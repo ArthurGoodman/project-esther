@@ -30,22 +30,25 @@ class DefaultLexer : public Lexer
 {
     Tokens tokens; // List of tokens, that the lexer produces.
 
-    string *source;
+    const string *source;
     Token token; // Current token.
     int pos, line, column; // Current position of the lexer.
 
-public:
     static list<string> operators, keywords;
 
 public:
-    Tokens lex();
+    Tokens lex(const string &source);
 
     static void initialize();
+
+    static const list<string> &getOperators();
+    static const list<string> &getKeywords();
 
 private:
     void error(string msg, int shift = 0); // Handle lexical errors.
     void scan(); // Scan code for the next lexeme.
     void skipSpaces();
+    const char &at(int pos);
 };
 
 }

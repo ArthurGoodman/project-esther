@@ -10,7 +10,7 @@ class Lexer
 {
 public:
     virtual ~Lexer();
-    virtual Tokens lex() = 0;
+    virtual Tokens lex(const string &source) = 0;
 };
 
 }

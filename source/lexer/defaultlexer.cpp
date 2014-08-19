@@ -1,17 +1,15 @@
 #include "defaultlexer.h"
 
 #include "lexicalerror.h"
-#include "runtime.h"
 
 namespace Esther {
 
 list<string> DefaultLexer::operators, DefaultLexer::keywords;
 
-Tokens DefaultLexer::lex()
+Tokens DefaultLexer::lex(const string &source)
 {
     // Initialize:
-    source = new string;
-    *source = Runtime::source();
+    this->source = &source;
     pos = 0; line = column = 1;
 
     tokens.clear();
@@ -20,8 +18,8 @@ Tokens DefaultLexer::lex()
     {
         scan(); tokens << token;
 
-        //cout << token.getId() << " : \"" << token.getText() << "\""
-        //     << " (" << token.getPos().offset << "," << token.getPos().line << "," << token.getPos().column << ")\n";
+        cout << token.getId() << " : \"" << token.getText() << "\""
+             << " (" << token.getPos().offset << "," << token.getPos().line << "," << token.getPos().column << ")\n";
     }
     while(token != tEnd);
 
@@ -47,6 +45,9 @@ void DefaultLexer::initialize()
              << "try" << "throw" << "catch";
 }
 
+const list<string> &DefaultLexer::getOperators() { return operators; }
+const list<string> &DefaultLexer::getKeywords() { return keywords; }
+
 void DefaultLexer::error(string msg, int delta)
 {
     // Delta is used when the position of the token needs to be corrected.
@@ -60,26 +61,26 @@ void DefaultLexer::scan()
 
     skipSpaces();
 
-    while((*source)[pos] == '/' && (*source)[pos + 1] == '/') //Comment.
+    while(at(pos) == '/' && at(pos + 1) == '/') //Comment.
     {
-        while((*source)[pos] && (*source)[pos] != '\n') ++pos;
+        while(at(pos) && at(pos) != '\n') ++pos;
         skipSpaces();
     }
 
     token.setPos(Position(pos, line, column));
 
-    if(!(*source)[pos]) token = tEnd;
-    else if((*source)[pos] == '\'' || (*source)[pos] == '"') // String literals.
+    if(!at(pos)) token = tEnd;
+    else if(at(pos) == '\'' || at(pos) == '"') // String literals.
     {
-        char type = (*source)[pos++]; token = type == '"' ? tComplexString : tString;
+        char type = at(pos++); token = type == '"' ? tComplexString : tString;
 
-        while((*source)[pos] && (*source)[pos] != type)
+        while(at(pos) && at(pos) != type)
         {
-            if((*source)[pos] == '\n') break;
+            if(at(pos) == '\n') break;
 
-            if((*source)[pos] == '\\') // Escape sequences.
+            if(at(pos) == '\\') // Escape sequences.
             {
-                switch((*source)[++pos])
+                switch(at(++pos))
                 {
                 case 'n': token += '\n'; break;
                 case 't': token += '\t'; break;
@@ -88,36 +89,36 @@ void DefaultLexer::scan()
                 case '"': token += '"'; break;
                 case '\n': break;
 
-                default: error((string)"invalid escape sequence '\\" + (*source)[pos] + "'", token.getText().size() + 1);
+                default: error((string)"invalid escape sequence '\\" + at(pos) + "'", token.getText().size() + 1);
                 }
 
                 ++pos;
             }
-            else token += (*source)[pos++];
+            else token += at(pos++);
         }
 
-        if((*source)[pos] != type) error("invalid string constant"); else ++pos;
+        if(at(pos) != type) error("invalid string constant"); else ++pos;
     }
-    else if(isDigit((*source)[pos])) // Numbers.
+    else if(isDigit(at(pos))) // Numbers.
     {
-        token = tInteger; do token += (*source)[pos++]; while(isDigit((*source)[pos])); // Integral part.
+        token = tInteger; do token += at(pos++); while(isDigit(at(pos))); // Integral part.
 
         // Fractional part:
-        if((*source)[pos] == '.' && isDigit((*source)[pos + 1]))
-        { token = tFloat; do token += (*source)[pos++]; while(isDigit((*source)[pos])); }
+        if(at(pos) == '.' && isDigit(at(pos + 1)))
+        { token = tFloat; do token += at(pos++); while(isDigit(at(pos))); }
 
         // Scientific notation:
-        if((toLower((*source)[pos]) == 'e') && (isDigit((*source)[pos + 1]) || (isSign((*source)[pos + 1]) && isDigit((*source)[pos + 2]))))
+        if((toLower(at(pos)) == 'e') && (isDigit(at(pos + 1)) || (isSign(at(pos + 1)) && isDigit(at(pos + 2)))))
         {
-            token += (*source)[pos++];
+            token += at(pos++);
 
-            if((isSign((*source)[pos])) && isDigit((*source)[pos + 1])) do token += (*source)[pos++]; while(isDigit((*source)[pos]));
-            else while(isDigit((*source)[pos])) token += (*source)[pos++];
+            if((isSign(at(pos))) && isDigit(at(pos + 1))) do token += at(pos++); while(isDigit(at(pos)));
+            else while(isDigit(at(pos))) token += at(pos++);
         }
     }
-    else if(isLetter((*source)[pos]) || (*source)[pos] == '_') // Identifiers and keywords.
+    else if(isLetter(at(pos)) || at(pos) == '_') // Identifiers and keywords.
     {
-        do token += (*source)[pos++]; while(isLetterOrDigit((*source)[pos]) || (*source)[pos] == '_');
+        do token += at(pos++); while(isLetterOrDigit(at(pos)) || at(pos) == '_');
 
         list<string>::iterator i;
 
@@ -126,11 +127,11 @@ void DefaultLexer::scan()
     }
     else // Operators and other tokens.
     {
-        token += (*source)[pos++];
+        token += at(pos++);
 
-        if(string("<>=!+-*/%").find(token.getText()) + 1 && (*source)[pos] == '=') token += (*source)[pos++]; // ?= operators.
-        else if(token.getText() == "-" && (*source)[pos] == '>') // Arrow.
-            token += (*source)[pos++];
+        if(string("<>=!+-*/%").find(token.getText()) + 1 && at(pos) == '=') token += at(pos++); // ?= operators.
+        else if(token.getText() == "-" && at(pos) == '>') // Arrow.
+            token += at(pos++);
 
         list<string>::iterator i;
 
@@ -143,11 +144,13 @@ void DefaultLexer::scan()
 
 void DefaultLexer::skipSpaces()
 {
-    while(isSpace((*source)[pos]))
+    while(isSpace(at(pos)))
     {
         ++pos; ++column;
-        if((*source)[pos - 1] == '\n') { ++line; column = 1; }
+        if(at(pos - 1) == '\n') { ++line; column = 1; }
     }
 }
+
+const char &DefaultLexer::at(int pos) { return (*source)[pos]; }
 
 }

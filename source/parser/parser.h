@@ -10,7 +10,7 @@ class Parser
 {
 public:
     virtual ~Parser();
-    virtual Expression *parse() = 0;
+    virtual Expression *parse(const string &source) = 0;
 };
 
 }

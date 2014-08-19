@@ -15,7 +15,7 @@ public:
     DefaultParser();
     ~DefaultParser();
 
-    Expression *parse();
+    Expression *parse(const string &source);
 };
 
 }

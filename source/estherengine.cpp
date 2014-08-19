@@ -19,7 +19,7 @@ void EstherEngine::run(const string &script)
 
     try
     {
-        Runtime::parser->parse();
+        Runtime::parser->parse(script);
     }
     catch(ErrorException *e) { cout << e->msg() << endl; delete e; }
     catch(...) { cout << "something bad happened...\n"; }
