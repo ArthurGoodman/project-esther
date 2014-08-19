@@ -13,6 +13,7 @@ public:
     };
 
 public:
+    virtual ~ExpressionManager();
     virtual Expression *create(ExpressionType type) = 0;
 };
 

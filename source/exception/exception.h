@@ -6,7 +6,7 @@ namespace Esther {
 class Exception
 {
 public:
-    virtual ~Exception() {}
+    virtual ~Exception();
     virtual void raise() = 0;
 };
 

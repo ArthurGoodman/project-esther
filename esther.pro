@@ -49,7 +49,9 @@ SOURCES += \
     source/runtime/expression/expressionmanager.cpp \
     source/runtime/expression/defaultexpressionmanager.cpp \
     source/runtime/context.cpp \
-    source/runtime/module.cpp
+    source/runtime/module.cpp \
+    source/lexer/token.cpp \
+    source/lexer/position.cpp
 
 HEADERS += \
     source/common.h \
@@ -89,7 +91,9 @@ HEADERS += \
     source/runtime/expression/expressionmanager.h \
     source/runtime/expression/defaultexpressionmanager.h \
     source/runtime/context.h \
-    source/runtime/module.h
+    source/runtime/module.h \
+    source/lexer/token.h \
+    source/lexer/position.h
 
 OTHER_FILES += \
     README.MD \

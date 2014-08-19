@@ -2,4 +2,6 @@
 
 namespace Esther {
 
+Parser::~Parser() {}
+
 }

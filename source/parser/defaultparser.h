@@ -5,9 +5,17 @@
 
 namespace Esther {
 
+class Lexer;
+
 class DefaultParser : public Parser
 {
+    Lexer *lexer;
+
 public:
+    DefaultParser();
+    ~DefaultParser();
+
+    Expression *parse();
 };
 
 }

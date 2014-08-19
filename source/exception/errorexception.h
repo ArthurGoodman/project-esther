@@ -2,15 +2,20 @@
 #include <common.h>
 
 #include "exception.h"
+#include "position.h"
 
 namespace Esther {
 
 class ErrorException : public Exception
 {
-    string message;
-    int line, column;
+    string message; // Error message.
+    Position position; // Position of the error in code.
 
 public:
+    ErrorException(string msg, Position pos);
+
+    virtual string msg();
+    Position pos();
 };
 
 }

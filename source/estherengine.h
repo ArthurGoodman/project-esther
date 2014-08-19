@@ -11,7 +11,7 @@ public:
     EstherEngine();
     ~EstherEngine();
 
-    void run(string script);
+    void run(const string &script);
 
 private:
     void initialize();

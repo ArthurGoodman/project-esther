@@ -6,7 +6,8 @@ class ScriptEngine
     static ScriptEngine *defaultEngine;
 
 public:
-    static ScriptEngine *getDefaultEngine();
+    virtual ~ScriptEngine();
+    virtual void run(const string &script) = 0;
 
-    virtual void run(string script) = 0;
+    static ScriptEngine *getDefaultEngine();
 };

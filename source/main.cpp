@@ -4,14 +4,14 @@
 
 int main(int argc, char **argv)
 {
-    if(argc < 2) return 0;
+    //if(argc < 2) return 0;
 
-    string fileName = argv[1];
-
-    fileName = "scripts/test.es";
+    //string fileName = argv[1];
 
     ScriptEngine *engine = ScriptEngine::getDefaultEngine();
-    engine->run(readFile(fileName));
+    engine->run(readFile("scripts/test.es"/*fileName*/));
+
+    delete engine;
 
     return 0;
 }
