@@ -9,8 +9,9 @@ INCLUDEPATH = source \
     source/parser \
     source/runtime \
     source/runtime/expression \
+    source/runtime/expression/ast \
     source/runtime/function \
-    source/variant
+    source/varian
 
 SOURCES += \
     source/main.cpp \
