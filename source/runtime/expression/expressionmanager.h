@@ -5,16 +5,13 @@ namespace Esther {
 
 class Expression;
 
-class ExpressionManager
-{
+class ExpressionManager {
 public:
-    enum ExpressionType
-    {
+    enum ExpressionType {
     };
 
 public:
     virtual ~ExpressionManager();
     virtual Expression *create(ExpressionType type) = 0;
 };
-
 }

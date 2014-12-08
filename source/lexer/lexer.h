@@ -6,11 +6,9 @@
 namespace Esther {
 
 // Lexical analysis.
-class Lexer
-{
+class Lexer {
 public:
     virtual ~Lexer();
     virtual Tokens lex(const string &source) = 0;
 };
-
 }

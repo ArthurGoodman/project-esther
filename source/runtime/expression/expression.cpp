@@ -3,5 +3,4 @@
 namespace Esther {
 
 ExpressionManager *Expression::manager;
-
 }

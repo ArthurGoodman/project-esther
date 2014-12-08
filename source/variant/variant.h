@@ -3,17 +3,18 @@
 
 class VariantPrivate;
 
-class Variant
-{
+class Variant {
     friend class VariantPrivate;
 
     VariantPrivate *data;
 
 public:
-    enum Type
-    {
+    enum Type {
         Null,
-        Integer, Float, Char, String
+        Integer,
+        Float,
+        Char,
+        String
     };
 
 public:
@@ -25,7 +26,7 @@ public:
     Variant(const char *value);
 
     Variant(const Variant &v);
-    Variant &operator =(const Variant &v);
+    Variant &operator=(const Variant &v);
 
     ~Variant();
 

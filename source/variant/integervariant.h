@@ -3,8 +3,7 @@
 
 #include "variantprivate.h"
 
-class IntegerVariant : public VariantPrivate
-{
+class IntegerVariant : public VariantPrivate {
     int value;
 
 public:

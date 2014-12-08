@@ -2,10 +2,15 @@
 
 namespace Esther {
 
-SyntaxError::SyntaxError(string msg, Position pos) : ErrorException(msg, pos) {}
+SyntaxError::SyntaxError(string msg, Position pos)
+    : ErrorException(msg, pos) {
+}
 
-string SyntaxError::msg() { return "syntax error: " + ErrorException::msg();  }
+string SyntaxError::msg() {
+    return "syntax error: " + ErrorException::msg();
+}
 
-void SyntaxError::raise() { throw this; }
-
+void SyntaxError::raise() {
+    throw this;
+}
 }

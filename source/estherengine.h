@@ -5,8 +5,7 @@
 
 namespace Esther {
 
-class EstherEngine : public ScriptEngine
-{
+class EstherEngine : public ScriptEngine {
 public:
     EstherEngine();
     ~EstherEngine();
@@ -17,5 +16,4 @@ private:
     void initialize();
     void release();
 };
-
 }

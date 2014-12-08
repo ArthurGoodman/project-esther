@@ -5,10 +5,8 @@
 
 namespace Esther {
 
-class DefaultExpressionManager : public ExpressionManager
-{
+class DefaultExpressionManager : public ExpressionManager {
 public:
     Expression *create(ExpressionType type);
 };
-
 }

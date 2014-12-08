@@ -3,8 +3,7 @@
 
 #include "variantprivate.h"
 
-class StringVariant : public VariantPrivate
-{
+class StringVariant : public VariantPrivate {
     string value;
 
 public:

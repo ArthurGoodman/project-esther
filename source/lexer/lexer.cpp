@@ -2,6 +2,6 @@
 
 namespace Esther {
 
-Lexer::~Lexer() {}
-
+Lexer::~Lexer() {
+}
 }

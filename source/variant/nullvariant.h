@@ -3,8 +3,7 @@
 
 #include "variantprivate.h"
 
-class NullVariant : public VariantPrivate
-{
+class NullVariant : public VariantPrivate {
 public:
     VariantPrivate *clone() const;
 

@@ -2,6 +2,6 @@
 
 namespace Esther {
 
-Exception::~Exception() {}
-
+Exception::~Exception() {
+}
 }

@@ -6,8 +6,7 @@ namespace Esther {
 class Parser;
 
 // Global access point to the various runtime stuff.
-class Runtime
-{
+class Runtime {
 public:
     // External environment.
 
@@ -26,5 +25,4 @@ public:
     // Current source code access point.
     static const string &source();
 };
-
 }

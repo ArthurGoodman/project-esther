@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class NativeMethod : public Method
-{
+class NativeMethod : public Method {
 public:
 };
-
 }

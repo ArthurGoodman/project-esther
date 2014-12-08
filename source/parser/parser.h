@@ -6,11 +6,9 @@ namespace Esther {
 class Expression;
 
 // Syntax analysis.
-class Parser
-{
+class Parser {
 public:
     virtual ~Parser();
     virtual Expression *parse(const string &source) = 0;
 };
-
 }

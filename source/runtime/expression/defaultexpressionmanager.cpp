@@ -2,9 +2,7 @@
 
 namespace Esther {
 
-Expression *DefaultExpressionManager::create(ExpressionType /*type*/)
-{
+Expression *DefaultExpressionManager::create(ExpressionType /*type*/) {
     return 0;
 }
-
 }

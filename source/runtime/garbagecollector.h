@@ -3,9 +3,7 @@
 
 namespace Esther {
 
-class GarbageCollector
-{
+class GarbageCollector {
 public:
 };
-
 }

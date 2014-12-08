@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class OverloadedMethod : public Method
-{
+class OverloadedMethod : public Method {
 public:
 };
-
 }

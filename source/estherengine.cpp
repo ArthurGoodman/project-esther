@@ -10,25 +10,30 @@
 
 namespace Esther {
 
-EstherEngine::EstherEngine() { initialize(); }
-EstherEngine::~EstherEngine() { release(); }
+EstherEngine::EstherEngine() {
+    initialize();
+}
 
-void EstherEngine::run(const string &script)
-{
+EstherEngine::~EstherEngine() {
+    release();
+}
+
+void EstherEngine::run(const string &script) {
     Runtime::pushSource(script);
 
-    try
-    {
+    try {
         Runtime::parser->parse(script);
+    } catch (ErrorException *e) {
+        cout << e->msg() << endl;
+        delete e;
+    } catch (...) {
+        cout << "something bad happened...\n";
     }
-    catch(ErrorException *e) { cout << e->msg() << endl; delete e; }
-    catch(...) { cout << "something bad happened...\n"; }
 
     Runtime::popSource();
 }
 
-void EstherEngine::initialize()
-{
+void EstherEngine::initialize() {
     Runtime::initialize();
     DefaultLexer::initialize();
 
@@ -36,12 +41,10 @@ void EstherEngine::initialize()
     Runtime::parser = new DefaultParser;
 }
 
-void EstherEngine::release()
-{
+void EstherEngine::release() {
     Runtime::release();
 
     delete Expression::manager;
     delete Runtime::parser;
 }
-
 }

@@ -2,21 +2,49 @@
 
 namespace Esther {
 
-Token::Token() : id(invalidTokenId), text("") {}
-Token::Token(int id, const string &text) : id(id), text(text) {}
+Token::Token()
+    : id(invalidTokenId), text("") {
+}
 
-int Token::getId() { return id; }
-void Token::setId(int id) { this->id = id; }
+Token::Token(int id, const string &text)
+    : id(id), text(text) {
+}
 
-string Token::getText() { return text; }
+int Token::getId() {
+    return id;
+}
 
-Position Token::getPos() { return pos; }
-void Token::setPos(Position pos) { this->pos = pos; }
+void Token::setId(int id) {
+    this->id = id;
+}
 
-Token &Token::operator =(int id) { this->id = id; return *this; }
-Token &Token::operator +=(char c) { text += c; return *this; }
+string Token::getText() {
+    return text;
+}
 
-bool Token::operator ==(int id) { return this->id == id; }
-bool Token::operator !=(int id) { return this->id != id; }
+Position Token::getPos() {
+    return pos;
+}
 
+void Token::setPos(Position pos) {
+    this->pos = pos;
+}
+
+Token &Token::operator=(int id) {
+    this->id = id;
+    return *this;
+}
+
+Token &Token::operator+=(char c) {
+    text += c;
+    return *this;
+}
+
+bool Token::operator==(int id) {
+    return this->id == id;
+}
+
+bool Token::operator!=(int id) {
+    return this->id != id;
+}
 }

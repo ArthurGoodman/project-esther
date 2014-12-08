@@ -6,14 +6,18 @@
 namespace Esther {
 
 class ExpressionManager;
+class Context;
+class Node;
 
-class Expression : public Object
-{
+class Expression : public Object {
     friend class EstherEngine;
+    friend class ExpressionManager;
 
     static ExpressionManager *manager;
 
-public:
-};
+    Node *node;
 
+public:
+    Object *eval(Context *context);
+};
 }

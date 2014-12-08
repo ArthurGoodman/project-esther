@@ -3,8 +3,7 @@
 
 #include "variantprivate.h"
 
-class FloatVariant : public VariantPrivate
-{
+class FloatVariant : public VariantPrivate {
     double value;
 
 public:

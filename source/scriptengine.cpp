@@ -4,9 +4,9 @@
 
 ScriptEngine *ScriptEngine::defaultEngine = 0;
 
-ScriptEngine::~ScriptEngine() {}
+ScriptEngine::~ScriptEngine() {
+}
 
-ScriptEngine *ScriptEngine::getDefaultEngine()
-{
+ScriptEngine *ScriptEngine::getDefaultEngine() {
     return defaultEngine ? defaultEngine : defaultEngine = new Esther::EstherEngine();
 }

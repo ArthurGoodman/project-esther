@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class Function : public Object
-{
+class Function : public Object {
 public:
 };
-
 }

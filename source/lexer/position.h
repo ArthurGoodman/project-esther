@@ -3,8 +3,7 @@
 
 namespace Esther {
 
-class Position
-{
+class Position {
 public:
     int offset, line, column;
 
@@ -14,5 +13,4 @@ public:
 
     Position shifted(int delta);
 };
-
 }

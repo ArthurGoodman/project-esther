@@ -2,6 +2,6 @@
 
 namespace Esther {
 
-ExpressionManager::~ExpressionManager() {}
-
+ExpressionManager::~ExpressionManager() {
+}
 }

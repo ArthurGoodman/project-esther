@@ -6,9 +6,9 @@
 namespace Esther {
 
 // A lexeme with additional information.
-class Token
-{
-    int id; string text;
+class Token {
+    int id;
+    string text;
     Position pos; // Position of the lexeme in code.
 
 public:
@@ -26,13 +26,12 @@ public:
     Position getPos();
     void setPos(Position getPos);
 
-    Token &operator =(int getId);
-    Token &operator +=(char c);
+    Token &operator=(int getId);
+    Token &operator+=(char c);
 
-    bool operator ==(int getId);
-    bool operator !=(int getId);
+    bool operator==(int getId);
+    bool operator!=(int getId);
 };
 
 typedef list<Token> Tokens;
-
 }

@@ -8,8 +8,7 @@ namespace Esther {
 
 class Lexer;
 
-class DefaultParser : public Parser
-{
+class DefaultParser : public Parser {
     Lexer *lexer;
     Tokens::iterator token;
 
@@ -43,5 +42,4 @@ private:
     Expression *arrow();
     Expression *term();
 };
-
 }

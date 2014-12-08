@@ -1,8 +1,7 @@
 #pragma once
 #include <common.h>
 
-class ScriptEngine
-{
+class ScriptEngine {
     static ScriptEngine *defaultEngine;
 
 public:

@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class Class : public Object
-{
+class Class : public Object {
 public:
 };
-
 }
