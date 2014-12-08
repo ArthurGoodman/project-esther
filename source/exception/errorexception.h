@@ -6,9 +6,8 @@
 
 namespace Esther {
 
-class ErrorException : public Exception
-{
-    string message; // Error message.
+class ErrorException : public Exception {
+    string message;    // Error message.
     Position position; // Position of the error in code.
 
 public:
@@ -17,5 +16,4 @@ public:
     virtual string msg();
     Position pos();
 };
-
 }

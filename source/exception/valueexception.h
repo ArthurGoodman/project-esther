@@ -7,11 +7,9 @@ namespace Esther {
 
 class Object;
 
-class ValueException : public Exception
-{
+class ValueException : public Exception {
     Object *value;
 
 public:
 };
-
 }

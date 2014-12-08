@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class RuntimeError : public ErrorException
-{
+class RuntimeError : public ErrorException {
 public:
 };
-
 }

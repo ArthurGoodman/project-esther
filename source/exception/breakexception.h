@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class BreakException : public ValueException
-{
+class BreakException : public ValueException {
 public:
 };
-
 }

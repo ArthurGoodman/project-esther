@@ -6,8 +6,7 @@
 namespace Esther {
 
 // This is used in syntax analysis.
-class SyntaxError : public ErrorException
-{
+class SyntaxError : public ErrorException {
 public:
     SyntaxError(string msg, Position pos);
 
@@ -15,5 +14,4 @@ public:
 
     void raise();
 };
-
 }

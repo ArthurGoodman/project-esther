@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class ContinueException : public Exception
-{
+class ContinueException : public Exception {
 public:
 };
-
 }

@@ -5,9 +5,7 @@
 
 namespace Esther {
 
-class ReturnException : public Exception
-{
+class ReturnException : public Exception {
 public:
 };
-
 }
