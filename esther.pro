@@ -11,7 +11,7 @@ INCLUDEPATH = source \
     source/runtime/expression \
     source/runtime/expression/ast \
     source/runtime/function \
-    source/varian
+    source/variant
 
 SOURCES += \
     source/main.cpp \
