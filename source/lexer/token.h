@@ -3,7 +3,7 @@
 
 #include "position.h"
 
-namespace Esther {
+namespace esther {
 
 // A lexeme with additional information.
 class Token {

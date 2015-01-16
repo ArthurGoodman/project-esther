@@ -2,28 +2,9 @@
 
 #include "lexicalerror.h"
 
-namespace Esther {
+namespace esther {
 
 list<string> DefaultLexer::operators, DefaultLexer::keywords;
-
-Tokens DefaultLexer::lex(const string &source) {
-    // Initialize:
-    this->source = &source;
-    pos = 0;
-    line = column = 1;
-
-    tokens.clear();
-
-    do { // Form the list of tokens.
-        scan();
-        tokens << token;
-
-        cout << token.getId() << " : \"" << token.getText() << "\""
-             << " (" << token.getPos().offset << "," << token.getPos().line << "," << token.getPos().column << ")\n";
-    } while (token != tEnd);
-
-    return tokens;
-}
 
 void DefaultLexer::initialize() {
     // Lexemes:
@@ -97,6 +78,29 @@ const list<string> &DefaultLexer::getOperators() {
 
 const list<string> &DefaultLexer::getKeywords() {
     return keywords;
+}
+
+DefaultLexer::DefaultLexer() {
+    initialize();
+}
+
+Tokens DefaultLexer::lex(const string &source) {
+    // Initialize:
+    this->source = &source;
+    pos = 0;
+    line = column = 1;
+
+    tokens.clear();
+
+    do { // Form the list of tokens.
+        scan();
+        tokens << token;
+
+        cout << token.getId() << " : \"" << token.getText() << "\""
+             << " (" << token.getPos().offset << "," << token.getPos().line << "," << token.getPos().column << ")\n";
+    } while (token != tEnd);
+
+    return tokens;
 }
 
 void DefaultLexer::error(string msg, int delta) {

@@ -20,6 +20,7 @@ using namespace std;
 #define foreach (i, c) for (typeof(c.begin()) i = c.begin(); i != c.end(); ++i)
 
 // Append operators:
+
 template <class A, class B>
 list<B> &operator<<(list<B> &l, const A &e) {
     l.push_back((B)e);

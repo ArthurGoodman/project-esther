@@ -1,4 +1,4 @@
 #include "continueexception.h"
 
-namespace Esther {
+namespace esther {
 }

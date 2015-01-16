@@ -1,7 +1,7 @@
 #pragma once
 #include <common.h>
 
-namespace Esther {
+namespace esther {
 
 class Object {
 public:

@@ -4,7 +4,7 @@
 #include "parser.h"
 #include "defaultlexer.h"
 
-namespace Esther {
+namespace esther {
 
 class Lexer;
 

@@ -3,7 +3,7 @@
 #include "defaultlexer.h"
 #include "syntaxerror.h"
 
-namespace Esther {
+namespace esther {
 
 DefaultParser::DefaultParser()
     : lexer(new DefaultLexer) {

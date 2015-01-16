@@ -1,6 +1,6 @@
 #include "syntaxerror.h"
 
-namespace Esther {
+namespace esther {
 
 SyntaxError::SyntaxError(string msg, Position pos)
     : ErrorException(msg, pos) {

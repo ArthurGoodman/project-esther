@@ -2,11 +2,9 @@
 
 #include "estherengine.h"
 
-ScriptEngine *ScriptEngine::defaultEngine = 0;
-
-ScriptEngine::~ScriptEngine() {
+ScriptEngine *ScriptEngine::create() {
+    return new esther::EstherEngine();
 }
 
-ScriptEngine *ScriptEngine::getDefaultEngine() {
-    return defaultEngine ? defaultEngine : defaultEngine = new Esther::EstherEngine();
+ScriptEngine::~ScriptEngine() {
 }

@@ -1,6 +1,6 @@
 #include "token.h"
 
-namespace Esther {
+namespace esther {
 
 Token::Token()
     : id(invalidTokenId), text("") {

@@ -1,4 +1,4 @@
 #include "nativemethod.h"
 
-namespace Esther {
+namespace esther {
 }

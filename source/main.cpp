@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
 
     //string fileName = argv[1];
 
-    ScriptEngine *engine = ScriptEngine::getDefaultEngine();
+    ScriptEngine *engine = ScriptEngine::create();
     engine->run(readFile("scripts/test.es" /*fileName*/));
 
     delete engine;

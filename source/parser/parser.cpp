@@ -1,6 +1,12 @@
 #include "parser.h"
 
-namespace Esther {
+#include "defaultparser.h"
+
+namespace esther {
+
+Parser *Parser::create() {
+    return new DefaultParser;
+}
 
 Parser::~Parser() {
 }

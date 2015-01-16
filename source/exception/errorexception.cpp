@@ -1,6 +1,6 @@
 #include "errorexception.h"
 
-namespace Esther {
+namespace esther {
 
 ErrorException::ErrorException(string msg, Position pos)
     : message(msg), position(pos) {

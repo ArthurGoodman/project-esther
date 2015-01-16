@@ -1,4 +1,4 @@
 #include "module.h"
 
-namespace Esther {
+namespace esther {
 }

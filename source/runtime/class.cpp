@@ -1,5 +1,5 @@
 #include "class.h"
 
-namespace Esther {
+namespace esther {
 
 }

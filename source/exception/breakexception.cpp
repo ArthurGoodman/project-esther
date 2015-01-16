@@ -1,4 +1,4 @@
 #include "breakexception.h"
 
-namespace Esther {
+namespace esther {
 }

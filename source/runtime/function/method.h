@@ -3,7 +3,7 @@
 
 #include "function.h"
 
-namespace Esther {
+namespace esther {
 
 class Method : public Function {
 public:

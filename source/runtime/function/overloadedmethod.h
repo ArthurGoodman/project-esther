@@ -3,7 +3,7 @@
 
 #include "method.h"
 
-namespace Esther {
+namespace esther {
 
 class OverloadedMethod : public Method {
 public:

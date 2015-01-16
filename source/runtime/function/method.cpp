@@ -1,4 +1,4 @@
 #include "method.h"
 
-namespace Esther {
+namespace esther {
 }

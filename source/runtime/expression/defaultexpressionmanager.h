@@ -3,10 +3,9 @@
 
 #include "expressionmanager.h"
 
-namespace Esther {
+namespace esther {
 
 class DefaultExpressionManager : public ExpressionManager {
 public:
-    Expression *create(ExpressionType type);
 };
 }

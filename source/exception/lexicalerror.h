@@ -3,7 +3,7 @@
 
 #include "errorexception.h"
 
-namespace Esther {
+namespace esther {
 
 // This is used in lexical analysis.
 class LexicalError : public ErrorException {

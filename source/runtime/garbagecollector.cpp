@@ -1,4 +1,4 @@
 #include "garbagecollector.h"
 
-namespace Esther {
+namespace esther {
 }

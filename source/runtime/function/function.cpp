@@ -1,4 +1,4 @@
 #include "function.h"
 
-namespace Esther {
+namespace esther {
 }

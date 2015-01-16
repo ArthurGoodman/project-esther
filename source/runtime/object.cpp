@@ -1,4 +1,4 @@
 #include "object.h"
 
-namespace Esther {
+namespace esther {
 }

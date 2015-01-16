@@ -1,6 +1,6 @@
 #include "estherengine.h"
 
-#include "runtime.h"
+#include "esther.h"
 
 #include "expression.h"
 #include "defaultexpressionmanager.h"
@@ -8,7 +8,7 @@
 #include "defaultlexer.h"
 #include "errorexception.h"
 
-namespace Esther {
+namespace esther {
 
 EstherEngine::EstherEngine() {
     initialize();
@@ -19,10 +19,10 @@ EstherEngine::~EstherEngine() {
 }
 
 void EstherEngine::run(const string &script) {
-    Runtime::pushSource(script);
+    Esther::pushSource(script);
 
     try {
-        Runtime::parser->parse(script);
+        Esther::parser->parse(script);
     } catch (ErrorException *e) {
         cout << e->msg() << endl;
         delete e;
@@ -30,21 +30,14 @@ void EstherEngine::run(const string &script) {
         cout << "something bad happened...\n";
     }
 
-    Runtime::popSource();
+    Esther::popSource();
 }
 
 void EstherEngine::initialize() {
-    Runtime::initialize();
-    DefaultLexer::initialize();
-
-    Expression::manager = new DefaultExpressionManager;
-    Runtime::parser = new DefaultParser;
+    Esther::initialize();
 }
 
 void EstherEngine::release() {
-    Runtime::release();
-
-    delete Expression::manager;
-    delete Runtime::parser;
+    Esther::release();
 }
 }

@@ -3,7 +3,7 @@
 
 #include "method.h"
 
-namespace Esther {
+namespace esther {
 
 class NativeMethod : public Method {
 public:

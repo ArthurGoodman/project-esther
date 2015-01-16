@@ -1,6 +1,6 @@
 #include "lexicalerror.h"
 
-namespace Esther {
+namespace esther {
 
 LexicalError::LexicalError(string msg, Position pos)
     : ErrorException(msg, pos) {

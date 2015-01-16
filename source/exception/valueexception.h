@@ -3,7 +3,7 @@
 
 #include "exception.h"
 
-namespace Esther {
+namespace esther {
 
 class Object;
 

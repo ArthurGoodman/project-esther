@@ -1,17 +1,12 @@
 #pragma once
 #include <common.h>
 
-namespace Esther {
-
-class Expression;
+namespace esther {
 
 class ExpressionManager {
 public:
-    enum ExpressionType {
-    };
+    static ExpressionManager *create();
 
-public:
     virtual ~ExpressionManager();
-    virtual Expression *create(ExpressionType type) = 0;
 };
 }

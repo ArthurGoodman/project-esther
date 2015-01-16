@@ -1,4 +1,4 @@
 #include "runtimeerror.h"
 
-namespace Esther {
+namespace esther {
 }

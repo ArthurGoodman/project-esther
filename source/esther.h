@@ -1,19 +1,20 @@
 #pragma once
 #include <common.h>
 
-namespace Esther {
+namespace esther {
 
+class Lexer;
 class Parser;
 
 // Global access point to the various runtime stuff.
-class Runtime {
+class Esther {
 public:
     // External environment.
 
     // Internal environment.
+    static Lexer *lexer;
     static Parser *parser;
-    static stack<string> sources; // This is mostly used in error messages to show the line containing errors.
-    static string *currentSource;
+    static stack<string> sources; // This is used in error messages to show the line containing errors.
 
 public:
     static void initialize();

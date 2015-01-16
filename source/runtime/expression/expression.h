@@ -3,21 +3,21 @@
 
 #include "object.h"
 
-namespace Esther {
+namespace esther {
 
 class ExpressionManager;
 class Context;
 class Node;
 
 class Expression : public Object {
-    friend class EstherEngine;
-    friend class ExpressionManager;
-
     static ExpressionManager *manager;
 
     Node *node;
 
 public:
+    static void initialize();
+    static void release();
+
     Object *eval(Context *context);
 };
 }

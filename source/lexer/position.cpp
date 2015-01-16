@@ -1,6 +1,6 @@
 #include "position.h"
 
-namespace Esther {
+namespace esther {
 
 Position::Position()
     : offset(0), line(0), column(0) {

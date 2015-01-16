@@ -3,7 +3,7 @@
 
 #include "valueexception.h"
 
-namespace Esther {
+namespace esther {
 
 class BreakException : public ValueException {
 public:

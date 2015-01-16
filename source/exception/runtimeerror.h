@@ -3,7 +3,7 @@
 
 #include "errorexception.h"
 
-namespace Esther {
+namespace esther {
 
 class RuntimeError : public ErrorException {
 public:

@@ -3,10 +3,10 @@
 
 #include "lexer.h"
 
-namespace Esther {
+namespace esther {
 
 // Ids for all the lexemes:
-// Ids have to be enumerated in the exact same sequence as lexemes are.
+// Ids have to be enumerated in the exact same order as lexemes are.
 enum {
     tNone = Token::invalidTokenId,
 
@@ -82,21 +82,23 @@ enum {
 };
 
 class DefaultLexer : public Lexer {
+    static list<string> operators, keywords;
+
     Tokens tokens; // List of tokens, that the lexer produces.
 
     const string *source;
     Token token;           // Current token.
     int pos, line, column; // Current position of the lexer.
 
-    static list<string> operators, keywords;
-
 public:
-    Tokens lex(const string &source);
-
     static void initialize();
 
     static const list<string> &getOperators();
     static const list<string> &getKeywords();
+
+    DefaultLexer();
+
+    Tokens lex(const string &source);
 
 private:
     void error(string msg, int shift = 0); // Handle lexical errors.

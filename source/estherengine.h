@@ -3,7 +3,7 @@
 
 #include "scriptengine.h"
 
-namespace Esther {
+namespace esther {
 
 class EstherEngine : public ScriptEngine {
 public:

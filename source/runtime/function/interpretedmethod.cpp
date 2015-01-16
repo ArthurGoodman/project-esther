@@ -1,4 +1,4 @@
 #include "interpretedmethod.h"
 
-namespace Esther {
+namespace esther {
 }

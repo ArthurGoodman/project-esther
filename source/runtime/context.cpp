@@ -1,4 +1,4 @@
 #include "context.h"
 
-namespace Esther {
+namespace esther {
 }

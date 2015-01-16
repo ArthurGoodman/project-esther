@@ -1,4 +1,4 @@
 #include "returnexception.h"
 
-namespace Esther {
+namespace esther {
 }

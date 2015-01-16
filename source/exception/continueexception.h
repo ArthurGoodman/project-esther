@@ -3,7 +3,7 @@
 
 #include "exception.h"
 
-namespace Esther {
+namespace esther {
 
 class ContinueException : public Exception {
 public:

@@ -3,11 +3,13 @@
 
 #include "token.h"
 
-namespace Esther {
+namespace esther {
 
 // Lexical analysis.
 class Lexer {
 public:
+    static Lexer *create();
+
     virtual ~Lexer();
     virtual Tokens lex(const string &source) = 0;
 };

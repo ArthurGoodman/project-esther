@@ -24,7 +24,6 @@ SOURCES += \
     source/runtime/object.cpp \
     source/scriptengine.cpp \
     source/estherengine.cpp \
-    source/runtime/runtime.cpp \
     source/runtime/class.cpp \
     source/runtime/garbagecollector.cpp \
     source/lexer/lexer.cpp \
@@ -52,7 +51,8 @@ SOURCES += \
     source/runtime/context.cpp \
     source/runtime/module.cpp \
     source/lexer/token.cpp \
-    source/lexer/position.cpp
+    source/lexer/position.cpp \
+    source/esther.cpp
 
 HEADERS += \
     source/common.h \
@@ -66,7 +66,6 @@ HEADERS += \
     source/runtime/object.h \
     source/scriptengine.h \
     source/estherengine.h \
-    source/runtime/runtime.h \
     source/runtime/class.h \
     source/runtime/garbagecollector.h \
     source/lexer/lexer.h \
@@ -94,7 +93,8 @@ HEADERS += \
     source/runtime/context.h \
     source/runtime/module.h \
     source/lexer/token.h \
-    source/lexer/position.h
+    source/lexer/position.h \
+    source/esther.h
 
 OTHER_FILES += \
     README.MD \

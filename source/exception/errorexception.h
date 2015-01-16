@@ -4,7 +4,7 @@
 #include "exception.h"
 #include "position.h"
 
-namespace Esther {
+namespace esther {
 
 class ErrorException : public Exception {
     string message;    // Error message.

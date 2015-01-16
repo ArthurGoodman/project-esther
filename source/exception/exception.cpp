@@ -1,6 +1,6 @@
 #include "exception.h"
 
-namespace Esther {
+namespace esther {
 
 Exception::~Exception() {
 }

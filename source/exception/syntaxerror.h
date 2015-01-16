@@ -3,7 +3,7 @@
 
 #include "errorexception.h"
 
-namespace Esther {
+namespace esther {
 
 // This is used in syntax analysis.
 class SyntaxError : public ErrorException {
