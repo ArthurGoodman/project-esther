@@ -1,90 +1,43 @@
 #include "defaultlexer.h"
 
 #include "lexicalerror.h"
+#include "logger.h"
 
 namespace esther {
 
-list<string> DefaultLexer::operators, DefaultLexer::keywords;
+// Lexemes:
 
-void DefaultLexer::initialize() {
-    // Lexemes:
+string DefaultLexer::operators[] = {
+    "+", "-", "*", "/", "%",
+    "<", ">", "<=", ">=", "==", "!=", "&", "|", "^", "!", "=",
+    "+=", "-=", "*=", "/=", "%=",
+    "--", "++",
+    ".", "->", ",", ":", "@", "$", ";",
+    "(", "[", "{", ")", "]", "}"};
 
-    operators << "+"
-              << "-"
-              << "*"
-              << "/"
-              << "%"
-              << "<"
-              << ">"
-              << "<="
-              << ">="
-              << "=="
-              << "!="
-              << "&"
-              << "|"
-              << "^"
-              << "!"
-              << "="
-              << "+="
-              << "-="
-              << "*="
-              << "/="
-              << "%="
-              << "--"
-              << "++"
-              << "."
-              << "->"
-              << ","
-              << ":"
-              << "@"
-              << "$"
-              << ";"
-              << "("
-              << "["
-              << "{"
-              << ")"
-              << "]"
-              << "}";
+string DefaultLexer::keywords[] = {
+    "if", "else", "elif", "while", "for", "do", "forever",
+    "true", "false", "null", "self", "super", "context", "continue", "break", "return",
+    "include", "class", "static", "method", "function", "try", "throw", "catch"};
 
-    keywords << "if"
-             << "else"
-             << "elif"
-             << "while"
-             << "for"
-             << "do"
-             << "forever"
-             << "true"
-             << "false"
-             << "null"
-             << "self"
-             << "super"
-             << "context"
-             << "continue"
-             << "break"
-             << "return"
-             << "include"
-             << "class"
-             << "static"
-             << "method"
-             << "function"
-             << "try"
-             << "throw"
-             << "catch";
-}
+#if DEBUG
+// This is used in logs.
+string DefaultLexer::tokenTypes[] = {
+    "tPlus", "tMinus", "tMultiply", "tDivide", "tMod",
+    "tLt", "tGt", "tLe", "tGe", "tEq", "tNe", "tAnd", "tOr", "tXor", "tNot", "tAssign",
+    "tPlusAssign", "tMinusAssign", "tMultiplyAssign", "tDivideAssign", "tModAssign",
+    "tDec", "tInc",
+    "tDot", "tArrow", "tComma", "tColon", "tAt", "tDollar", "tSemi",
+    "tLPar", "tLBracket", "tLBrace", "tRPar", "tRBracket", "tRBrace",
 
-const list<string> &DefaultLexer::getOperators() {
-    return operators;
-}
+    "tIf", "tElse", "tElif", "tWhile", "tFor", "tDo", "tForever",
+    "tTrue", "tFalse", "tNull", "tSelf", "tSuper", "tContext", "tContinue", "tBreak", "tReturn",
+    "tInclude", "tClass", "tStatic", "tMethod", "tFunction", "tTry", "tThrow", "tCatch",
 
-const list<string> &DefaultLexer::getKeywords() {
-    return keywords;
-}
+    "tId", "tInteger", "tFloat", "tString", "tComplexString", "tUnknown", "tEnd"};
+#endif
 
-DefaultLexer::DefaultLexer() {
-    initialize();
-}
-
-Tokens DefaultLexer::lex(const string &source) {
+Tokens &DefaultLexer::lex(const string &source) {
     // Initialize:
     this->source = &source;
     pos = 0;
@@ -92,12 +45,23 @@ Tokens DefaultLexer::lex(const string &source) {
 
     tokens.clear();
 
-    do { // Form the list of tokens.
+    do { // Build the list of tokens.
         scan();
         tokens << token;
 
-        cout << token.getId() << " : \"" << token.getText() << "\""
-             << " (" << token.getPos().offset << "," << token.getPos().line << "," << token.getPos().column << ")\n";
+#if DEBUG
+        Logger::setActiveLog("lexer");
+
+        Logger::write(tokenTypes[token.getId()]);
+        Logger::write(" : \"" + token.getText() + "\"");
+        Logger::write(" (");
+        Logger::write(token.getPos().offset);
+        Logger::write(", ");
+        Logger::write(token.getPos().line);
+        Logger::write(", ");
+        Logger::write(token.getPos().column);
+        Logger::write(")\n");
+#endif
     } while (token != tEnd);
 
     return tokens;
@@ -116,7 +80,7 @@ void DefaultLexer::scan() {
 
     while (at(pos) == '/' && at(pos + 1) == '/') { // Comment.
         while (at(pos) && at(pos) != '\n')
-            ++pos;
+            pos++;
 
         skipSpaces();
     }
@@ -156,8 +120,7 @@ void DefaultLexer::scan() {
                     break;
 
                 default:
-                    error((string) "invalid escape sequence '\\" + at(pos) + "'",
-                          token.getText().size() + 1);
+                    error((string) "invalid escape sequence '\\" + at(pos) + "'", token.getText().size() + 1);
                 }
 
                 ++pos;
@@ -202,10 +165,10 @@ void DefaultLexer::scan() {
             token += at(pos++);
         while (isLetterOrDigit(at(pos)) || at(pos) == '_');
 
-        list<string>::iterator i;
+        string *i;
 
-        if ((i = find(keywords.begin(), keywords.end(), token.getText())) != keywords.end())
-            token = tIf + distance(keywords.begin(), i);
+        if ((i = find(keywords, keywords + count(keywords), token.getText())) != keywords + count(keywords))
+            token = tIf + distance(keywords, i);
         else
             token = tId;
     } else { // Operators and other tokens.
@@ -216,11 +179,10 @@ void DefaultLexer::scan() {
         else if (token.getText() == "-" && at(pos) == '>') // Arrow.
             token += at(pos++);
 
-        list<string>::iterator i;
+        string *i;
 
-        if ((i = find(operators.begin(), operators.end(), token.getText())) !=
-            operators.end())
-            token = distance(operators.begin(), i);
+        if ((i = find(operators, operators + count(operators), token.getText())) != operators + count(operators))
+            token = distance(operators, i);
         else
             token = tUnknown;
     }
@@ -230,10 +192,10 @@ void DefaultLexer::scan() {
 
 void DefaultLexer::skipSpaces() {
     while (isSpace(at(pos))) {
-        ++pos;
-        ++column;
+        pos++;
+        column++;
         if (at(pos - 1) == '\n') {
-            ++line;
+            line++;
             column = 1;
         }
     }

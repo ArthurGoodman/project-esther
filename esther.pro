@@ -11,7 +11,8 @@ INCLUDEPATH = source \
     source/runtime/expression \
     source/runtime/expression/ast \
     source/runtime/function \
-    source/variant
+    source/variant \
+    source/common
 
 SOURCES += \
     source/main.cpp \
@@ -52,10 +53,11 @@ SOURCES += \
     source/runtime/module.cpp \
     source/lexer/token.cpp \
     source/lexer/position.cpp \
-    source/esther.cpp
+    source/esther.cpp \
+    source/common/io.cpp \
+    source/common/logger.cpp
 
 HEADERS += \
-    source/common.h \
     source/variant/charvariant.h \
     source/variant/floatvariant.h \
     source/variant/integervariant.h \
@@ -94,7 +96,10 @@ HEADERS += \
     source/runtime/module.h \
     source/lexer/token.h \
     source/lexer/position.h \
-    source/esther.h
+    source/esther.h \
+    source/common/common.h \
+    source/common/io.h \
+    source/common/logger.h
 
 OTHER_FILES += \
     README.MD \

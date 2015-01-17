@@ -1,4 +1,6 @@
 #include <common.h>
+#include "io.h"
+#include "logger.h"
 
 #include "scriptengine.h"
 
@@ -8,9 +10,13 @@ int main(int argc, char **argv) {
     //string fileName = argv[1];
 
     ScriptEngine *engine = ScriptEngine::create();
-    engine->run(readFile("scripts/test.es" /*fileName*/));
+    engine->run(IO::readFile("scripts/test.es" /*fileName*/));
 
     delete engine;
+
+#if DEBUG
+    Logger::flush();
+#endif
 
     return 0;
 }

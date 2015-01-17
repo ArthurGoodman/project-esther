@@ -10,13 +10,14 @@ class Lexer;
 
 class DefaultParser : public Parser {
     Lexer *lexer;
+    Tokens tokens;
     Tokens::iterator token;
 
 public:
     DefaultParser();
     ~DefaultParser();
 
-    Expression *parse(const string &source);
+    Expression *parse(Tokens &tokens);
 
 private:
     void error(string msg, int delta = 0);

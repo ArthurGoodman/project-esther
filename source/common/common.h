@@ -12,12 +12,14 @@
 #include <stack>
 using namespace std;
 
+#define DEBUG 1
+
 // Some useful functions and defines:
 
 #define forever while (true)
 
 // Foreach loop for standart STL containters.
-#define foreach (i, c) for (typeof(c.begin()) i = c.begin(); i != c.end(); ++i)
+#define foreach(i, c) for (typeof(c.begin()) i = c.begin(); i != c.end(); ++i)
 
 // Append operators:
 
@@ -103,21 +105,4 @@ inline bool isLetter(char c) {
 
 inline bool isLetterOrDigit(char c) {
     return isLetter(c) || isDigit(c);
-}
-
-// Read the whole file into a string.
-inline string readFile(string fileName) {
-    ifstream f(fileName.data());
-
-    if (!f) {
-        cout << "error opening file '" << fileName << "'\n";
-        return "";
-    }
-
-    ostringstream buffer;
-    buffer << f.rdbuf();
-
-    f.close();
-
-    return buffer.str();
 }

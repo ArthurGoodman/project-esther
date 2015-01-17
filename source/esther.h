@@ -20,6 +20,8 @@ public:
     static void initialize();
     static void release();
 
+    static void initializeRuntime();
+
     static void pushSource(const string &source);
     static void popSource();
 

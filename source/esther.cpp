@@ -15,6 +15,8 @@ void Esther::initialize() {
     parser = Parser::create();
 
     Expression::initialize();
+
+    initializeRuntime();
 }
 
 void Esther::release() {
@@ -22,6 +24,9 @@ void Esther::release() {
     delete parser;
 
     Expression::release();
+}
+
+void Esther::initializeRuntime() {
 }
 
 void Esther::pushSource(const string &source) {

@@ -13,8 +13,9 @@ DefaultParser::~DefaultParser() {
     delete lexer;
 }
 
-Expression *DefaultParser::parse(const string &source) {
-    token = lexer->lex(source).begin(); // Get the list of tokens.
+Expression *DefaultParser::parse(Tokens &tokens) {
+    this->tokens.swap(tokens);
+    token = this->tokens.begin(); // Get the list of tokens.
 
     //    BlockExpression *e = new BlockExpression(false);
 

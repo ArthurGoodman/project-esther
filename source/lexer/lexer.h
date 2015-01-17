@@ -11,6 +11,6 @@ public:
     static Lexer *create();
 
     virtual ~Lexer();
-    virtual Tokens lex(const string &source) = 0;
+    virtual Tokens &lex(const string &source) = 0;
 };
 }

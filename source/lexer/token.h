@@ -12,6 +12,7 @@ class Token {
     Position pos; // Position of the lexeme in code.
 
 public:
+    // This has to be -1 for lexer logs to display token types properly.
     static const int invalidTokenId = -1;
 
 public:

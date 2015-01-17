@@ -22,7 +22,7 @@ void EstherEngine::run(const string &script) {
     Esther::pushSource(script);
 
     try {
-        Esther::parser->parse(script);
+        Esther::parser->parse(Esther::lexer->lex(script));
     } catch (ErrorException *e) {
         cout << e->msg() << endl;
         delete e;
