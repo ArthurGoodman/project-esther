@@ -1,13 +1,13 @@
 #include "expression.h"
 
-#include "defaultexpressionmanager.h"
+#include "expressionmanager.h"
 
 namespace esther {
 
 ExpressionManager *Expression::manager;
 
 void Expression::initialize() {
-    manager = new DefaultExpressionManager;
+    manager = ExpressionManager::create();
 }
 
 void Expression::release() {

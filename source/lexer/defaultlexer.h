@@ -1,5 +1,6 @@
 #pragma once
 #include <common.h>
+#include <debug.h>
 
 #include "lexer.h"
 
@@ -85,7 +86,7 @@ class DefaultLexer : public Lexer {
     static string operators[];
     static string keywords[];
 
-#if DEBUG
+#if DEBUG_LEXER
     static string tokenTypes[];
 #endif
 

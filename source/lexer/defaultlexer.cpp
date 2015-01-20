@@ -20,7 +20,7 @@ string DefaultLexer::keywords[] = {
     "true", "false", "null", "self", "super", "context", "continue", "break", "return",
     "include", "class", "static", "method", "function", "try", "throw", "catch"};
 
-#if DEBUG
+#if DEBUG_LEXER
 // This is used in logs.
 string DefaultLexer::tokenTypes[] = {
     "tPlus", "tMinus", "tMultiply", "tDivide", "tMod",
@@ -49,7 +49,7 @@ Tokens &DefaultLexer::lex(const string &source) {
         scan();
         tokens << token;
 
-#if DEBUG
+#if DEBUG_LEXER
         Logger::setActiveLog("lexer");
 
         Logger::write(tokenTypes[token.getId()]);

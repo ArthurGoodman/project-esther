@@ -10,6 +10,7 @@ INCLUDEPATH = source \
     source/runtime \
     source/runtime/expression \
     source/runtime/expression/ast \
+    source/runtime/expression/debug \
     source/runtime/function \
     source/variant \
     source/common
@@ -55,7 +56,9 @@ SOURCES += \
     source/lexer/position.cpp \
     source/esther.cpp \
     source/common/io.cpp \
-    source/common/logger.cpp
+    source/common/logger.cpp \
+    source/runtime/expression/debug/debugexpressionmanager.cpp \
+    source/runtime/expression/debug/debugexpression.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -99,7 +102,10 @@ HEADERS += \
     source/esther.h \
     source/common/common.h \
     source/common/io.h \
-    source/common/logger.h
+    source/common/logger.h \
+    source/common/debug.h \
+    source/runtime/expression/debug/debugexpressionmanager.h \
+    source/runtime/expression/debug/debugexpression.h
 
 OTHER_FILES += \
     README.MD \

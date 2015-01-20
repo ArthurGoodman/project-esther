@@ -9,14 +9,10 @@ namespace esther {
 class Lexer;
 
 class DefaultParser : public Parser {
-    Lexer *lexer;
     Tokens tokens;
     Tokens::iterator token;
 
 public:
-    DefaultParser();
-    ~DefaultParser();
-
     Expression *parse(Tokens &tokens);
 
 private:

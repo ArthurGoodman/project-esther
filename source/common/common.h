@@ -12,8 +12,6 @@
 #include <stack>
 using namespace std;
 
-#define DEBUG 1
-
 // Some useful functions and defines:
 
 #define forever while (true)
