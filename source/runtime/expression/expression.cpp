@@ -26,12 +26,24 @@ Expression *Expression::Literal(Object *value) {
     return manager->createLiteral(value);
 }
 
+Expression *Expression::Identifier(Expression *type, Expression *name, Expression *value) {
+    return manager->createIdentifier(type, name, value);
+}
+
 Expression *Expression::Call(Expression *self, string name, list<Expression *> args) {
     return manager->createCall(self, name, args);
 }
 
 Expression *Expression::Call(Expression *self, string name, Expression *arg) {
     return manager->createCall(self, name, list<Expression *>(1, arg));
+}
+
+Expression *Expression::Call(Expression *self, string name) {
+    return manager->createCall(self, name, list<Expression *>());
+}
+
+Expression *Expression::CloneAndCall(Expression *self, string name) {
+    return manager->createCloneAndCall(self, name);
 }
 
 Expression *Expression::If(Expression *condition, Expression *body, Expression *elseBody) {
@@ -48,5 +60,9 @@ Expression *Expression::For(Expression *preffix, Expression *condition, Expressi
 
 Expression *Expression::Do(Expression *body, Expression *condition) {
     return manager->createDo(body, condition);
+}
+
+Expression *Expression::ContextResolution(Expression *self, Expression *body) {
+    return manager->createContextResolution(self, body);
 }
 }

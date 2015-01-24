@@ -178,6 +178,8 @@ void DefaultLexer::scan() {
             token += at(pos++);                            // ?= operators.
         else if (token.getText() == "-" && at(pos) == '>') // Arrow.
             token += at(pos++);
+        else if ((token.getText() == "+" || token.getText() == "-") && at(pos) == token.getText()[0])
+            token += at(pos++);
 
         string *i;
 

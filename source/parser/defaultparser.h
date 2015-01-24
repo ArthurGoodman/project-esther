@@ -24,6 +24,9 @@ private:
 
     void getToken();
 
+    list<Expression *> parseBlock();
+    list<Expression *> parseList();
+
     Expression *expr();
     Expression *assign();
     Expression *logicOr();
@@ -32,10 +35,8 @@ private:
     Expression *relation();
     Expression *addSub();
     Expression *mulDiv();
-    Expression *dot();
     Expression *preffix();
     Expression *suffix();
-    Expression *arrow();
     Expression *term();
 };
 }

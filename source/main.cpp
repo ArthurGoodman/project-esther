@@ -5,12 +5,12 @@
 #include "scriptengine.h"
 
 int main(int argc, char **argv) {
-    //if(argc < 2) return 0;
+//    if(argc < 2) return 0;
 
-    //string fileName = argv[1];
+    string fileName = argc < 2 ? "scripts/test.es" : argv[1];
 
     ScriptEngine *engine = ScriptEngine::create();
-    engine->run(IO::readFile("scripts/test.es" /*fileName*/));
+    engine->run(IO::readFile(fileName));
 
     delete engine;
 

@@ -34,17 +34,43 @@ Expression *DebugExpressionManager::createLiteral(Object *value) {
     return new DebugExpression("Literal", arguments);
 }
 
-Expression *DebugExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {
+Expression *DebugExpressionManager::createIdentifier(Expression *type, Expression *name, Expression *value) {
     list<Object *> arguments;
+
+    if (type)
+        arguments << type;
+
+    arguments << name;
+
+    if (value)
+        arguments << value;
+
+    return new DebugExpression("Identifier", arguments);
+}
+
+Expression *DebugExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {
+    list<Object *> arguments, callArguments;
 
     arguments << self;
 
     arguments << new ValueObject("<String : \"" + name + "\">");
 
     foreach (i, args)
-        arguments << *i;
+        callArguments << *i;
+
+    arguments << new DebugExpression("List", callArguments);
 
     return new DebugExpression("Call", arguments);
+}
+
+Expression *DebugExpressionManager::createCloneAndCall(Expression *self, string name) {
+    list<Object *> arguments;
+
+    arguments << self;
+
+    arguments << new ValueObject("<String : \"" + name + "\">");
+
+    return new DebugExpression("CloneAndCall", arguments);
 }
 
 Expression *DebugExpressionManager::createIf(Expression *condition, Expression *body, Expression *elseBody) {
@@ -52,7 +78,8 @@ Expression *DebugExpressionManager::createIf(Expression *condition, Expression *
 
     arguments << condition;
     arguments << body;
-    if(elseBody) arguments << elseBody;
+    if (elseBody)
+        arguments << elseBody;
 
     return new DebugExpression("If", arguments);
 }
@@ -62,7 +89,8 @@ Expression *DebugExpressionManager::createWhile(Expression *condition, Expressio
 
     arguments << condition;
     arguments << body;
-    if(elseBody) arguments << elseBody;
+    if (elseBody)
+        arguments << elseBody;
 
     return new DebugExpression("While", arguments);
 }
@@ -85,6 +113,15 @@ Expression *DebugExpressionManager::createDo(Expression *body, Expression *condi
     arguments << condition;
 
     return new DebugExpression("Do", arguments);
+}
+
+Expression *DebugExpressionManager::createContextResolution(Expression *self, Expression *body) {
+    list<Object *> arguments;
+
+    arguments << self;
+    arguments << body;
+
+    return new DebugExpression("ContextResolution", arguments);
 }
 }
 

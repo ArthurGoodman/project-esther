@@ -17,11 +17,17 @@ public:
 
     virtual Expression *createLiteral(Object *value) = 0;
 
+    virtual Expression *createIdentifier(Expression *type, Expression *name, Expression *value) = 0;
+
     virtual Expression *createCall(Expression *self, string name, list<Expression *> args) = 0;
+
+    virtual Expression *createCloneAndCall(Expression *self, string name) = 0;
 
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) = 0;
     virtual Expression *createDo(Expression *body, Expression *condition) = 0;
+
+    virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
 };
 }

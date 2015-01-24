@@ -20,13 +20,20 @@ public:
 
     static Expression *Literal(Object *value);
 
+    static Expression *Identifier(Expression *type, Expression *name, Expression *value);
+
     static Expression *Call(Expression *self, string name, list<Expression *> args);
     static Expression *Call(Expression *self, string name, Expression *arg);
+    static Expression *Call(Expression *self, string name);
+
+    static Expression *CloneAndCall(Expression *self, string name);
 
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *While(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *For(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
     static Expression *Do(Expression *body, Expression *condition);
+
+    static Expression *ContextResolution(Expression *self, Expression *body);
 
     virtual Object *eval(Context *context) = 0;
 };
