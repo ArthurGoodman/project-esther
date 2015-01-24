@@ -58,7 +58,9 @@ SOURCES += \
     source/common/io.cpp \
     source/common/logger.cpp \
     source/runtime/expression/debug/debugexpressionmanager.cpp \
-    source/runtime/expression/debug/debugexpression.cpp
+    source/runtime/expression/debug/debugexpression.cpp \
+    source/runtime/valueobject.cpp \
+    source/variant/variantprivate.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -105,7 +107,8 @@ HEADERS += \
     source/common/logger.h \
     source/common/debug.h \
     source/runtime/expression/debug/debugexpressionmanager.h \
-    source/runtime/expression/debug/debugexpression.h
+    source/runtime/expression/debug/debugexpression.h \
+    source/runtime/valueobject.h
 
 OTHER_FILES += \
     README.MD \

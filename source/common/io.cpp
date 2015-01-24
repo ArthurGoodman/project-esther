@@ -29,3 +29,11 @@ void IO::writeFile(string fileName, string data) {
 
     f.close();
 }
+
+void IO::print(string data) {
+    cout << data;
+}
+
+void IO::printLine(string data) {
+    cout << data << endl;
+}

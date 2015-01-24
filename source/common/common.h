@@ -49,9 +49,9 @@ vector<B> *operator<<(vector<B> *v, const A &e) {
 // String covertions:
 
 template <class T>
-string toString(T t, int precision = 16) {
+string toString(T t, int base = 10, int precision = 16) {
     ostringstream s;
-    s << setprecision(precision) << t;
+    s << setbase(base) << setprecision(precision) << t;
     return s.str();
 }
 

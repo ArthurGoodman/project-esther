@@ -6,10 +6,10 @@
 namespace esther {
 
 ExpressionManager *ExpressionManager::create() {
-#if DEBUG_EXPRESSIONS
+#if DEBUG_PARSER
     return new DebugExpressionManager;
 #endif
-    return new DefaultExpressionManager;
+    //    return new DefaultExpressionManager;
 }
 
 ExpressionManager::~ExpressionManager() {

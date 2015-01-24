@@ -7,8 +7,7 @@ class VariantPrivate {
     friend class Variant;
 
 public:
-    virtual ~VariantPrivate() {
-    }
+    virtual ~VariantPrivate();
 
 private:
     virtual VariantPrivate *clone() const = 0;

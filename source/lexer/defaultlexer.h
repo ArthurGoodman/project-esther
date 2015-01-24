@@ -24,7 +24,6 @@ enum {
     tNe,
     tAnd,
     tOr,
-    tXor,
     tNot,
     tAssign,
     tPlusAssign,

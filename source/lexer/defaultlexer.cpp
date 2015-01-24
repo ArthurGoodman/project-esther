@@ -9,7 +9,7 @@ namespace esther {
 
 string DefaultLexer::operators[] = {
     "+", "-", "*", "/", "%",
-    "<", ">", "<=", ">=", "==", "!=", "&", "|", "^", "!", "=",
+    "<", ">", "<=", ">=", "==", "!=", "&", "|", "!", "=",
     "+=", "-=", "*=", "/=", "%=",
     "--", "++",
     ".", "->", ",", ":", "@", "$", ";",
@@ -24,7 +24,7 @@ string DefaultLexer::keywords[] = {
 // This is used in logs.
 string DefaultLexer::tokenTypes[] = {
     "tPlus", "tMinus", "tMultiply", "tDivide", "tMod",
-    "tLt", "tGt", "tLe", "tGe", "tEq", "tNe", "tAnd", "tOr", "tXor", "tNot", "tAssign",
+    "tLt", "tGt", "tLe", "tGe", "tEq", "tNe", "tAnd", "tOr", "tNot", "tAssign",
     "tPlusAssign", "tMinusAssign", "tMultiplyAssign", "tDivideAssign", "tModAssign",
     "tDec", "tInc",
     "tDot", "tArrow", "tComma", "tColon", "tAt", "tDollar", "tSemi",

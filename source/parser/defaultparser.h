@@ -27,7 +27,6 @@ private:
     Expression *expr();
     Expression *assign();
     Expression *logicOr();
-    Expression *logicXor();
     Expression *logicAnd();
     Expression *equality();
     Expression *relation();
