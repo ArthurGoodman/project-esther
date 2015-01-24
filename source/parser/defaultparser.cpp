@@ -208,8 +208,8 @@ Expression *DefaultParser::preffix() {
 Expression *DefaultParser::suffix() {
     Expression *e = term();
 
-    if (range(tLPar, tLBracket) | check(tDot))
-        while (range(tLPar, tLBracket) | check(tDot)) {
+    if (range(tLPar, tLBracket) || check(tDot))
+        while (range(tLPar, tLBracket) || check(tDot)) {
             if (accept(tLPar)) {
                 list<Expression *> nodes = check(tRPar) ? list<Expression *>() : parseList();
 

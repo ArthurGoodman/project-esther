@@ -6,6 +6,9 @@
 #include "lexer.h"
 #include "parser.h"
 #include "expression.h"
+#include "true.h"
+#include "false.h"
+#include "null.h"
 
 namespace esther {
 
@@ -36,15 +39,55 @@ void Esther::release() {
     delete parser;
 
     Expression::release();
+
+    releaseRuntime();
 }
 
 void Esther::initializeRuntime() {
-    setRootClass(new Class("Integer"));
-    setRootClass(new Class("Float"));
-    setRootClass(new Class("Char"));
-    setRootClass(new Class("String"));
+    objectClass = new Class("Object", 0);
+    setRootClass(objectClass);
+
+    mainObject = new Object;
+
+    Class *classClass = new Class("Class");
+    setRootClass(classClass);
+
+    objectClass->setClass(classClass);
+    classClass->setClass(classClass);
+
+    //Class *methodClass = new Class("Method", 0, 0); setRootClass(methodClass);
+    //Class *callableClass = new Class("Callable"); setRootClass(callableClass);
+    //methodClass->setSuperclass(callableClass);
+
+    setRootClass("TrueClass"); trueObject = new True;
+    setRootClass("FalseClass"); falseObject = new False;
+    setRootClass("NullClass"); nullObject = new Null;
+
+    //setRootClass("MethodList", "Method");
+    //setRootClass("Function", "Callable");
+    //setRootClass("Lambda", "Callable");
+
+    setRootClass("Integer");
+    setRootClass("Float");
+    setRootClass("Char");
+    setRootClass("String");
+
+    setRootClass("Context");
 
     root = new Context;
+}
+
+void Esther::releaseRuntime() {
+    delete root;
+
+    delete mainObject;
+
+    delete trueObject;
+    delete falseObject;
+    delete nullObject;
+
+    foreach (i, rootClasses)
+        delete i->second;
 }
 
 Context *Esther::getRoot() {
@@ -87,9 +130,9 @@ void Esther::setRootClass(string name) {
     rootClasses[name] = new Class(name);
 }
 
-//void Esther::setRootClass(string name, string superName) {
-//    rootClasses[name] = new Class(name, superName);
-//}
+void Esther::setRootClass(string name, string superName) {
+    rootClasses[name] = new Class(name, superName);
+}
 
 Object *Esther::toBoolean(bool value) {
     return value ? trueObject : falseObject;

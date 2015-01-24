@@ -60,7 +60,10 @@ SOURCES += \
     source/runtime/expression/debug/debugexpressionmanager.cpp \
     source/runtime/expression/debug/debugexpression.cpp \
     source/runtime/valueobject.cpp \
-    source/variant/variantprivate.cpp
+    source/variant/variantprivate.cpp \
+    source/runtime/true.cpp \
+    source/runtime/false.cpp \
+    source/runtime/null.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -108,7 +111,10 @@ HEADERS += \
     source/common/debug.h \
     source/runtime/expression/debug/debugexpressionmanager.h \
     source/runtime/expression/debug/debugexpression.h \
-    source/runtime/valueobject.h
+    source/runtime/valueobject.h \
+    source/runtime/true.h \
+    source/runtime/false.h \
+    source/runtime/null.h
 
 OTHER_FILES += \
     README.MD \

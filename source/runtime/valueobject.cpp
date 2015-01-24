@@ -1,27 +1,25 @@
 #include "valueobject.h"
 
-#include "esther.h"
-
 namespace esther {
 
 ValueObject::ValueObject(int value)
-    : Object(Esther::getRootClass("Integer")), value(value) {
+    : Object("Integer"), value(value) {
 }
 
 ValueObject::ValueObject(double value)
-    : Object(Esther::getRootClass("Float")), value(value) {
+    : Object("Float"), value(value) {
 }
 
 ValueObject::ValueObject(char value)
-    : Object(Esther::getRootClass("Char")), value(value) {
+    : Object("Char"), value(value) {
 }
 
 ValueObject::ValueObject(string value)
-    : Object(Esther::getRootClass("String")), value(value) {
+    : Object("String"), value(value) {
 }
 
 ValueObject::ValueObject(const char *value)
-    : Object(Esther::getRootClass("String")), value(value) {
+    : Object("String"), value(value) {
 }
 
 string ValueObject::toString() {

@@ -35,6 +35,7 @@ public:
     static void release();
 
     static void initializeRuntime();
+    static void releaseRuntime();
 
     static Context *getRoot();
     static Object *getMainObject();
@@ -47,7 +48,7 @@ public:
     static Class *getRootClass(string name);
     static void setRootClass(Class *rootClass);
     static void setRootClass(string name);
-//    static void setRootClass(string name, string superName);
+    static void setRootClass(string name, string superName);
 
     static Object *toBoolean(bool value);
 
