@@ -13,6 +13,11 @@ class Parser;
 // Global access point to the various runtime stuff.
 class Esther {
 public:
+    // Internal environment.
+    static Lexer *lexer;
+    static Parser *parser;
+    static stack<string> sources; // This is used in error messages to show the line containing errors.
+
     // External environment.
     static Context *root;
 
@@ -24,11 +29,6 @@ public:
     static Object *nullObject;
 
     static map<string, Class *> rootClasses;
-
-    // Internal environment.
-    static Lexer *lexer;
-    static Parser *parser;
-    static stack<string> sources; // This is used in error messages to show the line containing errors.
 
 public:
     static void initialize();

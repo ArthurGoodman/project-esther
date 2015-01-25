@@ -100,8 +100,8 @@ Expression *DefaultParser::assign() {
 Expression *DefaultParser::logicOr() {
     Expression *e = logicAnd();
 
-    //while (accept(tOr))
-    //    e = new OrExpression(e, logicXor());
+    while (accept(tOr))
+        e = Expression::Or(e, logicAnd());
 
     return e;
 }
@@ -109,8 +109,8 @@ Expression *DefaultParser::logicOr() {
 Expression *DefaultParser::logicAnd() {
     Expression *e = equality();
 
-    //while (accept(tAnd))
-    //    e = new AndExpression(e, equality());
+    while (accept(tAnd))
+        e = Expression::And(e, equality());
 
     return e;
 }
@@ -304,7 +304,7 @@ Expression *DefaultParser::term() {
             getToken();
         }
 
-        if(accept(tAssign))
+        if (accept(tAssign))
             value = logicOr();
 
         if (type)
@@ -389,14 +389,12 @@ Expression *DefaultParser::term() {
         e = Expression::Do(body, term());
     }
 
-    //else if (accept(tReturn))
-    //    e = new ReturnExpression(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : assign());
-
-    //else if (accept(tBreak))
-    //    e = new BreakExpression(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : assign());
-
-    //else if (accept(tContinue))
-    //    e = new ExceptionExpression(new ContinueException);
+    else if (accept(tReturn))
+        e = Expression::Return(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : assign());
+    else if (accept(tBreak))
+        e = Expression::Break(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : assign());
+    else if (accept(tContinue))
+        e = Expression::Continue();
 
     else if (accept(tTrue))
         e = Expression::Literal(Esther::getTrue());
@@ -404,6 +402,7 @@ Expression *DefaultParser::term() {
         e = Expression::Literal(Esther::getFalse());
     else if (accept(tNull))
         e = Expression::Literal(Esther::getNull());
+
     //else if (accept(tSelf))
     //    e = new SelfExpression;
     //else if (accept(tSuper))
@@ -457,20 +456,23 @@ Expression *DefaultParser::term() {
     //        e = !name ? (Expression *)new CallableExpression(new IdentifierExpression(new LiteralExpression(/*new String("")*/ 0), 0, 0, false), params, assign(), tDollar, isStatic) : (Expression *)new CallableExpression(name, params, assign(), tDollar, isStatic);
     //        break;
     //    }
-    //} else if (accept(tClass)) {
-    //    IdentifierExpression *name = 0;
-    //    Expression *superClass = 0, *body;
-
-    //    if (check(tId) || check(tColon))
-    //        name = (IdentifierExpression *)term();
-    //    if (accept(tLt))
-    //        superClass = term();
-    //    body = term();
-    //    if (dynamic_cast<BlockExpression *>(body))
-    //        ((BlockExpression *)body)->disableChildContext();
-
-    //    e = new ClassExpression(name, superClass, body);
     //}
+    else if (accept(tClass)) {
+        Expression *name = 0, *superClass = 0, *body;
+
+        if (check(tId) || check(tColon))
+            name = term();
+
+        if (accept(tLt))
+            superClass = term();
+
+        body = term();
+
+        //if (dynamic_cast<BlockExpression *>(body))
+        //    ((BlockExpression *)body)->disableChildContext();
+
+        e = Expression::Class(name, superClass, body);
+    }
 
     //else if(accept(tTry)) {}
 

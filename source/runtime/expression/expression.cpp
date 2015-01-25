@@ -26,6 +26,14 @@ Expression *Expression::Literal(Object *value) {
     return manager->createLiteral(value);
 }
 
+Expression *Expression::Or(Expression *self, Expression *arg) {
+    return manager->createOr(self, arg);
+}
+
+Expression *Expression::And(Expression *self, Expression *arg) {
+    return manager->createAnd(self, arg);
+}
+
 Expression *Expression::Identifier(Expression *name) {
     return manager->createIdentifier(name);
 }
@@ -72,5 +80,21 @@ Expression *Expression::Do(Expression *body, Expression *condition) {
 
 Expression *Expression::ContextResolution(Expression *self, Expression *body) {
     return manager->createContextResolution(self, body);
+}
+
+Expression *Expression::Class(Expression *name, Expression *superclass, Expression *body) {
+    return manager->createClass(name, superclass, body);
+}
+
+Expression *Expression::Return(Expression *value) {
+    return manager->createReturn(value);
+}
+
+Expression *Expression::Break(Expression *value) {
+    return manager->createBreak(value);
+}
+
+Expression *Expression::Continue() {
+    return manager->createContinue();
 }
 }

@@ -20,6 +20,9 @@ public:
 
     static Expression *Literal(Object *value);
 
+    static Expression *Or(Expression *self, Expression *arg);
+    static Expression *And(Expression *self, Expression *arg);
+
     static Expression *Identifier(Expression *name);
     static Expression *IdentifierAssignment(Expression *name, Expression *value);
     static Expression *LocalDefinition(Expression *type, Expression *name, Expression *value);
@@ -36,6 +39,12 @@ public:
     static Expression *Do(Expression *body, Expression *condition);
 
     static Expression *ContextResolution(Expression *self, Expression *body);
+
+    static Expression *Class(Expression *name, Expression *superclass, Expression *body);
+
+    static Expression *Return(Expression *value);
+    static Expression *Break(Expression *value);
+    static Expression *Continue();
 
     virtual Object *eval(Context *context) = 0;
 };

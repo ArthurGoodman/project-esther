@@ -4,6 +4,8 @@
 #include "blockexpression.h"
 #include "listexpression.h"
 #include "literalexpression.h"
+#include "orexpression.h"
+#include "andexpression.h"
 #include "identifierexpression.h"
 #include "identifierassignmentexpression.h"
 #include "localdefinitionexpression.h"
@@ -14,6 +16,10 @@
 #include "forexpression.h"
 #include "doexpression.h"
 #include "contextresolutionexpression.h"
+#include "classexpression.h"
+#include "returnexpression.h"
+#include "breakexpression.h"
+#include "continueexpression.h"
 
 namespace esther {
 
@@ -27,6 +33,14 @@ Expression *DefaultExpressionManager::createList(list<Expression *> nodes) {
 
 Expression *DefaultExpressionManager::createLiteral(Object *value) {
     return new LiteralExpression(value);
+}
+
+Expression *DefaultExpressionManager::createOr(Expression *self, Expression *arg) {
+    return new OrExpression(self, arg);
+}
+
+Expression *DefaultExpressionManager::createAnd(Expression *self, Expression *arg) {
+    return new AndExpression(self, arg);
 }
 
 Expression *DefaultExpressionManager::createIdentifier(Expression *name) {
@@ -67,5 +81,21 @@ Expression *DefaultExpressionManager::createDo(Expression *body, Expression *con
 
 Expression *DefaultExpressionManager::createContextResolution(Expression *self, Expression *body) {
     return new ContextResolutionExpression(self, body);
+}
+
+Expression *DefaultExpressionManager::createClass(Expression *name, Expression *superclass, Expression *body) {
+    return new ClassExpression(name, superclass, body);
+}
+
+Expression *DefaultExpressionManager::createReturn(Expression *value) {
+    return new ReturnExpression(value);
+}
+
+Expression *DefaultExpressionManager::createBreak(Expression *value) {
+    return new BreakExpression(value);
+}
+
+Expression *DefaultExpressionManager::createContinue() {
+    return new ContinueExpression;
 }
 }

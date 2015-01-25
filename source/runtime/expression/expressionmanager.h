@@ -17,6 +17,9 @@ public:
 
     virtual Expression *createLiteral(Object *value) = 0;
 
+    virtual Expression *createOr(Expression *self, Expression *arg) = 0;
+    virtual Expression *createAnd(Expression *self, Expression *arg) = 0;
+
     virtual Expression *createIdentifier(Expression *name) = 0;
     virtual Expression *createIdentifierAssignment(Expression *name, Expression *value) = 0;
     virtual Expression *createLocalDefinition(Expression *type, Expression *name, Expression *value) = 0;
@@ -31,5 +34,11 @@ public:
     virtual Expression *createDo(Expression *body, Expression *condition) = 0;
 
     virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
+
+    virtual Expression *createClass(Expression *name, Expression *superclass, Expression *body) = 0;
+
+    virtual Expression *createReturn(Expression *value) = 0;
+    virtual Expression *createBreak(Expression *value) = 0;
+    virtual Expression *createContinue() = 0;
 };
 }

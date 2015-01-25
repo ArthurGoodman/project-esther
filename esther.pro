@@ -76,7 +76,13 @@ SOURCES += \
     source/runtime/expression/ast/doexpression.cpp \
     source/runtime/expression/ast/forexpression.cpp \
     source/runtime/expression/ast/ifexpression.cpp \
-    source/runtime/expression/ast/whileexpression.cpp
+    source/runtime/expression/ast/whileexpression.cpp \
+    source/runtime/expression/ast/classexpression.cpp \
+    source/runtime/expression/ast/returnexpression.cpp \
+    source/runtime/expression/ast/breakexpression.cpp \
+    source/runtime/expression/ast/continueexpression.cpp \
+    source/runtime/expression/ast/orexpression.cpp \
+    source/runtime/expression/ast/andexpression.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -140,7 +146,13 @@ HEADERS += \
     source/runtime/expression/ast/doexpression.h \
     source/runtime/expression/ast/forexpression.h \
     source/runtime/expression/ast/ifexpression.h \
-    source/runtime/expression/ast/whileexpression.h
+    source/runtime/expression/ast/whileexpression.h \
+    source/runtime/expression/ast/classexpression.h \
+    source/runtime/expression/ast/returnexpression.h \
+    source/runtime/expression/ast/breakexpression.h \
+    source/runtime/expression/ast/continueexpression.h \
+    source/runtime/expression/ast/orexpression.h \
+    source/runtime/expression/ast/andexpression.h
 
 OTHER_FILES += \
     README.MD \
