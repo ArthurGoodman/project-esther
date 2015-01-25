@@ -66,7 +66,17 @@ SOURCES += \
     source/runtime/null.cpp \
     source/runtime/expression/ast/literalexpression.cpp \
     source/runtime/expression/ast/blockexpression.cpp \
-    source/runtime/expression/ast/listexpression.cpp
+    source/runtime/expression/ast/listexpression.cpp \
+    source/runtime/expression/ast/identifierexpression.cpp \
+    source/runtime/expression/ast/identifierassignmentexpression.cpp \
+    source/runtime/expression/ast/localdefinitionexpression.cpp \
+    source/runtime/expression/ast/callexpression.cpp \
+    source/runtime/expression/ast/cloneandcallexpression.cpp \
+    source/runtime/expression/ast/contextresolutionexpression.cpp \
+    source/runtime/expression/ast/doexpression.cpp \
+    source/runtime/expression/ast/forexpression.cpp \
+    source/runtime/expression/ast/ifexpression.cpp \
+    source/runtime/expression/ast/whileexpression.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -120,7 +130,17 @@ HEADERS += \
     source/runtime/null.h \
     source/runtime/expression/ast/literalexpression.h \
     source/runtime/expression/ast/blockexpression.h \
-    source/runtime/expression/ast/listexpression.h
+    source/runtime/expression/ast/listexpression.h \
+    source/runtime/expression/ast/identifierexpression.h \
+    source/runtime/expression/ast/identifierassignmentexpression.h \
+    source/runtime/expression/ast/localdefinitionexpression.h \
+    source/runtime/expression/ast/callexpression.h \
+    source/runtime/expression/ast/cloneandcallexpression.h \
+    source/runtime/expression/ast/contextresolutionexpression.h \
+    source/runtime/expression/ast/doexpression.h \
+    source/runtime/expression/ast/forexpression.h \
+    source/runtime/expression/ast/ifexpression.h \
+    source/runtime/expression/ast/whileexpression.h
 
 OTHER_FILES += \
     README.MD \

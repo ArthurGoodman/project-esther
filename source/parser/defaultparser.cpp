@@ -309,7 +309,7 @@ Expression *DefaultParser::term() {
 
         if (type)
             e = Expression::LocalDefinition(type, name, value);
-        else if (accept(tAssign))
+        else if (value)
             e = Expression::IdentifierAssignment(name, value);
         else
             e = Expression::Identifier(name);
