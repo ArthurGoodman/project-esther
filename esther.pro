@@ -63,7 +63,10 @@ SOURCES += \
     source/variant/variantprivate.cpp \
     source/runtime/true.cpp \
     source/runtime/false.cpp \
-    source/runtime/null.cpp
+    source/runtime/null.cpp \
+    source/runtime/expression/ast/literalexpression.cpp \
+    source/runtime/expression/ast/blockexpression.cpp \
+    source/runtime/expression/ast/listexpression.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -114,7 +117,10 @@ HEADERS += \
     source/runtime/valueobject.h \
     source/runtime/true.h \
     source/runtime/false.h \
-    source/runtime/null.h
+    source/runtime/null.h \
+    source/runtime/expression/ast/literalexpression.h \
+    source/runtime/expression/ast/blockexpression.h \
+    source/runtime/expression/ast/listexpression.h
 
 OTHER_FILES += \
     README.MD \

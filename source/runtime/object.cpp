@@ -78,6 +78,6 @@ bool Object::isNull() {
 }
 
 string Object::toString() {
-    return "<" + objectClass->toString() + "0x" + ::toString((int)this, 16) + ">";
+    return "<" + objectClass->toString() + ":" + ::toString<void *>(this) + ">";
 }
 }

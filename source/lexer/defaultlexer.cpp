@@ -18,7 +18,7 @@ string DefaultLexer::operators[] = {
 string DefaultLexer::keywords[] = {
     "if", "else", "elif", "while", "for", "do", "forever",
     "true", "false", "null", "self", "super", "context", "continue", "break", "return",
-    "include", "class", "static", "method", "function", "try", "throw", "catch"};
+    "include", "class", "static", "method", "function", "try", "throw", "catch", "var"};
 
 #if DEBUG_LEXER
 // This is used in logs.
@@ -32,7 +32,7 @@ string DefaultLexer::tokenTypes[] = {
 
     "tIf", "tElse", "tElif", "tWhile", "tFor", "tDo", "tForever",
     "tTrue", "tFalse", "tNull", "tSelf", "tSuper", "tContext", "tContinue", "tBreak", "tReturn",
-    "tInclude", "tClass", "tStatic", "tMethod", "tFunction", "tTry", "tThrow", "tCatch",
+    "tInclude", "tClass", "tStatic", "tMethod", "tFunction", "tTry", "tThrow", "tCatch", "tVar",
 
     "tId", "tInteger", "tFloat", "tString", "tComplexString", "tUnknown", "tEnd"};
 #endif

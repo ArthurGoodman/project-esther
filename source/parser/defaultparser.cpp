@@ -292,7 +292,7 @@ Expression *DefaultParser::term() {
     //}
 
     if (check(tId)) {
-        Expression *type = 0, *name = 0;
+        Expression *type = 0, *name = 0, *value = 0;
 
         name = Expression::Literal(new ValueObject(token->getText()));
 
@@ -304,7 +304,24 @@ Expression *DefaultParser::term() {
             getToken();
         }
 
-        e = Expression::Identifier(type, name, accept(tAssign) ? logicOr() : 0);
+        if(accept(tAssign))
+            value = logicOr();
+
+        if (type)
+            e = Expression::LocalDefinition(type, name, value);
+        else if (accept(tAssign))
+            e = Expression::IdentifierAssignment(name, value);
+        else
+            e = Expression::Identifier(name);
+    } else if (accept(tVar)) {
+        if (!check(tId))
+            error("identifier expected");
+
+        Expression *name = Expression::Literal(new ValueObject(token->getText()));
+
+        getToken();
+
+        e = Expression::LocalDefinition(0, name, accept(tAssign) ? logicOr() : 0);
     }
 
     else if (check(tInteger)) {

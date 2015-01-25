@@ -21,8 +21,6 @@ public:
     Object *getCurrentSelf();
     Class *getCurrentClass();
 
-    bool isObjectContext();
-
     bool hasLocal(string name);
     void setLocal(string name, Object *value);
 

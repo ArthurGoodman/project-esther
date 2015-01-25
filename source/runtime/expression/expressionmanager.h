@@ -17,7 +17,9 @@ public:
 
     virtual Expression *createLiteral(Object *value) = 0;
 
-    virtual Expression *createIdentifier(Expression *type, Expression *name, Expression *value) = 0;
+    virtual Expression *createIdentifier(Expression *name) = 0;
+    virtual Expression *createIdentifierAssignment(Expression *name, Expression *value) = 0;
+    virtual Expression *createLocalDefinition(Expression *type, Expression *name, Expression *value) = 0;
 
     virtual Expression *createCall(Expression *self, string name, list<Expression *> args) = 0;
 

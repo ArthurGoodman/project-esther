@@ -71,6 +71,7 @@ enum {
     tTry,
     tThrow,
     tCatch,
+    tVar,
 
     tId,
     tInteger,

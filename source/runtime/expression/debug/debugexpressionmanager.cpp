@@ -34,7 +34,24 @@ Expression *DebugExpressionManager::createLiteral(Object *value) {
     return new DebugExpression("Literal", arguments);
 }
 
-Expression *DebugExpressionManager::createIdentifier(Expression *type, Expression *name, Expression *value) {
+Expression *DebugExpressionManager::createIdentifier(Expression *name) {
+    list<Object *> arguments;
+
+    arguments << name;
+
+    return new DebugExpression("Identifier", arguments);
+}
+
+Expression *DebugExpressionManager::createIdentifierAssignment(Expression *name, Expression *value) {
+    list<Object *> arguments;
+
+    arguments << name;
+        arguments << value;
+
+    return new DebugExpression("IdentifierAssignment", arguments);
+}
+
+Expression *DebugExpressionManager::createLocalDefinition(Expression *type, Expression *name, Expression *value) {
     list<Object *> arguments;
 
     if (type)
@@ -45,7 +62,7 @@ Expression *DebugExpressionManager::createIdentifier(Expression *type, Expressio
     if (value)
         arguments << value;
 
-    return new DebugExpression("Identifier", arguments);
+    return new DebugExpression("LocalDefinition", arguments);
 }
 
 Expression *DebugExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {

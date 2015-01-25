@@ -20,7 +20,9 @@ public:
 
     static Expression *Literal(Object *value);
 
-    static Expression *Identifier(Expression *type, Expression *name, Expression *value);
+    static Expression *Identifier(Expression *name);
+    static Expression *IdentifierAssignment(Expression *name, Expression *value);
+    static Expression *LocalDefinition(Expression *type, Expression *name, Expression *value);
 
     static Expression *Call(Expression *self, string name, list<Expression *> args);
     static Expression *Call(Expression *self, string name, Expression *arg);

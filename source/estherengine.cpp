@@ -7,6 +7,7 @@
 #include "defaultlexer.h"
 #include "errorexception.h"
 #include "logger.h"
+#include "io.h"
 
 namespace esther {
 
@@ -26,7 +27,7 @@ void EstherEngine::run(const string &script) {
 #if DEBUG_PARSER
         Logger::setActiveLog("parser");
 #endif
-        expr->eval(0);
+        IO::printLine("=> " + expr->eval(0)->toString());
     } catch (ErrorException *e) {
         cout << e->msg() << endl;
         delete e;

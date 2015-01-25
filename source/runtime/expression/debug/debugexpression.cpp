@@ -1,5 +1,6 @@
 #include "debugexpression.h"
 
+#include "esther.h"
 #include "logger.h"
 
 #if DEBUG_PARSER
@@ -15,7 +16,7 @@ DebugExpression::DebugExpression(string name, list<Object *> args)
 Object *DebugExpression::eval(Context *) {
     Logger::write(toString());
 
-    return 0;
+    return Esther::getNull();
 }
 
 string DebugExpression::toString() {

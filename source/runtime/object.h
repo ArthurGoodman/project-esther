@@ -29,9 +29,9 @@ public:
 
     Object *as(Class *_class);
 
-    Object *call(string name, list<Object *> args);
-    Object *call(string name, Object *arg);
-    Object *call(string name);
+    virtual Object *call(string name, list<Object *> args);
+    virtual Object *call(string name, Object *arg);
+    virtual Object *call(string name);
 
     virtual bool isTrue();
     virtual bool isFalse();
