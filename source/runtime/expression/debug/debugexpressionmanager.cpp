@@ -8,6 +8,10 @@
 
 namespace esther {
 
+Expression *DebugExpressionManager::createEmpty() {
+    return new DebugExpression("Empty");
+}
+
 Expression *DebugExpressionManager::createBlock(list<Expression *> nodes) {
     list<Object *> arguments;
 
@@ -34,6 +38,32 @@ Expression *DebugExpressionManager::createLiteral(Object *value) {
     return new DebugExpression("Literal", arguments);
 }
 
+Expression *DebugExpressionManager::createOr(Expression *self, Expression *arg) {
+    list<Object *> arguments;
+
+    arguments << self;
+    arguments << arg;
+
+    return new DebugExpression("Or", arguments);
+}
+
+Expression *DebugExpressionManager::createAnd(Expression *self, Expression *arg) {
+    list<Object *> arguments;
+
+    arguments << self;
+    arguments << arg;
+
+    return new DebugExpression("And", arguments);
+}
+
+Expression *DebugExpressionManager::createNegate(Expression *self) {
+    list<Object *> arguments;
+
+    arguments << self;
+
+    return new DebugExpression("Negate", arguments);
+}
+
 Expression *DebugExpressionManager::createIdentifier(Expression *name) {
     list<Object *> arguments;
 
@@ -46,7 +76,7 @@ Expression *DebugExpressionManager::createIdentifierAssignment(Expression *name,
     list<Object *> arguments;
 
     arguments << name;
-        arguments << value;
+    arguments << value;
 
     return new DebugExpression("IdentifierAssignment", arguments);
 }
@@ -139,6 +169,36 @@ Expression *DebugExpressionManager::createContextResolution(Expression *self, Ex
     arguments << body;
 
     return new DebugExpression("ContextResolution", arguments);
+}
+
+Expression *DebugExpressionManager::createClass(Expression *name, Expression *superclass, Expression *body) {
+    list<Object *> arguments;
+
+    if(name) arguments << name;
+    if(superclass) arguments << superclass;
+    arguments << body;
+
+    return new DebugExpression("Class", arguments);
+}
+
+Expression *DebugExpressionManager::createReturn(Expression *value) {
+    list<Object *> arguments;
+
+    if(value) arguments << value;
+
+    return new DebugExpression("Return", arguments);
+}
+
+Expression *DebugExpressionManager::createBreak(Expression *value) {
+    list<Object *> arguments;
+
+    if(value) arguments << value;
+
+    return new DebugExpression("Break", arguments);
+}
+
+Expression *DebugExpressionManager::createContinue() {
+    return new DebugExpression("Continue");
 }
 }
 

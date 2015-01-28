@@ -5,7 +5,7 @@
 namespace esther {
 
 IdentifierAssignmentExpression::IdentifierAssignmentExpression(Expression *name, Expression *value)
-    : name(name), value(value) {
+    : IdentifierExpression(name), value(value) {
 }
 
 Object *IdentifierAssignmentExpression::eval(Context *context) {

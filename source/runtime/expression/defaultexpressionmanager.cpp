@@ -10,7 +10,7 @@
 #include "negateexpression.h"
 #include "identifierexpression.h"
 #include "identifierassignmentexpression.h"
-#include "localdefinitionexpression.h"
+#include "identifierdefinitionexpression.h"
 #include "callexpression.h"
 #include "cloneandcallexpression.h"
 #include "ifexpression.h"
@@ -62,7 +62,7 @@ Expression *DefaultExpressionManager::createIdentifierAssignment(Expression *nam
 }
 
 Expression *DefaultExpressionManager::createLocalDefinition(Expression *type, Expression *name, Expression *value) {
-    return new LocalDefinitionExpression(type, name, value);
+    return new IdentifierDefinitionExpression(type, name, value);
 }
 
 Expression *DefaultExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {

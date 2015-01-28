@@ -10,10 +10,17 @@ namespace esther {
 
 class DebugExpressionManager : public ExpressionManager {
 public:
+    Expression *createEmpty();
+
     Expression *createBlock(list<Expression *> nodes);
     Expression *createList(list<Expression *> nodes);
 
     Expression *createLiteral(Object *value);
+
+    Expression *createOr(Expression *self, Expression *arg);
+    Expression *createAnd(Expression *self, Expression *arg);
+
+    Expression *createNegate(Expression *self);
 
     Expression *createIdentifier(Expression *name);
     Expression *createIdentifierAssignment(Expression *name, Expression *value);
@@ -29,6 +36,12 @@ public:
     Expression *createDo(Expression *body, Expression *condition);
 
     Expression *createContextResolution(Expression *self, Expression *body);
+
+    Expression *createClass(Expression *name, Expression *superclass, Expression *body);
+
+    Expression *createReturn(Expression *value);
+    Expression *createBreak(Expression *value);
+    Expression *createContinue();
 };
 }
 

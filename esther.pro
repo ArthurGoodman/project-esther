@@ -69,7 +69,6 @@ SOURCES += \
     source/runtime/expression/ast/listexpression.cpp \
     source/runtime/expression/ast/identifierexpression.cpp \
     source/runtime/expression/ast/identifierassignmentexpression.cpp \
-    source/runtime/expression/ast/localdefinitionexpression.cpp \
     source/runtime/expression/ast/callexpression.cpp \
     source/runtime/expression/ast/cloneandcallexpression.cpp \
     source/runtime/expression/ast/contextresolutionexpression.cpp \
@@ -84,7 +83,8 @@ SOURCES += \
     source/runtime/expression/ast/orexpression.cpp \
     source/runtime/expression/ast/andexpression.cpp \
     source/runtime/expression/ast/emptyexpression.cpp \
-    source/runtime/expression/ast/negateexpression.cpp
+    source/runtime/expression/ast/negateexpression.cpp \
+    source/runtime/expression/ast/identifierdefinitionexpression.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -141,7 +141,6 @@ HEADERS += \
     source/runtime/expression/ast/listexpression.h \
     source/runtime/expression/ast/identifierexpression.h \
     source/runtime/expression/ast/identifierassignmentexpression.h \
-    source/runtime/expression/ast/localdefinitionexpression.h \
     source/runtime/expression/ast/callexpression.h \
     source/runtime/expression/ast/cloneandcallexpression.h \
     source/runtime/expression/ast/contextresolutionexpression.h \
@@ -156,7 +155,8 @@ HEADERS += \
     source/runtime/expression/ast/orexpression.h \
     source/runtime/expression/ast/andexpression.h \
     source/runtime/expression/ast/emptyexpression.h \
-    source/runtime/expression/ast/negateexpression.h
+    source/runtime/expression/ast/negateexpression.h \
+    source/runtime/expression/ast/identifierdefinitionexpression.h
 
 OTHER_FILES += \
     README.MD \

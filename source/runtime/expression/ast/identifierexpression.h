@@ -6,6 +6,7 @@
 namespace esther {
 
 class IdentifierExpression : public Expression {
+protected:
     Expression *name;
 
 public:

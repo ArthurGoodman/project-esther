@@ -1,12 +1,13 @@
 #pragma once
 #include <common.h>
 
-#include "expression.h"
+#include "identifierexpression.h"
 
 namespace esther {
 
-class IdentifierAssignmentExpression : public Expression {
-    Expression *name, *value;
+class IdentifierAssignmentExpression : public IdentifierExpression {
+protected:
+    Expression *value;
 
 public:
     IdentifierAssignmentExpression(Expression *name, Expression *value);
