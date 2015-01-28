@@ -71,6 +71,8 @@ list<Expression *> DefaultParser::parseList() {
 Expression *DefaultParser::expr() {
     list<Expression *> nodes = parseList();
 
+    accept(tSemi);
+
     return nodes.size() == 1 ? nodes.front() : Expression::List(nodes);
 }
 
@@ -91,8 +93,6 @@ Expression *DefaultParser::assign() {
         else if (accept(tModAssign))
             e = Expression::Call(e, "%=", logicOr());
     }
-
-    accept(tSemi);
 
     return e;
 }
@@ -180,8 +180,8 @@ Expression *DefaultParser::preffix() {
         e = Expression::Call(Expression::Literal(new ValueObject(0)), "+", suffix());
     else if (accept(tMinus))
         e = Expression::Call(Expression::Literal(new ValueObject(0)), "-", suffix());
-    //else if (accept(tNot))
-    //    e = new NotExpression(suffix());
+    else if (accept(tNot))
+        e = Expression::Negate(suffix());
     //else if (accept(tInclude))
     //    e = new IncludeExpression(suffix());
     //else if (accept(tDot)) {
@@ -355,10 +355,10 @@ Expression *DefaultParser::term() {
 
         getToken();
 
-        Expression *condition = term(), *body = assign(), *elseBody = 0;
+        Expression *condition = term(), *body = expr(), *elseBody = 0;
 
         if (accept(tElse))
-            elseBody = assign();
+            elseBody = expr();
         else if (check(tElif)) {
             token->setId(tIf);
             elseBody = term();
@@ -366,7 +366,7 @@ Expression *DefaultParser::term() {
 
         e = id == tIf ? Expression::If(condition, body, elseBody) : Expression::While(condition, body, elseBody);
     } else if (accept(tForever))
-        e = Expression::While(Expression::Literal(Esther::getTrue()), assign(), 0);
+        e = Expression::While(Expression::Literal(Esther::getTrue()), expr(), 0);
     else if (accept(tFor)) {
         if (!accept(tLPar))
             error("left parenthesis expected");
@@ -381,9 +381,9 @@ Expression *DefaultParser::term() {
         list<Expression *>::iterator i = nodes.begin();
         Expression *preffix = *i++, *condition = *i++, *suffix = *i++;
 
-        e = Expression::For(preffix, condition, suffix, assign());
+        e = Expression::For(preffix, condition, suffix, expr());
     } else if (accept(tDo)) {
-        Expression *body = assign();
+        Expression *body = expr();
         if (!accept(tWhile))
             error("while expected");
         e = Expression::Do(body, term());
@@ -477,15 +477,19 @@ Expression *DefaultParser::term() {
     //else if(accept(tTry)) {}
 
     else if (accept(tLPar)) {
-        e = expr();
+        if (accept(tRPar))
+            e = Expression::List();
+        else {
+            e = Expression::List(parseList());
 
-        if (!accept(tRPar))
-            error("unmatched parentheses");
-    } else if (accept(tLBrace)) {
-        list<Expression *> nodes = parseBlock();
+            if (!accept(tRPar))
+                error("unmatched parentheses");
+        }
+    } else if (accept(tLBrace))
+        e = Expression::Block(parseBlock());
 
-        e = Expression::Block(nodes);
-    }
+    else if(accept(tSemi))
+        e = Expression::Empty();
 
     else if (check(tEnd))
         error("unexpected end of expression");

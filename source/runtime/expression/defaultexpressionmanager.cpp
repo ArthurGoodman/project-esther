@@ -1,11 +1,13 @@
 #include "defaultexpressionmanager.h"
 
 #include "esther.h"
+#include "emptyexpression.h"
 #include "blockexpression.h"
 #include "listexpression.h"
 #include "literalexpression.h"
 #include "orexpression.h"
 #include "andexpression.h"
+#include "negateexpression.h"
 #include "identifierexpression.h"
 #include "identifierassignmentexpression.h"
 #include "localdefinitionexpression.h"
@@ -22,6 +24,10 @@
 #include "continueexpression.h"
 
 namespace esther {
+
+Expression *DefaultExpressionManager::createEmpty() {
+    return new EmptyExpression;
+}
 
 Expression *DefaultExpressionManager::createBlock(list<Expression *> nodes) {
     return new BlockExpression(nodes);
@@ -41,6 +47,10 @@ Expression *DefaultExpressionManager::createOr(Expression *self, Expression *arg
 
 Expression *DefaultExpressionManager::createAnd(Expression *self, Expression *arg) {
     return new AndExpression(self, arg);
+}
+
+Expression *DefaultExpressionManager::createNegate(Expression *self) {
+    return new NegateExpression(self);
 }
 
 Expression *DefaultExpressionManager::createIdentifier(Expression *name) {

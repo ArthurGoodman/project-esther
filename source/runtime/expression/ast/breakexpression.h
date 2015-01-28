@@ -9,7 +9,8 @@ class BreakExpression : public Expression {
     Expression *value;
 
 public:
-    BreakExpression(Expression *value);
+    BreakExpression(Expression *value = 0);
+    ~BreakExpression();
 
     Object *eval(Context *context);
 };

@@ -12,6 +12,8 @@ public:
 
     virtual ~ExpressionManager();
 
+    virtual Expression *createEmpty() = 0;
+
     virtual Expression *createBlock(list<Expression *> nodes) = 0;
     virtual Expression *createList(list<Expression *> nodes) = 0;
 
@@ -19,6 +21,8 @@ public:
 
     virtual Expression *createOr(Expression *self, Expression *arg) = 0;
     virtual Expression *createAnd(Expression *self, Expression *arg) = 0;
+
+    virtual Expression *createNegate(Expression *self) = 0;
 
     virtual Expression *createIdentifier(Expression *name) = 0;
     virtual Expression *createIdentifierAssignment(Expression *name, Expression *value) = 0;

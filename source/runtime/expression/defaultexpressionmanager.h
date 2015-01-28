@@ -7,6 +7,8 @@ namespace esther {
 
 class DefaultExpressionManager : public ExpressionManager {
 public:
+    Expression *createEmpty();
+
     Expression *createBlock(list<Expression *> nodes);
     Expression *createList(list<Expression *> nodes);
 
@@ -14,6 +16,8 @@ public:
 
     Expression *createOr(Expression *self, Expression *arg);
     Expression *createAnd(Expression *self, Expression *arg);
+
+    Expression *createNegate(Expression *self);
 
     Expression *createIdentifier(Expression *name);
     Expression *createIdentifierAssignment(Expression *name, Expression *value);

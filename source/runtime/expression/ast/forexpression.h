@@ -10,6 +10,7 @@ class ForExpression : public Expression {
 
 public:
     ForExpression(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
+    ~ForExpression();
 
     Object *eval(Context *context);
 };

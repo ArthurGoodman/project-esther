@@ -10,6 +10,9 @@ class Object;
 class ValueException : public Exception {
     Object *value;
 
-public:
+protected:
+    ValueException(Object *value);
+
+    Object *getValue();
 };
 }

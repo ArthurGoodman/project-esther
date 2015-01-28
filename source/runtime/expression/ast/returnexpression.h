@@ -9,7 +9,8 @@ class ReturnExpression : public Expression {
     Expression *value;
 
 public:
-    ReturnExpression(Expression *value);
+    ReturnExpression(Expression *value = 0);
+    ~ReturnExpression();
 
     Object *eval(Context *context);
 };

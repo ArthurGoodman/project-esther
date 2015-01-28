@@ -7,5 +7,6 @@ namespace esther {
 
 class ContinueException : public Exception {
 public:
+    void raise();
 };
 }

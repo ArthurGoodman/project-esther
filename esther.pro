@@ -82,7 +82,9 @@ SOURCES += \
     source/runtime/expression/ast/breakexpression.cpp \
     source/runtime/expression/ast/continueexpression.cpp \
     source/runtime/expression/ast/orexpression.cpp \
-    source/runtime/expression/ast/andexpression.cpp
+    source/runtime/expression/ast/andexpression.cpp \
+    source/runtime/expression/ast/emptyexpression.cpp \
+    source/runtime/expression/ast/negateexpression.cpp
 
 HEADERS += \
     source/variant/charvariant.h \
@@ -152,7 +154,9 @@ HEADERS += \
     source/runtime/expression/ast/breakexpression.h \
     source/runtime/expression/ast/continueexpression.h \
     source/runtime/expression/ast/orexpression.h \
-    source/runtime/expression/ast/andexpression.h
+    source/runtime/expression/ast/andexpression.h \
+    source/runtime/expression/ast/emptyexpression.h \
+    source/runtime/expression/ast/negateexpression.h
 
 OTHER_FILES += \
     README.MD \

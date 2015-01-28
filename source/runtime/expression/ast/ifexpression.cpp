@@ -8,7 +8,20 @@ IfExpression::IfExpression(Expression *condition, Expression *body, Expression *
     : condition(condition), body(body), elseBody(elseBody) {
 }
 
+IfExpression::~IfExpression() {
+    delete condition;
+    delete body;
+    delete elseBody;
+}
+
 Object *IfExpression::eval(Context *context) {
-    return Esther::getNull();
+    Object *value = Esther::getNull();
+
+    if (condition->eval(context)->isTrue())
+        value = body->eval(context);
+    else if (elseBody)
+        value = elseBody->eval(context);
+
+    return value;
 }
 }

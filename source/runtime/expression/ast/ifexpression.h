@@ -10,6 +10,7 @@ class IfExpression : public Expression {
 
 public:
     IfExpression(Expression *condition, Expression *body, Expression *elseBody);
+    ~IfExpression();
 
     Object *eval(Context *context);
 };

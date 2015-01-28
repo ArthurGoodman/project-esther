@@ -10,6 +10,7 @@ class DoExpression : public Expression {
 
 public:
     DoExpression(Expression *body, Expression *condition);
+    ~DoExpression();
 
     Object *eval(Context *context);
 };

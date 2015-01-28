@@ -15,13 +15,17 @@ public:
     static void initialize();
     static void release();
 
+    static Expression *Empty();
+
     static Expression *Block(list<Expression *> nodes);
-    static Expression *List(list<Expression *> nodes);
+    static Expression *List(list<Expression *> nodes = list<Expression *>());
 
     static Expression *Literal(Object *value);
 
     static Expression *Or(Expression *self, Expression *arg);
     static Expression *And(Expression *self, Expression *arg);
+
+    static Expression *Negate(Expression *self);
 
     static Expression *Identifier(Expression *name);
     static Expression *IdentifierAssignment(Expression *name, Expression *value);

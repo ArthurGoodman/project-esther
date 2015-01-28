@@ -14,6 +14,10 @@ void Expression::release() {
     delete manager;
 }
 
+Expression *Expression::Empty() {
+    return manager->createEmpty();
+}
+
 Expression *Expression::Block(list<Expression *> nodes) {
     return manager->createBlock(nodes);
 }
@@ -32,6 +36,10 @@ Expression *Expression::Or(Expression *self, Expression *arg) {
 
 Expression *Expression::And(Expression *self, Expression *arg) {
     return manager->createAnd(self, arg);
+}
+
+Expression *Expression::Negate(Expression *self) {
+    return manager->createNegate(self);
 }
 
 Expression *Expression::Identifier(Expression *name) {

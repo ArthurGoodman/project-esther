@@ -5,7 +5,12 @@
 
 namespace esther {
 
-class ReturnException : public Exception {
+class ReturnException : public ValueException {
 public:
+    ReturnException(Object *value);
+
+    Object *value();
+
+    void raise();
 };
 }
