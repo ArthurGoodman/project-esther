@@ -27,7 +27,7 @@ void EstherEngine::run(const string &script) {
 #if DEBUG_PARSER
         Logger::setActiveLog("parser");
 #endif
-        IO::printLine("\n=> " + expr->eval(0)->toString());
+        IO::printLine("\n=> " + expr->eval(Esther::getRoot())->toString());
     } catch (ErrorException *e) {
         cout << e->msg() << endl;
         delete e;

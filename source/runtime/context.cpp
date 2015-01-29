@@ -16,12 +16,12 @@ Context::Context()
     : Object("Context"), currentSelf(Esther::getMainObject()), currentClass(currentSelf->getClass()), parent(0) {
 }
 
-Context::~Context() {
-    foreach (i, locals)
-        delete i->second;
+//Context::~Context() {
+//    foreach (i, locals)
+//        delete i->second;
 
-    delete parent;
-}
+//    delete parent;
+//}
 
 Object *Context::getCurrentSelf() {
     return currentSelf;
@@ -31,12 +31,19 @@ Class *Context::getCurrentClass() {
     return currentClass;
 }
 
+bool Context::isObjectContext() {
+    return !parent || currentSelf != parent->currentSelf;
+}
+
 bool Context::hasLocal(string name) {
     return locals.find(name) != locals.end();
 }
 
 void Context::setLocal(string name, Object *value) {
-    locals[name] = value;
+    if (isObjectContext())
+        currentSelf->setAttribute(name, value);
+    else
+        locals[name] = value;
 }
 
 bool Context::hasId(string name) {

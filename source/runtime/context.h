@@ -16,10 +16,12 @@ public:
     Context(Object *currentSelf, Class *currentClass, Context *parent = 0);
     Context(Object *currentSelf, Context *parent = 0);
     Context();
-    ~Context();
+    //~Context();
 
     Object *getCurrentSelf();
     Class *getCurrentClass();
+
+    bool isObjectContext();
 
     bool hasLocal(string name);
     void setLocal(string name, Object *value);

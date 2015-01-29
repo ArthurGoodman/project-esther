@@ -1,6 +1,7 @@
 #include "identifierassignmentexpression.h"
 
 #include "esther.h"
+#include "context.h"
 
 namespace esther {
 
@@ -9,6 +10,11 @@ IdentifierAssignmentExpression::IdentifierAssignmentExpression(Expression *name,
 }
 
 Object *IdentifierAssignmentExpression::eval(Context *context) {
-    return Esther::getNull();
+    string name = this->name->eval(context)->toString();
+    Object *value = this->value->eval(context);
+
+    context->setId(name, value);
+
+    return value;
 }
 }

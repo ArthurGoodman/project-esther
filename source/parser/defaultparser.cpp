@@ -303,11 +303,10 @@ Expression *DefaultParser::term() {
         Expression *type = 0, *name = 0, *value = 0;
 
         name = Expression::Literal(new ValueObject(token->getText()));
-
         getToken();
 
         if (check(tId)) {
-            type = name;
+            type = Expression::Identifier(name);
             name = Expression::Literal(new ValueObject(token->getText()));
             getToken();
         }
@@ -326,7 +325,6 @@ Expression *DefaultParser::term() {
             error("identifier expected");
 
         Expression *name = Expression::Literal(new ValueObject(token->getText()));
-
         getToken();
 
         e = Expression::IdentifierDefinition(0, name, accept(tAssign) ? logicOr() : 0);
