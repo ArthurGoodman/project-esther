@@ -1,6 +1,6 @@
 #include "contextresolutionexpression.h"
 
-#include "esther.h"
+#include "context.h"
 
 namespace esther {
 
@@ -9,6 +9,7 @@ ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expre
 }
 
 Object *ContextResolutionExpression::eval(Context *context) {
-    return Esther::getNull();
+    Object *self = this->self->eval(context);
+    return body->eval(context->childContext(self));
 }
 }

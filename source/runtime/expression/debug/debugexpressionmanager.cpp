@@ -81,7 +81,7 @@ Expression *DebugExpressionManager::createIdentifierAssignment(Expression *name,
     return new DebugExpression("IdentifierAssignment", arguments);
 }
 
-Expression *DebugExpressionManager::createLocalDefinition(Expression *type, Expression *name, Expression *value) {
+Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value) {
     list<Object *> arguments;
 
     if (type)
@@ -92,7 +92,7 @@ Expression *DebugExpressionManager::createLocalDefinition(Expression *type, Expr
     if (value)
         arguments << value;
 
-    return new DebugExpression("LocalDefinition", arguments);
+    return new DebugExpression("IdentifierDefinition", arguments);
 }
 
 Expression *DebugExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {

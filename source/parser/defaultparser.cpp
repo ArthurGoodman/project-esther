@@ -159,15 +159,33 @@ Expression *DefaultParser::addSub() {
 }
 
 Expression *DefaultParser::mulDiv() {
-    Expression *e = preffix();
+    Expression *e = dot();
 
     while (range(tMultiply, tMod)) {
         if (accept(tMultiply))
-            e = Expression::Call(e, "*", preffix());
+            e = Expression::Call(e, "*", dot());
         else if (accept(tDivide))
-            e = Expression::Call(e, "/", preffix());
+            e = Expression::Call(e, "/", dot());
         else if (accept(tMod))
-            e = Expression::Call(e, "%", preffix());
+            e = Expression::Call(e, "%", dot());
+    }
+
+    return e;
+}
+
+Expression *DefaultParser::dot() {
+    Expression *e = preffix();
+
+    while (accept(tDot)) {
+        if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
+            token->setId(tId);
+
+        Expression *body = preffix();
+
+        //if (dynamic_cast<BlockExpression *>(body))
+        //    ((BlockExpression *)body)->disableChildContext();
+
+        e = Expression::ContextResolution(e, body);
     }
 
     return e;
@@ -177,9 +195,9 @@ Expression *DefaultParser::preffix() {
     Expression *e = 0;
 
     if (accept(tPlus))
-        e = Expression::Call(Expression::Literal(new ValueObject(0)), "+", suffix());
+        e = Expression::Call(suffix(), "+");
     else if (accept(tMinus))
-        e = Expression::Call(Expression::Literal(new ValueObject(0)), "-", suffix());
+        e = Expression::Call(suffix(), "-");
     else if (accept(tNot))
         e = Expression::Negate(suffix());
     //else if (accept(tInclude))
@@ -208,8 +226,8 @@ Expression *DefaultParser::preffix() {
 Expression *DefaultParser::suffix() {
     Expression *e = term();
 
-    if (range(tLPar, tLBracket) || check(tDot))
-        while (range(tLPar, tLBracket) || check(tDot)) {
+    if (range(tLPar, tLBracket))
+        while (range(tLPar, tLBracket)) {
             if (accept(tLPar)) {
                 list<Expression *> nodes = check(tRPar) ? list<Expression *>() : parseList();
 
@@ -224,16 +242,6 @@ Expression *DefaultParser::suffix() {
 
                 if (!accept(tRBracket))
                     error("unmatched brackets");
-            } else if (accept(tDot)) {
-                if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
-                    token->setId(tId);
-
-                Expression *body = term();
-
-                //if (dynamic_cast<BlockExpression *>(body))
-                //    ((BlockExpression *)body)->disableChildContext();
-
-                e = Expression::ContextResolution(e, body);
             }
         }
     else if (accept(tDec))
@@ -308,7 +316,7 @@ Expression *DefaultParser::term() {
             value = logicOr();
 
         if (type)
-            e = Expression::LocalDefinition(type, name, value);
+            e = Expression::IdentifierDefinition(type, name, value);
         else if (value)
             e = Expression::IdentifierAssignment(name, value);
         else
@@ -321,7 +329,7 @@ Expression *DefaultParser::term() {
 
         getToken();
 
-        e = Expression::LocalDefinition(0, name, accept(tAssign) ? logicOr() : 0);
+        e = Expression::IdentifierDefinition(0, name, accept(tAssign) ? logicOr() : 0);
     }
 
     else if (check(tInteger)) {
@@ -488,7 +496,7 @@ Expression *DefaultParser::term() {
     } else if (accept(tLBrace))
         e = Expression::Block(parseBlock());
 
-    else if(accept(tSemi))
+    else if (accept(tSemi))
         e = Expression::Empty();
 
     else if (check(tEnd))

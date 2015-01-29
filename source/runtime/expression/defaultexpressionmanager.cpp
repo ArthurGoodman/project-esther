@@ -61,7 +61,7 @@ Expression *DefaultExpressionManager::createIdentifierAssignment(Expression *nam
     return new IdentifierAssignmentExpression(name, value);
 }
 
-Expression *DefaultExpressionManager::createLocalDefinition(Expression *type, Expression *name, Expression *value) {
+Expression *DefaultExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value) {
     return new IdentifierDefinitionExpression(type, name, value);
 }
 

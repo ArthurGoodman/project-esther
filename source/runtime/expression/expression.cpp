@@ -50,8 +50,8 @@ Expression *Expression::IdentifierAssignment(Expression *name, Expression *value
     return manager->createIdentifierAssignment(name, value);
 }
 
-Expression *Expression::LocalDefinition(Expression *type, Expression *name, Expression *value) {
-    return manager->createLocalDefinition(type, name, value);
+Expression *Expression::IdentifierDefinition(Expression *type, Expression *name, Expression *value) {
+    return manager->createIdentifierDefinition(type, name, value);
 }
 
 Expression *Expression::Call(Expression *self, string name, list<Expression *> args) {

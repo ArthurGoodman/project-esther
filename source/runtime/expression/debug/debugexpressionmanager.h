@@ -24,7 +24,7 @@ public:
 
     Expression *createIdentifier(Expression *name);
     Expression *createIdentifierAssignment(Expression *name, Expression *value);
-    Expression *createLocalDefinition(Expression *type, Expression *name, Expression *value);
+    Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value);
 
     Expression *createCall(Expression *self, string name, list<Expression *> args);
 
