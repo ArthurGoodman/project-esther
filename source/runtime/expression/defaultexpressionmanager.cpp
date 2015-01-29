@@ -93,7 +93,7 @@ Expression *DefaultExpressionManager::createContextResolution(Expression *self, 
     return new ContextResolutionExpression(self, body);
 }
 
-Expression *DefaultExpressionManager::createClass(Expression *name, Expression *superclass, Expression *body) {
+Expression *DefaultExpressionManager::createClassDefinition(Expression *name, Expression *superclass, Expression *body) {
     return new ClassExpression(name, superclass, body);
 }
 

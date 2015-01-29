@@ -30,6 +30,7 @@ public:
 
     Context *childContext();
     Context *childContext(Object *self);
+    Context *childContext(Object *self, Class *_class);
 
     bool hasParent();
     Context *getParent();

@@ -39,7 +39,7 @@ public:
 
     virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
 
-    virtual Expression *createClass(Expression *name, Expression *superclass, Expression *body) = 0;
+    virtual Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body) = 0;
 
     virtual Expression *createReturn(Expression *value) = 0;
     virtual Expression *createBreak(Expression *value) = 0;

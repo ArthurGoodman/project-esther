@@ -468,8 +468,10 @@ Expression *DefaultParser::term() {
     else if (accept(tClass)) {
         Expression *name = 0, *superClass = 0, *body;
 
-        if (check(tId) || check(tColon))
-            name = term();
+        if (check(tId)) {
+            name = Expression::Literal(new ValueObject(token->getText()));
+            getToken();
+        }
 
         if (accept(tLt))
             superClass = term();
@@ -479,7 +481,7 @@ Expression *DefaultParser::term() {
         //if (dynamic_cast<BlockExpression *>(body))
         //    ((BlockExpression *)body)->disableChildContext();
 
-        e = Expression::Class(name, superClass, body);
+        e = Expression::ClassDefinition(name, superClass, body);
     }
 
     //else if(accept(tTry)) {}

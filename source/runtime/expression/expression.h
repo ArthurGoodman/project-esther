@@ -44,7 +44,7 @@ public:
 
     static Expression *ContextResolution(Expression *self, Expression *body);
 
-    static Expression *Class(Expression *name, Expression *superclass, Expression *body);
+    static Expression *ClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
     static Expression *Return(Expression *value);
     static Expression *Break(Expression *value);

@@ -90,8 +90,8 @@ Expression *Expression::ContextResolution(Expression *self, Expression *body) {
     return manager->createContextResolution(self, body);
 }
 
-Expression *Expression::Class(Expression *name, Expression *superclass, Expression *body) {
-    return manager->createClass(name, superclass, body);
+Expression *Expression::ClassDefinition(Expression *name, Expression *superclass, Expression *body) {
+    return manager->createClassDefinition(name, superclass, body);
 }
 
 Expression *Expression::Return(Expression *value) {

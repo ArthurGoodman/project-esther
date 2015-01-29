@@ -171,7 +171,7 @@ Expression *DebugExpressionManager::createContextResolution(Expression *self, Ex
     return new DebugExpression("ContextResolution", arguments);
 }
 
-Expression *DebugExpressionManager::createClass(Expression *name, Expression *superclass, Expression *body) {
+Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expression *superclass, Expression *body) {
     list<Object *> arguments;
 
     if(name) arguments << name;

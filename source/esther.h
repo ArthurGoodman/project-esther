@@ -52,6 +52,8 @@ public:
 
     static Object *toBoolean(bool value);
 
+    static void runtimeError(string message);
+
     static void pushSource(const string &source);
     static void popSource();
 

@@ -11,7 +11,7 @@ class ErrorException : public Exception {
     Position position; // Position of the error in code.
 
 public:
-    ErrorException(string msg, Position pos);
+    ErrorException(string msg, Position pos = Position());
 
     virtual string msg();
     Position pos();

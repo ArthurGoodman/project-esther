@@ -36,7 +36,7 @@ bool Context::hasLocal(string name) {
 }
 
 void Context::setLocal(string name, Object *value) {
-        locals[name] = value;
+    locals[name] = value;
 }
 
 bool Context::hasId(string name) {
@@ -56,6 +56,10 @@ Context *Context::childContext() {
 
 Context *Context::childContext(Object *self) {
     return new Context(self, this);
+}
+
+Context *Context::childContext(Object *self, Class *_class) {
+    return new Context(self, _class, this);
 }
 
 bool Context::hasParent() {

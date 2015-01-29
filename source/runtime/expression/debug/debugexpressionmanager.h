@@ -37,7 +37,7 @@ public:
 
     Expression *createContextResolution(Expression *self, Expression *body);
 
-    Expression *createClass(Expression *name, Expression *superclass, Expression *body);
+    Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
     Expression *createReturn(Expression *value);
     Expression *createBreak(Expression *value);

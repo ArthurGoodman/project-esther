@@ -2,13 +2,13 @@
 
 #include "class.h"
 #include "context.h"
-
 #include "lexer.h"
 #include "parser.h"
 #include "expression.h"
 #include "true.h"
 #include "false.h"
 #include "null.h"
+#include "runtimeerror.h"
 
 namespace esther {
 
@@ -59,9 +59,14 @@ void Esther::initializeRuntime() {
     //Class *callableClass = new Class("Callable"); setRootClass(callableClass);
     //methodClass->setSuperclass(callableClass);
 
-    setRootClass("TrueClass"); trueObject = new True;
-    setRootClass("FalseClass"); falseObject = new False;
-    setRootClass("NullClass"); nullObject = new Null;
+    setRootClass("TrueClass");
+    trueObject = new True;
+
+    setRootClass("FalseClass");
+    falseObject = new False;
+
+    setRootClass("NullClass");
+    nullObject = new Null;
 
     //setRootClass("MethodList", "Method");
     //setRootClass("Function", "Callable");
@@ -136,6 +141,10 @@ void Esther::setRootClass(string name, string superName) {
 
 Object *Esther::toBoolean(bool value) {
     return value ? trueObject : falseObject;
+}
+
+void Esther::runtimeError(string message) {
+    throw new RuntimeError(message);
 }
 
 void Esther::pushSource(const string &source) {
