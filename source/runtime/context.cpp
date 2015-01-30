@@ -35,9 +35,9 @@ bool Context::isObjectContext() {
     return !parent || currentSelf != parent->currentSelf;
 }
 
-bool Context::hasLocal(string name) {
-    return locals.find(name) != locals.end();
-}
+//bool Context::hasLocal(string name) {
+//    return locals.find(name) != locals.end();
+//}
 
 void Context::setLocal(string name, Object *value) {
     if (isObjectContext())
@@ -74,6 +74,6 @@ bool Context::hasParent() {
 }
 
 Context *Context::getParent() {
-    return parent ? parent : (Context *)Esther::getNull();
+    return parent ? parent : 0;
 }
 }

@@ -13,7 +13,7 @@ Class::Class(string name, string superclassName)
 }
 
 string Class::getName() {
-    return name.empty() ? "<Anonymous Class>" : name;
+    return name;
 }
 
 Class *Class::getSuperclass() {
@@ -66,6 +66,6 @@ Object *Class::call(string name) {
 }
 
 string Class::toString() {
-    return getName();
+    return name.empty() ? "<Anonymous Class>" : name;
 }
 }

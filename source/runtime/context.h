@@ -23,7 +23,7 @@ public:
 
     bool isObjectContext();
 
-    bool hasLocal(string name);
+    //bool hasLocal(string name);
     void setLocal(string name, Object *value);
 
     bool hasId(string name);
