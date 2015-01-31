@@ -23,12 +23,13 @@ public:
 
     bool isObjectContext();
 
-    //bool hasLocal(string name);
+    bool hasLocal(string name);
+    Object *getLocal(string name);
     void setLocal(string name, Object *value);
 
     bool hasId(string name);
     Object *getId(string name);
-    void setId(string name, Object *value);
+    bool setId(string name, Object *value);
 
     Context *childContext();
     Context *childContext(Object *self);

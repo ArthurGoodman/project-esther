@@ -13,7 +13,8 @@ Object *IdentifierAssignmentExpression::eval(Context *context) {
     string name = this->name->eval(context)->toString();
     Object *value = this->value->eval(context);
 
-    context->setId(name, value);
+    if (!context->setId(name, value) || context->isObjectContext())
+        context->setLocal(name, value);
 
     return value;
 }

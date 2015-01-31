@@ -1,6 +1,7 @@
 #include "context.h"
 
 #include "esther.h"
+#include "class.h"
 
 namespace esther {
 
@@ -35,9 +36,13 @@ bool Context::isObjectContext() {
     return !parent || currentSelf != parent->currentSelf;
 }
 
-//bool Context::hasLocal(string name) {
-//    return locals.find(name) != locals.end();
-//}
+bool Context::hasLocal(string name) {
+    return locals.find(name) != locals.end();
+}
+
+Object *Context::getLocal(string name) {
+    return hasLocal(name) ? locals.at(name) : 0;
+}
 
 void Context::setLocal(string name, Object *value) {
     if (isObjectContext())
@@ -47,14 +52,34 @@ void Context::setLocal(string name, Object *value) {
 }
 
 bool Context::hasId(string name) {
-    return false;
+    return true;
 }
 
 Object *Context::getId(string name) {
-    return Esther::getNull();
+    if (isObjectContext()) {
+        if (currentSelf->hasAttribute(name))
+            return currentSelf->getAttribute(name);
+        if (currentClass->lookup(name))
+            return (Object *)currentClass->lookup(name);
+    }
+
+    if (hasLocal(name))
+        return getLocal(name);
+    if (parent)
+        return parent->getId(name);
+    else
+        return Esther::getNull();
 }
 
-void Context::setId(string name, Object *value) {
+bool Context::setId(string name, Object *value) {
+    if (hasLocal(name)) {
+        setLocal(name, value);
+        return true;
+    }
+    if (parent)
+        return parent->setId(name, value);
+    else
+        return false;
 }
 
 Context *Context::childContext() {
