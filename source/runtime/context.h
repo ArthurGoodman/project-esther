@@ -25,6 +25,7 @@ public:
 
     bool hasLocal(string name);
     Object *getLocal(string name);
+    void setLocalOrAttribute(string name, Object *value);
     void setLocal(string name, Object *value);
 
     bool hasId(string name);

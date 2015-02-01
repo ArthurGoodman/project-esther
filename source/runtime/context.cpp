@@ -44,42 +44,68 @@ Object *Context::getLocal(string name) {
     return hasLocal(name) ? locals.at(name) : 0;
 }
 
-void Context::setLocal(string name, Object *value) {
+void Context::setLocalOrAttribute(string name, Object *value) {
     if (isObjectContext())
         currentSelf->setAttribute(name, value);
     else
         locals[name] = value;
 }
 
+void Context::setLocal(string name, Object *value) {
+    locals[name] = value;
+}
+
 bool Context::hasId(string name) {
-    return true;
+    if (isObjectContext()) {
+        if (currentSelf->hasAttribute(name))
+            return true;
+
+        if (currentClass->lookup(name))
+            return true;
+    }
+
+    if (hasLocal(name))
+        return true;
+
+    if (parent)
+        return parent->hasId(name);
+
+    return false;
 }
 
 Object *Context::getId(string name) {
     if (isObjectContext()) {
         if (currentSelf->hasAttribute(name))
             return currentSelf->getAttribute(name);
+
         if (currentClass->lookup(name))
             return (Object *)currentClass->lookup(name);
     }
 
     if (hasLocal(name))
         return getLocal(name);
+
     if (parent)
         return parent->getId(name);
-    else
-        return Esther::getNull();
+
+    return 0;
 }
 
 bool Context::setId(string name, Object *value) {
+    if (isObjectContext() && currentSelf->hasAttribute(name)) {
+        currentSelf->setAttribute(name, value);
+        return true;
+    }
+
     if (hasLocal(name)) {
         setLocal(name, value);
         return true;
     }
+
     if (parent)
         return parent->setId(name, value);
-    else
-        return false;
+
+    return false;
 }
 
 Context *Context::childContext() {

@@ -30,7 +30,7 @@ Object *IdentifierDefinitionExpression::eval(Context *context) {
     if (!value)
         value = new Object;
 
-    context->setLocal(name, value);
+    context->setLocalOrAttribute(name, value);
 
     return value;
 }

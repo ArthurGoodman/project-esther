@@ -17,8 +17,10 @@ BlockExpression::~BlockExpression() {
 Object *BlockExpression::eval(Context *context) {
     Object *value = Esther::getNull();
 
+    context = context->childContext();
+
     foreach (i, nodes)
-        value = (*i)->eval(context->childContext());
+        value = (*i)->eval(context);
 
     return value;
 }
