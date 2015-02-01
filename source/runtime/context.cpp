@@ -44,15 +44,11 @@ Object *Context::getLocal(string name) {
     return hasLocal(name) ? locals.at(name) : 0;
 }
 
-void Context::setLocalOrAttribute(string name, Object *value) {
+void Context::setLocal(string name, Object *value) {
     if (isObjectContext())
         currentSelf->setAttribute(name, value);
     else
         locals[name] = value;
-}
-
-void Context::setLocal(string name, Object *value) {
-    locals[name] = value;
 }
 
 bool Context::hasId(string name) {

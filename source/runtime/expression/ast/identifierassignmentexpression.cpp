@@ -14,7 +14,7 @@ Object *IdentifierAssignmentExpression::eval(Context *context) {
     Object *value = this->value->eval(context);
 
     if (!context->setId(name, value) || context->isObjectContext())
-        context->setLocalOrAttribute(name, value);
+        context->setLocal(name, value);
 
     return value;
 }

@@ -33,6 +33,8 @@ Object *ClassExpression::eval(Context *context) {
 
     body->eval(context->childContext(_class, _class));
 
+    context->setLocal(name, _class);
+
     return _class;
 }
 }
