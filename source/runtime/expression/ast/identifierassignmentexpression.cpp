@@ -9,6 +9,11 @@ IdentifierAssignmentExpression::IdentifierAssignmentExpression(Expression *name,
     : IdentifierExpression(name), value(value) {
 }
 
+IdentifierAssignmentExpression::~IdentifierAssignmentExpression() {
+    delete name;
+    delete value;
+}
+
 Object *IdentifierAssignmentExpression::eval(Context *context) {
     string name = this->name->eval(context)->toString();
     Object *value = this->value->eval(context);

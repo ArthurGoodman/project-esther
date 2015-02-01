@@ -10,6 +10,7 @@ class IdentifierDefinitionExpression : public IdentifierAssignmentExpression {
 
 public:
     IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value);
+    ~IdentifierDefinitionExpression();
 
     Object *eval(Context *context);
 };
