@@ -5,6 +5,8 @@
 #include "expression.h"
 #include "valueobject.h"
 #include "esther.h"
+#include "utility.h"
+#include "runtime.h"
 
 namespace esther {
 
@@ -300,23 +302,15 @@ Expression *DefaultParser::term() {
     //}
 
     if (check(tId)) {
-        Expression *type = 0, *name = 0, *value = 0;
+        Expression *name = 0, *value = 0;
 
         name = Expression::Literal(new ValueObject(token->getText()));
         getToken();
 
-        if (check(tId)) {
-            type = Expression::Identifier(name);
-            name = Expression::Literal(new ValueObject(token->getText()));
-            getToken();
-        }
-
         if (accept(tAssign))
             value = logicOr();
 
-        if (type)
-            e = Expression::IdentifierDefinition(type, name, value);
-        else if (value)
+        if (value)
             e = Expression::IdentifierAssignment(name, value);
         else
             e = Expression::Identifier(name);
@@ -327,14 +321,14 @@ Expression *DefaultParser::term() {
         Expression *name = Expression::Literal(new ValueObject(token->getText()));
         getToken();
 
-        e = Expression::IdentifierDefinition(0, name, accept(tAssign) ? logicOr() : 0);
+        e = Expression::IdentifierDefinition(name, accept(tAssign) ? logicOr() : 0);
     }
 
     else if (check(tInteger)) {
-        e = Expression::Literal(new ValueObject(fromString<int>(token->getText())));
+        e = Expression::Literal(new ValueObject(Utility::fromString<int>(token->getText())));
         getToken();
     } else if (check(tFloat)) {
-        e = Expression::Literal(new ValueObject(fromString<double>(token->getText())));
+        e = Expression::Literal(new ValueObject(Utility::fromString<double>(token->getText())));
         getToken();
     }
 
@@ -372,7 +366,7 @@ Expression *DefaultParser::term() {
 
         e = id == tIf ? Expression::If(condition, body, elseBody) : Expression::While(condition, body, elseBody);
     } else if (accept(tForever))
-        e = Expression::While(Expression::Literal(Esther::getTrue()), expr(), 0);
+        e = Expression::While(Expression::Literal(Runtime::getTrue()), expr(), 0);
     else if (accept(tFor)) {
         if (!accept(tLPar))
             error("left parenthesis expected");
@@ -403,11 +397,11 @@ Expression *DefaultParser::term() {
         e = Expression::Continue();
 
     else if (accept(tTrue))
-        e = Expression::Literal(Esther::getTrue());
+        e = Expression::Literal(Runtime::getTrue());
     else if (accept(tFalse))
-        e = Expression::Literal(Esther::getFalse());
+        e = Expression::Literal(Runtime::getFalse());
     else if (accept(tNull))
-        e = Expression::Literal(Esther::getNull());
+        e = Expression::Literal(Runtime::getNull());
 
     //else if (accept(tSelf))
     //    e = new SelfExpression;

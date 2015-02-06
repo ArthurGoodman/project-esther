@@ -2,6 +2,7 @@
 
 #include "lexicalerror.h"
 #include "logger.h"
+#include "utility.h"
 
 namespace esther {
 
@@ -132,38 +133,38 @@ void DefaultLexer::scan() {
             error("invalid string constant");
         else
             ++pos;
-    } else if (isDigit(at(pos))) { // Numbers.
+    } else if (Utility::isDigit(at(pos))) { // Numbers.
         token = tInteger;
 
         do
             token += at(pos++);
-        while (isDigit(at(pos))); // Integral part.
+        while (Utility::isDigit(at(pos))); // Integral part.
 
         // Fractional part:
-        if (at(pos) == '.' && isDigit(at(pos + 1))) {
+        if (at(pos) == '.' && Utility::isDigit(at(pos + 1))) {
             token = tFloat;
 
             do
                 token += at(pos++);
-            while (isDigit(at(pos)));
+            while (Utility::isDigit(at(pos)));
         }
 
         // Scientific notation:
-        if ((toLower(at(pos)) == 'e') && (isDigit(at(pos + 1)) || (isSign(at(pos + 1)) && isDigit(at(pos + 2))))) {
+        if ((Utility::toLower(at(pos)) == 'e') && (Utility::isDigit(at(pos + 1)) || (Utility::isSign(at(pos + 1)) && Utility::isDigit(at(pos + 2))))) {
             token += at(pos++);
 
-            if ((isSign(at(pos))) && isDigit(at(pos + 1)))
+            if ((Utility::isSign(at(pos))) && Utility::isDigit(at(pos + 1)))
                 do
                     token += at(pos++);
-                while (isDigit(at(pos)));
+                while (Utility::isDigit(at(pos)));
             else
-                while (isDigit(at(pos)))
+                while (Utility::isDigit(at(pos)))
                     token += at(pos++);
         }
-    } else if (isLetter(at(pos)) || at(pos) == '_') { // Identifiers and keywords.
+    } else if (Utility::isLetter(at(pos)) || at(pos) == '_') { // Identifiers and keywords.
         do
             token += at(pos++);
-        while (isLetterOrDigit(at(pos)) || at(pos) == '_');
+        while (Utility::isLetterOrDigit(at(pos)) || at(pos) == '_');
 
         string *i;
 
@@ -193,7 +194,7 @@ void DefaultLexer::scan() {
 }
 
 void DefaultLexer::skipSpaces() {
-    while (isSpace(at(pos))) {
+    while (Utility::isSpace(at(pos))) {
         pos++;
         column++;
         if (at(pos - 1) == '\n') {

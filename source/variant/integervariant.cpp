@@ -1,5 +1,7 @@
 #include "integervariant.h"
 
+#include "utility.h"
+
 IntegerVariant::IntegerVariant(int value)
     : value(value) {
 }
@@ -25,5 +27,5 @@ char IntegerVariant::toChar() const {
 }
 
 string IntegerVariant::toString() const {
-    return ::toString<int>(value);
+    return Utility::toString(value);
 }

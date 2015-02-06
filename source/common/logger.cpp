@@ -12,6 +12,8 @@ void Logger::setActiveLog(string log) {
 }
 
 void Logger::flush() {
+    system("if not exist logs md logs");
+
     foreach (i, logs)
         IO::writeFile("logs\\" + i->first + ".log", i->second);
 }

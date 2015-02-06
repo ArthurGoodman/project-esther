@@ -1,5 +1,7 @@
 #include "stringvariant.h"
 
+#include "utility.h"
+
 StringVariant::StringVariant(string value)
     : value(value) {
 }
@@ -13,15 +15,15 @@ Variant::Type StringVariant::type() const {
 }
 
 int StringVariant::toInteger() const {
-    return ::fromString<int>(value);
+    return Utility::fromString<int>(value);
 }
 
 double StringVariant::toFloat() const {
-    return ::fromString<double>(value);
+    return Utility::fromString<double>(value);
 }
 
 char StringVariant::toChar() const {
-    return ::fromString<char>(value);
+    return Utility::fromString<char>(value);
 }
 
 string StringVariant::toString() const {

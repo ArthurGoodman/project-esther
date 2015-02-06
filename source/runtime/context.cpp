@@ -1,6 +1,6 @@
 #include "context.h"
 
-#include "esther.h"
+#include "runtime.h"
 #include "class.h"
 
 namespace esther {
@@ -14,7 +14,7 @@ Context::Context(Object *currentSelf, Context *parent)
 }
 
 Context::Context()
-    : Object("Context"), currentSelf(Esther::getMainObject()), currentClass(currentSelf->getClass()), parent(0) {
+    : Object("Context"), currentSelf(Runtime::getMainObject()), currentClass(currentSelf->getClass()), parent(0) {
 }
 
 //Context::~Context() {

@@ -1,6 +1,8 @@
 #pragma once
-#include <common.h>
-#include <debug.h>
+#include "common.h"
+
+#include "debug.h"
+#include "utility.h"
 
 #if DEBUG
 
@@ -22,7 +24,7 @@ public:
 
 template <class T>
 void Logger::write(string log, T data) {
-    logs[log] += toString(data);
+    logs[log] += Utility::toString(data);
 }
 
 template <class T>

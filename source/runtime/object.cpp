@@ -1,13 +1,14 @@
 #include "object.h"
 
-#include "esther.h"
+#include "runtime.h"
 #include "class.h"
 #include "io.h"
+#include "utility.h"
 
 namespace esther {
 
 Object::Object()
-    : objectClass(Esther::getObjectClass()) {
+    : objectClass(Runtime::getObjectClass()) {
 }
 
 Object::Object(Class *objectClass)
@@ -15,7 +16,7 @@ Object::Object(Class *objectClass)
 }
 
 Object::Object(string className)
-    : objectClass(Esther::getRootClass(className)) {
+    : objectClass(Runtime::getRootClass(className)) {
 }
 
 Object::~Object() {
@@ -50,11 +51,11 @@ bool Object::converts(Class *_class) {
 }
 
 Object *Object::as(Class *_class) {
-    return Esther::getNull();
+    return Runtime::getNull();
 }
 
 Object *Object::call(string name, list<Object *> args) {
-    return Esther::getNull();
+    return Runtime::getNull();
 }
 
 Object *Object::call(string name, Object *arg) {
@@ -78,6 +79,6 @@ bool Object::isNull() {
 }
 
 string Object::toString() {
-    return "<" + objectClass->toString() + ":" + ::toString(this) + ">";
+    return "<" + objectClass->toString() + ":" + Utility::toString(this) + ">";
 }
 }

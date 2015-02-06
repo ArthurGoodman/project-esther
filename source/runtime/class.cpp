@@ -1,6 +1,6 @@
 #include "class.h"
 
-#include "esther.h"
+#include "runtime.h"
 
 namespace esther {
 
@@ -9,7 +9,7 @@ Class::Class(string name, Class *superclass)
 }
 
 Class::Class(string name, string superclassName)
-    : Object("Class"), name(name), superclass(superclassName.empty() ? Esther::getObjectClass() : Esther::getRootClass(superclassName)) {
+    : Object("Class"), name(name), superclass(superclassName.empty() ? Runtime::getObjectClass() : Runtime::getRootClass(superclassName)) {
 }
 
 string Class::getName() {
@@ -54,7 +54,7 @@ Method *Class::lookup(string name) {
 }
 
 Object *Class::call(string name, list<Object *> args) {
-    return Esther::getNull();
+    return Runtime::getNull();
 }
 
 Object *Class::call(string name, Object *arg) {

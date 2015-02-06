@@ -1,7 +1,7 @@
 #pragma once
-#include <common.h>
-#include <debug.h>
+#include "common.h"
 
+#include "debug.h"
 #include "lexer.h"
 
 namespace esther {

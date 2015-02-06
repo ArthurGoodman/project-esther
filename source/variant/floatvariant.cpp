@@ -1,5 +1,7 @@
 #include "floatvariant.h"
 
+#include "utility.h"
+
 FloatVariant::FloatVariant(double value)
     : value(value) {
 }
@@ -25,5 +27,5 @@ char FloatVariant::toChar() const {
 }
 
 string FloatVariant::toString() const {
-    return ::toString<double>(value);
+    return Utility::toString(value);
 }

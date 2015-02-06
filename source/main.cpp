@@ -1,18 +1,14 @@
-#include <common.h>
+#include "common.h"
 #include "io.h"
-#include "logger.h"
 
-#include "scriptengine.h"
+#include "esther.h"
+#include "logger.h"
 
 int main(int argc, char **argv) {
     //if(argc < 2) return 0;
 
     string fileName = argc < 2 ? "scripts/test.es" : argv[1];
-
-    ScriptEngine *engine = ScriptEngine::create();
-    engine->run(IO::readFile(fileName));
-
-    delete engine;
+    esther::Esther::run(IO::readFile(fileName));
 
 #if DEBUG
     Logger::flush();

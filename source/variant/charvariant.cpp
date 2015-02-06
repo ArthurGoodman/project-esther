@@ -1,5 +1,7 @@
 #include "charvariant.h"
 
+#include "utility.h"
+
 CharVariant::CharVariant(char value)
     : value(value) {
 }
@@ -25,5 +27,5 @@ char CharVariant::toChar() const {
 }
 
 string CharVariant::toString() const {
-    return ::toString<char>(value);
+    return Utility::toString(value);
 }
