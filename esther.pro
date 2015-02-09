@@ -4,86 +4,95 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH = source \
-    source/exception \
-    source/lexer \
-    source/parser \
-    source/runtime \
-    source/runtime/function \
-    source/expression \
-    source/expression/ast \
-    source/expression/debug \
     source/variant \
-    source/common
+    source/common \
+    source/esther \
+    source/esther/exception \
+    source/esther/expression \
+    source/esther/expression/ast \
+    source/esther/expression/debug \
+    source/esther/lexer \
+    source/esther/parser \
+    source/esther/runtime \
+    source/esther/runtime/function
 
 SOURCES += \
+    source/esther.cpp \
     source/main.cpp \
+    source/common/io.cpp \
+    source/common/logger.cpp \
+    source/common/utility.cpp \
     source/variant/charvariant.cpp \
     source/variant/floatvariant.cpp \
     source/variant/integervariant.cpp \
     source/variant/nullvariant.cpp \
     source/variant/stringvariant.cpp \
     source/variant/variant.cpp \
-    source/runtime/object.cpp \
-    source/runtime/class.cpp \
-    source/lexer/lexer.cpp \
-    source/parser/parser.cpp \
-    source/lexer/defaultlexer.cpp \
-    source/parser/defaultparser.cpp \
-    source/exception/exception.cpp \
-    source/exception/breakexception.cpp \
-    source/exception/continueexception.cpp \
-    source/exception/errorexception.cpp \
-    source/exception/lexicalerror.cpp \
-    source/exception/returnexception.cpp \
-    source/exception/runtimeerror.cpp \
-    source/exception/syntaxerror.cpp \
-    source/exception/valueexception.cpp \
-    source/runtime/function/function.cpp \
-    source/runtime/function/method.cpp \
-    source/runtime/function/overloadedmethod.cpp \
-    source/runtime/context.cpp \
-    source/runtime/module.cpp \
-    source/lexer/token.cpp \
-    source/lexer/position.cpp \
-    source/common/io.cpp \
-    source/common/logger.cpp \
-    source/runtime/valueobject.cpp \
     source/variant/variantprivate.cpp \
-    source/runtime/true.cpp \
-    source/runtime/false.cpp \
-    source/runtime/null.cpp \
-    source/expression/defaultexpressionmanager.cpp \
-    source/expression/expression.cpp \
-    source/expression/expressionmanager.cpp \
-    source/expression/debug/debugexpression.cpp \
-    source/expression/debug/debugexpressionmanager.cpp \
-    source/expression/ast/andexpression.cpp \
-    source/expression/ast/blockexpression.cpp \
-    source/expression/ast/breakexpression.cpp \
-    source/expression/ast/callexpression.cpp \
-    source/expression/ast/classexpression.cpp \
-    source/expression/ast/cloneandcallexpression.cpp \
-    source/expression/ast/contextresolutionexpression.cpp \
-    source/expression/ast/continueexpression.cpp \
-    source/expression/ast/doexpression.cpp \
-    source/expression/ast/emptyexpression.cpp \
-    source/expression/ast/forexpression.cpp \
-    source/expression/ast/identifierassignmentexpression.cpp \
-    source/expression/ast/identifierdefinitionexpression.cpp \
-    source/expression/ast/identifierexpression.cpp \
-    source/expression/ast/ifexpression.cpp \
-    source/expression/ast/listexpression.cpp \
-    source/expression/ast/literalexpression.cpp \
-    source/expression/ast/negateexpression.cpp \
-    source/expression/ast/orexpression.cpp \
-    source/expression/ast/returnexpression.cpp \
-    source/expression/ast/whileexpression.cpp \
-    source/runtime/function/block.cpp \
-    source/common/utility.cpp \
-    source/esther.cpp \
-    source/runtime/runtime.cpp
+    source/esther/exception/breakexception.cpp \
+    source/esther/exception/continueexception.cpp \
+    source/esther/exception/errorexception.cpp \
+    source/esther/exception/exception.cpp \
+    source/esther/exception/lexicalerror.cpp \
+    source/esther/exception/returnexception.cpp \
+    source/esther/exception/runtimeerror.cpp \
+    source/esther/exception/syntaxerror.cpp \
+    source/esther/exception/valueexception.cpp \
+    source/esther/expression/defaultexpressionmanager.cpp \
+    source/esther/expression/expression.cpp \
+    source/esther/expression/expressionmanager.cpp \
+    source/esther/expression/ast/andexpression.cpp \
+    source/esther/expression/ast/blockexpression.cpp \
+    source/esther/expression/ast/breakexpression.cpp \
+    source/esther/expression/ast/callexpression.cpp \
+    source/esther/expression/ast/classexpression.cpp \
+    source/esther/expression/ast/cloneandcallexpression.cpp \
+    source/esther/expression/ast/contextresolutionexpression.cpp \
+    source/esther/expression/ast/continueexpression.cpp \
+    source/esther/expression/ast/doexpression.cpp \
+    source/esther/expression/ast/emptyexpression.cpp \
+    source/esther/expression/ast/forexpression.cpp \
+    source/esther/expression/ast/identifierassignmentexpression.cpp \
+    source/esther/expression/ast/identifierdefinitionexpression.cpp \
+    source/esther/expression/ast/identifierexpression.cpp \
+    source/esther/expression/ast/ifexpression.cpp \
+    source/esther/expression/ast/listexpression.cpp \
+    source/esther/expression/ast/literalexpression.cpp \
+    source/esther/expression/ast/negateexpression.cpp \
+    source/esther/expression/ast/orexpression.cpp \
+    source/esther/expression/ast/returnexpression.cpp \
+    source/esther/expression/ast/whileexpression.cpp \
+    source/esther/expression/debug/debugexpression.cpp \
+    source/esther/expression/debug/debugexpressionmanager.cpp \
+    source/esther/lexer/defaultlexer.cpp \
+    source/esther/lexer/lexer.cpp \
+    source/esther/lexer/position.cpp \
+    source/esther/lexer/token.cpp \
+    source/esther/parser/defaultparser.cpp \
+    source/esther/parser/parser.cpp \
+    source/esther/runtime/class.cpp \
+    source/esther/runtime/context.cpp \
+    source/esther/runtime/false.cpp \
+    source/esther/runtime/module.cpp \
+    source/esther/runtime/null.cpp \
+    source/esther/runtime/object.cpp \
+    source/esther/runtime/runtime.cpp \
+    source/esther/runtime/true.cpp \
+    source/esther/runtime/valueobject.cpp \
+    source/esther/runtime/function/block.cpp \
+    source/esther/runtime/function/function.cpp \
+    source/esther/runtime/function/method.cpp \
+    source/esther/runtime/function/overloadedmethod.cpp \
+    source/esther/defaultengine.cpp \
+    source/esther/engine.cpp
 
 HEADERS += \
+    source/esther.h \
+    source/common/common.h \
+    source/common/debug.h \
+    source/common/io.h \
+    source/common/logger.h \
+    source/common/utility.h \
     source/variant/charvariant.h \
     source/variant/floatvariant.h \
     source/variant/integervariant.h \
@@ -91,66 +100,62 @@ HEADERS += \
     source/variant/stringvariant.h \
     source/variant/variant.h \
     source/variant/variantprivate.h \
-    source/runtime/object.h \
-    source/runtime/class.h \
-    source/lexer/lexer.h \
-    source/parser/parser.h \
-    source/lexer/defaultlexer.h \
-    source/parser/defaultparser.h \
-    source/exception/exception.h \
-    source/exception/breakexception.h \
-    source/exception/continueexception.h \
-    source/exception/errorexception.h \
-    source/exception/lexicalerror.h \
-    source/exception/returnexception.h \
-    source/exception/runtimeerror.h \
-    source/exception/syntaxerror.h \
-    source/exception/valueexception.h \
-    source/runtime/function/function.h \
-    source/runtime/function/method.h \
-    source/runtime/function/overloadedmethod.h \
-    source/runtime/context.h \
-    source/runtime/module.h \
-    source/lexer/token.h \
-    source/lexer/position.h \
-    source/common/common.h \
-    source/common/io.h \
-    source/common/logger.h \
-    source/common/debug.h \
-    source/runtime/valueobject.h \
-    source/runtime/true.h \
-    source/runtime/false.h \
-    source/runtime/null.h \
-    source/expression/defaultexpressionmanager.h \
-    source/expression/expression.h \
-    source/expression/expressionmanager.h \
-    source/expression/debug/debugexpression.h \
-    source/expression/debug/debugexpressionmanager.h \
-    source/expression/ast/andexpression.h \
-    source/expression/ast/blockexpression.h \
-    source/expression/ast/breakexpression.h \
-    source/expression/ast/callexpression.h \
-    source/expression/ast/classexpression.h \
-    source/expression/ast/cloneandcallexpression.h \
-    source/expression/ast/contextresolutionexpression.h \
-    source/expression/ast/continueexpression.h \
-    source/expression/ast/doexpression.h \
-    source/expression/ast/emptyexpression.h \
-    source/expression/ast/forexpression.h \
-    source/expression/ast/identifierassignmentexpression.h \
-    source/expression/ast/identifierdefinitionexpression.h \
-    source/expression/ast/identifierexpression.h \
-    source/expression/ast/ifexpression.h \
-    source/expression/ast/listexpression.h \
-    source/expression/ast/literalexpression.h \
-    source/expression/ast/negateexpression.h \
-    source/expression/ast/orexpression.h \
-    source/expression/ast/returnexpression.h \
-    source/expression/ast/whileexpression.h \
-    source/runtime/function/block.h \
-    source/common/utility.h \
-    source/esther.h \
-    source/runtime/runtime.h
+    source/esther/exception/breakexception.h \
+    source/esther/exception/continueexception.h \
+    source/esther/exception/errorexception.h \
+    source/esther/exception/exception.h \
+    source/esther/exception/lexicalerror.h \
+    source/esther/exception/returnexception.h \
+    source/esther/exception/runtimeerror.h \
+    source/esther/exception/syntaxerror.h \
+    source/esther/exception/valueexception.h \
+    source/esther/expression/defaultexpressionmanager.h \
+    source/esther/expression/expression.h \
+    source/esther/expression/expressionmanager.h \
+    source/esther/expression/ast/andexpression.h \
+    source/esther/expression/ast/blockexpression.h \
+    source/esther/expression/ast/breakexpression.h \
+    source/esther/expression/ast/callexpression.h \
+    source/esther/expression/ast/classexpression.h \
+    source/esther/expression/ast/cloneandcallexpression.h \
+    source/esther/expression/ast/contextresolutionexpression.h \
+    source/esther/expression/ast/continueexpression.h \
+    source/esther/expression/ast/doexpression.h \
+    source/esther/expression/ast/emptyexpression.h \
+    source/esther/expression/ast/forexpression.h \
+    source/esther/expression/ast/identifierassignmentexpression.h \
+    source/esther/expression/ast/identifierdefinitionexpression.h \
+    source/esther/expression/ast/identifierexpression.h \
+    source/esther/expression/ast/ifexpression.h \
+    source/esther/expression/ast/listexpression.h \
+    source/esther/expression/ast/literalexpression.h \
+    source/esther/expression/ast/negateexpression.h \
+    source/esther/expression/ast/orexpression.h \
+    source/esther/expression/ast/returnexpression.h \
+    source/esther/expression/ast/whileexpression.h \
+    source/esther/expression/debug/debugexpression.h \
+    source/esther/expression/debug/debugexpressionmanager.h \
+    source/esther/lexer/defaultlexer.h \
+    source/esther/lexer/lexer.h \
+    source/esther/lexer/position.h \
+    source/esther/lexer/token.h \
+    source/esther/parser/defaultparser.h \
+    source/esther/parser/parser.h \
+    source/esther/runtime/class.h \
+    source/esther/runtime/context.h \
+    source/esther/runtime/false.h \
+    source/esther/runtime/module.h \
+    source/esther/runtime/null.h \
+    source/esther/runtime/object.h \
+    source/esther/runtime/runtime.h \
+    source/esther/runtime/true.h \
+    source/esther/runtime/valueobject.h \
+    source/esther/runtime/function/block.h \
+    source/esther/runtime/function/function.h \
+    source/esther/runtime/function/method.h \
+    source/esther/runtime/function/overloadedmethod.h \
+    source/esther/defaultengine.h \
+    source/esther/engine.h
 
 OTHER_FILES += \
     README.MD \

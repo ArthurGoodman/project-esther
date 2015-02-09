@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
     //if(argc < 2) return 0;
 
     string fileName = argc < 2 ? "scripts/test.es" : argv[1];
-    esther::Esther::run(IO::readFile(fileName));
+    Esther::run(IO::readFile(fileName));
 
 #if DEBUG
     Logger::flush();
