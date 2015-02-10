@@ -27,6 +27,11 @@ public:
 
     static Expression *Negate(Expression *self);
 
+    static Expression *PreDecrement(Expression *self);
+    static Expression *PreIncrement(Expression *self);
+    static Expression *PostDecrement(Expression *self);
+    static Expression *PostIncrement(Expression *self);
+
     static Expression *Identifier(Expression *name);
     static Expression *IdentifierAssignment(Expression *name, Expression *value);
     static Expression *IdentifierDefinition(Expression *name, Expression *value);
@@ -34,8 +39,6 @@ public:
     static Expression *Call(Expression *self, string name, list<Expression *> args);
     static Expression *Call(Expression *self, string name, Expression *arg);
     static Expression *Call(Expression *self, string name);
-
-    static Expression *CloneAndCall(Expression *self, string name);
 
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *While(Expression *condition, Expression *body, Expression *elseBody);

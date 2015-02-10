@@ -8,11 +8,14 @@
 #include "orexpression.h"
 #include "andexpression.h"
 #include "negateexpression.h"
+#include "predecrementexpression.h"
+#include "preincrementexpression.h"
+#include "postdecrementexpression.h"
+#include "postincrementexpression.h"
 #include "identifierexpression.h"
 #include "identifierassignmentexpression.h"
 #include "identifierdefinitionexpression.h"
 #include "callexpression.h"
-#include "cloneandcallexpression.h"
 #include "ifexpression.h"
 #include "whileexpression.h"
 #include "forexpression.h"
@@ -53,6 +56,22 @@ Expression *DefaultExpressionManager::createNegate(Expression *self) {
     return new NegateExpression(self);
 }
 
+Expression *DefaultExpressionManager::createPreDecrement(Expression *self) {
+    return new PreDecrementExpression(self);
+}
+
+Expression *DefaultExpressionManager::createPreIncrement(Expression *self) {
+    return new PreIncrementExpression(self);
+}
+
+Expression *DefaultExpressionManager::createPostDecrement(Expression *self) {
+    return new PostDecrementExpression(self);
+}
+
+Expression *DefaultExpressionManager::createPostIncrement(Expression *self) {
+    return new PostIncrementExpression(self);
+}
+
 Expression *DefaultExpressionManager::createIdentifier(Expression *name) {
     return new IdentifierExpression(name);
 }
@@ -67,10 +86,6 @@ Expression *DefaultExpressionManager::createIdentifierDefinition(Expression *nam
 
 Expression *DefaultExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {
     return new CallExpression(self, name, args);
-}
-
-Expression *DefaultExpressionManager::createCloneAndCall(Expression *self, string name) {
-    return new CloneAndCallExpression(self, name);
 }
 
 Expression *DefaultExpressionManager::createIf(Expression *condition, Expression *body, Expression *elseBody) {

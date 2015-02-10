@@ -64,6 +64,38 @@ Expression *DebugExpressionManager::createNegate(Expression *self) {
     return new DebugExpression("Negate", arguments);
 }
 
+Expression *DebugExpressionManager::createPreDecrement(Expression *self) {
+    list<Object *> arguments;
+
+    arguments << self;
+
+    return new DebugExpression("PreDecrement", arguments);
+}
+
+Expression *DebugExpressionManager::createPreIncrement(Expression *self) {
+    list<Object *> arguments;
+
+    arguments << self;
+
+    return new DebugExpression("PreIncrement", arguments);
+}
+
+Expression *DebugExpressionManager::createPostDecrement(Expression *self) {
+    list<Object *> arguments;
+
+    arguments << self;
+
+    return new DebugExpression("PostDecrement", arguments);
+}
+
+Expression *DebugExpressionManager::createPostIncrement(Expression *self) {
+    list<Object *> arguments;
+
+    arguments << self;
+
+    return new DebugExpression("PostIncrement", arguments);
+}
+
 Expression *DebugExpressionManager::createIdentifier(Expression *name) {
     list<Object *> arguments;
 
@@ -105,16 +137,6 @@ Expression *DebugExpressionManager::createCall(Expression *self, string name, li
     arguments << new DebugExpression("List", callArguments);
 
     return new DebugExpression("Call", arguments);
-}
-
-Expression *DebugExpressionManager::createCloneAndCall(Expression *self, string name) {
-    list<Object *> arguments;
-
-    arguments << self;
-
-    arguments << new ValueObject("<String : \"" + name + "\">");
-
-    return new DebugExpression("CloneAndCall", arguments);
 }
 
 Expression *DebugExpressionManager::createIf(Expression *condition, Expression *body, Expression *elseBody) {
@@ -171,8 +193,10 @@ Expression *DebugExpressionManager::createContextResolution(Expression *self, Ex
 Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expression *superclass, Expression *body) {
     list<Object *> arguments;
 
-    if(name) arguments << name;
-    if(superclass) arguments << superclass;
+    if (name)
+        arguments << name;
+    if (superclass)
+        arguments << superclass;
     arguments << body;
 
     return new DebugExpression("Class", arguments);
@@ -181,7 +205,8 @@ Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expr
 Expression *DebugExpressionManager::createReturn(Expression *value) {
     list<Object *> arguments;
 
-    if(value) arguments << value;
+    if (value)
+        arguments << value;
 
     return new DebugExpression("Return", arguments);
 }
@@ -189,7 +214,8 @@ Expression *DebugExpressionManager::createReturn(Expression *value) {
 Expression *DebugExpressionManager::createBreak(Expression *value) {
     list<Object *> arguments;
 
-    if(value) arguments << value;
+    if (value)
+        arguments << value;
 
     return new DebugExpression("Break", arguments);
 }

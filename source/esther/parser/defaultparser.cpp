@@ -216,9 +216,9 @@ Expression *DefaultParser::preffix() {
     //    e = new ContextResolutionExpression(0, body);
     //}
     else if (accept(tDec))
-        e = Expression::Call(suffix(), "--");
+        e = Expression::PreDecrement(suffix());
     else if (accept(tInc))
-        e = Expression::Call(suffix(), "++");
+        e = Expression::PreIncrement(suffix());
     else
         e = suffix();
 
@@ -247,9 +247,9 @@ Expression *DefaultParser::suffix() {
             }
         }
     else if (accept(tDec))
-        e = Expression::CloneAndCall(e, "--");
+        e = Expression::PostDecrement(e);
     else if (accept(tInc))
-        e = Expression::CloneAndCall(e, "++");
+        e = Expression::PostIncrement(e);
 
     return e;
 }

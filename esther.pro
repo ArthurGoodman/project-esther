@@ -84,7 +84,11 @@ SOURCES += \
     source/esther/runtime/function/method.cpp \
     source/esther/runtime/function/overloadedmethod.cpp \
     source/esther/defaultengine.cpp \
-    source/esther/engine.cpp
+    source/esther/engine.cpp \
+    source/esther/expression/ast/predecrementexpression.cpp \
+    source/esther/expression/ast/postdecrementexpression.cpp \
+    source/esther/expression/ast/postincrementexpression.cpp \
+    source/esther/expression/ast/preincrementexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -155,7 +159,11 @@ HEADERS += \
     source/esther/runtime/function/method.h \
     source/esther/runtime/function/overloadedmethod.h \
     source/esther/defaultengine.h \
-    source/esther/engine.h
+    source/esther/engine.h \
+    source/esther/expression/ast/predecrementexpression.h \
+    source/esther/expression/ast/postdecrementexpression.h \
+    source/esther/expression/ast/postincrementexpression.h \
+    source/esther/expression/ast/preincrementexpression.h
 
 OTHER_FILES += \
     README.MD \

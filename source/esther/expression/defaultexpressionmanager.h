@@ -19,13 +19,16 @@ public:
 
     Expression *createNegate(Expression *self);
 
+    Expression *createPreDecrement(Expression *self);
+    Expression *createPreIncrement(Expression *self);
+    Expression *createPostDecrement(Expression *self);
+    Expression *createPostIncrement(Expression *self);
+
     Expression *createIdentifier(Expression *name);
     Expression *createIdentifierAssignment(Expression *name, Expression *value);
     Expression *createIdentifierDefinition(Expression *name, Expression *value);
 
     Expression *createCall(Expression *self, string name, list<Expression *> args);
-
-    Expression *createCloneAndCall(Expression *self, string name);
 
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
     Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody);

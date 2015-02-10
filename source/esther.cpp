@@ -7,7 +7,6 @@ esther::Engine *Esther::engine;
 
 Esther::Esther() {
     engine = esther::Engine::create();
-
     engine->initialize();
 }
 

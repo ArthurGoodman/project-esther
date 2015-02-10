@@ -42,6 +42,22 @@ Expression *Expression::Negate(Expression *self) {
     return manager->createNegate(self);
 }
 
+Expression *Expression::PreDecrement(Expression *self) {
+    return manager->createPreDecrement(self);
+}
+
+Expression *Expression::PreIncrement(Expression *self) {
+    return manager->createPreIncrement(self);
+}
+
+Expression *Expression::PostDecrement(Expression *self) {
+    return manager->createPostDecrement(self);
+}
+
+Expression *Expression::PostIncrement(Expression *self) {
+    return manager->createPostIncrement(self);
+}
+
 Expression *Expression::Identifier(Expression *name) {
     return manager->createIdentifier(name);
 }
@@ -64,10 +80,6 @@ Expression *Expression::Call(Expression *self, string name, Expression *arg) {
 
 Expression *Expression::Call(Expression *self, string name) {
     return manager->createCall(self, name, list<Expression *>());
-}
-
-Expression *Expression::CloneAndCall(Expression *self, string name) {
-    return manager->createCloneAndCall(self, name);
 }
 
 Expression *Expression::If(Expression *condition, Expression *body, Expression *elseBody) {

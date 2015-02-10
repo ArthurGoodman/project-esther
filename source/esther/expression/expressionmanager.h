@@ -24,13 +24,16 @@ public:
 
     virtual Expression *createNegate(Expression *self) = 0;
 
+    virtual Expression *createPreDecrement(Expression *self) = 0;
+    virtual Expression *createPreIncrement(Expression *self) = 0;
+    virtual Expression *createPostDecrement(Expression *self) = 0;
+    virtual Expression *createPostIncrement(Expression *self) = 0;
+
     virtual Expression *createIdentifier(Expression *name) = 0;
     virtual Expression *createIdentifierAssignment(Expression *name, Expression *value) = 0;
     virtual Expression *createIdentifierDefinition(Expression *name, Expression *value) = 0;
 
     virtual Expression *createCall(Expression *self, string name, list<Expression *> args) = 0;
-
-    virtual Expression *createCloneAndCall(Expression *self, string name) = 0;
 
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody) = 0;
