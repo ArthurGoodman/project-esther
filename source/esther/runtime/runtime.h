@@ -6,6 +6,7 @@ namespace esther {
 class Object;
 class Class;
 class Context;
+class CallStack;
 
 // Global access point to the various runtime stuff.
 class Runtime {
@@ -20,6 +21,8 @@ class Runtime {
 
     static map<string, Class *> rootClasses;
 
+    static CallStack *callStack;
+
 public:
     static void initialize();
     static void release();
@@ -30,6 +33,8 @@ public:
     static Object *getTrue();
     static Object *getFalse();
     static Object *getNull();
+
+    static CallStack *getCallStack();
 
     static bool hasRootClass(string name);
     static Class *getRootClass(string name);

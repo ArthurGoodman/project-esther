@@ -17,7 +17,7 @@ Object *ClassExpression::eval(Context *context) {
     if (this->superclass) {
         superclass = (Class *)this->superclass->eval(context);
 
-        if (!superclass->is(Runtime::getRootClass("Class")))
+        if (!superclass->is("Class"))
             Runtime::runtimeError("class expected");
     }
 
@@ -28,12 +28,13 @@ Object *ClassExpression::eval(Context *context) {
             _class = (Class *)context->getId(name);
     }
 
-    if (!_class || !_class->is(Runtime::getRootClass("Class")))
+    if (!_class || !_class->is("Class"))
         _class = new Class(name, superclass);
 
     body->eval(context->childContext(_class, _class));
 
-    context->setLocal(name, _class);
+    if (!name.empty())
+        context->setLocal(name, _class);
 
     return _class;
 }

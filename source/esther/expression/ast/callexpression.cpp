@@ -1,6 +1,9 @@
 #include "callexpression.h"
 
 #include "runtime.h"
+#include "tuple.h"
+#include "callstack.h"
+#include "call.h"
 
 namespace esther {
 
@@ -9,6 +12,19 @@ CallExpression::CallExpression(Expression *self, string name, list<Expression *>
 }
 
 Object *CallExpression::eval(Context *context) {
-    return Runtime::getNull();
+    Object *self = this->self->eval(context);
+
+    list<Object *> evaledArgsList;
+
+    foreach (i, args)
+        evaledArgsList << (*i)->eval(context);
+
+    Tuple *evaledArgs = new Tuple(evaledArgsList);
+
+    Runtime::getCallStack()->beginCall(new esther::Call(context, evaledArgs));
+    Object *value = self->call(name, evaledArgs);
+    Runtime::getCallStack()->endCall();
+
+    return value;
 }
 }

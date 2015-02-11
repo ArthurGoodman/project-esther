@@ -4,6 +4,7 @@
 namespace esther {
 
 class Class;
+class Tuple;
 
 class Object {
     Class *objectClass;
@@ -25,11 +26,13 @@ public:
     virtual void setAttribute(string name, Object *value);
 
     bool is(Class *_class);
+    bool is(string className);
+
     bool converts(Class *_class);
 
     Object *as(Class *_class);
 
-    virtual Object *call(string name, list<Object *> args);
+    virtual Object *call(string name, Tuple *args);
     virtual Object *call(string name, Object *arg);
     virtual Object *call(string name);
 

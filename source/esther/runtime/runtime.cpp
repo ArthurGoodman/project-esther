@@ -10,6 +10,13 @@
 #include "null.h"
 #include "runtimeerror.h"
 
+#include "method.h"
+#include "nativefunctionbody.h"
+#include "io.h"
+#include "tuple.h"
+#include "callstack.h"
+#include "valueobject.h"
+
 namespace esther {
 
 Context *Runtime::root;
@@ -23,6 +30,8 @@ Object *Runtime::nullObject;
 
 map<string, Class *> Runtime::rootClasses;
 
+CallStack *Runtime::callStack;
+
 void Runtime::initialize() {
     objectClass = new Class("Object", 0);
     setRootClass(objectClass);
@@ -35,9 +44,8 @@ void Runtime::initialize() {
     objectClass->setClass(classClass);
     classClass->setClass(classClass);
 
-    //Class *methodClass = new Class("Method", 0, 0); setRootClass(methodClass);
-    //Class *callableClass = new Class("Callable"); setRootClass(callableClass);
-    //methodClass->setSuperclass(callableClass);
+    setRootClass("Function");
+    setRootClass("Method", "Function");
 
     setRootClass("TrueClass");
     trueObject = new True;
@@ -60,6 +68,21 @@ void Runtime::initialize() {
     setRootClass("Context");
 
     root = new Context;
+
+    objectClass->setMethod("print",
+                           new Method("print", root, list<string>(1, "arg"),
+                                      new NativeFunctionBody([](Object *, Tuple * args) -> Object * {
+                                                   IO::print(args->at(0)->toString());
+                                                   return Runtime::getNull();
+                                      })));
+
+    getRootClass("Integer")->setMethod("+",
+                                       new Method("+", root, list<string>(1, "arg"),
+                                                  new NativeFunctionBody([](Object * self, Tuple * args) -> Object * {
+                                                               return new ValueObject(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
+                                                  })));
+
+    callStack = new CallStack;
 }
 
 void Runtime::release() {
@@ -73,6 +96,8 @@ void Runtime::release() {
 
     foreach (i, rootClasses)
         delete i->second;
+
+    delete callStack;
 }
 
 Context *Runtime::getRoot() {
@@ -97,6 +122,10 @@ Object *Runtime::getFalse() {
 
 Object *Runtime::getNull() {
     return nullObject;
+}
+
+CallStack *Runtime::getCallStack() {
+    return callStack;
 }
 
 bool Runtime::hasRootClass(string name) {

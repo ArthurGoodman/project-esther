@@ -3,6 +3,8 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
+CONFIG += c++11
+
 INCLUDEPATH = source \
     source/variant \
     source/common \
@@ -46,7 +48,6 @@ SOURCES += \
     source/esther/expression/ast/breakexpression.cpp \
     source/esther/expression/ast/callexpression.cpp \
     source/esther/expression/ast/classexpression.cpp \
-    source/esther/expression/ast/cloneandcallexpression.cpp \
     source/esther/expression/ast/contextresolutionexpression.cpp \
     source/esther/expression/ast/continueexpression.cpp \
     source/esther/expression/ast/doexpression.cpp \
@@ -79,7 +80,6 @@ SOURCES += \
     source/esther/runtime/runtime.cpp \
     source/esther/runtime/true.cpp \
     source/esther/runtime/valueobject.cpp \
-    source/esther/runtime/function/block.cpp \
     source/esther/runtime/function/function.cpp \
     source/esther/runtime/function/method.cpp \
     source/esther/runtime/function/overloadedmethod.cpp \
@@ -88,7 +88,14 @@ SOURCES += \
     source/esther/expression/ast/predecrementexpression.cpp \
     source/esther/expression/ast/postdecrementexpression.cpp \
     source/esther/expression/ast/postincrementexpression.cpp \
-    source/esther/expression/ast/preincrementexpression.cpp
+    source/esther/expression/ast/preincrementexpression.cpp \
+    source/esther/runtime/tuple.cpp \
+    source/esther/runtime/function/functionbody.cpp \
+    source/esther/runtime/function/interpretedfunctionbody.cpp \
+    source/esther/runtime/function/nativefunctionbody.cpp \
+    source/esther/runtime/function/signature.cpp \
+    source/esther/runtime/callstack.cpp \
+    source/esther/runtime/call.cpp
 
 HEADERS += \
     source/esther.h \
@@ -121,7 +128,6 @@ HEADERS += \
     source/esther/expression/ast/breakexpression.h \
     source/esther/expression/ast/callexpression.h \
     source/esther/expression/ast/classexpression.h \
-    source/esther/expression/ast/cloneandcallexpression.h \
     source/esther/expression/ast/contextresolutionexpression.h \
     source/esther/expression/ast/continueexpression.h \
     source/esther/expression/ast/doexpression.h \
@@ -154,7 +160,6 @@ HEADERS += \
     source/esther/runtime/runtime.h \
     source/esther/runtime/true.h \
     source/esther/runtime/valueobject.h \
-    source/esther/runtime/function/block.h \
     source/esther/runtime/function/function.h \
     source/esther/runtime/function/method.h \
     source/esther/runtime/function/overloadedmethod.h \
@@ -163,7 +168,14 @@ HEADERS += \
     source/esther/expression/ast/predecrementexpression.h \
     source/esther/expression/ast/postdecrementexpression.h \
     source/esther/expression/ast/postincrementexpression.h \
-    source/esther/expression/ast/preincrementexpression.h
+    source/esther/expression/ast/preincrementexpression.h \
+    source/esther/runtime/tuple.h \
+    source/esther/runtime/function/functionbody.h \
+    source/esther/runtime/function/interpretedfunctionbody.h \
+    source/esther/runtime/function/nativefunctionbody.h \
+    source/esther/runtime/function/signature.h \
+    source/esther/runtime/callstack.h \
+    source/esther/runtime/call.h
 
 OTHER_FILES += \
     README.MD \

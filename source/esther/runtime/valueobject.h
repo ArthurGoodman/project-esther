@@ -16,6 +16,8 @@ public:
     ValueObject(string value);
     ValueObject(const char *value);
 
+    Variant getVariant();
+
     string toString();
 };
 }

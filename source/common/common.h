@@ -10,12 +10,13 @@
 #include <iomanip>
 #include <algorithm>
 #include <stack>
+#include <functional>
 using namespace std;
 
 // Some useful functions and defines:
 
 // Foreach loop for standart STL containters.
-#define foreach(i, c) for (typeof(c.begin()) i = c.begin(); i != c.end(); ++i)
+#define foreach(i, c) for (decltype(c.begin()) i = c.begin(); i != c.end(); ++i)
 
 // Append operators:
 

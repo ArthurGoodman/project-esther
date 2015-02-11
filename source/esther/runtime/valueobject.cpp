@@ -22,6 +22,10 @@ ValueObject::ValueObject(const char *value)
     : Object("String"), value(value) {
 }
 
+Variant ValueObject::getVariant() {
+    return value;
+}
+
 string ValueObject::toString() {
     return value.toString();
 }

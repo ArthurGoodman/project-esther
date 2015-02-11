@@ -41,6 +41,7 @@ Method *Class::getMethod(string name) {
 }
 
 void Class::setMethod(string name, Method *method) {
+    methods[name] = method;
 }
 
 Method *Class::lookup(string name) {
