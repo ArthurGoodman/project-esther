@@ -212,9 +212,7 @@ HEADERS += \
 
 OTHER_FILES += \
     README.MD \
-    scripts/test.es
-
-DISTFILES += \
-    source/esther/lexer/keywords.def \
+    scripts/test.es \
     source/esther/lexer/operators.def \
-    source/esther/lexer/othertokens.def
+    source/esther/lexer/othertokens.def \
+    source/esther/lexer/keywords.def

@@ -1,9 +1,11 @@
 #include "token.h"
 
+#include "tokens.h"
+
 namespace esther {
 
 Token::Token()
-    : id(-1), text("") {
+    : id(tNone), text("") {
 }
 
 Token::Token(int id, const string &text)
