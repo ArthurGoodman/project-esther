@@ -9,13 +9,16 @@
 #include "false.h"
 #include "null.h"
 #include "runtimeerror.h"
-
-#include "method.h"
-#include "nativefunctionbody.h"
-#include "io.h"
-#include "tuple.h"
 #include "callstack.h"
-#include "valueobject.h"
+#include "objectclass.h"
+#include "classclass.h"
+#include "functionclass.h"
+#include "methodclass.h"
+#include "integerclass.h"
+#include "floatclass.h"
+#include "characterclass.h"
+#include "stringclass.h"
+#include "contextclass.h"
 
 namespace esther {
 
@@ -33,56 +36,36 @@ map<string, Class *> Runtime::rootClasses;
 CallStack *Runtime::callStack;
 
 void Runtime::initialize() {
-    objectClass = new Class("Object", 0);
-    setRootClass(objectClass);
+    objectClass = new ObjectClass;
+
+    new ClassClass;
+
+    new FunctionClass;
+    new MethodClass;
+
+    setRootClass("TrueClass");
+    setRootClass("FalseClass");
+    setRootClass("NullClass");
+
+    new IntegerClass;
+    new FloatClass;
+    new CharacterClass;
+    new StringClass;
+
+    new ContextClass;
 
     mainObject = new Object;
 
-    Class *classClass = new Class("Class");
-    setRootClass(classClass);
-
-    objectClass->setClass(classClass);
-    classClass->setClass(classClass);
-
-    setRootClass("Function");
-    setRootClass("Method", "Function");
-
-    setRootClass("TrueClass");
     trueObject = new True;
-
-    setRootClass("FalseClass");
     falseObject = new False;
-
-    setRootClass("NullClass");
     nullObject = new Null;
-
-    //setRootClass("MethodList", "Method");
-    //setRootClass("Function", "Callable");
-    //setRootClass("Lambda", "Callable");
-
-    setRootClass("Integer");
-    setRootClass("Float");
-    setRootClass("Char");
-    setRootClass("String");
-
-    setRootClass("Context");
 
     root = new Context;
 
-    objectClass->setMethod("print",
-                           new Method("print", root, list<string>(1, "arg"),
-                                      new NativeFunctionBody([](Object *, Tuple * args) -> Object * {
-                                                   IO::print(args->at(0)->toString());
-                                                   return Runtime::getNull();
-                                      })));
-
-    getRootClass("Integer")->setMethod("+",
-                                       new Method("+", root, list<string>(1, "arg"),
-                                                  new NativeFunctionBody([](Object * self, Tuple * args) -> Object * {
-                                                               return new ValueObject(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
-                                                  })));
-
     callStack = new CallStack;
+
+    foreach (i, rootClasses)
+        i->second->setupMethods();
 }
 
 void Runtime::release() {
@@ -126,6 +109,14 @@ Object *Runtime::getNull() {
 
 CallStack *Runtime::getCallStack() {
     return callStack;
+}
+
+void Runtime::beginCall(Call *call) {
+    callStack->beginCall(call);
+}
+
+void Runtime::endCall() {
+    callStack->endCall();
 }
 
 bool Runtime::hasRootClass(string name) {

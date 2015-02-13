@@ -11,6 +11,6 @@ public:
 
     Object *invoke(Object *self, Tuple *args);
 
-//    string toString();
+    string toString();
 };
 }

@@ -7,11 +7,11 @@ namespace esther {
 
 class Tuple;
 
-class NativeFunctionBody : public FunctionBody {
+class NativeMethod : public FunctionBody {
     function<Object *(Object *, Tuple *)> f;
 
 public:
-    NativeFunctionBody(function<Object *(Object *, Tuple *)> f);
+    NativeMethod(function<Object *(Object *, Tuple *)> f);
 
     Object *eval(Context *context);
 };

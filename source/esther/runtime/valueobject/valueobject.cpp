@@ -18,10 +18,6 @@ ValueObject::ValueObject(string value)
     : Object("String"), value(value) {
 }
 
-ValueObject::ValueObject(const char *value)
-    : Object("String"), value(value) {
-}
-
 Variant ValueObject::getVariant() {
     return value;
 }

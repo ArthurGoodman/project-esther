@@ -223,6 +223,10 @@ Expression *DebugExpressionManager::createBreak(Expression *value) {
 Expression *DebugExpressionManager::createContinue() {
     return new DebugExpression("Continue");
 }
+
+Expression *DebugExpressionManager::createSelf() {
+    return new DebugExpression("Self");
+}
 }
 
 #endif

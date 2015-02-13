@@ -16,7 +16,9 @@ INCLUDEPATH = source \
     source/esther/lexer \
     source/esther/parser \
     source/esther/runtime \
-    source/esther/runtime/function
+    source/esther/runtime/classes \
+    source/esther/runtime/function \
+    source/esther/runtime/valueobject
 
 SOURCES += \
     source/esther.cpp \
@@ -79,7 +81,6 @@ SOURCES += \
     source/esther/runtime/object.cpp \
     source/esther/runtime/runtime.cpp \
     source/esther/runtime/true.cpp \
-    source/esther/runtime/valueobject.cpp \
     source/esther/runtime/function/function.cpp \
     source/esther/runtime/function/method.cpp \
     source/esther/runtime/function/overloadedmethod.cpp \
@@ -92,10 +93,25 @@ SOURCES += \
     source/esther/runtime/tuple.cpp \
     source/esther/runtime/function/functionbody.cpp \
     source/esther/runtime/function/interpretedfunctionbody.cpp \
-    source/esther/runtime/function/nativefunctionbody.cpp \
     source/esther/runtime/function/signature.cpp \
     source/esther/runtime/callstack.cpp \
-    source/esther/runtime/call.cpp
+    source/esther/runtime/call.cpp \
+    source/esther/runtime/function/nativemethod.cpp \
+    source/esther/runtime/valueobject/valueobject.cpp \
+    source/esther/runtime/valueobject/integer.cpp \
+    source/esther/runtime/valueobject/character.cpp \
+    source/esther/runtime/valueobject/float.cpp \
+    source/esther/runtime/valueobject/string.cpp \
+    source/esther/runtime/classes/objectclass.cpp \
+    source/esther/runtime/classes/characterclass.cpp \
+    source/esther/runtime/classes/classclass.cpp \
+    source/esther/runtime/classes/contextclass.cpp \
+    source/esther/runtime/classes/floatclass.cpp \
+    source/esther/runtime/classes/functionclass.cpp \
+    source/esther/runtime/classes/integerclass.cpp \
+    source/esther/runtime/classes/methodclass.cpp \
+    source/esther/runtime/classes/stringclass.cpp \
+    source/esther/expression/ast/selfexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -159,7 +175,6 @@ HEADERS += \
     source/esther/runtime/object.h \
     source/esther/runtime/runtime.h \
     source/esther/runtime/true.h \
-    source/esther/runtime/valueobject.h \
     source/esther/runtime/function/function.h \
     source/esther/runtime/function/method.h \
     source/esther/runtime/function/overloadedmethod.h \
@@ -172,10 +187,25 @@ HEADERS += \
     source/esther/runtime/tuple.h \
     source/esther/runtime/function/functionbody.h \
     source/esther/runtime/function/interpretedfunctionbody.h \
-    source/esther/runtime/function/nativefunctionbody.h \
     source/esther/runtime/function/signature.h \
     source/esther/runtime/callstack.h \
-    source/esther/runtime/call.h
+    source/esther/runtime/call.h \
+    source/esther/runtime/function/nativemethod.h \
+    source/esther/runtime/valueobject/valueobject.h \
+    source/esther/runtime/valueobject/integer.h \
+    source/esther/runtime/valueobject/character.h \
+    source/esther/runtime/valueobject/float.h \
+    source/esther/runtime/valueobject/string.h \
+    source/esther/runtime/classes/objectclass.h \
+    source/esther/runtime/classes/characterclass.h \
+    source/esther/runtime/classes/classclass.h \
+    source/esther/runtime/classes/contextclass.h \
+    source/esther/runtime/classes/floatclass.h \
+    source/esther/runtime/classes/functionclass.h \
+    source/esther/runtime/classes/integerclass.h \
+    source/esther/runtime/classes/methodclass.h \
+    source/esther/runtime/classes/stringclass.h \
+    source/esther/expression/ast/selfexpression.h
 
 OTHER_FILES += \
     README.MD \

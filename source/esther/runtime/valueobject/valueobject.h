@@ -7,6 +7,7 @@
 namespace esther {
 
 class ValueObject : public Object {
+protected:
     Variant value;
 
 public:
@@ -14,7 +15,6 @@ public:
     ValueObject(double value);
     ValueObject(char value);
     ValueObject(string value);
-    ValueObject(const char *value);
 
     Variant getVariant();
 

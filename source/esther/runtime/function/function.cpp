@@ -14,17 +14,20 @@ Function::Function(string name, Context *context, list<string> params, FunctionB
     : Object("Function"), name(name), context(context), params(params), body(body) {
 }
 
+string Function::getName() {
+    return name;
+}
+
 Object *Function::invoke(Object *self, Tuple *args) {
     context = context->childContext(self);
 
-    int c = 0;
     foreach (i, params)
-        context->setLocal(*i, args->at(c));
+        context->setLocal(*i, args->at(distance(params.begin(), i)));
 
     return body->eval(context);
 }
 
-//string Function::toString() {
-//    return name.empty() ? "<Anonymous Function>" : name;
-//}
+string Function::toString() {
+    return name.empty() ? "<anonymous function>" : "<function " + name + ">";
+}
 }

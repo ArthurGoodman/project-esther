@@ -1,6 +1,8 @@
 #include "class.h"
 
 #include "runtime.h"
+#include "tuple.h"
+#include "method.h"
 
 namespace esther {
 
@@ -9,7 +11,11 @@ Class::Class(string name, Class *superclass)
 }
 
 Class::Class(string name, string superclassName)
-    : Object("Class"), name(name), superclass(superclassName.empty() ? Runtime::getObjectClass() : Runtime::getRootClass(superclassName)) {
+    : Object("Class"), name(name), superclass(Runtime::getRootClass(superclassName)) {
+}
+
+Class::Class(string name)
+    : Object("Class"), name(name), superclass(Runtime::getObjectClass()) {
 }
 
 string Class::getName() {
@@ -40,8 +46,8 @@ Method *Class::getMethod(string name) {
     return hasMethod(name) ? methods.at(name) : 0;
 }
 
-void Class::setMethod(string name, Method *method) {
-    methods[name] = method;
+void Class::setMethod(Method *method) {
+    methods[method->getName()] = method;
 }
 
 Method *Class::lookup(string name) {
@@ -54,19 +60,22 @@ Method *Class::lookup(string name) {
     return 0;
 }
 
-Object *Class::call(string name, list<Object *> args) {
-    return Runtime::getNull();
+Object *Class::call(string name, Tuple *args) {
+    return Object::call(name, args);
 }
 
 Object *Class::call(string name, Object *arg) {
-    return call(name, list<Object *>(1, arg));
+    return call(name, new Tuple(list<Object *>(1, arg)));
 }
 
 Object *Class::call(string name) {
-    return call(name, list<Object *>());
+    return call(name, new Tuple(list<Object *>()));
 }
 
 string Class::toString() {
-    return name.empty() ? "<Anonymous Class>" : name;
+    return name.empty() ? "<anonymous class>" : name;
+}
+
+void Class::setupMethods() {
 }
 }

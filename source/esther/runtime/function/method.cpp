@@ -10,7 +10,7 @@ Object *Method::invoke(Object *self, Tuple *args) {
     return Function::invoke(self, args);
 }
 
-//string Method::toString() {
-//    return name.empty() ? "<Anonymous Method>" : name;
-//}
+string Method::toString() {
+    return name.empty() ? "<anonymous method>" : "<method " + name + ">";
+}
 }

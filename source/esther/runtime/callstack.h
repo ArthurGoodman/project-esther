@@ -1,11 +1,13 @@
 #pragma once
 #include "common.h"
 
+#include "object.h"
+
 namespace esther {
 
 class Call;
 
-class CallStack {
+class CallStack : public Object {
     static stack<Call *> calls;
 
 public:

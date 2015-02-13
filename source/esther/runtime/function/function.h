@@ -21,8 +21,10 @@ protected:
 public:
     Function(string name, Context *context, list<string> params, FunctionBody *body);
 
+    string getName();
+
     virtual Object *invoke(Object *self, Tuple *args);
 
-//    virtual string toString();
+    virtual string toString();
 };
 }

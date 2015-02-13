@@ -25,6 +25,7 @@
 #include "returnexpression.h"
 #include "breakexpression.h"
 #include "continueexpression.h"
+#include "selfexpression.h"
 
 namespace esther {
 
@@ -122,5 +123,9 @@ Expression *DefaultExpressionManager::createBreak(Expression *value) {
 
 Expression *DefaultExpressionManager::createContinue() {
     return new ContinueExpression;
+}
+
+Expression *DefaultExpressionManager::createSelf() {
+    return new SelfExpression;
 }
 }

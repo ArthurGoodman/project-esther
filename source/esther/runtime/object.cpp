@@ -62,7 +62,8 @@ Object *Object::as(Class *_class) {
 
 Object *Object::call(string name, Tuple *args) {
     Method *method = objectClass->lookup(name);
-    if(!method) Runtime::runtimeError("undefined method '" + name + "'");
+    if (!method)
+        Runtime::runtimeError("undefined method '" + name + "'");
     return method->invoke(this, args);
 }
 

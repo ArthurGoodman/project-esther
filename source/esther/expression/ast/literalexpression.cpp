@@ -1,8 +1,5 @@
 #include "literalexpression.h"
 
-#include "object.h"
-#include "objectarray.h"
-
 namespace esther {
 
 LiteralExpression::LiteralExpression(Object *value)

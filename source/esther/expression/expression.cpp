@@ -117,4 +117,8 @@ Expression *Expression::Break(Expression *value) {
 Expression *Expression::Continue() {
     return manager->createContinue();
 }
+
+Expression *Expression::Self() {
+    return manager->createSelf();
+}
 }

@@ -47,5 +47,7 @@ public:
     virtual Expression *createReturn(Expression *value) = 0;
     virtual Expression *createBreak(Expression *value) = 0;
     virtual Expression *createContinue() = 0;
+
+    virtual Expression *createSelf() = 0;
 };
 }

@@ -7,6 +7,7 @@ class Object;
 class Class;
 class Context;
 class CallStack;
+class Call;
 
 // Global access point to the various runtime stuff.
 class Runtime {
@@ -35,6 +36,8 @@ public:
     static Object *getNull();
 
     static CallStack *getCallStack();
+    static void beginCall(Call *call);
+    static void endCall();
 
     static bool hasRootClass(string name);
     static Class *getRootClass(string name);

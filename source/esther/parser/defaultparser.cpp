@@ -403,8 +403,8 @@ Expression *DefaultParser::term() {
     else if (accept(tNull))
         e = Expression::Literal(Runtime::getNull());
 
-    //else if (accept(tSelf))
-    //    e = new SelfExpression;
+    else if (accept(tSelf))
+        e = Expression::Self();
     //else if (accept(tSuper))
     //    e = new SuperExpression;
     //else if (accept(tContext))

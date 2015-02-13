@@ -1,4 +1,4 @@
-#include "nativefunctionbody.h"
+#include "nativemethod.h"
 
 #include "runtime.h"
 #include "callstack.h"
@@ -7,11 +7,11 @@
 
 namespace esther {
 
-NativeFunctionBody::NativeFunctionBody(function<Object *(Object *, Tuple *)> f)
+NativeMethod::NativeMethod(function<Object *(Object *, Tuple *)> f)
     : f(f) {
 }
 
-Object *NativeFunctionBody::eval(Context *context) {
+Object *NativeMethod::eval(Context *context) {
     Call *call = Runtime::getCallStack()->current();
     return f(context->getCurrentSelf(), call->getArgs());
 }

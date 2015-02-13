@@ -5,6 +5,8 @@
 #include "callstack.h"
 #include "call.h"
 
+#include "initializer_list"
+
 namespace esther {
 
 CallExpression::CallExpression(Expression *self, string name, list<Expression *> args)
@@ -21,9 +23,9 @@ Object *CallExpression::eval(Context *context) {
 
     Tuple *evaledArgs = new Tuple(evaledArgsList);
 
-    Runtime::getCallStack()->beginCall(new esther::Call(context, evaledArgs));
+    Runtime::beginCall(new esther::Call(context, evaledArgs));
     Object *value = self->call(name, evaledArgs);
-    Runtime::getCallStack()->endCall();
+    Runtime::endCall();
 
     return value;
 }
