@@ -16,7 +16,7 @@ using namespace std;
 // Some useful functions and defines:
 
 // Foreach loop for standart STL containters.
-#define foreach(i, c) for (decltype(c.begin()) i = c.begin(); i != c.end(); ++i)
+#define foreach(i, c) for (auto i = c.begin(); i != c.end(); ++i)
 
 // Append operators:
 

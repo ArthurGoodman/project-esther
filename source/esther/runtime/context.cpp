@@ -66,6 +66,9 @@ bool Context::hasId(string name) {
     if (parent)
         return parent->hasId(name);
 
+    if(Runtime::hasRootClass(name))
+        return true;
+
     return false;
 }
 
@@ -83,6 +86,9 @@ Object *Context::getId(string name) {
 
     if (parent)
         return parent->getId(name);
+
+    if(Runtime::hasRootClass(name))
+        return Runtime::getRootClass(name);
 
     return 0;
 }

@@ -20,6 +20,18 @@ Object *ClassClass::newInstance() {
 }
 
 void ClassClass::setupMethods() {
+    auto newMethod = [](Object * self, Tuple *) -> Object * {
+        return ((Class *)self)->newInstance();
+    };
+
+    setMethod(new Method("new", Runtime::getRoot(), {}, new NativeMethod(newMethod)));
+
+    auto superclassMethod = [](Object * self, Tuple *) -> Object * {
+        return ((Class *)self)->getSuperclass();
+    };
+
+    setMethod(new Method("superclass", Runtime::getRoot(), {}, new NativeMethod(superclassMethod)));
+
     auto nameMethod = [](Object * self, Tuple *) -> Object * {
         return new String(((Class *)self)->getName());
     };
