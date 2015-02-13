@@ -1,10 +1,10 @@
 #include "objectclass.h"
 
 #include "runtime.h"
+#include "nativemethod.h"
+#include "nativeblock.h"
 #include "tuple.h"
 #include "io.h"
-#include "nativemethod.h"
-#include "method.h"
 
 namespace esther {
 
@@ -22,7 +22,7 @@ void ObjectClass::setupMethods() {
         return self->getClass();
     };
 
-    setMethod(new Method("class", Runtime::getRoot(), {}, new NativeMethod(classMethod)));
+    setMethod("class", classMethod);
 
     auto printMethod = [](Object * self, Tuple * args) -> Object * {
         if (args->isEmpty())
@@ -33,6 +33,7 @@ void ObjectClass::setupMethods() {
 
         return Runtime::getNull();
     };
-    setMethod(new Method("print", Runtime::getRoot(), {}, new NativeMethod(printMethod)));
+
+    setMethod("print", printMethod);
 }
 }

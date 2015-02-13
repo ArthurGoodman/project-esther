@@ -1,6 +1,6 @@
 #include "defaultparser.h"
 
-#include "defaultlexer.h"
+#include "tokens.h"
 #include "syntaxerror.h"
 #include "expression.h"
 #include "valueobject.h"
@@ -182,7 +182,7 @@ Expression *DefaultParser::dot() {
         if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
             token->setId(tId);
 
-        Expression *body = preffix();
+        Expression *body = dot();
 
         //if (dynamic_cast<BlockExpression *>(body))
         //    ((BlockExpression *)body)->disableChildContext();

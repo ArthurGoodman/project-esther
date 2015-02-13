@@ -3,12 +3,12 @@
 
 #include "debug.h"
 #include "utility.h"
+#include "io.h"
 
 #if DEBUG
 
 class Logger {
     static string activeLog;
-    static map<string, string> logs;
 
 public:
     static void setActiveLog(string log);
@@ -18,13 +18,18 @@ public:
 
     template <class T>
     static void write(T data);
-
-    static void flush();
 };
 
 template <class T>
 void Logger::write(string log, T data) {
-    logs[log] += Utility::toString(data);
+    string fileName = "logs\\" + log + ".log";
+
+    if (!IO::isOpen(fileName)) {
+        IO::createDirectory("logs");
+        IO::openFile(fileName);
+    }
+
+    IO::writeToFile(fileName, Utility::toString(data));
 }
 
 template <class T>

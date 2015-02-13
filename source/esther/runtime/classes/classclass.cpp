@@ -1,8 +1,8 @@
 #include "classclass.h"
 
 #include "runtime.h"
-#include "method.h"
 #include "nativemethod.h"
+#include "nativeblock.h"
 #include "string.h"
 
 namespace esther {
@@ -24,18 +24,18 @@ void ClassClass::setupMethods() {
         return ((Class *)self)->newInstance();
     };
 
-    setMethod(new Method("new", Runtime::getRoot(), {}, new NativeMethod(newMethod)));
+    setMethod("new", newMethod);
 
     auto superclassMethod = [](Object * self, Tuple *) -> Object * {
         return ((Class *)self)->getSuperclass();
     };
 
-    setMethod(new Method("superclass", Runtime::getRoot(), {}, new NativeMethod(superclassMethod)));
+    setMethod("superclass", superclassMethod);
 
     auto nameMethod = [](Object * self, Tuple *) -> Object * {
         return new String(((Class *)self)->getName());
     };
 
-    setMethod(new Method("name", Runtime::getRoot(), {}, new NativeMethod(nameMethod)));
+    setMethod("name", nameMethod);
 }
 }

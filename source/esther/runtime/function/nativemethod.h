@@ -1,18 +1,16 @@
 #pragma once
 #include "common.h"
 
-#include "functionbody.h"
+#include "method.h"
 
 namespace esther {
 
-class Tuple;
+class NativeBlock;
 
-class NativeMethod : public FunctionBody {
-    function<Object *(Object *, Tuple *)> f;
-
+class NativeMethod : public Method {
 public:
-    NativeMethod(function<Object *(Object *, Tuple *)> f);
+    NativeMethod(string name, NativeBlock *body);
 
-    Object *eval(Context *context);
+    Object *invoke(Object *self, Tuple *args);
 };
 }

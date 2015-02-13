@@ -1,17 +1,17 @@
 #pragma once
 #include "common.h"
 
-#include "functionbody.h"
+#include "block.h"
 
 namespace esther {
 
 class Expression;
 
-class InterpretedFunctionBody : public FunctionBody {
+class InterpretedBlock : public Block {
     Expression *e;
 
 public:
-    InterpretedFunctionBody(Expression *e);
+    InterpretedBlock(Expression *e);
 
     Object *eval(Context *context);
 };

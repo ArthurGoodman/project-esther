@@ -8,7 +8,7 @@ class Token;
 
 typedef list<Token> Tokens;
 
-// Syntax analysis.
+// Syntactic analysis.
 class Parser {
 public:
     static Parser *create();

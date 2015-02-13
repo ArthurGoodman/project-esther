@@ -4,7 +4,7 @@
 #include "integer.h"
 #include "tuple.h"
 #include "nativemethod.h"
-#include "method.h"
+#include "nativeblock.h"
 
 namespace esther {
 
@@ -22,6 +22,6 @@ void IntegerClass::setupMethods() {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
-    setMethod(new Method("+", Runtime::getRoot(), {"arg"}, new NativeMethod(plusMethod)));
+    setMethod("+", plusMethod);
 }
 }

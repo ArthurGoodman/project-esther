@@ -3,7 +3,7 @@
 namespace esther {
 
 Token::Token()
-    : id(invalidTokenId), text("") {
+    : id(-1), text("") {
 }
 
 Token::Token(int id, const string &text)

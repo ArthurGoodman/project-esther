@@ -1,13 +1,9 @@
 #include "functionclass.h"
 
 #include "runtime.h"
-#include "function.h"
-#include "callstack.h"
-#include "call.h"
-#include "function.h"
-#include "context.h"
 #include "nativemethod.h"
-#include "method.h"
+#include "nativeblock.h"
+#include "tuple.h"
 
 namespace esther {
 
@@ -17,19 +13,26 @@ FunctionClass::FunctionClass()
 }
 
 Object *FunctionClass::newInstance() {
-    return new Function("", Runtime::getRoot(), {}, new NativeMethod([](Object *, Tuple *) -> Object * {
-                            return Runtime::getNull();
-                                                    }));
+    auto body = [](Object *, Tuple *) -> Object * {
+        return Runtime::getNull();
+    };
+
+    return new Function("", Runtime::getRoot(), {}, new NativeBlock(body));
 }
 
 void FunctionClass::setupMethods() {
     auto parenthesesMethod = [](Object * self, Tuple * args) -> Object * {
-        Runtime::beginCall(new Call(Runtime::getCallStack()->current()->getContext(), args));
-        Object *value = ((Function *)self)->invoke(Runtime::getCallStack()->current()->getContext()->getCurrentSelf(), args);
-        Runtime::endCall();
+        if(!dynamic_cast<Function *>(self)) Runtime::runtimeError("invalid self");
+
+        list<Object *> argsList;
+
+        for(int i = 1; i < args->size(); i++)
+            argsList << args->at(i);
+
+        Object *value = ((Function *)self)->invoke(args->at(0), new Tuple(argsList));
         return value;
     };
 
-    setMethod(new Method("()", Runtime::getRoot(), {"args"}, new NativeMethod(parenthesesMethod)));
+    setMethod("()", parenthesesMethod);
 }
 }

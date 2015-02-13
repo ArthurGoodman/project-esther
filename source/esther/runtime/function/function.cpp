@@ -1,16 +1,17 @@
 #include "function.h"
 
 #include "context.h"
-#include "functionbody.h"
+#include "block.h"
 #include "tuple.h"
+#include "logger.h"
 
 namespace esther {
 
-Function::Function(string className, string name, Context *context, list<string> params, FunctionBody *body)
+Function::Function(string className, string name, Context *context, list<string> params, Block *body)
     : Object(className), name(name), context(context), params(params), body(body) {
 }
 
-Function::Function(string name, Context *context, list<string> params, FunctionBody *body)
+Function::Function(string name, Context *context, list<string> params, Block *body)
     : Object("Function"), name(name), context(context), params(params), body(body) {
 }
 

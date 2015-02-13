@@ -2,7 +2,7 @@
 
 namespace esther {
 
-Method::Method(string name, Context *context, list<string> params, FunctionBody *body)
+Method::Method(string name, Context *context, list<string> params, Block *body)
     : Function("Method", name, context, params, body) {
 }
 

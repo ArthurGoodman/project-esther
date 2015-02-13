@@ -1,33 +1,65 @@
 #include "io.h"
 
+map<string, unique_ptr<fstream>> IO::files;
+
 // Read the file into a string.
 string IO::readFile(string fileName) {
-    ifstream f(fileName.data());
+    ifstream file(fileName.data());
 
-    if (!f) {
+    if (!file) {
         cout << "error opening file '" << fileName << "'\n";
         return "";
     }
 
     ostringstream buffer;
-    buffer << f.rdbuf();
+    buffer << file.rdbuf();
 
-    f.close();
+    file.close();
 
     return buffer.str();
 }
 
 // Write data into a file.
 void IO::writeFile(string fileName, string data) {
-    ofstream f(fileName.data());
+    ofstream file(fileName.data());
 
-    if (!f)
+    if (!file)
         cout << "error opening file '" << fileName << "'\n";
 
     ostringstream buffer(data);
-    f << buffer.str();
+    file << buffer.str();
 
-    f.close();
+    file.close();
+}
+
+void IO::createDirectory(string name) {
+    system(string("if not exist logs md " + name).data());
+}
+
+void IO::openFile(string fileName) {
+    files[fileName] = unique_ptr<fstream>(new fstream(fileName.data(), ios::out | ios::trunc));
+}
+
+bool IO::isOpen(string fileName) {
+    return files.find(fileName) != files.end();
+}
+
+void IO::writeToFile(string fileName, string data) {
+    ostringstream buffer(data);
+    *files[fileName] << buffer.str();
+    files[fileName]->flush();
+}
+
+void IO::closeFile(string fileName) {
+    files[fileName]->close();
+    files.erase(fileName);
+}
+
+void IO::closeAllFiles() {
+    foreach (i, files)
+        i->second->close();
+
+    files.clear();
 }
 
 void IO::print(string data) {

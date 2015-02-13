@@ -7,19 +7,19 @@ namespace esther {
 
 class Tuple;
 class Context;
-class FunctionBody;
+class Block;
 
 class Function : public Object {
 protected:
     string name;
     Context *context;
     list<string> params;
-    FunctionBody *body;
+    Block *body;
 
-    Function(string className, string name, Context *context, list<string> params, FunctionBody *body);
+    Function(string className, string name, Context *context, list<string> params, Block *body);
 
 public:
-    Function(string name, Context *context, list<string> params, FunctionBody *body);
+    Function(string name, Context *context, list<string> params, Block *body);
 
     string getName();
 

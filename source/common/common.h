@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <stack>
 #include <functional>
+#include <memory>
 using namespace std;
 
 // Some useful functions and defines:

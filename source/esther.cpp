@@ -1,6 +1,7 @@
 #include "esther.h"
 
 #include "engine.h"
+#include "io.h"
 
 Esther Esther::esther;
 esther::Engine *Esther::engine;
@@ -12,6 +13,8 @@ Esther::Esther() {
 
 Esther::~Esther() {
     engine->release();
+
+    IO::closeAllFiles();
 }
 
 void Esther::run(const string &script) {

@@ -7,7 +7,7 @@ namespace esther {
 
 class Method : public Function {
 public:
-    Method(string name, Context *context, list<string> params, FunctionBody *body);
+    Method(string name, Context *context, list<string> params, Block *body);
 
     Object *invoke(Object *self, Tuple *args);
 

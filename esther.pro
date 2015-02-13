@@ -91,8 +91,6 @@ SOURCES += \
     source/esther/expression/ast/postincrementexpression.cpp \
     source/esther/expression/ast/preincrementexpression.cpp \
     source/esther/runtime/tuple.cpp \
-    source/esther/runtime/function/functionbody.cpp \
-    source/esther/runtime/function/interpretedfunctionbody.cpp \
     source/esther/runtime/function/signature.cpp \
     source/esther/runtime/callstack.cpp \
     source/esther/runtime/call.cpp \
@@ -111,7 +109,10 @@ SOURCES += \
     source/esther/runtime/classes/integerclass.cpp \
     source/esther/runtime/classes/methodclass.cpp \
     source/esther/runtime/classes/stringclass.cpp \
-    source/esther/expression/ast/selfexpression.cpp
+    source/esther/expression/ast/selfexpression.cpp \
+    source/esther/runtime/function/block.cpp \
+    source/esther/runtime/function/nativeblock.cpp \
+    source/esther/runtime/function/interpretedblock.cpp
 
 HEADERS += \
     source/esther.h \
@@ -185,8 +186,6 @@ HEADERS += \
     source/esther/expression/ast/postincrementexpression.h \
     source/esther/expression/ast/preincrementexpression.h \
     source/esther/runtime/tuple.h \
-    source/esther/runtime/function/functionbody.h \
-    source/esther/runtime/function/interpretedfunctionbody.h \
     source/esther/runtime/function/signature.h \
     source/esther/runtime/callstack.h \
     source/esther/runtime/call.h \
@@ -205,8 +204,17 @@ HEADERS += \
     source/esther/runtime/classes/integerclass.h \
     source/esther/runtime/classes/methodclass.h \
     source/esther/runtime/classes/stringclass.h \
-    source/esther/expression/ast/selfexpression.h
+    source/esther/expression/ast/selfexpression.h \
+    source/esther/runtime/function/block.h \
+    source/esther/runtime/function/nativeblock.h \
+    source/esther/runtime/function/interpretedblock.h \
+    source/esther/lexer/tokens.h
 
 OTHER_FILES += \
     README.MD \
     scripts/test.es
+
+DISTFILES += \
+    source/esther/lexer/keywords.def \
+    source/esther/lexer/operators.def \
+    source/esther/lexer/othertokens.def

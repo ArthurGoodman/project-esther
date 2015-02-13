@@ -1,5 +1,6 @@
 #include "defaultlexer.h"
 
+#include "tokens.h"
 #include "lexicalerror.h"
 #include "logger.h"
 #include "utility.h"
@@ -9,33 +10,29 @@ namespace esther {
 // Lexemes:
 
 string DefaultLexer::operators[] = {
-    "+", "-", "*", "/", "%",
-    "<", ">", "<=", ">=", "==", "!=", "&", "|", "!", "=",
-    "+=", "-=", "*=", "/=", "%=",
-    "--", "++",
-    ".", "->", ",", ":", "@", "$", ";",
-    "(", "[", "{", ")", "]", "}"};
+#define X(a, b) b,
+#include "operators.def"
+#undef X
+    ""};
 
 string DefaultLexer::keywords[] = {
-    "if", "else", "elif", "while", "for", "do", "forever",
-    "true", "false", "null", "self", "super", "context", "continue", "break", "return",
-    "include", "class", "static", "method", "function", "try", "throw", "catch", "var"};
+#define X(a, b) b,
+#include "keywords.def"
+#undef X
+    ""};
 
 #if DEBUG_LEXER
 // This is used in logs.
 string DefaultLexer::tokenTypes[] = {
-    "tPlus", "tMinus", "tMultiply", "tDivide", "tMod",
-    "tLt", "tGt", "tLe", "tGe", "tEq", "tNe", "tAnd", "tOr", "tNot", "tAssign",
-    "tPlusAssign", "tMinusAssign", "tMultiplyAssign", "tDivideAssign", "tModAssign",
-    "tDec", "tInc",
-    "tDot", "tArrow", "tComma", "tColon", "tAt", "tDollar", "tSemi",
-    "tLPar", "tLBracket", "tLBrace", "tRPar", "tRBracket", "tRBrace",
+    #define X(a, b) #a,
+    #include "operators.def"
+    #include "keywords.def"
+    #undef X
 
-    "tIf", "tElse", "tElif", "tWhile", "tFor", "tDo", "tForever",
-    "tTrue", "tFalse", "tNull", "tSelf", "tSuper", "tContext", "tContinue", "tBreak", "tReturn",
-    "tInclude", "tClass", "tStatic", "tMethod", "tFunction", "tTry", "tThrow", "tCatch", "tVar",
-
-    "tId", "tInteger", "tFloat", "tString", "tComplexString", "tUnknown", "tEnd"};
+    #define X(a) #a,
+    #include "othertokens.def"
+    #undef X
+""};
 #endif
 
 Tokens &DefaultLexer::lex(const string &source) {

@@ -1,6 +1,7 @@
 #include "contextresolutionexpression.h"
 
 #include "context.h"
+#include "function.h"
 
 namespace esther {
 

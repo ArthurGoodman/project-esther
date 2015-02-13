@@ -3,6 +3,8 @@
 #include "runtime.h"
 #include "tuple.h"
 #include "method.h"
+#include "nativemethod.h"
+#include "nativeblock.h"
 
 namespace esther {
 
@@ -48,6 +50,10 @@ Method *Class::getMethod(string name) {
 
 void Class::setMethod(Method *method) {
     methods[method->getName()] = method;
+}
+
+void Class::setMethod(string name, function<Object *(Object *, Tuple *)> body) {
+    methods[name] = new NativeMethod(name, new NativeBlock(body));
 }
 
 Method *Class::lookup(string name) {

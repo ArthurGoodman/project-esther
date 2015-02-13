@@ -1,8 +1,8 @@
 #include "methodclass.h"
 
 #include "runtime.h"
-#include "method.h"
 #include "nativemethod.h"
+#include "nativeblock.h"
 
 namespace esther {
 
@@ -12,9 +12,11 @@ MethodClass::MethodClass()
 }
 
 Object *MethodClass::newInstance() {
-    return new Method("", Runtime::getRoot(), {}, new NativeMethod([](Object *, Tuple *) -> Object * {
-                          return Runtime::getNull();
-                                                  }));
+    auto body = [](Object *, Tuple *) -> Object * {
+        return Runtime::getNull();
+    };
+
+    return new Method("", Runtime::getRoot(), {}, new NativeBlock(body));
 }
 
 void MethodClass::setupMethods() {

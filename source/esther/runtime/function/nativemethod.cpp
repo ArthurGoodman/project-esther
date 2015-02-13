@@ -1,18 +1,15 @@
 #include "nativemethod.h"
 
 #include "runtime.h"
-#include "callstack.h"
-#include "call.h"
-#include "context.h"
+#include "nativeblock.h"
 
 namespace esther {
 
-NativeMethod::NativeMethod(function<Object *(Object *, Tuple *)> f)
-    : f(f) {
+NativeMethod::NativeMethod(string name, NativeBlock *body)
+    : Method(name, Runtime::getRoot(), {}, body) {
 }
 
-Object *NativeMethod::eval(Context *context) {
-    Call *call = Runtime::getCallStack()->current();
-    return f(context->getCurrentSelf(), call->getArgs());
+Object *NativeMethod::invoke(Object *self, Tuple *args) {
+    return ((NativeBlock *)body)->eval(self, args);
 }
 }

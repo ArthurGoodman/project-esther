@@ -9,7 +9,7 @@
 #include "false.h"
 #include "null.h"
 #include "runtimeerror.h"
-#include "callstack.h"
+//#include "callstack.h"
 #include "objectclass.h"
 #include "classclass.h"
 #include "functionclass.h"
@@ -33,7 +33,7 @@ Object *Runtime::nullObject;
 
 map<string, Class *> Runtime::rootClasses;
 
-CallStack *Runtime::callStack;
+//CallStack *Runtime::callStack;
 
 void Runtime::initialize() {
     objectClass = new ObjectClass;
@@ -62,7 +62,7 @@ void Runtime::initialize() {
 
     root = new Context;
 
-    callStack = new CallStack;
+    //callStack = new CallStack;
 
     foreach (i, rootClasses)
         i->second->setupMethods();
@@ -80,7 +80,7 @@ void Runtime::release() {
     foreach (i, rootClasses)
         delete i->second;
 
-    delete callStack;
+    //delete callStack;
 }
 
 Context *Runtime::getRoot() {
@@ -107,17 +107,17 @@ Object *Runtime::getNull() {
     return nullObject;
 }
 
-CallStack *Runtime::getCallStack() {
-    return callStack;
-}
+//CallStack *Runtime::getCallStack() {
+//    return callStack;
+//}
 
-void Runtime::beginCall(Call *call) {
-    callStack->beginCall(call);
-}
+//void Runtime::beginCall(Call *call) {
+//    callStack->beginCall(call);
+//}
 
-void Runtime::endCall() {
-    callStack->endCall();
-}
+//void Runtime::endCall() {
+//    callStack->endCall();
+//}
 
 bool Runtime::hasRootClass(string name) {
     return rootClasses.find(name) != rootClasses.end();

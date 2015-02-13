@@ -1,15 +1,14 @@
 #pragma once
 #include "common.h"
 
+#include "object.h"
+
 namespace esther {
 
-class Object;
 class Context;
 
-class FunctionBody {
+class Block : public Object {
 public:
-    virtual ~FunctionBody();
-
     virtual Object *eval(Context *context) = 0;
 };
 }

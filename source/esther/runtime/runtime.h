@@ -22,7 +22,7 @@ class Runtime {
 
     static map<string, Class *> rootClasses;
 
-    static CallStack *callStack;
+    //static CallStack *callStack;
 
 public:
     static void initialize();
@@ -35,9 +35,9 @@ public:
     static Object *getFalse();
     static Object *getNull();
 
-    static CallStack *getCallStack();
-    static void beginCall(Call *call);
-    static void endCall();
+    //static CallStack *getCallStack();
+    //static void beginCall(Call *call);
+    //static void endCall();
 
     static bool hasRootClass(string name);
     static Class *getRootClass(string name);
