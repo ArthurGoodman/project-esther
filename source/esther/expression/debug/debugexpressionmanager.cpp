@@ -122,8 +122,11 @@ Expression *DebugExpressionManager::createIdentifierAssignment(Expression *name,
     return new DebugExpression("IdentifierAssignment", arguments);
 }
 
-Expression *DebugExpressionManager::createIdentifierDefinition(Expression *name, Expression *value) {
+Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value) {
     list<Object *> arguments;
+
+    if (type)
+        arguments << type;
 
     arguments << name;
 

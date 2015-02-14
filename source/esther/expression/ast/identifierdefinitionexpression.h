@@ -6,8 +6,10 @@
 namespace esther {
 
 class IdentifierDefinitionExpression : public IdentifierAssignmentExpression {
+    Expression *type;
+
 public:
-    IdentifierDefinitionExpression(Expression *name, Expression *value);
+    IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value);
     ~IdentifierDefinitionExpression();
 
     Object *eval(Context *context);

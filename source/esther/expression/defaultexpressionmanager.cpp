@@ -86,8 +86,8 @@ Expression *DefaultExpressionManager::createIdentifierAssignment(Expression *nam
     return new IdentifierAssignmentExpression(name, value);
 }
 
-Expression *DefaultExpressionManager::createIdentifierDefinition(Expression *name, Expression *value) {
-    return new IdentifierDefinitionExpression(name, value);
+Expression *DefaultExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value) {
+    return new IdentifierDefinitionExpression(type, name, value);
 }
 
 Expression *DefaultExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {

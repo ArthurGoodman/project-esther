@@ -6,13 +6,12 @@
 
 namespace esther {
 
-IdentifierDefinitionExpression::IdentifierDefinitionExpression(Expression *name, Expression *value)
-    : IdentifierAssignmentExpression(name, value) {
+IdentifierDefinitionExpression::IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value)
+    : IdentifierAssignmentExpression(name, value), type(type) {
 }
 
 IdentifierDefinitionExpression::~IdentifierDefinitionExpression() {
-    delete name;
-    delete value;
+    delete type;
 }
 
 Object *IdentifierDefinitionExpression::eval(Context *context) {

@@ -10,7 +10,6 @@ IdentifierAssignmentExpression::IdentifierAssignmentExpression(Expression *name,
 }
 
 IdentifierAssignmentExpression::~IdentifierAssignmentExpression() {
-    delete name;
     delete value;
 }
 

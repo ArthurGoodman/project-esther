@@ -3,7 +3,10 @@
 #include "tokens.h"
 #include "syntaxerror.h"
 #include "expression.h"
-#include "valueobject.h"
+#include "integer.h"
+#include "float.h"
+#include "character.h"
+#include "string.h"
 #include "esther.h"
 #include "utility.h"
 #include "runtime.h"
@@ -12,7 +15,7 @@ namespace esther {
 
 Expression *DefaultParser::parse(Tokens &tokens) {
     this->tokens.swap(tokens);
-    token = this->tokens.begin(); // Get the list of tokens.
+    token = this->tokens.begin();
 
     list<Expression *> nodes;
 
@@ -48,7 +51,7 @@ void DefaultParser::getToken() {
     ++token;
 }
 
-Expression *DefaultParser::parseBlock() {
+list<Expression *> DefaultParser::parseBlock() {
     list<Expression *> nodes;
 
     while (!check(tRBrace) && !check(tEnd))
@@ -57,7 +60,7 @@ Expression *DefaultParser::parseBlock() {
     if (!accept(tRBrace))
         error("unmatched braces");
 
-    return Expression::Block(nodes);
+    return nodes;
 }
 
 list<Expression *> DefaultParser::parseList() {
@@ -184,16 +187,11 @@ Expression *DefaultParser::mulDiv() {
 Expression *DefaultParser::dot() {
     Expression *e = preffix();
 
-    while (accept(tDot)) {
+    if (accept(tDot)) {
         if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
             token->setId(tId);
 
-        Expression *body = dot();
-
-        //if (dynamic_cast<BlockExpression *>(body))
-        //((BlockExpression *)body)->disableChildContext();
-
-        e = Expression::ContextResolution(e, body);
+        e = Expression::ContextResolution(e, dot());
     }
 
     return e;
@@ -303,16 +301,55 @@ Expression *DefaultParser::term() {
     //e = new IdentifierExpression(name, type, accept(tAssign) ? logicOr() : 0, attribute);
     //}
 
-    if (check(tId)) {
-        Expression *name = 0, *value = 0;
+    if (check(tId) || check(tDollar)) {
+        Expression *type = 0, *name = 0, *value = 0;
 
-        name = Expression::Literal(new ValueObject(token->getText()));
-        getToken();
+        if (check(tId)) {
+            name = Expression::Literal(new String(token->getText()));
+            getToken();
+        } else if (accept(tDollar)) {
+            if (check(tLPar) || check(tLBrace) || check(tEnd))
+                name = term();
+            else {
+                name = Expression::Literal(new String(token->getText()));
+                getToken();
+            }
+        }
+
+        if (check(tId)) {
+            type = name;
+            name = Expression::Literal(new String(token->getText()));
+            getToken();
+        } else if (accept(tDollar)) {
+            type = name;
+
+            if (check(tLPar) || check(tLBrace) || check(tEnd))
+                name = term();
+            else {
+                name = Expression::Literal(new String(token->getText()));
+                getToken();
+            }
+        } else if (accept(tColon)) {
+            if (check(tId)) {
+                type = Expression::Literal(new String(token->getText()));
+                getToken();
+            } else if (accept(tDollar)) {
+                if (check(tLPar) || check(tLBrace) || check(tEnd))
+                    type = term();
+                else {
+                    type = Expression::Literal(new String(token->getText()));
+                    getToken();
+                }
+            } else
+                type = term();
+        }
 
         if (accept(tAssign))
-            value = logicOr();
+            value = tuple();
 
-        if (value)
+        if (type)
+            e = Expression::IdentifierDefinition(type, name, value);
+        else if (value)
             e = Expression::IdentifierAssignment(name, value);
         else
             e = Expression::Identifier(name);
@@ -320,25 +357,25 @@ Expression *DefaultParser::term() {
         if (!check(tId))
             error("identifier expected");
 
-        Expression *name = Expression::Literal(new ValueObject(token->getText()));
+        Expression *name = Expression::Literal(new String(token->getText()));
         getToken();
 
-        e = Expression::IdentifierDefinition(name, accept(tAssign) ? logicOr() : 0);
+        e = Expression::IdentifierDefinition(0, name, accept(tAssign) ? logicOr() : 0);
     }
 
     else if (check(tInteger)) {
-        e = Expression::Literal(new ValueObject(Utility::fromString<int>(token->getText())));
+        e = Expression::Literal(new Integer(Utility::fromString<int>(token->getText())));
         getToken();
     } else if (check(tFloat)) {
-        e = Expression::Literal(new ValueObject(Utility::fromString<double>(token->getText())));
+        e = Expression::Literal(new Float(Utility::fromString<double>(token->getText())));
         getToken();
     }
 
     else if (check(tString)) {
-        e = Expression::Literal(token->getText().size() == 1 ? new ValueObject(token->getText()[0]) : new ValueObject(token->getText()));
+        e = Expression::Literal(token->getText().size() == 1 ? (Object *)new Character(token->getText()[0]) : (Object *)new String(token->getText()));
         getToken();
     } else if (check(tComplexString)) {
-        e = Expression::Literal(new ValueObject(token->getText()));
+        e = Expression::Literal(new String(token->getText()));
         getToken();
     }
 
@@ -357,18 +394,21 @@ Expression *DefaultParser::term() {
 
         getToken();
 
-        Expression *condition = term(), *body = oper(), *elseBody = 0;
+        Expression *condition = term(), *body = accept(tLBrace) ? Expression::List(parseBlock()) : oper(), *elseBody = 0;
 
-        if (accept(tElse))
-            elseBody = oper();
-        else if (check(tElif)) {
-            token->setId(tIf);
-            elseBody = term();
+        while (check(tElse) || check(tElif)) {
+            if (accept(tElse)) {
+                elseBody = accept(tLBrace) ? Expression::List(parseBlock()) : oper();
+                break;
+            } else if (check(tElif)) {
+                token->setId(tIf);
+                elseBody = term();
+            }
         }
 
         e = id == tIf ? Expression::If(condition, body, elseBody) : Expression::While(condition, body, elseBody);
     } else if (accept(tForever))
-        e = Expression::While(Expression::Literal(Runtime::getTrue()), oper(), 0);
+        e = Expression::While(Expression::Literal(Runtime::getTrue()), accept(tLBrace) ? Expression::List(parseBlock()) : oper(), 0);
     //else if (accept(tFor)) {
     //    if (!accept(tLPar))
     //        error("left parenthesis expected");
@@ -386,7 +426,7 @@ Expression *DefaultParser::term() {
     //    e = Expression::For(preffix, condition, suffix, oper());
     //}
     else if (accept(tDo)) {
-        Expression *body = oper();
+        Expression *body = accept(tLBrace) ? Expression::List(parseBlock()) : oper();
         if (!accept(tWhile))
             error("while expected");
         e = Expression::Do(body, term());
@@ -471,10 +511,7 @@ Expression *DefaultParser::term() {
         if (accept(tLt))
             superClass = term();
 
-        body = term();
-
-        //if (dynamic_cast<BlockExpression *>(body))
-        //((BlockExpression *)body)->disableChildContext();
+        body = accept(tLBrace) ? Expression::List(parseBlock()) : term();
 
         e = Expression::ClassDefinition(name, superClass, body);
     }
@@ -487,7 +524,7 @@ Expression *DefaultParser::term() {
         if (!accept(tRPar))
             error("unmatched parentheses");
     } else if (accept(tLBrace))
-        e = parseBlock();
+        e = Expression::Block(parseBlock());
 
     else if (accept(tSemi))
         e = Expression::Empty();

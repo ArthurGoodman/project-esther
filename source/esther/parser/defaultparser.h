@@ -24,7 +24,7 @@ private:
 
     void getToken();
 
-    Expression * parseBlock();
+    list<Expression *> parseBlock();
     list<Expression *> parseList();
 
     Expression *oper();
