@@ -24,11 +24,12 @@ private:
 
     void getToken();
 
-    list<Expression *> parseBlock();
+    Expression * parseBlock();
     list<Expression *> parseList();
 
+    Expression *oper();
     Expression *expr();
-    Expression *assign();
+    Expression *tuple();
     Expression *logicOr();
     Expression *logicAnd();
     Expression *equality();

@@ -17,7 +17,7 @@ Expression *DefaultParser::parse(Tokens &tokens) {
     list<Expression *> nodes;
 
     while (!check(tEnd))
-        nodes << expr();
+        nodes << oper();
 
     return Expression::List(nodes);
 }
@@ -48,55 +48,61 @@ void DefaultParser::getToken() {
     ++token;
 }
 
-list<Expression *> DefaultParser::parseBlock() {
+Expression *DefaultParser::parseBlock() {
     list<Expression *> nodes;
 
     while (!check(tRBrace) && !check(tEnd))
-        nodes << expr();
+        nodes << oper();
 
     if (!accept(tRBrace))
         error("unmatched braces");
 
-    return nodes;
+    return Expression::Block(nodes);
 }
 
 list<Expression *> DefaultParser::parseList() {
     list<Expression *> nodes;
 
     do
-        nodes << assign();
+        nodes << logicOr();
     while (accept(tComma));
 
     return nodes;
 }
 
-Expression *DefaultParser::expr() {
-    list<Expression *> nodes = parseList();
+Expression *DefaultParser::oper() {
+    Expression *e = expr();
 
     accept(tSemi);
 
-    return nodes.size() == 1 ? nodes.front() : Expression::List(nodes);
+    return e;
 }
 
-Expression *DefaultParser::assign() {
-    Expression *e = logicOr();
+Expression *DefaultParser::expr() {
+    Expression *e = tuple();
 
     while (range(tAssign, tModAssign)) {
         if (accept(tAssign))
-            e = Expression::Call(e, "=", logicOr());
+            e = Expression::Call(e, "=", tuple());
         else if (accept(tPlusAssign))
-            e = Expression::Call(e, "+=", logicOr());
+            e = Expression::Call(e, "+=", tuple());
         else if (accept(tMinusAssign))
-            e = Expression::Call(e, "-=", logicOr());
+            e = Expression::Call(e, "-=", tuple());
         else if (accept(tMultiplyAssign))
-            e = Expression::Call(e, "*=", logicOr());
+            e = Expression::Call(e, "*=", tuple());
         else if (accept(tDivideAssign))
-            e = Expression::Call(e, "/=", logicOr());
+            e = Expression::Call(e, "/=", tuple());
         else if (accept(tModAssign))
-            e = Expression::Call(e, "%=", logicOr());
+            e = Expression::Call(e, "%=", tuple());
     }
 
     return e;
+}
+
+Expression *DefaultParser::tuple() {
+    list<Expression *> nodes = parseList();
+
+    return nodes.size() == 1 ? nodes.front() : Expression::TupleLiteral(nodes);
 }
 
 Expression *DefaultParser::logicOr() {
@@ -185,7 +191,7 @@ Expression *DefaultParser::dot() {
         Expression *body = dot();
 
         //if (dynamic_cast<BlockExpression *>(body))
-        //    ((BlockExpression *)body)->disableChildContext();
+        //((BlockExpression *)body)->disableChildContext();
 
         e = Expression::ContextResolution(e, body);
     }
@@ -203,17 +209,17 @@ Expression *DefaultParser::preffix() {
     else if (accept(tNot))
         e = Expression::Negate(suffix());
     //else if (accept(tInclude))
-    //    e = new IncludeExpression(suffix());
+    //e = new IncludeExpression(suffix());
     //else if (accept(tDot)) {
-    //    if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tDot) && !check(tEnd))
-    //        (*token).setId(tId);
+    //if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tDot) && !check(tEnd))
+    //    (*token).setId(tId);
 
-    //    Expression *body = assign();
+    //Expression *body = assign();
 
-    //    if (dynamic_cast<BlockExpression *>(body))
-    //        ((BlockExpression *)body)->disableChildContext();
+    //if (dynamic_cast<BlockExpression *>(body))
+    //    ((BlockExpression *)body)->disableChildContext();
 
-    //    e = new ContextResolutionExpression(0, body);
+    //e = new ContextResolutionExpression(0, body);
     //}
     else if (accept(tDec))
         e = Expression::PreDecrement(suffix());
@@ -231,16 +237,12 @@ Expression *DefaultParser::suffix() {
     if (range(tLPar, tLBracket))
         while (range(tLPar, tLBracket)) {
             if (accept(tLPar)) {
-                list<Expression *> nodes = check(tRPar) ? list<Expression *>() : parseList();
-
-                e = Expression::Call(e, "()", nodes);
+                e = Expression::Call(e, "()", check(tRPar) ? list<Expression *>() : parseList());
 
                 if (!accept(tRPar))
                     error("unmatched parentheses");
             } else if (accept(tLBracket)) {
-                list<Expression *> nodes = check(tRPar) ? list<Expression *>() : parseList();
-
-                e = Expression::Call(e, "[]", nodes);
+                e = Expression::Call(e, "[]", check(tRBracket) ? list<Expression *>() : parseList());
 
                 if (!accept(tRBracket))
                     error("unmatched brackets");
@@ -258,47 +260,47 @@ Expression *DefaultParser::term() {
     Expression *e = 0;
 
     //if (check(tAt) || check(tId) || check(tColon)) {
-    //    bool attribute = accept(tAt);
+    //bool attribute = accept(tAt);
 
-    //    if (attribute && !check(tId) && !check(tColon))
+    //if (attribute && !check(tId) && !check(tColon))
+    //    error("identifier expected");
+
+    //Expression *name = 0, *type = 0;
+
+    //if (check(tId)) {
+    //    name = new LiteralExpression(/*new String(token.text())*/ 0);
+    //    getToken();
+    //} else {
+    //    getToken();
+
+    //    if (check(tLPar) || check(tLBrace) || check(tEnd))
+    //        name = term();
+    //    else {
+    //        name = new LiteralExpression(/*new String(token.text())*/ 0);
+    //        getToken();
+    //    }
+    //}
+
+    //if (accept(tColon)) {
+    //    if (!check(tId) && !check(tColon))
     //        error("identifier expected");
 
-    //    Expression *name = 0, *type = 0;
-
     //    if (check(tId)) {
-    //        name = new LiteralExpression(/*new String(token.text())*/ 0);
+    //        type = new LiteralExpression(/*new String(token.text())*/ 0);
     //        getToken();
     //    } else {
     //        getToken();
 
     //        if (check(tLPar) || check(tLBrace) || check(tEnd))
-    //            name = term();
+    //            type = term();
     //        else {
-    //            name = new LiteralExpression(/*new String(token.text())*/ 0);
-    //            getToken();
-    //        }
-    //    }
-
-    //    if (accept(tColon)) {
-    //        if (!check(tId) && !check(tColon))
-    //            error("identifier expected");
-
-    //        if (check(tId)) {
     //            type = new LiteralExpression(/*new String(token.text())*/ 0);
     //            getToken();
-    //        } else {
-    //            getToken();
-
-    //            if (check(tLPar) || check(tLBrace) || check(tEnd))
-    //                type = term();
-    //            else {
-    //                type = new LiteralExpression(/*new String(token.text())*/ 0);
-    //                getToken();
-    //            }
     //        }
     //    }
+    //}
 
-    //    e = new IdentifierExpression(name, type, accept(tAssign) ? logicOr() : 0, attribute);
+    //e = new IdentifierExpression(name, type, accept(tAssign) ? logicOr() : 0, attribute);
     //}
 
     if (check(tId)) {
@@ -341,13 +343,13 @@ Expression *DefaultParser::term() {
     }
 
     //else if (accept(tLBracket)) {
-    //    e = new ListExpression(((BlockExpression *)expr())->getExpressions());
-    //    if (!accept(tRBracket))
-    //        error("unmatched brackets");
+    //e = new ListExpression(((BlockExpression *)expr())->getExpressions());
+    //if (!accept(tRBracket))
+    //    error("unmatched brackets");
     //} else if (accept(tLt)) {
-    //    e = new VectorExpression(((BlockExpression *)expr())->getExpressions());
-    //    if (!accept(tGt))
-    //        error("unmatched brackets");
+    //e = new VectorExpression(((BlockExpression *)expr())->getExpressions());
+    //if (!accept(tGt))
+    //    error("unmatched brackets");
     //}
 
     else if (check(tIf) || check(tWhile)) {
@@ -355,10 +357,10 @@ Expression *DefaultParser::term() {
 
         getToken();
 
-        Expression *condition = term(), *body = expr(), *elseBody = 0;
+        Expression *condition = term(), *body = oper(), *elseBody = 0;
 
         if (accept(tElse))
-            elseBody = expr();
+            elseBody = oper();
         else if (check(tElif)) {
             token->setId(tIf);
             elseBody = term();
@@ -366,33 +368,34 @@ Expression *DefaultParser::term() {
 
         e = id == tIf ? Expression::If(condition, body, elseBody) : Expression::While(condition, body, elseBody);
     } else if (accept(tForever))
-        e = Expression::While(Expression::Literal(Runtime::getTrue()), expr(), 0);
-    else if (accept(tFor)) {
-        if (!accept(tLPar))
-            error("left parenthesis expected");
+        e = Expression::While(Expression::Literal(Runtime::getTrue()), oper(), 0);
+    //else if (accept(tFor)) {
+    //    if (!accept(tLPar))
+    //        error("left parenthesis expected");
 
-        list<Expression *> nodes = parseList();
+    //    list<Expression *> nodes = parseList();
 
-        if (!accept(tRPar))
-            error("unmatched parentheses");
-        if (nodes.size() != 3)
-            error("three expressions expected");
+    //    if (!accept(tRPar))
+    //        error("unmatched parentheses");
+    //    if (nodes.size() != 3)
+    //        error("three expressions expected");
 
-        list<Expression *>::iterator i = nodes.begin();
-        Expression *preffix = *i++, *condition = *i++, *suffix = *i++;
+    //    list<Expression *>::iterator i = nodes.begin();
+    //    Expression *preffix = *i++, *condition = *i++, *suffix = *i++;
 
-        e = Expression::For(preffix, condition, suffix, expr());
-    } else if (accept(tDo)) {
-        Expression *body = expr();
+    //    e = Expression::For(preffix, condition, suffix, oper());
+    //}
+    else if (accept(tDo)) {
+        Expression *body = oper();
         if (!accept(tWhile))
             error("while expected");
         e = Expression::Do(body, term());
     }
 
     else if (accept(tReturn))
-        e = Expression::Return(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : assign());
+        e = Expression::Return(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : expr());
     else if (accept(tBreak))
-        e = Expression::Break(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : assign());
+        e = Expression::Break(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : expr());
     else if (accept(tContinue))
         e = Expression::Continue();
 
@@ -406,56 +409,56 @@ Expression *DefaultParser::term() {
     else if (accept(tSelf))
         e = Expression::Self();
     //else if (accept(tSuper))
-    //    e = new SuperExpression;
+    //e = new SuperExpression;
     //else if (accept(tContext))
-    //    e = new ContextExpression;
+    //e = new ContextExpression;
 
     //else if (range(tStatic, tLambda) || check(tDollar)) {
-    //    bool isStatic = false;
-    //    if (accept(tStatic))
-    //        isStatic = true;
-    //    if (!range(tMethod, tLambda) && !check(tDollar))
-    //        error("method expected");
+    //bool isStatic = false;
+    //if (accept(tStatic))
+    //    isStatic = true;
+    //if (!range(tMethod, tLambda) && !check(tDollar))
+    //    error("method expected");
 
-    //    int type = (*token).id();
-    //    getToken();
+    //int type = (*token).id();
+    //getToken();
 
-    //    IdentifierExpression *name = 0;
-    //    list<IdentifierExpression *> params;
+    //IdentifierExpression *name = 0;
+    //list<IdentifierExpression *> params;
 
-    //    if (type == tMethod || type == tFunction || (type == tDollar && (check(tId) || check(tColon)))) {
-    //        if (!check(tId) && !check(tColon))
+    //if (type == tMethod || type == tFunction || (type == tDollar && (check(tId) || check(tColon)))) {
+    //    if (!check(tId) && !check(tColon))
+    //        error("identifier expected");
+    //    name = (IdentifierExpression *)term();
+    //}
+
+    //if (accept((tLPar))) {
+    //    list<Expression *> expressions = check(tRPar) ? list<Expression *>() : ((BlockExpression *)expr())->getExpressions();
+
+    //    foreach (n, expressions) {
+    //        if (!dynamic_cast<IdentifierExpression *>(*n))
     //            error("identifier expected");
-    //        name = (IdentifierExpression *)term();
+    //        params << *n;
     //    }
 
-    //    if (accept((tLPar))) {
-    //        list<Expression *> expressions = check(tRPar) ? list<Expression *>() : ((BlockExpression *)expr())->getExpressions();
+    //    if (!accept(tRPar))
+    //        error("unmatched parentheses");
+    //}
 
-    //        foreach (n, expressions) {
-    //            if (!dynamic_cast<IdentifierExpression *>(*n))
-    //                error("identifier expected");
-    //            params << *n;
-    //        }
-
-    //        if (!accept(tRPar))
-    //            error("unmatched parentheses");
-    //    }
-
-    //    switch (type) {
-    //    case tMethod:
-    //        e = new CallableExpression(name, params, assign(), tMethod, isStatic);
-    //        break;
-    //    case tFunction:
-    //        e = new CallableExpression(name, params, assign(), tFunction, isStatic);
-    //        break;
-    //    case tLambda:
-    //        e = new CallableExpression(new IdentifierExpression(new LiteralExpression(/*new String("")*/ 0), 0, 0, false), params, assign(), tLambda, isStatic);
-    //        break;
-    //    case tDollar:
-    //        e = !name ? (Expression *)new CallableExpression(new IdentifierExpression(new LiteralExpression(/*new String("")*/ 0), 0, 0, false), params, assign(), tDollar, isStatic) : (Expression *)new CallableExpression(name, params, assign(), tDollar, isStatic);
-    //        break;
-    //    }
+    //switch (type) {
+    //case tMethod:
+    //    e = new CallableExpression(name, params, assign(), tMethod, isStatic);
+    //    break;
+    //case tFunction:
+    //    e = new CallableExpression(name, params, assign(), tFunction, isStatic);
+    //    break;
+    //case tLambda:
+    //    e = new CallableExpression(new IdentifierExpression(new LiteralExpression(/*new String("")*/ 0), 0, 0, false), params, assign(), tLambda, isStatic);
+    //    break;
+    //case tDollar:
+    //    e = !name ? (Expression *)new CallableExpression(new IdentifierExpression(new LiteralExpression(/*new String("")*/ 0), 0, 0, false), params, assign(), tDollar, isStatic) : (Expression *)new CallableExpression(name, params, assign(), tDollar, isStatic);
+    //    break;
+    //}
     //}
     else if (accept(tClass)) {
         Expression *name = 0, *superClass = 0, *body;
@@ -471,7 +474,7 @@ Expression *DefaultParser::term() {
         body = term();
 
         //if (dynamic_cast<BlockExpression *>(body))
-        //    ((BlockExpression *)body)->disableChildContext();
+        //((BlockExpression *)body)->disableChildContext();
 
         e = Expression::ClassDefinition(name, superClass, body);
     }
@@ -479,16 +482,12 @@ Expression *DefaultParser::term() {
     //else if(accept(tTry)) {}
 
     else if (accept(tLPar)) {
-        if (accept(tRPar))
-            e = Expression::List();
-        else {
-            e = Expression::List(parseList());
+        e = expr();
 
-            if (!accept(tRPar))
-                error("unmatched parentheses");
-        }
+        if (!accept(tRPar))
+            error("unmatched parentheses");
     } else if (accept(tLBrace))
-        e = Expression::Block(parseBlock());
+        e = parseBlock();
 
     else if (accept(tSemi))
         e = Expression::Empty();

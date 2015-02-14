@@ -4,6 +4,7 @@
 #include "emptyexpression.h"
 #include "blockexpression.h"
 #include "listexpression.h"
+#include "tupleexpression.h"
 #include "literalexpression.h"
 #include "orexpression.h"
 #include "andexpression.h"
@@ -39,6 +40,10 @@ Expression *DefaultExpressionManager::createBlock(list<Expression *> nodes) {
 
 Expression *DefaultExpressionManager::createList(list<Expression *> nodes) {
     return new ListExpression(nodes);
+}
+
+Expression *DefaultExpressionManager::createTuple(list<Expression *> nodes) {
+    return new TupleExpression(nodes);
 }
 
 Expression *DefaultExpressionManager::createLiteral(Object *value) {

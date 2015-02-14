@@ -11,7 +11,7 @@ ValueObject::ValueObject(double value)
 }
 
 ValueObject::ValueObject(char value)
-    : Object("Char"), value(value) {
+    : Object("Character"), value(value) {
 }
 
 ValueObject::ValueObject(string value)

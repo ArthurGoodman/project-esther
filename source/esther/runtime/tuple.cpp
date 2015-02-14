@@ -1,13 +1,15 @@
 #include "tuple.h"
 
+#include "rangeexception.h"
+
 namespace esther {
 
 Tuple::Tuple(int size)
-    : n(size), data(new Object *[n]) {
+    : Object("Tuple"), n(size), data(new Object *[n]) {
 }
 
 Tuple::Tuple(list<Object *> data)
-    : n(data.size()), data(new Object *[n]) {
+    : Object("Tuple"), n(data.size()), data(new Object *[n]) {
     foreach (i, data)
         this->data[distance(data.begin(), i)] = *i;
 }
@@ -25,6 +27,7 @@ bool Tuple::isEmpty() const {
 }
 
 Object *&Tuple::at(int i) const {
+    if(i < 0 || i >= n) throw new RangeException;
     return data[i];
 }
 

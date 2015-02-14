@@ -2,13 +2,10 @@
 
 namespace esther {
 
-ErrorException::ErrorException(string msg, Position pos)
-    : message(msg), position(pos) {
+ErrorException::ErrorException(string message, Position pos)
+    : Exception(message), position(pos) {
 }
 
-string ErrorException::msg() {
-    return message;
-}
 Position ErrorException::pos() {
     return position;
 }

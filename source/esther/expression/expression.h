@@ -18,7 +18,9 @@ public:
     static Expression *Empty();
 
     static Expression *Block(list<Expression *> nodes);
-    static Expression *List(list<Expression *> nodes = list<Expression *>());
+    static Expression *List(list<Expression *> nodes);
+
+    static Expression *TupleLiteral(list<Expression *> nodes = list<Expression *>());
 
     static Expression *Literal(Object *value);
 

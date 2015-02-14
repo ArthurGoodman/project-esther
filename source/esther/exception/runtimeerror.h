@@ -9,7 +9,7 @@ class RuntimeError : public ErrorException {
 public:
     RuntimeError(string message);
 
-    string msg();
+    string message();
 
     void raise();
 };

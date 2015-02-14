@@ -16,8 +16,8 @@ void DefaultEngine::run(const string &script) {
         Expression *e = parser->parse(lexer->lex(script));
         IO::printLine("\n=> " + e->eval(Runtime::getRoot())->toString());
         delete e;
-    } catch (ErrorException *e) {
-        IO::printLine(e->msg());
+    } catch (Exception *e) {
+        IO::printLine(e->message());
         delete e;
     } catch (...) {
         IO::printLine("something bad happened...");

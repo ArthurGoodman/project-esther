@@ -2,12 +2,12 @@
 
 namespace esther {
 
-LexicalError::LexicalError(string msg, Position pos)
-    : ErrorException(msg, pos) {
+LexicalError::LexicalError(string message, Position pos)
+    : ErrorException(message, pos) {
 }
 
-string LexicalError::msg() {
-    return "lexical error: " + ErrorException::msg();
+string LexicalError::message() {
+    return "lexical error: " + Exception::message();
 }
 
 void LexicalError::raise() {

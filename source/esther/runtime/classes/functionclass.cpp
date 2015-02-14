@@ -22,8 +22,6 @@ Object *FunctionClass::newInstance() {
 
 void FunctionClass::setupMethods() {
     auto parenthesesMethod = [](Object * self, Tuple * args) -> Object * {
-        if(!dynamic_cast<Function *>(self)) Runtime::runtimeError("invalid self");
-
         list<Object *> argsList;
 
         for(int i = 1; i < args->size(); i++)

@@ -18,6 +18,7 @@
 #include "floatclass.h"
 #include "characterclass.h"
 #include "stringclass.h"
+#include "tupleclass.h"
 #include "contextclass.h"
 
 namespace esther {
@@ -51,6 +52,8 @@ void Runtime::initialize() {
     new FloatClass;
     new CharacterClass;
     new StringClass;
+
+    new TupleClass;
 
     new ContextClass;
 

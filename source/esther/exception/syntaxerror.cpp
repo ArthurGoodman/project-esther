@@ -2,12 +2,12 @@
 
 namespace esther {
 
-SyntaxError::SyntaxError(string msg, Position pos)
-    : ErrorException(msg, pos) {
+SyntaxError::SyntaxError(string message, Position pos)
+    : ErrorException(message, pos) {
 }
 
-string SyntaxError::msg() {
-    return "syntax error: " + ErrorException::msg();
+string SyntaxError::message() {
+    return "syntax error: " + Exception::message();
 }
 
 void SyntaxError::raise() {

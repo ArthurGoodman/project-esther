@@ -30,6 +30,15 @@ Expression *DebugExpressionManager::createList(list<Expression *> nodes) {
     return new DebugExpression("List", arguments);
 }
 
+Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
+    list<Object *> arguments;
+
+    foreach (i, nodes)
+        arguments << *i;
+
+    return new DebugExpression("Tuple", arguments);
+}
+
 Expression *DebugExpressionManager::createLiteral(Object *value) {
     list<Object *> arguments;
 
@@ -128,7 +137,6 @@ Expression *DebugExpressionManager::createCall(Expression *self, string name, li
     list<Object *> arguments, callArguments;
 
     arguments << self;
-
     arguments << new ValueObject("<String : \"" + name + "\">");
 
     foreach (i, args)
@@ -144,6 +152,7 @@ Expression *DebugExpressionManager::createIf(Expression *condition, Expression *
 
     arguments << condition;
     arguments << body;
+
     if (elseBody)
         arguments << elseBody;
 
@@ -155,6 +164,7 @@ Expression *DebugExpressionManager::createWhile(Expression *condition, Expressio
 
     arguments << condition;
     arguments << body;
+
     if (elseBody)
         arguments << elseBody;
 
@@ -195,8 +205,10 @@ Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expr
 
     if (name)
         arguments << name;
+
     if (superclass)
         arguments << superclass;
+
     arguments << body;
 
     return new DebugExpression("Class", arguments);

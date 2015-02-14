@@ -8,9 +8,9 @@ namespace esther {
 // This is used in syntax analysis.
 class SyntaxError : public ErrorException {
 public:
-    SyntaxError(string msg, Position pos);
+    SyntaxError(string message, Position pos);
 
-    string msg();
+    string message();
 
     void raise();
 };

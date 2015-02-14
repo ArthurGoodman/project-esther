@@ -8,9 +8,9 @@ namespace esther {
 // This is used in lexical analysis.
 class LexicalError : public ErrorException {
 public:
-    LexicalError(string msg, Position pos);
+    LexicalError(string message, Position pos);
 
-    string msg();
+    string message();
 
     void raise();
 };

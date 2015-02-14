@@ -112,7 +112,10 @@ SOURCES += \
     source/esther/expression/ast/selfexpression.cpp \
     source/esther/runtime/function/block.cpp \
     source/esther/runtime/function/nativeblock.cpp \
-    source/esther/runtime/function/interpretedblock.cpp
+    source/esther/runtime/function/interpretedblock.cpp \
+    source/esther/expression/ast/tupleexpression.cpp \
+    source/esther/runtime/classes/tupleclass.cpp \
+    source/esther/exception/rangeexception.cpp
 
 HEADERS += \
     source/esther.h \
@@ -208,7 +211,10 @@ HEADERS += \
     source/esther/runtime/function/block.h \
     source/esther/runtime/function/nativeblock.h \
     source/esther/runtime/function/interpretedblock.h \
-    source/esther/lexer/tokens.h
+    source/esther/lexer/tokens.h \
+    source/esther/expression/ast/tupleexpression.h \
+    source/esther/runtime/classes/tupleclass.h \
+    source/esther/exception/rangeexception.h
 
 OTHER_FILES += \
     README.MD \

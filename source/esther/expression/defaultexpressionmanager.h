@@ -12,6 +12,8 @@ public:
     Expression *createBlock(list<Expression *> nodes);
     Expression *createList(list<Expression *> nodes);
 
+    Expression *createTuple(list<Expression *> nodes);
+
     Expression *createLiteral(Object *value);
 
     Expression *createOr(Expression *self, Expression *arg);

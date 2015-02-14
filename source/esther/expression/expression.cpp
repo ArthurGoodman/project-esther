@@ -26,6 +26,10 @@ Expression *Expression::List(list<Expression *> nodes) {
     return manager->createList(nodes);
 }
 
+Expression *Expression::TupleLiteral(list<Expression *> nodes) {
+    return manager->createTuple(nodes);
+}
+
 Expression *Expression::Literal(Object *value) {
     return manager->createLiteral(value);
 }
@@ -75,11 +79,11 @@ Expression *Expression::Call(Expression *self, string name, list<Expression *> a
 }
 
 Expression *Expression::Call(Expression *self, string name, Expression *arg) {
-    return manager->createCall(self, name, list<Expression *>(1, arg));
+    return Call(self, name, list<Expression *>(1, arg));
 }
 
 Expression *Expression::Call(Expression *self, string name) {
-    return manager->createCall(self, name, list<Expression *>());
+    return Call(self, name, list<Expression *>());
 }
 
 Expression *Expression::If(Expression *condition, Expression *body, Expression *elseBody) {

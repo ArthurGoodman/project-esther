@@ -6,8 +6,8 @@ RuntimeError::RuntimeError(string message)
     : ErrorException(message) {
 }
 
-string RuntimeError::msg() {
-    return "runtime error: " + ErrorException::msg();
+string RuntimeError::message() {
+    return "runtime error: " + ErrorException::message();
 }
 
 void RuntimeError::raise() {

@@ -19,10 +19,10 @@ Object *CallExpression::eval(Context *context) {
     foreach (i, args)
         evaledArgsList << (*i)->eval(context);
 
-    if (dynamic_cast<Function *>(self))
+    if (dynamic_cast<Function *>(self) && name == "()")
         evaledArgsList.push_front(context->getCurrentSelf());
 
-    Tuple *evaledArgs = new Tuple(evaledArgsList);
+    esther::Tuple *evaledArgs = new Tuple(evaledArgsList);
 
     Object *value = self->call(name, evaledArgs);
 

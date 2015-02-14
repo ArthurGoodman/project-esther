@@ -17,6 +17,8 @@ public:
     virtual Expression *createBlock(list<Expression *> nodes) = 0;
     virtual Expression *createList(list<Expression *> nodes) = 0;
 
+    virtual Expression *createTuple(list<Expression *> nodes) = 0;
+
     virtual Expression *createLiteral(Object *value) = 0;
 
     virtual Expression *createOr(Expression *self, Expression *arg) = 0;
