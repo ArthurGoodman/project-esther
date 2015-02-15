@@ -8,7 +8,6 @@ class PreDecrementExpression : public Expression {
 
 public:
     PreDecrementExpression(Expression *self);
-    ~PreDecrementExpression();
 
     Object *eval(Context *context);
 };

@@ -8,11 +8,6 @@ DoExpression::DoExpression(Expression *body, Expression *condition)
     : body(body), condition(condition) {
 }
 
-DoExpression::~DoExpression() {
-    delete body;
-    delete condition;
-}
-
 Object *DoExpression::eval(Context *context) {
     Object *value = Runtime::getNull();
 

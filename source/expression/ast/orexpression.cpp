@@ -4,11 +4,6 @@ OrExpression::OrExpression(Expression *self, Expression *arg)
     : self(self), arg(arg) {
 }
 
-OrExpression::~OrExpression() {
-    delete self;
-    delete arg;
-}
-
 Object *OrExpression::eval(Context *context) {
     Object *self = this->self->eval(context);
 

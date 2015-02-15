@@ -8,7 +8,6 @@ class NegateExpression : public Expression {
 
 public:
     NegateExpression(Expression *self);
-    ~NegateExpression();
 
     Object *eval(Context *context);
 };

@@ -8,7 +8,6 @@ class BlockExpression : public Expression {
 
 public:
     BlockExpression(list<Expression *> nodes);
-    ~BlockExpression();
 
     Object *eval(Context *context);
 };

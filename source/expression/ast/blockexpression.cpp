@@ -7,11 +7,6 @@ BlockExpression::BlockExpression(list<Expression *> nodes)
     : nodes(nodes) {
 }
 
-BlockExpression::~BlockExpression() {
-    foreach (i, nodes)
-        delete *i;
-}
-
 Object *BlockExpression::eval(Context *context) {
     Object *value = Runtime::getNull();
 

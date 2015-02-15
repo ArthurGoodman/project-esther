@@ -9,7 +9,6 @@ protected:
 
 public:
     IdentifierExpression(Expression *name);
-    ~IdentifierExpression();
 
     Object *eval(Context *context);
 };

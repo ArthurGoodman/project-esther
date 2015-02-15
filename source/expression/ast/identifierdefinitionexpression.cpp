@@ -8,10 +8,6 @@ IdentifierDefinitionExpression::IdentifierDefinitionExpression(Expression *type,
     : IdentifierAssignmentExpression(name, value), type(type) {
 }
 
-IdentifierDefinitionExpression::~IdentifierDefinitionExpression() {
-    delete type;
-}
-
 Object *IdentifierDefinitionExpression::eval(Context *context) {
     string name = this->name->eval(context)->toString();
     Object *value = this->value ? this->value->eval(context) : new Object;

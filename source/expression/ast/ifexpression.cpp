@@ -6,12 +6,6 @@ IfExpression::IfExpression(Expression *condition, Expression *body, Expression *
     : condition(condition), body(body), elseBody(elseBody) {
 }
 
-IfExpression::~IfExpression() {
-    delete condition;
-    delete body;
-    delete elseBody;
-}
-
 Object *IfExpression::eval(Context *context) {
     Object *value = Runtime::getNull();
 

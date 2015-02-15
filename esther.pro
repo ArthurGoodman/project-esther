@@ -18,6 +18,7 @@ INCLUDEPATH = source \
     source/runtime \
     source/runtime/rootclass \
     source/runtime/matcher \
+    source/runtime/matcher\pattern \
     source/runtime/function \
     source/runtime/valueobject
 
@@ -120,12 +121,13 @@ SOURCES += \
     source/runtime/rootclass/rootclass.cpp \
     source/runtime/rootclass/stringclass.cpp \
     source/runtime/rootclass/tupleclass.cpp \
-    source/runtime/matcher/pattern.cpp \
     source/runtime/matcher/case.cpp \
     source/exception/matchfailureexception.cpp \
     source/runtime/matcher/matcher.cpp \
     source/expression/ast/hereexpression.cpp \
-    source/runtime/matcher/patternblock.cpp
+    source/runtime/matcher/patternblock.cpp \
+    source/runtime/matcher/pattern/pattern.cpp \
+    source/runtime/matcher/pattern/wildcardpattern.cpp
 
 HEADERS += \
     source/esther.h \
@@ -228,12 +230,13 @@ HEADERS += \
     source/runtime/rootclass/rootclass.h \
     source/runtime/rootclass/stringclass.h \
     source/runtime/rootclass/tupleclass.h \
-    source/runtime/matcher/pattern.h \
     source/runtime/matcher/case.h \
     source/exception/matchfailureexception.h \
     source/runtime/matcher/matcher.h \
     source/expression/ast/hereexpression.h \
-    source/runtime/matcher/patternblock.h
+    source/runtime/matcher/patternblock.h \
+    source/runtime/matcher/pattern/pattern.h \
+    source/runtime/matcher/pattern/wildcardpattern.h
 
 OTHER_FILES += \
     README.MD \

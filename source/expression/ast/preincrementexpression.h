@@ -8,7 +8,6 @@ class PreIncrementExpression : public Expression {
 
 public:
     PreIncrementExpression(Expression *self);
-    ~PreIncrementExpression();
 
     Object *eval(Context *context);
 };

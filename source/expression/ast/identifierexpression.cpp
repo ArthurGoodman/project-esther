@@ -7,10 +7,6 @@ IdentifierExpression::IdentifierExpression(Expression *name)
     : name(name) {
 }
 
-IdentifierExpression::~IdentifierExpression() {
-    delete name;
-}
-
 Object *IdentifierExpression::eval(Context *context) {
     string name = this->name->eval(context)->toString();
 

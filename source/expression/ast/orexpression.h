@@ -8,7 +8,6 @@ class OrExpression : public Expression {
 
 public:
     OrExpression(Expression *self, Expression *arg);
-    ~OrExpression();
 
     Object *eval(Context *context);
 };

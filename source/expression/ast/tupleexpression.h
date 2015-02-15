@@ -8,7 +8,6 @@ class TupleExpression : public Expression {
 
 public:
     TupleExpression(list<Expression *> nodes);
-    ~TupleExpression();
 
     Object *eval(Context *context);
 };

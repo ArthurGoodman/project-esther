@@ -8,12 +8,6 @@ WhileExpression::WhileExpression(Expression *condition, Expression *body, Expres
     : condition(condition), body(body), elseBody(elseBody) {
 }
 
-WhileExpression::~WhileExpression() {
-    delete condition;
-    delete body;
-    delete elseBody;
-}
-
 Object *WhileExpression::eval(Context *context) {
     Object *value = Runtime::getNull();
 

@@ -8,7 +8,6 @@ class PostDecrementExpression : public Expression {
 
 public:
     PostDecrementExpression(Expression *self);
-    ~PostDecrementExpression();
 
     Object *eval(Context *context);
 };

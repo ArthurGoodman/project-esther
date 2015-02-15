@@ -8,13 +8,6 @@ ForExpression::ForExpression(Expression *preffix, Expression *condition, Express
     : preffix(preffix), condition(condition), suffix(suffix), body(body) {
 }
 
-ForExpression::~ForExpression() {
-    delete preffix;
-    delete condition;
-    delete suffix;
-    delete body;
-}
-
 Object *ForExpression::eval(Context *context) {
     Object *value = Runtime::getNull();
 

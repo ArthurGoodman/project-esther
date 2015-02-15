@@ -8,7 +8,6 @@ class ReturnExpression : public Expression {
 
 public:
     ReturnExpression(Expression *value = 0);
-    ~ReturnExpression();
 
     Object *eval(Context *context);
 };

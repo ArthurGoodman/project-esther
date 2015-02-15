@@ -8,7 +8,6 @@ class PostIncrementExpression : public Expression {
 
 public:
     PostIncrementExpression(Expression *self);
-    ~PostIncrementExpression();
 
     Object *eval(Context *context);
 };

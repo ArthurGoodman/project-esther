@@ -9,7 +9,6 @@ protected:
 
 public:
     IdentifierAssignmentExpression(Expression *name, Expression *value);
-    ~IdentifierAssignmentExpression();
 
     Object *eval(Context *context);
 };

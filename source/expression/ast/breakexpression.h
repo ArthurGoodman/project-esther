@@ -8,7 +8,6 @@ class BreakExpression : public Expression {
 
 public:
     BreakExpression(Expression *value = 0);
-    ~BreakExpression();
 
     Object *eval(Context *context);
 };

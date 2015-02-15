@@ -8,7 +8,6 @@ class AndExpression : public Expression {
 
 public:
     AndExpression(Expression *self, Expression *arg);
-    ~AndExpression();
 
     Object *eval(Context *context);
 };
