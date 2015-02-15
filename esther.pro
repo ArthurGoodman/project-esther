@@ -217,7 +217,6 @@ HEADERS += \
     source/runtime/valueobject/valueobject.h \
     source/common/position.h \
     source/common/token.h \
-    source/common/tokens.h \
     source/common/definitions/tokens.h \
     source/runtime/classes/booleanclass.h \
     source/runtime/classes/rootclass.h \

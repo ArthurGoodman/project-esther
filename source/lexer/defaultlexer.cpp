@@ -165,17 +165,21 @@ void DefaultLexer::scan() {
         else
             token = tId;
     } else { // Operators and unknown tokens.
-        for (vector<string>::iterator i; i != operators.end();)
+        vector<string>::iterator i;
+
+        while (i != operators.end())
             for (i = operators.begin(); i != operators.end(); ++i)
                 if (i->substr(0, token.getText().size() + 1) == token.getText() + at(pos)) {
                     token += at(pos++);
                     break;
                 }
 
-        if (!token.getText().empty())
-            token = tOperatorMarker + distance(operators.begin(), find(operators.begin(), operators.end(), token.getText()));
+        if (!token.getText().empty() && (i = find(operators.begin(), operators.end(), token.getText())) != operators.end())
+            token = tOperatorMarker + distance(operators.begin(), i);
         else {
-            token += at(pos++);
+            if (token.getText().empty())
+                token += at(pos++);
+
             token = tUnknown;
         }
     }
