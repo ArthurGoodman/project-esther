@@ -16,7 +16,8 @@ INCLUDEPATH = source \
     source/lexer \
     source/parser \
     source/runtime \
-    source/runtime/classes \
+    source/runtime/rootclass \
+    source/runtime/matcher \
     source/runtime/function \
     source/runtime/valueobject
 
@@ -91,16 +92,6 @@ SOURCES += \
     source/runtime/runtime.cpp \
     source/runtime/true.cpp \
     source/runtime/tuple.cpp \
-    source/runtime/classes/characterclass.cpp \
-    source/runtime/classes/classclass.cpp \
-    source/runtime/classes/contextclass.cpp \
-    source/runtime/classes/floatclass.cpp \
-    source/runtime/classes/functionclass.cpp \
-    source/runtime/classes/integerclass.cpp \
-    source/runtime/classes/methodclass.cpp \
-    source/runtime/classes/objectclass.cpp \
-    source/runtime/classes/stringclass.cpp \
-    source/runtime/classes/tupleclass.cpp \
     source/runtime/function/block.cpp \
     source/runtime/function/function.cpp \
     source/runtime/function/interpretedblock.cpp \
@@ -116,9 +107,25 @@ SOURCES += \
     source/runtime/valueobject/valueobject.cpp \
     source/common/position.cpp \
     source/common/token.cpp \
-    source/runtime/classes/booleanclass.cpp \
-    source/runtime/classes/rootclass.cpp \
-    source/runtime/classes/nullclass.cpp
+    source/runtime/rootclass/booleanclass.cpp \
+    source/runtime/rootclass/characterclass.cpp \
+    source/runtime/rootclass/classclass.cpp \
+    source/runtime/rootclass/contextclass.cpp \
+    source/runtime/rootclass/floatclass.cpp \
+    source/runtime/rootclass/functionclass.cpp \
+    source/runtime/rootclass/integerclass.cpp \
+    source/runtime/rootclass/methodclass.cpp \
+    source/runtime/rootclass/nullclass.cpp \
+    source/runtime/rootclass/objectclass.cpp \
+    source/runtime/rootclass/rootclass.cpp \
+    source/runtime/rootclass/stringclass.cpp \
+    source/runtime/rootclass/tupleclass.cpp \
+    source/runtime/matcher/pattern.cpp \
+    source/runtime/matcher/case.cpp \
+    source/exception/matchfailureexception.cpp \
+    source/runtime/matcher/matcher.cpp \
+    source/expression/ast/hereexpression.cpp \
+    source/runtime/matcher/patternblock.cpp
 
 HEADERS += \
     source/esther.h \
@@ -192,16 +199,6 @@ HEADERS += \
     source/runtime/runtime.h \
     source/runtime/true.h \
     source/runtime/tuple.h \
-    source/runtime/classes/characterclass.h \
-    source/runtime/classes/classclass.h \
-    source/runtime/classes/contextclass.h \
-    source/runtime/classes/floatclass.h \
-    source/runtime/classes/functionclass.h \
-    source/runtime/classes/integerclass.h \
-    source/runtime/classes/methodclass.h \
-    source/runtime/classes/objectclass.h \
-    source/runtime/classes/stringclass.h \
-    source/runtime/classes/tupleclass.h \
     source/runtime/function/block.h \
     source/runtime/function/function.h \
     source/runtime/function/interpretedblock.h \
@@ -218,9 +215,25 @@ HEADERS += \
     source/common/position.h \
     source/common/token.h \
     source/common/definitions/tokens.h \
-    source/runtime/classes/booleanclass.h \
-    source/runtime/classes/rootclass.h \
-    source/runtime/classes/nullclass.h
+    source/runtime/rootclass/booleanclass.h \
+    source/runtime/rootclass/characterclass.h \
+    source/runtime/rootclass/classclass.h \
+    source/runtime/rootclass/contextclass.h \
+    source/runtime/rootclass/floatclass.h \
+    source/runtime/rootclass/functionclass.h \
+    source/runtime/rootclass/integerclass.h \
+    source/runtime/rootclass/methodclass.h \
+    source/runtime/rootclass/nullclass.h \
+    source/runtime/rootclass/objectclass.h \
+    source/runtime/rootclass/rootclass.h \
+    source/runtime/rootclass/stringclass.h \
+    source/runtime/rootclass/tupleclass.h \
+    source/runtime/matcher/pattern.h \
+    source/runtime/matcher/case.h \
+    source/exception/matchfailureexception.h \
+    source/runtime/matcher/matcher.h \
+    source/expression/ast/hereexpression.h \
+    source/runtime/matcher/patternblock.h
 
 OTHER_FILES += \
     README.MD \

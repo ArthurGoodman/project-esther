@@ -120,6 +120,10 @@ Expression *Expression::Continue() {
     return manager->createContinue();
 }
 
-Expression *Expression::Self() {
-    return manager->createSelf();
+Expression *Expression::This() {
+    return manager->createThis();
+}
+
+Expression *Expression::Here() {
+    return manager->createHere();
 }

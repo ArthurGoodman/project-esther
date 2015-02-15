@@ -5,6 +5,7 @@
 #include "interpretedblock.h"
 #include "expression.h"
 #include "tuple.h"
+#include "context.h"
 
 FunctionClass::FunctionClass()
     : RootClass("Function") {
@@ -16,12 +17,7 @@ Object *FunctionClass::newInstance() {
 
 void FunctionClass::setupMethods() {
     auto parenthesesMethod = [](Object * self, Tuple * args) -> Object * {
-        list<Object *> argsList;
-
-        for (int i = 1; i < args->size(); i++)
-            argsList << args->at(i);
-
-        Object *value = ((Function *)self)->invoke(args->at(0), new Tuple(argsList));
+        Object *value = ((Function *)self)->invoke(((Context *)args->at(0))->getCurrentSelf(), (Tuple *)args->at(1));
         return value;
     };
 

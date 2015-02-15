@@ -9,5 +9,7 @@ public:
     RootClass(string name, string superclassName);
     RootClass(string name);
 
+    void setMethod(string name, function<Object *(Object *, Tuple *)> body);
+
     virtual void setupMethods() = 0;
 };

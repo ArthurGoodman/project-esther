@@ -7,7 +7,7 @@ NativeBlock::NativeBlock(function<Object *(Object *, Tuple *)> body)
 }
 
 Object *NativeBlock::eval(Context *) {
-    Runtime::runtimeError("cannot evaluate native code without its method");
+    Runtime::runtimeError("cannot evaluate native code block without its function");
     return 0;
 }
 

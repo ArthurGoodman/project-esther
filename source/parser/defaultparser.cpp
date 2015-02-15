@@ -41,10 +41,6 @@ bool DefaultParser::accept(int id) {
     return false;
 }
 
-bool DefaultParser::range(int a, int b) {
-    return (*token).getId() >= a && (*token).getId() <= b;
-}
-
 void DefaultParser::getToken() {
     ++token;
 }
@@ -100,7 +96,7 @@ Expression *DefaultParser::oper() {
 Expression *DefaultParser::expr() {
     Expression *e = tuple();
 
-    while (range(tAssign, tModAssign)) {
+    forever {
         if (accept(tAssign))
             e = Expression::Call(e, "=", tuple());
         else if (accept(tPlusAssign))
@@ -113,6 +109,8 @@ Expression *DefaultParser::expr() {
             e = Expression::Call(e, "/=", tuple());
         else if (accept(tModAssign))
             e = Expression::Call(e, "%=", tuple());
+        else
+            break;
     }
 
     return e;
@@ -145,11 +143,13 @@ Expression *DefaultParser::logicAnd() {
 Expression *DefaultParser::equality() {
     Expression *e = relation();
 
-    while (range(tEq, tNe)) {
+    forever {
         if (accept(tEq))
             e = Expression::Call(e, "==", relation());
         else if (accept(tNe))
             e = Expression::Call(e, "!=", relation());
+        else
+            break;
     }
 
     return e;
@@ -158,7 +158,7 @@ Expression *DefaultParser::equality() {
 Expression *DefaultParser::relation() {
     Expression *e = addSub();
 
-    while (range(tLt, tGe)) {
+    forever {
         if (accept(tLt))
             e = Expression::Call(e, "<", addSub());
         else if (accept(tGt))
@@ -167,6 +167,8 @@ Expression *DefaultParser::relation() {
             e = Expression::Call(e, "<=", addSub());
         else if (accept(tGe))
             e = Expression::Call(e, ">=", addSub());
+        else
+            break;
     }
 
     return e;
@@ -175,11 +177,12 @@ Expression *DefaultParser::relation() {
 Expression *DefaultParser::addSub() {
     Expression *e = mulDiv();
 
-    while (range(tPlus, tMinus)) {
+    forever {
         if (accept(tPlus))
             e = Expression::Call(e, "+", mulDiv());
         else if (accept(tMinus))
             e = Expression::Call(e, "-", mulDiv());
+        else break;
     }
 
     return e;
@@ -188,13 +191,14 @@ Expression *DefaultParser::addSub() {
 Expression *DefaultParser::mulDiv() {
     Expression *e = dot();
 
-    while (range(tMultiply, tMod)) {
+    forever {
         if (accept(tMultiply))
             e = Expression::Call(e, "*", dot());
         else if (accept(tDivide))
             e = Expression::Call(e, "/", dot());
         else if (accept(tMod))
             e = Expression::Call(e, "%", dot());
+        else break;
     }
 
     return e;
@@ -248,8 +252,8 @@ Expression *DefaultParser::preffix() {
 Expression *DefaultParser::suffix() {
     Expression *e = term();
 
-    if (range(tLPar, tLBracket))
-        while (range(tLPar, tLBracket)) {
+    if (check(tLPar) || check(tLBracket))
+        forever {
             if (accept(tLPar)) {
                 e = Expression::Call(e, "()", check(tRPar) ? list<Expression *>() : parseList());
 
@@ -261,6 +265,7 @@ Expression *DefaultParser::suffix() {
                 if (!accept(tRBracket))
                     error("unmatched brackets");
             }
+            else break;
         }
     else if (accept(tDec))
         e = Expression::PostDecrement(e);
@@ -339,8 +344,10 @@ Expression *DefaultParser::term() {
     } else if (accept(tVar)) {
         Expression *name = parseIdentifier();
 
-        if (!name)
-            error("identifier expected");
+        if (!name) {
+            name = Expression::Literal(new String(token->getText()));
+            getToken();
+        }
 
         e = Expression::IdentifierDefinition(0, name, accept(tAssign) ? logicOr() : 0);
     }
@@ -428,12 +435,12 @@ Expression *DefaultParser::term() {
     else if (accept(tNull))
         e = Expression::Literal(Runtime::getNull());
 
-    else if (accept(tSelf))
-        e = Expression::Self();
+    else if (accept(tThis))
+        e = Expression::This();
+    else if (accept(tHere))
+        e = Expression::Here();
     //else if (accept(tSuper))
     //e = new SuperExpression;
-    //else if (accept(tContext))
-    //e = new ContextExpression;
 
     //else if (range(tStatic, tLambda) || check(tDollar)) {
     //bool isStatic = false;

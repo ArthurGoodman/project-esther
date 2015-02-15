@@ -12,17 +12,19 @@ CallExpression::CallExpression(Expression *self, string name, list<Expression *>
 Object *CallExpression::eval(Context *context) {
     Object *self = this->self->eval(context);
 
-    list<Object *> evaledArgsList;
+    list<Object *> evaledArgs;
 
     foreach (i, args)
-        evaledArgsList << (*i)->eval(context);
+        evaledArgs << (*i)->eval(context);
 
-    if (dynamic_cast<Function *>(self) && name == "()")
-        evaledArgsList.push_front(context->getCurrentSelf());
+    Tuple *actualArgs;
 
-    Tuple *evaledArgs = new Tuple(evaledArgsList);
+    if (name == "()")
+        actualArgs = new Tuple({context, new Tuple(evaledArgs)});
+    else
+        actualArgs = new Tuple(evaledArgs);
 
-    Object *value = self->call(name, evaledArgs);
+    Object *value = self->call(name, actualArgs);
 
     return value;
 }

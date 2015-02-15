@@ -19,6 +19,8 @@ using namespace std;
 // Foreach loop for standart STL containters.
 #define foreach(i, c) for (auto i = c.begin(); i != c.end(); ++i)
 
+#define forever while (true)
+
 // Append operators:
 
 template <class A, class B>

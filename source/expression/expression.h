@@ -53,7 +53,8 @@ public:
     static Expression *Break(Expression *value);
     static Expression *Continue();
 
-    static Expression *Self();
+    static Expression *This();
+    static Expression *Here();
 
     virtual Object *eval(Context *context) = 0;
 };

@@ -3,8 +3,6 @@
 #include "runtime.h"
 #include "tuple.h"
 #include "method.h"
-#include "nativemethod.h"
-#include "nativeblock.h"
 
 Class::Class(string name, Class *superclass)
     : Object("Class"), name(name), superclass(superclass) {
@@ -48,10 +46,6 @@ Method *Class::getMethod(string name) {
 
 void Class::setMethod(Method *method) {
     methods[method->getName()] = method;
-}
-
-void Class::setMethod(string name, function<Object *(Object *, Tuple *)> body) {
-    methods[name] = new NativeMethod(name, new NativeBlock(body));
 }
 
 Method *Class::lookup(string name) {

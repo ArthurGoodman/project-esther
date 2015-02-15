@@ -27,9 +27,7 @@ public:
 
     bool hasMethod(string name);
     Method *getMethod(string name);
-
     void setMethod(Method *method);
-    void setMethod(string name, function<Object *(Object *, Tuple *)> body);
 
     Method *lookup(string name);
 

@@ -18,7 +18,6 @@ private:
 
     bool check(int id);
     bool accept(int id);
-    bool range(int a, int b);
 
     void getToken();
 

@@ -27,6 +27,7 @@
 #include "breakexpression.h"
 #include "continueexpression.h"
 #include "selfexpression.h"
+#include "hereexpression.h"
 
 Expression *DefaultExpressionManager::createEmpty() {
     return new EmptyExpression;
@@ -128,6 +129,10 @@ Expression *DefaultExpressionManager::createContinue() {
     return new ContinueExpression;
 }
 
-Expression *DefaultExpressionManager::createSelf() {
+Expression *DefaultExpressionManager::createThis() {
     return new SelfExpression;
+}
+
+Expression *DefaultExpressionManager::createHere() {
+    return new HereExpression;
 }

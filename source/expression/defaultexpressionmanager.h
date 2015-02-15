@@ -43,5 +43,6 @@ public:
     Expression *createBreak(Expression *value);
     Expression *createContinue();
 
-    Expression *createSelf();
+    Expression *createThis();
+    Expression *createHere();
 };
