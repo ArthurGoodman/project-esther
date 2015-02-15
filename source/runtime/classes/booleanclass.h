@@ -3,9 +3,9 @@
 
 #include "rootclass.h"
 
-class ClassClass : public RootClass {
+class BooleanClass : public RootClass {
 public:
-    ClassClass();
+    BooleanClass();
 
     Object *newInstance();
 

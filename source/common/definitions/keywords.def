@@ -1,3 +1,5 @@
+X(tKeywordMarker, "")
+
 X(tIf, "if")
 X(tElse, "else")
 X(tElif, "elif")
@@ -23,3 +25,4 @@ X(tTry, "try")
 X(tThrow, "throw")
 X(tCatch, "catch")
 X(tVar, "var")
+X(tNew, "new")

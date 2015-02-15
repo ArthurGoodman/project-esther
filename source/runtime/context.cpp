@@ -86,7 +86,7 @@ Object *Context::getId(string name) {
         return parent->getId(name);
 
     if (Runtime::hasRootClass(name))
-        return Runtime::getRootClass(name);
+        return (Object *)Runtime::getRootClass(name);
 
     return 0;
 }

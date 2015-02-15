@@ -11,7 +11,7 @@ Class::Class(string name, Class *superclass)
 }
 
 Class::Class(string name, string superclassName)
-    : Object("Class"), name(name), superclass(Runtime::getRootClass(superclassName)) {
+    : Object("Class"), name(name), superclass((Class *)Runtime::getRootClass(superclassName)) {
 }
 
 Class::Class(string name)
@@ -78,7 +78,4 @@ Object *Class::call(string name) {
 
 string Class::toString() {
     return name.empty() ? "<anonymous class>" : name;
-}
-
-void Class::setupMethods() {
 }

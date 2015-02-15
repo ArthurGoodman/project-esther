@@ -1,7 +1,7 @@
 #include "null.h"
 
 Null::Null()
-    : Object("NullClass") {
+    : Object("Null") {
 }
 
 bool Null::isTrue() {

@@ -4,8 +4,7 @@
 #include "character.h"
 
 CharacterClass::CharacterClass()
-    : Class("Character") {
-    Runtime::setRootClass(this);
+    : RootClass("Character") {
 }
 
 Object *CharacterClass::newInstance() {

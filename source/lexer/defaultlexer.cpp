@@ -7,13 +7,13 @@
 
 // Lexemes:
 
-string DefaultLexer::operators[] = {
+vector<string> DefaultLexer::operators = {
 #define X(a, b) b,
 #include "operators.def"
 #undef X
     ""};
 
-string DefaultLexer::keywords[] = {
+vector<string> DefaultLexer::keywords = {
 #define X(a, b) b,
 #include "keywords.def"
 #undef X
@@ -21,13 +21,10 @@ string DefaultLexer::keywords[] = {
 
 #if DEBUG_LEXER
 // This is used in logs.
-string DefaultLexer::tokenTypes[] = {
+vector<string> DefaultLexer::tokenTypes = {
 #define X(a, b) #a,
 #include "operators.def"
 #include "keywords.def"
-#undef X
-
-#define X(a) #a,
 #include "othertokens.def"
 #undef X
     ""};
@@ -156,33 +153,31 @@ void DefaultLexer::scan() {
                 while (Utility::isDigit(at(pos)))
                     token += at(pos++);
         }
-    } else if (Utility::isLetter(at(pos)) || at(pos) == '_') { // Identifiers and keywords.
+    } else if (Utility::isLetter(at(pos))) { // Identifiers and keywords.
         do
             token += at(pos++);
-        while (Utility::isLetterOrDigit(at(pos)) || at(pos) == '_');
+        while (Utility::isLetterOrDigit(at(pos)));
 
-        string *i;
+        vector<string>::iterator i;
 
-        if ((i = find(keywords, keywords + count(keywords), token.getText())) != keywords + count(keywords))
-            token = tIf + distance(keywords, i);
+        if ((i = find(keywords.begin(), keywords.end(), token.getText())) != keywords.end())
+            token = tKeywordMarker + distance(keywords.begin(), i);
         else
             token = tId;
-    } else { // Operators and other tokens.
-        token += at(pos++);
+    } else { // Operators and unknown tokens.
+        for (vector<string>::iterator i; i != operators.end();)
+            for (i = operators.begin(); i != operators.end(); ++i)
+                if (i->substr(0, token.getText().size() + 1) == token.getText() + at(pos)) {
+                    token += at(pos++);
+                    break;
+                }
 
-        if (string("<>=!+-*/%").find(token.getText()) + 1 && at(pos) == '=')
-            token += at(pos++);                            // ?= operators.
-        else if (token.getText() == "-" && at(pos) == '>') // Arrow.
+        if (!token.getText().empty())
+            token = tOperatorMarker + distance(operators.begin(), find(operators.begin(), operators.end(), token.getText()));
+        else {
             token += at(pos++);
-        else if ((token.getText() == "+" || token.getText() == "-") && at(pos) == token.getText()[0])
-            token += at(pos++);
-
-        string *i;
-
-        if ((i = find(operators, operators + count(operators), token.getText())) != operators + count(operators))
-            token = distance(operators, i);
-        else
             token = tUnknown;
+        }
     }
 
     column += token.getText().length();

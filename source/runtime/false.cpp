@@ -1,7 +1,7 @@
 #include "false.h"
 
 False::False()
-    : Object("FalseClass") {
+    : Object("Boolean") {
 }
 
 bool False::isTrue() {

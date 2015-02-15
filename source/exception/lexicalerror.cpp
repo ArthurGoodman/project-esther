@@ -1,7 +1,7 @@
 #include "lexicalerror.h"
 
-LexicalError::LexicalError(string message, Position pos)
-    : ErrorException(message, pos) {
+LexicalError::LexicalError(string message, Position position)
+    : ErrorException(message, position) {
 }
 
 string LexicalError::message() {

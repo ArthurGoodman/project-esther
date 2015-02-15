@@ -6,9 +6,7 @@
 #include "string.h"
 
 ClassClass::ClassClass()
-    : Class("Class") {
-    Runtime::setRootClass(this);
-
+    : RootClass("Class") {
     Runtime::getRootClass("Object")->setClass(this);
     setClass(this);
 }

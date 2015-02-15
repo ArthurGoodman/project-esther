@@ -3,9 +3,10 @@
 
 #include "rootclass.h"
 
-class ClassClass : public RootClass {
+class NullClass : public RootClass
+{
 public:
-    ClassClass();
+    NullClass();
 
     Object *newInstance();
 

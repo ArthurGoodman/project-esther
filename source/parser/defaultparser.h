@@ -25,6 +25,8 @@ private:
     list<Expression *> parseBlock();
     list<Expression *> parseList();
 
+    Expression *parseIdentifier();
+
     Expression *oper();
     Expression *expr();
     Expression *tuple();

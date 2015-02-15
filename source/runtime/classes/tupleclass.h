@@ -1,9 +1,9 @@
 #pragma once
 #include "common.h"
 
-#include "class.h"
+#include "rootclass.h"
 
-class TupleClass : public Class {
+class TupleClass : public RootClass {
 public:
     TupleClass();
 

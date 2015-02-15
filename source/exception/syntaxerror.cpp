@@ -1,7 +1,7 @@
 #include "syntaxerror.h"
 
-SyntaxError::SyntaxError(string message, Position pos)
-    : ErrorException(message, pos) {
+SyntaxError::SyntaxError(string message, Position position)
+    : ErrorException(message, position) {
 }
 
 string SyntaxError::message() {

@@ -71,6 +71,24 @@ list<Expression *> DefaultParser::parseList() {
     return nodes;
 }
 
+Expression *DefaultParser::parseIdentifier() {
+    Expression *e = 0;
+
+    if (check(tId)) {
+        e = Expression::Literal(new String(token->getText()));
+        getToken();
+    } else if (accept(tDollar)) {
+        if (check(tLPar) || check(tLBrace) || check(tEnd))
+            e = term();
+        else {
+            e = Expression::Literal(new String(token->getText()));
+            getToken();
+        }
+    }
+
+    return e;
+}
+
 Expression *DefaultParser::oper() {
     Expression *e = expr();
 
@@ -302,45 +320,12 @@ Expression *DefaultParser::term() {
     if (check(tId) || check(tDollar)) {
         Expression *type = 0, *name = 0, *value = 0;
 
-        if (check(tId)) {
-            name = Expression::Literal(new String(token->getText()));
-            getToken();
-        } else if (accept(tDollar)) {
-            if (check(tLPar) || check(tLBrace) || check(tEnd))
-                name = term();
-            else {
-                name = Expression::Literal(new String(token->getText()));
-                getToken();
-            }
-        }
+        name = parseIdentifier();
 
-        if (check(tId)) {
-            type = name;
-            name = Expression::Literal(new String(token->getText()));
-            getToken();
-        } else if (accept(tDollar)) {
-            type = name;
-
-            if (check(tLPar) || check(tLBrace) || check(tEnd))
-                name = term();
-            else {
-                name = Expression::Literal(new String(token->getText()));
-                getToken();
-            }
-        } else if (accept(tColon)) {
-            if (check(tId)) {
-                type = Expression::Literal(new String(token->getText()));
-                getToken();
-            } else if (accept(tDollar)) {
-                if (check(tLPar) || check(tLBrace) || check(tEnd))
-                    type = term();
-                else {
-                    type = Expression::Literal(new String(token->getText()));
-                    getToken();
-                }
-            } else
-                type = term();
-        }
+        if ((type = parseIdentifier()))
+            swap(type, name);
+        else if (accept(tColon) && !(type = parseIdentifier()))
+            type = term();
 
         if (accept(tAssign))
             value = tuple();
@@ -352,19 +337,9 @@ Expression *DefaultParser::term() {
         else
             e = Expression::Identifier(name);
     } else if (accept(tVar)) {
-        Expression *name = 0;
+        Expression *name = parseIdentifier();
 
-        if (check(tId)) {
-            name = Expression::Literal(new String(token->getText()));
-            getToken();
-        } else if (accept(tDollar)) {
-            if (check(tLPar) || check(tLBrace) || check(tEnd))
-                name = term();
-            else {
-                name = Expression::Literal(new String(token->getText()));
-                getToken();
-            }
-        } else
+        if (!name)
             error("identifier expected");
 
         e = Expression::IdentifierDefinition(0, name, accept(tAssign) ? logicOr() : 0);
@@ -537,7 +512,7 @@ Expression *DefaultParser::term() {
         e = Expression::Empty();
 
     else if (check(tEnd))
-        error("unexpected end of expression");
+        error("unexpected end of program");
     else if (check(tUnknown))
         error("unknown token '" + token->getText() + "'");
     else

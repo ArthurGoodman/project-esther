@@ -2,19 +2,15 @@
 
 #include "runtime.h"
 #include "nativemethod.h"
-#include "nativeblock.h"
+#include "interpretedblock.h"
+#include "expression.h"
 
 MethodClass::MethodClass()
-    : Class("Method", "Function") {
-    Runtime::setRootClass(this);
+    : RootClass("Method", "Function") {
 }
 
 Object *MethodClass::newInstance() {
-    auto body = [](Object *, Tuple *) -> Object * {
-        return Runtime::getNull();
-    };
-
-    return new Method("", Runtime::getRoot(), {}, new NativeBlock(body));
+    return new Method("", Runtime::getRoot(), {}, new InterpretedBlock(Expression::Empty()));
 }
 
 void MethodClass::setupMethods() {

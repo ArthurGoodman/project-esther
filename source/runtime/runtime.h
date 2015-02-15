@@ -3,6 +3,7 @@
 
 class Object;
 class Class;
+class RootClass;
 class Context;
 class CallStack;
 class Call;
@@ -18,7 +19,7 @@ class Runtime {
     static Object *falseObject;
     static Object *nullObject;
 
-    static map<string, Class *> rootClasses;
+    static map<string, RootClass *> rootClasses;
 
     //static CallStack *callStack;
 
@@ -38,10 +39,8 @@ public:
     //static void endCall();
 
     static bool hasRootClass(string name);
-    static Class *getRootClass(string name);
-    static void setRootClass(Class *rootClass);
-    static void setRootClass(string name);
-    static void setRootClass(string name, string superName);
+    static RootClass *getRootClass(string name);
+    static void setRootClass(RootClass *rootClass);
 
     static Object *toBoolean(bool value);
 

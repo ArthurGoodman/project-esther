@@ -1,7 +1,7 @@
 #include "true.h"
 
 True::True()
-    : Object("TrueClass") {
+    : Object("Boolean") {
 }
 
 bool True::isTrue() {

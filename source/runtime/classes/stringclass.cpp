@@ -4,8 +4,7 @@
 #include "string.h"
 
 StringClass::StringClass()
-    : Class("String") {
-    Runtime::setRootClass(this);
+    : RootClass("String") {
 }
 
 Object *StringClass::newInstance() {

@@ -8,6 +8,7 @@ CONFIG += c++11
 INCLUDEPATH = source \
     source/variant \
     source/common \
+    source/common/definitions \
     source/exception \
     source/expression \
     source/expression/ast \
@@ -77,8 +78,6 @@ SOURCES += \
     source/expression/debug/debugexpressionmanager.cpp \
     source/lexer/defaultlexer.cpp \
     source/lexer/lexer.cpp \
-    source/lexer/position.cpp \
-    source/lexer/token.cpp \
     source/parser/defaultparser.cpp \
     source/parser/parser.cpp \
     source/runtime/call.cpp \
@@ -114,7 +113,12 @@ SOURCES += \
     source/runtime/valueobject/float.cpp \
     source/runtime/valueobject/integer.cpp \
     source/runtime/valueobject/string.cpp \
-    source/runtime/valueobject/valueobject.cpp
+    source/runtime/valueobject/valueobject.cpp \
+    source/common/position.cpp \
+    source/common/token.cpp \
+    source/runtime/classes/booleanclass.cpp \
+    source/runtime/classes/rootclass.cpp \
+    source/runtime/classes/nullclass.cpp
 
 HEADERS += \
     source/esther.h \
@@ -175,9 +179,6 @@ HEADERS += \
     source/expression/debug/debugexpressionmanager.h \
     source/lexer/defaultlexer.h \
     source/lexer/lexer.h \
-    source/lexer/position.h \
-    source/lexer/token.h \
-    source/lexer/tokens.h \
     source/parser/defaultparser.h \
     source/parser/parser.h \
     source/runtime/call.h \
@@ -213,11 +214,18 @@ HEADERS += \
     source/runtime/valueobject/float.h \
     source/runtime/valueobject/integer.h \
     source/runtime/valueobject/string.h \
-    source/runtime/valueobject/valueobject.h
+    source/runtime/valueobject/valueobject.h \
+    source/common/position.h \
+    source/common/token.h \
+    source/common/tokens.h \
+    source/common/definitions/tokens.h \
+    source/runtime/classes/booleanclass.h \
+    source/runtime/classes/rootclass.h \
+    source/runtime/classes/nullclass.h
 
 OTHER_FILES += \
     README.MD \
     scripts/test.es \
-    source/lexer/keywords.def \
-    source/lexer/operators.def \
-    source/lexer/othertokens.def
+    source/common/definitions/keywords.def \
+    source/common/definitions/operators.def \
+    source/common/definitions/othertokens.def

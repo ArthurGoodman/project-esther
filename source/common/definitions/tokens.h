@@ -1,4 +1,4 @@
-#include "token.h"
+#pragma once
 
 enum {
     tNone = -1,
@@ -6,9 +6,6 @@ enum {
 #define X(a, b) a,
 #include "operators.def"
 #include "keywords.def"
-#undef X
-
-#define X(a) a,
 #include "othertokens.def"
 #undef X
 

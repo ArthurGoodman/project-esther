@@ -16,7 +16,7 @@ Object::Object(Class *objectClass)
 }
 
 Object::Object(string className)
-    : objectClass(Runtime::getRootClass(className)) {
+    : objectClass((Class *)Runtime::getRootClass(className)) {
 }
 
 Object::~Object() {
@@ -47,7 +47,7 @@ bool Object::is(Class *_class) {
 }
 
 bool Object::is(string className) {
-    return is(Runtime::getRootClass(className));
+    return is((Class *)Runtime::getRootClass(className));
 }
 
 bool Object::converts(Class *_class) {

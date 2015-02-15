@@ -1,9 +1,9 @@
 #pragma once
 #include "common.h"
 
-#include "class.h"
+#include "rootclass.h"
 
-class FloatClass : public Class {
+class FloatClass : public RootClass {
 public:
     FloatClass();
 

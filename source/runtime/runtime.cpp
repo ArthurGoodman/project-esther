@@ -1,6 +1,6 @@
 #include "runtime.h"
 
-#include "class.h"
+#include "rootclass.h"
 #include "context.h"
 #include "lexer.h"
 #include "parser.h"
@@ -14,6 +14,8 @@
 #include "classclass.h"
 #include "functionclass.h"
 #include "methodclass.h"
+#include "booleanclass.h"
+#include "nullclass.h"
 #include "integerclass.h"
 #include "floatclass.h"
 #include "characterclass.h"
@@ -30,7 +32,7 @@ Object *Runtime::trueObject;
 Object *Runtime::falseObject;
 Object *Runtime::nullObject;
 
-map<string, Class *> Runtime::rootClasses;
+map<string, RootClass *> Runtime::rootClasses;
 
 //CallStack *Runtime::callStack;
 
@@ -42,9 +44,8 @@ void Runtime::initialize() {
     new FunctionClass;
     new MethodClass;
 
-    setRootClass("TrueClass");
-    setRootClass("FalseClass");
-    setRootClass("NullClass");
+    new BooleanClass;
+    new NullClass;
 
     new IntegerClass;
     new FloatClass;
@@ -124,20 +125,12 @@ bool Runtime::hasRootClass(string name) {
     return rootClasses.find(name) != rootClasses.end();
 }
 
-Class *Runtime::getRootClass(string name) {
+RootClass *Runtime::getRootClass(string name) {
     return rootClasses.find(name) != rootClasses.end() ? rootClasses[name] : 0;
 }
 
-void Runtime::setRootClass(Class *rootClass) {
+void Runtime::setRootClass(RootClass *rootClass) {
     rootClasses[rootClass->getName()] = rootClass;
-}
-
-void Runtime::setRootClass(string name) {
-    rootClasses[name] = new Class(name);
-}
-
-void Runtime::setRootClass(string name, string superName) {
-    rootClasses[name] = new Class(name, superName);
 }
 
 Object *Runtime::toBoolean(bool value) {

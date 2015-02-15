@@ -1,21 +1,17 @@
 #include "functionclass.h"
 
 #include "runtime.h"
-#include "nativemethod.h"
-#include "nativeblock.h"
+#include "function.h"
+#include "interpretedblock.h"
+#include "expression.h"
 #include "tuple.h"
 
 FunctionClass::FunctionClass()
-    : Class("Function") {
-    Runtime::setRootClass(this);
+    : RootClass("Function") {
 }
 
 Object *FunctionClass::newInstance() {
-    auto body = [](Object *, Tuple *) -> Object * {
-        return Runtime::getNull();
-    };
-
-    return new Function("", Runtime::getRoot(), {}, new NativeBlock(body));
+    return new Function("", Runtime::getRoot(), {}, new InterpretedBlock(Expression::Empty()));
 }
 
 void FunctionClass::setupMethods() {

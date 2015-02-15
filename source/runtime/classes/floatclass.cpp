@@ -4,8 +4,7 @@
 #include "float.h"
 
 FloatClass::FloatClass()
-    : Class("Float") {
-    Runtime::setRootClass(this);
+    : RootClass("Float") {
 }
 
 Object *FloatClass::newInstance() {

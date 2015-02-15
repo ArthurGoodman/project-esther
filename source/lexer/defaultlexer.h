@@ -5,11 +5,11 @@
 #include "lexer.h"
 
 class DefaultLexer : public Lexer {
-    static string operators[];
-    static string keywords[];
+    static vector<string> operators;
+    static vector<string> keywords;
 
 #if DEBUG_LEXER
-    static string tokenTypes[];
+    static vector<string> tokenTypes;
 #endif
 
     Tokens tokens; // List of tokens, that the lexer produces.
@@ -30,9 +30,3 @@ private:
     void skipSpaces();
     const char &at(int pos);
 };
-
-// Count elements of an array of strings.
-template <int N>
-int DefaultLexer::count(string (&)[N]) {
-    return N;
-}

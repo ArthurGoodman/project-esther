@@ -6,7 +6,7 @@
 // This is used in lexical analysis.
 class LexicalError : public ErrorException {
 public:
-    LexicalError(string message, Position pos);
+    LexicalError(string message, Position position);
 
     string message();
     void raise();

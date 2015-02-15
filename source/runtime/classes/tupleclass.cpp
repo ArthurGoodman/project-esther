@@ -5,8 +5,7 @@
 #include "integer.h"
 
 TupleClass::TupleClass()
-    : Class("Tuple") {
-    Runtime::setRootClass(this);
+    : RootClass("Tuple") {
 }
 
 Object *TupleClass::newInstance() {

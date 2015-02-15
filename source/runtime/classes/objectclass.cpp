@@ -7,8 +7,7 @@
 #include "io.h"
 
 ObjectClass::ObjectClass()
-    : Class("Object", 0) {
-    Runtime::setRootClass(this);
+    : RootClass("Object", 0) {
 }
 
 Object *ObjectClass::newInstance() {

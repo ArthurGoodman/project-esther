@@ -1,9 +1,9 @@
 #pragma once
 #include "common.h"
 
-#include "class.h"
+#include "rootclass.h"
 
-class CharacterClass : public Class {
+class CharacterClass : public RootClass {
 public:
     CharacterClass();
 

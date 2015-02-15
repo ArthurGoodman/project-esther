@@ -4,12 +4,11 @@
 #include "context.h"
 
 ContextClass::ContextClass()
-    : Class("Context") {
-    Runtime::setRootClass(this);
+    : RootClass("Context") {
 }
 
 Object *ContextClass::newInstance() {
-    return new Context();
+    return new Context;
 }
 
 void ContextClass::setupMethods() {

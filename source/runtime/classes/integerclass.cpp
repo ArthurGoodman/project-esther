@@ -7,8 +7,7 @@
 #include "nativeblock.h"
 
 IntegerClass::IntegerClass()
-    : Class("Integer") {
-    Runtime::setRootClass(this);
+    : RootClass("Integer") {
 }
 
 Object *IntegerClass::newInstance() {

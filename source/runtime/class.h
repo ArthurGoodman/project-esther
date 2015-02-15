@@ -38,6 +38,4 @@ public:
     Object *call(string name);
 
     string toString();
-
-    virtual void setupMethods();
 };

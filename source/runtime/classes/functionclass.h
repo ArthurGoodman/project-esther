@@ -1,9 +1,9 @@
 #pragma once
 #include "common.h"
 
-#include "class.h"
+#include "rootclass.h"
 
-class FunctionClass : public Class {
+class FunctionClass : public RootClass {
 public:
     FunctionClass();
 
