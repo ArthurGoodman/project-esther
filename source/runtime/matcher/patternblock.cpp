@@ -4,6 +4,7 @@
 #include "case.h"
 #include "pattern.h"
 #include "matchfailureexception.h"
+#include "context.h"
 
 PatternBlock::PatternBlock(list<Case *> cases)
     : cases(cases) {
@@ -14,10 +15,12 @@ Object *PatternBlock::eval(Context *) {
     return 0;
 }
 
-Object *PatternBlock::eval(Object *object) {
+Object *PatternBlock::eval(Object *object, Context *context) {
+    Object *value = 0;
+
     foreach (i, cases)
-        if ((*i)->getPattern()->match(object))
-            return (*i)->match(object);
+        if ((value = (*i)->match(object, context->childContext())))
+            return value;
 
     throw new MatchFailureException;
 }

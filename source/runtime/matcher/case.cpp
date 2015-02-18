@@ -3,19 +3,12 @@
 #include "pattern.h"
 #include "expression.h"
 #include "context.h"
-#include "matchfailureexception.h"
 
-Case::Case(Pattern *pattern, Expression *body, Context *context)
-    : pattern(pattern), body(body), context(context) {
+Case::Case(Pattern *pattern, Expression *body)
+    : pattern(pattern), body(body) {
 }
 
-Pattern *Case::getPattern() {
-    return pattern;
-}
-
-Object *Case::match(Object *object) {
-    if (pattern->match(object))
-        return body->eval(context->childContext());
-
-    throw new MatchFailureException;
+Object *Case::match(Object *object, Context *context) {
+    context = context->childContext();
+    return pattern->match(object, context) ? body->eval(context) : 0;
 }

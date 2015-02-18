@@ -127,7 +127,9 @@ SOURCES += \
     source/expression/ast/hereexpression.cpp \
     source/runtime/matcher/patternblock.cpp \
     source/runtime/matcher/pattern/pattern.cpp \
-    source/runtime/matcher/pattern/wildcardpattern.cpp
+    source/runtime/matcher/pattern/wildcardpattern.cpp \
+    source/runtime/interface.cpp \
+    source/runtime/rootclass/interfaceclass.cpp
 
 HEADERS += \
     source/esther.h \
@@ -236,7 +238,9 @@ HEADERS += \
     source/expression/ast/hereexpression.h \
     source/runtime/matcher/patternblock.h \
     source/runtime/matcher/pattern/pattern.h \
-    source/runtime/matcher/pattern/wildcardpattern.h
+    source/runtime/matcher/pattern/wildcardpattern.h \
+    source/runtime/interface.h \
+    source/runtime/rootclass/interfaceclass.h
 
 OTHER_FILES += \
     README.MD \

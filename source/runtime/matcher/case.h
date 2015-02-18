@@ -1,21 +1,17 @@
 #pragma once
 #include "common.h"
 
-#include "object.h"
-
+class Object;
 class Pattern;
 class Expression;
 class Context;
 
-class Case : public Object {
+class Case {
     Pattern *pattern;
     Expression *body;
-    Context *context;
 
 public:
-    Case(Pattern *pattern, Expression *body, Context *context);
+    Case(Pattern *pattern, Expression *body);
 
-    Pattern *getPattern();
-
-    Object *match(Object *object);
+    Object *match(Object *object, Context *context);
 };

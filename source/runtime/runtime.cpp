@@ -22,6 +22,7 @@
 #include "stringclass.h"
 #include "tupleclass.h"
 #include "contextclass.h"
+#include "interfaceclass.h"
 
 Context *Runtime::root;
 
@@ -65,6 +66,8 @@ void Runtime::initialize() {
     root = new Context;
 
     //callStack = new CallStack;
+
+    new InterfaceClass;
 
     foreach (i, rootClasses)
         i->second->setupMethods();

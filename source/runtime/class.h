@@ -6,6 +6,7 @@
 class Method;
 
 class Class : public Object {
+protected:
     string name;
     Class *superclass;
 
@@ -35,5 +36,5 @@ public:
     Object *call(string name, Object *arg);
     Object *call(string name);
 
-    string toString();
+    virtual string toString();
 };

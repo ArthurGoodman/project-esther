@@ -12,5 +12,5 @@ public:
     PatternBlock(list<Case *> cases);
 
     Object *eval(Context *context);
-    Object *eval(Object *object);
+    Object *eval(Object *object, Context *context);
 };

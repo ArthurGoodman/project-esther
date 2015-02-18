@@ -3,9 +3,14 @@
 
 #include "object.h"
 
+class Context;
+
 class Pattern : public Object {
+protected:
+    Pattern(string className);
+
 public:
     virtual ~Pattern();
 
-    virtual bool match(Object *object) = 0;
+    virtual bool match(Object *object, Context *context) = 0;
 };
