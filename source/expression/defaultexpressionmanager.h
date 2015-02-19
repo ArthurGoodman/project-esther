@@ -39,10 +39,12 @@ public:
 
     Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
+//    Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params);
+
     Expression *createReturn(Expression *value);
     Expression *createBreak(Expression *value);
     Expression *createContinue();
 
-    Expression *createThis();
+    Expression *createSelf();
     Expression *createHere();
 };

@@ -129,7 +129,7 @@ Expression *DefaultExpressionManager::createContinue() {
     return new ContinueExpression;
 }
 
-Expression *DefaultExpressionManager::createThis() {
+Expression *DefaultExpressionManager::createSelf() {
     return new SelfExpression;
 }
 

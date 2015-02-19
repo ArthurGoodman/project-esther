@@ -237,8 +237,8 @@ Expression *DebugExpressionManager::createContinue() {
     return new DebugExpression("Continue");
 }
 
-Expression *DebugExpressionManager::createThis() {
-    return new DebugExpression("This");
+Expression *DebugExpressionManager::createSelf() {
+    return new DebugExpression("Self");
 }
 
 Expression *DebugExpressionManager::createHere() {

@@ -44,10 +44,12 @@ public:
 
     virtual Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body) = 0;
 
+//    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params) = 0;
+
     virtual Expression *createReturn(Expression *value) = 0;
     virtual Expression *createBreak(Expression *value) = 0;
     virtual Expression *createContinue() = 0;
 
-    virtual Expression *createThis() = 0;
+    virtual Expression *createSelf() = 0;
     virtual Expression *createHere() = 0;
 };

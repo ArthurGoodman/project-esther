@@ -182,7 +182,8 @@ Expression *DefaultParser::addSub() {
             e = Expression::Call(e, "+", mulDiv());
         else if (accept(tMinus))
             e = Expression::Call(e, "-", mulDiv());
-        else break;
+        else
+            break;
     }
 
     return e;
@@ -198,7 +199,8 @@ Expression *DefaultParser::mulDiv() {
             e = Expression::Call(e, "/", dot());
         else if (accept(tMod))
             e = Expression::Call(e, "%", dot());
-        else break;
+        else
+            break;
     }
 
     return e;
@@ -264,8 +266,8 @@ Expression *DefaultParser::suffix() {
 
                 if (!accept(tRBracket))
                     error("unmatched brackets");
-            }
-            else break;
+            } else
+                break;
         }
     else if (accept(tDec))
         e = Expression::PostDecrement(e);
@@ -327,10 +329,15 @@ Expression *DefaultParser::term() {
 
         name = parseIdentifier();
 
-        if ((type = parseIdentifier()))
+        if ((type = parseIdentifier())) {
             swap(type, name);
-        else if (accept(tColon) && !(type = parseIdentifier()))
-            type = term();
+            type = Expression::Identifier(type);
+        } else if (accept(tColon)) {
+            if ((type = parseIdentifier()))
+                type = Expression::Identifier(type);
+            else
+                type = term();
+        }
 
         if (accept(tAssign))
             value = tuple();
@@ -436,7 +443,7 @@ Expression *DefaultParser::term() {
         e = Expression::Literal(Runtime::getNull());
 
     else if (accept(tThis))
-        e = Expression::This();
+        e = Expression::Self();
     else if (accept(tHere))
         e = Expression::Here();
     //else if (accept(tSuper))
