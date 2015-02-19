@@ -19,6 +19,6 @@ RootClass::RootClass(string name)
     Runtime::setRootClass(this);
 }
 
-void RootClass::setMethod(string name, function<Object *(Object *, Tuple *)> body) {
-    Class::setMethod(new NativeMethod(name, new NativeBlock(body)));
+void RootClass::setMethod(string name, Signature *signature, function<Object *(Object *, Tuple *)> body) {
+    Class::setMethod(new NativeMethod(name, signature, new NativeBlock(body)));
 }

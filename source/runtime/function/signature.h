@@ -6,9 +6,16 @@
 class Class;
 
 class Signature : public Object {
-    Class *returnType;
-    list<Class *> argsTypes;
+    Class *returnClass;
+    list<Class *> argsClasses;
 
 public:
-    Signature(Class *returnType, list<Class *> argsTypes);
+    Signature();
+    Signature(Class *returnClass, list<Class *> argsClasses);
+    Signature(string returnClassName, list<string> argsClassesNames);
+
+    bool accepts(Tuple *args);
+    Tuple *convert(Tuple *args);
+
+    bool equals(Object *other);
 };

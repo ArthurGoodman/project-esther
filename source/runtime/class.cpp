@@ -29,11 +29,32 @@ void Class::setSuperclass(Class *superclass) {
 }
 
 bool Class::isChild(Class *_class) {
-    return false;
+    return this->equals(_class) || (superclass ? (superclass->equals(_class) ? true : superclass->isChild(_class)) : false);
 }
 
 Object *Class::newInstance() {
     return new Object(this);
+}
+
+Object *Class::newInstance(Tuple *args) {
+    Object *instance = new Object(this);
+    instance->call(name, args);
+    return instance;
+}
+
+bool Class::hasAttribute(string name) {
+    return hasMethod(name) || Object::hasAttribute(name);
+}
+
+Object *Class::getAttribute(string name) {
+    return hasMethod(name) ? getMethod(name) : Object::getAttribute(name);
+}
+
+void Class::setAttribute(string name, Object *value) {
+    if (dynamic_cast<Method *>(value))
+        setMethod(name, (Method *)value);
+    else
+        Object::setAttribute(name, value);
 }
 
 bool Class::hasMethod(string name) {
@@ -46,6 +67,10 @@ Method *Class::getMethod(string name) {
 
 void Class::setMethod(Method *method) {
     methods[method->getName()] = method;
+}
+
+void Class::setMethod(string name, Method *method) {
+    methods[name] = method;
 }
 
 Method *Class::lookup(string name) {

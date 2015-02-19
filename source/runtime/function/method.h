@@ -5,9 +5,11 @@
 
 class Method : public Function {
 public:
-    Method(string name, Context *context, list<string> params, Block *body);
+    Method(string name, Context *context, Signature *signature, list<string> params, Block *body);
 
-    Object *invoke(Object *self, Tuple *args);
+    virtual Object *invoke(Object *self, Tuple *args);
 
     string toString();
+
+    void check(Object *self, Tuple *args);
 };

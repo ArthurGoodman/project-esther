@@ -128,7 +128,7 @@ bool Runtime::hasRootClass(string name) {
     return rootClasses.find(name) != rootClasses.end();
 }
 
-RootClass *Runtime::getRootClass(string name) {
+Class *Runtime::getRootClass(string name) {
     return rootClasses.find(name) != rootClasses.end() ? rootClasses[name] : 0;
 }
 

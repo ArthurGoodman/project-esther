@@ -39,4 +39,6 @@ public:
     virtual bool isNull();
 
     virtual string toString();
+
+    virtual bool equals(Object *other);
 };

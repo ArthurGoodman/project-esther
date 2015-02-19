@@ -4,13 +4,13 @@
 #include "object.h"
 
 class Tuple : public Object {
-    typedef Object **iterator;
-    typedef Object *const *const_iterator;
-
     int n;
     Object **data;
 
 public:
+    typedef Object **iterator;
+    typedef Object *const *const_iterator;
+
     Tuple(int size = 0);
     Tuple(list<Object *> data);
     ~Tuple();

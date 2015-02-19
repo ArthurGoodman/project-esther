@@ -6,6 +6,7 @@
 #include "utility.h"
 #include "tuple.h"
 #include "method.h"
+#include "signature.h"
 
 Object::Object()
     : objectClass(Runtime::getObjectClass()) {
@@ -43,7 +44,7 @@ void Object::setAttribute(string name, Object *value) {
 }
 
 bool Object::is(Class *_class) {
-    return false;
+    return objectClass->isChild(_class);
 }
 
 bool Object::is(string className) {
@@ -51,11 +52,30 @@ bool Object::is(string className) {
 }
 
 bool Object::converts(Class *_class) {
-    return false;
+    if (is(_class))
+        return true;
+
+    if (!_class->hasMethod(_class->getName()))
+        return false;
+
+    Method *constructor = _class->getMethod(_class->getName());
+
+    if (!constructor->getSignature()->equals(new Signature(Runtime::getObjectClass(), {objectClass})))
+        return false;
+
+    return true;
 }
 
 Object *Object::as(Class *_class) {
-    return Runtime::getNull();
+    if (is(_class))
+        return this;
+
+    Method *constructor = _class->getMethod(_class->getName());
+
+    if (!constructor)
+        Runtime::runtimeError("can't convert");
+
+    return _class->newInstance(new Tuple({this}));
 }
 
 Object *Object::call(string name, Tuple *args) {
@@ -89,4 +109,8 @@ bool Object::isNull() {
 
 string Object::toString() {
     return "<" + objectClass->toString() + ":" + Utility::toString(this) + ">";
+}
+
+bool Object::equals(Object *other) {
+    return this == other;
 }

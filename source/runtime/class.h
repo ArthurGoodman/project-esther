@@ -25,10 +25,16 @@ public:
     bool isChild(Class *_class);
 
     virtual Object *newInstance();
+    virtual Object *newInstance(Tuple *args);
+
+    bool hasAttribute(string name);
+    Object *getAttribute(string name);
+    void setAttribute(string name, Object *value);
 
     bool hasMethod(string name);
     Method *getMethod(string name);
     void setMethod(Method *method);
+    void setMethod(string name, Method *method);
 
     Method *lookup(string name);
 

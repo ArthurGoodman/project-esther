@@ -5,6 +5,7 @@
 #include "tuple.h"
 #include "nativemethod.h"
 #include "nativeblock.h"
+#include "signature.h"
 
 IntegerClass::IntegerClass()
     : RootClass("Integer") {
@@ -19,5 +20,5 @@ void IntegerClass::setupMethods() {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
-    setMethod("+", plusMethod);
+    setMethod("+", new Signature("Integer", {"Integer"}), plusMethod);
 }

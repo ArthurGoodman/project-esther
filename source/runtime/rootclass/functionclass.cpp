@@ -6,13 +6,15 @@
 #include "expression.h"
 #include "tuple.h"
 #include "context.h"
+#include "signature.h"
+#include "method.h"
 
 FunctionClass::FunctionClass()
     : RootClass("Function") {
 }
 
 Object *FunctionClass::newInstance() {
-    return new Function("", Runtime::getRoot(), {}, new InterpretedBlock(Expression::Empty()));
+    return new Function("", Runtime::getRoot(), new Signature, {}, new InterpretedBlock(Expression::Empty()));
 }
 
 void FunctionClass::setupMethods() {
@@ -21,5 +23,6 @@ void FunctionClass::setupMethods() {
         return value;
     };
 
-    setMethod("()", parenthesesMethod);
+    setMethod("call", new Signature("Object", {"Context", "Tuple"}), parenthesesMethod);
+    setAttribute("()", getMethod("call"));
 }

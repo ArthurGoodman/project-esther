@@ -7,7 +7,7 @@ class NativeBlock;
 
 class NativeMethod : public Method {
 public:
-    NativeMethod(string name, NativeBlock *body);
+    NativeMethod(string name, Signature *signature, NativeBlock *body);
 
     Object *invoke(Object *self, Tuple *args);
 };

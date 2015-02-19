@@ -3,6 +3,7 @@
 #include "runtime.h"
 #include "tuple.h"
 #include "integer.h"
+#include "signature.h"
 
 TupleClass::TupleClass()
     : RootClass("Tuple") {
@@ -17,11 +18,11 @@ void TupleClass::setupMethods() {
         return new Integer(((Tuple *)self)->size());
     };
 
-    setMethod("size", sizeMethod);
+    setMethod("size", new Signature("Integer", {}), sizeMethod);
 
     auto atMethod = [](Object * self, Tuple * args) -> Object * {
         return ((Tuple *)self)->at(((Integer *)args->at(0))->getVariant().toInteger());
     };
 
-    setMethod("at", atMethod);
+    setMethod("at", new Signature("Object", {"Integer"}), atMethod);
 }

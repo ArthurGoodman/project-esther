@@ -39,7 +39,7 @@ public:
     //static void endCall();
 
     static bool hasRootClass(string name);
-    static RootClass *getRootClass(string name);
+    static Class *getRootClass(string name);
     static void setRootClass(RootClass *rootClass);
 
     static Object *toBoolean(bool value);

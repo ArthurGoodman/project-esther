@@ -5,6 +5,7 @@
 #include "nativeblock.h"
 #include "tuple.h"
 #include "io.h"
+#include "signature.h"
 
 ObjectClass::ObjectClass()
     : RootClass("Object", 0) {
@@ -19,7 +20,7 @@ void ObjectClass::setupMethods() {
         return self->getClass();
     };
 
-    setMethod("class", classMethod);
+    setMethod("class", new Signature, classMethod);
 
     auto printMethod = [](Object * self, Tuple * args) -> Object * {
         if (args->isEmpty())
@@ -31,5 +32,12 @@ void ObjectClass::setupMethods() {
         return Runtime::getNull();
     };
 
-    setMethod("print", printMethod);
+    setMethod("print", new Signature("Object", {}), printMethod);
+
+    auto equalsMethod = [](Object * self, Tuple * args) -> Object * {
+        return Runtime::toBoolean(self->equals(args->at(0)));
+    };
+
+    setMethod("equals", new Signature("Boolean", {"Object"}), equalsMethod);
+    setAttribute("==", getMethod("equals"));
 }
