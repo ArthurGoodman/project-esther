@@ -4,18 +4,22 @@
 #include "object.h"
 
 class Class;
+class Parameter;
 
 class Signature : public Object {
     Class *returnClass;
-    list<Class *> argsClasses;
+    list<Parameter *> params;
 
 public:
     Signature();
-    Signature(Class *returnClass, list<Class *> argsClasses);
-    Signature(string returnClassName, list<string> argsClassesNames);
+    Signature(Class *returnClass, list<Class *> paramsClasses);
+    Signature(string returnClassName, list<string> paramsClassesNames);
+    Signature(Class *returnClass, list<Parameter *> params);
 
     bool accepts(Tuple *args);
     Tuple *convert(Tuple *args);
 
     bool equals(Object *other);
+
+    list<string> paramsNames();
 };

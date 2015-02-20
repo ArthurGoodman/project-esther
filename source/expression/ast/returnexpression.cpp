@@ -8,5 +8,5 @@ ReturnExpression::ReturnExpression(Expression *value)
 }
 
 Object *ReturnExpression::eval(Context *context) {
-    throw ReturnException(value ? value->eval(context) : Runtime::getNull());
+    throw new ReturnException(value ? value->eval(context) : Runtime::getNull());
 }

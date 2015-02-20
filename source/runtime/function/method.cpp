@@ -1,7 +1,7 @@
 #include "method.h"
 
-Method::Method(string name, Context *context, Signature *signature, list<string> params, Block *body)
-    : Function("Method", name, context, signature, params, body) {
+Method::Method(string name, Context *context, Signature *signature, Block *body)
+    : Function("Method", name, context, signature, body) {
 }
 
 Object *Method::invoke(Object *self, Tuple *args) {

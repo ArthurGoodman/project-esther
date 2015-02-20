@@ -14,7 +14,7 @@ FunctionClass::FunctionClass()
 }
 
 Object *FunctionClass::newInstance() {
-    return new Function("", Runtime::getRoot(), new Signature, {}, new InterpretedBlock(Expression::Empty()));
+    return new Function("", Runtime::getRoot(), new Signature, new InterpretedBlock(Expression::Empty()));
 }
 
 void FunctionClass::setupMethods() {

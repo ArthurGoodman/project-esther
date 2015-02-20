@@ -31,6 +31,7 @@ public:
     Expression *createIdentifierAssignment(Expression *name, Expression *value);
     Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value);
 
+    Expression *createParameter(Expression *type, Expression *name, Expression *value);
     Expression *createCall(Expression *self, string name, list<Expression *> args);
 
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
@@ -41,6 +42,8 @@ public:
     Expression *createContextResolution(Expression *self, Expression *body);
 
     Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
+
+    Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body);
 
     Expression *createReturn(Expression *value);
     Expression *createBreak(Expression *value);

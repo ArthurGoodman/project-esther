@@ -5,7 +5,7 @@
 
 class Method : public Function {
 public:
-    Method(string name, Context *context, Signature *signature, list<string> params, Block *body);
+    Method(string name, Context *context, Signature *signature, Block *body);
 
     virtual Object *invoke(Object *self, Tuple *args);
 

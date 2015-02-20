@@ -6,6 +6,7 @@
 #include "runtime.h"
 #include "io.h"
 #include "errorexception.h"
+#include "returnexception.h"
 
 void DefaultEngine::run(const string &script) {
     pushSource(script);
@@ -14,7 +15,10 @@ void DefaultEngine::run(const string &script) {
         Expression *e = parser->parse(lexer->lex(script));
         IO::printLine("\n=> " + e->eval(Runtime::getRoot())->toString());
         delete e;
-    } catch (Exception *e) {
+    } catch (ReturnException *e) {
+        IO::printLine("runtime error: return not within a function");
+        delete e;
+    }  catch (Exception *e) {
         IO::printLine(e->message());
         delete e;
     } catch (...) {

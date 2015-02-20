@@ -13,13 +13,12 @@ protected:
     string name;
     Context *context;
     Signature *signature;
-    list<string> params;
     Block *body;
 
-    Function(string className, string name, Context *context, Signature *signature, list<string> params, Block *body);
+    Function(string className, string name, Context *context, Signature *signature, Block *body);
 
 public:
-    Function(string name, Context *context, Signature *signature, list<string> params, Block *body);
+    Function(string name, Context *context, Signature *signature, Block *body);
 
     string getName();
     Signature *getSignature();

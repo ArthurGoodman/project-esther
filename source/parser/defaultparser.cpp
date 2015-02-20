@@ -325,9 +325,7 @@ Expression *DefaultParser::term() {
     //}
 
     if (check(tId) || check(tDollar)) {
-        Expression *type = 0, *name = 0, *value = 0;
-
-        name = parseIdentifier();
+        Expression *type = 0, *name = parseIdentifier(), *value = 0;
 
         if ((type = parseIdentifier())) {
             swap(type, name);
@@ -510,6 +508,58 @@ Expression *DefaultParser::term() {
         body = accept(tLBrace) ? Expression::List(parseBlock()) : term();
 
         e = Expression::ClassDefinition(name, superClass, body);
+    }
+
+    else if (accept(tFunction)) {
+        Expression *type = 0, *name = parseIdentifier();
+        list<Expression *> params;
+
+        if (name && (type = parseIdentifier())) {
+            swap(type, name);
+            type = Expression::Identifier(type);
+        } else if (accept(tColon)) {
+            if ((type = parseIdentifier()))
+                type = Expression::Identifier(type);
+            else
+                type = term();
+        }
+
+        if (accept(tLPar) && !accept(tRPar)) {
+            bool expectDefaultArguments = false;
+
+            do {
+                if (!check(tId) && !check(tDollar))
+                    error("identifier expected");
+
+                Expression *type = 0, *name = parseIdentifier(), *value = 0;
+
+                if ((type = parseIdentifier())) {
+                    swap(type, name);
+                    type = Expression::Identifier(type);
+                } else if (accept(tColon)) {
+                    if ((type = parseIdentifier()))
+                        type = Expression::Identifier(type);
+                    else
+                        type = term();
+                }
+
+                if (accept(tAssign)) {
+                    expectDefaultArguments = true;
+                    value = logicOr();
+                } else if (expectDefaultArguments)
+                    error("default argument expected");
+
+                params << Expression::ParameterDefinition(type, name, value);
+            } while (accept(tComma));
+
+            if (!accept(tRPar))
+                error("unmatched parenteses");
+        }
+
+        if (!type && accept(tArrow))
+            type = term();
+
+        e = Expression::FunctionDefinition(type, name, params, term());
     }
 
     //else if(accept(tTry)) {}

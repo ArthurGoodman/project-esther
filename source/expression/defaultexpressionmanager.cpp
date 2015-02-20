@@ -16,6 +16,7 @@
 #include "identifierexpression.h"
 #include "identifierassignmentexpression.h"
 #include "identifierdefinitionexpression.h"
+#include "parameterexpression.h"
 #include "callexpression.h"
 #include "ifexpression.h"
 #include "whileexpression.h"
@@ -23,6 +24,7 @@
 #include "doexpression.h"
 #include "contextresolutionexpression.h"
 #include "classexpression.h"
+#include "functionexpression.h"
 #include "returnexpression.h"
 #include "breakexpression.h"
 #include "continueexpression.h"
@@ -89,6 +91,10 @@ Expression *DefaultExpressionManager::createIdentifierDefinition(Expression *typ
     return new IdentifierDefinitionExpression(type, name, value);
 }
 
+Expression *DefaultExpressionManager::createParameter(Expression *type, Expression *name, Expression *value) {
+    return new ParameterExpression(type, name, value);
+}
+
 Expression *DefaultExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {
     return new CallExpression(self, name, args);
 }
@@ -115,6 +121,10 @@ Expression *DefaultExpressionManager::createContextResolution(Expression *self, 
 
 Expression *DefaultExpressionManager::createClassDefinition(Expression *name, Expression *superclass, Expression *body) {
     return new ClassExpression(name, superclass, body);
+}
+
+Expression *DefaultExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+    return new FunctionExpression(type, name, params, body);
 }
 
 Expression *DefaultExpressionManager::createReturn(Expression *value) {

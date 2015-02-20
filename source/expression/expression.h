@@ -36,6 +36,8 @@ public:
     static Expression *IdentifierAssignment(Expression *name, Expression *value);
     static Expression *IdentifierDefinition(Expression *type, Expression *name, Expression *value);
 
+    static Expression *ParameterDefinition(Expression *type, Expression *name, Expression *value);
+
     static Expression *Call(Expression *self, string name, list<Expression *> args);
     static Expression *Call(Expression *self, string name, Expression *arg);
     static Expression *Call(Expression *self, string name);
@@ -48,6 +50,8 @@ public:
     static Expression *ContextResolution(Expression *self, Expression *body);
 
     static Expression *ClassDefinition(Expression *name, Expression *superclass, Expression *body);
+
+    static Expression *FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body);
 
     static Expression *Return(Expression *value);
     static Expression *Break(Expression *value);

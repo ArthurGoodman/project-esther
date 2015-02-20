@@ -134,6 +134,20 @@ Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type,
     return new DebugExpression("IdentifierDefinition", arguments);
 }
 
+Expression *DebugExpressionManager::createParameter(Expression *type, Expression *name, Expression *value) {
+    list<Object *> arguments;
+
+    if (type)
+        arguments << type;
+
+    arguments << name;
+
+    if (value)
+        arguments << value;
+
+    return new DebugExpression("Parameter", arguments);
+}
+
 Expression *DebugExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {
     list<Object *> arguments, callArguments;
 
@@ -213,6 +227,25 @@ Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expr
     arguments << body;
 
     return new DebugExpression("Class", arguments);
+}
+
+Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+    list<Object *> arguments, paramsArguments;
+
+    if (type)
+        arguments << type;
+
+    if (name)
+        arguments << name;
+
+    foreach (i, params)
+        paramsArguments << *i;
+
+    arguments << new DebugExpression("List", paramsArguments);
+
+    arguments << body;
+
+    return new DebugExpression("Function", arguments);
 }
 
 Expression *DebugExpressionManager::createReturn(Expression *value) {

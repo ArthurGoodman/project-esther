@@ -72,6 +72,10 @@ Expression *Expression::IdentifierDefinition(Expression *type, Expression *name,
     return manager->createIdentifierDefinition(type, name, value);
 }
 
+Expression *Expression::ParameterDefinition(Expression *type, Expression *name, Expression *value) {
+    return manager->createParameter(type, name, value);
+}
+
 Expression *Expression::Call(Expression *self, string name, list<Expression *> args) {
     return manager->createCall(self, name, args);
 }
@@ -106,6 +110,10 @@ Expression *Expression::ContextResolution(Expression *self, Expression *body) {
 
 Expression *Expression::ClassDefinition(Expression *name, Expression *superclass, Expression *body) {
     return manager->createClassDefinition(name, superclass, body);
+}
+
+Expression *Expression::FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+    return manager->createFunctionDefinition(type, name, params, body);
 }
 
 Expression *Expression::Return(Expression *value) {

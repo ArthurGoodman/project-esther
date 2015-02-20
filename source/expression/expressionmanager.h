@@ -33,6 +33,7 @@ public:
     virtual Expression *createIdentifierAssignment(Expression *name, Expression *value) = 0;
     virtual Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value) = 0;
 
+    virtual Expression *createParameter(Expression *type, Expression *name, Expression *value) = 0;
     virtual Expression *createCall(Expression *self, string name, list<Expression *> args) = 0;
 
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
@@ -44,7 +45,7 @@ public:
 
     virtual Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body) = 0;
 
-//    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params) = 0;
+    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) = 0;
 
     virtual Expression *createReturn(Expression *value) = 0;
     virtual Expression *createBreak(Expression *value) = 0;

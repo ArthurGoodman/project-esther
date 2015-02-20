@@ -6,13 +6,14 @@
 #include "tuple.h"
 #include "logger.h"
 #include "signature.h"
+#include "returnexception.h"
 
-Function::Function(string className, string name, Context *context, Signature *signature, list<string> params, Block *body)
-    : Object(className), name(name), context(context), signature(signature), params(params), body(body) {
+Function::Function(string className, string name, Context *context, Signature *signature, Block *body)
+    : Object(className), name(name), context(context), signature(signature), body(body) {
 }
 
-Function::Function(string name, Context *context, Signature *signature, list<string> params, Block *body)
-    : Object("Function"), name(name), context(context), signature(signature), params(params), body(body) {
+Function::Function(string name, Context *context, Signature *signature, Block *body)
+    : Object("Function"), name(name), context(context), signature(signature), body(body) {
 }
 
 string Function::getName() {
@@ -26,21 +27,32 @@ Signature *Function::getSignature() {
 Object *Function::invoke(Object *self, Tuple *args) {
     check(self, args);
 
+    args = signature->convert(args);
+
     context = context->childContext(self);
+
+    list<string> params = signature->paramsNames();
 
     foreach (i, params)
         context->setLocal(*i, args->at(distance(params.begin(), i)));
 
-    return body->eval(context);
+    try {
+        return body->eval(context);
+    } catch (ReturnException *e) {
+        Object *value = e->value();
+        delete e;
+        return value;
+    } catch (Exception *e) {
+        e->raise();
+        return 0;
+    }
 }
 
 string Function::toString() {
     return name.empty() ? "<anonymous function>" : "<function " + name + ">";
 }
 
-void Function::check(Object *self, Tuple *args) {
+void Function::check(Object *, Tuple *args) {
     if (!signature->accepts(args))
         Runtime::runtimeError("invalid arguments");
-
-    args = signature->convert(args);
 }

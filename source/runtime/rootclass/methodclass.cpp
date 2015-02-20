@@ -11,7 +11,7 @@ MethodClass::MethodClass()
 }
 
 Object *MethodClass::newInstance() {
-    return new Method("", Runtime::getRoot(), new Signature, {}, new InterpretedBlock(Expression::Empty()));
+    return new Method("", Runtime::getRoot(), new Signature, new InterpretedBlock(Expression::Empty()));
 }
 
 void MethodClass::setupMethods() {

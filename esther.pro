@@ -129,7 +129,10 @@ SOURCES += \
     source/runtime/matcher/pattern/pattern.cpp \
     source/runtime/matcher/pattern/wildcardpattern.cpp \
     source/runtime/interface.cpp \
-    source/runtime/rootclass/interfaceclass.cpp
+    source/runtime/rootclass/interfaceclass.cpp \
+    source/expression/ast/parameterexpression.cpp \
+    source/runtime/function/parameter.cpp \
+    source/expression/ast/functionexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -240,7 +243,10 @@ HEADERS += \
     source/runtime/matcher/pattern/pattern.h \
     source/runtime/matcher/pattern/wildcardpattern.h \
     source/runtime/interface.h \
-    source/runtime/rootclass/interfaceclass.h
+    source/runtime/rootclass/interfaceclass.h \
+    source/expression/ast/parameterexpression.h \
+    source/runtime/function/parameter.h \
+    source/expression/ast/functionexpression.h
 
 OTHER_FILES += \
     README.MD \
