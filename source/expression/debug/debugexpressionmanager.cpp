@@ -248,6 +248,25 @@ Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, E
     return new DebugExpression("Function", arguments);
 }
 
+Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+    list<Object *> arguments, paramsArguments;
+
+    if (type)
+        arguments << type;
+
+    if (name)
+        arguments << name;
+
+    foreach (i, params)
+        paramsArguments << *i;
+
+    arguments << new DebugExpression("List", paramsArguments);
+
+    arguments << body;
+
+    return new DebugExpression("Method", arguments);
+}
+
 Expression *DebugExpressionManager::createReturn(Expression *value) {
     list<Object *> arguments;
 

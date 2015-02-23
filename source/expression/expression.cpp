@@ -116,6 +116,10 @@ Expression *Expression::FunctionDefinition(Expression *type, Expression *name, l
     return manager->createFunctionDefinition(type, name, params, body);
 }
 
+Expression *Expression::MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+    return manager->createMethodDefinition(type, name, params, body);
+}
+
 Expression *Expression::Return(Expression *value) {
     return manager->createReturn(value);
 }

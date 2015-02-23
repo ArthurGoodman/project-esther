@@ -25,6 +25,7 @@
 #include "contextresolutionexpression.h"
 #include "classexpression.h"
 #include "functionexpression.h"
+#include "methodexpression.h"
 #include "returnexpression.h"
 #include "breakexpression.h"
 #include "continueexpression.h"
@@ -125,6 +126,10 @@ Expression *DefaultExpressionManager::createClassDefinition(Expression *name, Ex
 
 Expression *DefaultExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
     return new FunctionExpression(type, name, params, body);
+}
+
+Expression *DefaultExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+    return new MethodExpression(type, name, params, body);
 }
 
 Expression *DefaultExpressionManager::createReturn(Expression *value) {

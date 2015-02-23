@@ -44,6 +44,7 @@ public:
     Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
     Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body);
+    Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body);
 
     Expression *createReturn(Expression *value);
     Expression *createBreak(Expression *value);

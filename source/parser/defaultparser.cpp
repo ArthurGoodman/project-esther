@@ -510,8 +510,11 @@ Expression *DefaultParser::term() {
         e = Expression::ClassDefinition(name, superClass, body);
     }
 
-    else if (accept(tFunction)) {
-        Expression *type = 0, *name = parseIdentifier();
+    else if (check(tFunction) || check(tMethod)) {
+        int id = token->getId();
+        getToken();
+
+        Expression *type = 0, *name = parseIdentifier(), *body;
         list<Expression *> params;
 
         if (name && (type = parseIdentifier())) {
@@ -559,7 +562,17 @@ Expression *DefaultParser::term() {
         if (!type && accept(tArrow))
             type = term();
 
-        e = Expression::FunctionDefinition(type, name, params, term());
+        body = accept(tLBrace) ? Expression::List(parseBlock()) : oper();
+
+        switch (id) {
+        case tFunction:
+            e = Expression::FunctionDefinition(type, name, params, body);
+            break;
+
+        case tMethod:
+            e = Expression::MethodDefinition(type, name, params, body);
+            break;
+        }
     }
 
     //else if(accept(tTry)) {}
