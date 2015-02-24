@@ -440,7 +440,7 @@ Expression *DefaultParser::term() {
     else if (accept(tNull))
         e = Expression::Literal(Runtime::getNull());
 
-    else if (accept(tThis))
+    else if (accept(tSelf))
         e = Expression::Self();
     else if (accept(tHere))
         e = Expression::Here();

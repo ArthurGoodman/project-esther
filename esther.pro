@@ -133,7 +133,8 @@ SOURCES += \
     source/expression/ast/parameterexpression.cpp \
     source/runtime/function/parameter.cpp \
     source/expression/ast/functionexpression.cpp \
-    source/expression/ast/methodexpression.cpp
+    source/expression/ast/methodexpression.cpp \
+    source/runtime/objectcontext.cpp
 
 HEADERS += \
     source/esther.h \
@@ -248,7 +249,8 @@ HEADERS += \
     source/expression/ast/parameterexpression.h \
     source/runtime/function/parameter.h \
     source/expression/ast/functionexpression.h \
-    source/expression/ast/methodexpression.h
+    source/expression/ast/methodexpression.h \
+    source/runtime/objectcontext.h
 
 OTHER_FILES += \
     README.MD \

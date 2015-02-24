@@ -4,6 +4,7 @@
 #include "object.h"
 
 class Context : public Object {
+protected:
     Object *currentSelf;
     Class *currentClass;
     map<string, Object *> locals;
@@ -23,15 +24,23 @@ public:
 
     bool hasLocal(string name);
     Object *getLocal(string name);
-    void setLocal(string name, Object *value);
+    virtual void setLocal(string name, Object *value);
 
-    bool hasId(string name);
-    Object *getId(string name);
-    bool setId(string name, Object *value);
+    virtual bool hasId(string name);
+    virtual Object *getId(string name);
+    virtual bool setId(string name, Object *value);
 
+//    Context *childContext();
+//    Context *childContext(Object *self);
+//    Context *childContext(Object *self, Class *_class);
+
+    Context *childContext(Object *currentSelf, Class *currentClass);
+    Context *childContext(Object *currentSelf);
     Context *childContext();
-    Context *childContext(Object *self);
-    Context *childContext(Object *self, Class *_class);
+
+    Context *objectChildContext(Object *currentSelf, Class *currentClass);
+    Context *objectChildContext(Object *currentSelf);
+    Context *objectChildContext();
 
     bool hasParent();
     Context *getParent();

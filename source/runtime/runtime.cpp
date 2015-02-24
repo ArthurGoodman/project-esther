@@ -1,7 +1,7 @@
 #include "runtime.h"
 
 #include "rootclass.h"
-#include "context.h"
+#include "objectcontext.h"
 #include "lexer.h"
 #include "parser.h"
 #include "expression.h"
@@ -63,7 +63,7 @@ void Runtime::initialize() {
     falseObject = new False;
     nullObject = new Null;
 
-    root = new Context;
+    root = new ObjectContext;
 
     //callStack = new CallStack;
 

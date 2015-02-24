@@ -9,5 +9,5 @@ ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expre
 
 Object *ContextResolutionExpression::eval(Context *context) {
     Object *self = this->self->eval(context);
-    return body->eval(context->childContext(self));
+    return body->eval(context->objectChildContext(self));
 }

@@ -9,6 +9,8 @@ ClassExpression::ClassExpression(Expression *name, Expression *superclass, Expre
 }
 
 Object *ClassExpression::eval(Context *context) {
+    context = context->childContext();
+
     string name;
     Class *_class = 0, *superclass = 0;
 
@@ -29,7 +31,7 @@ Object *ClassExpression::eval(Context *context) {
     if (!_class || !_class->is("Class"))
         _class = new Class(name, superclass);
 
-    body->eval(context->childContext(_class, _class));
+    body->eval(context->objectChildContext(_class, _class));
 
     if (!name.empty())
         context->setLocal(name, _class);
