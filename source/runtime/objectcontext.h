@@ -5,7 +5,7 @@
 
 class ObjectContext : public Context {
 public:
-    ObjectContext(Object *currentSelf, Class *currentClass, Context *parent);
+    ObjectContext(Object *currentSelf, Class *currentClass, Context *parent, int modifiers);
     ObjectContext();
 
     void setLocal(string name, Object *value);

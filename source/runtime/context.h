@@ -7,15 +7,20 @@ class Context : public Object {
 protected:
     Object *currentSelf;
     Class *currentClass;
-    map<string, Object *> locals;
-
     Context *parent;
 
+    int modifiers;
+
+    map<string, Object *> locals;
+
+    Context(Object *currentSelf, Class *currentClass, Context *parent, int modifiers);
+
 public:
+    const static int StaticModifier = 0x1;
+
     Context(Object *currentSelf, Class *currentClass, Context *parent = 0);
     Context(Object *currentSelf, Context *parent = 0);
     Context();
-    //~Context();
 
     Object *getCurrentSelf();
     Class *getCurrentClass();
@@ -30,10 +35,6 @@ public:
     virtual Object *getId(string name);
     virtual bool setId(string name, Object *value);
 
-//    Context *childContext();
-//    Context *childContext(Object *self);
-//    Context *childContext(Object *self, Class *_class);
-
     Context *childContext(Object *currentSelf, Class *currentClass);
     Context *childContext(Object *currentSelf);
     Context *childContext();
@@ -44,4 +45,7 @@ public:
 
     bool hasParent();
     Context *getParent();
+
+    void setModifier(int modifier, bool state);
+    int getModifier(int modifier);
 };

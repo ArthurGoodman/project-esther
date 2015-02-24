@@ -4,10 +4,8 @@
 #include "expression.h"
 
 class ForExpression : public Expression {
-    Expression *preffix, *condition, *suffix, *body;
-
 public:
-    ForExpression(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
+    ForExpression();
 
     Object *eval(Context *context);
 };

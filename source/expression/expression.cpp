@@ -96,9 +96,9 @@ Expression *Expression::While(Expression *condition, Expression *body, Expressio
     return manager->createWhile(condition, body, elseBody);
 }
 
-Expression *Expression::For(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
-    return manager->createFor(preffix, condition, suffix, body);
-}
+//Expression *Expression::For(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
+//    return manager->createFor(preffix, condition, suffix, body);
+//}
 
 Expression *Expression::Do(Expression *body, Expression *condition) {
     return manager->createDo(body, condition);
@@ -138,4 +138,8 @@ Expression *Expression::Self() {
 
 Expression *Expression::Here() {
     return manager->createHere();
+}
+
+Expression *Expression::Static(Expression *body) {
+    return manager->createStatic(body);
 }

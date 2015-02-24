@@ -31,6 +31,7 @@
 #include "continueexpression.h"
 #include "selfexpression.h"
 #include "hereexpression.h"
+#include "staticexpression.h"
 
 Expression *DefaultExpressionManager::createEmpty() {
     return new EmptyExpression;
@@ -108,9 +109,9 @@ Expression *DefaultExpressionManager::createWhile(Expression *condition, Express
     return new WhileExpression(condition, body, elseBody);
 }
 
-Expression *DefaultExpressionManager::createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
-    return new ForExpression(preffix, condition, suffix, body);
-}
+//Expression *DefaultExpressionManager::createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
+//    return new ForExpression(preffix, condition, suffix, body);
+//}
 
 Expression *DefaultExpressionManager::createDo(Expression *body, Expression *condition) {
     return new DoExpression(body, condition);
@@ -150,4 +151,8 @@ Expression *DefaultExpressionManager::createSelf() {
 
 Expression *DefaultExpressionManager::createHere() {
     return new HereExpression;
+}
+
+Expression *DefaultExpressionManager::createStatic(Expression *body) {
+    return new StaticExpression(body);
 }

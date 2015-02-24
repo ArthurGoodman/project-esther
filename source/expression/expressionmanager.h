@@ -38,7 +38,7 @@ public:
 
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody) = 0;
-    virtual Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) = 0;
+    //virtual Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) = 0;
     virtual Expression *createDo(Expression *body, Expression *condition) = 0;
 
     virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
@@ -54,4 +54,6 @@ public:
 
     virtual Expression *createSelf() = 0;
     virtual Expression *createHere() = 0;
+
+    virtual Expression *createStatic(Expression *body) = 0;
 };

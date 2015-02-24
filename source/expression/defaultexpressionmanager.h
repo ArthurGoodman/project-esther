@@ -33,7 +33,7 @@ public:
 
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
     Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody);
-    Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
+    //Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
     Expression *createDo(Expression *body, Expression *condition);
 
     Expression *createContextResolution(Expression *self, Expression *body);
@@ -49,4 +49,6 @@ public:
 
     Expression *createSelf();
     Expression *createHere();
+
+    Expression *createStatic(Expression *body);
 };

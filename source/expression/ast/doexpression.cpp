@@ -3,6 +3,7 @@
 #include "runtime.h"
 #include "continueexception.h"
 #include "breakexception.h"
+#include "context.h"
 
 DoExpression::DoExpression(Expression *body, Expression *condition)
     : body(body), condition(condition) {
@@ -10,6 +11,8 @@ DoExpression::DoExpression(Expression *body, Expression *condition)
 
 Object *DoExpression::eval(Context *context) {
     Object *value = Runtime::getNull();
+
+    context = context->childContext();
 
     do
         try {

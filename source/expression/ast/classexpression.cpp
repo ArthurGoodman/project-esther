@@ -9,8 +9,6 @@ ClassExpression::ClassExpression(Expression *name, Expression *superclass, Expre
 }
 
 Object *ClassExpression::eval(Context *context) {
-    context = context->childContext();
-
     string name;
     Class *_class = 0, *superclass = 0;
 

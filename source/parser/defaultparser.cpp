@@ -421,8 +421,10 @@ Expression *DefaultParser::term() {
     //}
     else if (accept(tDo)) {
         Expression *body = accept(tLBrace) ? Expression::List(parseBlock()) : oper();
+
         if (!accept(tWhile))
             error("while expected");
+
         e = Expression::Do(body, term());
     }
 
@@ -446,6 +448,9 @@ Expression *DefaultParser::term() {
         e = Expression::Here();
     //else if (accept(tSuper))
     //e = new SuperExpression;
+
+    else if (accept(tStatic))
+        e = Expression::Static(oper());
 
     //else if (range(tStatic, tLambda) || check(tDollar)) {
     //bool isStatic = false;

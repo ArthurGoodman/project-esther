@@ -44,7 +44,7 @@ public:
 
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *While(Expression *condition, Expression *body, Expression *elseBody);
-    static Expression *For(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
+    //static Expression *For(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
     static Expression *Do(Expression *body, Expression *condition);
 
     static Expression *ContextResolution(Expression *self, Expression *body);
@@ -60,6 +60,8 @@ public:
 
     static Expression *Self();
     static Expression *Here();
+
+    static Expression *Static(Expression *body);
 
     virtual Object *eval(Context *context) = 0;
 };

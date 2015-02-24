@@ -4,24 +4,21 @@
 #include "class.h"
 #include "objectcontext.h"
 
+Context::Context(Object *currentSelf, Class *currentClass, Context *parent, int modifiers)
+    : Object("Context"), currentSelf(currentSelf), currentClass(currentClass), parent(parent), modifiers(modifiers) {
+}
+
 Context::Context(Object *currentSelf, Class *currentClass, Context *parent)
-    : Object("Context"), currentSelf(currentSelf), currentClass(currentClass), parent(parent) {
+    : Object("Context"), currentSelf(currentSelf), currentClass(currentClass), parent(parent), modifiers(0) {
 }
 
 Context::Context(Object *currentSelf, Context *parent)
-    : Object("Context"), currentSelf(currentSelf), currentClass(currentSelf->getClass()), parent(parent) {
+    : Object("Context"), currentSelf(currentSelf), currentClass(currentSelf->getClass()), parent(parent), modifiers(0) {
 }
 
 Context::Context()
-    : Object("Context"), currentSelf(Runtime::getMainObject()), currentClass(currentSelf->getClass()), parent(0) {
+    : Object("Context"), currentSelf(Runtime::getMainObject()), currentClass(currentSelf->getClass()), parent(0), modifiers(0) {
 }
-
-//Context::~Context() {
-//    foreach (i, locals)
-//        delete i->second;
-
-//    delete parent;
-//}
 
 Object *Context::getCurrentSelf() {
     return currentSelf;
@@ -86,40 +83,28 @@ bool Context::setId(string name, Object *value) {
 }
 
 Context *Context::childContext(Object *currentSelf, Class *currentClass) {
-    return new Context(currentSelf, currentClass, this);
+    return new Context(currentSelf, currentClass, this, modifiers);
 }
 
 Context *Context::childContext(Object *currentSelf) {
-    return new Context(currentSelf, currentSelf->getClass(), this);
+    return new Context(currentSelf, currentSelf->getClass(), this, modifiers);
 }
 
 Context *Context::childContext() {
-    return new Context(currentSelf, currentClass, this);
+    return new Context(currentSelf, currentClass, this, modifiers);
 }
 
 Context *Context::objectChildContext(Object *currentSelf, Class *currentClass) {
-    return new ObjectContext(currentSelf, currentClass, this);
+    return new ObjectContext(currentSelf, currentClass, this, modifiers);
 }
 
 Context *Context::objectChildContext(Object *currentSelf) {
-    return new ObjectContext(currentSelf, currentSelf->getClass(), this);
+    return new ObjectContext(currentSelf, currentSelf->getClass(), this, modifiers);
 }
 
 Context *Context::objectChildContext() {
-    return new ObjectContext(currentSelf, currentClass, this);
+    return new ObjectContext(currentSelf, currentClass, this, modifiers);
 }
-
-//Context *Context::childContext() {
-//    return new Context(currentSelf, currentClass, this);
-//}
-
-//Context *Context::childContext(Object *self) {
-//    return new Context(self, this);
-//}
-
-//Context *Context::childContext(Object *self, Class *_class) {
-//    return new Context(self, _class, this);
-//}
 
 bool Context::hasParent() {
     return parent;
@@ -127,4 +112,15 @@ bool Context::hasParent() {
 
 Context *Context::getParent() {
     return parent ? parent : 0;
+}
+
+void Context::setModifier(int modifier, bool state) {
+    if (state)
+        modifiers |= modifier;
+    else
+        modifiers &= ~modifier;
+}
+
+int Context::getModifier(int modifier) {
+    return modifiers & modifier;
 }

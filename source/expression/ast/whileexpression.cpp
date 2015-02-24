@@ -3,6 +3,7 @@
 #include "runtime.h"
 #include "continueexception.h"
 #include "breakexception.h"
+#include "context.h"
 
 WhileExpression::WhileExpression(Expression *condition, Expression *body, Expression *elseBody)
     : condition(condition), body(body), elseBody(elseBody) {
@@ -10,6 +11,8 @@ WhileExpression::WhileExpression(Expression *condition, Expression *body, Expres
 
 Object *WhileExpression::eval(Context *context) {
     Object *value = Runtime::getNull();
+
+    context = context->childContext();
 
     if (condition->eval(context)->isTrue()) {
         do

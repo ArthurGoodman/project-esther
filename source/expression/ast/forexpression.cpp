@@ -4,29 +4,9 @@
 #include "continueexception.h"
 #include "breakexception.h"
 
-ForExpression::ForExpression(Expression *preffix, Expression *condition, Expression *suffix, Expression *body)
-    : preffix(preffix), condition(condition), suffix(suffix), body(body) {
+ForExpression::ForExpression() {
 }
 
 Object *ForExpression::eval(Context *context) {
-    Object *value = Runtime::getNull();
-
-    preffix->eval(context);
-
-    while (condition->eval(context)->isTrue())
-        try {
-            value = body->eval(context);
-            suffix->eval(context);
-        } catch (ContinueException *e) {
-            delete e;
-            continue;
-        } catch (BreakException *e) {
-            value = e->value();
-            delete e;
-            break;
-        } catch (Exception *e) {
-            e->raise();
-        }
-
-    return value;
+    return Runtime::getNull();
 }

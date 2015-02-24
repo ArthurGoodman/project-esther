@@ -2,8 +2,8 @@
 
 #include "class.h"
 
-ObjectContext::ObjectContext(Object *currentSelf, Class *currentClass, Context *parent)
-    : Context(currentSelf, currentClass, parent) {
+ObjectContext::ObjectContext(Object *currentSelf, Class *currentClass, Context *parent, int modifiers)
+    : Context(currentSelf, currentClass, parent, modifiers) {
 }
 
 ObjectContext::ObjectContext()
