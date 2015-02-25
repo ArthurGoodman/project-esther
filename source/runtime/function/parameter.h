@@ -15,5 +15,5 @@ public:
     string getName();
     Object *getValue();
 
-    bool equals(Object *other);
+    bool equals(Parameter *other);
 };

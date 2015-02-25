@@ -17,9 +17,11 @@ public:
     Signature(Class *returnClass, list<Parameter *> params);
 
     bool accepts(Tuple *args);
+    bool check(Tuple *args);
+
     Tuple *convert(Tuple *args);
 
-    bool equals(Object *other);
+    bool equals(Signature *other);
 
     list<string> paramsNames();
 };

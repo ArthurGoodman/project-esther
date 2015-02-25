@@ -20,6 +20,7 @@ INCLUDEPATH = source \
     source/runtime/matcher \
     source/runtime/matcher\pattern \
     source/runtime/function \
+    source/runtime/function/functionfeature \
     source/runtime/valueobject
 
 SOURCES += \
@@ -135,7 +136,11 @@ SOURCES += \
     source/expression/ast/functionexpression.cpp \
     source/expression/ast/methodexpression.cpp \
     source/runtime/objectcontext.cpp \
-    source/expression/ast/staticexpression.cpp
+    source/expression/ast/staticexpression.cpp \
+    source/runtime/function/functionfeature/functionfeature.cpp \
+    source/runtime/function/functionfeature/argumentscheckerfeature.cpp \
+    source/runtime/function/functionfeature/selfcheckerfeature.cpp \
+    source/runtime/function/functionfeature/staticselfcheckerfeature.cpp
 
 HEADERS += \
     source/esther.h \
@@ -252,7 +257,11 @@ HEADERS += \
     source/expression/ast/functionexpression.h \
     source/expression/ast/methodexpression.h \
     source/runtime/objectcontext.h \
-    source/expression/ast/staticexpression.h
+    source/expression/ast/staticexpression.h \
+    source/runtime/function/functionfeature/functionfeature.h \
+    source/runtime/function/functionfeature/argumentscheckerfeature.h \
+    source/runtime/function/functionfeature/selfcheckerfeature.h \
+    source/runtime/function/functionfeature/staticselfcheckerfeature.h
 
 OTHER_FILES += \
     README.MD \

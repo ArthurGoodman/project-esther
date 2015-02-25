@@ -29,7 +29,7 @@ void Class::setSuperclass(Class *superclass) {
 }
 
 bool Class::isChild(Class *_class) {
-    return this->equals(_class) || (superclass ? (superclass->equals(_class) ? true : superclass->isChild(_class)) : false);
+    return this == _class || (superclass ? (superclass == _class ? true : superclass->isChild(_class)) : false);
 }
 
 Object *Class::newInstance() {
@@ -84,6 +84,9 @@ Method *Class::lookup(string name) {
 }
 
 Object *Class::call(string name, Tuple *args) {
+    if(hasMethod(name))
+        return getMethod(name)->invoke(this, args);
+
     return Object::call(name, args);
 }
 

@@ -1,17 +1,20 @@
 #include "method.h"
 
-Method::Method(string name, Context *context, Signature *signature, Block *body)
-    : Function("Method", name, context, signature, body) {
-}
+#include "selfcheckerfeature.h"
+#include "staticselfcheckerfeature.h"
 
-Object *Method::invoke(Object *self, Tuple *args) {
-    return Function::invoke(self, args);
+Method::Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag)
+    : Function("Method", name, context, signature, body), staticFlag(staticFlag) {
+    if (staticFlag)
+        addFeature(new StaticSelfCheckerFeature(self));
+    else
+        addFeature(new SelfCheckerFeature((Class *)self));
 }
 
 string Method::toString() {
     return name.empty() ? "<anonymous method>" : "<method " + name + ">";
 }
 
-void Method::check(Object *self, Tuple *args) {
-    return Function::check(self, args);
+bool Method::isStatic() {
+    return staticFlag;
 }

@@ -21,4 +21,10 @@ void IntegerClass::setupMethods() {
     };
 
     setMethod("+", new Signature("Integer", {"Integer"}), plusMethod);
+
+    auto equalsMethod = [](Object * self, Tuple * args) -> Object * {
+        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toInteger() == ((ValueObject *)args->at(0))->getVariant().toInteger());
+    };
+
+    setMethod("equals", new Signature("Boolean", {"Integer"}), equalsMethod);
 }

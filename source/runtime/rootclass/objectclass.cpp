@@ -35,9 +35,20 @@ void ObjectClass::setupMethods() {
     setMethod("print", new Signature("Object", {}), printMethod);
 
     auto equalsMethod = [](Object * self, Tuple * args) -> Object * {
-        return Runtime::toBoolean(self->equals(args->at(0)));
+        return Runtime::toBoolean(self == args->at(0));
     };
 
     setMethod("equals", new Signature("Boolean", {"Object"}), equalsMethod);
-    setAttribute("==", getMethod("equals"));
+
+    auto equalsOperator = [](Object * self, Tuple * args) -> Object * {
+        return Runtime::toBoolean(self->equals(args->at(0)));
+    };
+
+    setMethod("==", new Signature("Boolean", {"Object"}), equalsOperator);
+
+    auto notEqualsOperator = [](Object * self, Tuple * args) -> Object * {
+        return Runtime::toBoolean(!self->equals(args->at(0)));
+    };
+
+    setMethod("!=", new Signature("Boolean", {"Object"}), notEqualsOperator);
 }

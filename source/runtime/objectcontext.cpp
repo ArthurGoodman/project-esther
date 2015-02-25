@@ -35,10 +35,6 @@ Object *ObjectContext::getId(string name) {
 }
 
 bool ObjectContext::setId(string name, Object *value) {
-    //    if (currentSelf->hasAttribute(name)) {
     currentSelf->setAttribute(name, value);
     return true;
-    //    }
-
-    //    return Context::setId(name, value);
 }

@@ -8,6 +8,7 @@ public:
     StringClass();
 
     Object *newInstance();
+    Object *newInstance(Tuple *args);
 
     void setupMethods();
 };

@@ -29,11 +29,21 @@ bool Signature::accepts(Tuple *args) {
     if (args->size() > (int)params.size())
         return false;
 
-    //    Tuple::iterator j = args->begin();
+    int c = 0;
 
-    //    foreach (i, params)
-    //        if (!(*j++)->converts((*i)->getType()))
-    //            return false;
+    foreach (i, params) {
+        if ((c >= args->size() && !(*i)->getValue()) || (c < args->size() && !args->at(c)->converts((*i)->getType())))
+            return false;
+
+        c++;
+    }
+
+    return true;
+}
+
+bool Signature::check(Tuple *args) {
+    if (args->size() > (int)params.size())
+        return false;
 
     int c = 0;
 
@@ -50,11 +60,6 @@ bool Signature::accepts(Tuple *args) {
 Tuple *Signature::convert(Tuple *args) {
     Tuple *convertedArgs = new Tuple(params.size());
 
-    //    list<Parameter *>::iterator j = params.begin();
-
-    //    for (int i = 0; i < args->size(); i++)
-    //        convertedArgs->at(i) = args->at(i)->as((*j++)->getType());
-
     int c = 0;
 
     foreach (i, params) {
@@ -69,19 +74,17 @@ Tuple *Signature::convert(Tuple *args) {
     return convertedArgs;
 }
 
-bool Signature::equals(Object *other) {
-    if (!dynamic_cast<Signature *>(other))
+bool Signature::equals(Signature *other) {
+    if (returnClass != other->returnClass)
         return false;
 
-    Signature *otherSignature = (Signature *)other;
-
-    if (!returnClass->equals(otherSignature->returnClass))
+    if(params.size() != other->params.size())
         return false;
 
-    list<Parameter *>::iterator j = otherSignature->params.begin();
+    list<Parameter *>::iterator j = other->params.begin();
 
     foreach (i, params)
-        if (!(*i)->equals(*j++))
+        if (*i != *j++)
             return false;
 
     return true;

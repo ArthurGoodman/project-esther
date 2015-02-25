@@ -4,12 +4,14 @@
 #include "function.h"
 
 class Method : public Function {
-public:
-    Method(string name, Context *context, Signature *signature, Block *body);
+    bool staticFlag;
 
-    virtual Object *invoke(Object *self, Tuple *args);
+public:
+    Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool isStatic = false);
 
     string toString();
 
     void check(Object *self, Tuple *args);
+
+    bool isStatic();
 };

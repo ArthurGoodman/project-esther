@@ -32,6 +32,7 @@ public:
 
     virtual Object *call(string name, Tuple *args);
     virtual Object *call(string name, Object *arg);
+    Object *call(string name, Object *arg, string expectedClassName);
     virtual Object *call(string name);
 
     virtual bool isTrue();
@@ -40,5 +41,5 @@ public:
 
     virtual string toString();
 
-    virtual bool equals(Object *other);
+    bool equals(Object *other);
 };

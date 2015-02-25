@@ -18,9 +18,6 @@ Object *Parameter::getValue() {
     return value;
 }
 
-bool Parameter::equals(Object *other) {
-    if (!dynamic_cast<Parameter *>(other))
-        return false;
-
-    return type->equals(((Parameter *)other)->type) && (value ? value->equals(((Parameter *)other)->value) : true);
+bool Parameter::equals(Parameter *other) {
+    return type->equals(other->type) && ((value && other->value) ? value->equals(other->value) : true);
 }

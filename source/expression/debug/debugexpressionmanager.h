@@ -52,6 +52,8 @@ public:
 
     Expression *createSelf();
     Expression *createHere();
+
+    Expression * createStatic(Expression *body);
 };
 
 #endif

@@ -20,5 +20,9 @@ RootClass::RootClass(string name)
 }
 
 void RootClass::setMethod(string name, Signature *signature, function<Object *(Object *, Tuple *)> body) {
-    Class::setMethod(new NativeMethod(name, signature, new NativeBlock(body)));
+    Class::setMethod(new NativeMethod(name, signature, new NativeBlock(body), this));
+}
+
+void RootClass::setStaticMethod(string name, Signature *signature, function<Object *(Object *, Tuple *)> body) {
+    Class::setMethod(new NativeMethod(name, signature, new NativeBlock(body), this, true));
 }

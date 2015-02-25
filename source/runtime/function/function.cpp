@@ -7,13 +7,17 @@
 #include "logger.h"
 #include "signature.h"
 #include "returnexception.h"
+#include "functionfeature.h"
+#include "argumentscheckerfeature.h"
 
 Function::Function(string className, string name, Context *context, Signature *signature, Block *body)
     : Object(className), name(name), context(context), signature(signature), body(body) {
+    addFeature(new ArgumentsCheckerFeature(signature));
 }
 
 Function::Function(string name, Context *context, Signature *signature, Block *body)
     : Object("Function"), name(name), context(context), signature(signature), body(body) {
+    addFeature(new ArgumentsCheckerFeature(signature));
 }
 
 string Function::getName() {
@@ -25,8 +29,13 @@ Signature *Function::getSignature() {
 }
 
 Object *Function::invoke(Object *self, Tuple *args) {
-    check(self, args);
+    foreach (i, features)
+        (*i)->check(self, args);
 
+    return execute(self, args);
+}
+
+Object *Function::execute(Object *self, Tuple *args) {
     args = signature->convert(args);
 
     context = context->childContext(self);
@@ -52,7 +61,6 @@ string Function::toString() {
     return name.empty() ? "<anonymous function>" : "<function " + name + ">";
 }
 
-void Function::check(Object *, Tuple *args) {
-    if (!signature->accepts(args))
-        Runtime::runtimeError("invalid arguments");
+void Function::addFeature(FunctionFeature *feature) {
+    features << feature;
 }

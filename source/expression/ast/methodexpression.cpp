@@ -25,7 +25,10 @@ Object *MethodExpression::eval(Context *context) {
     foreach (i, params)
         evaledParams << (Parameter *)(*i)->eval(context);
 
-    Method *f = new Method(name, context, new Signature(type, evaledParams), new InterpretedBlock(body));
+    bool isStatic = context->getModifier(Context::StaticModifier);
+    Object *self = isStatic ? context->getCurrentSelf() : (Object *)context->getCurrentClass();
+
+    Method *f = new Method(name, context, new Signature(type, evaledParams), new InterpretedBlock(body), self, isStatic);
 
     if (!name.empty())
         context->setLocal(name, f);

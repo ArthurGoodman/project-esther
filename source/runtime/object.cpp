@@ -91,6 +91,15 @@ Object *Object::call(string name, Object *arg) {
     return call(name, new Tuple(list<Object *>(1, arg)));
 }
 
+Object *Object::call(string name, Object *arg, string expectedClassName) {
+    Object *value = call(name, new Tuple(list<Object *>(1, arg)));
+
+    if(!value->is(Runtime::getRootClass(expectedClassName)))
+        Runtime::runtimeError("invalid return class");
+
+    return value;
+}
+
 Object *Object::call(string name) {
     return call(name, new Tuple(list<Object *>()));
 }
@@ -112,5 +121,5 @@ string Object::toString() {
 }
 
 bool Object::equals(Object *other) {
-    return this == other;
+    return call("equals", other, "Boolean")->isTrue();
 }

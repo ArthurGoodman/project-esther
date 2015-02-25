@@ -297,4 +297,12 @@ Expression *DebugExpressionManager::createHere() {
     return new DebugExpression("Here");
 }
 
+Expression *DebugExpressionManager::createStatic(Expression *body) {
+    list<Object *> arguments;
+
+    arguments << body;
+
+    return new DebugExpression("Static", arguments);
+}
+
 #endif
