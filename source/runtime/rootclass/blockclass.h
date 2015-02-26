@@ -1,12 +1,10 @@
 #pragma once
-#include "common.h"
 
 #include "rootclass.h"
 
-class InterfaceClass : public RootClass
-{
+class BlockClass : public RootClass {
 public:
-    InterfaceClass();
+    BlockClass();
 
     Object *newInstance();
 

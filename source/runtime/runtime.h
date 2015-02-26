@@ -21,8 +21,6 @@ class Runtime {
 
     static map<string, RootClass *> rootClasses;
 
-    //static CallStack *callStack;
-
 public:
     static void initialize();
     static void release();
@@ -33,10 +31,6 @@ public:
     static Object *getTrue();
     static Object *getFalse();
     static Object *getNull();
-
-    //static CallStack *getCallStack();
-    //static void beginCall(Call *call);
-    //static void endCall();
 
     static bool hasRootClass(string name);
     static Class *getRootClass(string name);

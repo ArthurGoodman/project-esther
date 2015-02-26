@@ -25,6 +25,7 @@ public:
 
     string getName();
     Signature *getSignature();
+    Block *getBody();
 
     virtual Object *invoke(Object *self, Tuple *args);
     virtual Object *execute(Object *self, Tuple *args);

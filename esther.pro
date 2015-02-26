@@ -84,7 +84,6 @@ SOURCES += \
     source/parser/defaultparser.cpp \
     source/parser/parser.cpp \
     source/runtime/call.cpp \
-    source/runtime/callstack.cpp \
     source/runtime/class.cpp \
     source/runtime/context.cpp \
     source/runtime/false.cpp \
@@ -129,8 +128,6 @@ SOURCES += \
     source/runtime/matcher/patternblock.cpp \
     source/runtime/matcher/pattern/pattern.cpp \
     source/runtime/matcher/pattern/wildcardpattern.cpp \
-    source/runtime/interface.cpp \
-    source/runtime/rootclass/interfaceclass.cpp \
     source/expression/ast/parameterexpression.cpp \
     source/runtime/function/parameter.cpp \
     source/expression/ast/functionexpression.cpp \
@@ -140,7 +137,8 @@ SOURCES += \
     source/runtime/function/functionfeature/functionfeature.cpp \
     source/runtime/function/functionfeature/argumentscheckerfeature.cpp \
     source/runtime/function/functionfeature/selfcheckerfeature.cpp \
-    source/runtime/function/functionfeature/staticselfcheckerfeature.cpp
+    source/runtime/function/functionfeature/staticselfcheckerfeature.cpp \
+    source/runtime/rootclass/blockclass.cpp
 
 HEADERS += \
     source/esther.h \
@@ -204,7 +202,6 @@ HEADERS += \
     source/parser/defaultparser.h \
     source/parser/parser.h \
     source/runtime/call.h \
-    source/runtime/callstack.h \
     source/runtime/class.h \
     source/runtime/context.h \
     source/runtime/false.h \
@@ -250,8 +247,6 @@ HEADERS += \
     source/runtime/matcher/patternblock.h \
     source/runtime/matcher/pattern/pattern.h \
     source/runtime/matcher/pattern/wildcardpattern.h \
-    source/runtime/interface.h \
-    source/runtime/rootclass/interfaceclass.h \
     source/expression/ast/parameterexpression.h \
     source/runtime/function/parameter.h \
     source/expression/ast/functionexpression.h \
@@ -261,7 +256,8 @@ HEADERS += \
     source/runtime/function/functionfeature/functionfeature.h \
     source/runtime/function/functionfeature/argumentscheckerfeature.h \
     source/runtime/function/functionfeature/selfcheckerfeature.h \
-    source/runtime/function/functionfeature/staticselfcheckerfeature.h
+    source/runtime/function/functionfeature/staticselfcheckerfeature.h \
+    source/runtime/rootclass/blockclass.h
 
 OTHER_FILES += \
     README.MD \

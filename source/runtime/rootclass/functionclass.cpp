@@ -25,4 +25,10 @@ void FunctionClass::setupMethods() {
 
     setMethod("call", new Signature("Object", {"Context", "Tuple"}), parenthesesMethod);
     setAttribute("()", getMethod("call"));
+
+    auto bodyMethod = [](Object * self, Tuple *) -> Object * {
+        return ((Function *)self)->getBody();
+    };
+
+    setMethod("body", new Signature("Block", {}), bodyMethod);
 }

@@ -22,7 +22,7 @@
 #include "stringclass.h"
 #include "tupleclass.h"
 #include "contextclass.h"
-#include "interfaceclass.h"
+#include "blockclass.h"
 
 Context *Runtime::root;
 
@@ -34,8 +34,6 @@ Object *Runtime::falseObject;
 Object *Runtime::nullObject;
 
 map<string, RootClass *> Runtime::rootClasses;
-
-//CallStack *Runtime::callStack;
 
 void Runtime::initialize() {
     objectClass = new ObjectClass;
@@ -57,6 +55,8 @@ void Runtime::initialize() {
 
     new ContextClass;
 
+    new BlockClass;
+
     mainObject = new Object;
 
     trueObject = new True;
@@ -64,10 +64,6 @@ void Runtime::initialize() {
     nullObject = new Null;
 
     root = new ObjectContext;
-
-    //callStack = new CallStack;
-
-    new InterfaceClass;
 
     foreach (i, rootClasses)
         i->second->setupMethods();
@@ -111,18 +107,6 @@ Object *Runtime::getFalse() {
 Object *Runtime::getNull() {
     return nullObject;
 }
-
-//CallStack *Runtime::getCallStack() {
-//    return callStack;
-//}
-
-//void Runtime::beginCall(Call *call) {
-//    callStack->beginCall(call);
-//}
-
-//void Runtime::endCall() {
-//    callStack->endCall();
-//}
 
 bool Runtime::hasRootClass(string name) {
     return rootClasses.find(name) != rootClasses.end();

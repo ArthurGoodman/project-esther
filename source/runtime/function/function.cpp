@@ -28,6 +28,10 @@ Signature *Function::getSignature() {
     return signature;
 }
 
+Block *Function::getBody() {
+    return body;
+}
+
 Object *Function::invoke(Object *self, Tuple *args) {
     foreach (i, features)
         (*i)->check(self, args);

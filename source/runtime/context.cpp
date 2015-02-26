@@ -111,7 +111,7 @@ bool Context::hasParent() {
 }
 
 Context *Context::getParent() {
-    return parent ? parent : 0;
+    return parent ? parent : (Context *)Runtime::getNull();
 }
 
 void Context::setModifier(int modifier, bool state) {

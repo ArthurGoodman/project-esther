@@ -580,6 +580,21 @@ Expression *DefaultParser::term() {
         }
     }
 
+    else if (accept(tNew)) {
+        Expression *body = term();
+
+        list<Expression *> args;
+
+        if (accept(tLPar)) {
+            args = check(tRPar) ? list<Expression *>() : parseList();
+
+            if (!accept(tRPar))
+                error("unmatched parentheses");
+        }
+
+        e = Expression::Call(body, "new", args);
+    }
+
     //else if(accept(tTry)) {}
 
     else if (accept(tLPar)) {
