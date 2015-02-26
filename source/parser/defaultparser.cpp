@@ -228,19 +228,6 @@ Expression *DefaultParser::preffix() {
         e = Expression::Call(suffix(), "-");
     else if (accept(tNot))
         e = Expression::Negate(suffix());
-    //else if (accept(tInclude))
-    //e = new IncludeExpression(suffix());
-    //else if (accept(tDot)) {
-    //if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tDot) && !check(tEnd))
-    //    (*token).setId(tId);
-
-    //Expression *body = assign();
-
-    //if (dynamic_cast<BlockExpression *>(body))
-    //    ((BlockExpression *)body)->disableChildContext();
-
-    //e = new ContextResolutionExpression(0, body);
-    //}
     else if (accept(tDec))
         e = Expression::PreDecrement(suffix());
     else if (accept(tInc))
@@ -279,50 +266,6 @@ Expression *DefaultParser::suffix() {
 
 Expression *DefaultParser::term() {
     Expression *e = 0;
-
-    //if (check(tAt) || check(tId) || check(tColon)) {
-    //bool attribute = accept(tAt);
-
-    //if (attribute && !check(tId) && !check(tColon))
-    //    error("identifier expected");
-
-    //Expression *name = 0, *type = 0;
-
-    //if (check(tId)) {
-    //    name = new LiteralExpression(/*new String(token.text())*/ 0);
-    //    getToken();
-    //} else {
-    //    getToken();
-
-    //    if (check(tLPar) || check(tLBrace) || check(tEnd))
-    //        name = term();
-    //    else {
-    //        name = new LiteralExpression(/*new String(token.text())*/ 0);
-    //        getToken();
-    //    }
-    //}
-
-    //if (accept(tColon)) {
-    //    if (!check(tId) && !check(tColon))
-    //        error("identifier expected");
-
-    //    if (check(tId)) {
-    //        type = new LiteralExpression(/*new String(token.text())*/ 0);
-    //        getToken();
-    //    } else {
-    //        getToken();
-
-    //        if (check(tLPar) || check(tLBrace) || check(tEnd))
-    //            type = term();
-    //        else {
-    //            type = new LiteralExpression(/*new String(token.text())*/ 0);
-    //            getToken();
-    //        }
-    //    }
-    //}
-
-    //e = new IdentifierExpression(name, type, accept(tAssign) ? logicOr() : 0, attribute);
-    //}
 
     if (check(tId) || check(tDollar)) {
         Expression *type = 0, *name = parseIdentifier(), *value = 0;
@@ -373,22 +316,12 @@ Expression *DefaultParser::term() {
         getToken();
     }
 
-    //else if (accept(tLBracket)) {
-    //e = new ListExpression(((BlockExpression *)expr())->getExpressions());
-    //if (!accept(tRBracket))
-    //    error("unmatched brackets");
-    //} else if (accept(tLt)) {
-    //e = new VectorExpression(((BlockExpression *)expr())->getExpressions());
-    //if (!accept(tGt))
-    //    error("unmatched brackets");
-    //}
-
     else if (check(tIf) || check(tWhile)) {
         int id = token->getId();
 
         getToken();
 
-        Expression *condition = term(), *body = accept(tLBrace) ? Expression::List(parseBlock()) : oper(), *elseBody = 0;
+        Expression *condition = expr(), *body = accept(tLBrace) ? Expression::List(parseBlock()) : oper(), *elseBody = 0;
 
         while (check(tElse) || check(tElif)) {
             if (accept(tElse)) {
@@ -452,53 +385,6 @@ Expression *DefaultParser::term() {
     else if (accept(tStatic))
         e = Expression::Static(oper());
 
-    //else if (range(tStatic, tLambda) || check(tDollar)) {
-    //bool isStatic = false;
-    //if (accept(tStatic))
-    //    isStatic = true;
-    //if (!range(tMethod, tLambda) && !check(tDollar))
-    //    error("method expected");
-
-    //int type = (*token).id();
-    //getToken();
-
-    //IdentifierExpression *name = 0;
-    //list<IdentifierExpression *> params;
-
-    //if (type == tMethod || type == tFunction || (type == tDollar && (check(tId) || check(tColon)))) {
-    //    if (!check(tId) && !check(tColon))
-    //        error("identifier expected");
-    //    name = (IdentifierExpression *)term();
-    //}
-
-    //if (accept((tLPar))) {
-    //    list<Expression *> expressions = check(tRPar) ? list<Expression *>() : ((BlockExpression *)expr())->getExpressions();
-
-    //    foreach (n, expressions) {
-    //        if (!dynamic_cast<IdentifierExpression *>(*n))
-    //            error("identifier expected");
-    //        params << *n;
-    //    }
-
-    //    if (!accept(tRPar))
-    //        error("unmatched parentheses");
-    //}
-
-    //switch (type) {
-    //case tMethod:
-    //    e = new CallableExpression(name, params, assign(), tMethod, isStatic);
-    //    break;
-    //case tFunction:
-    //    e = new CallableExpression(name, params, assign(), tFunction, isStatic);
-    //    break;
-    //case tLambda:
-    //    e = new CallableExpression(new IdentifierExpression(new LiteralExpression(/*new String("")*/ 0), 0, 0, false), params, assign(), tLambda, isStatic);
-    //    break;
-    //case tDollar:
-    //    e = !name ? (Expression *)new CallableExpression(new IdentifierExpression(new LiteralExpression(/*new String("")*/ 0), 0, 0, false), params, assign(), tDollar, isStatic) : (Expression *)new CallableExpression(name, params, assign(), tDollar, isStatic);
-    //    break;
-    //}
-    //}
     else if (accept(tClass)) {
         Expression *name = 0, *superClass = 0, *body;
 

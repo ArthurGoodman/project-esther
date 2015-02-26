@@ -17,4 +17,7 @@ public:
     Variant getVariant();
 
     string toString();
+
+protected:
+    void setVariant(Variant value);
 };

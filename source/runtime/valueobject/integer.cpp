@@ -7,3 +7,7 @@ Integer::Integer(int value)
 Integer::Integer()
     : ValueObject(0) {
 }
+
+void Integer::setValue(int value) {
+    setVariant(Variant(value));
+}

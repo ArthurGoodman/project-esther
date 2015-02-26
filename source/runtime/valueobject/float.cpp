@@ -7,3 +7,7 @@ Float::Float(double value)
 Float::Float()
     : ValueObject(0.) {
 }
+
+void Float::setValue(double value) {
+    setVariant(Variant(value));
+}

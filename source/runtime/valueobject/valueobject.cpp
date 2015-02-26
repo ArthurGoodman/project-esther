@@ -23,3 +23,7 @@ Variant ValueObject::getVariant() {
 string ValueObject::toString() {
     return value.toString();
 }
+
+void ValueObject::setVariant(Variant value) {
+    this->value = value;
+}
