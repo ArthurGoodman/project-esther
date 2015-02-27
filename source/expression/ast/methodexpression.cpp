@@ -26,7 +26,7 @@ Object *MethodExpression::eval(Context *context) {
         evaledParams << (Parameter *)(*i)->eval(context);
 
     bool isStatic = context->getModifier(Context::StaticModifier);
-    Object *self = isStatic ? context->getCurrentSelf() : (Object *)context->getCurrentClass();
+    Object *self = (isStatic || dynamic_cast<Class *>(context->getCurrentSelf())) ? context->getCurrentSelf() : (Object *)context->getCurrentClass();
 
     Method *f = new Method(name, context, new Signature(type, evaledParams), new InterpretedBlock(body), self, isStatic);
 

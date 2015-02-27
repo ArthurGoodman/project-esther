@@ -53,8 +53,12 @@ Object *Class::getAttribute(string name) {
 void Class::setAttribute(string name, Object *value) {
     if (dynamic_cast<Method *>(value))
         setMethod(name, (Method *)value);
-    else
+    else {
+       if(hasMethod(name))
+           methods.erase(name);
+
         Object::setAttribute(name, value);
+    }
 }
 
 bool Class::hasMethod(string name) {

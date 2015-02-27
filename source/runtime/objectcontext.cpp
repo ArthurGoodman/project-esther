@@ -10,6 +10,14 @@ ObjectContext::ObjectContext()
     : Context() {
 }
 
+bool ObjectContext::hasLocal(string name) {
+    return currentSelf->hasAttribute(name);
+}
+
+Object *ObjectContext::getLocal(string name) {
+    return currentSelf->getAttribute(name);
+}
+
 void ObjectContext::setLocal(string name, Object *value) {
     currentSelf->setAttribute(name, value);
 }

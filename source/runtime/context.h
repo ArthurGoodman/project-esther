@@ -27,8 +27,8 @@ public:
 
     bool isObjectContext();
 
-    bool hasLocal(string name);
-    Object *getLocal(string name);
+    virtual bool hasLocal(string name);
+    virtual Object *getLocal(string name);
     virtual void setLocal(string name, Object *value);
 
     virtual bool hasId(string name);
