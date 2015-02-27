@@ -3,8 +3,16 @@
 #include "selfcheckerfeature.h"
 #include "staticselfcheckerfeature.h"
 
+Method::Method(string className, string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag)
+    : Function(className, name, context, signature, body), staticFlag(staticFlag), self(self) {
+    if (staticFlag)
+        addFeature(new StaticSelfCheckerFeature(self));
+    else
+        addFeature(new SelfCheckerFeature((Class *)self));
+}
+
 Method::Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag)
-    : Function("Method", name, context, signature, body), staticFlag(staticFlag) {
+    : Function("Method", name, context, signature, body), staticFlag(staticFlag), self(self) {
     if (staticFlag)
         addFeature(new StaticSelfCheckerFeature(self));
     else
@@ -17,4 +25,8 @@ string Method::toString() {
 
 bool Method::isStatic() {
     return staticFlag;
+}
+
+Object *Method::getSelf() {
+    return self;
 }

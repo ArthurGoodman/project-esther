@@ -57,6 +57,22 @@ void Runtime::initialize() {
 
     new BlockClass;
 
+    class OverloadedMethdoClass : public RootClass {
+    public:
+        OverloadedMethdoClass()
+            : RootClass("OverloadedMethod", "Method") {
+        }
+
+        Object *newInstance() {
+            return 0;
+        }
+
+        void setupMethods() {
+        }
+    };
+
+    new OverloadedMethdoClass;
+
     mainObject = new Object;
 
     trueObject = new True;

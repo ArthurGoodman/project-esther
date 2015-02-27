@@ -5,13 +5,16 @@
 
 class Method : public Function {
     bool staticFlag;
+    Object *self;
+
+protected:
+    Method(string className, string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag = false);
 
 public:
-    Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool isStatic = false);
+    Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag = false);
 
     string toString();
 
-    void check(Object *self, Tuple *args);
-
     bool isStatic();
+    Object *getSelf();
 };

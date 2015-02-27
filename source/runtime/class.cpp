@@ -3,6 +3,7 @@
 #include "runtime.h"
 #include "tuple.h"
 #include "method.h"
+#include "overloadedmethod.h"
 
 Class::Class(string name, Class *superclass)
     : Object("Class"), name(name), superclass(superclass) {
@@ -33,12 +34,16 @@ bool Class::isChild(Class *_class) {
 }
 
 Object *Class::newInstance() {
-    return new Object(this);
+    Object *instance = new Object(this);
+    if (lookup("initialize"))
+        instance->call("initialize");
+    return instance;
 }
 
 Object *Class::newInstance(Tuple *args) {
     Object *instance = new Object(this);
-    instance->call(name, args);
+    if (lookup("initialize"))
+        instance->call("initialize", args);
     return instance;
 }
 
@@ -54,8 +59,8 @@ void Class::setAttribute(string name, Object *value) {
     if (dynamic_cast<Method *>(value))
         setMethod(name, (Method *)value);
     else {
-       if(hasMethod(name))
-           methods.erase(name);
+        if (hasMethod(name))
+            methods.erase(name);
 
         Object::setAttribute(name, value);
     }
@@ -74,6 +79,25 @@ void Class::setMethod(Method *method) {
 }
 
 void Class::setMethod(string name, Method *method) {
+    if (hasMethod(name)) {
+        Method *existing = getMethod(name);
+
+        if (existing->isStatic() == method->isStatic() && existing->getSelf() == method->getSelf()) {
+            if (dynamic_cast<OverloadedMethod *>(existing)) {
+                OverloadedMethod *overloadedMethod = (OverloadedMethod *)existing;
+                overloadedMethod->addMethod(method);
+            } else {
+                OverloadedMethod *newMethod = new OverloadedMethod(name, method->getSelf(), method->isStatic());
+                newMethod->addMethod(existing);
+                newMethod->addMethod(method);
+
+                methods[name] = newMethod;
+            }
+
+            return;
+        }
+    }
+
     methods[name] = method;
 }
 
@@ -88,7 +112,7 @@ Method *Class::lookup(string name) {
 }
 
 Object *Class::call(string name, Tuple *args) {
-    if(hasMethod(name))
+    if (hasMethod(name))
         return getMethod(name)->invoke(this, args);
 
     return Object::call(name, args);

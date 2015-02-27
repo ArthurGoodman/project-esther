@@ -48,7 +48,7 @@ bool Signature::check(Tuple *args) {
     int c = 0;
 
     foreach (i, params) {
-        if ((c >= args->size() && !(*i)->getValue()) || (c < args->size() && !args->at(c)->converts((*i)->getType())))
+        if ((c >= args->size() && !(*i)->getValue()) || (c < args->size() && args->at(c)->getClass() != (*i)->getType()))
             return false;
 
         c++;

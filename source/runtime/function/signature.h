@@ -16,7 +16,7 @@ public:
     Signature(string returnClassName, list<string> paramsClassesNames);
     Signature(Class *returnClass, list<Parameter *> params);
 
-    bool accepts(Tuple *args);
+    virtual bool accepts(Tuple *args);
     bool check(Tuple *args);
 
     Tuple *convert(Tuple *args);

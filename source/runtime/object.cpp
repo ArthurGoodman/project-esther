@@ -55,10 +55,10 @@ bool Object::converts(Class *_class) {
     if (is(_class))
         return true;
 
-    if (!_class->hasMethod(_class->getName()))
+    if (!_class->hasMethod("initialize"))
         return false;
 
-    Method *constructor = _class->getMethod(_class->getName());
+    Method *constructor = _class->getMethod("initialize");
 
     if (!constructor->getSignature()->equals(new Signature(Runtime::getObjectClass(), {objectClass})))
         return false;

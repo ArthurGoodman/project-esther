@@ -6,8 +6,11 @@
 class NativeBlock;
 
 class NativeMethod : public Method {
+protected:
+    NativeMethod(string className, string name, Context *context, Signature *signature, NativeBlock *body, Object *self, bool staticFlag = false);
+
 public:
-    NativeMethod(string name, Signature *signature, NativeBlock *body, Object *self, bool isStatic = false);
+    NativeMethod(string name, Signature *signature, NativeBlock *body, Object *self, bool staticFlag = false);
 
     Object *execute(Object *self, Tuple *args);
 };
