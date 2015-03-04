@@ -9,24 +9,24 @@ Signature::Signature()
     : returnClass(Runtime::getObjectClass()) {
 }
 
-Signature::Signature(Class *returnClass, list<Class *> paramsClasses)
-    : returnClass(returnClass) {
+Signature::Signature(Class *returnClass, list<Class *> paramsClasses, bool variadic)
+    : returnClass(returnClass), variadic(variadic) {
     foreach (i, paramsClasses)
         params << new Parameter(*i, "", 0);
 }
 
-Signature::Signature(string returnClassName, list<string> argsClassesNames)
-    : returnClass(Runtime::getRootClass(returnClassName)) {
+Signature::Signature(string returnClassName, list<string> argsClassesNames, bool variadic)
+    : returnClass(Runtime::getRootClass(returnClassName)), variadic(variadic) {
     foreach (i, argsClassesNames)
         params << new Parameter(Runtime::getRootClass(*i), "", 0);
 }
 
-Signature::Signature(Class *returnClass, list<Parameter *> params)
-    : returnClass(returnClass), params(params) {
+Signature::Signature(Class *returnClass, list<Parameter *> params, bool variadic)
+    : returnClass(returnClass), params(params), variadic(variadic) {
 }
 
 bool Signature::accepts(Tuple *args) {
-    if (args->size() > (int)params.size())
+    if (!variadic && args->size() > (int)params.size())
         return false;
 
     int c = 0;
@@ -42,7 +42,7 @@ bool Signature::accepts(Tuple *args) {
 }
 
 bool Signature::check(Tuple *args) {
-    if (args->size() > (int)params.size())
+    if (!variadic && args->size() > (int)params.size())
         return false;
 
     int c = 0;
@@ -58,7 +58,7 @@ bool Signature::check(Tuple *args) {
 }
 
 Tuple *Signature::convert(Tuple *args) {
-    Tuple *convertedArgs = new Tuple(params.size());
+    Tuple *convertedArgs = new Tuple(variadic ? max((int)params.size(), args->size()) : params.size());
 
     int c = 0;
 
@@ -71,14 +71,20 @@ Tuple *Signature::convert(Tuple *args) {
         c++;
     }
 
+    for (; c < args->size(); c++)
+        convertedArgs->at(c) = args->at(c);
+
     return convertedArgs;
 }
 
 bool Signature::equals(Signature *other) {
+    if(variadic != other->variadic)
+        return false;
+
     if (returnClass != other->returnClass)
         return false;
 
-    if(params.size() != other->params.size())
+    if (params.size() != other->params.size())
         return false;
 
     list<Parameter *>::iterator j = other->params.begin();

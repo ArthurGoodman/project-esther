@@ -57,9 +57,9 @@ void Runtime::initialize() {
 
     new BlockClass;
 
-    class OverloadedMethdoClass : public RootClass {
+    class OverloadedMethodClass : public RootClass {
     public:
-        OverloadedMethdoClass()
+        OverloadedMethodClass()
             : RootClass("OverloadedMethod", "Method") {
         }
 
@@ -71,7 +71,7 @@ void Runtime::initialize() {
         }
     };
 
-    new OverloadedMethdoClass;
+    new OverloadedMethodClass;
 
     mainObject = new Object;
 

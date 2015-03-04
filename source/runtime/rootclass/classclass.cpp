@@ -5,6 +5,7 @@
 #include "nativeblock.h"
 #include "string.h"
 #include "signature.h"
+#include "tuple.h"
 
 ClassClass::ClassClass()
     : RootClass("Class") {
@@ -17,11 +18,11 @@ Object *ClassClass::newInstance() {
 }
 
 void ClassClass::setupMethods() {
-    auto newMethod = [](Object * self, Tuple *) -> Object * {
-        return ((Class *)self)->newInstance();
+    auto newMethod = [](Object * self, Tuple * args) -> Object * {
+        return ((Class *)self)->newInstance(args);
     };
 
-    setMethod("new", new Signature("Object", {}), newMethod);
+    setMethod("new", new Signature("Object", {}, true), newMethod);
 
     auto superclassMethod = [](Object * self, Tuple *) -> Object * {
         return ((Class *)self)->getSuperclass();
@@ -34,4 +35,10 @@ void ClassClass::setupMethods() {
     };
 
     setMethod("name", new Signature("String", {}), nameMethod);
+
+    auto isChildMethod = [](Object * self, Tuple * args) -> Object * {
+        return Runtime::toBoolean(((Class *)self)->isChild((Class *)args->at(0)));
+    };
+
+    setMethod("isChild", new Signature("Boolean", {"Class"}), isChildMethod);
 }

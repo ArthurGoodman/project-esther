@@ -22,7 +22,7 @@ string Class::getName() {
 }
 
 Class *Class::getSuperclass() {
-    return superclass;
+    return superclass ? superclass : (Class *)Runtime::getNull();
 }
 
 void Class::setSuperclass(Class *superclass) {

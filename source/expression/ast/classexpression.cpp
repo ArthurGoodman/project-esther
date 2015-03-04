@@ -17,7 +17,8 @@ Object *ClassExpression::eval(Context *context) {
 
         if (!superclass->is("Class"))
             Runtime::runtimeError("class expected");
-    }
+    } else
+        superclass = Runtime::getObjectClass();
 
     if (this->name) {
         name = this->name->eval(context)->toString();

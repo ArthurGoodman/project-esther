@@ -9,12 +9,13 @@ class Parameter;
 class Signature : public Object {
     Class *returnClass;
     list<Parameter *> params;
+    bool variadic;
 
 public:
     Signature();
-    Signature(Class *returnClass, list<Class *> paramsClasses);
-    Signature(string returnClassName, list<string> paramsClassesNames);
-    Signature(Class *returnClass, list<Parameter *> params);
+    Signature(Class *returnClass, list<Class *> paramsClasses, bool variadic = false);
+    Signature(string returnClassName, list<string> paramsClassesNames, bool variadic = false);
+    Signature(Class *returnClass, list<Parameter *> params, bool variadic = false);
 
     virtual bool accepts(Tuple *args);
     bool check(Tuple *args);

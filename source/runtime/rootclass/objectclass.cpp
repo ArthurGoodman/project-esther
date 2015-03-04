@@ -32,7 +32,7 @@ void ObjectClass::setupMethods() {
         return Runtime::getNull();
     };
 
-    setMethod("print", new Signature("Object", {}), printMethod);
+    setMethod("print", new Signature("Object", {}, true), printMethod);
 
     auto equalsMethod = [](Object * self, Tuple * args) -> Object * {
         return Runtime::toBoolean(self == args->at(0));
@@ -51,4 +51,10 @@ void ObjectClass::setupMethods() {
     };
 
     setMethod("!=", new Signature("Boolean", {"Object"}), notEqualsOperator);
+
+    auto isMethod = [](Object * self, Tuple * args) -> Object * {
+        return Runtime::toBoolean(self->is((Class *)args->at(0)));
+    };
+
+    setMethod("is", new Signature("Boolean", {"Class"}), isMethod);
 }
