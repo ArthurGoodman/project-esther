@@ -112,12 +112,12 @@ Expression *Expression::ClassDefinition(Expression *name, Expression *superclass
     return manager->createClassDefinition(name, superclass, body);
 }
 
-Expression *Expression::FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
-    return manager->createFunctionDefinition(type, name, params, body);
+Expression *Expression::FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
+    return manager->createFunctionDefinition(type, name, params, body, variadic);
 }
 
-Expression *Expression::MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
-    return manager->createMethodDefinition(type, name, params, body);
+Expression *Expression::MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
+    return manager->createMethodDefinition(type, name, params, body, variadic);
 }
 
 Expression *Expression::Return(Expression *value) {

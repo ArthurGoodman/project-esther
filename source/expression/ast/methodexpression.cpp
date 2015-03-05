@@ -8,8 +8,8 @@
 #include "context.h"
 #include "interpretedblock.h"
 
-MethodExpression::MethodExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body)
-    : type(type), name(name), params(params), body(body) {
+MethodExpression::MethodExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic)
+    : type(type), name(name), params(params), body(body), variadic(variadic) {
 }
 
 Object *MethodExpression::eval(Context *context) {
@@ -28,7 +28,7 @@ Object *MethodExpression::eval(Context *context) {
     bool isStatic = context->getModifier(Context::StaticModifier);
     Object *self = (isStatic || dynamic_cast<Class *>(context->getCurrentSelf())) ? context->getCurrentSelf() : (Object *)context->getCurrentClass();
 
-    Method *f = new Method(name, context, new Signature(type, evaledParams), new InterpretedBlock(body), self, isStatic);
+    Method *f = new Method(name, context, new Signature(type, evaledParams, variadic), new InterpretedBlock(body), self, isStatic);
 
     if (!name.empty())
         context->setLocal(name, f);

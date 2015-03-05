@@ -51,8 +51,8 @@ public:
 
     static Expression *ClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
-    static Expression *FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body);
-    static Expression *MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body);
+    static Expression *FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
+    static Expression *MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
 
     static Expression *Return(Expression *value);
     static Expression *Break(Expression *value);

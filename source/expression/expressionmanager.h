@@ -45,8 +45,8 @@ public:
 
     virtual Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body) = 0;
 
-    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) = 0;
-    virtual Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) = 0;
+    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) = 0;
+    virtual Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) = 0;
 
     virtual Expression *createReturn(Expression *value) = 0;
     virtual Expression *createBreak(Expression *value) = 0;

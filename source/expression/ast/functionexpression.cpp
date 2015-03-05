@@ -8,8 +8,8 @@
 #include "context.h"
 #include "interpretedblock.h"
 
-FunctionExpression::FunctionExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body)
-    : type(type), name(name), params(params), body(body) {
+FunctionExpression::FunctionExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic)
+    : type(type), name(name), params(params), body(body), variadic(variadic) {
 }
 
 Object *FunctionExpression::eval(Context *context) {
@@ -25,7 +25,7 @@ Object *FunctionExpression::eval(Context *context) {
     foreach (i, params)
         evaledParams << (Parameter *)(*i)->eval(context);
 
-    Function *f = new Function(name, context, new Signature(type, evaledParams), new InterpretedBlock(body));
+    Function *f = new Function(name, context, new Signature(type, evaledParams, variadic), new InterpretedBlock(body));
 
     if (!name.empty())
         context->setLocal(name, f);

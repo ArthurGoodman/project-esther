@@ -3,6 +3,7 @@
 #include "debugexpression.h"
 #include "valueobject.h"
 #include "class.h"
+#include "runtime.h"
 
 #if DEBUG_PARSER
 
@@ -229,7 +230,7 @@ Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expr
     return new DebugExpression("Class", arguments);
 }
 
-Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
     list<Object *> arguments, paramsArguments;
 
     if (type)
@@ -244,11 +245,13 @@ Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, E
     arguments << new DebugExpression("List", paramsArguments);
 
     arguments << body;
+
+    arguments << new DebugExpression("Variadic", {Runtime::toBoolean(variadic)});
 
     return new DebugExpression("Function", arguments);
 }
 
-Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
+Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
     list<Object *> arguments, paramsArguments;
 
     if (type)
@@ -263,6 +266,8 @@ Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Exp
     arguments << new DebugExpression("List", paramsArguments);
 
     arguments << body;
+
+    arguments << new DebugExpression("Variadic", {Runtime::toBoolean(variadic)});
 
     return new DebugExpression("Method", arguments);
 }

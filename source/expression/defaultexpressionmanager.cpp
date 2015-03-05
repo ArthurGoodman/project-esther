@@ -125,12 +125,12 @@ Expression *DefaultExpressionManager::createClassDefinition(Expression *name, Ex
     return new ClassExpression(name, superclass, body);
 }
 
-Expression *DefaultExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
-    return new FunctionExpression(type, name, params, body);
+Expression *DefaultExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
+    return new FunctionExpression(type, name, params, body, variadic);
 }
 
-Expression *DefaultExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body) {
-    return new MethodExpression(type, name, params, body);
+Expression *DefaultExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
+    return new MethodExpression(type, name, params, body, variadic);
 }
 
 Expression *DefaultExpressionManager::createReturn(Expression *value) {

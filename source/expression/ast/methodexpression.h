@@ -7,9 +7,10 @@ class MethodExpression : public Expression {
     Expression *type, *name;
     list<Expression *> params;
     Expression *body;
+    bool variadic;
 
 public:
-    MethodExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body);
+    MethodExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
 
     Object *eval(Context *context);
 };

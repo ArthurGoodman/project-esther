@@ -46,6 +46,8 @@ Object *Function::execute(Object *self, Tuple *args) {
 
     list<string> params = signature->paramsNames();
 
+    context->setLocal("arguments" ,args);
+
     foreach (i, params)
         context->setLocal(*i, args->at(distance(params.begin(), i)));
 

@@ -407,6 +407,7 @@ Expression *DefaultParser::term() {
 
         Expression *type = 0, *name = parseIdentifier(), *body;
         list<Expression *> params;
+        bool variadic = false;
 
         if (name && (type = parseIdentifier())) {
             swap(type, name);
@@ -422,6 +423,11 @@ Expression *DefaultParser::term() {
             bool expectDefaultArguments = false;
 
             do {
+                if (accept(tElipsis)) {
+                    variadic = true;
+                    break;
+                }
+
                 if (!check(tId) && !check(tDollar))
                     error("identifier expected");
 
@@ -457,11 +463,11 @@ Expression *DefaultParser::term() {
 
         switch (id) {
         case tFunction:
-            e = Expression::FunctionDefinition(type, name, params, body);
+            e = Expression::FunctionDefinition(type, name, params, body, variadic);
             break;
 
         case tMethod:
-            e = Expression::MethodDefinition(type, name, params, body);
+            e = Expression::MethodDefinition(type, name, params, body, variadic);
             break;
         }
     }
