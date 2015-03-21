@@ -70,7 +70,7 @@ Object *Object::as(Class *_class) {
     if (is(_class))
         return this;
 
-    Method *constructor = _class->getMethod(_class->getName());
+    Method *constructor = _class->getMethod("initialize");
 
     if (!constructor)
         Runtime::runtimeError("can't convert");

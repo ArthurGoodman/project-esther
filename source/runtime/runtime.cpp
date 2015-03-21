@@ -96,8 +96,6 @@ void Runtime::release() {
 
     foreach (i, rootClasses)
         delete i->second;
-
-    //delete callStack;
 }
 
 Context *Runtime::getRoot() {
