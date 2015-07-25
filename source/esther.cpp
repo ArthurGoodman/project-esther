@@ -19,7 +19,6 @@ void Esther::run(const string &script) {
     engine->run(script);
 }
 
-void Esther::runFile(const string &fileName)
-{
+void Esther::runFile(const string &fileName) {
     engine->run(IO::readFile(fileName));
 }

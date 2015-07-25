@@ -1,0 +1,8 @@
+debug
+release
+_clang-format
+Makefile
+*.Debug
+*.Release
+*.log
+*.user
