@@ -5,8 +5,13 @@
 
 // Lexical analysis.
 class Lexer {
+    static Lexer *lexer;
+
 public:
-    static Lexer *create();
+    static void initialize();
+    static void release();
+
+    static Lexer *instance();
 
     virtual ~Lexer();
     virtual Tokens &lex(const string &source) = 0;

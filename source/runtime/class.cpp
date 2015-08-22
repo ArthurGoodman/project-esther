@@ -34,16 +34,15 @@ bool Class::isChild(Class *_class) {
 }
 
 Object *Class::newInstance() {
-    Object *instance = new Object(this);
-    if (lookup("initialize"))
-        instance->call("initialize");
-    return instance;
+    return newInstance(new Tuple({}));
 }
 
 Object *Class::newInstance(Tuple *args) {
-    Object *instance = new Object(this);
+    Object *instance = createNewInstance();
+
     if (lookup("initialize"))
         instance->call("initialize", args);
+
     return instance;
 }
 
@@ -75,7 +74,7 @@ Method *Class::getMethod(string name) {
 }
 
 void Class::setMethod(Method *method) {
-    methods[method->getName()] = method;
+    setMethod(method->getName(), method);
 }
 
 void Class::setMethod(string name, Method *method) {
@@ -128,4 +127,8 @@ Object *Class::call(string name) {
 
 string Class::toString() {
     return name.empty() ? "<anonymous class>" : name;
+}
+
+Object *Class::createNewInstance() {
+    return new Object(this);
 }

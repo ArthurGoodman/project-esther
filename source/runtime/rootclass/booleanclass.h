@@ -7,7 +7,8 @@ class BooleanClass : public RootClass {
 public:
     BooleanClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

@@ -69,3 +69,15 @@ void IO::print(string data) {
 void IO::printLine(string data) {
     cout << data << endl;
 }
+
+string IO::scan() {
+    string str;
+    cin >> str;
+    return str;
+}
+
+string IO::scanLine() {
+    string str;
+    getline(cin, str);
+    return str;
+}

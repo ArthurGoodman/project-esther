@@ -63,5 +63,7 @@ public:
 
     static Expression *Static(Expression *body);
 
+    static Expression *Include(Expression *fileName);
+
     virtual Object *eval(Context *context) = 0;
 };

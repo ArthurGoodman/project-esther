@@ -77,8 +77,12 @@ Tuple *Signature::convert(Tuple *args) {
     return convertedArgs;
 }
 
+Object *Signature::convertReturnValue(Object *value) {
+    return value->as(returnClass);
+}
+
 bool Signature::equals(Signature *other) {
-    if(variadic != other->variadic)
+    if (variadic != other->variadic)
         return false;
 
     if (returnClass != other->returnClass)

@@ -32,6 +32,7 @@
 #include "selfexpression.h"
 #include "hereexpression.h"
 #include "staticexpression.h"
+#include "includeexpression.h"
 
 Expression *DefaultExpressionManager::createEmpty() {
     return new EmptyExpression;
@@ -155,4 +156,8 @@ Expression *DefaultExpressionManager::createHere() {
 
 Expression *DefaultExpressionManager::createStatic(Expression *body) {
     return new StaticExpression(body);
+}
+
+Expression *DefaultExpressionManager::createInclude(Expression *fileName) {
+    return new IncludeExpression(fileName);
 }

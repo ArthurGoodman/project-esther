@@ -190,15 +190,28 @@ Expression *DefaultParser::addSub() {
 }
 
 Expression *DefaultParser::mulDiv() {
-    Expression *e = dot();
+    Expression *e = power();
 
     forever {
         if (accept(tMultiply))
-            e = Expression::Call(e, "*", dot());
+            e = Expression::Call(e, "*", power());
         else if (accept(tDivide))
-            e = Expression::Call(e, "/", dot());
+            e = Expression::Call(e, "/", power());
         else if (accept(tMod))
-            e = Expression::Call(e, "%", dot());
+            e = Expression::Call(e, "%", power());
+        else
+            break;
+    }
+
+    return e;
+}
+
+Expression *DefaultParser::power() {
+    Expression *e = dot();
+
+    forever {
+        if (accept(tPower))
+            e = Expression::Call(e, "**", dot());
         else
             break;
     }
@@ -270,10 +283,11 @@ Expression *DefaultParser::term() {
     if (check(tId) || check(tDollar)) {
         Expression *type = 0, *name = parseIdentifier(), *value = 0;
 
-        if ((type = parseIdentifier())) {
-            swap(type, name);
-            type = Expression::Identifier(type);
-        } else if (accept(tColon)) {
+        //        if ((type = parseIdentifier())) {
+        //            swap(type, name);
+        //            type = Expression::Identifier(type);
+        //        } else
+        if (accept(tColon)) {
             if ((type = parseIdentifier()))
                 type = Expression::Identifier(type);
             else
@@ -409,10 +423,11 @@ Expression *DefaultParser::term() {
         list<Expression *> params;
         bool variadic = false;
 
-        if (name && (type = parseIdentifier())) {
-            swap(type, name);
-            type = Expression::Identifier(type);
-        } else if (accept(tColon)) {
+        //        if (name && (type = parseIdentifier())) {
+        //            swap(type, name);
+        //            type = Expression::Identifier(type);
+        //        } else
+        if (accept(tColon)) {
             if ((type = parseIdentifier()))
                 type = Expression::Identifier(type);
             else
@@ -486,6 +501,9 @@ Expression *DefaultParser::term() {
 
         e = Expression::Call(body, "new", args);
     }
+
+    else if (accept(tInclude))
+        e = Expression::Include(term());
 
     //else if(accept(tTry)) {}
 

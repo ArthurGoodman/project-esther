@@ -24,8 +24,8 @@ public:
 
     bool isChild(Class *_class);
 
-    virtual Object *newInstance();
-    virtual Object *newInstance(Tuple *args);
+    Object *newInstance();
+    Object *newInstance(Tuple *args);
 
     bool hasAttribute(string name);
     Object *getAttribute(string name);
@@ -43,4 +43,7 @@ public:
     Object *call(string name);
 
     virtual string toString();
+
+protected:
+    virtual Object *createNewInstance();
 };

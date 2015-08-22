@@ -10,14 +10,14 @@ BlockClass::BlockClass()
     : RootClass("Block") {
 }
 
-Object *BlockClass::newInstance() {
-    return new InterpretedBlock(Expression::Empty());
-}
-
 void BlockClass::setupMethods() {
     auto evalMethod = [](Object * self, Tuple * args) -> Object * {
         return ((Block *)self)->eval((Context *)args->at(0));
     };
 
     setMethod("eval", new Signature("Object", {"Context"}), evalMethod);
+}
+
+Object *BlockClass::createNewInstance() {
+    return new InterpretedBlock(Expression::Empty());
 }

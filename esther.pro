@@ -140,7 +140,8 @@ SOURCES += \
     source/runtime/function/functionfeature/staticselfcheckerfeature.cpp \
     source/runtime/rootclass/blockclass.cpp \
     source/runtime/function/multisignature.cpp \
-    source/runtime/function/overloadedmethodblock.cpp
+    source/runtime/function/overloadedmethodblock.cpp \
+    source/expression/ast/includeexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -261,7 +262,8 @@ HEADERS += \
     source/runtime/function/functionfeature/staticselfcheckerfeature.h \
     source/runtime/rootclass/blockclass.h \
     source/runtime/function/multisignature.h \
-    source/runtime/function/overloadedmethodblock.h
+    source/runtime/function/overloadedmethodblock.h \
+    source/expression/ast/includeexpression.h
 
 OTHER_FILES += \
     README.MD \
@@ -269,3 +271,6 @@ OTHER_FILES += \
     source/common/definitions/keywords.def \
     source/common/definitions/operators.def \
     source/common/definitions/othertokens.def
+
+DISTFILES += \
+    scripts/parser.es

@@ -10,10 +10,6 @@ ContextClass::ContextClass()
     : RootClass("Context") {
 }
 
-Object *ContextClass::newInstance() {
-    return new Context;
-}
-
 void ContextClass::setupMethods() {
     auto parentMethod = [](Object * self, Tuple *) -> Object * {
         return ((Context *)self)->getParent();
@@ -39,4 +35,8 @@ void ContextClass::setupMethods() {
     };
 
     setMethod("setLocal", new Signature("Object", {"String", "Object"}), setLocalMethod);
+}
+
+Object *ContextClass::createNewInstance() {
+    return new Context;
 }

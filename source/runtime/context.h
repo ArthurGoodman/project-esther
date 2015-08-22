@@ -25,7 +25,7 @@ public:
     Object *getCurrentSelf();
     Class *getCurrentClass();
 
-    bool isObjectContext();
+//    bool isObjectContext();
 
     virtual bool hasLocal(string name);
     virtual Object *getLocal(string name);

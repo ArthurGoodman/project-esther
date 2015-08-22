@@ -7,7 +7,8 @@ class TupleClass : public RootClass {
 public:
     TupleClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

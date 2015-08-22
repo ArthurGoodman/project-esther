@@ -1,24 +1,23 @@
 #include "esther.h"
 
 #include "engine.h"
+#include "object.h"
 #include "io.h"
 
 Esther Esther::esther;
-Engine *Esther::engine;
 
 Esther::Esther() {
-    engine = Engine::create();
-    engine->initialize();
+    Engine::initialize();
 }
 
 Esther::~Esther() {
-    engine->release();
+    Engine::release();
 }
 
 void Esther::run(const string &script) {
-    engine->run(script);
+    IO::printLine("\n=> " + Engine::instance()->run(script)->toString());
 }
 
 void Esther::runFile(const string &fileName) {
-    engine->run(IO::readFile(fileName));
+    IO::printLine("\n=> " + Engine::instance()->run(IO::readFile(fileName))->toString());
 }

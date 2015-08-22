@@ -6,10 +6,10 @@ NullClass::NullClass()
     : RootClass("Null") {
 }
 
-Object *NullClass::newInstance() {
-    Runtime::runtimeError("cannot create new instance of Null class");
-    return 0;
+void NullClass::setupMethods() {
 }
 
-void NullClass::setupMethods() {
+Object *NullClass::createNewInstance() {
+    Runtime::runtimeError("cannot create new instance of Null class");
+    return 0;
 }

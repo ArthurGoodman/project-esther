@@ -8,17 +8,23 @@
 #include "errorexception.h"
 #include "returnexception.h"
 
-void DefaultEngine::run(const string &script) {
+Object *DefaultEngine::run(const string &script) {
+    return run(script, Runtime::getRoot());
+}
+
+Object *DefaultEngine::run(const string &script, Context *context) {
+    Object *value = Runtime::getNull();
+
     pushSource(script);
 
     try {
-        Expression *e = parser->parse(lexer->lex(script));
-        IO::printLine("\n=> " + e->eval(Runtime::getRoot())->toString());
+        Expression *e = Parser::instance()->parse(Lexer::instance()->lex(script));
+        value = e->eval(context);
         delete e;
     } catch (ReturnException *e) {
         IO::printLine("runtime error: return not within a function");
         delete e;
-    }  catch (Exception *e) {
+    } catch (Exception *e) {
         IO::printLine(e->message());
         delete e;
     } catch (...) {
@@ -26,20 +32,20 @@ void DefaultEngine::run(const string &script) {
     }
 
     popSource();
+
+    return value;
 }
 
-void DefaultEngine::initialize() {
-    lexer = Lexer::create();
-    parser = Parser::create();
-
+void DefaultEngine::initializeEngine() {
+    Lexer::initialize();
+    Parser::initialize();
     Expression::initialize();
     Runtime::initialize();
 }
 
-void DefaultEngine::release() {
-    delete lexer;
-    delete parser;
-
+void DefaultEngine::releaseEngine() {
+    Lexer::release();
+    Parser::release();
     Expression::release();
     Runtime::release();
 }

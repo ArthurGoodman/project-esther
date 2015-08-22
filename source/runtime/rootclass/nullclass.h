@@ -8,7 +8,8 @@ class NullClass : public RootClass
 public:
     NullClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

@@ -63,11 +63,12 @@ void Runtime::initialize() {
             : RootClass("OverloadedMethod", "Method") {
         }
 
-        Object *newInstance() {
-            return 0;
+        void setupMethods() {
         }
 
-        void setupMethods() {
+    protected:
+        Object *createNewInstance() {
+            return Runtime::getNull();
         }
     };
 

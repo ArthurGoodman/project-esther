@@ -2,9 +2,19 @@
 
 #include "defaultlexer.h"
 
-Lexer::~Lexer() {
+Lexer *Lexer::lexer;
+
+void Lexer::initialize() {
+    lexer = new DefaultLexer;
 }
 
-Lexer *Lexer::create() {
-    return new DefaultLexer;
+void Lexer::release() {
+    delete lexer;
+}
+
+Lexer *Lexer::instance() {
+    return lexer;
+}
+
+Lexer::~Lexer() {
 }

@@ -7,7 +7,8 @@ class FunctionClass : public RootClass {
 public:
     FunctionClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

@@ -143,3 +143,7 @@ Expression *Expression::Here() {
 Expression *Expression::Static(Expression *body) {
     return manager->createStatic(body);
 }
+
+Expression *Expression::Include(Expression *fileName) {
+    return manager->createInclude(fileName);
+}

@@ -8,8 +8,13 @@ typedef list<Token> Tokens;
 
 // Syntactic analysis.
 class Parser {
+    static Parser *parser;
+
 public:
-    static Parser *create();
+    static void initialize();
+    static void release();
+
+    static Parser *instance();
 
     virtual ~Parser();
     virtual Expression *parse(Tokens &tokens) = 0;

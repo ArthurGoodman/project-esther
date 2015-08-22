@@ -23,7 +23,7 @@ public:
 
 private:
     template <int N>
-    static int count(string (&)[N]);
+    static int count(string(&)[N]);
 
     void error(string msg, int shift = 0); // Handle lexical errors.
     void scan();                           // Scan code for the next lexeme.

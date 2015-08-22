@@ -27,6 +27,7 @@ bool Tuple::isEmpty() const {
 Object *&Tuple::at(int i) const {
     if (i < 0 || i >= n)
         throw new OutOfRangeException;
+
     return data[i];
 }
 

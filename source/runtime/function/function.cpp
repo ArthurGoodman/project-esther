@@ -42,25 +42,29 @@ Object *Function::invoke(Object *self, Tuple *args) {
 Object *Function::execute(Object *self, Tuple *args) {
     args = signature->convert(args);
 
-    context = context->childContext(self);
+    context = context->objectChildContext(self)->childContext();
 
     list<string> params = signature->paramsNames();
 
-    context->setLocal("arguments" ,args);
+    context->setLocal("arguments", args);
 
     foreach (i, params)
         context->setLocal(*i, args->at(distance(params.begin(), i)));
 
+    Object *returnValue = 0;
+
     try {
-        return body->eval(context);
+        returnValue = body->eval(context);
     } catch (ReturnException *e) {
         Object *value = e->value();
         delete e;
-        return value;
+        returnValue = signature->convertReturnValue(value);
     } catch (Exception *e) {
         e->raise();
         return 0;
     }
+
+    return returnValue;
 }
 
 string Function::toString() {

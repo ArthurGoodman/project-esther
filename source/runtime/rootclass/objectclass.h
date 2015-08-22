@@ -7,7 +7,8 @@ class ObjectClass : public RootClass {
 public:
     ObjectClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

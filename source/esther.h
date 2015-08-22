@@ -5,7 +5,6 @@ class Engine;
 
 class Esther {
     static Esther esther;
-    static Engine *engine;
 
 public:
     Esther();

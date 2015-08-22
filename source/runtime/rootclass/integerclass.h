@@ -7,7 +7,8 @@ class IntegerClass : public RootClass {
 public:
     IntegerClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

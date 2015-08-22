@@ -7,7 +7,8 @@ class CharacterClass : public RootClass {
 public:
     CharacterClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

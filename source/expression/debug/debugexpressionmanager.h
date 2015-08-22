@@ -54,6 +54,8 @@ public:
     Expression *createHere();
 
     Expression * createStatic(Expression *body);
+
+    Expression *createInclude(Expression *fileName);
 };
 
 #endif

@@ -13,22 +13,22 @@ FunctionClass::FunctionClass()
     : RootClass("Function") {
 }
 
-Object *FunctionClass::newInstance() {
-    return new Function("", Runtime::getRoot(), new Signature, new InterpretedBlock(Expression::Empty()));
-}
-
 void FunctionClass::setupMethods() {
-    auto parenthesesMethod = [](Object * self, Tuple * args) -> Object * {
+    auto callMethod = [](Object *self, Tuple *args) -> Object *{
         Object *value = ((Function *)self)->invoke(((Context *)args->at(0))->getCurrentSelf(), (Tuple *)args->at(1));
         return value;
     };
 
-    setMethod("call", new Signature("Object", {"Context", "Tuple"}), parenthesesMethod);
+    setMethod("call", new Signature("Object", {"Context", "Tuple"}), callMethod);
     setAttribute("()", getMethod("call"));
 
-    auto bodyMethod = [](Object * self, Tuple *) -> Object * {
+    auto bodyMethod = [](Object *self, Tuple *) -> Object *{
         return ((Function *)self)->getBody();
     };
 
     setMethod("body", new Signature("Block", {}), bodyMethod);
+}
+
+Object *FunctionClass::createNewInstance() {
+    return new Function("", Runtime::getRoot(), new Signature, new InterpretedBlock(Expression::Empty()));
 }

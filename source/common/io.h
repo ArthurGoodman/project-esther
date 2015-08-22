@@ -21,4 +21,7 @@ public:
 
     static void print(string data);
     static void printLine(string data);
+
+    static string scan();
+    static string scanLine();
 };

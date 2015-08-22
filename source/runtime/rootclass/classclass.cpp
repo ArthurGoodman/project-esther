@@ -13,10 +13,6 @@ ClassClass::ClassClass()
     setClass(this);
 }
 
-Object *ClassClass::newInstance() {
-    return new Class("");
-}
-
 void ClassClass::setupMethods() {
     auto newMethod = [](Object * self, Tuple * args) -> Object * {
         return ((Class *)self)->newInstance(args);
@@ -41,4 +37,8 @@ void ClassClass::setupMethods() {
     };
 
     setMethod("isChild", new Signature("Boolean", {"Class"}), isChildMethod);
+}
+
+Object *ClassClass::createNewInstance() {
+    return new Class("");
 }

@@ -3,20 +3,18 @@
 
 #include "engine.h"
 
-class Lexer;
-class Parser;
+class Context;
 
 class DefaultEngine : public Engine {
-    Lexer *lexer;
-    Parser *parser;
-
     stack<string> sources; // This is used in error messages to show the line containing errors.
 
 public:
-    void run(const string &script);
+    Object *run(const string &script);
+    Object *run(const string &script, Context *context);
 
-    void initialize();
-    void release();
+protected:
+    void initializeEngine();
+    void releaseEngine();
 
 private:
     void pushSource(const string &source);

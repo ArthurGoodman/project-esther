@@ -6,7 +6,8 @@ class BlockClass : public RootClass {
 public:
     BlockClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

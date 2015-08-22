@@ -310,4 +310,12 @@ Expression *DebugExpressionManager::createStatic(Expression *body) {
     return new DebugExpression("Static", arguments);
 }
 
+Expression *DebugExpressionManager::createInclude(Expression *fileName) {
+    list<Object *> arguments;
+
+    arguments << fileName;
+
+    return new DebugExpression("Include", arguments);
+}
+
 #endif

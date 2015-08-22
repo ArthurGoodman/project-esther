@@ -28,9 +28,9 @@ Class *Context::getCurrentClass() {
     return currentClass;
 }
 
-bool Context::isObjectContext() {
-    return !parent || currentSelf != parent->currentSelf;
-}
+//bool Context::isObjectContext() {
+//    return !parent || currentSelf != parent->currentSelf;
+//}
 
 bool Context::hasLocal(string name) {
     return locals.find(name) != locals.end();

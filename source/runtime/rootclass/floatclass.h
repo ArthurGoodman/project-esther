@@ -7,7 +7,8 @@ class FloatClass : public RootClass {
 public:
     FloatClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

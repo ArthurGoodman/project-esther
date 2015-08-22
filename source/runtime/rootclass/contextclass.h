@@ -7,7 +7,8 @@ class ContextClass : public RootClass {
 public:
     ContextClass();
 
-    Object *newInstance();
-
     void setupMethods();
+
+protected:
+    Object *createNewInstance();
 };

@@ -7,6 +7,6 @@
 ForExpression::ForExpression() {
 }
 
-Object *ForExpression::eval(Context *context) {
+Object *ForExpression::eval(Context */*context*/) {
     return Runtime::getNull();
 }

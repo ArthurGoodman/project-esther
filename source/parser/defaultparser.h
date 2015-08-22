@@ -35,6 +35,7 @@ private:
     Expression *relation();
     Expression *addSub();
     Expression *mulDiv();
+    Expression *power();
     Expression *dot();
     Expression *preffix();
     Expression *suffix();
