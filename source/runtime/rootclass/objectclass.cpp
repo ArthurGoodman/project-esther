@@ -66,6 +66,12 @@ void ObjectClass::setupMethods() {
     };
 
     setMethod("is", new Signature("Boolean", {"Class"}), isMethod);
+
+    auto asMethod = [](Object *self, Tuple *args) -> Object *{
+        return self->as((Class *)args->at(0));
+    };
+
+    setMethod("as", new Signature("Object", {"Class"}), asMethod);
 }
 
 Object *ObjectClass::createNewInstance() {
