@@ -1,1 +1,1 @@
-include 'scripts/parser.es'
+include 'parser.es'

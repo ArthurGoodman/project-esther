@@ -9,7 +9,7 @@ class PlusNode < BinaryNode
         left.eval() + right.eval()
 
 class MinusNode < BinaryNode
-    method eval
+    method eval 
         left.eval() - right.eval()
 
 class MultiplyNode < BinaryNode
@@ -33,8 +33,19 @@ class ValueNode {
 }
 
 class Parser {
-    method parse : Integer(code) {
-        "This is ast!\n"
+    method getToken {
+        if (pos >= code.size())
+            self.token = null
+        elif (code[pos] >= '0' && code[pos] <= '9')
+            self.token = new {
+                text = "..."
+                type = "..."
+            }
+    }
+
+    method parse(code) {
+        self.code = code
+        self.pos = 0
     }
 }
 
