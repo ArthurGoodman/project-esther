@@ -56,6 +56,6 @@ public:
     virtual Expression *createHere() = 0;
 
     virtual Expression *createStatic(Expression *body) = 0;
-
     virtual Expression *createInclude(Expression *fileName) = 0;
+    virtual Expression *createObjectLiteral(Expression *body) = 0;
 };

@@ -53,9 +53,9 @@ public:
     Expression *createSelf();
     Expression *createHere();
 
-    Expression * createStatic(Expression *body);
-
+    Expression *createStatic(Expression *body);
     Expression *createInclude(Expression *fileName);
+    Expression *createObjectLiteral(Expression *body);
 };
 
 #endif

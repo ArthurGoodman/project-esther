@@ -19,6 +19,7 @@ void ClassClass::setupMethods() {
     };
 
     setMethod("new", new Signature("Object", {}, true), newMethod);
+    setAttribute("()", getMethod("new"));
 
     auto superclassMethod = [](Object * self, Tuple *) -> Object * {
         return ((Class *)self)->getSuperclass();

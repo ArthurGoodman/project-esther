@@ -7,4 +7,6 @@ class Character : public ValueObject {
 public:
     Character(char value);
     Character();
+
+    void setValue(char value);
 };

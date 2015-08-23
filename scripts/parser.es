@@ -1,5 +1,10 @@
-class BinaryNode
-    method initialize(left, right) {
+class Node {
+    method eval
+        null
+}
+
+class BinaryNode < Node
+    method initialize(Node left, Node right) {
         self.left = left
         self.right = right
     }
@@ -24,7 +29,7 @@ class PowerNode < BinaryNode
     method eval
         left.eval() ** right.eval()
 
-class ValueNode {
+class ValueNode < Node {
     method initialize(value)
         self.value = value
 
@@ -35,26 +40,47 @@ class ValueNode {
 class Parser {
     method getToken {
         if (pos >= code.size())
-            self.token = null
-        elif (code[pos] >= '0' && code[pos] <= '9')
-            self.token = new {
-                text = "..."
-                type = "..."
+            token = null
+        elif (code[pos].isDigit())
+            token = new {
+                text = ""
+                while (pos < code.size() && code[pos].isDigit())
+                    //text += code[pos++ - 1]
+                    text = text + code[pos++ - 1]
+
+                type = 'n'
+            }
+        else
+            token = new {
+                text = code[pos++ - 1]
+                type = 'u'
             }
     }
 
-    method parse(code) {
+    method parse : Node(String code) {
         self.code = code
         self.pos = 0
+        self.token = null
+
+        getToken()
+
+        while (token) {
+            print(token.text)
+            getToken()
+        }
+
+        new ValueNode(123)
     }
 }
+
+new Parser.parse("1 2 3 4 5").eval()
 
 //forever {
 //    "$ ".print()
 
 //    str = scanLine()
 
-//    if (str.size() == 0) continue
+//    if (str.empty() continue
 //    elif (str == "help" || str == "?")
 //        print("This is help!\n")
 //    elif (str == "exit" || str == "quit")

@@ -147,3 +147,7 @@ Expression *Expression::Static(Expression *body) {
 Expression *Expression::Include(Expression *fileName) {
     return manager->createInclude(fileName);
 }
+
+Expression *Expression::ObjectLiteral(Expression *body) {
+    return manager->createObjectLiteral(body);
+}

@@ -62,8 +62,8 @@ public:
     static Expression *Here();
 
     static Expression *Static(Expression *body);
-
     static Expression *Include(Expression *fileName);
+    static Expression *ObjectLiteral(Expression *body);
 
     virtual Object *eval(Context *context) = 0;
 };

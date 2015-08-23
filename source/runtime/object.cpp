@@ -94,7 +94,7 @@ Object *Object::call(string name, Object *arg) {
 Object *Object::call(string name, Object *arg, string expectedClassName) {
     Object *value = call(name, new Tuple(list<Object *>(1, arg)));
 
-    if(!value->is(Runtime::getRootClass(expectedClassName)))
+    if (!value->is(Runtime::getRootClass(expectedClassName)))
         Runtime::runtimeError("invalid return class");
 
     return value;

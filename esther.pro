@@ -141,7 +141,8 @@ SOURCES += \
     source/runtime/rootclass/blockclass.cpp \
     source/runtime/function/multisignature.cpp \
     source/runtime/function/overloadedmethodblock.cpp \
-    source/expression/ast/includeexpression.cpp
+    source/expression/ast/includeexpression.cpp \
+    source/expression/ast/objectliteralexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -263,7 +264,8 @@ HEADERS += \
     source/runtime/rootclass/blockclass.h \
     source/runtime/function/multisignature.h \
     source/runtime/function/overloadedmethodblock.h \
-    source/expression/ast/includeexpression.h
+    source/expression/ast/includeexpression.h \
+    source/expression/ast/objectliteralexpression.h
 
 OTHER_FILES += \
     README.MD \

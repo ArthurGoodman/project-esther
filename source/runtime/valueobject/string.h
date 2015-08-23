@@ -8,4 +8,6 @@ public:
     String(string value);
     String(const char *value);
     String();
+
+    void setValue(string value);
 };

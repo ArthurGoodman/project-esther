@@ -51,6 +51,6 @@ public:
     Expression *createHere();
 
     Expression *createStatic(Expression *body);
-
     Expression *createInclude(Expression *fileName);
+    Expression *createObjectLiteral(Expression *body);
 };

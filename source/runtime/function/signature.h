@@ -23,7 +23,7 @@ public:
     Tuple *convert(Tuple *args);
     Object *convertReturnValue(Object *value);
 
-    bool equals(Signature *other);
+    virtual bool equals(Signature *other);
 
     list<string> paramsNames();
 };

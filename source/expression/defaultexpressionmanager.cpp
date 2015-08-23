@@ -33,6 +33,7 @@
 #include "hereexpression.h"
 #include "staticexpression.h"
 #include "includeexpression.h"
+#include "objectliteralexpression.h"
 
 Expression *DefaultExpressionManager::createEmpty() {
     return new EmptyExpression;
@@ -160,4 +161,8 @@ Expression *DefaultExpressionManager::createStatic(Expression *body) {
 
 Expression *DefaultExpressionManager::createInclude(Expression *fileName) {
     return new IncludeExpression(fileName);
+}
+
+Expression *DefaultExpressionManager::createObjectLiteral(Expression *body) {
+    return new ObjectLiteralExpression(body);
 }

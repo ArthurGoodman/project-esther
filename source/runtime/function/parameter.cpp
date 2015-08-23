@@ -19,5 +19,5 @@ Object *Parameter::getValue() {
 }
 
 bool Parameter::equals(Parameter *other) {
-    return type->equals(other->type) && ((value && other->value) ? value->equals(other->value) : true);
+    return type == other->type /*type->equals(other->type)*/ && ((value && other->value) ? value->equals(other->value) : true);
 }

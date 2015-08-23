@@ -10,6 +10,34 @@ FloatClass::FloatClass()
 }
 
 void FloatClass::setupMethods() {
+    auto initMethod = [](Object *self, Tuple *) -> Object *{
+        ((Float *)self)->setValue(0);
+        return self;
+    };
+
+    setMethod("initialize", new Signature("Object", {}), initMethod);
+
+    auto initCharacterMethod = [](Object *self, Tuple *args) -> Object *{
+        ((Float *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
+        return self;
+    };
+
+    setMethod("initialize", new Signature("Object", {"Character"}), initCharacterMethod);
+
+    auto initIntegerMethod = [](Object *self, Tuple *args) -> Object *{
+        ((Float *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toInteger());
+        return self;
+    };
+
+    setMethod("initialize", new Signature("Object", {"Integer"}), initIntegerMethod);
+
+    auto initFloatMethod = [](Object *self, Tuple *args) -> Object *{
+        ((Float *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toFloat());
+        return self;
+    };
+
+    setMethod("initialize", new Signature("Object", {"Float"}), initFloatMethod);
+
     auto plusMethod = [](Object *self, Tuple *args) -> Object *{
         return new Float(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
     };

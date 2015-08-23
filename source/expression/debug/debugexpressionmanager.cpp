@@ -318,4 +318,12 @@ Expression *DebugExpressionManager::createInclude(Expression *fileName) {
     return new DebugExpression("Include", arguments);
 }
 
+Expression *DebugExpressionManager::createObjectLiteral(Expression *body) {
+    list<Object *> arguments;
+
+    arguments << body;
+
+    return new DebugExpression("ObjectLiteral", arguments);
+}
+
 #endif

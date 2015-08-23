@@ -94,7 +94,7 @@ bool Signature::equals(Signature *other) {
     list<Parameter *>::iterator j = other->params.begin();
 
     foreach (i, params)
-        if (*i != *j++)
+        if (!(*i)->equals(*j++))
             return false;
 
     return true;

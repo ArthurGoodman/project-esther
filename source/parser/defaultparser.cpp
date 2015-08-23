@@ -488,18 +488,22 @@ Expression *DefaultParser::term() {
     }
 
     else if (accept(tNew)) {
-        Expression *body = term();
+        if (accept(tLBrace))
+            e = Expression::ObjectLiteral(Expression::List(parseBlock()));
+        else {
+            Expression *body = term();
 
-        list<Expression *> args;
+            list<Expression *> args;
 
-        if (accept(tLPar)) {
-            args = check(tRPar) ? list<Expression *>() : parseList();
+            if (accept(tLPar)) {
+                args = check(tRPar) ? list<Expression *>() : parseList();
 
-            if (!accept(tRPar))
-                error("unmatched parentheses");
+                if (!accept(tRPar))
+                    error("unmatched parentheses");
+            }
+
+            e = Expression::Call(body, "new", args);
         }
-
-        e = Expression::Call(body, "new", args);
     }
 
     else if (accept(tInclude))

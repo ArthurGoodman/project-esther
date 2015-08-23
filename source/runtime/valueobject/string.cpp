@@ -11,3 +11,7 @@ String::String(const char *value)
 String::String()
     : ValueObject("") {
 }
+
+void String::setValue(string value) {
+    setVariant(Variant(value));
+}

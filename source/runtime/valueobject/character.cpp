@@ -7,3 +7,7 @@ Character::Character(char value)
 Character::Character()
     : ValueObject('\0') {
 }
+
+void Character::setValue(char value) {
+    setVariant(Variant(value));
+}

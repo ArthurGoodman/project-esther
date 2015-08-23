@@ -12,4 +12,6 @@ public:
     MultiSignature(OverloadedMethod *method);
 
     bool accepts(Tuple *args);
+
+    bool equals(Signature *other);
 };

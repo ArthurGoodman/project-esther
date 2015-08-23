@@ -15,3 +15,13 @@ bool MultiSignature::accepts(Tuple *args) {
 
     return false;
 }
+
+bool MultiSignature::equals(Signature *other) {
+    list<Method *> methods = method->getMethods();
+
+    foreach (i, methods)
+        if ((*i)->getSignature()->equals(other))
+            return true;
+
+    return false;
+}

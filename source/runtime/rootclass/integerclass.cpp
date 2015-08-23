@@ -17,21 +17,28 @@ void IntegerClass::setupMethods() {
         return self;
     };
 
-    setMethod("initialize", new Signature("Integer", {}), initMethod);
+    setMethod("initialize", new Signature("Object", {}), initMethod);
+
+    auto initCharacterMethod = [](Object *self, Tuple *args) -> Object *{
+        ((Integer *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
+        return self;
+    };
+
+    setMethod("initialize", new Signature("Object", {"Character"}), initCharacterMethod);
 
     auto initIntegerMethod = [](Object *self, Tuple *args) -> Object *{
         ((Integer *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toInteger());
         return self;
     };
 
-    setMethod("initialize", new Signature("Integer", {"Integer"}), initIntegerMethod);
+    setMethod("initialize", new Signature("Object", {"Integer"}), initIntegerMethod);
 
     auto initFloatMethod = [](Object *self, Tuple *args) -> Object *{
         ((Integer *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toFloat());
         return self;
     };
 
-    setMethod("initialize", new Signature("Integer", {"Float"}), initFloatMethod);
+    setMethod("initialize", new Signature("Object", {"Float"}), initFloatMethod);
 
     auto plusMethod = [](Object *self, Tuple *args) -> Object *{
         return new Integer(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());

@@ -56,15 +56,14 @@ Object *Function::execute(Object *self, Tuple *args) {
     try {
         returnValue = body->eval(context);
     } catch (ReturnException *e) {
-        Object *value = e->value();
+        returnValue = e->value();
         delete e;
-        returnValue = signature->convertReturnValue(value);
     } catch (Exception *e) {
         e->raise();
         return 0;
     }
 
-    return returnValue;
+    return signature->convertReturnValue(returnValue);
 }
 
 string Function::toString() {
