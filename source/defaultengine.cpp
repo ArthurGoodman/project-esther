@@ -27,6 +27,8 @@ Object *DefaultEngine::run(const string &script, Context *context) {
     } catch (Exception *e) {
         IO::printLine(e->message());
         delete e;
+    } catch (exception e) {
+        IO::printLine((string)"error: " + e.what());
     } catch (...) {
         IO::printLine("something bad happened...");
     }

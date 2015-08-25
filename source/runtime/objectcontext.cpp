@@ -1,6 +1,7 @@
 #include "objectcontext.h"
 
 #include "class.h"
+#include "method.h"
 
 ObjectContext::ObjectContext(Object *currentSelf, Class *currentClass, Context *parent, int modifiers)
     : Context(currentSelf, currentClass, parent, modifiers) {
@@ -37,12 +38,16 @@ Object *ObjectContext::getId(string name) {
         return currentSelf->getAttribute(name);
 
     if (currentClass->lookup(name))
-        return (Object *)currentClass->lookup(name);
+        return currentClass->lookup(name);
 
     return Context::getId(name);
 }
 
 bool ObjectContext::setId(string name, Object *value) {
-    currentSelf->setAttribute(name, value);
-    return true;
+    if (currentSelf->hasAttribute(name)) {
+        currentSelf->setAttribute(name, value);
+        return true;
+    }
+
+    return Context::setId(name, value);
 }

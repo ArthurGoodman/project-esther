@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 
+#include "variant.h"
 #include "expressionmanager.h"
 
 class DefaultExpressionManager : public ExpressionManager {
@@ -12,7 +13,8 @@ public:
 
     Expression *createTuple(list<Expression *> nodes);
 
-    Expression *createLiteral(Object *value);
+    Expression *createLiteral(const Variant &value);
+    Expression *createConstant(Object *value);
 
     Expression *createOr(Expression *self, Expression *arg);
     Expression *createAnd(Expression *self, Expression *arg);
@@ -37,6 +39,7 @@ public:
     Expression *createDo(Expression *body, Expression *condition);
 
     Expression *createContextResolution(Expression *self, Expression *body);
+    Expression *createContextCall(Expression *self, Expression *body, list<Expression *> args);
 
     Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
 

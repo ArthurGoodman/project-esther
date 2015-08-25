@@ -17,26 +17,15 @@ void FloatClass::setupMethods() {
 
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
-    auto initCharacterMethod = [](Object *self, Tuple *args) -> Object *{
-        ((Float *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
-        return self;
-    };
-
-    setMethod("initialize", new Signature("Object", {"Character"}), initCharacterMethod);
-
-    auto initIntegerMethod = [](Object *self, Tuple *args) -> Object *{
-        ((Float *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toInteger());
-        return self;
-    };
-
-    setMethod("initialize", new Signature("Object", {"Integer"}), initIntegerMethod);
-
-    auto initFloatMethod = [](Object *self, Tuple *args) -> Object *{
+    auto initVariantMethod = [](Object *self, Tuple *args) -> Object *{
         ((Float *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toFloat());
         return self;
     };
 
-    setMethod("initialize", new Signature("Object", {"Float"}), initFloatMethod);
+    setMethod("initialize", new Signature("Object", {"Character"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"Integer"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"Float"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"String"}), initVariantMethod);
 
     auto plusMethod = [](Object *self, Tuple *args) -> Object *{
         return new Float(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
@@ -45,19 +34,19 @@ void FloatClass::setupMethods() {
     setMethod("+", new Signature("Float", {"Float"}), plusMethod);
 
     auto minusMethod = [](Object *self, Tuple *args) -> Object *{
-        return new Float(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
+        return new Float(((ValueObject *)self)->getVariant().toFloat() - ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("-", new Signature("Float", {"Float"}), minusMethod);
 
     auto multiplyMethod = [](Object *self, Tuple *args) -> Object *{
-        return new Float(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
+        return new Float(((ValueObject *)self)->getVariant().toFloat() * ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("*", new Signature("Float", {"Float"}), multiplyMethod);
 
     auto divideMethod = [](Object *self, Tuple *args) -> Object *{
-        return new Float(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
+        return new Float(((ValueObject *)self)->getVariant().toFloat() / ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("/", new Signature("Float", {"Float"}), divideMethod);

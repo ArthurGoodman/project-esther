@@ -100,6 +100,9 @@ void DefaultLexer::scan() {
                 case 't':
                     token += '\t';
                     break;
+                case '0':
+                    token += '\0';
+                    break;
                 case '\\':
                     token += '\\';
                     break;
@@ -153,7 +156,7 @@ void DefaultLexer::scan() {
                 while (Utility::isDigit(at(pos)))
                     token += at(pos++);
         }
-    } else if (Utility::isLetter(at(pos))) { // Identifiers and keywords.
+    } else if (Utility::isLetter(at(pos)) || at(pos) == '_') { // Identifiers and keywords.
         do
             token += at(pos++);
         while (Utility::isLetterOrDigit(at(pos)));

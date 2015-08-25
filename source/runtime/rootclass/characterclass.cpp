@@ -26,14 +26,14 @@ void CharacterClass::setupMethods() {
     setMethod("initialize", new Signature("Object", {"Character"}), initCharacterMethod);
 
     auto initIntegerMethod = [](Object *self, Tuple *args) -> Object *{
-        ((Character *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toInteger());
+        ((Character *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
         return self;
     };
 
     setMethod("initialize", new Signature("Object", {"Integer"}), initIntegerMethod);
 
     auto initFloatMethod = [](Object *self, Tuple *args) -> Object *{
-        ((Character *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toFloat());
+        ((Character *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
         return self;
     };
 

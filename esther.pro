@@ -142,7 +142,9 @@ SOURCES += \
     source/runtime/function/multisignature.cpp \
     source/runtime/function/overloadedmethodblock.cpp \
     source/expression/ast/includeexpression.cpp \
-    source/expression/ast/objectliteralexpression.cpp
+    source/expression/ast/objectliteralexpression.cpp \
+    source/expression/ast/constantexpression.cpp \
+    source/expression/ast/contextcallexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -265,7 +267,9 @@ HEADERS += \
     source/runtime/function/multisignature.h \
     source/runtime/function/overloadedmethodblock.h \
     source/expression/ast/includeexpression.h \
-    source/expression/ast/objectliteralexpression.h
+    source/expression/ast/objectliteralexpression.h \
+    source/expression/ast/constantexpression.h \
+    source/expression/ast/contextcallexpression.h
 
 OTHER_FILES += \
     README.MD \

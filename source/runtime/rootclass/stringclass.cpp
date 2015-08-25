@@ -7,6 +7,10 @@
 #include "character.h"
 #include "signature.h"
 #include "method.h"
+#include "outofrangeexception.h"
+#include "runtimeerror.h"
+#include "io.h"
+#include "utility.h"
 
 StringClass::StringClass()
     : RootClass("String") {
@@ -14,18 +18,25 @@ StringClass::StringClass()
 
 void StringClass::setupMethods() {
     auto initMethod = [](Object *self, Tuple *) -> Object *{
-        ((String *)self)->setValue(0);
+        ((String *)self)->setValue("");
         return self;
     };
 
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
     auto initCharacterMethod = [](Object *self, Tuple *args) -> Object *{
-        ((String *)self)->setValue(string() + ((ValueObject *)args->at(0))->getVariant().toChar());
+        ((String *)self)->setValue(string() + ((ValueObject *)args->at(0))->getVariant().toString());
         return self;
     };
 
     setMethod("initialize", new Signature("Object", {"Character"}), initCharacterMethod);
+
+    auto initStringMethod = [](Object *self, Tuple *args) -> Object *{
+        ((String *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toString());
+        return self;
+    };
+
+    setMethod("initialize", new Signature("Object", {"String"}), initStringMethod);
 
     auto sizeMethod = [](Object *self, Tuple *) -> Object *{
         return new Integer(((ValueObject *)self)->getVariant().toString().size());
@@ -34,7 +45,13 @@ void StringClass::setupMethods() {
     setMethod("size", new Signature("Integer", {}), sizeMethod);
 
     auto atMethod = [](Object *self, Tuple *args) -> Object *{
-        return new Character(((ValueObject *)self)->getVariant().toString().at(((Integer *)args->at(0))->getVariant().toInteger()));
+        string str = ((ValueObject *)self)->getVariant().toString();
+        int index = ((Integer *)args->at(0))->getVariant().toInteger();
+
+        if (index >= (int)str.size())
+            throw new OutOfRangeException;
+
+        return new Character(str.at(index));
     };
 
     setMethod("at", new Signature("Character", {"Integer"}), atMethod);
@@ -51,6 +68,12 @@ void StringClass::setupMethods() {
     };
 
     setMethod("empty", new Signature("Boolean", {}), emptyMethod);
+
+    auto containsMethod = [](Object *self, Tuple *args) -> Object *{
+        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString().find(((ValueObject *)args->at(0))->getVariant().toChar()) != string::npos);
+    };
+
+    setMethod("contains", new Signature("Boolean", {"Character"}), containsMethod);
 
     auto appendMethod = [](Object *self, Tuple *args) -> Object *{
         return new String(((ValueObject *)self)->getVariant().toString() + ((ValueObject *)args->at(0))->getVariant().toString());

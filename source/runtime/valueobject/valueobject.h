@@ -13,6 +13,7 @@ public:
     ValueObject(double value);
     ValueObject(char value);
     ValueObject(string value);
+    ValueObject(const Variant &value);
 
     Variant getVariant();
 
@@ -20,4 +21,7 @@ public:
 
 protected:
     void setVariant(Variant value);
+
+private:
+    static string typeToClassName(Variant::Type type);
 };

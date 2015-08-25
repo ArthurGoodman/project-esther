@@ -3,6 +3,7 @@
 
 #include "object.h"
 
+class Variant;
 class ExpressionManager;
 class Context;
 
@@ -20,7 +21,8 @@ public:
 
     static Expression *TupleLiteral(list<Expression *> nodes = list<Expression *>());
 
-    static Expression *Literal(Object *value);
+    static Expression *Literal(const Variant &value);
+    static Expression *Constant(Object *value);
 
     static Expression *Or(Expression *self, Expression *arg);
     static Expression *And(Expression *self, Expression *arg);
@@ -48,6 +50,7 @@ public:
     static Expression *Do(Expression *body, Expression *condition);
 
     static Expression *ContextResolution(Expression *self, Expression *body);
+    static Expression *ContextCall(Expression *self, Expression *body, list<Expression *> args);
 
     static Expression *ClassDefinition(Expression *name, Expression *superclass, Expression *body);
 

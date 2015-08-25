@@ -19,8 +19,8 @@ Object *CallExpression::eval(Context *context) {
 
     Tuple *actualArgs;
 
-    if (name == "()")
-        actualArgs = new Tuple({context, new Tuple(evaledArgs)});
+    if (dynamic_cast<Function *>(self) && name == "()")
+        actualArgs = new Tuple({context->getCurrentSelf(), new Tuple(evaledArgs)});
     else
         actualArgs = new Tuple(evaledArgs);
 

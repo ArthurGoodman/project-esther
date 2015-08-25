@@ -1,9 +1,11 @@
 #include "literalexpression.h"
 
-LiteralExpression::LiteralExpression(Object *value)
+#include "valueobject.h"
+
+LiteralExpression::LiteralExpression(const Variant &value)
     : value(value) {
 }
 
 Object *LiteralExpression::eval(Context *) {
-    return value;
+    return new ValueObject(value);
 }

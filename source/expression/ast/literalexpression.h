@@ -2,14 +2,13 @@
 #include "common.h"
 
 #include "expression.h"
-
-class Object;
+#include "variant.h"
 
 class LiteralExpression : public Expression {
-    Object *value;
+    Variant value;
 
 public:
-    LiteralExpression(Object *value);
+    LiteralExpression(const Variant &value);
 
     Object *eval(Context *context);
 };

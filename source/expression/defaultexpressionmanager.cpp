@@ -34,6 +34,8 @@
 #include "staticexpression.h"
 #include "includeexpression.h"
 #include "objectliteralexpression.h"
+#include "constantexpression.h"
+#include "contextcallexpression.h"
 
 Expression *DefaultExpressionManager::createEmpty() {
     return new EmptyExpression;
@@ -51,8 +53,12 @@ Expression *DefaultExpressionManager::createTuple(list<Expression *> nodes) {
     return new TupleExpression(nodes);
 }
 
-Expression *DefaultExpressionManager::createLiteral(Object *value) {
+Expression *DefaultExpressionManager::createLiteral(const Variant &value) {
     return new LiteralExpression(value);
+}
+
+Expression *DefaultExpressionManager::createConstant(Object *value) {
+    return new ConstantExpression(value);
 }
 
 Expression *DefaultExpressionManager::createOr(Expression *self, Expression *arg) {
@@ -121,6 +127,10 @@ Expression *DefaultExpressionManager::createDo(Expression *body, Expression *con
 
 Expression *DefaultExpressionManager::createContextResolution(Expression *self, Expression *body) {
     return new ContextResolutionExpression(self, body);
+}
+
+Expression *DefaultExpressionManager::createContextCall(Expression *self, Expression *body, list<Expression *> args) {
+    return new ContextCallExpression(self, body, args);
 }
 
 Expression *DefaultExpressionManager::createClassDefinition(Expression *name, Expression *superclass, Expression *body) {

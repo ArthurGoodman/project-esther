@@ -8,7 +8,6 @@ class IncludeExpression : public Expression {
 
 public:
     IncludeExpression(Expression *fileName);
-    ~IncludeExpression();
 
     Object *eval(Context *context);
 };

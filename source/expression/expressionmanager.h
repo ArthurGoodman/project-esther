@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 
+class Variant;
 class Expression;
 class Object;
 
@@ -17,7 +18,8 @@ public:
 
     virtual Expression *createTuple(list<Expression *> nodes) = 0;
 
-    virtual Expression *createLiteral(Object *value) = 0;
+    virtual Expression *createLiteral(const Variant &value) = 0;
+    virtual Expression *createConstant(Object *value) = 0;
 
     virtual Expression *createOr(Expression *self, Expression *arg) = 0;
     virtual Expression *createAnd(Expression *self, Expression *arg) = 0;
@@ -42,6 +44,7 @@ public:
     virtual Expression *createDo(Expression *body, Expression *condition) = 0;
 
     virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
+    virtual Expression *createContextCall(Expression *self, Expression *body, list<Expression *> args) = 0;
 
     virtual Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body) = 0;
 

@@ -71,13 +71,13 @@ Expression *DefaultParser::parseIdentifier() {
     Expression *e = 0;
 
     if (check(tId)) {
-        e = Expression::Literal(new String(token->getText()));
+        e = Expression::Literal(token->getText());
         getToken();
     } else if (accept(tDollar)) {
         if (check(tLPar) || check(tLBrace) || check(tEnd))
             e = term();
         else {
-            e = Expression::Literal(new String(token->getText()));
+            e = Expression::Literal(token->getText());
             getToken();
         }
     }
@@ -86,9 +86,22 @@ Expression *DefaultParser::parseIdentifier() {
 }
 
 Expression *DefaultParser::oper() {
-    Expression *e = expr();
+    Expression *e = context();
 
     accept(tSemi);
+
+    return e;
+}
+
+Expression *DefaultParser::context() {
+    Expression *e = expr();
+
+    forever {
+        if (accept(tLBrace))
+            e = Expression::ContextResolution(e, Expression::List(parseBlock()));
+        else
+            break;
+    }
 
     return e;
 }
@@ -222,11 +235,19 @@ Expression *DefaultParser::power() {
 Expression *DefaultParser::dot() {
     Expression *e = preffix();
 
-    if (accept(tDot)) {
-        if (!check(tId) && !check(tColon) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
+    while (accept(tDot)) {
+        if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
             token->setId(tId);
 
-        e = Expression::ContextResolution(e, dot());
+        Expression *body = term();
+
+        if (accept(tLPar)) {
+            e = Expression::ContextCall(e, body, check(tRPar) ? list<Expression *>() : parseList());
+
+            if (!accept(tRPar))
+                error("unmatched parentheses");
+        } else
+            e = Expression::ContextResolution(e, body);
     }
 
     return e;
@@ -254,7 +275,7 @@ Expression *DefaultParser::preffix() {
 Expression *DefaultParser::suffix() {
     Expression *e = term();
 
-    if (check(tLPar) || check(tLBracket))
+    if (check(tLPar) || check(tLBracket) || check(tLBrace))
         forever {
             if (accept(tLPar)) {
                 e = Expression::Call(e, "()", check(tRPar) ? list<Expression *>() : parseList());
@@ -307,7 +328,7 @@ Expression *DefaultParser::term() {
         Expression *name = parseIdentifier();
 
         if (!name) {
-            name = Expression::Literal(new String(token->getText()));
+            name = Expression::Literal(token->getText());
             getToken();
         }
 
@@ -315,18 +336,22 @@ Expression *DefaultParser::term() {
     }
 
     else if (check(tInteger)) {
-        e = Expression::Literal(new Integer(Utility::fromString<int>(token->getText())));
+        e = Expression::Literal(Utility::fromString<int>(token->getText()));
         getToken();
     } else if (check(tFloat)) {
-        e = Expression::Literal(new Float(Utility::fromString<double>(token->getText())));
+        e = Expression::Literal(Utility::fromString<double>(token->getText()));
         getToken();
     }
 
     else if (check(tString)) {
-        e = Expression::Literal(token->getText().size() == 1 ? (Object *)new Character(token->getText()[0]) : (Object *)new String(token->getText()));
+        if (token->getText().size() == 1)
+            e = Expression::Literal(token->getText()[0]);
+        else
+            e = Expression::Literal(token->getText());
+
         getToken();
     } else if (check(tComplexString)) {
-        e = Expression::Literal(new String(token->getText()));
+        e = Expression::Literal(token->getText());
         getToken();
     }
 
@@ -349,7 +374,7 @@ Expression *DefaultParser::term() {
 
         e = id == tIf ? Expression::If(condition, body, elseBody) : Expression::While(condition, body, elseBody);
     } else if (accept(tForever))
-        e = Expression::While(Expression::Literal(Runtime::getTrue()), accept(tLBrace) ? Expression::List(parseBlock()) : oper(), 0);
+        e = Expression::While(Expression::Constant(Runtime::getTrue()), accept(tLBrace) ? Expression::List(parseBlock()) : oper(), 0);
     //else if (accept(tFor)) {
     //    if (!accept(tLPar))
     //        error("left parenthesis expected");
@@ -376,18 +401,18 @@ Expression *DefaultParser::term() {
     }
 
     else if (accept(tReturn))
-        e = Expression::Return(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : expr());
+        e = Expression::Return(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : context());
     else if (accept(tBreak))
-        e = Expression::Break(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : expr());
+        e = Expression::Break(check(tRPar) || check(tRBrace) || check(tEnd) || accept(tSemi) ? 0 : context());
     else if (accept(tContinue))
         e = Expression::Continue();
 
     else if (accept(tTrue))
-        e = Expression::Literal(Runtime::getTrue());
+        e = Expression::Constant(Runtime::getTrue());
     else if (accept(tFalse))
-        e = Expression::Literal(Runtime::getFalse());
+        e = Expression::Constant(Runtime::getFalse());
     else if (accept(tNull))
-        e = Expression::Literal(Runtime::getNull());
+        e = Expression::Constant(Runtime::getNull());
 
     else if (accept(tSelf))
         e = Expression::Self();
@@ -403,7 +428,7 @@ Expression *DefaultParser::term() {
         Expression *name = 0, *superClass = 0, *body;
 
         if (check(tId)) {
-            name = Expression::Literal(new ValueObject(token->getText()));
+            name = Expression::Literal(token->getText());
             getToken();
         }
 
@@ -512,7 +537,7 @@ Expression *DefaultParser::term() {
     //else if(accept(tTry)) {}
 
     else if (accept(tLPar)) {
-        e = expr();
+        e = context();
 
         if (!accept(tRPar))
             error("unmatched parentheses");

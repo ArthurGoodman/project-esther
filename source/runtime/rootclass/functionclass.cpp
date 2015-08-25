@@ -15,11 +15,11 @@ FunctionClass::FunctionClass()
 
 void FunctionClass::setupMethods() {
     auto callMethod = [](Object *self, Tuple *args) -> Object *{
-        Object *value = ((Function *)self)->invoke(((Context *)args->at(0))->getCurrentSelf(), (Tuple *)args->at(1));
+        Object *value = ((Function *)self)->invoke(args->at(0), (Tuple *)args->at(1));
         return value;
     };
 
-    setMethod("call", new Signature("Object", {"Context", "Tuple"}), callMethod);
+    setMethod("call", new Signature("Object", {"Object", "Tuple"}), callMethod);
     setAttribute("()", getMethod("call"));
 
     auto bodyMethod = [](Object *self, Tuple *) -> Object *{

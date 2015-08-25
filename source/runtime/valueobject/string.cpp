@@ -9,7 +9,7 @@ String::String(const char *value)
 }
 
 String::String()
-    : ValueObject("") {
+    : ValueObject((string)"") {
 }
 
 void String::setValue(string value) {

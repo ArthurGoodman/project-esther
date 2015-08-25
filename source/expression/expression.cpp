@@ -28,8 +28,12 @@ Expression *Expression::TupleLiteral(list<Expression *> nodes) {
     return manager->createTuple(nodes);
 }
 
-Expression *Expression::Literal(Object *value) {
+Expression *Expression::Literal(const Variant &value) {
     return manager->createLiteral(value);
+}
+
+Expression *Expression::Constant(Object *value) {
+    return manager->createConstant(value);
 }
 
 Expression *Expression::Or(Expression *self, Expression *arg) {
@@ -106,6 +110,10 @@ Expression *Expression::Do(Expression *body, Expression *condition) {
 
 Expression *Expression::ContextResolution(Expression *self, Expression *body) {
     return manager->createContextResolution(self, body);
+}
+
+Expression *Expression::ContextCall(Expression *self, Expression *body, list<Expression *> args) {
+    return manager->createContextCall(self, body, args);
 }
 
 Expression *Expression::ClassDefinition(Expression *name, Expression *superclass, Expression *body) {

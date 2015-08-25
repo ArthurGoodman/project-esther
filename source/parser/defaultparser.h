@@ -27,6 +27,7 @@ private:
     Expression *parseIdentifier();
 
     Expression *oper();
+    Expression *context();
     Expression *expr();
     Expression *tuple();
     Expression *logicOr();

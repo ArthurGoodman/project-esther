@@ -37,7 +37,7 @@ bool Context::hasLocal(string name) {
 }
 
 Object *Context::getLocal(string name) {
-    return hasLocal(name) ? locals.at(name) : 0;
+    return Context::hasLocal(name) ? locals.at(name) : 0;
 }
 
 void Context::setLocal(string name, Object *value) {
@@ -45,7 +45,7 @@ void Context::setLocal(string name, Object *value) {
 }
 
 bool Context::hasId(string name) {
-    if (hasLocal(name))
+    if (Context::hasLocal(name))
         return true;
 
     if (parent)
@@ -58,8 +58,8 @@ bool Context::hasId(string name) {
 }
 
 Object *Context::getId(string name) {
-    if (hasLocal(name))
-        return getLocal(name);
+    if (Context::hasLocal(name))
+        return Context::getLocal(name);
 
     if (parent)
         return parent->getId(name);
@@ -71,13 +71,13 @@ Object *Context::getId(string name) {
 }
 
 bool Context::setId(string name, Object *value) {
-    if (hasLocal(name)) {
-        setLocal(name, value);
+    if (Context::hasLocal(name)) {
+        Context::setLocal(name, value);
         return true;
     }
 
     if (parent)
-        return parent->Context::setId(name, value);
+        return parent->setId(name, value);
 
     return false;
 }
