@@ -273,10 +273,8 @@ HEADERS += \
 
 OTHER_FILES += \
     README.MD \
-    scripts/test.es \
+    scripts/parser.es \
+    scripts/script.es \
     source/common/definitions/keywords.def \
     source/common/definitions/operators.def \
     source/common/definitions/othertokens.def
-
-DISTFILES += \
-    scripts/parser.es
