@@ -4,31 +4,45 @@ class Parser {
             null
     }
 
-    class BinaryNode < Node
+    class BinaryNode < Node {
         method initialize(Node left, Node right) {
             self.left = left
             self.right = right
         }
 
-    class PlusNode < BinaryNode
         method eval
-            left.eval() + right.eval()
+            left.eval().oper(right.eval())
+    }
+
+    class PlusNode < BinaryNode
+        method initialize(...) {
+            (BinaryNode.initialize)(arguments[0], arguments[1])
+            self.oper = Float.+
+        }
 
     class MinusNode < BinaryNode
-        method eval 
-            left.eval() - right.eval()
+        method initialize(...) {
+            (BinaryNode.initialize)(arguments[0], arguments[1])
+            self.oper = Float.-
+        }
 
     class MultiplyNode < BinaryNode
-        method eval
-            left.eval() * right.eval()
+        method initialize(...) {
+            (BinaryNode.initialize)(arguments[0], arguments[1])
+            self.oper = Float.*
+        }
 
     class DivideNode < BinaryNode
-        method eval
-            left.eval() / right.eval()
+        method initialize(...) {
+            (BinaryNode.initialize)(arguments[0], arguments[1])
+            self.oper = Float./
+        }
 
     class PowerNode < BinaryNode
-        method eval
-            left.eval() ** right.eval()
+        method initialize(...) {
+            (BinaryNode.initialize)(arguments[0], arguments[1])
+            self.oper = Float.**
+        }
 
     class ValueNode < Node {
         method initialize(value)
