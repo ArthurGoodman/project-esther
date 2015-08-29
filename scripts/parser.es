@@ -10,42 +10,44 @@ class Parser {
             self.right = right
         }
 
+        super = initialize
+
         method eval
             left.eval().oper(right.eval())
     }
 
     class PlusNode < BinaryNode
-        method initialize(...) {
-            (BinaryNode.initialize)(arguments[0], arguments[1])
+        method initialize(left, right) {
+            super(left, right)
             self.oper = Float.+
         }
 
     class MinusNode < BinaryNode
-        method initialize(...) {
-            (BinaryNode.initialize)(arguments[0], arguments[1])
+        method initialize(left : Node, right : Node) {
+            super(left, right)
             self.oper = Float.-
         }
 
     class MultiplyNode < BinaryNode
-        method initialize(...) {
-            (BinaryNode.initialize)(arguments[0], arguments[1])
-            self.oper = Float.*
+        method initialize(Node left, right) {
+            super(left, right)
+            self.oper = function (Float a) self * a
         }
 
     class DivideNode < BinaryNode
-        method initialize(...) {
-            (BinaryNode.initialize)(arguments[0], arguments[1])
+        method initialize(left, ...) {
+            super(left, arguments[1])
             self.oper = Float./
         }
 
     class PowerNode < BinaryNode
         method initialize(...) {
-            (BinaryNode.initialize)(arguments[0], arguments[1])
+            super(arguments[0], arguments[1])
             self.oper = Float.**
         }
 
     class ValueNode < Node {
-        method initialize(value)
+        method initialize(value : Float = 0)
             self.value = value
 
         method eval
@@ -88,7 +90,7 @@ class Parser {
             if (p.at(pos) == '.') do
                 text += p.at(pos++ - 1)
             while (p.at(pos).isDigit())
-        } elif (operators.contains(at(pos))) token = new Token(at(pos++ - 1))
+        } elif (operators.contains(at(pos))) token = Token(at(pos++ - 1))
         elif (at(pos).isLetter() || at(pos) == '_') token = new Token {
             id = 'u'
             text = ""   
@@ -128,7 +130,7 @@ class Parser {
         node = addSub()
 
         if (node == null)
-            node = new ValueNode(0)
+            node = new ValueNode
 
         //if(!check('e'))
         //    ...
@@ -167,14 +169,27 @@ class Parser {
     }
 
     method power {
-        node = term()
+        node = unary()
 
         forever {
             if (accept('^'))
-                node = new PowerNode(node, term())
+                node = new PowerNode(node, unary())
             else
                 break
         }
+
+        node
+    }
+
+    method unary {
+        node = null
+
+        if (accept('+'))
+            node = new PlusNode(new ValueNode, term())
+        else if (accept('-'))
+            node = new MinusNode(ValueNode(), term())
+        else
+            node = term()
 
         node
     }
@@ -201,7 +216,7 @@ class Parser {
     }
 }
 
-new Parser.parse("2 + 3").eval()
+new Parser.parse("").eval()
 
 //forever {
 //    "$ ".print()

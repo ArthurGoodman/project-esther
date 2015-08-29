@@ -14,10 +14,6 @@ Esther::~Esther() {
     Engine::release();
 }
 
-void Esther::run(const string &script) {
-    IO::printLine("\n=> " + Engine::instance()->run(script)->toString());
-}
-
 void Esther::runFile(const string &fileName) {
-    IO::printLine("\n=> " + Engine::instance()->run(IO::readFile(fileName))->toString());
+    IO::printLine("\n=> " + Engine::instance()->runFile(fileName)->toString());
 }

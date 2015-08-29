@@ -15,8 +15,8 @@ public:
 
     virtual ~Engine();
 
-    virtual Object *run(const string &script) = 0;
-    virtual Object *run(const string &script, Context *context) = 0;
+    virtual Object *run(const string &script, Context *context = 0) = 0;
+    virtual Object *runFile(const string &fileName, Context *context = 0) = 0;
 
 protected:
     virtual void initializeEngine() = 0;

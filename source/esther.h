@@ -10,6 +10,5 @@ public:
     Esther();
     ~Esther();
 
-    static void run(const string &script);
     static void runFile(const string &fileName);
 };

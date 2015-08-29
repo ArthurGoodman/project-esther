@@ -8,11 +8,10 @@
 #include "errorexception.h"
 #include "returnexception.h"
 
-Object *DefaultEngine::run(const string &script) {
-    return run(script, Runtime::getRoot());
-}
-
 Object *DefaultEngine::run(const string &script, Context *context) {
+    if (!context)
+        context = Runtime::getRoot();
+
     Object *value = Runtime::getNull();
 
     pushSource(script);
@@ -28,12 +27,22 @@ Object *DefaultEngine::run(const string &script, Context *context) {
         IO::printLine(e->message());
         delete e;
     } catch (exception e) {
-        IO::printLine((string)"error: " + e.what());
+        IO::printLine((string) "error: " + e.what());
     } catch (...) {
         IO::printLine("something bad happened...");
     }
 
     popSource();
+
+    return value;
+}
+
+Object *DefaultEngine::runFile(const string &fileName, Context *context) {
+    pushFileName(fileName);
+
+    Object *value = run(IO::readFile(fileName), context);
+
+    popFileName();
 
     return value;
 }
@@ -59,6 +68,15 @@ void DefaultEngine::pushSource(const string &source) {
 void DefaultEngine::popSource() {
     if (!sources.empty())
         sources.pop();
+}
+
+void DefaultEngine::pushFileName(const string &fileName) {
+    fileNames.push(fileName);
+}
+
+void DefaultEngine::popFileName() {
+    if (!fileNames.empty())
+        fileNames.pop();
 }
 
 const string &DefaultEngine::source() {

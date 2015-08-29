@@ -6,11 +6,13 @@
 class Context;
 
 class DefaultEngine : public Engine {
-    stack<string> sources; // This is used in error messages to show the line containing errors.
+    // This is used in error messages to show the line containing errors.
+    stack<string> sources;
+    stack<string> fileNames;
 
 public:
-    Object *run(const string &script);
-    Object *run(const string &script, Context *context);
+    Object *run(const string &script, Context *context = 0);
+    Object *runFile(const string &fileName, Context *context = 0);
 
 protected:
     void initializeEngine();
@@ -19,6 +21,9 @@ protected:
 private:
     void pushSource(const string &source);
     void popSource();
+
+    void pushFileName(const string &fileName);
+    void popFileName();
 
     // Current source code access point.
     const string &source();
