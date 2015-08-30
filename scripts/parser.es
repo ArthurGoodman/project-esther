@@ -91,9 +91,9 @@ class Parser {
                 text += p.at(pos++ - 1)
             while (p.at(pos).isDigit())
         } elif (operators.contains(at(pos))) token = Token(at(pos++ - 1))
-        elif (at(pos).isLetter() || at(pos) == '_') token = new Token {
+            elif (at(pos).isLetter() || at(pos) == '_') token = new Token {
             id = 'u'
-            text = ""   
+            text = ""
             
             while (p.at(pos).isLetter() || p.at(pos) == '_')
                 text += p.at(pos++ - 1)

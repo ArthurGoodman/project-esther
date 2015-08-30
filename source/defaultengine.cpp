@@ -7,24 +7,39 @@
 #include "io.h"
 #include "errorexception.h"
 #include "returnexception.h"
+#include "breakexception.h"
+#include "continueexception.h"
+#include "utility.h"
 
 Object *DefaultEngine::run(const string &script, Context *context) {
     if (!context)
         context = Runtime::getRoot();
 
-    Object *value = Runtime::getNull();
+    Object *value = 0;
 
-    pushSource(script);
+    string src = Utility::expandTabs(script);
+
+    pushSource(src);
 
     try {
-        Expression *e = Parser::instance()->parse(Lexer::instance()->lex(script));
+        Expression *e = Parser::instance()->parse(Lexer::instance()->lex(src));
         value = e->eval(context);
         delete e;
     } catch (ReturnException *e) {
         IO::printLine("runtime error: return not within a function");
         delete e;
+    } catch (BreakException *e) {
+        IO::printLine("runtime error: break not within a loop");
+        delete e;
+    } catch (ContinueException *e) {
+        IO::printLine("runtime error: continue not within a loop");
+        delete e;
+    } catch (ErrorException *e) {
+        IO::printLine(fileName() + ":" + e->position().toString() + ": " + e->message());
+        IO::printLine(source().quote(e->position()));
+        delete e;
     } catch (Exception *e) {
-        IO::printLine(e->message());
+        IO::printLine("error: " + e->message());
         delete e;
     } catch (exception e) {
         IO::printLine((string) "error: " + e.what());
@@ -38,7 +53,7 @@ Object *DefaultEngine::run(const string &script, Context *context) {
 }
 
 Object *DefaultEngine::runFile(const string &fileName, Context *context) {
-    pushFileName(fileName);
+    pushFileName(IO::fullPath(fileName));
 
     Object *value = run(IO::readFile(fileName), context);
 
@@ -62,7 +77,7 @@ void DefaultEngine::releaseEngine() {
 }
 
 void DefaultEngine::pushSource(const string &source) {
-    sources.push(source);
+    sources.push(Source(source));
 }
 
 void DefaultEngine::popSource() {
@@ -79,6 +94,10 @@ void DefaultEngine::popFileName() {
         fileNames.pop();
 }
 
-const string &DefaultEngine::source() {
+const Source &DefaultEngine::source() {
     return sources.top();
+}
+
+const string &DefaultEngine::fileName() {
+    return fileNames.top();
 }

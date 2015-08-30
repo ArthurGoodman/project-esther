@@ -24,4 +24,6 @@ public:
 
     static string scan();
     static string scanLine();
+
+    static string fullPath(string partialPath);
 };

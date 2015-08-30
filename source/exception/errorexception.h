@@ -6,7 +6,7 @@
 
 class ErrorException : public Exception {
     string msg;
-    Position pos; // Position of error in the code.
+    Position pos;
 
 public:
     ErrorException(string message, Position position = Position());

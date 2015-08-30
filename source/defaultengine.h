@@ -2,12 +2,13 @@
 #include "common.h"
 
 #include "engine.h"
+#include "source.h"
 
 class Context;
 
 class DefaultEngine : public Engine {
     // This is used in error messages to show the line containing errors.
-    stack<string> sources;
+    stack<Source> sources;
     stack<string> fileNames;
 
 public:
@@ -26,5 +27,6 @@ private:
     void popFileName();
 
     // Current source code access point.
-    const string &source();
+    const Source &source();
+    const string &fileName();
 };

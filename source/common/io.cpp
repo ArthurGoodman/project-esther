@@ -1,5 +1,7 @@
 #include "io.h"
 
+#include <stdlib.h>
+
 map<string, unique_ptr<fstream>> IO::files;
 
 // Read the file into a string.
@@ -80,4 +82,12 @@ string IO::scanLine() {
     string str;
     getline(cin, str);
     return str;
+}
+
+string IO::fullPath(string partialPath) {
+    char path[_MAX_PATH];
+    if (_fullpath(path, partialPath.data(), _MAX_PATH))
+        return path;
+
+    return "";
 }

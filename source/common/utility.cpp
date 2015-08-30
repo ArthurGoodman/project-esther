@@ -27,3 +27,23 @@ bool Utility::isLetter(char c) {
 bool Utility::isLetterOrDigit(char c) {
     return isLetter(c) || isDigit(c);
 }
+
+string Utility::expandTabs(const string &str) {
+    string result;
+
+    for (int i = 0, c = 0; i < (int)str.size(); i++)
+        if (str[i] == '\t') {
+            int delta = c % tabSize ? c % tabSize : tabSize;
+            c += delta;
+            result.insert(result.size(), delta, ' ');
+        } else {
+            result += str[i];
+
+            if (str[i] == '\n')
+                c = 0;
+            else
+                c++;
+        }
+
+    return result;
+}

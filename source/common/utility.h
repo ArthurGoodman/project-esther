@@ -2,6 +2,8 @@
 #include "common.h"
 
 class Utility {
+    static const int tabSize = 4;
+
 public:
     // String covertions:
 
@@ -20,6 +22,8 @@ public:
     static bool isDigit(char c);
     static bool isLetter(char c);
     static bool isLetterOrDigit(char c);
+
+    static string expandTabs(const string &str);
 };
 
 template <class T>

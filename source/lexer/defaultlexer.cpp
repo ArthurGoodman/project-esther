@@ -85,6 +85,7 @@ void DefaultLexer::scan() {
 
     else if (at(pos) == '\'' || at(pos) == '"') { // String literals.
         char type = at(pos++);
+        column++;
 
         token = type == '"' ? tComplexString : tString;
 
@@ -96,38 +97,52 @@ void DefaultLexer::scan() {
                 switch (at(++pos)) {
                 case 'n':
                     token += '\n';
+                    column += 2;
                     break;
                 case 't':
                     token += '\t';
+                    column += 2;
                     break;
                 case '0':
                     token += '\0';
+                    column += 2;
                     break;
                 case '\\':
                     token += '\\';
+                    column += 2;
                     break;
                 case '\'':
                     token += '\'';
+                    column += 2;
                     break;
                 case '"':
                     token += '"';
+                    column += 2;
                     break;
                 case '\n':
+                    line++;
+                    column = 1;
                     break;
 
                 default:
-                    error((string) "invalid escape sequence '\\" + at(pos) + "'", token.getText().size() + 1);
+                    token.setPos(Position(pos, line, column));
+                    error((string) "invalid escape sequence '\\" + at(pos) + "'");
                 }
 
-                ++pos;
-            } else
+                pos++;
+            } else {
                 token += at(pos++);
+                column++;
+            }
         }
 
         if (at(pos) != type)
             error("invalid string constant");
-        else
-            ++pos;
+
+        pos++;
+        column++;
+
+        column -= token.getText().length();
     } else if (Utility::isDigit(at(pos))) { // Numbers.
         token = tInteger;
 

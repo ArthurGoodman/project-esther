@@ -144,7 +144,8 @@ SOURCES += \
     source/expression/ast/includeexpression.cpp \
     source/expression/ast/objectliteralexpression.cpp \
     source/expression/ast/constantexpression.cpp \
-    source/expression/ast/contextcallexpression.cpp
+    source/expression/ast/contextcallexpression.cpp \
+    source/common/source.cpp
 
 HEADERS += \
     source/esther.h \
@@ -269,7 +270,8 @@ HEADERS += \
     source/expression/ast/includeexpression.h \
     source/expression/ast/objectliteralexpression.h \
     source/expression/ast/constantexpression.h \
-    source/expression/ast/contextcallexpression.h
+    source/expression/ast/contextcallexpression.h \
+    source/common/source.h
 
 OTHER_FILES += \
     README.MD \
