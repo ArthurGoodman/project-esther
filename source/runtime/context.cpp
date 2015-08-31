@@ -3,6 +3,8 @@
 #include "runtime.h"
 #include "class.h"
 #include "objectcontext.h"
+#include "runtimeerror.h"
+#include "method.h"
 
 Context::Context(Object *currentSelf, Class *currentClass, Context *parent, int modifiers)
     : Object("Context"), currentSelf(currentSelf), currentClass(currentClass), parent(parent), modifiers(modifiers) {
@@ -123,4 +125,17 @@ void Context::setModifier(int modifier, bool state) {
 
 int Context::getModifier(int modifier) {
     return modifiers & modifier;
+}
+
+Object *Context::getSelfForMethod(Method *method) {
+    if (method->suitableFor(currentSelf))
+        return currentSelf;
+
+    if (parent)
+        return parent->getSelfForMethod(method);
+
+    ErrorException *e = new RuntimeError("can't find self for " + method->toString());
+    e->raise();
+
+    return 0;
 }

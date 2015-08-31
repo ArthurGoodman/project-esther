@@ -2,6 +2,7 @@
 
 #include "context.h"
 #include "function.h"
+#include "method.h"
 #include "tuple.h"
 
 ContextCallExpression::ContextCallExpression(Expression *self, Expression *body, list<Expression *> args)
@@ -10,7 +11,10 @@ ContextCallExpression::ContextCallExpression(Expression *self, Expression *body,
 
 Object *ContextCallExpression::exec(Context *context) {
     Object *self = this->self->eval(context);
-    Object *body = this->body->eval(context->objectChildContext(self));
+
+    Context *selfContext = context->objectChildContext(self);
+
+    Object *body = this->body->eval(selfContext);
 
     list<Object *> evaledArgs;
 
@@ -19,7 +23,9 @@ Object *ContextCallExpression::exec(Context *context) {
 
     Tuple *actualArgs;
 
-    if (dynamic_cast<Function *>(body))
+    if (dynamic_cast<Method *>(body))
+        actualArgs = new Tuple({selfContext->getSelfForMethod((Method *)body), new Tuple(evaledArgs)});
+    else if (dynamic_cast<Function *>(body))
         actualArgs = new Tuple({self, new Tuple(evaledArgs)});
     else
         actualArgs = new Tuple(evaledArgs);

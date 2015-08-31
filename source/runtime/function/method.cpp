@@ -30,3 +30,7 @@ bool Method::isStatic() {
 Object *Method::getSelf() {
     return self;
 }
+
+bool Method::suitableFor(Object *self) {
+    return staticFlag ? this->self == self : self->is((Class *)this->self);
+}

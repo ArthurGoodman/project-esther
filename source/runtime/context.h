@@ -3,6 +3,8 @@
 
 #include "object.h"
 
+class Method;
+
 class Context : public Object {
 protected:
     Object *currentSelf;
@@ -48,4 +50,6 @@ public:
 
     void setModifier(int modifier, bool state);
     int getModifier(int modifier);
+
+    Object *getSelfForMethod(Method *method);
 };

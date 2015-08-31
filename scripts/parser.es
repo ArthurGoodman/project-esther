@@ -74,8 +74,6 @@ class Parser {
         else code[pos]
 
     method getToken {
-        p = self
-
         while (at(pos).isSpace())
             pos++
 
@@ -84,22 +82,22 @@ class Parser {
             id = 'n'
             text = ""
 
-            while (p.at(pos).isDigit())
-                text += p.at(pos++ - 1)
+            while (at(pos).isDigit())
+                text += at(pos++ - 1)
             
-            if (p.at(pos) == '.') do
-                text += p.at(pos++ - 1)
-            while (p.at(pos).isDigit())
+            if (at(pos) == '.') do
+                text += at(pos++ - 1)
+            while (at(pos).isDigit())
         } elif (operators.contains(at(pos))) token = Token(at(pos++ - 1))
-            elif (at(pos).isLetter() || at(pos) == '_') token = new Token {
+        elif (at(pos).isLetter() || at(pos) == '_') token = new Token {
             id = 'u'
             text = ""
             
-            while (p.at(pos).isLetter() || p.at(pos) == '_')
-                text += p.at(pos++ - 1)
+            while (at(pos).isLetter() || at(pos) == '_')
+                text += at(pos++ - 1)
         } else token = new Token {
             id = 'u'
-            text = p.at(pos++ - 1)
+            text = at(pos++ - 1)
         }
     }
 

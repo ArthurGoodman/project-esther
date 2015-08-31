@@ -17,4 +17,6 @@ public:
 
     bool isStatic();
     Object *getSelf();
+
+    bool suitableFor(Object *self);
 };
