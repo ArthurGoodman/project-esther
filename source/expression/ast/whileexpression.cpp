@@ -9,7 +9,7 @@ WhileExpression::WhileExpression(Expression *condition, Expression *body, Expres
     : condition(condition), body(body), elseBody(elseBody) {
 }
 
-Object *WhileExpression::eval(Context *context) {
+Object *WhileExpression::exec(Context *context) {
     Object *value = Runtime::getNull();
 
     context = context->childContext();

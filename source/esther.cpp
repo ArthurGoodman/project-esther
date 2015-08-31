@@ -1,21 +1,21 @@
 #include "esther.h"
 
-#include "engine.h"
+#include "iengine.h"
 #include "object.h"
 #include "io.h"
 
 Esther Esther::esther;
 
 Esther::Esther() {
-    Engine::initialize();
+    IEngine::initialize();
 }
 
 Esther::~Esther() {
-    Engine::release();
+    IEngine::release();
 }
 
 void Esther::runFile(const string &fileName) {
-    Object *value = Engine::instance()->runFile(fileName);
+    Object *value = IEngine::instance()->runFile(fileName);
 
     if (value)
         IO::printLine("\n=> " + value->toString());

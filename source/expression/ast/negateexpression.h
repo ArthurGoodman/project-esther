@@ -9,5 +9,5 @@ class NegateExpression : public Expression {
 public:
     NegateExpression(Expression *self);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

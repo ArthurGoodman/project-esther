@@ -9,5 +9,5 @@ class AndExpression : public Expression {
 public:
     AndExpression(Expression *self, Expression *arg);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

@@ -9,5 +9,5 @@ class ReturnExpression : public Expression {
 public:
     ReturnExpression(Expression *value = 0);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

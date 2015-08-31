@@ -1,11 +1,12 @@
 #include "expression.h"
 
-#include "expressionmanager.h"
+#include "iexpressionmanager.h"
+#include "errorexception.h"
 
-ExpressionManager *Expression::manager;
+IExpressionManager *Expression::manager;
 
 void Expression::initialize() {
-    manager = ExpressionManager::create();
+    manager = IExpressionManager::create();
 }
 
 void Expression::release() {
@@ -158,4 +159,19 @@ Expression *Expression::Include(Expression *fileName) {
 
 Expression *Expression::ObjectLiteral(Expression *body) {
     return manager->createObjectLiteral(body);
+}
+
+Object *Expression::eval(Context *context) {
+    Object *value = 0;
+
+    try {
+        value = exec(context);
+    } catch (ErrorException *e) {
+        if (!e->getPosition().isValid())
+            e->setPosition(getPosition());
+
+        e->raise();
+    }
+
+    return value;
 }

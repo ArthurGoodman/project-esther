@@ -1,64 +1,59 @@
 #pragma once
 #include "common.h"
 
-class Variant;
-class Expression;
-class Object;
+#include "variant.h"
+#include "iexpressionmanager.h"
 
-class ExpressionManager {
+class ExpressionManager : public IExpressionManager {
 public:
-    static ExpressionManager *create();
+    Expression *createEmpty();
 
-    virtual ~ExpressionManager();
+    Expression *createBlock(list<Expression *> nodes);
+    Expression *createList(list<Expression *> nodes);
 
-    virtual Expression *createEmpty() = 0;
+    Expression *createTuple(list<Expression *> nodes);
 
-    virtual Expression *createBlock(list<Expression *> nodes) = 0;
-    virtual Expression *createList(list<Expression *> nodes) = 0;
+    Expression *createLiteral(const Variant &value);
+    Expression *createConstant(Object *value);
 
-    virtual Expression *createTuple(list<Expression *> nodes) = 0;
+    Expression *createOr(Expression *self, Expression *arg);
+    Expression *createAnd(Expression *self, Expression *arg);
 
-    virtual Expression *createLiteral(const Variant &value) = 0;
-    virtual Expression *createConstant(Object *value) = 0;
+    Expression *createNegate(Expression *self);
 
-    virtual Expression *createOr(Expression *self, Expression *arg) = 0;
-    virtual Expression *createAnd(Expression *self, Expression *arg) = 0;
+    Expression *createPreDecrement(Expression *self);
+    Expression *createPreIncrement(Expression *self);
+    Expression *createPostDecrement(Expression *self);
+    Expression *createPostIncrement(Expression *self);
 
-    virtual Expression *createNegate(Expression *self) = 0;
+    Expression *createIdentifier(Expression *name);
+    Expression *createIdentifierAssignment(Expression *name, Expression *value);
+    Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value);
 
-    virtual Expression *createPreDecrement(Expression *self) = 0;
-    virtual Expression *createPreIncrement(Expression *self) = 0;
-    virtual Expression *createPostDecrement(Expression *self) = 0;
-    virtual Expression *createPostIncrement(Expression *self) = 0;
+    Expression *createParameter(Expression *type, Expression *name, Expression *value);
+    Expression *createCall(Expression *self, string name, list<Expression *> args);
 
-    virtual Expression *createIdentifier(Expression *name) = 0;
-    virtual Expression *createIdentifierAssignment(Expression *name, Expression *value) = 0;
-    virtual Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value) = 0;
+    Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
+    Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody);
+    //Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
+    Expression *createDo(Expression *body, Expression *condition);
 
-    virtual Expression *createParameter(Expression *type, Expression *name, Expression *value) = 0;
-    virtual Expression *createCall(Expression *self, string name, list<Expression *> args) = 0;
+    Expression *createContextResolution(Expression *self, Expression *body);
+    Expression *createContextCall(Expression *self, Expression *body, list<Expression *> args);
 
-    virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
-    virtual Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody) = 0;
-    //virtual Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) = 0;
-    virtual Expression *createDo(Expression *body, Expression *condition) = 0;
+    Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
-    virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
-    virtual Expression *createContextCall(Expression *self, Expression *body, list<Expression *> args) = 0;
+    Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
+    Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
 
-    virtual Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body) = 0;
+    Expression *createReturn(Expression *value);
+    Expression *createBreak(Expression *value);
+    Expression *createContinue();
 
-    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) = 0;
-    virtual Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) = 0;
+    Expression *createSelf();
+    Expression *createHere();
 
-    virtual Expression *createReturn(Expression *value) = 0;
-    virtual Expression *createBreak(Expression *value) = 0;
-    virtual Expression *createContinue() = 0;
-
-    virtual Expression *createSelf() = 0;
-    virtual Expression *createHere() = 0;
-
-    virtual Expression *createStatic(Expression *body) = 0;
-    virtual Expression *createInclude(Expression *fileName) = 0;
-    virtual Expression *createObjectLiteral(Expression *body) = 0;
+    Expression *createStatic(Expression *body);
+    Expression *createInclude(Expression *fileName);
+    Expression *createObjectLiteral(Expression *body);
 };

@@ -9,5 +9,5 @@ class DoExpression : public Expression {
 public:
     DoExpression(Expression *body, Expression *condition);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

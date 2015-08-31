@@ -11,7 +11,7 @@ DebugExpression::DebugExpression(string name, list<Object *> args)
     : name(name), args(args) {
 }
 
-Object *DebugExpression::eval(Context *) {
+Object *DebugExpression::exec(Context *) {
     Logger::write("parser", toString());
 
     return Runtime::getNull();

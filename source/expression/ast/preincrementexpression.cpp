@@ -4,7 +4,7 @@ PreIncrementExpression::PreIncrementExpression(Expression *self)
     : self(self) {
 }
 
-Object *PreIncrementExpression::eval(Context *context) {
+Object *PreIncrementExpression::exec(Context *context) {
     Object *self = this->self->eval(context);
     self->call("++");
     return self;

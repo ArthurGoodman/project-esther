@@ -9,5 +9,5 @@ class TupleExpression : public Expression {
 public:
     TupleExpression(list<Expression *> nodes);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

@@ -2,8 +2,8 @@
 
 #include "rootclass.h"
 #include "objectcontext.h"
-#include "lexer.h"
-#include "parser.h"
+#include "ilexer.h"
+#include "iparser.h"
 #include "expression.h"
 #include "true.h"
 #include "false.h"

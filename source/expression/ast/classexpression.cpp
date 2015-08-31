@@ -8,7 +8,7 @@ ClassExpression::ClassExpression(Expression *name, Expression *superclass, Expre
     : name(name), superclass(superclass), body(body) {
 }
 
-Object *ClassExpression::eval(Context *context) {
+Object *ClassExpression::exec(Context *context) {
     string name;
     Class *_class = 0, *superclass = 0;
 

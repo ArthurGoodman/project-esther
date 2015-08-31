@@ -6,7 +6,7 @@ StaticExpression::StaticExpression(Expression *body)
     : body(body) {
 }
 
-Object *StaticExpression::eval(Context *context) {
+Object *StaticExpression::exec(Context *context) {
     int modifier = context->getModifier(Context::StaticModifier);
 
     context->setModifier(Context::StaticModifier, true);

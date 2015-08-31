@@ -6,6 +6,6 @@ LiteralExpression::LiteralExpression(const Variant &value)
     : value(value) {
 }
 
-Object *LiteralExpression::eval(Context *) {
+Object *LiteralExpression::exec(Context *) {
     return new ValueObject(value);
 }

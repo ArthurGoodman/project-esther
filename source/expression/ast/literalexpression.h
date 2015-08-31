@@ -10,5 +10,5 @@ class LiteralExpression : public Expression {
 public:
     LiteralExpression(const Variant &value);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

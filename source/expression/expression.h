@@ -2,13 +2,14 @@
 #include "common.h"
 
 #include "object.h"
+#include "positionedobject.h"
 
 class Variant;
-class ExpressionManager;
+class IExpressionManager;
 class Context;
 
-class Expression : public Object {
-    static ExpressionManager *manager;
+class Expression : public Object, public PositionedObject {
+    static IExpressionManager *manager;
 
 public:
     static void initialize();
@@ -68,5 +69,7 @@ public:
     static Expression *Include(Expression *fileName);
     static Expression *ObjectLiteral(Expression *body);
 
-    virtual Object *eval(Context *context) = 0;
+    Object *eval(Context *context);
+
+    virtual Object *exec(Context *context) = 0;
 };

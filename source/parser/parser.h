@@ -1,21 +1,44 @@
 #pragma once
 #include "common.h"
 
-class Expression;
-class Token;
+#include "iparser.h"
+#include "lexer.h"
 
-typedef list<Token> Tokens;
+class ILexer;
 
-// Syntactic analysis.
-class Parser {
-    static Parser *parser;
+class Parser : public IParser {
+    Tokens tokens;
+    Tokens::iterator token;
 
 public:
-    static void initialize();
-    static void release();
+    Expression *parse(Tokens &tokens);
 
-    static Parser *instance();
+private:
+    void error(string msg, int delta = 0);
 
-    virtual ~Parser();
-    virtual Expression *parse(Tokens &tokens) = 0;
+    bool check(int id);
+    bool accept(int id);
+
+    void getToken();
+
+    list<Expression *> parseBlock();
+    list<Expression *> parseList();
+
+    Expression *parseIdentifier();
+
+    Expression *oper();
+    Expression *context();
+    Expression *expr();
+    Expression *tuple();
+    Expression *logicOr();
+    Expression *logicAnd();
+    Expression *equality();
+    Expression *relation();
+    Expression *addSub();
+    Expression *mulDiv();
+    Expression *power();
+    Expression *dot();
+    Expression *preffix();
+    Expression *suffix();
+    Expression *term();
 };

@@ -7,5 +7,5 @@ class ForExpression : public Expression {
 public:
     ForExpression();
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

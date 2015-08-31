@@ -10,5 +10,5 @@ protected:
 public:
     IdentifierExpression(Expression *name);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

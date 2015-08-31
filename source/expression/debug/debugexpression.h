@@ -15,7 +15,7 @@ class DebugExpression : public Expression {
 public:
     DebugExpression(string name, list<Object *> args = list<Object *>());
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 
     string toString();
 };

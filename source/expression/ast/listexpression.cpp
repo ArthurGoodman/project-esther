@@ -6,7 +6,7 @@ ListExpression::ListExpression(list<Expression *> nodes)
     : nodes(nodes) {
 }
 
-Object *ListExpression::eval(Context *context) {
+Object *ListExpression::exec(Context *context) {
     Object *value = Runtime::getNull();
 
     foreach (i, nodes)

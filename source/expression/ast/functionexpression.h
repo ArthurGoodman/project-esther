@@ -12,5 +12,5 @@ class FunctionExpression : public Expression {
 public:
     FunctionExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

@@ -9,7 +9,7 @@ DoExpression::DoExpression(Expression *body, Expression *condition)
     : body(body), condition(condition) {
 }
 
-Object *DoExpression::eval(Context *context) {
+Object *DoExpression::exec(Context *context) {
     Object *value = Runtime::getNull();
 
     context = context->childContext();

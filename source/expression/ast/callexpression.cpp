@@ -9,7 +9,7 @@ CallExpression::CallExpression(Expression *self, string name, list<Expression *>
     : self(self), name(name), args(args) {
 }
 
-Object *CallExpression::eval(Context *context) {
+Object *CallExpression::exec(Context *context) {
     Object *self = this->self->eval(context);
 
     list<Object *> evaledArgs;

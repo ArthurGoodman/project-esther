@@ -2,6 +2,6 @@
 
 #include "runtime.h"
 
-Object *EmptyExpression::eval(Context *) {
+Object *EmptyExpression::exec(Context *) {
     return Runtime::getNull();
 }

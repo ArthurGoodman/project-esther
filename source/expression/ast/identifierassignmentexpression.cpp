@@ -8,7 +8,7 @@ IdentifierAssignmentExpression::IdentifierAssignmentExpression(Expression *name,
     : IdentifierExpression(name), value(value) {
 }
 
-Object *IdentifierAssignmentExpression::eval(Context *context) {
+Object *IdentifierAssignmentExpression::exec(Context *context) {
     string name = this->name->eval(context)->toString();
     Object *value = this->value->eval(context);
 

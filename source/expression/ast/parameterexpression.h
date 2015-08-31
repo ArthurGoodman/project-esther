@@ -9,5 +9,5 @@ class ParameterExpression : public Expression {
 public:
     ParameterExpression(Expression *type, Expression *name, Expression *value);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

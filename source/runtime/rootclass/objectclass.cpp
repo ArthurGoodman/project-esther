@@ -7,7 +7,7 @@
 #include "io.h"
 #include "signature.h"
 #include "string.h"
-#include "engine.h"
+#include "iengine.h"
 
 ObjectClass::ObjectClass()
     : RootClass("Object", 0) {
@@ -75,7 +75,7 @@ void ObjectClass::setupMethods() {
     setMethod("as", new Signature("Object", {"Class"}), asMethod);
 
     auto evalMethod = [](Object *, Tuple * args) -> Object * {
-        return Engine::instance()->run(((ValueObject *)args->at(0))->toString()); // TODO: Need to use proper context.
+        return IEngine::instance()->run(((ValueObject *)args->at(0))->toString()); // TODO: Need to use proper context.
     };
 
     setMethod("eval", new Signature("Object", {"String"}), evalMethod);

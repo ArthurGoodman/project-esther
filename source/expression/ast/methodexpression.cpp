@@ -12,7 +12,7 @@ MethodExpression::MethodExpression(Expression *type, Expression *name, list<Expr
     : type(type), name(name), params(params), body(body), variadic(variadic) {
 }
 
-Object *MethodExpression::eval(Context *context) {
+Object *MethodExpression::exec(Context *context) {
     Class *type = this->type ? (Class *)this->type->eval(context) : Runtime::getObjectClass();
 
     if (!type->is("Class"))

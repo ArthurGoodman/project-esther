@@ -1,24 +1,32 @@
 #pragma once
 #include "common.h"
 
-class Object;
+#include "iengine.h"
+#include "source.h"
+
 class Context;
 
-class Engine {
-    static Engine *engine;
+class Engine : public IEngine {
+    // This is used in error messages to show the line containing errors.
+    stack<Source> sources;
+    stack<string> fileNames;
 
 public:
-    static void initialize();
-    static void release();
-
-    static Engine *instance();
-
-    virtual ~Engine();
-
-    virtual Object *run(const string &script, Context *context = 0) = 0;
-    virtual Object *runFile(const string &fileName, Context *context = 0) = 0;
+    Object *run(const string &script, Context *context = 0);
+    Object *runFile(const string &fileName, Context *context = 0);
 
 protected:
-    virtual void initializeEngine() = 0;
-    virtual void releaseEngine() = 0;
+    void initializeEngine();
+    void releaseEngine();
+
+private:
+    void pushSource(const string &source);
+    void popSource();
+
+    void pushFileName(const string &fileName);
+    void popFileName();
+
+    // Current source code access point.
+    const Source &source();
+    const string &fileName();
 };

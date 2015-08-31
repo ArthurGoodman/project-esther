@@ -9,5 +9,5 @@ class BlockExpression : public Expression {
 public:
     BlockExpression(list<Expression *> nodes);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

@@ -9,5 +9,5 @@ class ConstantExpression : public Expression {
 public:
     ConstantExpression(Object *value);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

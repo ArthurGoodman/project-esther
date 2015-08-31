@@ -12,7 +12,7 @@ FunctionExpression::FunctionExpression(Expression *type, Expression *name, list<
     : type(type), name(name), params(params), body(body), variadic(variadic) {
 }
 
-Object *FunctionExpression::eval(Context *context) {
+Object *FunctionExpression::exec(Context *context) {
     Class *type = this->type ? (Class *)this->type->eval(context) : Runtime::getObjectClass();
 
     if (!type->is("Class"))

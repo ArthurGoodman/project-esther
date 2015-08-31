@@ -3,14 +3,13 @@
 
 #include "exception.h"
 #include "position.h"
+#include "positionedobject.h"
 
-class ErrorException : public Exception {
+class ErrorException : public Exception, public PositionedObject {
     string msg;
-    Position pos;
 
 public:
     ErrorException(string message, Position position = Position());
 
     string message();
-    Position position();
 };

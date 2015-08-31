@@ -7,7 +7,7 @@ IdentifierExpression::IdentifierExpression(Expression *name)
     : name(name) {
 }
 
-Object *IdentifierExpression::eval(Context *context) {
+Object *IdentifierExpression::exec(Context *context) {
     string name = this->name->eval(context)->toString();
 
     if (!context->hasId(name))

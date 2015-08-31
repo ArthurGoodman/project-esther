@@ -7,7 +7,7 @@ BlockExpression::BlockExpression(list<Expression *> nodes)
     : nodes(nodes) {
 }
 
-Object *BlockExpression::eval(Context *context) {
+Object *BlockExpression::exec(Context *context) {
     Object *value = Runtime::getNull();
 
     context = context->childContext();

@@ -1,7 +1,7 @@
 #pragma once
 #include "common.h"
 
-class Engine;
+class IEngine;
 
 class Esther {
     static Esther esther;

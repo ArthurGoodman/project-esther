@@ -8,7 +8,6 @@ class ObjectLiteralExpression : public Expression {
 
 public:
     ObjectLiteralExpression(Expression *body);
-    ~ObjectLiteralExpression();
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

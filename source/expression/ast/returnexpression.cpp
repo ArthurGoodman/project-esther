@@ -7,6 +7,6 @@ ReturnExpression::ReturnExpression(Expression *value)
     : value(value) {
 }
 
-Object *ReturnExpression::eval(Context *context) {
+Object *ReturnExpression::exec(Context *context) {
     throw new ReturnException(value ? value->eval(context) : Runtime::getNull());
 }

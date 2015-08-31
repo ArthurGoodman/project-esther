@@ -20,14 +20,6 @@ string Token::getText() {
     return text;
 }
 
-Position Token::getPos() {
-    return pos;
-}
-
-void Token::setPos(Position pos) {
-    this->pos = pos;
-}
-
 Token &Token::operator=(int id) {
     this->id = id;
     return *this;

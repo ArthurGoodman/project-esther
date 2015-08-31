@@ -8,7 +8,7 @@ ContextCallExpression::ContextCallExpression(Expression *self, Expression *body,
     : self(self), body(body), args(args) {
 }
 
-Object *ContextCallExpression::eval(Context *context) {
+Object *ContextCallExpression::exec(Context *context) {
     Object *self = this->self->eval(context);
     Object *body = this->body->eval(context->objectChildContext(self));
 

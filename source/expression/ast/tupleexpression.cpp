@@ -7,7 +7,7 @@ TupleExpression::TupleExpression(list<Expression *> nodes)
     : nodes(nodes) {
 }
 
-Object *TupleExpression::eval(Context *context) {
+Object *TupleExpression::exec(Context *context) {
     list<Object *> evaledNodes;
 
     foreach (i, nodes)

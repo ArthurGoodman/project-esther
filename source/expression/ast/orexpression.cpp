@@ -4,7 +4,7 @@ OrExpression::OrExpression(Expression *self, Expression *arg)
     : self(self), arg(arg) {
 }
 
-Object *OrExpression::eval(Context *context) {
+Object *OrExpression::exec(Context *context) {
     Object *self = this->self->eval(context);
 
     if (self->isTrue())

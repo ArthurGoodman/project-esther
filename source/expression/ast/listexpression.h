@@ -9,5 +9,5 @@ class ListExpression : public Expression {
 public:
     ListExpression(list<Expression *> nodes);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

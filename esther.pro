@@ -36,8 +36,6 @@ SOURCES += \
     source/variant/stringvariant.cpp \
     source/variant/variant.cpp \
     source/variant/variantprivate.cpp \
-    source/defaultengine.cpp \
-    source/engine.cpp \
     source/exception/breakexception.cpp \
     source/exception/continueexception.cpp \
     source/exception/errorexception.cpp \
@@ -48,9 +46,7 @@ SOURCES += \
     source/exception/runtimeerror.cpp \
     source/exception/syntaxerror.cpp \
     source/exception/valueexception.cpp \
-    source/expression/defaultexpressionmanager.cpp \
     source/expression/expression.cpp \
-    source/expression/expressionmanager.cpp \
     source/expression/ast/andexpression.cpp \
     source/expression/ast/blockexpression.cpp \
     source/expression/ast/breakexpression.cpp \
@@ -79,10 +75,6 @@ SOURCES += \
     source/expression/ast/whileexpression.cpp \
     source/expression/debug/debugexpression.cpp \
     source/expression/debug/debugexpressionmanager.cpp \
-    source/lexer/defaultlexer.cpp \
-    source/lexer/lexer.cpp \
-    source/parser/defaultparser.cpp \
-    source/parser/parser.cpp \
     source/runtime/call.cpp \
     source/runtime/class.cpp \
     source/runtime/context.cpp \
@@ -145,7 +137,16 @@ SOURCES += \
     source/expression/ast/objectliteralexpression.cpp \
     source/expression/ast/constantexpression.cpp \
     source/expression/ast/contextcallexpression.cpp \
-    source/common/source.cpp
+    source/common/source.cpp \
+    source/common/positionedobject.cpp \
+    source/parser/iparser.cpp \
+    source/parser/parser.cpp \
+    source/iengine.cpp \
+    source/engine.cpp \
+    source/lexer/ilexer.cpp \
+    source/lexer/lexer.cpp \
+    source/expression/iexpressionmanager.cpp \
+    source/expression/expressionmanager.cpp
 
 HEADERS += \
     source/esther.h \
@@ -161,8 +162,6 @@ HEADERS += \
     source/variant/stringvariant.h \
     source/variant/variant.h \
     source/variant/variantprivate.h \
-    source/defaultengine.h \
-    source/engine.h \
     source/exception/breakexception.h \
     source/exception/continueexception.h \
     source/exception/errorexception.h \
@@ -173,9 +172,7 @@ HEADERS += \
     source/exception/runtimeerror.h \
     source/exception/syntaxerror.h \
     source/exception/valueexception.h \
-    source/expression/defaultexpressionmanager.h \
     source/expression/expression.h \
-    source/expression/expressionmanager.h \
     source/expression/ast/andexpression.h \
     source/expression/ast/blockexpression.h \
     source/expression/ast/breakexpression.h \
@@ -204,10 +201,6 @@ HEADERS += \
     source/expression/ast/whileexpression.h \
     source/expression/debug/debugexpression.h \
     source/expression/debug/debugexpressionmanager.h \
-    source/lexer/defaultlexer.h \
-    source/lexer/lexer.h \
-    source/parser/defaultparser.h \
-    source/parser/parser.h \
     source/runtime/call.h \
     source/runtime/class.h \
     source/runtime/context.h \
@@ -271,7 +264,16 @@ HEADERS += \
     source/expression/ast/objectliteralexpression.h \
     source/expression/ast/constantexpression.h \
     source/expression/ast/contextcallexpression.h \
-    source/common/source.h
+    source/common/source.h \
+    source/common/positionedobject.h \
+    source/parser/iparser.h \
+    source/parser/parser.h \
+    source/iengine.h \
+    source/engine.h \
+    source/lexer/ilexer.h \
+    source/lexer/lexer.h \
+    source/expression/iexpressionmanager.h \
+    source/expression/expressionmanager.h
 
 OTHER_FILES += \
     README.MD \

@@ -11,5 +11,5 @@ class ContextCallExpression : public Expression {
 public:
     ContextCallExpression(Expression *self, Expression *body, list<Expression *> args);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

@@ -10,5 +10,5 @@ protected:
 public:
     IdentifierAssignmentExpression(Expression *name, Expression *value);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

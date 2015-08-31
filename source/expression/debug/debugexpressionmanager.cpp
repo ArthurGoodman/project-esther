@@ -38,12 +38,21 @@ Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
     return new DebugExpression("Tuple", arguments);
 }
 
-Expression *DebugExpressionManager::createLiteral(Object *value) {
+Expression *DebugExpressionManager::createLiteral(const Variant &value) {
+    list<Object *> arguments;
+
+    Object *object = new ValueObject(value);
+    arguments << new ValueObject("<" + object->getClass()->getName() + " : \"" + object->toString() + "\">");
+
+    return new DebugExpression("Literal", arguments);
+}
+
+Expression *DebugExpressionManager::createConstant(Object *value) {
     list<Object *> arguments;
 
     arguments << new ValueObject("<" + value->getClass()->getName() + " : \"" + value->toString() + "\">");
 
-    return new DebugExpression("Literal", arguments);
+    return new DebugExpression("Constant", arguments);
 }
 
 Expression *DebugExpressionManager::createOr(Expression *self, Expression *arg) {
@@ -187,16 +196,16 @@ Expression *DebugExpressionManager::createWhile(Expression *condition, Expressio
     return new DebugExpression("While", arguments);
 }
 
-Expression *DebugExpressionManager::createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
-    list<Object *> arguments;
+//Expression *DebugExpressionManager::createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
+//    list<Object *> arguments;
 
-    arguments << preffix;
-    arguments << condition;
-    arguments << suffix;
-    arguments << body;
+//    arguments << preffix;
+//    arguments << condition;
+//    arguments << suffix;
+//    arguments << body;
 
-    return new DebugExpression("For", arguments);
-}
+//    return new DebugExpression("For", arguments);
+//}
 
 Expression *DebugExpressionManager::createDo(Expression *body, Expression *condition) {
     list<Object *> arguments;
@@ -214,6 +223,20 @@ Expression *DebugExpressionManager::createContextResolution(Expression *self, Ex
     arguments << body;
 
     return new DebugExpression("ContextResolution", arguments);
+}
+
+Expression *DebugExpressionManager::createContextCall(Expression *self, Expression *body, list<Expression *> args) {
+    list<Object *> arguments, callArguments;
+
+    arguments << self;
+    arguments << body;
+
+    foreach (i, args)
+        callArguments << *i;
+
+    arguments << new DebugExpression("List", callArguments);
+
+    return new DebugExpression("ContextCall", arguments);
 }
 
 Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expression *superclass, Expression *body) {

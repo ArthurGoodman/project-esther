@@ -5,5 +5,5 @@
 
 class SelfExpression : public Expression {
 public:
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };

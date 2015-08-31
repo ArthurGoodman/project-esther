@@ -2,11 +2,11 @@
 #include "common.h"
 
 #include "debug.h"
-#include "expressionmanager.h"
+#include "iexpressionmanager.h"
 
 #if DEBUG_PARSER
 
-class DebugExpressionManager : public ExpressionManager {
+class DebugExpressionManager : public IExpressionManager {
 public:
     Expression *createEmpty();
 
@@ -15,7 +15,8 @@ public:
 
     Expression *createTuple(list<Expression *> nodes);
 
-    Expression *createLiteral(Object *value);
+    Expression *createLiteral(const Variant &value);
+    Expression *createConstant(Object *value);
 
     Expression *createOr(Expression *self, Expression *arg);
     Expression *createAnd(Expression *self, Expression *arg);
@@ -36,10 +37,11 @@ public:
 
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
     Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody);
-    Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
+    //Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body);
     Expression *createDo(Expression *body, Expression *condition);
 
     Expression *createContextResolution(Expression *self, Expression *body);
+    Expression *createContextCall(Expression *self, Expression *body, list<Expression *> args);
 
     Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
 

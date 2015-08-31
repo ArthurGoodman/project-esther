@@ -2,6 +2,6 @@
 
 #include "context.h"
 
-Object *SelfExpression::eval(Context *context) {
+Object *SelfExpression::exec(Context *context) {
     return context->getCurrentSelf();
 }

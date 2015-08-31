@@ -9,5 +9,5 @@ class StaticExpression : public Expression {
 public:
     StaticExpression(Expression *body);
 
-    Object *eval(Context *context);
+    Object *exec(Context *context);
 };
