@@ -33,8 +33,8 @@ Block *Function::getBody() {
 }
 
 Object *Function::invoke(Object *self, Tuple *args) {
-    foreach (i, features)
-        (*i)->check(self, args);
+    for (FunctionFeature *f : features)
+        f->check(self, args);
 
     return execute(self, args);
 }
@@ -48,8 +48,9 @@ Object *Function::execute(Object *self, Tuple *args) {
 
     context->setLocal("arguments", args);
 
-    foreach (i, params)
-        context->setLocal(*i, args->at(distance(params.begin(), i)));
+    int i = 0;
+    for (string s : params)
+        context->setLocal(s, args->at(i++));
 
     Object *returnValue = 0;
 

@@ -9,8 +9,8 @@ MultiSignature::MultiSignature(OverloadedMethod *method)
 bool MultiSignature::accepts(Tuple *args) {
     list<Method *> methods = method->getMethods();
 
-    foreach (i, methods)
-        if ((*i)->getSignature()->accepts(args))
+    for (Method *m : methods)
+        if (m->getSignature()->accepts(args))
             return true;
 
     return false;
@@ -19,8 +19,8 @@ bool MultiSignature::accepts(Tuple *args) {
 bool MultiSignature::equals(Signature *other) {
     list<Method *> methods = method->getMethods();
 
-    foreach (i, methods)
-        if ((*i)->getSignature()->equals(other))
+    for (Method *m : methods)
+        if (m->getSignature()->equals(other))
             return true;
 
     return false;

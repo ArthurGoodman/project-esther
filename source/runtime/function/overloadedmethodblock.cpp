@@ -5,17 +5,17 @@
 #include "signature.h"
 
 OverloadedMethodBlock::OverloadedMethodBlock(OverloadedMethod *method)
-    : NativeBlock([method](Object * self, Tuple * args) -> Object * {
+    : NativeBlock([method](Object *self, Tuple * args) -> Object * {
           list<Method *> methods = method->getMethods();
 
           Method *firstAccept = 0;
 
-          foreach (i, methods) {
-              if ((*i)->getSignature()->accepts(args) && !firstAccept)
-                  firstAccept = *i;
+          for (Method *m : methods) {
+              if (m->getSignature()->accepts(args) && !firstAccept)
+                  firstAccept = m;
 
-              if ((*i)->getSignature()->check(args))
-                  return (*i)->invoke(self, args);
+              if (m->getSignature()->check(args))
+                  return m->invoke(self, args);
           }
 
           return firstAccept->invoke(self, args);

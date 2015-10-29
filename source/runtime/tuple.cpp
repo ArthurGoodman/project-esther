@@ -8,8 +8,9 @@ Tuple::Tuple(int size)
 
 Tuple::Tuple(list<Object *> data)
     : Object("Tuple"), n(data.size()), data(new Object *[n]) {
-    foreach (i, data)
-        this->data[distance(data.begin(), i)] = *i;
+    int i = 0;
+    for (Object *o : data)
+        this->data[i++] = o;
 }
 
 Tuple::~Tuple() {

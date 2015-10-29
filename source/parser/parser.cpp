@@ -105,7 +105,7 @@ Expression *Parser::oper() {
 Expression *Parser::context() {
     Expression *e = expr();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tLBrace)) {
@@ -125,7 +125,7 @@ Expression *Parser::context() {
 Expression *Parser::expr() {
     Expression *e = tuple();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tAssign))
@@ -167,7 +167,7 @@ Expression *Parser::tuple() {
 Expression *Parser::logicOr() {
     Expression *e = logicAnd();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tOr))
@@ -184,7 +184,7 @@ Expression *Parser::logicOr() {
 Expression *Parser::logicAnd() {
     Expression *e = equality();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tAnd))
@@ -201,7 +201,7 @@ Expression *Parser::logicAnd() {
 Expression *Parser::equality() {
     Expression *e = relation();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tEq))
@@ -220,7 +220,7 @@ Expression *Parser::equality() {
 Expression *Parser::relation() {
     Expression *e = addSub();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tLt))
@@ -243,7 +243,7 @@ Expression *Parser::relation() {
 Expression *Parser::addSub() {
     Expression *e = mulDiv();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tPlus))
@@ -262,7 +262,7 @@ Expression *Parser::addSub() {
 Expression *Parser::mulDiv() {
     Expression *e = power();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tMultiply))
@@ -283,7 +283,7 @@ Expression *Parser::mulDiv() {
 Expression *Parser::power() {
     Expression *e = dot();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tPower))
@@ -300,7 +300,7 @@ Expression *Parser::power() {
 Expression *Parser::dot() {
     Expression *e = preffix();
 
-    forever {
+    while (true) {
         Position p = token->getPosition();
 
         if (accept(tDot)) {
@@ -358,8 +358,8 @@ Expression *Parser::suffix() {
 
     Position p = token->getPosition();
 
-    if (check(tLPar) || check(tLBracket)/* || check(tLBrace)*/)
-        forever {
+    if (check(tLPar) || check(tLBracket) /* || check(tLBrace)*/)
+        while (true) {
             Position p = token->getPosition();
 
             if (accept(tLPar)) {
@@ -396,10 +396,10 @@ Expression *Parser::term() {
     if (check(tId) || check(tDollar)) {
         Expression *type = 0, *name = parseIdentifier(), *value = 0;
 
-        //        if ((type = parseIdentifier())) {
-        //            swap(type, name);
-        //            type = Expression::Identifier(type);
-        //        } else
+        //    if ((type = parseIdentifier())) {
+        //        swap(type, name);
+        //        type = Expression::Identifier(type);
+        //    } else
         if (accept(tColon)) {
             Position p = token->getPosition();
 
@@ -509,7 +509,7 @@ Expression *Parser::term() {
     //    if (nodes.size() != 3)
     //        error("three expressions expected");
 
-    //    list<Expression *>::iterator i = nodes.begin();
+    //    auto i = nodes.begin();
     //    Expression *preffix = *i++, *condition = *i++, *suffix = *i++;
 
     //    e = Expression::For(preffix, condition, suffix, oper());
@@ -587,10 +587,10 @@ Expression *Parser::term() {
         list<Expression *> params;
         bool variadic = false;
 
-        //        if (name && (type = parseIdentifier())) {
-        //            swap(type, name);
-        //            type = Expression::Identifier(type);
-        //        } else
+        //    if (name && (type = parseIdentifier())) {
+        //        swap(type, name);
+        //        type = Expression::Identifier(type);
+        //    } else
         if (accept(tColon)) {
             Position p = token->getPosition();
 

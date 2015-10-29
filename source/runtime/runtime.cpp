@@ -82,8 +82,8 @@ void Runtime::initialize() {
 
     root = new ObjectContext;
 
-    foreach (i, rootClasses)
-        i->second->setupMethods();
+    for (auto c : rootClasses)
+        c.second->setupMethods();
 }
 
 void Runtime::release() {
@@ -95,8 +95,8 @@ void Runtime::release() {
     delete falseObject;
     delete nullObject;
 
-    foreach (i, rootClasses)
-        delete i->second;
+    for (auto c : rootClasses)
+        delete c.second;
 }
 
 Context *Runtime::getRoot() {

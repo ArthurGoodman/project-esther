@@ -18,8 +18,8 @@ Object *PatternBlock::eval(Context *) {
 Object *PatternBlock::eval(Object *object, Context *context) {
     Object *value = 0;
 
-    foreach (i, cases)
-        if ((value = (*i)->match(object, context->childContext())))
+    for (Case *c : cases)
+        if ((value = c->match(object, context->childContext())))
             return value;
 
     throw new MatchFailureException;

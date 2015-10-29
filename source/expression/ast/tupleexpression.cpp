@@ -10,8 +10,8 @@ TupleExpression::TupleExpression(list<Expression *> nodes)
 Object *TupleExpression::exec(Context *context) {
     list<Object *> evaledNodes;
 
-    foreach (i, nodes)
-        evaledNodes << (*i)->eval(context);
+    for (Expression *e : nodes)
+        evaledNodes << e->eval(context);
 
     return new Tuple(evaledNodes);
 }

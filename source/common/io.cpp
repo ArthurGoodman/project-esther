@@ -58,8 +58,8 @@ void IO::closeFile(string fileName) {
 }
 
 void IO::closeAllFiles() {
-    foreach (i, files)
-        i->second->close();
+    for(auto &i : files)
+        i.second->close();
 
     files.clear();
 }

@@ -22,8 +22,8 @@ Object *FunctionExpression::exec(Context *context) {
 
     list<Parameter *> evaledParams;
 
-    foreach (i, params)
-        evaledParams << (Parameter *)(*i)->eval(context);
+    for (Expression *e : params)
+        evaledParams << (Parameter *)e->eval(context);
 
     Function *f = new Function(name, context, new Signature(type, evaledParams, variadic), new InterpretedBlock(body));
 

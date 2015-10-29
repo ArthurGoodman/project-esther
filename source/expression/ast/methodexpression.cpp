@@ -22,8 +22,8 @@ Object *MethodExpression::exec(Context *context) {
 
     list<Parameter *> evaledParams;
 
-    foreach (i, params)
-        evaledParams << (Parameter *)(*i)->eval(context);
+    for (Expression *e : params)
+        evaledParams << (Parameter *)e->eval(context);
 
     bool isStatic = context->getModifier(Context::StaticModifier);
     Object *self = (isStatic || dynamic_cast<Class *>(context->getCurrentSelf())) ? context->getCurrentSelf() : (Object *)context->getCurrentClass();

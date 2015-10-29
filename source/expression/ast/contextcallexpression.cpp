@@ -18,8 +18,8 @@ Object *ContextCallExpression::exec(Context *context) {
 
     list<Object *> evaledArgs;
 
-    foreach (i, args)
-        evaledArgs << (*i)->eval(context);
+    for (Expression *e : args)
+        evaledArgs << e->eval(context);
 
     Tuple *actualArgs;
 

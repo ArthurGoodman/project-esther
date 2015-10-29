@@ -12,8 +12,8 @@ Object *BlockExpression::exec(Context *context) {
 
     context = context->childContext();
 
-    foreach (i, nodes)
-        value = (*i)->eval(context);
+    for (Expression *e : nodes)
+        value = e->eval(context);
 
     return value;
 }

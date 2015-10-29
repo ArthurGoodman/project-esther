@@ -11,14 +11,14 @@ Signature::Signature()
 
 Signature::Signature(Class *returnClass, list<Class *> paramsClasses, bool variadic)
     : returnClass(returnClass), variadic(variadic) {
-    foreach (i, paramsClasses)
-        params << new Parameter(*i, "", 0);
+    for (Class *c : paramsClasses)
+        params << new Parameter(c, "", 0);
 }
 
 Signature::Signature(string returnClassName, list<string> argsClassesNames, bool variadic)
     : returnClass(Runtime::getRootClass(returnClassName)), variadic(variadic) {
-    foreach (i, argsClassesNames)
-        params << new Parameter(Runtime::getRootClass(*i), "", 0);
+    for (string name : argsClassesNames)
+        params << new Parameter(Runtime::getRootClass(name), "", 0);
 }
 
 Signature::Signature(Class *returnClass, list<Parameter *> params, bool variadic)
@@ -31,8 +31,8 @@ bool Signature::accepts(Tuple *args) {
 
     int c = 0;
 
-    foreach (i, params) {
-        if ((c >= args->size() && !(*i)->getValue()) || (c < args->size() && !args->at(c)->converts((*i)->getType())))
+    for (Parameter *p : params) {
+        if ((c >= args->size() && !p->getValue()) || (c < args->size() && !args->at(c)->converts(p->getType())))
             return false;
 
         c++;
@@ -47,8 +47,8 @@ bool Signature::check(Tuple *args) {
 
     int c = 0;
 
-    foreach (i, params) {
-        if ((c >= args->size() && !(*i)->getValue()) || (c < args->size() && args->at(c)->getClass() != (*i)->getType()))
+    for (Parameter *p : params) {
+        if ((c >= args->size() && !p->getValue()) || (c < args->size() && args->at(c)->getClass() != p->getType()))
             return false;
 
         c++;
@@ -62,11 +62,11 @@ Tuple *Signature::convert(Tuple *args) {
 
     int c = 0;
 
-    foreach (i, params) {
+    for (Parameter *p : params) {
         if (c >= args->size())
-            convertedArgs->at(c) = (*i)->getValue();
+            convertedArgs->at(c) = p->getValue();
         else
-            convertedArgs->at(c) = args->at(c)->as((*i)->getType());
+            convertedArgs->at(c) = args->at(c)->as(p->getType());
 
         c++;
     }
@@ -91,10 +91,10 @@ bool Signature::equals(Signature *other) {
     if (params.size() != other->params.size())
         return false;
 
-    list<Parameter *>::iterator j = other->params.begin();
+    auto i = other->params.begin();
 
-    foreach (i, params)
-        if (!(*i)->equals(*j++))
+    for (Parameter *p : params)
+        if (!p->equals(*i++))
             return false;
 
     return true;
@@ -103,8 +103,8 @@ bool Signature::equals(Signature *other) {
 list<string> Signature::paramsNames() {
     list<string> names;
 
-    foreach (i, params)
-        names << (*i)->getName();
+    for (Parameter *p : params)
+        names << p->getName();
 
     return names;
 }
