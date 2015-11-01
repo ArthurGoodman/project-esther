@@ -11,13 +11,13 @@ vector<string> Lexer::operators = {
 #define X(a, b) b,
 #include "operators.def"
 #undef X
-    ""};
+};
 
 vector<string> Lexer::keywords = {
 #define X(a, b) b,
 #include "keywords.def"
 #undef X
-    ""};
+};
 
 #if DEBUG_LEXER
 // This is used in logs.
@@ -27,7 +27,7 @@ vector<string> DefaultLexer::tokenTypes = {
 #include "keywords.def"
 #include "othertokens.def"
 #undef X
-    ""};
+};
 #endif
 
 Tokens &Lexer::lex(const string &source) {

@@ -8,6 +8,4 @@ enum {
 #include "keywords.def"
 #include "othertokens.def"
 #undef X
-
-    tokensCount
 };
