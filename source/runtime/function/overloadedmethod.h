@@ -11,4 +11,6 @@ public:
 
     void addMethod(Method *method);
     list<Method *> getMethods();
+
+    Object *clone();
 };

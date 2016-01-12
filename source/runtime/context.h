@@ -52,4 +52,6 @@ public:
     int getModifier(int modifier);
 
     Object *getSelfForMethod(Method *method);
+
+    virtual Object *clone();
 };

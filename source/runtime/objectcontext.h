@@ -15,4 +15,6 @@ public:
     bool hasId(string name);
     Object *getId(string name);
     bool setId(string name, Object *value);
+
+    Object *clone();
 };

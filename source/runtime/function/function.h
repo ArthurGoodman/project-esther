@@ -32,6 +32,8 @@ public:
 
     virtual string toString();
 
+    virtual Object *clone();
+
 protected:
     void addFeature(FunctionFeature *feature);
 };

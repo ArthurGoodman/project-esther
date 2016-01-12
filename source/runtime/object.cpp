@@ -123,3 +123,9 @@ string Object::toString() {
 bool Object::equals(Object *other) {
     return call("equals", other, "Boolean")->isTrue();
 }
+
+Object *Object::clone() {
+    Object *clone = new Object(getClass());
+    clone->attributes = attributes;
+    return clone;
+}

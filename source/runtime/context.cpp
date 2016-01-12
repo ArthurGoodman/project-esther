@@ -139,3 +139,9 @@ Object *Context::getSelfForMethod(Method *method) {
 
     return 0;
 }
+
+Object *Context::clone() {
+    Context *clone = new Context(currentSelf, currentClass, parent, modifiers);
+    clone->locals = locals;
+    return clone;
+}

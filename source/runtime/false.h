@@ -12,4 +12,6 @@ public:
     bool isNull();
 
     string toString();
+
+    Object *clone();
 };

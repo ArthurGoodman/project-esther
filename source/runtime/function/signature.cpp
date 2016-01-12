@@ -108,3 +108,7 @@ list<string> Signature::paramsNames() {
 
     return names;
 }
+
+Object *Signature::clone() {
+    return new Signature(returnClass, params, variadic);
+}

@@ -16,3 +16,9 @@ void OverloadedMethod::addMethod(Method *method) {
 list<Method *> OverloadedMethod::getMethods() {
     return methods;
 }
+
+Object *OverloadedMethod::clone() {
+    OverloadedMethod *clone = new OverloadedMethod(name, getSelf(), isStatic());
+    clone->methods = methods;
+    return clone;
+}

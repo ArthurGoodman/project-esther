@@ -19,4 +19,6 @@ public:
     Object *getSelf();
 
     bool suitableFor(Object *self);
+
+    virtual Object *clone();
 };

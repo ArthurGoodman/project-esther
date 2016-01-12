@@ -42,4 +42,6 @@ public:
     virtual string toString();
 
     bool equals(Object *other);
+
+    virtual Object *clone();
 };

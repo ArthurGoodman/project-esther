@@ -71,6 +71,12 @@ string Function::toString() {
     return name.empty() ? "<anonymous function>" : "<function " + name + ">";
 }
 
+Object *Function::clone() {
+    Function *clone = new Function(name, context, signature, body);
+    clone->features = features;
+    return clone;
+}
+
 void Function::addFeature(FunctionFeature *feature) {
     features << feature;
 }

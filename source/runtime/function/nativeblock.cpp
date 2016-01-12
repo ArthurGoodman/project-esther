@@ -14,3 +14,7 @@ Object *NativeBlock::eval(Context *) {
 Object *NativeBlock::eval(Object *self, Tuple *args) {
     return body(self, args);
 }
+
+Object *NativeBlock::clone() {
+    return new NativeBlock(body);
+}

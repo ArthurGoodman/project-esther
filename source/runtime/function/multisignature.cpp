@@ -25,3 +25,7 @@ bool MultiSignature::equals(Signature *other) {
 
     return false;
 }
+
+Object *MultiSignature::clone() {
+    return new MultiSignature(method);
+}

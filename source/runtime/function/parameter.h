@@ -16,4 +16,6 @@ public:
     Object *getValue();
 
     bool equals(Parameter *other);
+
+    Object *clone();
 };

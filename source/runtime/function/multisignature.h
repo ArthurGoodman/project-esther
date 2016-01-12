@@ -14,4 +14,6 @@ public:
     bool accepts(Tuple *args);
 
     bool equals(Signature *other);
+
+    Object *clone();
 };

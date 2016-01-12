@@ -19,6 +19,8 @@ public:
 
     string toString();
 
+    Object *clone();
+
 protected:
     void setVariant(Variant value);
 

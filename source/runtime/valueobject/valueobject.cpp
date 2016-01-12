@@ -28,6 +28,10 @@ string ValueObject::toString() {
     return value.toString();
 }
 
+Object *ValueObject::clone() {
+    return new ValueObject(value);
+}
+
 void ValueObject::setVariant(Variant value) {
     this->value = value;
 }

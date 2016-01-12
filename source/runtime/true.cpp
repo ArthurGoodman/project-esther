@@ -19,3 +19,7 @@ bool True::isNull() {
 string True::toString() {
     return "true";
 }
+
+Object *True::clone() {
+    return this;
+}

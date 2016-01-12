@@ -44,6 +44,8 @@ public:
 
     virtual string toString();
 
+    Object *clone();
+
 protected:
     virtual Object *createNewInstance();
 };

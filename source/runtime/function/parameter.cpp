@@ -21,3 +21,7 @@ Object *Parameter::getValue() {
 bool Parameter::equals(Parameter *other) {
     return type == other->type /*type->equals(other->type)*/ && ((value && other->value) ? value->equals(other->value) : true);
 }
+
+Object *Parameter::clone() {
+    return new Parameter(type, name, value);
+}

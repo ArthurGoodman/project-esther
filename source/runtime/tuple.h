@@ -12,6 +12,7 @@ public:
     typedef Object *const *const_iterator;
 
     Tuple(int size = 0);
+    Tuple(const Tuple &other);
     Tuple(list<Object *> data);
     ~Tuple();
 
@@ -25,4 +26,6 @@ public:
 
     iterator end();
     const_iterator end() const;
+
+    Object *clone();
 };

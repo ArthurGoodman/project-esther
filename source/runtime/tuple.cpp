@@ -6,6 +6,11 @@ Tuple::Tuple(int size)
     : Object("Tuple"), n(size), data(new Object *[n]) {
 }
 
+Tuple::Tuple(const Tuple &other)
+    : Object("Tuple"), n(other.size()), data(new Object *[n]) {
+    memcpy(data, other.data, n * sizeof(Object *));
+}
+
 Tuple::Tuple(list<Object *> data)
     : Object("Tuple"), n(data.size()), data(new Object *[n]) {
     int i = 0;
@@ -46,4 +51,8 @@ Tuple::iterator Tuple::end() {
 
 Tuple::const_iterator Tuple::end() const {
     return data + n;
+}
+
+Object *Tuple::clone() {
+    return new Tuple(*this);
 }

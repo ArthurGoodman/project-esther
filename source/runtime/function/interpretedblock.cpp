@@ -9,3 +9,7 @@ InterpretedBlock::InterpretedBlock(Expression *e)
 Object *InterpretedBlock::eval(Context *context) {
     return e->eval(context);
 }
+
+Object *InterpretedBlock::clone() {
+    return new InterpretedBlock(e);
+}

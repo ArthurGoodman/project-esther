@@ -26,4 +26,6 @@ public:
     virtual bool equals(Signature *other);
 
     list<string> paramsNames();
+
+    virtual Object *clone();
 };

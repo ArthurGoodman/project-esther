@@ -51,3 +51,12 @@ bool ObjectContext::setId(string name, Object *value) {
 
     return Context::setId(name, value);
 }
+
+Object *ObjectContext::clone() {
+    Context *clone = new ObjectContext(currentSelf, currentClass, parent, modifiers);
+
+    for (auto local : locals)
+        clone->setLocal(local.first, local.second);
+
+    return clone;
+}

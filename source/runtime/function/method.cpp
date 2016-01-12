@@ -34,3 +34,7 @@ Object *Method::getSelf() {
 bool Method::suitableFor(Object *self) {
     return staticFlag ? this->self == self : self->is((Class *)this->self);
 }
+
+Object *Method::clone() {
+    return new Method(name, name, context, signature, body, self, staticFlag);
+}

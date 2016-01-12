@@ -129,6 +129,12 @@ string Class::toString() {
     return name.empty() ? "<anonymous class>" : name;
 }
 
+Object *Class::clone() {
+    Class *clone = new Class(name, superclass);
+    clone->methods = methods;
+    return clone;
+}
+
 Object *Class::createNewInstance() {
     return new Object(this);
 }

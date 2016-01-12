@@ -12,4 +12,6 @@ public:
     InterpretedBlock(Expression *e);
 
     Object *eval(Context *context);
+
+    Object *clone();
 };

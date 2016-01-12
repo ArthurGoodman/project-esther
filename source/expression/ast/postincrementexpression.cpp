@@ -6,7 +6,7 @@ PostIncrementExpression::PostIncrementExpression(Expression *self)
 
 Object *PostIncrementExpression::exec(Context *context) {
     Object *self = this->self->eval(context);
-    //Object *clone = self->clone();
+    Object *clone = self->clone();
     self->call("++");
-    return /*clone*/ self;
+    return clone;
 }

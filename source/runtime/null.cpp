@@ -19,3 +19,7 @@ bool Null::isNull() {
 string Null::toString() {
     return "null";
 }
+
+Object *Null::clone() {
+    return this;
+}
