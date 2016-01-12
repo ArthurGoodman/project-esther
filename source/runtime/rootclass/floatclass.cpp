@@ -4,6 +4,8 @@
 #include "float.h"
 #include "tuple.h"
 #include "signature.h"
+#include "string.h"
+#include "variant.h"
 
 FloatClass::FloatClass()
     : RootClass("Float") {
@@ -106,6 +108,12 @@ void FloatClass::setupMethods() {
     };
 
     setMethod("equals", new Signature("Boolean", {"Float"}), equalsMethod);
+
+    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
+        return new String(((ValueObject *)self)->getVariant().toString());
+    };
+
+    setMethod("toString", new Signature("String", {}), toStringMethod);
 }
 
 Object *FloatClass::createNewInstance() {

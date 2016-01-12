@@ -8,6 +8,7 @@
 #include "context.h"
 #include "signature.h"
 #include "method.h"
+#include "string.h"
 
 FunctionClass::FunctionClass()
     : RootClass("Function") {
@@ -27,6 +28,12 @@ void FunctionClass::setupMethods() {
     };
 
     setMethod("body", new Signature("Block", {}), bodyMethod);
+
+    auto toStringMethod = [](Object *self, Tuple *) -> Object * {
+        return new String(((Function *)self)->getName().empty() ? "<anonymous function>" : "<function " + ((Function *)self)->getName() + ">");
+    };
+
+    setMethod("toString", new Signature("String", {}), toStringMethod);
 }
 
 Object *FunctionClass::createNewInstance() {

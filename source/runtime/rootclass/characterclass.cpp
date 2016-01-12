@@ -5,6 +5,8 @@
 #include "tuple.h"
 #include "signature.h"
 #include "utility.h"
+#include "string.h"
+#include "variant.h"
 
 CharacterClass::CharacterClass()
     : RootClass("Character") {
@@ -117,6 +119,12 @@ void CharacterClass::setupMethods() {
     };
 
     setMethod("equals", new Signature("Boolean", {"Character"}), equalsMethod);
+
+    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
+        return new String(((ValueObject *)self)->getVariant().toString());
+    };
+
+    setMethod("toString", new Signature("String", {}), toStringMethod);
 
     auto isDigitMethod = [](Object *self, Tuple *) -> Object *{
         return Runtime::toBoolean(Utility::isDigit(((ValueObject *)self)->getVariant().toChar()));

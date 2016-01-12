@@ -33,13 +33,14 @@ public:
     virtual Object *call(string name, Tuple *args);
     virtual Object *call(string name, Object *arg);
     Object *call(string name, Object *arg, string expectedClassName);
+    Object *call(string name, string expectedClassName);
     virtual Object *call(string name);
 
     virtual bool isTrue();
     virtual bool isFalse();
     virtual bool isNull();
 
-    virtual string toString();
+    string toString();
 
     bool equals(Object *other);
 

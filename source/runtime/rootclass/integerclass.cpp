@@ -6,6 +6,8 @@
 #include "nativemethod.h"
 #include "nativeblock.h"
 #include "signature.h"
+#include "string.h"
+#include "valueobject.h"
 
 IntegerClass::IntegerClass()
     : RootClass("Integer") {
@@ -108,6 +110,12 @@ void IntegerClass::setupMethods() {
     };
 
     setMethod("equals", new Signature("Boolean", {"Integer"}), equalsMethod);
+
+    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
+        return new String(((ValueObject *)self)->getVariant().toString());
+    };
+
+    setMethod("toString", new Signature("String", {}), toStringMethod);
 
     auto plusAssignMethod = [](Object *self, Tuple *args) -> Object *{
         ((Integer *)self)->setValue(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());

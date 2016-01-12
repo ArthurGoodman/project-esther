@@ -38,6 +38,14 @@ void ClassClass::setupMethods() {
     };
 
     setMethod("isChild", new Signature("Boolean", {"Class"}), isChildMethod);
+
+    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
+        return new String(((Class *)self)->getName().empty() ? "<anonymous class>" : ((Class *)self)->getName());
+    };
+
+    setMethod("toString", new Signature("String", {}), toStringMethod);
+
+
 }
 
 Object *ClassClass::createNewInstance() {

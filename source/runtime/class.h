@@ -42,8 +42,6 @@ public:
     Object *call(string name, Object *arg);
     Object *call(string name);
 
-    virtual string toString();
-
     Object *clone();
 
 protected:

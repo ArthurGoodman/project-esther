@@ -63,6 +63,12 @@ void StringClass::setupMethods() {
 
     setMethod("equals", new Signature("Boolean", {"String"}), equalsMethod);
 
+    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
+        return new String(((ValueObject *)self)->getVariant().toString());
+    };
+
+    setMethod("toString", new Signature("String", {}), toStringMethod);
+
     auto emptyMethod = [](Object *self, Tuple *) -> Object *{
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString().empty());
     };

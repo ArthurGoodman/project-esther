@@ -17,8 +17,6 @@ public:
 
     Variant getVariant();
 
-    string toString();
-
     Object *clone();
 
 protected:

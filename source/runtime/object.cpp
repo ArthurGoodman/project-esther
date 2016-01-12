@@ -7,6 +7,8 @@
 #include "tuple.h"
 #include "method.h"
 #include "signature.h"
+#include "string.h"
+#include "variant.h"
 
 Object::Object()
     : objectClass(Runtime::getObjectClass()) {
@@ -100,6 +102,15 @@ Object *Object::call(string name, Object *arg, string expectedClassName) {
     return value;
 }
 
+Object *Object::call(string name, string expectedClassName) {
+    Object *value = call(name);
+
+    if (!value->is(Runtime::getRootClass(expectedClassName)))
+        Runtime::runtimeError("invalid return class");
+
+    return value;
+}
+
 Object *Object::call(string name) {
     return call(name, new Tuple(list<Object *>()));
 }
@@ -117,7 +128,7 @@ bool Object::isNull() {
 }
 
 string Object::toString() {
-    return "<" + objectClass->toString() + ":" + Utility::toString(this) + ">";
+    return ((String *)call("toString", "String"))->getVariant().toString();
 }
 
 bool Object::equals(Object *other) {

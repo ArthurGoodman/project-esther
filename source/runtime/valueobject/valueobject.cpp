@@ -24,10 +24,6 @@ Variant ValueObject::getVariant() {
     return value;
 }
 
-string ValueObject::toString() {
-    return value.toString();
-}
-
 Object *ValueObject::clone() {
     return new ValueObject(value);
 }

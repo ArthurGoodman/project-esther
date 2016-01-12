@@ -8,6 +8,7 @@
 #include "signature.h"
 #include "string.h"
 #include "iengine.h"
+#include "utility.h"
 
 ObjectClass::ObjectClass()
     : RootClass("Object", 0) {
@@ -49,6 +50,12 @@ void ObjectClass::setupMethods() {
     };
 
     setMethod("equals", new Signature("Boolean", {"Object"}), equalsMethod);
+
+    auto toStringMethod = [](Object *self, Tuple *) -> Object * {
+        return new String("<" + self->getClass()->toString() + ":" + Utility::toString(self) + ">");
+    };
+
+    setMethod("toString", new Signature("String", {}), toStringMethod);
 
     auto equalsOperator = [](Object *self, Tuple *args) -> Object * {
         return Runtime::toBoolean(self->equals(args->at(0)));

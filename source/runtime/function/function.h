@@ -30,8 +30,6 @@ public:
     virtual Object *invoke(Object *self, Tuple *args);
     virtual Object *execute(Object *self, Tuple *args);
 
-    virtual string toString();
-
     virtual Object *clone();
 
 protected:

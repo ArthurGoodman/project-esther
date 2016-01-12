@@ -13,8 +13,6 @@ protected:
 public:
     Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag = false);
 
-    string toString();
-
     bool isStatic();
     Object *getSelf();
 

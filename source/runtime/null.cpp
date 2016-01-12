@@ -16,10 +16,6 @@ bool Null::isNull() {
     return true;
 }
 
-string Null::toString() {
-    return "null";
-}
-
 Object *Null::clone() {
     return this;
 }

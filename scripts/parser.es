@@ -74,8 +74,9 @@ class Parser {
         else code[pos]
 
     method getToken {
-        while (at(pos).isSpace())
-            pos++
+        while (at(pos).isSpace()) {
+            ++pos
+        }
 
         if (at(pos) == '\0') token = new Token('e')
         elif (at(pos).isDigit()) token = new Token {
@@ -83,21 +84,21 @@ class Parser {
             text = ""
 
             while (at(pos).isDigit())
-                text += at(pos++ - 1)
+                text += at(pos++)
             
             if (at(pos) == '.') do
-                text += at(pos++ - 1)
+                text += at(pos++)
             while (at(pos).isDigit())
-        } elif (operators.contains(at(pos))) token = Token(at(pos++ - 1))
+        } elif (operators.contains(at(pos))) token = Token(at(pos++))
         elif (at(pos).isLetter() || at(pos) == '_') token = new Token {
             id = 'u'
             text = ""
             
             while (at(pos).isLetter() || at(pos) == '_')
-                text += at(pos++ - 1)
+                text += at(pos++)
         } else token = new Token {
             id = 'u'
-            text = at(pos++ - 1)
+            text = at(pos++)
         }
     }
 
@@ -214,22 +215,23 @@ class Parser {
     }
 }
 
-new Parser.parse("").eval()
+new Parser.parse("0").eval()
 
 //forever {
 //    "$ ".print()
 
 //    str = scanLine()
 
-//    if (str.empty() continue
+//    if (str.empty()) continue
 //    elif (str == "help" || str == "?")
 //        print("This is help!\n")
 //    elif (str == "exit" || str == "quit")
 //        break;
 //    else {
 //        parser = new Parser()
-//        ast = parser.parse("")
-//        ast.print()
+//        ast = parser.parse(str)
+//        ast.eval().print()
+//        "\n".print()
 //    }
 
 //    "\n".print()

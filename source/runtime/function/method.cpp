@@ -19,10 +19,6 @@ Method::Method(string name, Context *context, Signature *signature, Block *body,
         addFeature(new SelfCheckerFeature((Class *)self));
 }
 
-string Method::toString() {
-    return name.empty() ? "<anonymous method>" : "<method " + name + ">";
-}
-
 bool Method::isStatic() {
     return staticFlag;
 }

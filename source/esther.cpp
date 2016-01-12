@@ -3,6 +3,7 @@
 #include "iengine.h"
 #include "object.h"
 #include "io.h"
+#include "exception.h"
 
 Esther Esther::esther;
 
@@ -17,6 +18,12 @@ Esther::~Esther() {
 void Esther::runFile(const string &fileName) {
     Object *value = IEngine::instance()->runFile(fileName);
 
-    if (value)
-        IO::printLine("\n=> " + value->toString());
+    // TODO: refactor this
+    try {
+        if (value)
+            IO::printLine("\n=> " + value->toString());
+    } catch (Exception *e) {
+        IO::printLine("error: " + e->message());
+        delete e;
+    }
 }
