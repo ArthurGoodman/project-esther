@@ -46,59 +46,64 @@ Object *Class::newInstance(Tuple *args) {
     return instance;
 }
 
-bool Class::hasAttribute(string name) {
-    return hasMethod(name) || Object::hasAttribute(name);
-}
+//bool Class::hasAttribute(string name) {
+//    return hasMethod(name) || Object::hasAttribute(name);
+//}
 
-Object *Class::getAttribute(string name) {
-    return hasMethod(name) ? getMethod(name) : Object::getAttribute(name);
-}
+//Object *Class::getAttribute(string name) {
+//    return hasMethod(name) ? getMethod(name) : Object::getAttribute(name);
+//}
 
-void Class::setAttribute(string name, Object *value) {
-    if (dynamic_cast<Method *>(value))
-        setMethod(name, (Method *)value);
-    else {
-        if (hasMethod(name))
-            methods.erase(name);
+//void Class::setAttribute(string name, Object *value) {
+//    if (dynamic_cast<Method *>(value))
+//        setMethod(name, (Method *)value);
+//    else {
+//        if (hasMethod(name))
+//            methods.erase(name);
 
-        Object::setAttribute(name, value);
-    }
-}
+//        Object::setAttribute(name, value);
+//    }
+//}
 
 bool Class::hasMethod(string name) {
-    return methods.find(name) != methods.end();
+//    return methods.find(name) != methods.end();
+    return hasAttribute(name) && dynamic_cast<Method *>(getAttribute(name));
 }
 
 Method *Class::getMethod(string name) {
-    return hasMethod(name) ? methods.at(name) : 0;
+//    return hasMethod(name) ? methods.at(name) : 0;
+    return hasMethod(name) ? (Method *)getAttribute(name) : 0;
 }
 
 void Class::setMethod(Method *method) {
-    setMethod(method->getName(), method);
+//    setMethod(method->getName(), method);
+    setAttribute(method->getName(), method);
 }
 
-void Class::setMethod(string name, Method *method) {
-    if (hasMethod(name)) {
-        Method *existing = getMethod(name);
+//void Class::setMethod(string name, Method *method) {
+//    if (hasMethod(name)) {
+//        Method *existing = getMethod(name);
 
-        if (existing->isStatic() == method->isStatic() && existing->getSelf() == method->getSelf()) {
-            if (dynamic_cast<OverloadedMethod *>(existing)) {
-                OverloadedMethod *overloadedMethod = (OverloadedMethod *)existing;
-                overloadedMethod->addMethod(method);
-            } else {
-                OverloadedMethod *newMethod = new OverloadedMethod(name, method->getSelf(), method->isStatic());
-                newMethod->addMethod(existing);
-                newMethod->addMethod(method);
+//        if (existing->isStatic() == method->isStatic() && existing->getSelf() == method->getSelf()) {
+//            if (dynamic_cast<OverloadedMethod *>(existing)) {
+//                OverloadedMethod *overloadedMethod = (OverloadedMethod *)existing;
+//                overloadedMethod->addMethod(method);
+//            } else {
+//                OverloadedMethod *newMethod = new OverloadedMethod(name, method->getSelf(), method->isStatic());
+//                newMethod->addMethod(existing);
+//                newMethod->addMethod(method);
 
-                methods[name] = newMethod;
-            }
+////                methods[name] = newMethod;
+//                setMethod(newMethod);
+//            }
 
-            return;
-        }
-    }
+//            return;
+//        }
+//    }
 
-    methods[name] = method;
-}
+////    methods[name] = method;
+//    setMethod(method);
+//}
 
 Method *Class::lookup(string name) {
     if (hasMethod(name))
@@ -111,8 +116,9 @@ Method *Class::lookup(string name) {
 }
 
 Object *Class::call(string name, Tuple *args) {
-    if (hasMethod(name))
-        return getMethod(name)->invoke(this, args);
+    // TODO: Fix static methods
+//    if (hasMethod(name))
+//        return getMethod(name)->invoke(this, args);
 
     return Object::call(name, args);
 }
@@ -125,11 +131,11 @@ Object *Class::call(string name) {
     return call(name, new Tuple(list<Object *>()));
 }
 
-Object *Class::clone() {
-    Class *clone = new Class(name, superclass);
-    clone->methods = methods;
-    return clone;
-}
+//Object *Class::clone() {
+//    Class *clone = new Class(name, superclass);
+//    clone->methods = methods;
+//    return clone;
+//}
 
 Object *Class::createNewInstance() {
     return new Object(this);

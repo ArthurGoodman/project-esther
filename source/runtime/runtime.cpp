@@ -57,22 +57,22 @@ void Runtime::initialize() {
 
     new BlockClass;
 
-    class OverloadedMethodClass : public RootClass {
-    public:
-        OverloadedMethodClass()
-            : RootClass("OverloadedMethod", "Method") {
-        }
+//    class OverloadedMethodClass : public RootClass {
+//    public:
+//        OverloadedMethodClass()
+//            : RootClass("OverloadedMethod", "Method") {
+//        }
 
-        void setupMethods() {
-        }
+//        void setupMethods() {
+//        }
 
-    protected:
-        Object *createNewInstance() {
-            return Runtime::getNull();
-        }
-    };
+//    protected:
+//        Object *createNewInstance() {
+//            return Runtime::getNull();
+//        }
+//    };
 
-    new OverloadedMethodClass;
+//    new OverloadedMethodClass;
 
     mainObject = new Object;
 
@@ -82,8 +82,22 @@ void Runtime::initialize() {
 
     root = new ObjectContext;
 
-    for (auto c : rootClasses)
-        c.second->setupMethods();
+//    for (auto c : rootClasses)
+//        c.second->setupMethods();
+
+    ((RootClass *)getRootClass("Object"))->setupMethods();
+    ((RootClass *)getRootClass("Class"))->setupMethods();
+    ((RootClass *)getRootClass("Function"))->setupMethods();
+    ((RootClass *)getRootClass("Method"))->setupMethods();
+    ((RootClass *)getRootClass("Boolean"))->setupMethods();
+    ((RootClass *)getRootClass("Null"))->setupMethods();
+    ((RootClass *)getRootClass("Integer"))->setupMethods();
+    ((RootClass *)getRootClass("Float"))->setupMethods();
+    ((RootClass *)getRootClass("Character"))->setupMethods();
+    ((RootClass *)getRootClass("String"))->setupMethods();
+    ((RootClass *)getRootClass("Tuple"))->setupMethods();
+    ((RootClass *)getRootClass("Context"))->setupMethods();
+    ((RootClass *)getRootClass("Block"))->setupMethods();
 }
 
 void Runtime::release() {

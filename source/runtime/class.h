@@ -10,7 +10,7 @@ protected:
     string name;
     Class *superclass;
 
-    map<string, Method *> methods;
+//    map<string, Method *> methods;
 
 public:
     Class(string name, Class *superclass);
@@ -27,14 +27,14 @@ public:
     Object *newInstance();
     Object *newInstance(Tuple *args);
 
-    bool hasAttribute(string name);
-    Object *getAttribute(string name);
-    void setAttribute(string name, Object *value);
+//    bool hasAttribute(string name);
+//    Object *getAttribute(string name);
+//    void setAttribute(string name, Object *value);
 
     bool hasMethod(string name);
     Method *getMethod(string name);
     void setMethod(Method *method);
-    void setMethod(string name, Method *method);
+//    void setMethod(string name, Method *method);
 
     Method *lookup(string name);
 
@@ -42,7 +42,7 @@ public:
     Object *call(string name, Object *arg);
     Object *call(string name);
 
-    Object *clone();
+//    Object *clone();
 
 protected:
     virtual Object *createNewInstance();

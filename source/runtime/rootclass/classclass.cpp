@@ -44,8 +44,6 @@ void ClassClass::setupMethods() {
     };
 
     setMethod("toString", new Signature("String", {}), toStringMethod);
-
-
 }
 
 Object *ClassClass::createNewInstance() {
