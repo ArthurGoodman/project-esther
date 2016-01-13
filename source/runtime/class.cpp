@@ -76,34 +76,33 @@ Method *Class::getMethod(string name) {
 }
 
 void Class::setMethod(Method *method) {
-//    setMethod(method->getName(), method);
-    setAttribute(method->getName(), method);
+    setMethod(method->getName(), method);
 }
 
-//void Class::setMethod(string name, Method *method) {
-//    if (hasMethod(name)) {
-//        Method *existing = getMethod(name);
+void Class::setMethod(string name, Method *method) {
+    if (hasMethod(name)) {
+        Method *existing = getMethod(name);
 
-//        if (existing->isStatic() == method->isStatic() && existing->getSelf() == method->getSelf()) {
-//            if (dynamic_cast<OverloadedMethod *>(existing)) {
-//                OverloadedMethod *overloadedMethod = (OverloadedMethod *)existing;
-//                overloadedMethod->addMethod(method);
-//            } else {
-//                OverloadedMethod *newMethod = new OverloadedMethod(name, method->getSelf(), method->isStatic());
-//                newMethod->addMethod(existing);
-//                newMethod->addMethod(method);
+        if (existing->isStatic() == method->isStatic() && existing->getSelf() == method->getSelf()) {
+            if (dynamic_cast<OverloadedMethod *>(existing)) {
+                OverloadedMethod *overloadedMethod = (OverloadedMethod *)existing;
+                overloadedMethod->addMethod(method);
+            } else {
+                OverloadedMethod *newMethod = new OverloadedMethod(name, method->getSelf(), method->isStatic());
+                newMethod->addMethod(existing);
+                newMethod->addMethod(method);
 
-////                methods[name] = newMethod;
-//                setMethod(newMethod);
-//            }
+//                methods[name] = newMethod;
+                setAttribute(name, newMethod);
+            }
 
-//            return;
-//        }
-//    }
+            return;
+        }
+    }
 
-////    methods[name] = method;
-//    setMethod(method);
-//}
+//    methods[name] = method;
+    setAttribute(name, method);
+}
 
 Method *Class::lookup(string name) {
     if (hasMethod(name))

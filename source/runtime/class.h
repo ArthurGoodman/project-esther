@@ -34,7 +34,7 @@ public:
     bool hasMethod(string name);
     Method *getMethod(string name);
     void setMethod(Method *method);
-//    void setMethod(string name, Method *method);
+    void setMethod(string name, Method *method);
 
     Method *lookup(string name);
 
