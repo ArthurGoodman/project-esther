@@ -81,12 +81,19 @@ Object *Object::as(Class *_class) {
 }
 
 Object *Object::call(string name, Tuple *args) {
-    Method *method = objectClass->lookup(name);
+    Object *method = hasAttribute(name) ? getAttribute(name) : objectClass->lookup(name);
 
     if (!method)
-        Runtime::runtimeError("undefined method '" + name + "'");
+        Runtime::runtimeError("undefined identifier '" + name + "'");
 
-    return method->invoke(this, args);
+//    return method->invoke(this, args);
+
+    Object *callMethod = method->getClass()->lookup("()");
+
+    if (!dynamic_cast<Function *>(callMethod))
+        Runtime::runtimeError("'()' is not a function");
+
+    return ((Function *)callMethod)->invoke(method, new Tuple({this, args}));
 }
 
 Object *Object::call(string name, Object *arg) {

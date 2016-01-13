@@ -36,7 +36,7 @@ public:
     void setMethod(Method *method);
     void setMethod(string name, Method *method);
 
-    Method *lookup(string name);
+    Object *lookup(string name);
 
     Object *call(string name, Tuple *args);
     Object *call(string name, Object *arg);

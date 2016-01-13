@@ -104,9 +104,12 @@ void Class::setMethod(string name, Method *method) {
     setAttribute(name, method);
 }
 
-Method *Class::lookup(string name) {
-    if (hasMethod(name))
-        return getMethod(name);
+Object *Class::lookup(string name) {
+//    if (hasMethod(name))
+//        return getMethod(name);
+
+    if (hasAttribute(name))
+        return getAttribute(name);
 
     if (superclass)
         return superclass->lookup(name);
@@ -115,9 +118,12 @@ Method *Class::lookup(string name) {
 }
 
 Object *Class::call(string name, Tuple *args) {
-    // TODO: Fix static methods
-//    if (hasMethod(name))
-//        return getMethod(name)->invoke(this, args);
+    if (hasMethod(name)) {
+        Method *m = getMethod(name);
+
+        if (m->isStatic())
+            return m->invoke(this, args);
+    }
 
     return Object::call(name, args);
 }
