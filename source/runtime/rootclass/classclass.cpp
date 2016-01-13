@@ -19,12 +19,7 @@ void ClassClass::setupMethods() {
     };
 
     setMethod("new", new Signature("Object", {}, true), newMethod);
-
-    auto parenthesesMethod = [](Object * self, Tuple * args) -> Object * {
-        return ((Class *)self)->newInstance((Tuple *)args->at(1));
-    };
-
-    setMethod("()", new Signature("Object", {"Object", "Tuple"}), parenthesesMethod);
+    setAttribute("()", getMethod("new"));
 
     auto superclassMethod = [](Object * self, Tuple *) -> Object * {
         return ((Class *)self)->getSuperclass();

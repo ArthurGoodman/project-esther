@@ -90,10 +90,10 @@ Object *Object::call(string name, Tuple *args) {
             Runtime::runtimeError("undefined identifier '" + name + "'");
     }
 
-    if(dynamic_cast<Function *>(method))
+    if (dynamic_cast<Function *>(method))
         return ((Function *)method)->invoke(this, args);
     else
-        return method->call("()", new Tuple({this, args}));
+        return method->call("()", args);
 }
 
 Object *Object::call(string name, Object *arg) {
