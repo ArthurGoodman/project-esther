@@ -19,7 +19,12 @@ void ClassClass::setupMethods() {
     };
 
     setMethod("new", new Signature("Object", {}, true), newMethod);
-    setAttribute("()", getMethod("new"));
+
+    auto parenthesesMethod = [](Object * self, Tuple * args) -> Object * {
+        return ((Class *)self)->newInstance((Tuple *)args->at(1));
+    };
+
+    setMethod("()", new Signature("Object", {"Object", "Tuple"}), parenthesesMethod);
 
     auto superclassMethod = [](Object * self, Tuple *) -> Object * {
         return ((Class *)self)->getSuperclass();
@@ -39,7 +44,7 @@ void ClassClass::setupMethods() {
 
     setMethod("isChild", new Signature("Boolean", {"Class"}), isChildMethod);
 
-    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
+    auto toStringMethod = [](Object * self, Tuple *) -> Object * {
         return new String(((Class *)self)->getName().empty() ? "<anonymous class>" : ((Class *)self)->getName());
     };
 

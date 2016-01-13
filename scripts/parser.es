@@ -215,7 +215,7 @@ class Parser {
     }
 }
 
-new Parser.parse("0").eval()
+new Parser.parse("").eval()
 
 //forever {
 //    "$ ".print()

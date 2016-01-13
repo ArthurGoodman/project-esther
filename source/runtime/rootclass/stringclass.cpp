@@ -25,7 +25,7 @@ void StringClass::setupMethods() {
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
     auto initCharacterMethod = [](Object *self, Tuple *args) -> Object *{
-        ((String *)self)->setValue(string() + ((ValueObject *)args->at(0))->getVariant().toString());
+        ((String *)self)->setValue(string() + ((ValueObject *)args->at(0))->getVariant().toChar());
         return self;
     };
 

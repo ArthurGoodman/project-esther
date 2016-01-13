@@ -22,7 +22,7 @@ Object *CallExpression::exec(Context *context) {
 
     if (dynamic_cast<Method *>(self) && name == "()")
         actualArgs = new Tuple({context->getSelfForMethod((Method *)self), new Tuple(evaledArgs)});
-    else if (dynamic_cast<Function *>(self) && name == "()")
+    else if (/*dynamic_cast<Function *>(self) && */name == "()")
         actualArgs = new Tuple({context->getCurrentSelf(), new Tuple(evaledArgs)});
     else
         actualArgs = new Tuple(evaledArgs);

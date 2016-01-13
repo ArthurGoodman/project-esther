@@ -25,10 +25,13 @@ Object *ContextCallExpression::exec(Context *context) {
 
     if (dynamic_cast<Method *>(body))
         actualArgs = new Tuple({selfContext->getSelfForMethod((Method *)body), new Tuple(evaledArgs)});
-    else if (dynamic_cast<Function *>(body))
-        actualArgs = new Tuple({self, new Tuple(evaledArgs)});
     else
-        actualArgs = new Tuple(evaledArgs);
+        actualArgs = new Tuple({self, new Tuple(evaledArgs)});
+
+//    else if (dynamic_cast<Function *>(body))
+//        actualArgs = new Tuple({self, new Tuple(evaledArgs)});
+//    else
+//        actualArgs = new Tuple(evaledArgs);
 
     Object *value = body->call("()", actualArgs);
 
