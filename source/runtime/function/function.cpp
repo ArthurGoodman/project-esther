@@ -67,6 +67,10 @@ Object *Function::execute(Object *self, Tuple *args) {
     return signature->convertReturnValue(returnValue);
 }
 
+string Function::immediateToString() {
+    return name.empty() ? "<anonymous function>" : "<function " + name + ">";
+}
+
 Object *Function::clone() {
     Function *clone = new Function(name, context, signature, body);
     clone->features = features;

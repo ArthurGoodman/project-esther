@@ -24,19 +24,13 @@ void StringClass::setupMethods() {
 
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
-    auto initCharacterMethod = [](Object *self, Tuple *args) -> Object *{
-        ((String *)self)->setValue(string() + ((ValueObject *)args->at(0))->getVariant().toChar());
-        return self;
-    };
-
-    setMethod("initialize", new Signature("Object", {"Character"}), initCharacterMethod);
-
-    auto initStringMethod = [](Object *self, Tuple *args) -> Object *{
+    auto initVariantMethod = [](Object *self, Tuple *args) -> Object *{
         ((String *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toString());
         return self;
     };
 
-    setMethod("initialize", new Signature("Object", {"String"}), initStringMethod);
+    setMethod("initialize", new Signature("Object", {"Character"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"String"}), initVariantMethod);
 
     auto sizeMethod = [](Object *self, Tuple *) -> Object *{
         return new Integer(((ValueObject *)self)->getVariant().toString().size());
@@ -56,18 +50,6 @@ void StringClass::setupMethods() {
 
     setMethod("at", new Signature("Character", {"Integer"}), atMethod);
     setAttribute("[]", getMethod("at"));
-
-    auto equalsMethod = [](Object *self, Tuple *args) -> Object *{
-        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString() == ((ValueObject *)args->at(0))->getVariant().toString());
-    };
-
-    setMethod("equals", new Signature("Boolean", {"String"}), equalsMethod);
-
-    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
-        return new String(((ValueObject *)self)->getVariant().toString());
-    };
-
-    setMethod("toString", new Signature("String", {}), toStringMethod);
 
     auto emptyMethod = [](Object *self, Tuple *) -> Object *{
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString().empty());

@@ -8,8 +8,8 @@
 #include "context.h"
 #include "interpretedblock.h"
 
-FunctionExpression::FunctionExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic)
-    : type(type), name(name), params(params), body(body), variadic(variadic) {
+FunctionExpression::FunctionExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic)
+    : type(type), name(name), params(params), body(body), variadic(variadic), dynamic(dynamic) {
 }
 
 Object *FunctionExpression::exec(Context *context) {
@@ -18,7 +18,7 @@ Object *FunctionExpression::exec(Context *context) {
     if (!type->is("Class"))
         Runtime::runtimeError("class expected");
 
-    string name = this->name ? this->name->eval(context)->toString() : "";
+    string name = this->name ? (dynamic ? this->name->eval(context)->toString() : this->name->eval(context)->immediateToString()) : "";
 
     list<Parameter *> evaledParams;
 

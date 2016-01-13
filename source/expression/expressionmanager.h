@@ -26,11 +26,11 @@ public:
     Expression *createPostDecrement(Expression *self);
     Expression *createPostIncrement(Expression *self);
 
-    Expression *createIdentifier(Expression *name);
-    Expression *createIdentifierAssignment(Expression *name, Expression *value);
-    Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value);
+    Expression *createIdentifier(Expression *name, bool dynamic);
+    Expression *createIdentifierAssignment(Expression *name, Expression *value, bool dynamic);
+    Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);
 
-    Expression *createParameter(Expression *type, Expression *name, Expression *value);
+    Expression *createParameter(Expression *type, Expression *name, Expression *value, bool dynamic);
     Expression *createCall(Expression *self, string name, list<Expression *> args);
 
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
@@ -43,8 +43,8 @@ public:
 
     Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
-    Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
-    Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
+    Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic);
+    Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic);
 
     Expression *createReturn(Expression *value);
     Expression *createBreak(Expression *value);

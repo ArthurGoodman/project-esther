@@ -20,26 +20,14 @@ void CharacterClass::setupMethods() {
 
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
-    auto initCharacterMethod = [](Object *self, Tuple *args) -> Object *{
+    auto initVariantMethod = [](Object *self, Tuple *args) -> Object *{
         ((Character *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
         return self;
     };
 
-    setMethod("initialize", new Signature("Object", {"Character"}), initCharacterMethod);
-
-    auto initIntegerMethod = [](Object *self, Tuple *args) -> Object *{
-        ((Character *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
-        return self;
-    };
-
-    setMethod("initialize", new Signature("Object", {"Integer"}), initIntegerMethod);
-
-    auto initFloatMethod = [](Object *self, Tuple *args) -> Object *{
-        ((Character *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toChar());
-        return self;
-    };
-
-    setMethod("initialize", new Signature("Object", {"Float"}), initFloatMethod);
+    setMethod("initialize", new Signature("Object", {"Character"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"Integer"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"Float"}), initVariantMethod);
 
     auto plusMethod = [](Object *self, Tuple *args) -> Object *{
         return new Character(((ValueObject *)self)->getVariant().toChar() + ((ValueObject *)args->at(0))->getVariant().toChar());
@@ -114,17 +102,6 @@ void CharacterClass::setupMethods() {
     };
 
     setMethod("--", new Signature("Character", {}), decMethod);
-    auto equalsMethod = [](Object *self, Tuple *args) -> Object *{
-        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toChar() == ((ValueObject *)args->at(0))->getVariant().toChar());
-    };
-
-    setMethod("equals", new Signature("Boolean", {"Character"}), equalsMethod);
-
-    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
-        return new String(((ValueObject *)self)->getVariant().toString());
-    };
-
-    setMethod("toString", new Signature("String", {}), toStringMethod);
 
     auto isDigitMethod = [](Object *self, Tuple *) -> Object *{
         return Runtime::toBoolean(Utility::isDigit(((ValueObject *)self)->getVariant().toChar()));

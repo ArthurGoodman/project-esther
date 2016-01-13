@@ -65,20 +65,20 @@ Expression *Expression::PostIncrement(Expression *self) {
     return manager->createPostIncrement(self);
 }
 
-Expression *Expression::Identifier(Expression *name) {
-    return manager->createIdentifier(name);
+Expression *Expression::Identifier(Expression *name, bool dynamic) {
+    return manager->createIdentifier(name, dynamic);
 }
 
-Expression *Expression::IdentifierAssignment(Expression *name, Expression *value) {
-    return manager->createIdentifierAssignment(name, value);
+Expression *Expression::IdentifierAssignment(Expression *name, Expression *value, bool dynamic) {
+    return manager->createIdentifierAssignment(name, value, dynamic);
 }
 
-Expression *Expression::IdentifierDefinition(Expression *type, Expression *name, Expression *value) {
-    return manager->createIdentifierDefinition(type, name, value);
+Expression *Expression::IdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) {
+    return manager->createIdentifierDefinition(type, name, value, dynamic);
 }
 
-Expression *Expression::ParameterDefinition(Expression *type, Expression *name, Expression *value) {
-    return manager->createParameter(type, name, value);
+Expression *Expression::ParameterDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) {
+    return manager->createParameter(type, name, value, dynamic);
 }
 
 Expression *Expression::Call(Expression *self, string name, list<Expression *> args) {
@@ -121,12 +121,12 @@ Expression *Expression::ClassDefinition(Expression *name, Expression *superclass
     return manager->createClassDefinition(name, superclass, body);
 }
 
-Expression *Expression::FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
-    return manager->createFunctionDefinition(type, name, params, body, variadic);
+Expression *Expression::FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+    return manager->createFunctionDefinition(type, name, params, body, variadic, dynamic);
 }
 
-Expression *Expression::MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
-    return manager->createMethodDefinition(type, name, params, body, variadic);
+Expression *Expression::MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+    return manager->createMethodDefinition(type, name, params, body, variadic, dynamic);
 }
 
 Expression *Expression::Return(Expression *value) {

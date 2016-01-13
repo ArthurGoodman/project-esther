@@ -66,12 +66,12 @@ Object *Class::newInstance(Tuple *args) {
 //}
 
 bool Class::hasMethod(string name) {
-//    return methods.find(name) != methods.end();
+    //    return methods.find(name) != methods.end();
     return hasAttribute(name) && dynamic_cast<Method *>(getAttribute(name));
 }
 
 Method *Class::getMethod(string name) {
-//    return hasMethod(name) ? methods.at(name) : 0;
+    //    return hasMethod(name) ? methods.at(name) : 0;
     return hasMethod(name) ? (Method *)getAttribute(name) : 0;
 }
 
@@ -92,7 +92,7 @@ void Class::setMethod(string name, Method *method) {
                 newMethod->addMethod(existing);
                 newMethod->addMethod(method);
 
-//                methods[name] = newMethod;
+                //                methods[name] = newMethod;
                 setAttribute(name, newMethod);
             }
 
@@ -100,13 +100,13 @@ void Class::setMethod(string name, Method *method) {
         }
     }
 
-//    methods[name] = method;
+    //    methods[name] = method;
     setAttribute(name, method);
 }
 
 Object *Class::lookup(string name) {
-//    if (hasMethod(name))
-//        return getMethod(name);
+    //    if (hasMethod(name))
+    //        return getMethod(name);
 
     if (hasAttribute(name))
         return getAttribute(name);
@@ -134,6 +134,10 @@ Object *Class::call(string name, Object *arg) {
 
 Object *Class::call(string name) {
     return call(name, new Tuple(list<Object *>()));
+}
+
+string Class::immediateToString() {
+    return name.empty() ? "<anonymous class>" : name;
 }
 
 //Object *Class::clone() {

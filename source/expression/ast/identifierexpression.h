@@ -6,9 +6,10 @@
 class IdentifierExpression : public Expression {
 protected:
     Expression *name;
+    bool dynamic;
 
 public:
-    IdentifierExpression(Expression *name);
+    IdentifierExpression(Expression *name, bool dynamic);
 
     Object *exec(Context *context);
 };

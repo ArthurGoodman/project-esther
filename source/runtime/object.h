@@ -40,9 +40,11 @@ public:
     virtual bool isFalse();
     virtual bool isNull();
 
+    bool equals(Object *other);
     string toString();
 
-    bool equals(Object *other);
+    virtual bool immediateEquals(Object *other);
+    virtual string immediateToString();
 
     virtual Object *clone();
 };

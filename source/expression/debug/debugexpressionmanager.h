@@ -28,9 +28,9 @@ public:
     Expression *createPostDecrement(Expression *self);
     Expression *createPostIncrement(Expression *self);
 
-    Expression *createIdentifier(Expression *name);
-    Expression *createIdentifierAssignment(Expression *name, Expression *value);
-    Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value);
+    Expression *createIdentifier(Expression *name, bool dynamic);
+    Expression *createIdentifierAssignment(Expression *name, Expression *value, bool dynamic);
+    Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);
 
     Expression *createParameter(Expression *type, Expression *name, Expression *value);
     Expression *createCall(Expression *self, string name, list<Expression *> args);

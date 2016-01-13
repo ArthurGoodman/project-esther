@@ -18,12 +18,6 @@ void MethodClass::setupMethods() {
     };
 
     setMethod("isStatic", new Signature("Boolean", {}), isStaticMethod);
-
-    auto toStringMethod = [](Object *self, Tuple *) -> Object * {
-        return new String(((Function *)self)->getName().empty() ? "<anonymous method>" : "<method " + ((Function *)self)->getName() + ">");
-    };
-
-    setMethod("toString", new Signature("String", {}), toStringMethod);
 }
 
 Object *MethodClass::createNewInstance() {

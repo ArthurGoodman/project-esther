@@ -9,11 +9,6 @@ NullClass::NullClass()
 }
 
 void NullClass::setupMethods() {
-    auto toStringMethod = [](Object *, Tuple *) -> Object * {
-        return new String("null");
-    };
-
-    setMethod("toString", new Signature("String", {}), toStringMethod);
 }
 
 Object *NullClass::createNewInstance() {

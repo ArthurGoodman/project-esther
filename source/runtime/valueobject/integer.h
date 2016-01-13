@@ -9,4 +9,7 @@ public:
     Integer();
 
     void setValue(int value);
+
+    bool immediateEquals(Object *other);
+    string immediateToString();
 };

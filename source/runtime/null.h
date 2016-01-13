@@ -11,7 +11,7 @@ public:
     bool isFalse();
     bool isNull();
 
-    string toString();
+    string immediateToString();
 
     Object *clone();
 };

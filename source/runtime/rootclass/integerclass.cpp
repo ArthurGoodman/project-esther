@@ -105,18 +105,6 @@ void IntegerClass::setupMethods() {
 
     setMethod("--", new Signature("Integer", {}), decMethod);
 
-    auto equalsMethod = [](Object *self, Tuple *args) -> Object *{
-        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toInteger() == ((ValueObject *)args->at(0))->getVariant().toInteger());
-    };
-
-    setMethod("equals", new Signature("Boolean", {"Integer"}), equalsMethod);
-
-    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
-        return new String(((ValueObject *)self)->getVariant().toString());
-    };
-
-    setMethod("toString", new Signature("String", {}), toStringMethod);
-
     auto plusAssignMethod = [](Object *self, Tuple *args) -> Object *{
         ((Integer *)self)->setValue(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
         return self;

@@ -102,18 +102,6 @@ void FloatClass::setupMethods() {
     };
 
     setMethod("--", new Signature("Float", {}), decMethod);
-
-    auto equalsMethod = [](Object *self, Tuple *args) -> Object *{
-        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toFloat() == ((ValueObject *)args->at(0))->getVariant().toFloat());
-    };
-
-    setMethod("equals", new Signature("Boolean", {"Float"}), equalsMethod);
-
-    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
-        return new String(((ValueObject *)self)->getVariant().toString());
-    };
-
-    setMethod("toString", new Signature("String", {}), toStringMethod);
 }
 
 Object *FloatClass::createNewInstance() {

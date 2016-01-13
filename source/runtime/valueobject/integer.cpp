@@ -11,3 +11,11 @@ Integer::Integer()
 void Integer::setValue(int value) {
     setVariant(Variant(value));
 }
+
+bool Integer::immediateEquals(Object *other) {
+    return dynamic_cast<Integer *>(other) && value.toInteger() == ((Integer *)other)->value.toInteger();
+}
+
+string Integer::immediateToString() {
+    return value.toString();
+}

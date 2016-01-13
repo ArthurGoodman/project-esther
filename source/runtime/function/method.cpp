@@ -31,6 +31,10 @@ bool Method::suitableFor(Object *self) {
     return staticFlag ? this->self == self : self->is((Class *)this->self);
 }
 
+string Method::immediateToString() {
+    return name.empty() ? "<anonymous method>" : "<method " + name + ">";
+}
+
 Object *Method::clone() {
     return new Method(name, name, context, signature, body, self, staticFlag);
 }

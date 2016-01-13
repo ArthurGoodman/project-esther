@@ -35,11 +35,11 @@ public:
     static Expression *PostDecrement(Expression *self);
     static Expression *PostIncrement(Expression *self);
 
-    static Expression *Identifier(Expression *name);
-    static Expression *IdentifierAssignment(Expression *name, Expression *value);
-    static Expression *IdentifierDefinition(Expression *type, Expression *name, Expression *value);
+    static Expression *Identifier(Expression *name, bool dynamic);
+    static Expression *IdentifierAssignment(Expression *name, Expression *value, bool dynamic);
+    static Expression *IdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);
 
-    static Expression *ParameterDefinition(Expression *type, Expression *name, Expression *value);
+    static Expression *ParameterDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);
 
     static Expression *Call(Expression *self, string name, list<Expression *> args);
     static Expression *Call(Expression *self, string name, Expression *arg);
@@ -55,8 +55,8 @@ public:
 
     static Expression *ClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
-    static Expression *FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
-    static Expression *MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic);
+    static Expression *FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic);
+    static Expression *MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic);
 
     static Expression *Return(Expression *value);
     static Expression *Break(Expression *value);

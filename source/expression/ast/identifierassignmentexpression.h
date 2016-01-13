@@ -8,7 +8,7 @@ protected:
     Expression *value;
 
 public:
-    IdentifierAssignmentExpression(Expression *name, Expression *value);
+    IdentifierAssignmentExpression(Expression *name, Expression *value, bool dynamic);
 
     Object *exec(Context *context);
 };

@@ -16,6 +16,10 @@ bool True::isNull() {
     return false;
 }
 
+string True::immediateToString() {
+    return "true";
+}
+
 Object *True::clone() {
     return this;
 }

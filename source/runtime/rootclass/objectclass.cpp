@@ -46,13 +46,13 @@ void ObjectClass::setupMethods() {
     setMethod("scanLine", new Signature("String", {}), scanLineMethod);
 
     auto equalsMethod = [](Object *self, Tuple *args) -> Object * {
-        return Runtime::toBoolean(self == args->at(0));
+        return Runtime::toBoolean(self->immediateEquals(args->at(0)));
     };
 
     setMethod("equals", new Signature("Boolean", {"Object"}), equalsMethod);
 
     auto toStringMethod = [](Object *self, Tuple *) -> Object * {
-        return new String("<" + self->getClass()->toString() + ":" + Utility::toString(self) + ">");
+        return new String(self->immediateToString());
     };
 
     setMethod("toString", new Signature("String", {}), toStringMethod);

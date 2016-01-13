@@ -113,24 +113,28 @@ Expression *DebugExpressionManager::createPostIncrement(Expression *self) {
     return new DebugExpression("PostIncrement", arguments);
 }
 
-Expression *DebugExpressionManager::createIdentifier(Expression *name) {
+Expression *DebugExpressionManager::createIdentifier(Expression *name, bool dynamic) {
     list<Object *> arguments;
 
     arguments << name;
 
+    arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
+
     return new DebugExpression("Identifier", arguments);
 }
 
-Expression *DebugExpressionManager::createIdentifierAssignment(Expression *name, Expression *value) {
+Expression *DebugExpressionManager::createIdentifierAssignment(Expression *name, Expression *value, bool dynamic) {
     list<Object *> arguments;
 
     arguments << name;
     arguments << value;
 
+    arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
+
     return new DebugExpression("IdentifierAssignment", arguments);
 }
 
-Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value) {
+Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) {
     list<Object *> arguments;
 
     if (type)
@@ -140,6 +144,8 @@ Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type,
 
     if (value)
         arguments << value;
+
+    arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
 
     return new DebugExpression("IdentifierDefinition", arguments);
 }

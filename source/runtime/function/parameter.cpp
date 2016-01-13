@@ -19,7 +19,7 @@ Object *Parameter::getValue() {
 }
 
 bool Parameter::equals(Parameter *other) {
-    return type == other->type /*type->equals(other->type)*/ && ((value && other->value) ? value->equals(other->value) : true);
+    return type->immediateEquals(other) && ((value && other->value) ? value->equals(other->value) : true);
 }
 
 Object *Parameter::clone() {

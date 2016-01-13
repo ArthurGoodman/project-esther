@@ -10,4 +10,7 @@ public:
     String();
 
     void setValue(string value);
+
+    bool immediateEquals(Object *other);
+    string immediateToString();
 };

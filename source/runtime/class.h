@@ -42,6 +42,8 @@ public:
     Object *call(string name, Object *arg);
     Object *call(string name);
 
+    string immediateToString();
+
 //    Object *clone();
 
 protected:

@@ -134,12 +134,20 @@ bool Object::isNull() {
     return false;
 }
 
+bool Object::equals(Object *other) {
+    return call("equals", other, "Boolean")->isTrue();
+}
+
 string Object::toString() {
     return ((String *)call("toString", "String"))->getVariant().toString();
 }
 
-bool Object::equals(Object *other) {
-    return call("equals", other, "Boolean")->isTrue();
+bool Object::immediateEquals(Object *other) {
+    return this == other;
+}
+
+string Object::immediateToString() {
+    return "<" + getClass()->toString() + ":" + Utility::toString((void *)this) + ">";
 }
 
 Object *Object::clone() {

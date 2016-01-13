@@ -7,7 +7,7 @@ class IdentifierDefinitionExpression : public IdentifierAssignmentExpression {
     Expression *type;
 
 public:
-    IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value);
+    IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value, bool dynamic);
 
     Object *exec(Context *context);
 };

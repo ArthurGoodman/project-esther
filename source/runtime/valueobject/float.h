@@ -9,4 +9,7 @@ public:
     Float();
 
     void setValue(double value);
+
+    bool immediateEquals(Object *other);
+    string immediateToString();
 };

@@ -5,12 +5,12 @@
 #include "class.h"
 #include "context.h"
 
-IdentifierDefinitionExpression::IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value)
-    : IdentifierAssignmentExpression(name, value), type(type) {
+IdentifierDefinitionExpression::IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value, bool dynamic)
+    : IdentifierAssignmentExpression(name, value, dynamic), type(type) {
 }
 
 Object *IdentifierDefinitionExpression::exec(Context *context) {
-    string name = this->name->eval(context)->toString();
+    string name = dynamic ? this->name->eval(context)->toString() : this->name->eval(context)->immediateToString();
     Object *value = this->value ? this->value->eval(context) : 0;
 
     if (type) {

@@ -9,4 +9,7 @@ public:
     Character();
 
     void setValue(char value);
+
+    bool immediateEquals(Object *other);
+    string immediateToString();
 };

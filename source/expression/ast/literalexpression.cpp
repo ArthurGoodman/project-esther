@@ -7,5 +7,5 @@ LiteralExpression::LiteralExpression(const Variant &value)
 }
 
 Object *LiteralExpression::exec(Context *) {
-    return new ValueObject(value);
+    return ValueObject::createNewInstance(value);
 }

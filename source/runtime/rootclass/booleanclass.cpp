@@ -10,11 +10,6 @@ BooleanClass::BooleanClass()
 }
 
 void BooleanClass::setupMethods() {
-    auto toStringMethod = [](Object *self, Tuple *) -> Object *{
-        return new String(self->isTrue() ? "true" : "false");
-    };
-
-    setMethod("toString", new Signature("String", {}), toStringMethod);
 }
 
 Object *BooleanClass::createNewInstance() {

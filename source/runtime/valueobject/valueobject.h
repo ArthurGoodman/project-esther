@@ -9,6 +9,8 @@ protected:
     Variant value;
 
 public:
+    static ValueObject *createNewInstance(const Variant &value);
+
     ValueObject(int value);
     ValueObject(double value);
     ValueObject(char value);
