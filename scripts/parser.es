@@ -5,12 +5,10 @@ class Parser {
     }
 
     class BinaryNode < Node {
-        method initialize(Node left, Node right) {
+        super = method initialize(Node left, Node right) {
             self.left = left
             self.right = right
         }
-
-        super = initialize
 
         method eval
             left.eval().oper(right.eval())
