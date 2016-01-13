@@ -30,8 +30,12 @@ Object *MethodExpression::exec(Context *context) {
 
     Method *f = new Method(name, context, new Signature(type, evaledParams, variadic), new InterpretedBlock(body), self, isStatic);
 
-    if (!name.empty())
-        context->setLocal(name, f);
+    if (!name.empty()) {
+        if (dynamic_cast<Class *>(context->getCurrentSelf()))
+            ((Class *)context->getCurrentSelf())->setMethod(f);
+        else
+            context->setLocal(name, f);
+    }
 
     return f;
 }
