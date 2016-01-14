@@ -23,6 +23,7 @@
 #include "tupleclass.h"
 #include "contextclass.h"
 #include "blockclass.h"
+#include "rangeclass.h"
 
 Context *Runtime::root;
 
@@ -56,6 +57,8 @@ void Runtime::initialize() {
     new ContextClass;
 
     new BlockClass;
+
+    new RangeClass;
 
     class OverloadedMethodClass : public RootClass {
     public:

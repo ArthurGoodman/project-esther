@@ -221,19 +221,36 @@ Expression *Parser::equality() {
 }
 
 Expression *Parser::relation() {
-    Expression *e = addSub();
+    Expression *e = range();
 
     while (true) {
         Position p = token->getPosition();
 
         if (accept(tLt))
-            e = Expression::Call(e, "<", addSub());
+            e = Expression::Call(e, "<", range());
         else if (accept(tGt))
-            e = Expression::Call(e, ">", addSub());
+            e = Expression::Call(e, ">", range());
         else if (accept(tLe))
-            e = Expression::Call(e, "<=", addSub());
+            e = Expression::Call(e, "<=", range());
         else if (accept(tGe))
-            e = Expression::Call(e, ">=", addSub());
+            e = Expression::Call(e, ">=", range());
+        else
+            break;
+
+        e->setPosition(p);
+    }
+
+    return e;
+}
+
+Expression *Parser::range() {
+    Expression *e = addSub();
+
+    while (true) {
+        Position p = token->getPosition();
+
+        if (accept(tRange))
+            e = Expression::Call(e, "..", addSub());
         else
             break;
 
@@ -521,6 +538,26 @@ Expression *Parser::term() {
     //    e = Expression::For(preffix, condition, suffix, oper());
     //}
     else if (accept(tFor)) {
+        list<Expression *> params;
+
+        do {
+            Position p = token->getPosition();
+
+            bool dynamic = false;
+            Expression *name = parseIdentifier(&dynamic);
+
+            if (name == 0)
+                error("identifier expected");
+
+            params << Expression::ParameterDefinition(0, name, 0, dynamic);
+            params.back()->setPosition(p);
+        } while (accept(tComma));
+
+        accept(tIn);
+
+        Expression *expression = expr();
+
+        e = Expression::For(params, expression, oper());
     } else if (accept(tDo)) {
         Expression *body;
 

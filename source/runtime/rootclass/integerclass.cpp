@@ -8,6 +8,7 @@
 #include "signature.h"
 #include "string.h"
 #include "valueobject.h"
+#include "range.h"
 
 IntegerClass::IntegerClass()
     : RootClass("Integer") {
@@ -111,6 +112,12 @@ void IntegerClass::setupMethods() {
     };
 
     setMethod("+=", new Signature("Integer", {"Integer"}), plusAssignMethod);
+
+    auto rangeMethod = [](Object *self, Tuple *args) -> Object *{
+        return new Range(((Integer *)self)->getVariant().toInteger(), ((Integer *)args->at(0))->getVariant().toInteger());
+    };
+
+    setMethod("..", new Signature("Range", {"Integer"}), rangeMethod);
 }
 
 Object *IntegerClass::createNewInstance() {

@@ -146,7 +146,9 @@ SOURCES += \
     source/lexer/ilexer.cpp \
     source/lexer/lexer.cpp \
     source/expression/iexpressionmanager.cpp \
-    source/expression/expressionmanager.cpp
+    source/expression/expressionmanager.cpp \
+    source/runtime/rootclass/rangeclass.cpp \
+    source/runtime/range.cpp
 
 HEADERS += \
     source/esther.h \
@@ -273,7 +275,9 @@ HEADERS += \
     source/lexer/ilexer.h \
     source/lexer/lexer.h \
     source/expression/iexpressionmanager.h \
-    source/expression/expressionmanager.h
+    source/expression/expressionmanager.h \
+    source/runtime/rootclass/rangeclass.h \
+    source/runtime/range.h
 
 OTHER_FILES += \
     README.MD \

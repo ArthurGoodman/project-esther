@@ -119,18 +119,18 @@ class Parser {
 
         getToken()
 
-        //while (token) {
+        // while (token) {
         //    token.inspect()
         //    getToken()
-        //}
+        // }
 
         node = addSub()
 
         if (node == null)
             node = new ValueNode
 
-        //if(!check('e'))
-        //    ...
+        // if (!check('e'))
+        //     ...
 
         node
     }
@@ -215,22 +215,22 @@ class Parser {
 
 new Parser.parse("").eval()
 
-//forever {
-//    "$ ".print()
+// forever {
+//     "$ ".print()
 
-//    str = scanLine()
+//     str = scanLine()
 
-//    if (str.empty()) continue
-//    elif (str == "help" || str == "?")
-//        print("This is help!\n")
-//    elif (str == "exit" || str == "quit")
-//        break;
-//    else {
-//        parser = new Parser()
-//        ast = parser.parse(str)
-//        ast.eval().print()
-//        "\n".print()
-//    }
+//     if (str.empty()) continue
+//     elif (str == "help" || str == "?")
+//         print("This is help!\n")
+//     elif (str == "exit" || str == "quit")
+//         break;
+//     else {
+//         parser = new Parser()
+//         ast = parser.parse(str)
+//         ast.eval().print()
+//         "\n".print()
+//     }
 
-//    "\n".print()
-//}
+//     "\n".print()
+// }

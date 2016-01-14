@@ -34,6 +34,7 @@ private:
     Expression *logicAnd();
     Expression *equality();
     Expression *relation();
+    Expression *range();
     Expression *addSub();
     Expression *mulDiv();
     Expression *power();

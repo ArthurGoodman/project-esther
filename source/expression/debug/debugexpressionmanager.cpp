@@ -214,7 +214,6 @@ Expression *DebugExpressionManager::createFor(list<Expression *> params, Express
     arguments << new DebugExpression("List", paramsArguments);
 
     arguments << expression;
-
     arguments << body;
 
     return new DebugExpression("For", arguments);
