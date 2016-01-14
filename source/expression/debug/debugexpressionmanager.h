@@ -37,7 +37,7 @@ public:
 
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
     Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody);
-    Expression *createFor(list<Expression *> params, Expression *expression, Expression *body);
+    Expression *createFor(Expression *param, Expression *expression, Expression *body);
     Expression *createDo(Expression *body, Expression *condition);
 
     Expression *createContextResolution(Expression *self, Expression *body);

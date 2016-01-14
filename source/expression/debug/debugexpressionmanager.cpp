@@ -205,14 +205,10 @@ Expression *DebugExpressionManager::createWhile(Expression *condition, Expressio
     return new DebugExpression("While", arguments);
 }
 
-Expression *DebugExpressionManager::createFor(list<Expression *> params, Expression *expression, Expression *body) {
-    list<Object *> arguments, paramsArguments;
+Expression *DebugExpressionManager::createFor(Expression *param, Expression *expression, Expression *body) {
+    list<Object *> arguments;
 
-    for (Expression *param : params)
-        paramsArguments << param;
-
-    arguments << new DebugExpression("List", paramsArguments);
-
+    arguments << param;
     arguments << expression;
     arguments << body;
 
