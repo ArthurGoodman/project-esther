@@ -5,8 +5,6 @@
 #include "logger.h"
 #include "utility.h"
 
-// Lexemes:
-
 vector<string> Lexer::operators = {
 #define X(a, b) b,
 #include "operators.def"
@@ -20,8 +18,7 @@ vector<string> Lexer::keywords = {
 };
 
 #if DEBUG_LEXER
-// This is used in logs.
-vector<string> DefaultLexer::tokenTypes = {
+vector<string> Lexer::tokenTypes = {
 #define X(a, b) #a,
 #include "operators.def"
 #include "keywords.def"
@@ -31,14 +28,13 @@ vector<string> DefaultLexer::tokenTypes = {
 #endif
 
 Tokens &Lexer::lex(const string &source) {
-    // Initialize:
     this->source = &source;
     pos = 0;
     line = column = 1;
 
     tokens.clear();
 
-    do { // Build the list of tokens.
+    do {
         scan();
         tokens << token;
 
@@ -48,11 +44,11 @@ Tokens &Lexer::lex(const string &source) {
         Logger::write(tokenTypes[token.getId()]);
         Logger::write(" : \"" + token.getText() + "\"");
         Logger::write(" (");
-        Logger::write(token.getPos().offset);
+        Logger::write(token.getPosition().getOffset());
         Logger::write(", ");
-        Logger::write(token.getPos().line);
+        Logger::write(token.getPosition().getLine());
         Logger::write(", ");
-        Logger::write(token.getPos().column);
+        Logger::write(token.getPosition().getColumn());
         Logger::write(")\n");
 #endif
     } while (token != tEnd);
@@ -61,29 +57,46 @@ Tokens &Lexer::lex(const string &source) {
 }
 
 void Lexer::error(string msg, int delta) {
-    // Delta is used when the position of the token needs to be corrected.
     ErrorException *e = new LexicalError(msg, token.getPosition().shifted(delta));
     e->raise();
 }
 
 void Lexer::scan() {
-    token = Token(); // Clear current token.
+    token = Token();
 
     skipSpaces();
 
-    while (at(pos) == '/' && at(pos + 1) == '/') { // Comment.
-        while (at(pos) && at(pos) != '\n')
-            pos++;
+    if (at(pos) == '/' && at(pos + 1) == '/') {
+        while (at(pos) == '/' && at(pos + 1) == '/') {
+            while (at(pos) && at(pos) != '\n')
+                pos++;
 
-        skipSpaces();
+            while (Utility::isSpace(at(pos))) {
+                pos++;
+                column++;
+                if (at(pos - 1) == '\n') {
+                    line++;
+                    column = 1;
+                }
+            }
+        }
+
+        if (at(pos) && at(pos - 1) == '\n')
+            pos--;
     }
 
     token.setPosition(Position(pos, line, column));
 
     if (!at(pos))
         token = tEnd;
-
-    else if (at(pos) == '\'' || at(pos) == '"') { // String literals.
+    else if (at(pos) == '\n') {
+        token = tNewLine;
+        while (at(pos) == '\n') {
+            pos++;
+            line++;
+            column = 1;
+        }
+    } else if (at(pos) == '\'' || at(pos) == '"') {
         char type = at(pos++);
         column++;
 
@@ -93,7 +106,7 @@ void Lexer::scan() {
             if (at(pos) == '\n')
                 break;
 
-            if (at(pos) == '\\') { // Escape sequences.
+            if (at(pos) == '\\') {
                 switch (at(++pos)) {
                 case 'n':
                     token += '\n';
@@ -143,14 +156,13 @@ void Lexer::scan() {
         column++;
 
         column -= token.getText().length();
-    } else if (Utility::isDigit(at(pos))) { // Numbers.
+    } else if (Utility::isDigit(at(pos))) {
         token = tInteger;
 
         do
             token += at(pos++);
-        while (Utility::isDigit(at(pos))); // Integral part.
+        while (Utility::isDigit(at(pos)));
 
-        // Fractional part:
         if (at(pos) == '.' && Utility::isDigit(at(pos + 1))) {
             token = tFloat;
 
@@ -159,7 +171,6 @@ void Lexer::scan() {
             while (Utility::isDigit(at(pos)));
         }
 
-        // Scientific notation:
         if ((Utility::toLower(at(pos)) == 'e') && (Utility::isDigit(at(pos + 1)) || (Utility::isSign(at(pos + 1)) && Utility::isDigit(at(pos + 2))))) {
             token += at(pos++);
 
@@ -171,7 +182,7 @@ void Lexer::scan() {
                 while (Utility::isDigit(at(pos)))
                     token += at(pos++);
         }
-    } else if (Utility::isLetter(at(pos)) || at(pos) == '_') { // Identifiers and keywords.
+    } else if (Utility::isLetter(at(pos)) || at(pos) == '_') {
         do
             token += at(pos++);
         while (Utility::isLetterOrDigit(at(pos)));
@@ -182,7 +193,7 @@ void Lexer::scan() {
             token = tKeywordMarker + distance(keywords.begin(), i);
         else
             token = tId;
-    } else { // Operators and unknown tokens.
+    } else {
         vector<string>::iterator i;
 
         while (i != operators.end())
@@ -206,13 +217,9 @@ void Lexer::scan() {
 }
 
 void Lexer::skipSpaces() {
-    while (Utility::isSpace(at(pos))) {
+    while (Utility::isSpace(at(pos)) && at(pos) != '\n') {
         pos++;
         column++;
-        if (at(pos - 1) == '\n') {
-            line++;
-            column = 1;
-        }
     }
 }
 

@@ -10,6 +10,8 @@ class Parser : public IParser {
     Tokens tokens;
     Tokens::iterator token;
 
+    bool lastAcceptedNewLine;
+
 public:
     Expression *parse(Tokens &tokens);
 
@@ -17,7 +19,9 @@ private:
     void error(string msg, int delta = 0);
 
     bool check(int id);
+    bool realCheck(int id);
     bool accept(int id);
+    bool realAccept(int id);
 
     void getToken();
 

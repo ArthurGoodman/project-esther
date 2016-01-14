@@ -3,7 +3,6 @@
 
 #include "token.h"
 
-// Lexical analysis.
 class ILexer {
     static ILexer *lexer;
 

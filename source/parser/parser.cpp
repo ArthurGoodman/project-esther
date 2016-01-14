@@ -14,6 +14,7 @@
 Expression *Parser::parse(Tokens &tokens) {
     this->tokens.swap(tokens);
     token = this->tokens.begin();
+    lastAcceptedNewLine = false;
 
     list<Expression *> nodes;
 
@@ -34,10 +35,24 @@ void Parser::error(string msg, int delta) {
 }
 
 bool Parser::check(int id) {
+    if (*token == tNewLine)
+        getToken();
+
+    return realCheck(id);
+}
+
+bool Parser::realCheck(int id) {
     return *token == id;
 }
 
 bool Parser::accept(int id) {
+    if (*token == tNewLine)
+        getToken();
+
+    return realAccept(id);
+}
+
+bool Parser::realAccept(int id) {
     if (*token == id) {
         getToken();
         return true;
@@ -47,6 +62,11 @@ bool Parser::accept(int id) {
 }
 
 void Parser::getToken() {
+    if (*token == tNewLine)
+        lastAcceptedNewLine = true;
+    else
+        lastAcceptedNewLine = false;
+
     ++token;
 }
 
@@ -111,7 +131,7 @@ Expression *Parser::context() {
     while (true) {
         Position p = token->getPosition();
 
-        if (accept(tLBrace)) {
+        if (!lastAcceptedNewLine && realAccept(tLBrace)) {
             Expression *list = Expression::List(parseBlock());
             list->setPosition(p);
 
@@ -331,7 +351,7 @@ Expression *Parser::dot() {
 
             Position p = token->getPosition();
 
-            if (accept(tLPar)) {
+            if (!lastAcceptedNewLine && realAccept(tLPar)) {
                 e = Expression::ContextCall(e, body, check(tRPar) ? list<Expression *>() : parseList());
                 e->setPosition(p);
 
@@ -378,29 +398,31 @@ Expression *Parser::suffix() {
 
     Position p = token->getPosition();
 
-    if (check(tLPar) || check(tLBracket) /* || check(tLBrace)*/)
-        while (true) {
-            Position p = token->getPosition();
+    if (!lastAcceptedNewLine) {
+        if (realCheck(tLPar) || realCheck(tLBracket) /* || realCheck(tLBrace)*/)
+            while (true) {
+                Position p = token->getPosition();
 
-            if (accept(tLPar)) {
-                e = Expression::Call(e, "()", check(tRPar) ? list<Expression *>() : parseList());
+                if (accept(tLPar)) {
+                    e = Expression::Call(e, "()", check(tRPar) ? list<Expression *>() : parseList());
 
-                if (!accept(tRPar))
-                    error("unmatched parentheses");
-            } else if (accept(tLBracket)) {
-                e = Expression::Call(e, "[]", check(tRBracket) ? list<Expression *>() : parseList());
+                    if (!accept(tRPar))
+                        error("unmatched parentheses");
+                } else if (accept(tLBracket)) {
+                    e = Expression::Call(e, "[]", check(tRBracket) ? list<Expression *>() : parseList());
 
-                if (!accept(tRBracket))
-                    error("unmatched brackets");
-            } else
-                break;
+                    if (!accept(tRBracket))
+                        error("unmatched brackets");
+                } else
+                    break;
 
-            e->setPosition(p);
-        }
-    else if (accept(tDec))
-        e = Expression::PostDecrement(e);
-    else if (accept(tInc))
-        e = Expression::PostIncrement(e);
+                e->setPosition(p);
+            }
+        else if (realAccept(tDec))
+            e = Expression::PostDecrement(e);
+        else if (realAccept(tInc))
+            e = Expression::PostIncrement(e);
+    }
 
     if (!e->getPosition().isValid())
         e->setPosition(p);
@@ -737,6 +759,8 @@ Expression *Parser::term() {
         e = Expression::Block(parseBlock());
 
     else if (accept(tSemi))
+        e = Expression::Empty();
+    else if (accept(tNewLine))
         e = Expression::Empty();
 
     else if (check(tEnd))

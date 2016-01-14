@@ -12,11 +12,11 @@ class Lexer : public ILexer {
     static vector<string> tokenTypes;
 #endif
 
-    Tokens tokens; // List of tokens, that the lexer produces.
+    Tokens tokens;
 
     const string *source;
-    Token token;           // Current token.
-    int pos, line, column; // Current position of the lexer.
+    Token token;
+    int pos, line, column;
 
 public:
     Tokens &lex(const string &source);
@@ -25,8 +25,8 @@ private:
     template <int N>
     static int count(string(&)[N]);
 
-    void error(string msg, int shift = 0); // Handle lexical errors.
-    void scan();                           // Scan code for the next lexeme.
+    void error(string msg, int shift = 0);
+    void scan();
     void skipSpaces();
     const char &at(int pos);
 };
