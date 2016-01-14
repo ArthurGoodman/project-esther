@@ -11,25 +11,25 @@ ContextClass::ContextClass()
 }
 
 void ContextClass::setupMethods() {
-    auto parentMethod = [](Object * self, Tuple *) -> Object * {
+    auto parentMethod = [](Object *self, Tuple *) -> Object * {
         return ((Context *)self)->getParent();
     };
 
     setMethod("parent", new Signature("Context", {}), parentMethod);
 
-    auto hasLocalMethod = [](Object * self, Tuple * args) -> Object * {
+    auto hasLocalMethod = [](Object *self, Tuple *args) -> Object * {
         return Runtime::toBoolean(((Context *)self)->hasLocal(((String *)args->at(0))->toString()));
     };
 
     setMethod("hasLocal", new Signature("Boolean", {"String"}), hasLocalMethod);
 
-    auto getLocalMethod = [](Object * self, Tuple * args) -> Object * {
+    auto getLocalMethod = [](Object *self, Tuple *args) -> Object * {
         return ((Context *)self)->getLocal(((String *)args->at(0))->toString());
     };
 
     setMethod("getLocal", new Signature("Object", {"String"}), getLocalMethod);
 
-    auto setLocalMethod = [](Object * self, Tuple * args) -> Object * {
+    auto setLocalMethod = [](Object *self, Tuple *args) -> Object * {
         ((Context *)self)->setLocal(((String *)args->at(0))->toString(), args->at(1));
         return args->at(1);
     };

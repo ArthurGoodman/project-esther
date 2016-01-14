@@ -14,26 +14,26 @@ ClassClass::ClassClass()
 }
 
 void ClassClass::setupMethods() {
-    auto newMethod = [](Object * self, Tuple * args) -> Object * {
+    auto newMethod = [](Object *self, Tuple *args) -> Object * {
         return ((Class *)self)->newInstance(args);
     };
 
     setMethod("new", new Signature("Object", {}, true), newMethod);
     setAttribute("()", getMethod("new"));
 
-    auto superclassMethod = [](Object * self, Tuple *) -> Object * {
+    auto superclassMethod = [](Object *self, Tuple *) -> Object * {
         return ((Class *)self)->getSuperclass();
     };
 
     setMethod("superclass", new Signature("Class", {}), superclassMethod);
 
-    auto nameMethod = [](Object * self, Tuple *) -> Object * {
+    auto nameMethod = [](Object *self, Tuple *) -> Object * {
         return new String(((Class *)self)->getName());
     };
 
     setMethod("name", new Signature("String", {}), nameMethod);
 
-    auto isChildMethod = [](Object * self, Tuple * args) -> Object * {
+    auto isChildMethod = [](Object *self, Tuple *args) -> Object * {
         return Runtime::toBoolean(((Class *)self)->isChild((Class *)args->at(0)));
     };
 

@@ -47,7 +47,7 @@ public:
 
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *While(Expression *condition, Expression *body, Expression *elseBody);
-    static Expression *For(list<Expression *> params, Expression *expression, Expression *body);
+    static Expression *For(Expression * param, Expression *expression, Expression *body);
     static Expression *Do(Expression *body, Expression *condition);
 
     static Expression *ContextResolution(Expression *self, Expression *body);

@@ -22,6 +22,18 @@ Tuple::~Tuple() {
     delete[] data;
 }
 
+void Tuple::initialize(list<Object *> data) {
+    if (this->data)
+        delete[] this->data;
+
+    n = data.size();
+    this->data = new Object *[n];
+
+    int i = 0;
+    for (Object *o : data)
+        this->data[i++] = o;
+}
+
 int Tuple::size() const {
     return n;
 }

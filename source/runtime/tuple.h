@@ -16,6 +16,8 @@ public:
     Tuple(list<Object *> data);
     ~Tuple();
 
+    void initialize(list<Object *> data);
+
     int size() const;
     bool isEmpty() const;
 

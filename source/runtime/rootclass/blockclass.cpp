@@ -11,7 +11,7 @@ BlockClass::BlockClass()
 }
 
 void BlockClass::setupMethods() {
-    auto evalMethod = [](Object * self, Tuple * args) -> Object * {
+    auto evalMethod = [](Object *self, Tuple *args) -> Object * {
         return ((Block *)self)->eval((Context *)args->at(0));
     };
 

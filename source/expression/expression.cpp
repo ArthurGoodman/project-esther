@@ -101,8 +101,8 @@ Expression *Expression::While(Expression *condition, Expression *body, Expressio
     return manager->createWhile(condition, body, elseBody);
 }
 
-Expression *Expression::For(list<Expression *> params, Expression *expression, Expression *body) {
-    return manager->createFor(params, expression, body);
+Expression *Expression::For(Expression *param, Expression *expression, Expression *body) {
+    return manager->createFor(param, expression, body);
 }
 
 Expression *Expression::Do(Expression *body, Expression *condition) {

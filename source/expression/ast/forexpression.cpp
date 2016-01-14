@@ -7,17 +7,12 @@
 #include "signature.h"
 #include "interpretedblock.h"
 
-ForExpression::ForExpression(list<Expression *> params, Expression *expression, Expression *body)
-    : params(params), expression(expression), body(body) {
+ForExpression::ForExpression(Expression *param, Expression *expression, Expression *body)
+    : param(param), expression(expression), body(body) {
 }
 
 Object *ForExpression::exec(Context *context) {
-    list<Parameter *> actualParams;
-
-    for(Expression *param : params)
-        actualParams << (Parameter *)param->eval(context);
-
-    Function *f = new Function("", context, new Signature(Runtime::getObjectClass(), actualParams), new InterpretedBlock(body));
+    Function *f = new Function("", context, new Signature(Runtime::getObjectClass(), list<Parameter *>(1, (Parameter *)param->eval(context))), new InterpretedBlock(body));
     expression->eval(context)->call("each", f);
 
     return Runtime::getNull();

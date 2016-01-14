@@ -13,7 +13,7 @@ MethodClass::MethodClass()
 }
 
 void MethodClass::setupMethods() {
-    auto isStaticMethod = [](Object *self, Tuple *) -> Object *{
+    auto isStaticMethod = [](Object *self, Tuple *) -> Object * {
         return Runtime::toBoolean(((Method *)self)->isStatic());
     };
 

@@ -520,44 +520,23 @@ Expression *Parser::term() {
             body = oper();
 
         e = Expression::While(Expression::Constant(Runtime::getTrue()), body, 0);
-    }
-    //else if (accept(tFor)) {
-    //    if (!accept(tLPar))
-    //        error("left parenthesis expected");
+    } else if (accept(tFor)) {
+        Position p = token->getPosition();
 
-    //    list<Expression *> nodes = parseList();
+        bool dynamic = false;
+        Expression *name = parseIdentifier(&dynamic);
 
-    //    if (!accept(tRPar))
-    //        error("unmatched parentheses");
-    //    if (nodes.size() != 3)
-    //        error("three expressions expected");
+        if (name == 0)
+            error("identifier expected");
 
-    //    auto i = nodes.begin();
-    //    Expression *preffix = *i++, *condition = *i++, *suffix = *i++;
-
-    //    e = Expression::For(preffix, condition, suffix, oper());
-    //}
-    else if (accept(tFor)) {
-        list<Expression *> params;
-
-        do {
-            Position p = token->getPosition();
-
-            bool dynamic = false;
-            Expression *name = parseIdentifier(&dynamic);
-
-            if (name == 0)
-                error("identifier expected");
-
-            params << Expression::ParameterDefinition(0, name, 0, dynamic);
-            params.back()->setPosition(p);
-        } while (accept(tComma));
+        Expression *param = Expression::ParameterDefinition(0, name, 0, dynamic);
+        param->setPosition(p);
 
         accept(tIn);
 
         Expression *expression = expr();
 
-        e = Expression::For(params, expression, oper());
+        e = Expression::For(param, expression, oper());
     } else if (accept(tDo)) {
         Expression *body;
 

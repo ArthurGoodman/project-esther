@@ -42,6 +42,8 @@ Object *Class::newInstance(Tuple *args) {
 
     if (lookup("initialize"))
         instance->call("initialize", args);
+    else if(args->size() > 0)
+        Runtime::runtimeError("'initialize' not found");
 
     return instance;
 }
