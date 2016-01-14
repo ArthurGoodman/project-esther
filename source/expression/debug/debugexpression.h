@@ -17,7 +17,7 @@ public:
 
     Object *exec(Context *context);
 
-    string toString();
+    string immediateToString();
 };
 
 #endif

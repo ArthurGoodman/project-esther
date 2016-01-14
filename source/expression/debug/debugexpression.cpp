@@ -12,12 +12,12 @@ DebugExpression::DebugExpression(string name, list<Object *> args)
 }
 
 Object *DebugExpression::exec(Context *) {
-    Logger::write("parser", toString());
+    Logger::write("parser", immediateToString());
 
     return Runtime::getNull();
 }
 
-string DebugExpression::toString() {
+string DebugExpression::immediateToString() {
     string spacing;
     spacing.insert(0, 4 * indent, ' ');
 
@@ -25,17 +25,17 @@ string DebugExpression::toString() {
 
     bool fp = true;
 
-    foreach (i, args) {
+    for (Object *obj : args) {
         if (!fp)
             str += ",\n";
         else
             fp = false;
 
-        if (dynamic_cast<Expression *>(*i) == 0)
+        if (dynamic_cast<Expression *>(obj) == 0)
             str += spacing + "    ";
 
         indent++;
-        str += (*i)->toString();
+        str += obj->immediateToString();
         indent--;
     }
 

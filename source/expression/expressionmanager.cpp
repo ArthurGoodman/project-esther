@@ -117,9 +117,9 @@ Expression *ExpressionManager::createWhile(Expression *condition, Expression *bo
     return new WhileExpression(condition, body, elseBody);
 }
 
-//Expression *DefaultExpressionManager::createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
-//    return new ForExpression(preffix, condition, suffix, body);
-//}
+Expression *ExpressionManager::createFor(list<Expression *> params, Expression *expression, Expression *body) {
+    return new ForExpression(params, expression, body);
+}
 
 Expression *ExpressionManager::createDo(Expression *body, Expression *condition) {
     return new DoExpression(body, condition);

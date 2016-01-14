@@ -4,6 +4,7 @@
 #include "valueobject.h"
 #include "class.h"
 #include "runtime.h"
+#include "string.h"
 
 #if DEBUG_PARSER
 
@@ -14,8 +15,8 @@ Expression *DebugExpressionManager::createEmpty() {
 Expression *DebugExpressionManager::createBlock(list<Expression *> nodes) {
     list<Object *> arguments;
 
-    foreach (i, nodes)
-        arguments << *i;
+    for (Expression *e : nodes)
+        arguments << e;
 
     return new DebugExpression("Block", arguments);
 }
@@ -23,8 +24,8 @@ Expression *DebugExpressionManager::createBlock(list<Expression *> nodes) {
 Expression *DebugExpressionManager::createList(list<Expression *> nodes) {
     list<Object *> arguments;
 
-    foreach (i, nodes)
-        arguments << *i;
+    for (Expression *e : nodes)
+        arguments << e;
 
     return new DebugExpression("List", arguments);
 }
@@ -32,8 +33,8 @@ Expression *DebugExpressionManager::createList(list<Expression *> nodes) {
 Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
     list<Object *> arguments;
 
-    foreach (i, nodes)
-        arguments << *i;
+    for (Expression *e : nodes)
+        arguments << e;
 
     return new DebugExpression("Tuple", arguments);
 }
@@ -41,8 +42,8 @@ Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
 Expression *DebugExpressionManager::createLiteral(const Variant &value) {
     list<Object *> arguments;
 
-    Object *object = new ValueObject(value);
-    arguments << new ValueObject("<" + object->getClass()->getName() + " : \"" + object->toString() + "\">");
+    Object *object = ValueObject::createNewInstance(value);
+    arguments << new String("<" + object->getClass()->getName() + " : \"" + object->immediateToString() + "\">");
 
     return new DebugExpression("Literal", arguments);
 }
@@ -50,7 +51,7 @@ Expression *DebugExpressionManager::createLiteral(const Variant &value) {
 Expression *DebugExpressionManager::createConstant(Object *value) {
     list<Object *> arguments;
 
-    arguments << new ValueObject("<" + value->getClass()->getName() + " : \"" + value->toString() + "\">");
+    arguments << new String("<" + value->getClass()->getName() + " : \"" + value->immediateToString() + "\">");
 
     return new DebugExpression("Constant", arguments);
 }
@@ -150,7 +151,7 @@ Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type,
     return new DebugExpression("IdentifierDefinition", arguments);
 }
 
-Expression *DebugExpressionManager::createParameter(Expression *type, Expression *name, Expression *value) {
+Expression *DebugExpressionManager::createParameter(Expression *type, Expression *name, Expression *value, bool dynamic) {
     list<Object *> arguments;
 
     if (type)
@@ -161,6 +162,8 @@ Expression *DebugExpressionManager::createParameter(Expression *type, Expression
     if (value)
         arguments << value;
 
+    arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
+
     return new DebugExpression("Parameter", arguments);
 }
 
@@ -168,10 +171,10 @@ Expression *DebugExpressionManager::createCall(Expression *self, string name, li
     list<Object *> arguments, callArguments;
 
     arguments << self;
-    arguments << new ValueObject("<String : \"" + name + "\">");
+    arguments << new String("<String : \"" + name + "\">");
 
-    foreach (i, args)
-        callArguments << *i;
+    for (Expression *arg : args)
+        callArguments << arg;
 
     arguments << new DebugExpression("List", callArguments);
 
@@ -202,16 +205,20 @@ Expression *DebugExpressionManager::createWhile(Expression *condition, Expressio
     return new DebugExpression("While", arguments);
 }
 
-//Expression *DebugExpressionManager::createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) {
-//    list<Object *> arguments;
+Expression *DebugExpressionManager::createFor(list<Expression *> params, Expression *expression, Expression *body) {
+    list<Object *> arguments, paramsArguments;
 
-//    arguments << preffix;
-//    arguments << condition;
-//    arguments << suffix;
-//    arguments << body;
+    for (Expression *param : params)
+        paramsArguments << param;
 
-//    return new DebugExpression("For", arguments);
-//}
+    arguments << new DebugExpression("List", paramsArguments);
+
+    arguments << expression;
+
+    arguments << body;
+
+    return new DebugExpression("For", arguments);
+}
 
 Expression *DebugExpressionManager::createDo(Expression *body, Expression *condition) {
     list<Object *> arguments;
@@ -237,8 +244,8 @@ Expression *DebugExpressionManager::createContextCall(Expression *self, Expressi
     arguments << self;
     arguments << body;
 
-    foreach (i, args)
-        callArguments << *i;
+    for (Expression *arg : args)
+        callArguments << arg;
 
     arguments << new DebugExpression("List", callArguments);
 
@@ -259,7 +266,7 @@ Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expr
     return new DebugExpression("Class", arguments);
 }
 
-Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
+Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
     list<Object *> arguments, paramsArguments;
 
     if (type)
@@ -268,19 +275,21 @@ Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, E
     if (name)
         arguments << name;
 
-    foreach (i, params)
-        paramsArguments << *i;
+    for (Expression *param : params)
+        paramsArguments << param;
 
     arguments << new DebugExpression("List", paramsArguments);
 
     arguments << body;
 
     arguments << new DebugExpression("Variadic", {Runtime::toBoolean(variadic)});
+
+    arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
 
     return new DebugExpression("Function", arguments);
 }
 
-Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic) {
+Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
     list<Object *> arguments, paramsArguments;
 
     if (type)
@@ -289,14 +298,16 @@ Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Exp
     if (name)
         arguments << name;
 
-    foreach (i, params)
-        paramsArguments << *i;
+    for (Expression *param : params)
+        paramsArguments << param;
 
     arguments << new DebugExpression("List", paramsArguments);
 
     arguments << body;
 
     arguments << new DebugExpression("Variadic", {Runtime::toBoolean(variadic)});
+
+    arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
 
     return new DebugExpression("Method", arguments);
 }

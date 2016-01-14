@@ -40,7 +40,7 @@ public:
 
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody) = 0;
-    //virtual Expression *createFor(Expression *preffix, Expression *condition, Expression *suffix, Expression *body) = 0;
+    virtual Expression *createFor(list<Expression *> params, Expression *expression, Expression *body) = 0;
     virtual Expression *createDo(Expression *body, Expression *condition) = 0;
 
     virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
