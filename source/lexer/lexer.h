@@ -27,6 +27,7 @@ private:
 
     void error(string msg, int shift = 0);
     void scan();
+    void skipSpacesExceptForNewLine();
     void skipSpaces();
     const char &at(int pos);
 };

@@ -64,21 +64,14 @@ void Lexer::error(string msg, int delta) {
 void Lexer::scan() {
     token = Token();
 
-    skipSpaces();
+    skipSpacesExceptForNewLine();
 
     if (at(pos) == '/' && at(pos + 1) == '/') {
         while (at(pos) == '/' && at(pos + 1) == '/') {
             while (at(pos) && at(pos) != '\n')
                 pos++;
 
-            while (Utility::isSpace(at(pos))) {
-                pos++;
-                column++;
-                if (at(pos - 1) == '\n') {
-                    line++;
-                    column = 1;
-                }
-            }
+            skipSpaces();
         }
 
         if (at(pos) && at(pos - 1) == '\n')
@@ -91,11 +84,7 @@ void Lexer::scan() {
         token = tEnd;
     else if (at(pos) == '\n') {
         token = tNewLine;
-        while (at(pos) == '\n') {
-            pos++;
-            line++;
-            column = 1;
-        }
+        skipSpaces();
     } else if (at(pos) == '\'' || at(pos) == '"') {
         char type = at(pos++);
         column++;
@@ -216,10 +205,21 @@ void Lexer::scan() {
     column += token.getText().length();
 }
 
-void Lexer::skipSpaces() {
+void Lexer::skipSpacesExceptForNewLine() {
     while (Utility::isSpace(at(pos)) && at(pos) != '\n') {
         pos++;
         column++;
+    }
+}
+
+void Lexer::skipSpaces() {
+    while (Utility::isSpace(at(pos))) {
+        pos++;
+        column++;
+        if (at(pos - 1) == '\n') {
+            line++;
+            column = 1;
+        }
     }
 }
 

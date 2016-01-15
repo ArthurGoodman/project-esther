@@ -72,9 +72,8 @@ class Parser {
         else code[pos]
 
     method getToken {
-        while (at(pos).isSpace()) {
+        while (at(pos).isSpace())
             ++pos
-        }
 
         if (at(pos) == '\0') token = new Token('e')
         elif (at(pos).isDigit()) token = new Token {
