@@ -4,6 +4,7 @@
 #include "tuple.h"
 #include "method.h"
 #include "overloadedmethod.h"
+#include "signature.h"
 
 Class::Class(string name, Class *superclass)
     : Object("Class"), name(name), superclass(superclass) {
@@ -42,38 +43,17 @@ Object *Class::newInstance(Tuple *args) {
 
     if (lookup("initialize"))
         instance->call("initialize", args);
-    else if(args->size() > 0)
+    else if (args->size() > 0)
         Runtime::runtimeError("'initialize' not found");
 
     return instance;
 }
 
-//bool Class::hasAttribute(string name) {
-//    return hasMethod(name) || Object::hasAttribute(name);
-//}
-
-//Object *Class::getAttribute(string name) {
-//    return hasMethod(name) ? getMethod(name) : Object::getAttribute(name);
-//}
-
-//void Class::setAttribute(string name, Object *value) {
-//    if (dynamic_cast<Method *>(value))
-//        setMethod(name, (Method *)value);
-//    else {
-//        if (hasMethod(name))
-//            methods.erase(name);
-
-//        Object::setAttribute(name, value);
-//    }
-//}
-
 bool Class::hasMethod(string name) {
-    //    return methods.find(name) != methods.end();
     return hasAttribute(name) && dynamic_cast<Method *>(getAttribute(name));
 }
 
 Method *Class::getMethod(string name) {
-    //    return hasMethod(name) ? methods.at(name) : 0;
     return hasMethod(name) ? (Method *)getAttribute(name) : 0;
 }
 
@@ -86,7 +66,9 @@ void Class::setMethod(string name, Method *method) {
         Method *existing = getMethod(name);
 
         if (existing->isStatic() == method->isStatic() && existing->getSelf() == method->getSelf()) {
-            if (dynamic_cast<OverloadedMethod *>(existing)) {
+            if (existing->getSignature()->weakEquals(method->getSignature()))
+                setAttribute(name, method);
+            else if (dynamic_cast<OverloadedMethod *>(existing)) {
                 OverloadedMethod *overloadedMethod = (OverloadedMethod *)existing;
                 overloadedMethod->addMethod(method);
             } else {
@@ -94,7 +76,6 @@ void Class::setMethod(string name, Method *method) {
                 newMethod->addMethod(existing);
                 newMethod->addMethod(method);
 
-                //                methods[name] = newMethod;
                 setAttribute(name, newMethod);
             }
 
@@ -102,14 +83,10 @@ void Class::setMethod(string name, Method *method) {
         }
     }
 
-    //    methods[name] = method;
     setAttribute(name, method);
 }
 
 Object *Class::lookup(string name) {
-    //    if (hasMethod(name))
-    //        return getMethod(name);
-
     if (hasAttribute(name))
         return getAttribute(name);
 
@@ -141,12 +118,6 @@ Object *Class::call(string name) {
 string Class::immediateToString() {
     return name.empty() ? "<anonymous class>" : name;
 }
-
-//Object *Class::clone() {
-//    Class *clone = new Class(name, superclass);
-//    clone->methods = methods;
-//    return clone;
-//}
 
 Object *Class::createNewInstance() {
     return new Object(this);

@@ -25,6 +25,8 @@ public:
 
     virtual bool equals(Signature *other);
 
+    bool weakEquals(Signature *other);
+
     list<string> paramsNames();
 
     virtual Object *clone();

@@ -10,8 +10,6 @@ protected:
     string name;
     Class *superclass;
 
-//    map<string, Method *> methods;
-
 public:
     Class(string name, Class *superclass);
     Class(string name, string superclassName);
@@ -27,10 +25,6 @@ public:
     Object *newInstance();
     Object *newInstance(Tuple *args);
 
-//    bool hasAttribute(string name);
-//    Object *getAttribute(string name);
-//    void setAttribute(string name, Object *value);
-
     bool hasMethod(string name);
     Method *getMethod(string name);
     void setMethod(Method *method);
@@ -43,8 +37,6 @@ public:
     Object *call(string name);
 
     string immediateToString();
-
-//    Object *clone();
 
 protected:
     virtual Object *createNewInstance();

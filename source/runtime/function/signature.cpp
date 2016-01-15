@@ -88,6 +88,10 @@ bool Signature::equals(Signature *other) {
     if (returnClass != other->returnClass)
         return false;
 
+    return weakEquals(other);
+}
+
+bool Signature::weakEquals(Signature *other) {
     if (params.size() != other->params.size())
         return false;
 
