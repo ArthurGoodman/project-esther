@@ -75,7 +75,7 @@ Object *Object::as(Class *_class) {
     Method *constructor = _class->getMethod("initialize");
 
     if (!constructor)
-        Runtime::runtimeError("can't convert");
+        Runtime::runtimeError("can't convert from " + getClass()->toString() + " to " + _class->toString());
 
     return _class->newInstance(new Tuple({this}));
 }
@@ -104,7 +104,7 @@ Object *Object::call(string name, Object *arg, string expectedClassName) {
     Object *value = call(name, new Tuple(list<Object *>(1, arg)));
 
     if (!value->is(Runtime::getRootClass(expectedClassName)))
-        Runtime::runtimeError("invalid return class");
+        Runtime::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
 
     return value;
 }
@@ -113,7 +113,7 @@ Object *Object::call(string name, string expectedClassName) {
     Object *value = call(name);
 
     if (!value->is(Runtime::getRootClass(expectedClassName)))
-        Runtime::runtimeError("invalid return class");
+        Runtime::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
 
     return value;
 }

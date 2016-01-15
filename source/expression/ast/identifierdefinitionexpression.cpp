@@ -16,8 +16,10 @@ Object *IdentifierDefinitionExpression::exec(Context *context) {
     if (type) {
         Class *type = (Class *)this->type->eval(context);
 
-        if (!type->is("Class"))
-            Runtime::runtimeError("class expected");
+        if (!type->is("Class")) {
+            setPosition(this->type->getPosition());
+            Runtime::runtimeError("class expected in identifier type");
+        }
 
         if (value)
             value = value->as(type);

@@ -15,8 +15,10 @@ Object *ClassExpression::exec(Context *context) {
     if (this->superclass) {
         superclass = (Class *)this->superclass->eval(context);
 
-        if (!superclass->is("Class"))
-            Runtime::runtimeError("class expected");
+        if (!superclass->is("Class")) {
+            setPosition(this->superclass->getPosition());
+            Runtime::runtimeError("class expected in superclass expression");
+        }
     } else
         superclass = Runtime::getObjectClass();
 

@@ -11,8 +11,10 @@ ParameterExpression::ParameterExpression(Expression *type, Expression *name, Exp
 Object *ParameterExpression::exec(Context *context) {
     Class *type = this->type ? (Class *)this->type->eval(context) : Runtime::getObjectClass();
 
-    if (!type->is("Class"))
-        Runtime::runtimeError("class expected");
+    if (!type->is("Class")) {
+        setPosition(this->type->getPosition());
+        Runtime::runtimeError("class expected in parameter type");
+    }
 
     string name = dynamic ? this->name->eval(context)->toString() : this->name->eval(context)->immediateToString();
     Object *value = this->value ? this->value->eval(context)->as(type) : 0;

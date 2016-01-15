@@ -4,12 +4,14 @@
 #include "functionfeature.h"
 
 class Class;
+class Method;
 
 class SelfCheckerFeature : public FunctionFeature {
     Class *selfClass;
+    Method *method;
 
 public:
-    SelfCheckerFeature(Class *selfClass);
+    SelfCheckerFeature(Class *selfClass, Method *method);
 
     void check(Object *self, Tuple *args);
 };

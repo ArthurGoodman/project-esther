@@ -8,6 +8,5 @@ ArgumentsCheckerFeature::ArgumentsCheckerFeature(Signature *signature)
 }
 
 void ArgumentsCheckerFeature::check(Object *, Tuple *args) {
-    if (!signature->accepts(args))
-        Runtime::runtimeError("invalid arguments");
+    signature->apply(args);
 }

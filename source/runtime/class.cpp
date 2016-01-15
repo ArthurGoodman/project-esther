@@ -44,7 +44,7 @@ Object *Class::newInstance(Tuple *args) {
     if (lookup("initialize"))
         instance->call("initialize", args);
     else if (args->size() > 0)
-        Runtime::runtimeError("'initialize' not found");
+        Runtime::runtimeError("'initialize' method doesn't exist");
 
     return instance;
 }
@@ -66,9 +66,12 @@ void Class::setMethod(string name, Method *method) {
         Method *existing = getMethod(name);
 
         if (existing->isStatic() == method->isStatic() && existing->getSelf() == method->getSelf()) {
-            if (existing->getSignature()->weakEquals(method->getSignature()))
-                setAttribute(name, method);
-            else if (dynamic_cast<OverloadedMethod *>(existing)) {
+            if (existing->getSignature()->weakEquals(method->getSignature())) {
+                if (dynamic_cast<OverloadedMethod *>(existing))
+                    ((OverloadedMethod *)existing)->replaceMethod(method);
+                else
+                    setAttribute(name, method);
+            } else if (dynamic_cast<OverloadedMethod *>(existing)) {
                 OverloadedMethod *overloadedMethod = (OverloadedMethod *)existing;
                 overloadedMethod->addMethod(method);
             } else {

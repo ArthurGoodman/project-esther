@@ -6,17 +6,17 @@
 Method::Method(string className, string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag)
     : Function(className, name, context, signature, body), staticFlag(staticFlag), self(self) {
     if (staticFlag)
-        addFeature(new StaticSelfCheckerFeature(self));
+        addFeature(new StaticSelfCheckerFeature(self, this));
     else
-        addFeature(new SelfCheckerFeature((Class *)self));
+        addFeature(new SelfCheckerFeature((Class *)self, this));
 }
 
 Method::Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag)
     : Function("Method", name, context, signature, body), staticFlag(staticFlag), self(self) {
     if (staticFlag)
-        addFeature(new StaticSelfCheckerFeature(self));
+        addFeature(new StaticSelfCheckerFeature(self, this));
     else
-        addFeature(new SelfCheckerFeature((Class *)self));
+        addFeature(new SelfCheckerFeature((Class *)self, this));
 }
 
 bool Method::isStatic() {

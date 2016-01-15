@@ -17,6 +17,14 @@ list<Method *> OverloadedMethod::getMethods() {
     return methods;
 }
 
+void OverloadedMethod::replaceMethod(Method *method) {
+    for (Method *&m : methods)
+        if (m->getSignature()->weakEquals(method->getSignature())) {
+            m = method;
+            break;
+        }
+}
+
 Object *OverloadedMethod::clone() {
     OverloadedMethod *clone = new OverloadedMethod(name, getSelf(), isStatic());
     clone->methods = methods;

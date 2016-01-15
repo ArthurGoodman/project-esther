@@ -18,6 +18,7 @@ public:
     Signature(Class *returnClass, list<Parameter *> params, bool variadic = false);
 
     virtual bool accepts(Tuple *args);
+    virtual void apply(Tuple *args);
     bool check(Tuple *args);
 
     Tuple *convert(Tuple *args);

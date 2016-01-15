@@ -12,6 +12,7 @@ public:
     MultiSignature(OverloadedMethod *method);
 
     bool accepts(Tuple *args);
+    void apply(Tuple *args);
 
     bool equals(Signature *other);
     bool weakEquals(Signature *other);

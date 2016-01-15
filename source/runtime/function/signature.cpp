@@ -4,6 +4,7 @@
 #include "class.h"
 #include "tuple.h"
 #include "parameter.h"
+#include "utility.h"
 
 Signature::Signature()
     : returnClass(Runtime::getObjectClass()) {
@@ -39,6 +40,23 @@ bool Signature::accepts(Tuple *args) {
     }
 
     return true;
+}
+
+void Signature::apply(Tuple *args) {
+    if (!variadic && args->size() > (int)params.size())
+        Runtime::runtimeError("invalid number of arguments (" + Utility::toString(args->size()) + "/" + Utility::toString(params.size()) + ")");
+
+    int c = 0;
+
+    for (Parameter *p : params) {
+        if(c >= args->size() && !p->getValue())
+            Runtime::runtimeError("invalid number of arguments (" + Utility::toString(args->size()) + "/" + Utility::toString(params.size()) + ")");
+
+        if(c < args->size() && !args->at(c)->converts(p->getType()))
+            Runtime::runtimeError("can't convert argument #" + Utility::toString(c + 1) + " from " + args->at(c)->getClass()->toString() + " to " + p->getType()->toString());
+
+        c++;
+    }
 }
 
 bool Signature::check(Tuple *args) {

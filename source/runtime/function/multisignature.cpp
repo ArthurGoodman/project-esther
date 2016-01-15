@@ -1,6 +1,7 @@
 #include "multisignature.h"
 
 #include "overloadedmethod.h"
+#include "runtime.h"
 
 MultiSignature::MultiSignature(OverloadedMethod *method)
     : method(method) {
@@ -14,6 +15,11 @@ bool MultiSignature::accepts(Tuple *args) {
             return true;
 
     return false;
+}
+
+void MultiSignature::apply(Tuple *args) {
+    if (!accepts(args))
+        Runtime::runtimeError("all overloads of " + method->toString() + " don't accept arguments");
 }
 
 bool MultiSignature::equals(Signature *other) {

@@ -15,8 +15,10 @@ FunctionExpression::FunctionExpression(Expression *type, Expression *name, list<
 Object *FunctionExpression::exec(Context *context) {
     Class *type = this->type ? (Class *)this->type->eval(context) : Runtime::getObjectClass();
 
-    if (!type->is("Class"))
-        Runtime::runtimeError("class expected");
+    if (!type->is("Class")) {
+        setPosition(this->type->getPosition());
+        Runtime::runtimeError("class expected in function return type");
+    }
 
     string name = this->name ? (dynamic ? this->name->eval(context)->toString() : this->name->eval(context)->immediateToString()) : "";
 
