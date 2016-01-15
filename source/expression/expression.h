@@ -21,6 +21,7 @@ public:
     static Expression *List(list<Expression *> nodes);
 
     static Expression *TupleLiteral(list<Expression *> nodes = list<Expression *>());
+    static Expression *TupleAssignment(Expression *tuple, Expression *value);
 
     static Expression *Literal(const Variant &value);
     static Expression *Constant(Object *value);

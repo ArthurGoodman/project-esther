@@ -12,6 +12,7 @@ public:
     Expression *createList(list<Expression *> nodes);
 
     Expression *createTuple(list<Expression *> nodes);
+    Expression *createTupleAssignment(Expression *tuple, Expression *value);
 
     Expression *createLiteral(const Variant &value);
     Expression *createConstant(Object *value);

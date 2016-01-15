@@ -14,6 +14,7 @@
 Expression *Parser::parse(Tokens &tokens) {
     this->tokens.swap(tokens);
     token = this->tokens.begin();
+
     lastAcceptedNewLine = false;
 
     list<Expression *> nodes;
@@ -62,11 +63,7 @@ bool Parser::realAccept(int id) {
 }
 
 void Parser::getToken() {
-    if (*token == tNewLine)
-        lastAcceptedNewLine = true;
-    else
-        lastAcceptedNewLine = false;
-
+    lastAcceptedNewLine = *token == tNewLine;
     ++token;
 }
 
@@ -92,7 +89,7 @@ list<Expression *> Parser::parseList() {
     return nodes;
 }
 
-Expression *Parser::parseIdentifier(bool *dynamic) {
+Expression *Parser::parseIdentifier(bool &dynamic) {
     Expression *e = 0;
 
     if (check(tId)) {
@@ -102,9 +99,7 @@ Expression *Parser::parseIdentifier(bool *dynamic) {
         getToken();
     } else if (accept(tDollar)) {
         if (check(tLPar) || check(tLBrace) || check(tEnd)) {
-            if (dynamic)
-                *dynamic = true;
-
+            dynamic = true;
             e = term();
         } else {
             e = Expression::Literal(token->getText());
@@ -437,7 +432,7 @@ Expression *Parser::term() {
 
     if (check(tId) || check(tDollar)) {
         bool dynamic = false;
-        Expression *type = 0, *name = parseIdentifier(&dynamic), *value = 0;
+        Expression *type = 0, *name = parseIdentifier(dynamic), *value = 0;
 
         //    if ((type = parseIdentifier())) {
         //        swap(type, name);
@@ -447,7 +442,7 @@ Expression *Parser::term() {
             Position p = token->getPosition();
 
             bool dynamic = false;
-            if ((type = parseIdentifier(&dynamic))) {
+            if ((type = parseIdentifier(dynamic))) {
                 type = Expression::Identifier(type, dynamic);
                 type->setPosition(p);
             } else
@@ -465,7 +460,7 @@ Expression *Parser::term() {
             e = Expression::Identifier(name, dynamic);
     } else if (accept(tVar)) {
         bool dynamic = false;
-        Expression *name = parseIdentifier(&dynamic);
+        Expression *name = parseIdentifier(dynamic);
 
         if (!name) {
             name = Expression::Literal(token->getText());
@@ -546,7 +541,7 @@ Expression *Parser::term() {
         Position p = token->getPosition();
 
         bool dynamic = false;
-        Expression *name = parseIdentifier(&dynamic);
+        Expression *name = parseIdentifier(dynamic);
 
         if (name == 0)
             error("identifier expected");
@@ -629,7 +624,7 @@ Expression *Parser::term() {
         getToken();
 
         bool dynamic = false;
-        Expression *type = 0, *name = parseIdentifier(&dynamic), *body;
+        Expression *type = 0, *name = parseIdentifier(dynamic), *body;
         list<Expression *> params;
         bool variadic = false;
 
@@ -641,7 +636,7 @@ Expression *Parser::term() {
             Position p = token->getPosition();
 
             bool dynamic = false;
-            if ((type = parseIdentifier(&dynamic))) {
+            if ((type = parseIdentifier(dynamic))) {
                 type = Expression::Identifier(type, dynamic);
                 type->setPosition(p);
             } else
@@ -663,12 +658,12 @@ Expression *Parser::term() {
                     error("identifier expected");
 
                 bool dynamic = false;
-                Expression *type = 0, *name = parseIdentifier(&dynamic), *value = 0;
+                Expression *type = 0, *name = parseIdentifier(dynamic), *value = 0;
 
                 Position p = token->getPosition();
 
                 bool dynamicType;
-                if ((type = parseIdentifier(&dynamicType))) {
+                if ((type = parseIdentifier(dynamicType))) {
                     swap(type, name);
                     type = Expression::Identifier(type, dynamicType);
                     type->setPosition(p);
@@ -676,7 +671,7 @@ Expression *Parser::term() {
                     Position p = token->getPosition();
 
                     bool dynamic = false;
-                    if ((type = parseIdentifier(&dynamic))) {
+                    if ((type = parseIdentifier(dynamic))) {
                         type = Expression::Identifier(type, dynamic);
                         type->setPosition(p);
                     } else

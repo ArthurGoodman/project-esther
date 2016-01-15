@@ -148,7 +148,9 @@ SOURCES += \
     source/expression/iexpressionmanager.cpp \
     source/expression/expressionmanager.cpp \
     source/runtime/rootclass/rangeclass.cpp \
-    source/runtime/range.cpp
+    source/runtime/range.cpp \
+    source/runtime/rootclass/overloadedmethodclass.cpp \
+    source/expression/ast/tupleassignmentexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -277,7 +279,9 @@ HEADERS += \
     source/expression/iexpressionmanager.h \
     source/expression/expressionmanager.h \
     source/runtime/rootclass/rangeclass.h \
-    source/runtime/range.h
+    source/runtime/range.h \
+    source/runtime/rootclass/overloadedmethodclass.h \
+    source/expression/ast/tupleassignmentexpression.h
 
 OTHER_FILES += \
     README.MD \

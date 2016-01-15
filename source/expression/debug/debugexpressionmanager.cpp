@@ -39,6 +39,15 @@ Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
     return new DebugExpression("Tuple", arguments);
 }
 
+Expression *DebugExpressionManager::createTupleAssignment(Expression *tuple, Expression *value) {
+    list<Object *> arguments;
+
+    arguments << tuple;
+    arguments << value;
+
+    return new DebugExpression("TupleAssignment", arguments);
+}
+
 Expression *DebugExpressionManager::createLiteral(const Variant &value) {
     list<Object *> arguments;
 

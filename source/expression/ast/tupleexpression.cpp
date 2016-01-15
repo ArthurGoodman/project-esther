@@ -7,6 +7,10 @@ TupleExpression::TupleExpression(list<Expression *> nodes)
     : nodes(nodes) {
 }
 
+list<Expression *> TupleExpression::getNodes() {
+    return nodes;
+}
+
 Object *TupleExpression::exec(Context *context) {
     list<Object *> evaledNodes;
 

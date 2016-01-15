@@ -29,6 +29,10 @@ Expression *Expression::TupleLiteral(list<Expression *> nodes) {
     return manager->createTuple(nodes);
 }
 
+Expression *Expression::TupleAssignment(Expression *tuple, Expression *value) {
+    return manager->createTupleAssignment(tuple, value);
+}
+
 Expression *Expression::Literal(const Variant &value) {
     return manager->createLiteral(value);
 }

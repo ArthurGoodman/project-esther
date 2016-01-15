@@ -28,7 +28,7 @@ private:
     list<Expression *> parseBlock();
     list<Expression *> parseList();
 
-    Expression *parseIdentifier(bool *dynamic);
+    Expression *parseIdentifier(bool &dynamic);
 
     Expression *oper();
     Expression *context();

@@ -24,6 +24,7 @@
 #include "contextclass.h"
 #include "blockclass.h"
 #include "rangeclass.h"
+#include "overloadedmethodclass.h"
 
 Context *Runtime::root;
 
@@ -59,21 +60,6 @@ void Runtime::initialize() {
     new BlockClass;
 
     new RangeClass;
-
-    class OverloadedMethodClass : public RootClass {
-    public:
-        OverloadedMethodClass()
-            : RootClass("OverloadedMethod", "Method") {
-        }
-
-        void setupMethods() {
-        }
-
-    protected:
-        Object *createNewInstance() {
-            return Runtime::getNull();
-        }
-    };
 
     new OverloadedMethodClass;
 

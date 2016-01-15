@@ -5,6 +5,7 @@
 #include "blockexpression.h"
 #include "listexpression.h"
 #include "tupleexpression.h"
+#include "tupleassignmentexpression.h"
 #include "literalexpression.h"
 #include "orexpression.h"
 #include "andexpression.h"
@@ -51,6 +52,10 @@ Expression *ExpressionManager::createList(list<Expression *> nodes) {
 
 Expression *ExpressionManager::createTuple(list<Expression *> nodes) {
     return new TupleExpression(nodes);
+}
+
+Expression *ExpressionManager::createTupleAssignment(Expression *tuple, Expression *value) {
+    return new TupleAssignmentExpression(tuple, value);
 }
 
 Expression *ExpressionManager::createLiteral(const Variant &value) {
@@ -117,7 +122,7 @@ Expression *ExpressionManager::createWhile(Expression *condition, Expression *bo
     return new WhileExpression(condition, body, elseBody);
 }
 
-Expression *ExpressionManager::createFor(Expression * param, Expression *expression, Expression *body) {
+Expression *ExpressionManager::createFor(Expression *param, Expression *expression, Expression *body) {
     return new ForExpression(param, expression, body);
 }
 

@@ -8,7 +8,6 @@ class Context;
 class CallStack;
 class Call;
 
-// Global access point to the various runtime stuff.
 class Runtime {
     static Context *root;
 

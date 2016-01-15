@@ -17,6 +17,7 @@ public:
     virtual Expression *createList(list<Expression *> nodes) = 0;
 
     virtual Expression *createTuple(list<Expression *> nodes) = 0;
+    virtual Expression *createTupleAssignment(Expression *tuple, Expression *value) = 0;
 
     virtual Expression *createLiteral(const Variant &value) = 0;
     virtual Expression *createConstant(Object *value) = 0;
