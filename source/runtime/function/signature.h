@@ -24,8 +24,7 @@ public:
     Object *convertReturnValue(Object *value);
 
     virtual bool equals(Signature *other);
-
-    bool weakEquals(Signature *other);
+    virtual bool weakEquals(Signature *other);
 
     list<string> paramsNames();
 

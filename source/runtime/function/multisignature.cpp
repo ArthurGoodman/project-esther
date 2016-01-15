@@ -26,6 +26,16 @@ bool MultiSignature::equals(Signature *other) {
     return false;
 }
 
+bool MultiSignature::weakEquals(Signature *other) {
+    list<Method *> methods = method->getMethods();
+
+    for (Method *m : methods)
+        if (m->getSignature()->weakEquals(other))
+            return true;
+
+    return false;
+}
+
 Object *MultiSignature::clone() {
     return new MultiSignature(method);
 }

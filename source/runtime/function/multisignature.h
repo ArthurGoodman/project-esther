@@ -14,6 +14,7 @@ public:
     bool accepts(Tuple *args);
 
     bool equals(Signature *other);
+    bool weakEquals(Signature *other);
 
     Object *clone();
 };
