@@ -353,7 +353,7 @@ Expression *Parser::dot() {
                 if (!accept(tRPar))
                     error("unmatched parentheses");
             } else
-                e = Expression::ContextResolution(e, body);
+                e = Expression::ContextResolution(e, accept(tAssign) ? Expression::Assignment(body, tuple()) : body);
         } else
             break;
 
@@ -432,7 +432,7 @@ Expression *Parser::term() {
 
     if (check(tId) || check(tDollar)) {
         bool dynamic = false;
-        Expression *type = 0, *name = parseIdentifier(dynamic)/*, *value = 0*/;
+        Expression *type = 0, *name = parseIdentifier(dynamic) /*, *value = 0*/;
 
         //    if ((type = parseIdentifier())) {
         //        swap(type, name);
@@ -449,13 +449,8 @@ Expression *Parser::term() {
                 type = term();
         }
 
-//        if (accept(tAssign))
-//            value = tuple();
-
         if (type)
             e = Expression::IdentifierDefinition(type, name, 0, dynamic);
-//        else if (value)
-//            e = Expression::IdentifierAssignment(name, value, dynamic);
         else
             e = Expression::Identifier(name, dynamic);
     } else if (accept(tVar)) {
