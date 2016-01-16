@@ -17,7 +17,7 @@ public:
     virtual Expression *createList(list<Expression *> nodes) = 0;
 
     virtual Expression *createTuple(list<Expression *> nodes) = 0;
-    virtual Expression *createTupleAssignment(Expression *tuple, Expression *value) = 0;
+    virtual Expression *createAssignment(Expression *expression, Expression *value) = 0;
 
     virtual Expression *createLiteral(const Variant &value) = 0;
     virtual Expression *createConstant(Object *value) = 0;
@@ -33,7 +33,6 @@ public:
     virtual Expression *createPostIncrement(Expression *self) = 0;
 
     virtual Expression *createIdentifier(Expression *name, bool dynamic) = 0;
-    virtual Expression *createIdentifierAssignment(Expression *name, Expression *value, bool dynamic) = 0;
     virtual Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) = 0;
 
     virtual Expression *createParameter(Expression *type, Expression *name, Expression *value, bool dynamic) = 0;

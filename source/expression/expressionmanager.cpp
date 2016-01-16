@@ -5,7 +5,7 @@
 #include "blockexpression.h"
 #include "listexpression.h"
 #include "tupleexpression.h"
-#include "tupleassignmentexpression.h"
+#include "assignmentexpression.h"
 #include "literalexpression.h"
 #include "orexpression.h"
 #include "andexpression.h"
@@ -15,7 +15,6 @@
 #include "postdecrementexpression.h"
 #include "postincrementexpression.h"
 #include "identifierexpression.h"
-#include "identifierassignmentexpression.h"
 #include "identifierdefinitionexpression.h"
 #include "parameterexpression.h"
 #include "callexpression.h"
@@ -54,8 +53,8 @@ Expression *ExpressionManager::createTuple(list<Expression *> nodes) {
     return new TupleExpression(nodes);
 }
 
-Expression *ExpressionManager::createTupleAssignment(Expression *tuple, Expression *value) {
-    return new TupleAssignmentExpression(tuple, value);
+Expression *ExpressionManager::createAssignment(Expression *tuple, Expression *value) {
+    return new AssignmentExpression(tuple, value);
 }
 
 Expression *ExpressionManager::createLiteral(const Variant &value) {
@@ -96,10 +95,6 @@ Expression *ExpressionManager::createPostIncrement(Expression *self) {
 
 Expression *ExpressionManager::createIdentifier(Expression *name, bool dynamic) {
     return new IdentifierExpression(name, dynamic);
-}
-
-Expression *ExpressionManager::createIdentifierAssignment(Expression *name, Expression *value, bool dynamic) {
-    return new IdentifierAssignmentExpression(name, value, dynamic);
 }
 
 Expression *ExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) {

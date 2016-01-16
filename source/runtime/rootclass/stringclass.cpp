@@ -32,6 +32,8 @@ void StringClass::setupMethods() {
     setMethod("initialize", new Signature("Object", {"Character"}), initVariantMethod);
     setMethod("initialize", new Signature("Object", {"String"}), initVariantMethod);
 
+    setAttribute("=", getMethod("initialize"));
+
     auto sizeMethod = [](Object *self, Tuple *) -> Object * {
         return new Integer(((ValueObject *)self)->getVariant().toString().size());
     };

@@ -32,6 +32,8 @@ void IntegerClass::setupMethods() {
     setMethod("initialize", new Signature("Object", {"Float"}), initVariantMethod);
     setMethod("initialize", new Signature("Object", {"String"}), initVariantMethod);
 
+    setAttribute("=", getMethod("initialize"));
+
     auto plusMethod = [](Object *self, Tuple *args) -> Object * {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
     };

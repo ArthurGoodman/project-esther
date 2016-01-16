@@ -11,5 +11,8 @@ protected:
 public:
     IdentifierExpression(Expression *name, bool dynamic);
 
+    Expression *getName();
+    bool isDynamic();
+
     Object *exec(Context *context);
 };

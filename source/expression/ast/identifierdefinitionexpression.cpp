@@ -6,7 +6,11 @@
 #include "context.h"
 
 IdentifierDefinitionExpression::IdentifierDefinitionExpression(Expression *type, Expression *name, Expression *value, bool dynamic)
-    : IdentifierAssignmentExpression(name, value, dynamic), type(type) {
+    : IdentifierExpression(name, dynamic), type(type), value(value) {
+}
+
+void IdentifierDefinitionExpression::setValue(Expression *value) {
+    this->value = value;
 }
 
 Object *IdentifierDefinitionExpression::exec(Context *context) {

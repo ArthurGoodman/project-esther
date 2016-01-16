@@ -147,7 +147,7 @@ Expression *Parser::expr() {
         Position p = token->getPosition();
 
         if (accept(tAssign))
-            e = Expression::Call(e, "=", tuple());
+            e = Expression::Assignment(e, tuple());
         else if (accept(tPlusAssign))
             e = Expression::Call(e, "+=", tuple());
         else if (accept(tMinusAssign))
@@ -432,7 +432,7 @@ Expression *Parser::term() {
 
     if (check(tId) || check(tDollar)) {
         bool dynamic = false;
-        Expression *type = 0, *name = parseIdentifier(dynamic), *value = 0;
+        Expression *type = 0, *name = parseIdentifier(dynamic)/*, *value = 0*/;
 
         //    if ((type = parseIdentifier())) {
         //        swap(type, name);
@@ -449,13 +449,13 @@ Expression *Parser::term() {
                 type = term();
         }
 
-        if (accept(tAssign))
-            value = tuple();
+//        if (accept(tAssign))
+//            value = tuple();
 
         if (type)
-            e = Expression::IdentifierDefinition(type, name, value, dynamic);
-        else if (value)
-            e = Expression::IdentifierAssignment(name, value, dynamic);
+            e = Expression::IdentifierDefinition(type, name, 0, dynamic);
+//        else if (value)
+//            e = Expression::IdentifierAssignment(name, value, dynamic);
         else
             e = Expression::Identifier(name, dynamic);
     } else if (accept(tVar)) {

@@ -14,7 +14,7 @@ public:
     Expression *createList(list<Expression *> nodes);
 
     Expression *createTuple(list<Expression *> nodes);
-    Expression *createTupleAssignment(Expression *tuple, Expression *value);
+    Expression *createAssignment(Expression *expresion, Expression *value);
 
     Expression *createLiteral(const Variant &value);
     Expression *createConstant(Object *value);
@@ -30,7 +30,6 @@ public:
     Expression *createPostIncrement(Expression *self);
 
     Expression *createIdentifier(Expression *name, bool dynamic);
-    Expression *createIdentifierAssignment(Expression *name, Expression *value, bool dynamic);
     Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);
 
     Expression *createParameter(Expression *type, Expression *name, Expression *value, bool dynamic);

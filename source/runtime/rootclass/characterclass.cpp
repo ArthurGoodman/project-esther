@@ -7,6 +7,7 @@
 #include "utility.h"
 #include "string.h"
 #include "variant.h"
+#include "method.h"
 
 CharacterClass::CharacterClass()
     : RootClass("Character") {
@@ -28,6 +29,8 @@ void CharacterClass::setupMethods() {
     setMethod("initialize", new Signature("Object", {"Character"}), initVariantMethod);
     setMethod("initialize", new Signature("Object", {"Integer"}), initVariantMethod);
     setMethod("initialize", new Signature("Object", {"Float"}), initVariantMethod);
+
+    setAttribute("=", getMethod("initialize"));
 
     auto plusMethod = [](Object *self, Tuple *args) -> Object * {
         return new Character(((ValueObject *)self)->getVariant().toChar() + ((ValueObject *)args->at(0))->getVariant().toChar());

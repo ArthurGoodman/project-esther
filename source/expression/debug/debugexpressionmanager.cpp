@@ -39,13 +39,13 @@ Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
     return new DebugExpression("Tuple", arguments);
 }
 
-Expression *DebugExpressionManager::createTupleAssignment(Expression *tuple, Expression *value) {
+Expression *DebugExpressionManager::createAssignment(Expression *expresion, Expression *value) {
     list<Object *> arguments;
 
-    arguments << tuple;
+    arguments << expresion;
     arguments << value;
 
-    return new DebugExpression("TupleAssignment", arguments);
+    return new DebugExpression("Assignment", arguments);
 }
 
 Expression *DebugExpressionManager::createLiteral(const Variant &value) {
@@ -131,17 +131,6 @@ Expression *DebugExpressionManager::createIdentifier(Expression *name, bool dyna
     arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
 
     return new DebugExpression("Identifier", arguments);
-}
-
-Expression *DebugExpressionManager::createIdentifierAssignment(Expression *name, Expression *value, bool dynamic) {
-    list<Object *> arguments;
-
-    arguments << name;
-    arguments << value;
-
-    arguments << new DebugExpression("Dynamic", {Runtime::toBoolean(dynamic)});
-
-    return new DebugExpression("IdentifierAssignment", arguments);
 }
 
 Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) {

@@ -57,7 +57,6 @@ SOURCES += \
     source/expression/ast/doexpression.cpp \
     source/expression/ast/emptyexpression.cpp \
     source/expression/ast/forexpression.cpp \
-    source/expression/ast/identifierassignmentexpression.cpp \
     source/expression/ast/identifierdefinitionexpression.cpp \
     source/expression/ast/identifierexpression.cpp \
     source/expression/ast/ifexpression.cpp \
@@ -150,7 +149,7 @@ SOURCES += \
     source/runtime/rootclass/rangeclass.cpp \
     source/runtime/range.cpp \
     source/runtime/rootclass/overloadedmethodclass.cpp \
-    source/expression/ast/tupleassignmentexpression.cpp
+    source/expression/ast/assignmentexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -187,7 +186,6 @@ HEADERS += \
     source/expression/ast/doexpression.h \
     source/expression/ast/emptyexpression.h \
     source/expression/ast/forexpression.h \
-    source/expression/ast/identifierassignmentexpression.h \
     source/expression/ast/identifierdefinitionexpression.h \
     source/expression/ast/identifierexpression.h \
     source/expression/ast/ifexpression.h \
@@ -281,7 +279,7 @@ HEADERS += \
     source/runtime/rootclass/rangeclass.h \
     source/runtime/range.h \
     source/runtime/rootclass/overloadedmethodclass.h \
-    source/expression/ast/tupleassignmentexpression.h
+    source/expression/ast/assignmentexpression.h
 
 OTHER_FILES += \
     README.MD \

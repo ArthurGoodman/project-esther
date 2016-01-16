@@ -21,7 +21,7 @@ public:
     static Expression *List(list<Expression *> nodes);
 
     static Expression *TupleLiteral(list<Expression *> nodes = list<Expression *>());
-    static Expression *TupleAssignment(Expression *tuple, Expression *value);
+    static Expression *Assignment(Expression *expression, Expression *value);
 
     static Expression *Literal(const Variant &value);
     static Expression *Constant(Object *value);
@@ -37,7 +37,6 @@ public:
     static Expression *PostIncrement(Expression *self);
 
     static Expression *Identifier(Expression *name, bool dynamic);
-    static Expression *IdentifierAssignment(Expression *name, Expression *value, bool dynamic);
     static Expression *IdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);
 
     static Expression *ParameterDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);

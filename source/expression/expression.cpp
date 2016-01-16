@@ -29,8 +29,8 @@ Expression *Expression::TupleLiteral(list<Expression *> nodes) {
     return manager->createTuple(nodes);
 }
 
-Expression *Expression::TupleAssignment(Expression *tuple, Expression *value) {
-    return manager->createTupleAssignment(tuple, value);
+Expression *Expression::Assignment(Expression *expression, Expression *value) {
+    return manager->createAssignment(expression, value);
 }
 
 Expression *Expression::Literal(const Variant &value) {
@@ -71,10 +71,6 @@ Expression *Expression::PostIncrement(Expression *self) {
 
 Expression *Expression::Identifier(Expression *name, bool dynamic) {
     return manager->createIdentifier(name, dynamic);
-}
-
-Expression *Expression::IdentifierAssignment(Expression *name, Expression *value, bool dynamic) {
-    return manager->createIdentifierAssignment(name, value, dynamic);
 }
 
 Expression *Expression::IdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) {
