@@ -149,7 +149,8 @@ SOURCES += \
     source/runtime/rootclass/rangeclass.cpp \
     source/runtime/range.cpp \
     source/runtime/rootclass/overloadedmethodclass.cpp \
-    source/expression/ast/assignmentexpression.cpp
+    source/expression/ast/assignmentexpression.cpp \
+    source/runtime/mathlib.cpp
 
 HEADERS += \
     source/esther.h \
@@ -279,7 +280,8 @@ HEADERS += \
     source/runtime/rootclass/rangeclass.h \
     source/runtime/range.h \
     source/runtime/rootclass/overloadedmethodclass.h \
-    source/expression/ast/assignmentexpression.h
+    source/expression/ast/assignmentexpression.h \
+    source/runtime/mathlib.h
 
 OTHER_FILES += \
     README.MD \
@@ -288,3 +290,6 @@ OTHER_FILES += \
     source/common/definitions/keywords.def \
     source/common/definitions/operators.def \
     source/common/definitions/othertokens.def
+
+DISTFILES += \
+    scripts/graph.es

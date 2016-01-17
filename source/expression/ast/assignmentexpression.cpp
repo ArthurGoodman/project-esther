@@ -26,17 +26,17 @@ Object *AssignmentExpression::exec(Context *context) {
 
     list<Object *> values;
 
-    if (dynamic_cast<TupleExpression *>(value)) {
+    if (dynamic_cast<TupleExpression *>(value))
         for (Expression *e : ((TupleExpression *)value)->getNodes())
             values << e->eval(context);
-    } else {
-        Object *thatValue = value->eval(context);
+    else {
+        Object *value = this->value->eval(context);
 
-        if (dynamic_cast<Tuple *>(thatValue))
-            for (Object *obj : *(Tuple *)thatValue)
+        if (dynamic_cast<Tuple *>(value))
+            for (Object *obj : *(Tuple *)value)
                 values << obj;
         else
-            values << thatValue;
+            values << value;
     }
 
     list<Object *>::iterator i = values.begin();
@@ -44,12 +44,7 @@ Object *AssignmentExpression::exec(Context *context) {
     Object *result = Runtime::getNull();
 
     for (Expression *e : expressions) {
-        Object *value;
-
-        if (i != values.end())
-            value = *i;
-        else
-            value = Runtime::getNull();
+        Object *value = i != values.end() ? *i : Runtime::getNull();
 
         if (dynamic_cast<IdentifierExpression *>(e)) {
             IdentifierExpression *ie = (IdentifierExpression *)e;

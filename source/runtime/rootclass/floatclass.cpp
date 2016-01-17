@@ -111,6 +111,13 @@ void FloatClass::setupMethods() {
     };
 
     setMethod("--", new Signature("Float", {}), decMethod);
+
+    auto plusAssignMethod = [](Object *self, Tuple *args) -> Object * {
+        ((Float *)self)->setValue(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
+        return self;
+    };
+
+    setMethod("+=", new Signature("Float", {"Float"}), plusAssignMethod);
 }
 
 Object *FloatClass::createNewInstance() {

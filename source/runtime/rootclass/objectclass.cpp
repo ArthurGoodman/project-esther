@@ -1,5 +1,9 @@
 #include "objectclass.h"
 
+int memcmp(const void *ptr1, const void *ptr2, size_t num);
+void *memset(void *ptr, int value, size_t num);
+#include <windows.h>
+
 #include "runtime.h"
 #include "nativemethod.h"
 #include "nativeblock.h"
@@ -9,6 +13,7 @@
 #include "string.h"
 #include "iengine.h"
 #include "utility.h"
+#include "integer.h"
 
 ObjectClass::ObjectClass()
     : RootClass("Object", 0) {
@@ -86,6 +91,34 @@ void ObjectClass::setupMethods() {
     };
 
     setMethod("eval", new Signature("Object", {"String"}), evalMethod);
+
+    auto cloneMethod = [](Object *self, Tuple *) -> Object * {
+        return self->clone();
+    };
+
+    setMethod("clone", new Signature("Object", {}), cloneMethod);
+
+    auto systemMethod = [](Object *, Tuple *args) -> Object * {
+        system(((String *)args->at(0))->toString().data());
+        return Runtime::getNull();
+    };
+
+    setMethod("system", new Signature("Object", {"String"}), systemMethod);
+
+    auto sleepMethod = [](Object *, Tuple *args) -> Object * {
+        Sleep(((Integer *)args->at(0))->getVariant().toInteger());
+        return Runtime::getNull();
+    };
+
+    setMethod("sleep", new Signature("Object", {"Integer"}), sleepMethod);
+
+    auto setConsoleCursorPositionMethod = [](Object *, Tuple *args) -> Object * {
+        COORD p = {(short)((Integer *)args->at(0))->getVariant().toInteger(), (short)((Integer *)args->at(1))->getVariant().toInteger()};
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+        return Runtime::getNull();
+    };
+
+    setMethod("setConsoleCursorPosition", new Signature("Object", {"Integer", "Integer"}), setConsoleCursorPositionMethod);
 }
 
 Object *ObjectClass::createNewInstance() {

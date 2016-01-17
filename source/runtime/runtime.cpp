@@ -25,6 +25,7 @@
 #include "blockclass.h"
 #include "rangeclass.h"
 #include "overloadedmethodclass.h"
+#include "mathlib.h"
 
 Context *Runtime::root;
 
@@ -73,6 +74,8 @@ void Runtime::initialize() {
 
     for (auto c : rootClasses)
         c.second->setupMethods();
+
+    Math::initialize();
 }
 
 void Runtime::release() {
