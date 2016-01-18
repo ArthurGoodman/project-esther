@@ -398,12 +398,12 @@ Expression *Parser::suffix() {
             while (true) {
                 Position p = token->getPosition();
 
-                if (accept(tLPar)) {
+                if (realAccept(tLPar)) {
                     e = Expression::Call(e, "()", check(tRPar) ? list<Expression *>() : parseList());
 
                     if (!accept(tRPar))
                         error("unmatched parentheses");
-                } else if (accept(tLBracket)) {
+                } else if (realAccept(tLBracket)) {
                     e = Expression::Call(e, "[]", check(tRBracket) ? list<Expression *>() : parseList());
 
                     if (!accept(tRBracket))
