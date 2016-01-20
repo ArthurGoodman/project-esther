@@ -13,5 +13,6 @@ NativeMethod::NativeMethod(string name, Signature *signature, NativeBlock *body,
 }
 
 Object *NativeMethod::execute(Object *self, Tuple *args) {
-    return ((NativeBlock *)body)->eval(self, args);
+    args = signature->convert(args);
+    return signature->convertReturnValue(((NativeBlock *)body)->eval(self, args));
 }

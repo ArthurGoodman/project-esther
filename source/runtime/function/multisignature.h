@@ -14,6 +14,8 @@ public:
     bool accepts(Tuple *args);
     void apply(Tuple *args);
 
+    Tuple *convert(Tuple *args);
+
     bool equals(Signature *other);
     bool weakEquals(Signature *other);
 

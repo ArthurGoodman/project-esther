@@ -21,7 +21,7 @@ public:
     virtual void apply(Tuple *args);
     bool check(Tuple *args);
 
-    Tuple *convert(Tuple *args);
+    virtual Tuple *convert(Tuple *args);
     Object *convertReturnValue(Object *value);
 
     virtual bool equals(Signature *other);

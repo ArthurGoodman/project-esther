@@ -22,6 +22,22 @@ void MultiSignature::apply(Tuple *args) {
         Runtime::runtimeError("all overloads of " + method->toString() + " don't accept arguments");
 }
 
+Tuple *MultiSignature::convert(Tuple *args) {
+    list<Method *> methods = method->getMethods();
+
+    Method *firstAccept = 0;
+
+    for (Method *m : methods) {
+        if (m->getSignature()->accepts(args) && !firstAccept)
+            firstAccept = m;
+
+        if (m->getSignature()->check(args))
+            return m->getSignature()->convert(args);
+    }
+
+    return firstAccept->getSignature()->convert(args);
+}
+
 bool MultiSignature::equals(Signature *other) {
     list<Method *> methods = method->getMethods();
 
