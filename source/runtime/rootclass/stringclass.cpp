@@ -30,6 +30,8 @@ void StringClass::setupMethods() {
     };
 
     setMethod("initialize", new Signature("Object", {"Character"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"Integer"}), initVariantMethod);
+    setMethod("initialize", new Signature("Object", {"Float"}), initVariantMethod);
     setMethod("initialize", new Signature("Object", {"String"}), initVariantMethod);
 
     setAttribute("=", getMethod("initialize"));
@@ -78,6 +80,19 @@ void StringClass::setupMethods() {
     };
 
     setMethod("+=", new Signature("String", {"String"}), plusAssignMethod);
+
+    auto capitalizeMethod = [](Object *self, Tuple *) -> Object * {
+        string value = ((String *)self)->getVariant().toString();
+
+        if (value.empty())
+            return self;
+
+        value[0] = toupper(value[0]);
+
+        return new String(value);
+    };
+
+    setMethod("capitalize", new Signature("String", {}), capitalizeMethod);
 }
 
 Object *StringClass::createNewInstance() {

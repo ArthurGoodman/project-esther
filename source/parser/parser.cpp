@@ -316,18 +316,34 @@ Expression *Parser::mulDiv() {
 }
 
 Expression *Parser::power() {
-    Expression *e = dot();
+    Expression *e = negate();
 
     while (true) {
         Position p = token->getPosition();
 
         if (accept(tPower))
-            e = Expression::Call(e, "**", dot());
+            e = Expression::Call(e, "**", negate());
         else
             break;
 
         e->setPosition(p);
     }
+
+    return e;
+}
+
+Expression *Parser::negate() {
+    Expression *e = 0;
+
+    Position p = token->getPosition();
+
+    if (accept(tNot))
+        e = Expression::Negate(dot());
+    else
+        e = dot();
+
+    if (!e->getPosition().isValid())
+        e->setPosition(p);
 
     return e;
 }
@@ -373,8 +389,6 @@ Expression *Parser::preffix() {
         e = Expression::Call(suffix(), "+");
     else if (accept(tMinus))
         e = Expression::Call(suffix(), "-");
-    else if (accept(tNot))
-        e = Expression::Negate(suffix());
     else if (accept(tDec))
         e = Expression::PreDecrement(suffix());
     else if (accept(tInc))

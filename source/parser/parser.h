@@ -42,6 +42,7 @@ private:
     Expression *addSub();
     Expression *mulDiv();
     Expression *power();
+    Expression *negate();
     Expression *dot();
     Expression *preffix();
     Expression *suffix();
