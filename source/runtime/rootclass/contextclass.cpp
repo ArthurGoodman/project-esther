@@ -35,6 +35,24 @@ void ContextClass::setupMethods() {
     };
 
     setMethod("setLocal", new Signature("Object", {"String", "Object"}), setLocalMethod);
+
+    auto hasMethod = [](Object *self, Tuple *args) -> Object * {
+        return Runtime::toBoolean(((Context *)self)->hasId(((String *)args->at(0))->toString()));
+    };
+
+    setMethod("has", new Signature("Boolean", {"String"}), hasMethod);
+
+    auto getMethod = [](Object *self, Tuple *args) -> Object * {
+        return ((Context *)self)->getId(((String *)args->at(0))->toString());
+    };
+
+    setMethod("get", new Signature("Object", {"String"}), getMethod);
+
+    auto _setMethod = [](Object *self, Tuple *args) -> Object * {
+        return Runtime::toBoolean(((Context *)self)->setId(((String *)args->at(0))->toString(), args->at(1)));
+    };
+
+    setMethod("set", new Signature("Object", {"String", "Object"}), _setMethod);
 }
 
 Object *ContextClass::createNewInstance() {
