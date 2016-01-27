@@ -37,3 +37,11 @@ bool Token::operator==(int id) {
 bool Token::operator!=(int id) {
     return this->id != id;
 }
+
+Position Token::getPosition() {
+    return position;
+}
+
+void Token::setPosition(Position position) {
+    this->position = position;
+}

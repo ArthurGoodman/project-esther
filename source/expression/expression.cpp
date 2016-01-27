@@ -5,6 +5,9 @@
 
 IExpressionManager *Expression::manager;
 
+Expression::~Expression() {
+}
+
 void Expression::initialize() {
     manager = IExpressionManager::create();
 }
@@ -174,4 +177,12 @@ Object *Expression::eval(Context *context) {
     }
 
     return value;
+}
+
+Position Expression::getPosition() {
+    return position;
+}
+
+void Expression::setPosition(Position position) {
+    this->position = position;
 }

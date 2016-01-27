@@ -137,7 +137,6 @@ SOURCES += \
     source/expression/ast/constantexpression.cpp \
     source/expression/ast/contextcallexpression.cpp \
     source/common/source.cpp \
-    source/common/positionedobject.cpp \
     source/parser/iparser.cpp \
     source/parser/parser.cpp \
     source/iengine.cpp \
@@ -268,7 +267,6 @@ HEADERS += \
     source/expression/ast/constantexpression.h \
     source/expression/ast/contextcallexpression.h \
     source/common/source.h \
-    source/common/positionedobject.h \
     source/parser/iparser.h \
     source/parser/parser.h \
     source/iengine.h \

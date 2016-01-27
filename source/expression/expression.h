@@ -2,16 +2,20 @@
 #include "common.h"
 
 #include "object.h"
-#include "positionedobject.h"
+#include "position.h"
 
 class Variant;
 class IExpressionManager;
 class Context;
 
-class Expression : public Object, public PositionedObject {
+class Expression {
     static IExpressionManager *manager;
 
+    Position position;
+
 public:
+    virtual ~Expression();
+
     static void initialize();
     static void release();
 
@@ -47,7 +51,7 @@ public:
 
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *While(Expression *condition, Expression *body, Expression *elseBody);
-    static Expression *For(Expression * param, Expression *expression, Expression *body);
+    static Expression *For(Expression *param, Expression *expression, Expression *body);
     static Expression *Do(Expression *body, Expression *condition);
 
     static Expression *ContextResolution(Expression *self, Expression *body);
@@ -72,4 +76,7 @@ public:
     Object *eval(Context *context);
 
     virtual Object *exec(Context *context) = 0;
+
+    Position getPosition();
+    void setPosition(Position position);
 };

@@ -1,12 +1,13 @@
 #pragma once
 #include "common.h"
 
-#include "positionedobject.h"
+#include "position.h"
 
 // A lexeme with additional information.
-class Token : public PositionedObject {
+class Token {
     int id;
     string text;
+    Position position;
 
 public:
     Token();
@@ -22,6 +23,9 @@ public:
 
     bool operator==(int getId);
     bool operator!=(int getId);
+
+    Position getPosition();
+    void setPosition(Position position);
 };
 
 typedef list<Token> Tokens;
