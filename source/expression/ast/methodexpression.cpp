@@ -20,7 +20,7 @@ Object *MethodExpression::exec(Context *context) {
         Runtime::runtimeError("class expected in method return type");
     }
 
-    string name = this->name ? (dynamic ? this->name->eval(context)->toString() : this->name->eval(context)->immediateToString()) : "";
+    string name = this->name ? (dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString()) : "";
 
     list<Parameter *> evaledParams;
 

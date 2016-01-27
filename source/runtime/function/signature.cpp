@@ -53,7 +53,7 @@ void Signature::apply(Tuple *args) {
             Runtime::runtimeError("invalid number of arguments (" + Utility::toString(args->size()) + "/" + Utility::toString(params.size()) + ")");
 
         if(c < args->size() && !args->at(c)->converts(p->getType()))
-            Runtime::runtimeError("can't convert argument #" + Utility::toString(c + 1) + " from " + args->at(c)->getClass()->toString() + " to " + p->getType()->toString());
+            Runtime::runtimeError("can't convert argument #" + Utility::toString(c + 1) + " from " + args->at(c)->getClass()->callToString() + " to " + p->getType()->callToString());
 
         c++;
     }

@@ -75,20 +75,16 @@ Object *Object::as(Class *_class) {
     Method *constructor = _class->getMethod("initialize");
 
     if (!constructor)
-        Runtime::runtimeError("can't convert from " + getClass()->toString() + " to " + _class->toString());
+        Runtime::runtimeError("can't convert from " + getClass()->callToString() + " to " + _class->callToString());
 
     return _class->newInstance(new Tuple({this}));
 }
 
 Object *Object::call(string name, Tuple *args) {
-    Object *function = objectClass->lookup(name);
+    Object *function = hasAttribute(name) ? getAttribute(name) : objectClass->lookup(name);
 
-    if (!function) {
-        if (hasAttribute(name))
-            function = getAttribute(name);
-        else
-            Runtime::runtimeError("undefined identifier '" + name + "'");
-    }
+    if (!function)
+        Runtime::runtimeError("undefined identifier '" + name + "'");
 
     if (dynamic_cast<Function *>(function))
         return ((Function *)function)->invoke(this, args);
@@ -104,7 +100,7 @@ Object *Object::call(string name, Object *arg, string expectedClassName) {
     Object *value = call(name, new Tuple(list<Object *>(1, arg)));
 
     if (!value->is(Runtime::getRootClass(expectedClassName)))
-        Runtime::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
+        Runtime::runtimeError(value->getClass()->callToString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
 
     return value;
 }
@@ -113,7 +109,7 @@ Object *Object::call(string name, string expectedClassName) {
     Object *value = call(name);
 
     if (!value->is(Runtime::getRootClass(expectedClassName)))
-        Runtime::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
+        Runtime::runtimeError(value->getClass()->callToString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
 
     return value;
 }
@@ -130,24 +126,20 @@ bool Object::isFalse() {
     return false;
 }
 
-bool Object::isNull() {
-    return false;
-}
-
-bool Object::equals(Object *other) {
+bool Object::callEquals(Object *other) {
     return call("equals", other, "Boolean")->isTrue();
 }
 
-string Object::toString() {
+string Object::callToString() {
     return ((String *)call("toString", "String"))->getVariant().toString();
 }
 
-bool Object::immediateEquals(Object *other) {
+bool Object::equals(Object *other) {
     return this == other;
 }
 
-string Object::immediateToString() {
-    return "<" + getClass()->toString() + ":" + Utility::toString((void *)this) + ">";
+string Object::toString() {
+    return "<" + getClass()->callToString() + ":" + Utility::toString((void *)this) + ">";
 }
 
 Object *Object::clone() {

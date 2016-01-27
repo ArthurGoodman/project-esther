@@ -7,5 +7,5 @@ IncludeExpression::IncludeExpression(Expression *fileName)
 }
 
 Object *IncludeExpression::exec(Context *context) {
-    return IEngine::instance()->runFile(fileName->eval(context)->toString(), context);
+    return IEngine::instance()->runFile(fileName->eval(context)->callToString(), context);
 }

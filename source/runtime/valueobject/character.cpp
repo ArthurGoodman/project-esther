@@ -12,10 +12,10 @@ void Character::setValue(char value) {
     setVariant(Variant(value));
 }
 
-bool Character::immediateEquals(Object *other) {
+bool Character::equals(Object *other) {
     return dynamic_cast<Character *>(other) && value.toChar() == ((Character *)other)->value.toChar();
 }
 
-string Character::immediateToString() {
+string Character::toString() {
     return value.toString();
 }

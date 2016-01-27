@@ -9,9 +9,8 @@ public:
 
     bool isTrue();
     bool isFalse();
-    bool isNull();
 
-    string immediateToString();
+    string toString();
 
     Object *clone();
 };

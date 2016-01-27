@@ -11,6 +11,6 @@ public:
 
     void setValue(string value);
 
-    bool immediateEquals(Object *other);
-    string immediateToString();
+    bool equals(Object *other);
+    string toString();
 };

@@ -10,5 +10,5 @@ StaticSelfCheckerFeature::StaticSelfCheckerFeature(Object *self, Method *method)
 
 void StaticSelfCheckerFeature::check(Object *self, Tuple *) {
     if (self != this->self)
-        Runtime::runtimeError(self->toString() + " is not a valid self object for " + method->toString() + " (" + this->self->toString() + " expected)");
+        Runtime::runtimeError(self->callToString() + " is not a valid self object for " + method->callToString() + " (" + this->self->callToString() + " expected)");
 }

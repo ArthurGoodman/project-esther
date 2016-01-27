@@ -28,10 +28,10 @@ void ObjectClass::setupMethods() {
 
     auto printMethod = [](Object *self, Tuple *args) -> Object * {
         if (args->isEmpty())
-            IO::print(self->toString());
+            IO::print(self->callToString());
         else
             for (Object *o : *args)
-                IO::print(o->toString());
+                IO::print(o->callToString());
 
         return Runtime::getNull();
     };
@@ -51,25 +51,25 @@ void ObjectClass::setupMethods() {
     setMethod("scanLine", new Signature("String", {}), scanLineMethod);
 
     auto equalsMethod = [](Object *self, Tuple *args) -> Object * {
-        return Runtime::toBoolean(self->immediateEquals(args->at(0)));
+        return Runtime::toBoolean(self->equals(args->at(0)));
     };
 
     setMethod("equals", new Signature("Boolean", {"Object"}), equalsMethod);
 
     auto toStringMethod = [](Object *self, Tuple *) -> Object * {
-        return new String(self->immediateToString());
+        return new String(self->toString());
     };
 
     setMethod("toString", new Signature("String", {}), toStringMethod);
 
     auto equalsOperator = [](Object *self, Tuple *args) -> Object * {
-        return Runtime::toBoolean(self->equals(args->at(0)));
+        return Runtime::toBoolean(self->callEquals(args->at(0)));
     };
 
     setMethod("==", new Signature("Boolean", {"Object"}), equalsOperator);
 
     auto notEqualsOperator = [](Object *self, Tuple *args) -> Object * {
-        return Runtime::toBoolean(!self->equals(args->at(0)));
+        return Runtime::toBoolean(!self->callEquals(args->at(0)));
     };
 
     setMethod("!=", new Signature("Boolean", {"Object"}), notEqualsOperator);
@@ -87,7 +87,7 @@ void ObjectClass::setupMethods() {
     setMethod("as", new Signature("Object", {"Class"}), asMethod);
 
     auto evalMethod = [](Object *, Tuple *args) -> Object * {
-        return IEngine::instance()->run(((ValueObject *)args->at(0))->toString()); // TODO: Need to use proper context.
+        return IEngine::instance()->run(((ValueObject *)args->at(0))->callToString()); // TODO: Need to use proper context.
     };
 
     setMethod("eval", new Signature("Object", {"String"}), evalMethod);
@@ -99,7 +99,7 @@ void ObjectClass::setupMethods() {
     setMethod("clone", new Signature("Object", {}), cloneMethod);
 
     auto systemMethod = [](Object *, Tuple *args) -> Object * {
-        system(((String *)args->at(0))->toString().data());
+        system(((String *)args->at(0))->callToString().data());
         return Runtime::getNull();
     };
 

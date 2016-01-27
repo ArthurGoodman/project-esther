@@ -68,7 +68,7 @@ Object *Function::execute(Object *self, Tuple *args) {
     return signature->convertReturnValue(returnValue);
 }
 
-string Function::immediateToString() {
+string Function::toString() {
     return name.empty() ? "<anonymous function>" : "<function " + name + ">";
 }
 

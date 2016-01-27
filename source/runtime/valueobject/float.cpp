@@ -12,10 +12,10 @@ void Float::setValue(double value) {
     setVariant(Variant(value));
 }
 
-bool Float::immediateEquals(Object *other) {
+bool Float::equals(Object *other) {
     return dynamic_cast<Float *>(other) && value.toFloat() == ((Float *)other)->value.toFloat();
 }
 
-string Float::immediateToString() {
+string Float::toString() {
     return value.toString();
 }

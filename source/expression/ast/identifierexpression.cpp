@@ -16,7 +16,7 @@ bool IdentifierExpression::isDynamic() {
 }
 
 Object *IdentifierExpression::exec(Context *context) {
-    string name = dynamic ? this->name->eval(context)->toString() : this->name->eval(context)->immediateToString();
+    string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
 
     if (!context->hasId(name))
         Runtime::runtimeError("undefined identifier '" + name + "'");

@@ -12,11 +12,7 @@ bool True::isFalse() {
     return false;
 }
 
-bool True::isNull() {
-    return false;
-}
-
-string True::immediateToString() {
+string True::toString() {
     return "true";
 }
 

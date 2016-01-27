@@ -21,7 +21,7 @@ void Esther::runFile(const string &fileName) {
     // TODO: refactor this
     try {
         if (value)
-            IO::printLine("\n=> " + value->toString());
+            IO::printLine("\n=> " + value->callToString());
     } catch (Exception *e) {
         IO::printLine("error: " + e->message());
         delete e;

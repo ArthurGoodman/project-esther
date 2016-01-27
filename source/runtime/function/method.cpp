@@ -31,7 +31,7 @@ bool Method::suitableFor(Object *self) {
     return staticFlag ? this->self == self : self->is((Class *)this->self);
 }
 
-string Method::immediateToString() {
+string Method::toString() {
     return name.empty() ? "<anonymous method>" : "<method " + name + ">";
 }
 

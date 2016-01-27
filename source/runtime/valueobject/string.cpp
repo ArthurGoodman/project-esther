@@ -16,10 +16,10 @@ void String::setValue(string value) {
     setVariant(Variant(value));
 }
 
-bool String::immediateEquals(Object *other) {
+bool String::equals(Object *other) {
     return dynamic_cast<String *>(other) && value.toString() == ((String *)other)->value.toString();
 }
 
-string String::immediateToString() {
+string String::toString() {
     return value.toString();
 }

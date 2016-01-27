@@ -12,11 +12,7 @@ bool Null::isFalse() {
     return true;
 }
 
-bool Null::isNull() {
-    return true;
-}
-
-string Null::immediateToString() {
+string Null::toString() {
     return "null";
 }
 

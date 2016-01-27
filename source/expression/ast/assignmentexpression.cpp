@@ -49,7 +49,7 @@ Object *AssignmentExpression::exec(Context *context) {
         if (dynamic_cast<IdentifierExpression *>(e)) {
             IdentifierExpression *ie = (IdentifierExpression *)e;
 
-            string name = ie->isDynamic() ? ie->getName()->eval(context)->toString() : ie->getName()->eval(context)->immediateToString();
+            string name = ie->isDynamic() ? ie->getName()->eval(context)->callToString() : ie->getName()->eval(context)->toString();
 
             if (dynamic_cast<ObjectContext *>(context) || !context->setId(name, value))
                 context->setLocal(name, value);

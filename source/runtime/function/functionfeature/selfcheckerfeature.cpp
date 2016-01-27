@@ -11,5 +11,5 @@ SelfCheckerFeature::SelfCheckerFeature(Class *selfClass, Method *method)
 
 void SelfCheckerFeature::check(Object *self, Tuple *) {
     if (!self->is(selfClass))
-        Runtime::runtimeError(self->getClass()->toString() + " is not a valid self class for " + method->toString() + " (" + selfClass->toString() + " expected)");
+        Runtime::runtimeError(self->getClass()->callToString() + " is not a valid self class for " + method->callToString() + " (" + selfClass->callToString() + " expected)");
 }

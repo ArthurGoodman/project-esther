@@ -134,7 +134,7 @@ Object *Context::getSelfForMethod(Method *method) {
     if (parent)
         return parent->getSelfForMethod(method);
 
-    ErrorException *e = new RuntimeError("can't find self for " + method->toString());
+    ErrorException *e = new RuntimeError("can't find self for " + method->callToString());
     e->raise();
 
     return 0;

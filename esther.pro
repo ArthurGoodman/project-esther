@@ -149,7 +149,8 @@ SOURCES += \
     source/runtime/range.cpp \
     source/runtime/rootclass/overloadedmethodclass.cpp \
     source/expression/ast/assignmentexpression.cpp \
-    source/runtime/mathlib.cpp
+    source/runtime/mathlib.cpp \
+    source/runtime/iobject.cpp
 
 HEADERS += \
     source/esther.h \
@@ -279,7 +280,8 @@ HEADERS += \
     source/runtime/range.h \
     source/runtime/rootclass/overloadedmethodclass.h \
     source/expression/ast/assignmentexpression.h \
-    source/runtime/mathlib.h
+    source/runtime/mathlib.h \
+    source/runtime/iobject.h
 
 OTHER_FILES += \
     README.MD \

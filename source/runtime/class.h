@@ -36,7 +36,7 @@ public:
     Object *call(string name, Object *arg);
     Object *call(string name);
 
-    string immediateToString();
+    string toString();
 
 protected:
     virtual Object *createNewInstance();

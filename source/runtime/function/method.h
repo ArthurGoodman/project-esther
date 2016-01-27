@@ -18,7 +18,7 @@ public:
 
     bool suitableFor(Object *self);
 
-    virtual string immediateToString();
+    virtual string toString();
 
     virtual Object *clone();
 };

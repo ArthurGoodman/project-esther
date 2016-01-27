@@ -38,13 +38,12 @@ public:
 
     virtual bool isTrue();
     virtual bool isFalse();
-    virtual bool isNull();
 
-    bool equals(Object *other);
-    string toString();
+    bool callEquals(Object *other);
+    string callToString();
 
-    virtual bool immediateEquals(Object *other);
-    virtual string immediateToString();
+    virtual bool equals(Object *other);
+    virtual string toString();
 
     virtual Object *clone();
 };

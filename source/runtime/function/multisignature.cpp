@@ -19,7 +19,7 @@ bool MultiSignature::accepts(Tuple *args) {
 
 void MultiSignature::apply(Tuple *args) {
     if (!accepts(args))
-        Runtime::runtimeError("all overloads of " + method->toString() + " don't accept arguments");
+        Runtime::runtimeError("all overloads of " + method->callToString() + " don't accept arguments");
 }
 
 Tuple *MultiSignature::convert(Tuple *args) {

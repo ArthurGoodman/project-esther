@@ -23,7 +23,7 @@ Object *ClassExpression::exec(Context *context) {
         superclass = Runtime::getObjectClass();
 
     if (this->name) {
-        name = this->name->eval(context)->toString();
+        name = this->name->eval(context)->callToString();
 
         if (context->hasId(name))
             _class = (Class *)context->getId(name);

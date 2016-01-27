@@ -12,11 +12,7 @@ bool False::isFalse() {
     return true;
 }
 
-bool False::isNull() {
-    return false;
-}
-
-string False::immediateToString() {
+string False::toString() {
     return "false";
 }
 

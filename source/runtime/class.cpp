@@ -118,7 +118,7 @@ Object *Class::call(string name) {
     return call(name, new Tuple(list<Object *>()));
 }
 
-string Class::immediateToString() {
+string Class::toString() {
     return name.empty() ? "<anonymous class>" : name;
 }
 
