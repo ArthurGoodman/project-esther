@@ -1,7 +1,7 @@
 #pragma once
 #include "common.h"
 
-class Object;
+class IObject;
 class Pattern;
 class Expression;
 class Context;
@@ -13,5 +13,5 @@ class Case {
 public:
     Case(Pattern *pattern, Expression *body);
 
-    Object *match(Object *object, Context *context);
+    IObject *match(IObject *object, Context *context);
 };

@@ -11,50 +11,50 @@ ContextClass::ContextClass()
 }
 
 void ContextClass::setupMethods() {
-    auto parentMethod = [](Object *self, Tuple *) -> Object * {
+    auto parentMethod = [](IObject *self, Tuple *) -> IObject * {
         return ((Context *)self)->getParent();
     };
 
     setMethod("parent", new Signature("Context", {}), parentMethod);
 
-    auto hasLocalMethod = [](Object *self, Tuple *args) -> Object * {
+    auto hasLocalMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((Context *)self)->hasLocal(((String *)args->at(0))->callToString()));
     };
 
     setMethod("hasLocal", new Signature("Boolean", {"String"}), hasLocalMethod);
 
-    auto getLocalMethod = [](Object *self, Tuple *args) -> Object * {
+    auto getLocalMethod = [](IObject *self, Tuple *args) -> IObject * {
         return ((Context *)self)->getLocal(((String *)args->at(0))->callToString());
     };
 
     setMethod("getLocal", new Signature("Object", {"String"}), getLocalMethod);
 
-    auto setLocalMethod = [](Object *self, Tuple *args) -> Object * {
+    auto setLocalMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((Context *)self)->setLocal(((String *)args->at(0))->callToString(), args->at(1));
         return args->at(1);
     };
 
     setMethod("setLocal", new Signature("Object", {"String", "Object"}), setLocalMethod);
 
-    auto hasMethod = [](Object *self, Tuple *args) -> Object * {
+    auto hasMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((Context *)self)->hasId(((String *)args->at(0))->callToString()));
     };
 
     setMethod("has", new Signature("Boolean", {"String"}), hasMethod);
 
-    auto getMethod = [](Object *self, Tuple *args) -> Object * {
+    auto getMethod = [](IObject *self, Tuple *args) -> IObject * {
         return ((Context *)self)->getId(((String *)args->at(0))->callToString());
     };
 
     setMethod("get", new Signature("Object", {"String"}), getMethod);
 
-    auto _setMethod = [](Object *self, Tuple *args) -> Object * {
+    auto _setMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((Context *)self)->setId(((String *)args->at(0))->callToString(), args->at(1)));
     };
 
     setMethod("set", new Signature("Object", {"String", "Object"}), _setMethod);
 }
 
-Object *ContextClass::createNewInstance() {
+IObject *ContextClass::createNewInstance() {
     return new Context;
 }

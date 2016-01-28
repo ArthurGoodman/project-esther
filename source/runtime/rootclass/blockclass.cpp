@@ -11,13 +11,13 @@ BlockClass::BlockClass()
 }
 
 void BlockClass::setupMethods() {
-    auto evalMethod = [](Object *self, Tuple *args) -> Object * {
+    auto evalMethod = [](IObject *self, Tuple *args) -> IObject * {
         return ((Block *)self)->eval((Context *)args->at(0));
     };
 
     setMethod("eval", new Signature("Object", {"Context"}), evalMethod);
 }
 
-Object *BlockClass::createNewInstance() {
+IObject *BlockClass::createNewInstance() {
     return new InterpretedBlock(Expression::Empty());
 }

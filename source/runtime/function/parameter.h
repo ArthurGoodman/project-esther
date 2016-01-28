@@ -6,16 +6,16 @@
 class Parameter : public Object {
     Class *type;
     string name;
-    Object *value;
+    IObject *value;
 
 public:
-    Parameter(Class *type, string name, Object *value);
+    Parameter(Class *type, string name, IObject *value);
 
     Class *getType();
     string getName();
-    Object *getValue();
+    IObject *getValue();
 
     bool equals(Parameter *other);
 
-    Object *clone();
+    IObject *clone();
 };

@@ -11,6 +11,6 @@ class PatternBlock : public Block {
 public:
     PatternBlock(list<Case *> cases);
 
-    Object *eval(Context *context);
-    Object *eval(Object *object, Context *context);
+    IObject *eval(Context *context);
+    IObject *eval(IObject *object, Context *context);
 };

@@ -58,6 +58,6 @@ bool MultiSignature::weakEquals(Signature *other) {
     return false;
 }
 
-Object *MultiSignature::clone() {
+IObject *MultiSignature::clone() {
     return new MultiSignature(method);
 }

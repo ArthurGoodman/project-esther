@@ -1,7 +1,6 @@
 #pragma once
 #include "common.h"
 
-// Input/Output management.
 class IO {
     static map<string, unique_ptr<fstream>> files;
 

@@ -11,7 +11,7 @@ class InterpretedBlock : public Block {
 public:
     InterpretedBlock(Expression *e);
 
-    Object *eval(Context *context);
+    IObject *eval(Context *context);
 
-    Object *clone();
+    IObject *clone();
 };

@@ -22,22 +22,20 @@ public:
 
     bool isChild(Class *_class);
 
-    Object *newInstance();
-    Object *newInstance(Tuple *args);
+    IObject *newInstance();
+    IObject *newInstance(Tuple *args);
 
     bool hasMethod(string name);
     Method *getMethod(string name);
     void setMethod(Method *method);
     void setMethod(string name, Method *method);
 
-    Object *lookup(string name);
+    IObject *lookup(string name);
 
-    Object *call(string name, Tuple *args);
-    Object *call(string name, Object *arg);
-    Object *call(string name);
+    IObject *call(string name, Tuple *args);
 
     string toString();
 
 protected:
-    virtual Object *createNewInstance();
+    virtual IObject *createNewInstance();
 };

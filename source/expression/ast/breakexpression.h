@@ -9,5 +9,5 @@ class BreakExpression : public Expression {
 public:
     BreakExpression(Expression *value = 0);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

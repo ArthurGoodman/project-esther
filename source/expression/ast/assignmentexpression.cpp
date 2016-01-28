@@ -1,5 +1,6 @@
 #include "assignmentexpression.h"
 
+#include "iobject.h"
 #include "identifierdefinitionexpression.h"
 #include "identifierexpression.h"
 #include "tupleexpression.h"
@@ -11,7 +12,7 @@ AssignmentExpression::AssignmentExpression(Expression *expression, Expression *v
     : expression(expression), value(value) {
 }
 
-Object *AssignmentExpression::exec(Context *context) {
+IObject *AssignmentExpression::exec(Context *context) {
     if (dynamic_cast<IdentifierDefinitionExpression *>(expression)) {
         ((IdentifierDefinitionExpression *)expression)->setValue(value);
         return expression->eval(context);
@@ -24,27 +25,27 @@ Object *AssignmentExpression::exec(Context *context) {
     else
         expressions << expression;
 
-    list<Object *> values;
+    list<IObject *> values;
 
     if (dynamic_cast<TupleExpression *>(value))
         for (Expression *e : ((TupleExpression *)value)->getNodes())
             values << e->eval(context);
     else {
-        Object *value = this->value->eval(context);
+        IObject *value = this->value->eval(context);
 
         if (dynamic_cast<Tuple *>(value))
-            for (Object *obj : *(Tuple *)value)
+            for (IObject *obj : *(Tuple *)value)
                 values << obj;
         else
             values << value;
     }
 
-    list<Object *>::iterator i = values.begin();
+    list<IObject *>::iterator i = values.begin();
 
-    Object *result = Runtime::getNull();
+    IObject *result = Runtime::getNull();
 
     for (Expression *e : expressions) {
-        Object *value = i != values.end() ? *i : Runtime::getNull();
+        IObject *value = i != values.end() ? *i : Runtime::getNull();
 
         if (dynamic_cast<IdentifierExpression *>(e)) {
             IdentifierExpression *ie = (IdentifierExpression *)e;

@@ -29,6 +29,6 @@ void Range::each(Function *f) {
         f->invoke(this, new Tuple({new Integer(i)}));
 }
 
-Object *Range::clone() {
+IObject *Range::clone() {
     return new Range(first, second);
 }

@@ -19,7 +19,7 @@ public:
 
     Variant getVariant();
 
-    Object *clone();
+    IObject *clone();
 
 protected:
     void setVariant(Variant value);

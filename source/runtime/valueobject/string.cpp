@@ -16,7 +16,7 @@ void String::setValue(string value) {
     setVariant(Variant(value));
 }
 
-bool String::equals(Object *other) {
+bool String::equals(IObject *other) {
     return dynamic_cast<String *>(other) && value.toString() == ((String *)other)->value.toString();
 }
 

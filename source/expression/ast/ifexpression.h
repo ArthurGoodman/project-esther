@@ -9,5 +9,5 @@ class IfExpression : public Expression {
 public:
     IfExpression(Expression *condition, Expression *body, Expression *elseBody);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

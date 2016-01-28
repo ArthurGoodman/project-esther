@@ -1,11 +1,13 @@
 #include "predecrementexpression.h"
 
+#include "iobject.h"
+
 PreDecrementExpression::PreDecrementExpression(Expression *self)
     : self(self) {
 }
 
-Object *PreDecrementExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+IObject *PreDecrementExpression::exec(Context *context) {
+    IObject *self = this->self->eval(context);
     self->call("--");
     return self;
 }

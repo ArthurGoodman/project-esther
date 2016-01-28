@@ -1,10 +1,10 @@
 #pragma once
 #include "common.h"
 
-class Object;
+class IObject;
 class Tuple;
 
 class FunctionFeature {
 public:
-    virtual void check(Object *self, Tuple *args) = 0;
+    virtual void check(IObject *self, Tuple *args) = 0;
 };

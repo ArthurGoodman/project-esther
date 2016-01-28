@@ -6,15 +6,15 @@
 #include "runtimeerror.h"
 #include "method.h"
 
-Context::Context(Object *currentSelf, Class *currentClass, Context *parent, int modifiers)
+Context::Context(IObject *currentSelf, Class *currentClass, Context *parent, int modifiers)
     : Object("Context"), currentSelf(currentSelf), currentClass(currentClass), parent(parent), modifiers(modifiers) {
 }
 
-Context::Context(Object *currentSelf, Class *currentClass, Context *parent)
+Context::Context(IObject *currentSelf, Class *currentClass, Context *parent)
     : Object("Context"), currentSelf(currentSelf), currentClass(currentClass), parent(parent), modifiers(0) {
 }
 
-Context::Context(Object *currentSelf, Context *parent)
+Context::Context(IObject *currentSelf, Context *parent)
     : Object("Context"), currentSelf(currentSelf), currentClass(currentSelf->getClass()), parent(parent), modifiers(0) {
 }
 
@@ -22,7 +22,7 @@ Context::Context()
     : Object("Context"), currentSelf(Runtime::getMainObject()), currentClass(currentSelf->getClass()), parent(0), modifiers(0) {
 }
 
-Object *Context::getCurrentSelf() {
+IObject *Context::getCurrentSelf() {
     return currentSelf;
 }
 
@@ -38,11 +38,11 @@ bool Context::hasLocal(string name) {
     return locals.find(name) != locals.end();
 }
 
-Object *Context::getLocal(string name) {
+IObject *Context::getLocal(string name) {
     return Context::hasLocal(name) ? locals.at(name) : 0;
 }
 
-void Context::setLocal(string name, Object *value) {
+void Context::setLocal(string name, IObject *value) {
     locals[name] = value;
 }
 
@@ -59,7 +59,7 @@ bool Context::hasId(string name) {
     return false;
 }
 
-Object *Context::getId(string name) {
+IObject *Context::getId(string name) {
     if (Context::hasLocal(name))
         return Context::getLocal(name);
 
@@ -67,12 +67,12 @@ Object *Context::getId(string name) {
         return parent->getId(name);
 
     if (Runtime::hasRootClass(name))
-        return (Object *)Runtime::getRootClass(name);
+        return (IObject *)Runtime::getRootClass(name);
 
     return 0;
 }
 
-bool Context::setId(string name, Object *value) {
+bool Context::setId(string name, IObject *value) {
     if (Context::hasLocal(name)) {
         Context::setLocal(name, value);
         return true;
@@ -84,11 +84,11 @@ bool Context::setId(string name, Object *value) {
     return false;
 }
 
-Context *Context::childContext(Object *currentSelf, Class *currentClass) {
+Context *Context::childContext(IObject *currentSelf, Class *currentClass) {
     return new Context(currentSelf, currentClass, this, modifiers);
 }
 
-Context *Context::childContext(Object *currentSelf) {
+Context *Context::childContext(IObject *currentSelf) {
     return new Context(currentSelf, currentSelf->getClass(), this, modifiers);
 }
 
@@ -96,11 +96,11 @@ Context *Context::childContext() {
     return new Context(currentSelf, currentClass, this, modifiers);
 }
 
-Context *Context::objectChildContext(Object *currentSelf, Class *currentClass) {
+Context *Context::objectChildContext(IObject *currentSelf, Class *currentClass) {
     return new ObjectContext(currentSelf, currentClass, this, modifiers);
 }
 
-Context *Context::objectChildContext(Object *currentSelf) {
+Context *Context::objectChildContext(IObject *currentSelf) {
     return new ObjectContext(currentSelf, currentSelf->getClass(), this, modifiers);
 }
 
@@ -127,7 +127,7 @@ int Context::getModifier(int modifier) {
     return modifiers & modifier;
 }
 
-Object *Context::getSelfForMethod(Method *method) {
+IObject *Context::getSelfForMethod(Method *method) {
     if (method->suitableFor(currentSelf))
         return currentSelf;
 
@@ -140,7 +140,7 @@ Object *Context::getSelfForMethod(Method *method) {
     return 0;
 }
 
-Object *Context::clone() {
+IObject *Context::clone() {
     Context *clone = new Context(currentSelf, currentClass, parent, modifiers);
     clone->locals = locals;
     return clone;

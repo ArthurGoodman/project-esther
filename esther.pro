@@ -150,7 +150,8 @@ SOURCES += \
     source/runtime/rootclass/overloadedmethodclass.cpp \
     source/expression/ast/assignmentexpression.cpp \
     source/runtime/mathlib.cpp \
-    source/runtime/iobject.cpp
+    source/runtime/iobject.cpp \
+    source/runtime/dynamicobject.cpp
 
 HEADERS += \
     source/esther.h \
@@ -281,7 +282,8 @@ HEADERS += \
     source/runtime/rootclass/overloadedmethodclass.h \
     source/expression/ast/assignmentexpression.h \
     source/runtime/mathlib.h \
-    source/runtime/iobject.h
+    source/runtime/iobject.h \
+    source/runtime/dynamicobject.h
 
 OTHER_FILES += \
     README.MD \

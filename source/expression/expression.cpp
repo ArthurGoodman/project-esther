@@ -40,7 +40,7 @@ Expression *Expression::Literal(const Variant &value) {
     return manager->createLiteral(value);
 }
 
-Expression *Expression::Constant(Object *value) {
+Expression *Expression::Constant(IObject *value) {
     return manager->createConstant(value);
 }
 
@@ -164,8 +164,8 @@ Expression *Expression::ObjectLiteral(Expression *body) {
     return manager->createObjectLiteral(body);
 }
 
-Object *Expression::eval(Context *context) {
-    Object *value = 0;
+IObject *Expression::eval(Context *context) {
+    IObject *value = 0;
 
     try {
         value = exec(context);

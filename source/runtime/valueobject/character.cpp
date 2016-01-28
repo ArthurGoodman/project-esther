@@ -12,7 +12,7 @@ void Character::setValue(char value) {
     setVariant(Variant(value));
 }
 
-bool Character::equals(Object *other) {
+bool Character::equals(IObject *other) {
     return dynamic_cast<Character *>(other) && value.toChar() == ((Character *)other)->value.toChar();
 }
 

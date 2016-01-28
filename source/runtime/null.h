@@ -12,5 +12,5 @@ public:
 
     string toString();
 
-    Object *clone();
+    IObject *clone();
 };

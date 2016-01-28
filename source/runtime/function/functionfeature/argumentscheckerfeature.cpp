@@ -7,6 +7,6 @@ ArgumentsCheckerFeature::ArgumentsCheckerFeature(Signature *signature)
     : signature(signature) {
 }
 
-void ArgumentsCheckerFeature::check(Object *, Tuple *args) {
+void ArgumentsCheckerFeature::check(IObject *, Tuple *args) {
     signature->apply(args);
 }

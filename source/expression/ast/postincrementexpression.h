@@ -9,5 +9,5 @@ class PostIncrementExpression : public Expression {
 public:
     PostIncrementExpression(Expression *self);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

@@ -9,5 +9,5 @@ class PreDecrementExpression : public Expression {
 public:
     PreDecrementExpression(Expression *self);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

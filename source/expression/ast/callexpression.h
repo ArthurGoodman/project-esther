@@ -11,5 +11,5 @@ class CallExpression : public Expression {
 public:
     CallExpression(Expression *self, string name, list<Expression *> args);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

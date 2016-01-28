@@ -1,7 +1,7 @@
 #pragma once
 #include "common.h"
 
-class Object;
+class IObject;
 class Context;
 
 class IEngine {
@@ -15,8 +15,8 @@ public:
 
     virtual ~IEngine();
 
-    virtual Object *run(const string &script, Context *context = 0) = 0;
-    virtual Object *runFile(const string &fileName, Context *context = 0) = 0;
+    virtual IObject *run(const string &script, Context *context = 0) = 0;
+    virtual IObject *runFile(const string &fileName, Context *context = 0) = 0;
 
 protected:
     virtual void initializeEngine() = 0;

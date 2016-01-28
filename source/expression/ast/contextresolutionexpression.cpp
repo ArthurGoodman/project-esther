@@ -7,7 +7,7 @@ ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expre
     : self(self), body(body) {
 }
 
-Object *ContextResolutionExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+IObject *ContextResolutionExpression::exec(Context *context) {
+    IObject *self = this->self->eval(context);
     return body->eval(context->objectChildContext(self));
 }

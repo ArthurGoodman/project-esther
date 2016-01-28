@@ -10,6 +10,6 @@ public:
 
     void setValue(double value);
 
-    bool equals(Object *other);
+    bool equals(IObject *other);
     string toString();
 };

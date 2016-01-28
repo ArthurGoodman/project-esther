@@ -12,7 +12,7 @@ MethodExpression::MethodExpression(Expression *type, Expression *name, list<Expr
     : type(type), name(name), params(params), body(body), variadic(variadic), dynamic(dynamic) {
 }
 
-Object *MethodExpression::exec(Context *context) {
+IObject *MethodExpression::exec(Context *context) {
     Class *type = this->type ? (Class *)this->type->eval(context) : Runtime::getObjectClass();
 
     if (!type->is("Class")) {
@@ -28,7 +28,7 @@ Object *MethodExpression::exec(Context *context) {
         evaledParams << (Parameter *)e->eval(context);
 
     bool isStatic = context->getModifier(Context::StaticModifier);
-    Object *self = (isStatic || dynamic_cast<Class *>(context->getCurrentSelf())) ? context->getCurrentSelf() : (Object *)context->getCurrentClass();
+    IObject *self = (isStatic || dynamic_cast<Class *>(context->getCurrentSelf())) ? context->getCurrentSelf() : (IObject *)context->getCurrentClass();
 
     Method *f = new Method(name, context, new Signature(type, evaledParams, variadic), new InterpretedBlock(body), self, isStatic);
 

@@ -13,9 +13,9 @@ void IdentifierDefinitionExpression::setValue(Expression *value) {
     this->value = value;
 }
 
-Object *IdentifierDefinitionExpression::exec(Context *context) {
+IObject *IdentifierDefinitionExpression::exec(Context *context) {
     string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
-    Object *value = this->value ? this->value->eval(context) : 0;
+    IObject *value = this->value ? this->value->eval(context) : 0;
 
     if (type) {
         Class *type = (Class *)this->type->eval(context);

@@ -3,7 +3,6 @@
 
 #include "position.h"
 
-// A lexeme with additional information.
 class Token {
     int id;
     string text;

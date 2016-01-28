@@ -9,5 +9,5 @@ class PostDecrementExpression : public Expression {
 public:
     PostDecrementExpression(Expression *self);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

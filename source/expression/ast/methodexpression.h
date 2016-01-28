@@ -12,5 +12,5 @@ class MethodExpression : public Expression {
 public:
     MethodExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

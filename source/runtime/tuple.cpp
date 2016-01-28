@@ -3,18 +3,18 @@
 #include "outofrangeexception.h"
 
 Tuple::Tuple(int size)
-    : Object("Tuple"), n(size), data(new Object *[n]) {
+    : Object("Tuple"), n(size), data(new IObject *[n]) {
 }
 
 Tuple::Tuple(const Tuple &other)
-    : Object("Tuple"), n(other.size()), data(new Object *[n]) {
-    memcpy(data, other.data, n * sizeof(Object *));
+    : Object("Tuple"), n(other.size()), data(new IObject *[n]) {
+    memcpy(data, other.data, n * sizeof(IObject *));
 }
 
-Tuple::Tuple(list<Object *> data)
-    : Object("Tuple"), n(data.size()), data(new Object *[n]) {
+Tuple::Tuple(list<IObject *> data)
+    : Object("Tuple"), n(data.size()), data(new IObject *[n]) {
     int i = 0;
-    for (Object *o : data)
+    for (IObject *o : data)
         this->data[i++] = o;
 }
 
@@ -22,15 +22,15 @@ Tuple::~Tuple() {
     delete[] data;
 }
 
-void Tuple::initialize(list<Object *> data) {
+void Tuple::initialize(list<IObject *> data) {
     if (this->data)
         delete[] this->data;
 
     n = data.size();
-    this->data = new Object *[n];
+    this->data = new IObject *[n];
 
     int i = 0;
-    for (Object *o : data)
+    for (IObject *o : data)
         this->data[i++] = o;
 }
 
@@ -42,7 +42,7 @@ bool Tuple::isEmpty() const {
     return !n;
 }
 
-Object *&Tuple::at(int i) const {
+IObject *&Tuple::at(int i) const {
     if (i < 0 || i >= n)
         throw new OutOfRangeException;
 
@@ -65,6 +65,6 @@ Tuple::const_iterator Tuple::end() const {
     return data + n;
 }
 
-Object *Tuple::clone() {
+IObject *Tuple::clone() {
     return new Tuple(*this);
 }

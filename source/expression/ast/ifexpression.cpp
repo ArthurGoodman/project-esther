@@ -7,8 +7,8 @@ IfExpression::IfExpression(Expression *condition, Expression *body, Expression *
     : condition(condition), body(body), elseBody(elseBody) {
 }
 
-Object *IfExpression::exec(Context *context) {
-    Object *value = Runtime::getNull();
+IObject *IfExpression::exec(Context *context) {
+    IObject *value = Runtime::getNull();
 
     context = context->childContext();
 

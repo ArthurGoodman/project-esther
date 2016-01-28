@@ -9,5 +9,5 @@ class ClassExpression : public Expression {
 public:
     ClassExpression(Expression *name, Expression *superclass, Expression *body);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

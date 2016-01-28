@@ -9,5 +9,5 @@ class PreIncrementExpression : public Expression {
 public:
     PreIncrementExpression(Expression *self);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

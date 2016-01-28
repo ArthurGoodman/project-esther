@@ -5,23 +5,23 @@
 
 class Tuple : public Object {
     int n;
-    Object **data;
+    IObject **data;
 
 public:
-    typedef Object **iterator;
-    typedef Object *const *const_iterator;
+    typedef IObject **iterator;
+    typedef IObject *const *const_iterator;
 
     Tuple(int size = 0);
     Tuple(const Tuple &other);
-    Tuple(list<Object *> data);
+    Tuple(list<IObject *> data);
     ~Tuple();
 
-    void initialize(list<Object *> data);
+    void initialize(list<IObject *> data);
 
     int size() const;
     bool isEmpty() const;
 
-    Object *&at(int i) const;
+    IObject *&at(int i) const;
 
     iterator begin();
     const_iterator begin() const;
@@ -29,5 +29,5 @@ public:
     iterator end();
     const_iterator end() const;
 
-    Object *clone();
+    IObject *clone();
 };

@@ -5,20 +5,20 @@
 
 class Method : public Function {
     bool staticFlag;
-    Object *self;
+    IObject *self;
 
 protected:
-    Method(string className, string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag = false);
+    Method(string className, string name, Context *context, Signature *signature, Block *body, IObject *self, bool staticFlag = false);
 
 public:
-    Method(string name, Context *context, Signature *signature, Block *body, Object *self, bool staticFlag = false);
+    Method(string name, Context *context, Signature *signature, Block *body, IObject *self, bool staticFlag = false);
 
     bool isStatic();
-    Object *getSelf();
+    IObject *getSelf();
 
-    bool suitableFor(Object *self);
+    bool suitableFor(IObject *self);
 
     virtual string toString();
 
-    virtual Object *clone();
+    virtual IObject *clone();
 };

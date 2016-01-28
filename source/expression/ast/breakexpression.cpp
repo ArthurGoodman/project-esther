@@ -7,6 +7,6 @@ BreakExpression::BreakExpression(Expression *value)
     : value(value) {
 }
 
-Object *BreakExpression::exec(Context *context) {
+IObject *BreakExpression::exec(Context *context) {
     throw new BreakException(value ? value->eval(context) : Runtime::getNull());
 }

@@ -19,5 +19,5 @@ public:
     bool equals(Signature *other);
     bool weakEquals(Signature *other);
 
-    Object *clone();
+    IObject *clone();
 };

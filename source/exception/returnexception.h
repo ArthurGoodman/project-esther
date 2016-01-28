@@ -5,9 +5,9 @@
 
 class ReturnException : public ValueException {
 public:
-    ReturnException(Object *value);
+    ReturnException(IObject *value);
 
-    Object *value();
+    IObject *value();
 
     void raise();
 };

@@ -1,9 +1,9 @@
 #include "constantexpression.h"
 
-ConstantExpression::ConstantExpression(Object *value)
+ConstantExpression::ConstantExpression(IObject *value)
     : value(value) {
 }
 
-Object *ConstantExpression::exec(Context *) {
+IObject *ConstantExpression::exec(Context *) {
     return value;
 }

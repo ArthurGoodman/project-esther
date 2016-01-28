@@ -16,6 +16,6 @@ string False::toString() {
     return "false";
 }
 
-Object *False::clone() {
+IObject *False::clone() {
     return this;
 }

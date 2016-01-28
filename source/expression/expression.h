@@ -1,9 +1,9 @@
 #pragma once
 #include "common.h"
 
-#include "object.h"
 #include "position.h"
 
+class IObject;
 class Variant;
 class IExpressionManager;
 class Context;
@@ -28,7 +28,7 @@ public:
     static Expression *Assignment(Expression *expression, Expression *value);
 
     static Expression *Literal(const Variant &value);
-    static Expression *Constant(Object *value);
+    static Expression *Constant(IObject *value);
 
     static Expression *Or(Expression *self, Expression *arg);
     static Expression *And(Expression *self, Expression *arg);
@@ -73,9 +73,9 @@ public:
     static Expression *Include(Expression *fileName);
     static Expression *ObjectLiteral(Expression *body);
 
-    Object *eval(Context *context);
+    IObject *eval(Context *context);
 
-    virtual Object *exec(Context *context) = 0;
+    virtual IObject *exec(Context *context) = 0;
 
     Position getPosition();
     void setPosition(Position position);

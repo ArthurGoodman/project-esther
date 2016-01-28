@@ -9,5 +9,5 @@ class Block : public Object {
 public:
     Block();
 
-    virtual Object *eval(Context *context) = 0;
+    virtual IObject *eval(Context *context) = 0;
 };

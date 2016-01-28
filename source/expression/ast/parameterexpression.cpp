@@ -8,7 +8,7 @@ ParameterExpression::ParameterExpression(Expression *type, Expression *name, Exp
     : type(type), name(name), value(value), dynamic(dynamic) {
 }
 
-Object *ParameterExpression::exec(Context *context) {
+IObject *ParameterExpression::exec(Context *context) {
     Class *type = this->type ? (Class *)this->type->eval(context) : Runtime::getObjectClass();
 
     if (!type->is("Class")) {
@@ -17,7 +17,7 @@ Object *ParameterExpression::exec(Context *context) {
     }
 
     string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
-    Object *value = this->value ? this->value->eval(context)->as(type) : 0;
+    IObject *value = this->value ? this->value->eval(context)->as(type) : 0;
 
     return new Parameter(type, name, value);
 }

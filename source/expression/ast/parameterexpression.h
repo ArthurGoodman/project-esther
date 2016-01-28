@@ -10,5 +10,5 @@ class ParameterExpression : public Expression {
 public:
     ParameterExpression(Expression *type, Expression *name, Expression *value, bool dynamic);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

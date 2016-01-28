@@ -1,7 +1,7 @@
 #pragma once
 #include "common.h"
 
-class Object;
+class IObject;
 class Class;
 class RootClass;
 class Context;
@@ -11,12 +11,12 @@ class Call;
 class Runtime {
     static Context *root;
 
-    static Object *mainObject;
+    static IObject *mainObject;
     static Class *objectClass;
 
-    static Object *trueObject;
-    static Object *falseObject;
-    static Object *nullObject;
+    static IObject *trueObject;
+    static IObject *falseObject;
+    static IObject *nullObject;
 
     static map<string, RootClass *> rootClasses;
 
@@ -25,17 +25,17 @@ public:
     static void release();
 
     static Context *getRoot();
-    static Object *getMainObject();
+    static IObject *getMainObject();
     static Class *getObjectClass();
-    static Object *getTrue();
-    static Object *getFalse();
-    static Object *getNull();
+    static IObject *getTrue();
+    static IObject *getFalse();
+    static IObject *getNull();
 
     static bool hasRootClass(string name);
     static Class *getRootClass(string name);
     static void setRootClass(RootClass *rootClass);
 
-    static Object *toBoolean(bool value);
+    static IObject *toBoolean(bool value);
 
     static void runtimeError(string message);
 };

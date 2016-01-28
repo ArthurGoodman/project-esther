@@ -11,5 +11,5 @@ class ForExpression : public Expression {
 public:
     ForExpression(Expression *param, Expression *expression, Expression *body);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

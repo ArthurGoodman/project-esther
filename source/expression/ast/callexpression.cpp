@@ -1,5 +1,6 @@
 #include "callexpression.h"
 
+#include "iobject.h"
 #include "runtime.h"
 #include "tuple.h"
 #include "function.h"
@@ -10,10 +11,10 @@ CallExpression::CallExpression(Expression *self, string name, list<Expression *>
     : self(self), name(name), args(args) {
 }
 
-Object *CallExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+IObject *CallExpression::exec(Context *context) {
+    IObject *self = this->self->eval(context);
 
-    list<Object *> evaledArgs;
+    list<IObject *> evaledArgs;
 
     for (Expression *e : args)
         evaledArgs << e->eval(context);
@@ -27,7 +28,7 @@ Object *CallExpression::exec(Context *context) {
     else
         actualArgs = new Tuple(evaledArgs);
 
-    Object *value = self->call(name, actualArgs);
+    IObject *value = self->call(name, actualArgs);
 
     return value;
 }

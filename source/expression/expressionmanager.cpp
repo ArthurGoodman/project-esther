@@ -61,7 +61,7 @@ Expression *ExpressionManager::createLiteral(const Variant &value) {
     return new LiteralExpression(value);
 }
 
-Expression *ExpressionManager::createConstant(Object *value) {
+Expression *ExpressionManager::createConstant(IObject *value) {
     return new ConstantExpression(value);
 }
 

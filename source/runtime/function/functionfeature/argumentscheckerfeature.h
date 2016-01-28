@@ -11,5 +11,5 @@ class ArgumentsCheckerFeature : public FunctionFeature {
 public:
     ArgumentsCheckerFeature(Signature *signature);
 
-    void check(Object *self, Tuple *args);
+    void check(IObject *self, Tuple *args);
 };

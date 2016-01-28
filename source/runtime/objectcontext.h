@@ -5,16 +5,16 @@
 
 class ObjectContext : public Context {
 public:
-    ObjectContext(Object *currentSelf, Class *currentClass, Context *parent, int modifiers);
+    ObjectContext(IObject *currentSelf, Class *currentClass, Context *parent, int modifiers);
     ObjectContext();
 
     bool hasLocal(string name);
-    Object *getLocal(string name);
-    void setLocal(string name, Object *value);
+    IObject *getLocal(string name);
+    void setLocal(string name, IObject *value);
 
     bool hasId(string name);
-    Object *getId(string name);
-    bool setId(string name, Object *value);
+    IObject *getId(string name);
+    bool setId(string name, IObject *value);
 
-    Object *clone();
+    IObject *clone();
 };

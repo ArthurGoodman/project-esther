@@ -2,7 +2,7 @@
 
 #include "class.h"
 
-Parameter::Parameter(Class *type, string name, Object *value)
+Parameter::Parameter(Class *type, string name, IObject *value)
     : type(type), name(name), value(value) {
 }
 
@@ -14,7 +14,7 @@ string Parameter::getName() {
     return name;
 }
 
-Object *Parameter::getValue() {
+IObject *Parameter::getValue() {
     return value;
 }
 
@@ -22,6 +22,6 @@ bool Parameter::equals(Parameter *other) {
     return type == other->type && ((value && other->value) ? value->callEquals(other->value) : (value == other->value));
 }
 
-Object *Parameter::clone() {
+IObject *Parameter::clone() {
     return new Parameter(type, name, value);
 }

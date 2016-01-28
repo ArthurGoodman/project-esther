@@ -5,7 +5,7 @@
 #include "multisignature.h"
 #include "overloadedmethodblock.h"
 
-OverloadedMethod::OverloadedMethod(string name, Object *self, bool staticFlag)
+OverloadedMethod::OverloadedMethod(string name, IObject *self, bool staticFlag)
     : NativeMethod("OverloadedMethod", name, 0, new MultiSignature(this), new OverloadedMethodBlock(this), self, staticFlag) {
 }
 
@@ -25,7 +25,7 @@ void OverloadedMethod::replaceMethod(Method *method) {
         }
 }
 
-Object *OverloadedMethod::clone() {
+IObject *OverloadedMethod::clone() {
     OverloadedMethod *clone = new OverloadedMethod(name, getSelf(), isStatic());
     clone->methods = methods;
     return clone;

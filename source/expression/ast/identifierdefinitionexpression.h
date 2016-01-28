@@ -11,5 +11,5 @@ public:
 
     void setValue(Expression *value);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

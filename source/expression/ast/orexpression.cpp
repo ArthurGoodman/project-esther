@@ -1,11 +1,13 @@
 #include "orexpression.h"
 
+#include "iobject.h"
+
 OrExpression::OrExpression(Expression *self, Expression *arg)
     : self(self), arg(arg) {
 }
 
-Object *OrExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+IObject *OrExpression::exec(Context *context) {
+    IObject *self = this->self->eval(context);
 
     if (self->isTrue())
         return self;

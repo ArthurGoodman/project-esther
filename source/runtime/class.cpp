@@ -34,12 +34,12 @@ bool Class::isChild(Class *_class) {
     return this == _class || (superclass ? (superclass == _class ? true : superclass->isChild(_class)) : false);
 }
 
-Object *Class::newInstance() {
+IObject *Class::newInstance() {
     return newInstance(new Tuple({}));
 }
 
-Object *Class::newInstance(Tuple *args) {
-    Object *instance = createNewInstance();
+IObject *Class::newInstance(Tuple *args) {
+    IObject *instance = createNewInstance();
 
     if (lookup("initialize"))
         instance->call("initialize", args);
@@ -89,7 +89,7 @@ void Class::setMethod(string name, Method *method) {
     setAttribute(name, method);
 }
 
-Object *Class::lookup(string name) {
+IObject *Class::lookup(string name) {
     if (hasAttribute(name))
         return getAttribute(name);
 
@@ -99,7 +99,7 @@ Object *Class::lookup(string name) {
     return 0;
 }
 
-Object *Class::call(string name, Tuple *args) {
+IObject *Class::call(string name, Tuple *args) {
     if (hasMethod(name)) {
         Method *m = getMethod(name);
 
@@ -110,18 +110,10 @@ Object *Class::call(string name, Tuple *args) {
     return Object::call(name, args);
 }
 
-Object *Class::call(string name, Object *arg) {
-    return call(name, new Tuple(list<Object *>(1, arg)));
-}
-
-Object *Class::call(string name) {
-    return call(name, new Tuple(list<Object *>()));
-}
-
 string Class::toString() {
     return name.empty() ? "<anonymous class>" : name;
 }
 
-Object *Class::createNewInstance() {
+IObject *Class::createNewInstance() {
     return new Object(this);
 }

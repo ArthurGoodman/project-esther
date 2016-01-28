@@ -13,14 +13,14 @@ FloatClass::FloatClass()
 }
 
 void FloatClass::setupMethods() {
-    auto initMethod = [](Object *self, Tuple *) -> Object * {
+    auto initMethod = [](IObject *self, Tuple *) -> IObject * {
         ((Float *)self)->setValue(0);
         return self;
     };
 
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
-    auto initVariantMethod = [](Object *self, Tuple *args) -> Object * {
+    auto initVariantMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((Float *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toFloat());
         return self;
     };
@@ -32,87 +32,87 @@ void FloatClass::setupMethods() {
 
     setAttribute("=", getMethod("initialize"));
 
-    auto plusMethod = [](Object *self, Tuple *args) -> Object * {
+    auto plusMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Float(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("+", new Signature("Float", {"Float"}), plusMethod);
 
-    auto minusMethod = [](Object *self, Tuple *args) -> Object * {
+    auto minusMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Float(((ValueObject *)self)->getVariant().toFloat() - ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("-", new Signature("Float", {"Float"}), minusMethod);
 
-    auto unaryMinusMethod = [](Object *self, Tuple *) -> Object * {
+    auto unaryMinusMethod = [](IObject *self, Tuple *) -> IObject * {
         return new Float(-((ValueObject *)self)->getVariant().toFloat());
     };
 
     setMethod("-", new Signature("Float", {}), unaryMinusMethod);
 
-    auto multiplyMethod = [](Object *self, Tuple *args) -> Object * {
+    auto multiplyMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Float(((ValueObject *)self)->getVariant().toFloat() * ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("*", new Signature("Float", {"Float"}), multiplyMethod);
 
-    auto divideMethod = [](Object *self, Tuple *args) -> Object * {
+    auto divideMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Float(((ValueObject *)self)->getVariant().toFloat() / ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("/", new Signature("Float", {"Float"}), divideMethod);
 
-    auto modMethod = [](Object *self, Tuple *args) -> Object * {
+    auto modMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Float(fmod(((ValueObject *)self)->getVariant().toFloat(), ((ValueObject *)args->at(0))->getVariant().toFloat()));
     };
 
     setMethod("%", new Signature("Float", {"Float"}), modMethod);
 
-    auto powerMethod = [](Object *self, Tuple *args) -> Object * {
+    auto powerMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Float(pow(((ValueObject *)self)->getVariant().toFloat(), ((ValueObject *)args->at(0))->getVariant().toFloat()));
     };
 
     setMethod("**", new Signature("Float", {"Float"}), powerMethod);
 
-    auto ltMethod = [](Object *self, Tuple *args) -> Object * {
+    auto ltMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toFloat() < ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("<", new Signature("Boolean", {"Float"}), ltMethod);
 
-    auto gtMethod = [](Object *self, Tuple *args) -> Object * {
+    auto gtMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toFloat() >= ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod(">", new Signature("Boolean", {"Float"}), gtMethod);
 
-    auto leMethod = [](Object *self, Tuple *args) -> Object * {
+    auto leMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toFloat() <= ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod("<=", new Signature("Boolean", {"Float"}), leMethod);
 
-    auto geMethod = [](Object *self, Tuple *args) -> Object * {
+    auto geMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toFloat() >= ((ValueObject *)args->at(0))->getVariant().toFloat());
     };
 
     setMethod(">=", new Signature("Boolean", {"Float"}), geMethod);
 
-    auto incMethod = [](Object *self, Tuple *) -> Object * {
+    auto incMethod = [](IObject *self, Tuple *) -> IObject * {
         ((Float *)self)->setValue(((Float *)self)->getVariant().toFloat() + 1);
         return self;
     };
 
     setMethod("++", new Signature("Float", {}), incMethod);
 
-    auto decMethod = [](Object *self, Tuple *) -> Object * {
+    auto decMethod = [](IObject *self, Tuple *) -> IObject * {
         ((Float *)self)->setValue(((Float *)self)->getVariant().toFloat() - 1);
         return self;
     };
 
     setMethod("--", new Signature("Float", {}), decMethod);
 
-    auto plusAssignMethod = [](Object *self, Tuple *args) -> Object * {
+    auto plusAssignMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((Float *)self)->setValue(((ValueObject *)self)->getVariant().toFloat() + ((ValueObject *)args->at(0))->getVariant().toFloat());
         return self;
     };
@@ -120,6 +120,6 @@ void FloatClass::setupMethods() {
     setMethod("+=", new Signature("Float", {"Float"}), plusAssignMethod);
 }
 
-Object *FloatClass::createNewInstance() {
+IObject *FloatClass::createNewInstance() {
     return new Float;
 }

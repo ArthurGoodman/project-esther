@@ -5,7 +5,7 @@
 #include "signature.h"
 
 OverloadedMethodBlock::OverloadedMethodBlock(OverloadedMethod *method)
-    : NativeBlock([method](Object *self, Tuple * args) -> Object * {
+    : NativeBlock([method](IObject *self, Tuple * args) -> IObject * {
           list<Method *> methods = method->getMethods();
 
           Method *firstAccept = 0;

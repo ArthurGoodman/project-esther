@@ -1,5 +1,6 @@
 #include "classexpression.h"
 
+#include "iobject.h"
 #include "runtime.h"
 #include "context.h"
 #include "class.h"
@@ -8,7 +9,7 @@ ClassExpression::ClassExpression(Expression *name, Expression *superclass, Expre
     : name(name), superclass(superclass), body(body) {
 }
 
-Object *ClassExpression::exec(Context *context) {
+IObject *ClassExpression::exec(Context *context) {
     string name;
     Class *_class = 0, *superclass = 0;
 

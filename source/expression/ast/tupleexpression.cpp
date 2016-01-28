@@ -11,8 +11,8 @@ list<Expression *> TupleExpression::getNodes() {
     return nodes;
 }
 
-Object *TupleExpression::exec(Context *context) {
-    list<Object *> evaledNodes;
+IObject *TupleExpression::exec(Context *context) {
+    list<IObject *> evaledNodes;
 
     for (Expression *e : nodes)
         evaledNodes << e->eval(context);

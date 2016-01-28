@@ -12,7 +12,7 @@ void Integer::setValue(int value) {
     setVariant(Variant(value));
 }
 
-bool Integer::equals(Object *other) {
+bool Integer::equals(IObject *other) {
     return dynamic_cast<Integer *>(other) && value.toInteger() == ((Integer *)other)->value.toInteger();
 }
 

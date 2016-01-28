@@ -5,9 +5,9 @@
 
 class BreakException : public ValueException {
 public:
-    BreakException(Object *value);
+    BreakException(IObject *value);
 
-    Object *value();
+    IObject *value();
 
     void raise();
 };

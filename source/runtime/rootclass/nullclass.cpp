@@ -11,7 +11,7 @@ NullClass::NullClass()
 void NullClass::setupMethods() {
 }
 
-Object *NullClass::createNewInstance() {
+IObject *NullClass::createNewInstance() {
     Runtime::runtimeError("cannot create new instance of Null class");
     return 0;
 }

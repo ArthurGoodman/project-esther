@@ -6,11 +6,11 @@
 class Method;
 
 class StaticSelfCheckerFeature : public FunctionFeature {
-    Object *self;
+    IObject *self;
     Method *method;
 
 public:
-    StaticSelfCheckerFeature(Object *self, Method *method);
+    StaticSelfCheckerFeature(IObject *self, Method *method);
 
-    void check(Object *self, Tuple *args);
+    void check(IObject *self, Tuple *args);
 };

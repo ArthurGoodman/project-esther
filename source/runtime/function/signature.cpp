@@ -95,7 +95,7 @@ Tuple *Signature::convert(Tuple *args) {
     return convertedArgs;
 }
 
-Object *Signature::convertReturnValue(Object *value) {
+IObject *Signature::convertReturnValue(IObject *value) {
     return value->as(returnClass);
 }
 
@@ -131,6 +131,6 @@ list<string> Signature::paramsNames() {
     return names;
 }
 
-Object *Signature::clone() {
+IObject *Signature::clone() {
     return new Signature(returnClass, params, variadic);
 }

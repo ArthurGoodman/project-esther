@@ -3,7 +3,7 @@
 
 class Variant;
 class Expression;
-class Object;
+class IObject;
 
 class IExpressionManager {
 public:
@@ -20,7 +20,7 @@ public:
     virtual Expression *createAssignment(Expression *expression, Expression *value) = 0;
 
     virtual Expression *createLiteral(const Variant &value) = 0;
-    virtual Expression *createConstant(Object *value) = 0;
+    virtual Expression *createConstant(IObject *value) = 0;
 
     virtual Expression *createOr(Expression *self, Expression *arg) = 0;
     virtual Expression *createAnd(Expression *self, Expression *arg) = 0;

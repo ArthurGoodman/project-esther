@@ -27,12 +27,12 @@ public:
     Signature *getSignature();
     Block *getBody();
 
-    virtual Object *invoke(Object *self, Tuple *args);
-    virtual Object *execute(Object *self, Tuple *args);
+    virtual IObject *invoke(IObject *self, Tuple *args);
+    virtual IObject *execute(IObject *self, Tuple *args);
 
     virtual string toString();
 
-    virtual Object *clone();
+    virtual IObject *clone();
 
 protected:
     void addFeature(FunctionFeature *feature);

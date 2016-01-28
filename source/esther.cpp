@@ -16,7 +16,7 @@ Esther::~Esther() {
 }
 
 void Esther::runFile(const string &fileName) {
-    Object *value = IEngine::instance()->runFile(fileName);
+    IObject *value = IEngine::instance()->runFile(fileName);
 
     // TODO: refactor this
     try {

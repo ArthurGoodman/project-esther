@@ -4,7 +4,6 @@
 
 map<string, unique_ptr<fstream>> IO::files;
 
-// Read the file into a string.
 string IO::readFile(string fileName) {
     ifstream file(fileName.data());
 
@@ -21,7 +20,6 @@ string IO::readFile(string fileName) {
     return buffer.str();
 }
 
-// Write data into a file.
 void IO::writeFile(string fileName, string data) {
     ofstream file(fileName.data());
 

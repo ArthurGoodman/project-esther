@@ -3,13 +3,13 @@
 
 #include "exception.h"
 
-class Object;
+class IObject;
 
 class ValueException : public Exception {
-    Object *value;
+    IObject *value;
 
 protected:
-    ValueException(Object *value);
+    ValueException(IObject *value);
 
-    Object *getValue();
+    IObject *getValue();
 };

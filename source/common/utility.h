@@ -5,15 +5,11 @@ class Utility {
     static const int tabSize = 4;
 
 public:
-    // String covertions:
-
     template <class T>
     static string toString(T t, int base = 10, int precision = 16);
 
     template <class T>
     static T fromString(string str);
-
-    // Basic character operations:
 
     static char toLower(char c);
     static char toUpper(char c);

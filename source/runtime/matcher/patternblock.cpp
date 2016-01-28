@@ -10,13 +10,13 @@ PatternBlock::PatternBlock(list<Case *> cases)
     : cases(cases) {
 }
 
-Object *PatternBlock::eval(Context *) {
+IObject *PatternBlock::eval(Context *) {
     Runtime::runtimeError("cannot evaluate native code block without its function");
     return 0;
 }
 
-Object *PatternBlock::eval(Object *object, Context *context) {
-    Object *value = 0;
+IObject *PatternBlock::eval(IObject *object, Context *context) {
+    IObject *value = 0;
 
     for (Case *c : cases)
         if ((value = c->match(object, context->childContext())))

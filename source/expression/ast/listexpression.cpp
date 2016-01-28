@@ -6,8 +6,8 @@ ListExpression::ListExpression(list<Expression *> nodes)
     : nodes(nodes) {
 }
 
-Object *ListExpression::exec(Context *context) {
-    Object *value = Runtime::getNull();
+IObject *ListExpression::exec(Context *context) {
+    IObject *value = Runtime::getNull();
 
     for (Expression *e : nodes)
         value = e->eval(context);

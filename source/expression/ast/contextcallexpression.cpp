@@ -9,14 +9,14 @@ ContextCallExpression::ContextCallExpression(Expression *self, Expression *body,
     : self(self), body(body), args(args) {
 }
 
-Object *ContextCallExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+IObject *ContextCallExpression::exec(Context *context) {
+    IObject *self = this->self->eval(context);
 
     Context *selfContext = context->objectChildContext(self);
 
-    Object *body = this->body->eval(selfContext);
+    IObject *body = this->body->eval(selfContext);
 
-    list<Object *> evaledArgs;
+    list<IObject *> evaledArgs;
 
     for (Expression *e : args)
         evaledArgs << e->eval(context);
@@ -30,7 +30,7 @@ Object *ContextCallExpression::exec(Context *context) {
     else
         actualArgs = new Tuple(evaledArgs);
 
-    Object *value = body->call("()", actualArgs);
+    IObject *value = body->call("()", actualArgs);
 
     return value;
 }

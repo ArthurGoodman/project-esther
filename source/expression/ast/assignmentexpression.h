@@ -9,5 +9,5 @@ class AssignmentExpression : public Expression {
 public:
     AssignmentExpression(Expression *expression, Expression *value);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

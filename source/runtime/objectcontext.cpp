@@ -3,7 +3,7 @@
 #include "class.h"
 #include "method.h"
 
-ObjectContext::ObjectContext(Object *currentSelf, Class *currentClass, Context *parent, int modifiers)
+ObjectContext::ObjectContext(IObject *currentSelf, Class *currentClass, Context *parent, int modifiers)
     : Context(currentSelf, currentClass, parent, modifiers) {
 }
 
@@ -15,11 +15,11 @@ bool ObjectContext::hasLocal(string name) {
     return currentSelf->hasAttribute(name);
 }
 
-Object *ObjectContext::getLocal(string name) {
+IObject *ObjectContext::getLocal(string name) {
     return currentSelf->getAttribute(name);
 }
 
-void ObjectContext::setLocal(string name, Object *value) {
+void ObjectContext::setLocal(string name, IObject *value) {
     currentSelf->setAttribute(name, value);
 }
 
@@ -33,7 +33,7 @@ bool ObjectContext::hasId(string name) {
     return Context::hasId(name);
 }
 
-Object *ObjectContext::getId(string name) {
+IObject *ObjectContext::getId(string name) {
     if (currentSelf->hasAttribute(name))
         return currentSelf->getAttribute(name);
 
@@ -43,7 +43,7 @@ Object *ObjectContext::getId(string name) {
     return Context::getId(name);
 }
 
-bool ObjectContext::setId(string name, Object *value) {
+bool ObjectContext::setId(string name, IObject *value) {
     if (currentSelf->hasAttribute(name)) {
         currentSelf->setAttribute(name, value);
         return true;
@@ -52,7 +52,7 @@ bool ObjectContext::setId(string name, Object *value) {
     return Context::setId(name, value);
 }
 
-Object *ObjectContext::clone() {
+IObject *ObjectContext::clone() {
     Context *clone = new ObjectContext(currentSelf, currentClass, parent, modifiers);
 
     for (auto local : locals)

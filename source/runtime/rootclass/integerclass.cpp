@@ -15,14 +15,14 @@ IntegerClass::IntegerClass()
 }
 
 void IntegerClass::setupMethods() {
-    auto initMethod = [](Object *self, Tuple *) -> Object * {
+    auto initMethod = [](IObject *self, Tuple *) -> IObject * {
         ((Integer *)self)->setValue(0);
         return self;
     };
 
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
-    auto initVariantMethod = [](Object *self, Tuple *args) -> Object * {
+    auto initVariantMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((Integer *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toInteger());
         return self;
     };
@@ -34,100 +34,100 @@ void IntegerClass::setupMethods() {
 
     setAttribute("=", getMethod("initialize"));
 
-    auto plusMethod = [](Object *self, Tuple *args) -> Object * {
+    auto plusMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("+", new Signature("Integer", {"Integer"}), plusMethod);
 
-    auto minusMethod = [](Object *self, Tuple *args) -> Object * {
+    auto minusMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() - ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("-", new Signature("Integer", {"Integer"}), minusMethod);
 
-    auto unaryMinusMethod = [](Object *self, Tuple *) -> Object * {
+    auto unaryMinusMethod = [](IObject *self, Tuple *) -> IObject * {
         return new Integer(-((ValueObject *)self)->getVariant().toInteger());
     };
 
     setMethod("-", new Signature("Integer", {}), unaryMinusMethod);
 
-    auto multiplyMethod = [](Object *self, Tuple *args) -> Object * {
+    auto multiplyMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() * ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("*", new Signature("Integer", {"Integer"}), multiplyMethod);
 
-    auto divideMethod = [](Object *self, Tuple *args) -> Object * {
+    auto divideMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() / ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("/", new Signature("Integer", {"Integer"}), divideMethod);
 
-    auto modMethod = [](Object *self, Tuple *args) -> Object * {
+    auto modMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Integer(((ValueObject *)self)->getVariant().toInteger() % ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("%", new Signature("Integer", {"Integer"}), modMethod);
 
-    auto powerMethod = [](Object *self, Tuple *args) -> Object * {
+    auto powerMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Integer(pow(((ValueObject *)self)->getVariant().toInteger(), ((ValueObject *)args->at(0))->getVariant().toInteger()));
     };
 
     setMethod("**", new Signature("Integer", {"Integer"}), powerMethod);
 
-    auto ltMethod = [](Object *self, Tuple *args) -> Object * {
+    auto ltMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toInteger() < ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("<", new Signature("Boolean", {"Integer"}), ltMethod);
 
-    auto gtMethod = [](Object *self, Tuple *args) -> Object * {
+    auto gtMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toInteger() > ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod(">", new Signature("Boolean", {"Integer"}), gtMethod);
 
-    auto leMethod = [](Object *self, Tuple *args) -> Object * {
+    auto leMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toInteger() <= ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("<=", new Signature("Boolean", {"Integer"}), leMethod);
 
-    auto geMethod = [](Object *self, Tuple *args) -> Object * {
+    auto geMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toInteger() >= ((ValueObject *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod(">=", new Signature("Boolean", {"Integer"}), geMethod);
 
-    auto incMethod = [](Object *self, Tuple *) -> Object * {
+    auto incMethod = [](IObject *self, Tuple *) -> IObject * {
         ((Integer *)self)->setValue(((ValueObject *)self)->getVariant().toInteger() + 1);
         return self;
     };
 
     setMethod("++", new Signature("Integer", {}), incMethod);
 
-    auto decMethod = [](Object *self, Tuple *) -> Object * {
+    auto decMethod = [](IObject *self, Tuple *) -> IObject * {
         ((Integer *)self)->setValue(((ValueObject *)self)->getVariant().toInteger() - 1);
         return self;
     };
 
     setMethod("--", new Signature("Integer", {}), decMethod);
 
-    auto plusAssignMethod = [](Object *self, Tuple *args) -> Object * {
+    auto plusAssignMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((Integer *)self)->setValue(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args->at(0))->getVariant().toInteger());
         return self;
     };
 
     setMethod("+=", new Signature("Integer", {"Integer"}), plusAssignMethod);
 
-    auto rangeMethod = [](Object *self, Tuple *args) -> Object * {
+    auto rangeMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new Range(((Integer *)self)->getVariant().toInteger(), ((Integer *)args->at(0))->getVariant().toInteger());
     };
 
     setMethod("..", new Signature("Range", {"Integer"}), rangeMethod);
 }
 
-Object *IntegerClass::createNewInstance() {
+IObject *IntegerClass::createNewInstance() {
     return new Integer;
 }

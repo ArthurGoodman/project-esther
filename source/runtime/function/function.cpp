@@ -32,14 +32,14 @@ Block *Function::getBody() {
     return body;
 }
 
-Object *Function::invoke(Object *self, Tuple *args) {
+IObject *Function::invoke(IObject *self, Tuple *args) {
     for (FunctionFeature *f : features)
         f->check(self, args);
 
     return execute(self, args);
 }
 
-Object *Function::execute(Object *self, Tuple *args) {
+IObject *Function::execute(IObject *self, Tuple *args) {
     args = signature->convert(args);
 
     context = context->objectChildContext(self)->childContext();
@@ -53,7 +53,7 @@ Object *Function::execute(Object *self, Tuple *args) {
     for (string s : params)
         context->setLocal(s, args->at(i++));
 
-    Object *returnValue = 0;
+    IObject *returnValue = 0;
 
     try {
         returnValue = body->eval(context);
@@ -72,7 +72,7 @@ string Function::toString() {
     return name.empty() ? "<anonymous function>" : "<function " + name + ">";
 }
 
-Object *Function::clone() {
+IObject *Function::clone() {
     Function *clone = new Function(name, context, signature, body);
     clone->features = features;
     return clone;

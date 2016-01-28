@@ -9,5 +9,5 @@ class OrExpression : public Expression {
 public:
     OrExpression(Expression *self, Expression *arg);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

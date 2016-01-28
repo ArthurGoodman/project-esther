@@ -7,12 +7,12 @@ class OverloadedMethod : public NativeMethod {
     list<Method *> methods;
 
 public:
-    OverloadedMethod(string name, Object *self, bool staticFlag);
+    OverloadedMethod(string name, IObject *self, bool staticFlag);
 
     void addMethod(Method *method);
     list<Method *> getMethods();
 
     void replaceMethod(Method *method);
 
-    Object *clone();
+    IObject *clone();
 };

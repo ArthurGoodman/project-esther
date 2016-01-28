@@ -144,27 +144,27 @@ double fresnelC(double z) {
 }
 
 void Math::initialize() {
-    Object *math = new Object;
+    IObject *math = new Object;
 
-    auto sinMethod = [](Object *, Tuple *args) -> Object * {
+    auto sinMethod = [](IObject *, Tuple *args) -> IObject * {
         return new Float(sin(((Float *)args->at(0))->getVariant().toFloat()));
     };
 
     math->setAttribute("sin", new NativeMethod("sin", new Signature("Float", {"Float"}), new NativeBlock(sinMethod), math, true));
 
-    auto cosMethod = [](Object *, Tuple *args) -> Object * {
+    auto cosMethod = [](IObject *, Tuple *args) -> IObject * {
         return new Float(cos(((Float *)args->at(0))->getVariant().toFloat()));
     };
 
     math->setAttribute("cos", new NativeMethod("cos", new Signature("Float", {"Float"}), new NativeBlock(cosMethod), math, true));
 
-    auto fresnelSMethod = [](Object *, Tuple *args) -> Object * {
+    auto fresnelSMethod = [](IObject *, Tuple *args) -> IObject * {
         return new Float(fresnelS(((Float *)args->at(0))->getVariant().toFloat()));
     };
 
     math->setAttribute("fresnelS", new NativeMethod("fresnelS", new Signature("Float", {"Float"}), new NativeBlock(fresnelSMethod), math, true));
 
-    auto fresnelCMethod = [](Object *, Tuple *args) -> Object * {
+    auto fresnelCMethod = [](IObject *, Tuple *args) -> IObject * {
         return new Float(fresnelC(((Float *)args->at(0))->getVariant().toFloat()));
     };
 

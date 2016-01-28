@@ -12,7 +12,7 @@ void Float::setValue(double value) {
     setVariant(Variant(value));
 }
 
-bool Float::equals(Object *other) {
+bool Float::equals(IObject *other) {
     return dynamic_cast<Float *>(other) && value.toFloat() == ((Float *)other)->value.toFloat();
 }
 

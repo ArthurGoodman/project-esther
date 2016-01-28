@@ -19,10 +19,10 @@ RootClass::RootClass(string name)
     Runtime::setRootClass(this);
 }
 
-void RootClass::setMethod(string name, Signature *signature, function<Object *(Object *, Tuple *)> body) {
+void RootClass::setMethod(string name, Signature *signature, function<IObject *(IObject *, Tuple *)> body) {
     Class::setMethod(new NativeMethod(name, signature, new NativeBlock(body), this));
 }
 
-void RootClass::setStaticMethod(string name, Signature *signature, function<Object *(Object *, Tuple *)> body) {
+void RootClass::setStaticMethod(string name, Signature *signature, function<IObject *(IObject *, Tuple *)> body) {
     Class::setMethod(new NativeMethod(name, signature, new NativeBlock(body), this, true));
 }

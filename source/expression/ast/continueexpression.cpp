@@ -3,6 +3,6 @@
 #include "esther.h"
 #include "continueexception.h"
 
-Object *ContinueExpression::exec(Context *) {
+IObject *ContinueExpression::exec(Context *) {
     throw new ContinueException;
 }

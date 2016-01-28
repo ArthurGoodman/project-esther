@@ -2,19 +2,19 @@
 
 #include "runtime.h"
 
-NativeBlock::NativeBlock(function<Object *(Object *, Tuple *)> body)
+NativeBlock::NativeBlock(function<IObject *(IObject *, Tuple *)> body)
     : body(body) {
 }
 
-Object *NativeBlock::eval(Context *) {
+IObject *NativeBlock::eval(Context *) {
     Runtime::runtimeError("cannot evaluate native code block without its function");
     return 0;
 }
 
-Object *NativeBlock::eval(Object *self, Tuple *args) {
+IObject *NativeBlock::eval(IObject *self, Tuple *args) {
     return body(self, args);
 }
 
-Object *NativeBlock::clone() {
+IObject *NativeBlock::clone() {
     return new NativeBlock(body);
 }

@@ -9,7 +9,7 @@ SelfCheckerFeature::SelfCheckerFeature(Class *selfClass, Method *method)
     : selfClass(selfClass), method(method) {
 }
 
-void SelfCheckerFeature::check(Object *self, Tuple *) {
+void SelfCheckerFeature::check(IObject *self, Tuple *) {
     if (!self->is(selfClass))
         Runtime::runtimeError(self->getClass()->callToString() + " is not a valid self class for " + method->callToString() + " (" + selfClass->callToString() + " expected)");
 }

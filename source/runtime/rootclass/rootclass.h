@@ -11,8 +11,8 @@ public:
     RootClass(string name, string superclassName);
     RootClass(string name);
 
-    void setMethod(string name, Signature *signature, function<Object *(Object *, Tuple *)> body);
-    void setStaticMethod(string name, Signature *signature, function<Object *(Object *, Tuple *)> body);
+    void setMethod(string name, Signature *signature, function<IObject *(IObject *, Tuple *)> body);
+    void setStaticMethod(string name, Signature *signature, function<IObject *(IObject *, Tuple *)> body);
 
     virtual void setupMethods() = 0;
 };

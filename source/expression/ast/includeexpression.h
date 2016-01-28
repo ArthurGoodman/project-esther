@@ -9,5 +9,5 @@ class IncludeExpression : public Expression {
 public:
     IncludeExpression(Expression *fileName);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

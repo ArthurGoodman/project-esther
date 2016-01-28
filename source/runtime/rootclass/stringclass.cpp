@@ -17,14 +17,14 @@ StringClass::StringClass()
 }
 
 void StringClass::setupMethods() {
-    auto initMethod = [](Object *self, Tuple *) -> Object * {
+    auto initMethod = [](IObject *self, Tuple *) -> IObject * {
         ((String *)self)->setValue("");
         return self;
     };
 
     setMethod("initialize", new Signature("Object", {}), initMethod);
 
-    auto initVariantMethod = [](Object *self, Tuple *args) -> Object * {
+    auto initVariantMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((String *)self)->setValue(((ValueObject *)args->at(0))->getVariant().toString());
         return self;
     };
@@ -36,13 +36,13 @@ void StringClass::setupMethods() {
 
     setAttribute("=", getMethod("initialize"));
 
-    auto sizeMethod = [](Object *self, Tuple *) -> Object * {
+    auto sizeMethod = [](IObject *self, Tuple *) -> IObject * {
         return new Integer(((ValueObject *)self)->getVariant().toString().size());
     };
 
     setMethod("size", new Signature("Integer", {}), sizeMethod);
 
-    auto atMethod = [](Object *self, Tuple *args) -> Object * {
+    auto atMethod = [](IObject *self, Tuple *args) -> IObject * {
         string str = ((ValueObject *)self)->getVariant().toString();
         int index = ((Integer *)args->at(0))->getVariant().toInteger();
 
@@ -55,33 +55,33 @@ void StringClass::setupMethods() {
     setMethod("at", new Signature("Character", {"Integer"}), atMethod);
     setAttribute("[]", getMethod("at"));
 
-    auto emptyMethod = [](Object *self, Tuple *) -> Object * {
+    auto emptyMethod = [](IObject *self, Tuple *) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString().empty());
     };
 
     setMethod("empty", new Signature("Boolean", {}), emptyMethod);
 
-    auto containsMethod = [](Object *self, Tuple *args) -> Object * {
+    auto containsMethod = [](IObject *self, Tuple *args) -> IObject * {
         return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString().find(((ValueObject *)args->at(0))->getVariant().toChar()) != string::npos);
     };
 
     setMethod("contains", new Signature("Boolean", {"Character"}), containsMethod);
 
-    auto appendMethod = [](Object *self, Tuple *args) -> Object * {
+    auto appendMethod = [](IObject *self, Tuple *args) -> IObject * {
         return new String(((ValueObject *)self)->getVariant().toString() + ((ValueObject *)args->at(0))->getVariant().toString());
     };
 
     setMethod("append", new Signature("String", {"String"}), appendMethod);
     setAttribute("+", getMethod("append"));
 
-    auto plusAssignMethod = [](Object *self, Tuple *args) -> Object * {
+    auto plusAssignMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((String *)self)->setValue(((ValueObject *)self)->getVariant().toString() + ((ValueObject *)args->at(0))->getVariant().toString());
         return self;
     };
 
     setMethod("+=", new Signature("String", {"String"}), plusAssignMethod);
 
-    auto capitalizeMethod = [](Object *self, Tuple *) -> Object * {
+    auto capitalizeMethod = [](IObject *self, Tuple *) -> IObject * {
         string value = ((String *)self)->getVariant().toString();
 
         if (value.empty())
@@ -95,6 +95,6 @@ void StringClass::setupMethods() {
     setMethod("capitalize", new Signature("String", {}), capitalizeMethod);
 }
 
-Object *StringClass::createNewInstance() {
+IObject *StringClass::createNewInstance() {
     return new String;
 }

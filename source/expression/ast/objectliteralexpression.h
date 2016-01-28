@@ -9,5 +9,5 @@ class ObjectLiteralExpression : public Expression {
 public:
     ObjectLiteralExpression(Expression *body);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

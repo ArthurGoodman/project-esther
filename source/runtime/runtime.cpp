@@ -29,12 +29,12 @@
 
 Context *Runtime::root;
 
-Object *Runtime::mainObject;
+IObject *Runtime::mainObject;
 Class *Runtime::objectClass;
 
-Object *Runtime::trueObject;
-Object *Runtime::falseObject;
-Object *Runtime::nullObject;
+IObject *Runtime::trueObject;
+IObject *Runtime::falseObject;
+IObject *Runtime::nullObject;
 
 map<string, RootClass *> Runtime::rootClasses;
 
@@ -95,7 +95,7 @@ Context *Runtime::getRoot() {
     return root;
 }
 
-Object *Runtime::getMainObject() {
+IObject *Runtime::getMainObject() {
     return mainObject;
 }
 
@@ -103,15 +103,15 @@ Class *Runtime::getObjectClass() {
     return objectClass;
 }
 
-Object *Runtime::getTrue() {
+IObject *Runtime::getTrue() {
     return trueObject;
 }
 
-Object *Runtime::getFalse() {
+IObject *Runtime::getFalse() {
     return falseObject;
 }
 
-Object *Runtime::getNull() {
+IObject *Runtime::getNull() {
     return nullObject;
 }
 
@@ -127,7 +127,7 @@ void Runtime::setRootClass(RootClass *rootClass) {
     rootClasses[rootClass->getName()] = rootClass;
 }
 
-Object *Runtime::toBoolean(bool value) {
+IObject *Runtime::toBoolean(bool value) {
     return value ? trueObject : falseObject;
 }
 

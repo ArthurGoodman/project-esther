@@ -12,5 +12,5 @@ protected:
 public:
     virtual ~Pattern();
 
-    virtual bool match(Object *object, Context *context) = 0;
+    virtual bool match(IObject *object, Context *context) = 0;
 };

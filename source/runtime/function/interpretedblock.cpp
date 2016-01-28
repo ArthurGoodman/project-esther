@@ -6,10 +6,10 @@ InterpretedBlock::InterpretedBlock(Expression *e)
     : e(e) {
 }
 
-Object *InterpretedBlock::eval(Context *context) {
+IObject *InterpretedBlock::eval(Context *context) {
     return e->eval(context);
 }
 
-Object *InterpretedBlock::clone() {
+IObject *InterpretedBlock::clone() {
     return new InterpretedBlock(e);
 }

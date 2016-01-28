@@ -11,7 +11,7 @@ RangeClass::RangeClass()
 }
 
 void RangeClass::setupMethods() {
-    auto initMethod = [](Object *self, Tuple *args) -> Object * {
+    auto initMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((Range *)self)->setFirst(((Integer *)args->at(0))->getVariant().toInteger());
         ((Range *)self)->setSecond(((Integer *)args->at(1))->getVariant().toInteger());
         return self;
@@ -19,7 +19,7 @@ void RangeClass::setupMethods() {
 
     setMethod("initialize", new Signature("Object", {"Integer", "Integer"}), initMethod);
 
-    auto eachMethod = [](Object *self, Tuple *args) -> Object * {
+    auto eachMethod = [](IObject *self, Tuple *args) -> IObject * {
         ((Range *)self)->each((Function *)args->at(0));
         return Runtime::getNull();
     };
@@ -27,6 +27,6 @@ void RangeClass::setupMethods() {
     setMethod("each", new Signature("Object", {"Function"}), eachMethod);
 }
 
-Object *RangeClass::createNewInstance() {
+IObject *RangeClass::createNewInstance() {
     return new Range(0, 0);
 }

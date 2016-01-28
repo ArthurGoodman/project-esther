@@ -22,12 +22,12 @@ public:
     bool check(Tuple *args);
 
     virtual Tuple *convert(Tuple *args);
-    Object *convertReturnValue(Object *value);
+    IObject *convertReturnValue(IObject *value);
 
     virtual bool equals(Signature *other);
     virtual bool weakEquals(Signature *other);
 
     list<string> paramsNames();
 
-    virtual Object *clone();
+    virtual IObject *clone();
 };

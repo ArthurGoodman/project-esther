@@ -4,14 +4,14 @@
 #include "block.h"
 
 class NativeBlock : public Block {
-    function<Object *(Object *, Tuple *)> body;
+    function<IObject *(IObject *, Tuple *)> body;
 
 public:
-    NativeBlock(function<Object *(Object *, Tuple *)> body);
+    NativeBlock(function<IObject *(IObject *, Tuple *)> body);
 
-    Object *eval(Context *context);
+    IObject *eval(Context *context);
 
-    Object *eval(Object *self, Tuple *args);
+    IObject *eval(IObject *self, Tuple *args);
 
-    Object *clone();
+    IObject *clone();
 };

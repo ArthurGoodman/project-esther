@@ -9,8 +9,8 @@ WhileExpression::WhileExpression(Expression *condition, Expression *body, Expres
     : condition(condition), body(body), elseBody(elseBody) {
 }
 
-Object *WhileExpression::exec(Context *context) {
-    Object *value = Runtime::getNull();
+IObject *WhileExpression::exec(Context *context) {
+    IObject *value = Runtime::getNull();
 
     context = context->childContext();
 

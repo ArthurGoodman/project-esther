@@ -11,5 +11,5 @@ public:
 
     list<Expression *> getNodes();
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

@@ -1,11 +1,13 @@
 #include "preincrementexpression.h"
 
+#include "iobject.h"
+
 PreIncrementExpression::PreIncrementExpression(Expression *self)
     : self(self) {
 }
 
-Object *PreIncrementExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+IObject *PreIncrementExpression::exec(Context *context) {
+    IObject *self = this->self->eval(context);
     self->call("++");
     return self;
 }

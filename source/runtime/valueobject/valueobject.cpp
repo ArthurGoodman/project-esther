@@ -45,7 +45,7 @@ Variant ValueObject::getVariant() {
     return value;
 }
 
-Object *ValueObject::clone() {
+IObject *ValueObject::clone() {
     return createNewInstance(value);
 }
 

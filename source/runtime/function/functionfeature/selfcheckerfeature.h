@@ -13,5 +13,5 @@ class SelfCheckerFeature : public FunctionFeature {
 public:
     SelfCheckerFeature(Class *selfClass, Method *method);
 
-    void check(Object *self, Tuple *args);
+    void check(IObject *self, Tuple *args);
 };

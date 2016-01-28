@@ -4,10 +4,10 @@
 #include "expression.h"
 
 class ConstantExpression : public Expression {
-    Object *value;
+    IObject *value;
 
 public:
-    ConstantExpression(Object *value);
+    ConstantExpression(IObject *value);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

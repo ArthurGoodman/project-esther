@@ -1,5 +1,5 @@
 #include "wildcardpattern.h"
 
-bool WildcardPattern::match(Object *) {
+bool WildcardPattern::match(IObject *) {
     return true;
 }

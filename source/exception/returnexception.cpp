@@ -1,10 +1,10 @@
 #include "returnexception.h"
 
-ReturnException::ReturnException(Object *value)
+ReturnException::ReturnException(IObject *value)
     : ValueException(value) {
 }
 
-Object *ReturnException::value() {
+IObject *ReturnException::value() {
     return getValue();
 }
 

@@ -15,7 +15,7 @@ bool IdentifierExpression::isDynamic() {
     return dynamic;
 }
 
-Object *IdentifierExpression::exec(Context *context) {
+IObject *IdentifierExpression::exec(Context *context) {
     string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
 
     if (!context->hasId(name))

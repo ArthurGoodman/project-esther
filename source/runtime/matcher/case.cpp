@@ -8,7 +8,7 @@ Case::Case(Pattern *pattern, Expression *body)
     : pattern(pattern), body(body) {
 }
 
-Object *Case::match(Object *object, Context *context) {
+IObject *Case::match(IObject *object, Context *context) {
     context = context->childContext();
     return pattern->match(object, context) ? body->eval(context) : 0;
 }

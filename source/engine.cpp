@@ -11,11 +11,11 @@
 #include "continueexception.h"
 #include "utility.h"
 
-Object *Engine::run(const string &script, Context *context) {
+IObject *Engine::run(const string &script, Context *context) {
     if (!context)
         context = Runtime::getRoot();
 
-    Object *value = 0;
+    IObject *value = 0;
 
     string src = Utility::expandTabs(script);
 
@@ -53,10 +53,10 @@ Object *Engine::run(const string &script, Context *context) {
     return value;
 }
 
-Object *Engine::runFile(const string &fileName, Context *context) {
+IObject *Engine::runFile(const string &fileName, Context *context) {
     pushFileName(IO::fullPath(fileName));
 
-    Object *value = run(IO::readFile(fileName), context);
+    IObject *value = run(IO::readFile(fileName), context);
 
     popFileName();
 

@@ -9,5 +9,5 @@ class ContextResolutionExpression : public Expression {
 public:
     ContextResolutionExpression(Expression *self, Expression *body);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

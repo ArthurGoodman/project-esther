@@ -18,5 +18,5 @@ public:
 
     void each(Function *f);
 
-    Object *clone();
+    IObject *clone();
 };

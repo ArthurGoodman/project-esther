@@ -16,6 +16,6 @@ string Null::toString() {
     return "null";
 }
 
-Object *Null::clone() {
+IObject *Null::clone() {
     return this;
 }

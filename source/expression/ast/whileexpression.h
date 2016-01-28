@@ -9,5 +9,5 @@ class WhileExpression : public Expression {
 public:
     WhileExpression(Expression *condition, Expression *body, Expression *elseBody);
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };

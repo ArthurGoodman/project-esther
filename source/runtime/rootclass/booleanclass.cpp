@@ -12,7 +12,7 @@ BooleanClass::BooleanClass()
 void BooleanClass::setupMethods() {
 }
 
-Object *BooleanClass::createNewInstance() {
+IObject *BooleanClass::createNewInstance() {
     Runtime::runtimeError("cannot create new instance of Boolean class");
     return 0;
 }

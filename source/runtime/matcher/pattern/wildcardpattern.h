@@ -5,5 +5,5 @@
 
 class WildcardPattern : public Pattern {
 public:
-    bool match(Object *object);
+    bool match(IObject *object);
 };

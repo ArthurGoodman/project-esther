@@ -2,6 +2,6 @@
 
 #include "context.h"
 
-Object *HereExpression::exec(Context *context) {
+IObject *HereExpression::exec(Context *context) {
     return context;
 }

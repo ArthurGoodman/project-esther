@@ -15,7 +15,7 @@ public:
     Expression *createAssignment(Expression *tuple, Expression *value);
 
     Expression *createLiteral(const Variant &value);
-    Expression *createConstant(Object *value);
+    Expression *createConstant(IObject *value);
 
     Expression *createOr(Expression *self, Expression *arg);
     Expression *createAnd(Expression *self, Expression *arg);

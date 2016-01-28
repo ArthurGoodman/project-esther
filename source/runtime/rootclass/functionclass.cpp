@@ -15,21 +15,21 @@ FunctionClass::FunctionClass()
 }
 
 void FunctionClass::setupMethods() {
-    auto callMethod = [](Object *self, Tuple *args) -> Object * {
-        Object *value = ((Function *)self)->invoke(args->at(0), (Tuple *)args->at(1));
+    auto callMethod = [](IObject *self, Tuple *args) -> IObject * {
+        IObject *value = ((Function *)self)->invoke(args->at(0), (Tuple *)args->at(1));
         return value;
     };
 
     setMethod("call", new Signature("Object", {"Object", "Tuple"}), callMethod);
     setAttribute("()", getMethod("call"));
 
-    auto bodyMethod = [](Object *self, Tuple *) -> Object * {
+    auto bodyMethod = [](IObject *self, Tuple *) -> IObject * {
         return ((Function *)self)->getBody();
     };
 
     setMethod("body", new Signature("Block", {}), bodyMethod);
 }
 
-Object *FunctionClass::createNewInstance() {
+IObject *FunctionClass::createNewInstance() {
     return new Function("", Runtime::getRoot(), new Signature, new InterpretedBlock(Expression::Empty()));
 }

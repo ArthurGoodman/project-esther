@@ -11,5 +11,5 @@ public:
     void setupMethods();
 
 protected:
-    Object *createNewInstance();
+    IObject *createNewInstance();
 };

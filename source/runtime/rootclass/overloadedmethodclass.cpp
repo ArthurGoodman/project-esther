@@ -10,6 +10,6 @@ OverloadedMethodClass::OverloadedMethodClass()
 void OverloadedMethodClass::setupMethods() {
 }
 
-Object *OverloadedMethodClass::createNewInstance() {
+IObject *OverloadedMethodClass::createNewInstance() {
     return new OverloadedMethod("", Runtime::getObjectClass(), false);
 }

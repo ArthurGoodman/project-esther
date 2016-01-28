@@ -14,5 +14,5 @@ public:
     Expression *getName();
     bool isDynamic();
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 };
