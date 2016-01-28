@@ -7,7 +7,7 @@ class IObject;
 
 class IExpressionManager {
 public:
-    static IExpressionManager *create();
+    static IExpressionManager *instance();
 
     virtual ~IExpressionManager();
 

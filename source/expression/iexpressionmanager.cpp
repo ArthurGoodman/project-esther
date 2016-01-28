@@ -3,11 +3,14 @@
 #include "debugexpressionmanager.h"
 #include "expressionmanager.h"
 
-IExpressionManager *IExpressionManager::create() {
+IExpressionManager *IExpressionManager::instance() {
 #if DEBUG_PARSER
-    return new DebugExpressionManager;
+    static DebugExpressionManager manager;
+#else
+    static ExpressionManager manager;
 #endif
-    return new ExpressionManager;
+
+    return &manager;
 }
 
 IExpressionManager::~IExpressionManager() {

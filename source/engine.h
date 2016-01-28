@@ -11,12 +11,11 @@ class Engine : public IEngine {
     stack<string> fileNames;
 
 public:
+    Engine();
+    ~Engine();
+
     IObject *run(const string &script, Context *context = 0);
     IObject *runFile(const string &fileName, Context *context = 0);
-
-protected:
-    void initializeEngine();
-    void releaseEngine();
 
 private:
     void pushSource(const string &source);

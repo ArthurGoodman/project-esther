@@ -5,16 +5,6 @@
 #include "io.h"
 #include "exception.h"
 
-Esther Esther::esther;
-
-Esther::Esther() {
-    IEngine::initialize();
-}
-
-Esther::~Esther() {
-    IEngine::release();
-}
-
 void Esther::runFile(const string &fileName) {
     IObject *value = IEngine::instance()->runFile(fileName);
 

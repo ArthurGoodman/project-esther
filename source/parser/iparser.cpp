@@ -2,18 +2,9 @@
 
 #include "parser.h"
 
-IParser *IParser::parser;
-
-void IParser::initialize() {
-    parser = new Parser;
-}
-
-void IParser::release() {
-    delete parser;
-}
-
 IParser *IParser::instance() {
-    return parser;
+    static Parser parser;
+    return &parser;
 }
 
 IParser::~IParser() {

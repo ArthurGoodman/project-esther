@@ -11,6 +11,14 @@
 #include "continueexception.h"
 #include "utility.h"
 
+Engine::Engine() {
+    Runtime::initialize();
+}
+
+Engine::~Engine() {
+    Runtime::release();
+}
+
 IObject *Engine::run(const string &script, Context *context) {
     if (!context)
         context = Runtime::getRoot();
@@ -61,20 +69,6 @@ IObject *Engine::runFile(const string &fileName, Context *context) {
     popFileName();
 
     return value;
-}
-
-void Engine::initializeEngine() {
-    ILexer::initialize();
-    IParser::initialize();
-    Expression::initialize();
-    Runtime::initialize();
-}
-
-void Engine::releaseEngine() {
-    ILexer::release();
-    IParser::release();
-    Expression::release();
-    Runtime::release();
 }
 
 void Engine::pushSource(const string &source) {

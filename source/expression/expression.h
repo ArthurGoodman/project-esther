@@ -5,19 +5,13 @@
 
 class IObject;
 class Variant;
-class IExpressionManager;
 class Context;
 
 class Expression {
-    static IExpressionManager *manager;
-
     Position position;
 
 public:
     virtual ~Expression();
-
-    static void initialize();
-    static void release();
 
     static Expression *Empty();
 

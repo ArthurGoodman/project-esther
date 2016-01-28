@@ -4,12 +4,7 @@
 #include "token.h"
 
 class ILexer {
-    static ILexer *lexer;
-
 public:
-    static void initialize();
-    static void release();
-
     static ILexer *instance();
 
     virtual ~ILexer();
