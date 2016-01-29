@@ -14,7 +14,7 @@ void IdentifierDefinitionExpression::setValue(Expression *value) {
 }
 
 IObject *IdentifierDefinitionExpression::exec(Context *context) {
-    string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
+    std::string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
     IObject *value = this->value ? this->value->eval(context) : 0;
 
     if (type) {

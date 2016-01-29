@@ -1,6 +1,6 @@
 #include "matchfailureexception.h"
 
-string MatchFailureException::message() {
+std::string MatchFailureException::message() {
     return "match failure";
 }
 

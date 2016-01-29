@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "object.h"
 #include "variant.h"
@@ -14,7 +13,7 @@ public:
     ValueObject(int value);
     ValueObject(double value);
     ValueObject(char value);
-    ValueObject(string value);
+    ValueObject(const std::string &value);
     ValueObject(const Variant &value);
 
     Variant getVariant();
@@ -25,5 +24,5 @@ protected:
     void setVariant(Variant value);
 
 private:
-    static string typeToClassName(Variant::Type type);
+    static std::string typeToClassName(Variant::Type type);
 };

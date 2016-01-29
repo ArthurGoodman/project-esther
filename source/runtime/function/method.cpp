@@ -3,7 +3,7 @@
 #include "selfcheckerfeature.h"
 #include "staticselfcheckerfeature.h"
 
-Method::Method(string className, string name, Context *context, Signature *signature, Block *body, IObject *self, bool staticFlag)
+Method::Method(const std::string &className, const std::string &name, Context *context, Signature *signature, Block *body, IObject *self, bool staticFlag)
     : Function(className, name, context, signature, body), staticFlag(staticFlag), self(self) {
     if (staticFlag)
         addFeature(new StaticSelfCheckerFeature(self, this));
@@ -11,7 +11,7 @@ Method::Method(string className, string name, Context *context, Signature *signa
         addFeature(new SelfCheckerFeature((Class *)self, this));
 }
 
-Method::Method(string name, Context *context, Signature *signature, Block *body, IObject *self, bool staticFlag)
+Method::Method(const std::string &name, Context *context, Signature *signature, Block *body, IObject *self, bool staticFlag)
     : Function("Method", name, context, signature, body), staticFlag(staticFlag), self(self) {
     if (staticFlag)
         addFeature(new StaticSelfCheckerFeature(self, this));
@@ -31,7 +31,7 @@ bool Method::suitableFor(IObject *self) {
     return staticFlag ? this->self == self : self->is((Class *)this->self);
 }
 
-string Method::toString() {
+std::string Method::toString() {
     return name.empty() ? "<anonymous method>" : "<method " + name + ">";
 }
 

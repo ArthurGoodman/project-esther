@@ -1,5 +1,6 @@
 #include "signature.h"
 
+#include "common.h"
 #include "runtime.h"
 #include "class.h"
 #include "tuple.h"
@@ -10,19 +11,19 @@ Signature::Signature()
     : returnClass(Runtime::getObjectClass()) {
 }
 
-Signature::Signature(Class *returnClass, list<Class *> paramsClasses, bool variadic)
+Signature::Signature(Class *returnClass, std::list<Class *> paramsClasses, bool variadic)
     : returnClass(returnClass), variadic(variadic) {
     for (Class *c : paramsClasses)
         params << new Parameter(c, "", 0);
 }
 
-Signature::Signature(string returnClassName, list<string> argsClassesNames, bool variadic)
+Signature::Signature(const std::string &returnClassName, std::list<std::string> argsClassesNames, bool variadic)
     : returnClass(Runtime::getRootClass(returnClassName)), variadic(variadic) {
-    for (string name : argsClassesNames)
+    for (std::string name : argsClassesNames)
         params << new Parameter(Runtime::getRootClass(name), "", 0);
 }
 
-Signature::Signature(Class *returnClass, list<Parameter *> params, bool variadic)
+Signature::Signature(Class *returnClass, std::list<Parameter *> params, bool variadic)
     : returnClass(returnClass), params(params), variadic(variadic) {
 }
 
@@ -76,7 +77,7 @@ bool Signature::check(Tuple *args) {
 }
 
 Tuple *Signature::convert(Tuple *args) {
-    Tuple *convertedArgs = new Tuple(variadic ? max((int)params.size(), args->size()) : params.size());
+    Tuple *convertedArgs = new Tuple(variadic ? std::max((int)params.size(), args->size()) : params.size());
 
     int c = 0;
 
@@ -122,8 +123,8 @@ bool Signature::weakEquals(Signature *other) {
     return true;
 }
 
-list<string> Signature::paramsNames() {
-    list<string> names;
+std::list<std::string> Signature::paramsNames() {
+    std::list<std::string> names;
 
     for (Parameter *p : params)
         names << p->getName();

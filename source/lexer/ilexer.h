@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "token.h"
 
@@ -8,5 +7,5 @@ public:
     static ILexer *instance();
 
     virtual ~ILexer();
-    virtual Tokens &lex(const string &source) = 0;
+    virtual Tokens &lex(const std::string &source) = 0;
 };

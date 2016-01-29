@@ -5,7 +5,7 @@
 #include "io.h"
 #include "exception.h"
 
-void Esther::runFile(const string &fileName) {
+void Esther::runFile(const std::string &fileName) {
     IObject *value = IEngine::instance()->runFile(fileName);
 
     // TODO: refactor this

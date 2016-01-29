@@ -16,7 +16,7 @@ IObject *ParameterExpression::exec(Context *context) {
         Runtime::runtimeError("class expected in parameter type");
     }
 
-    string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
+    std::string name = dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString();
     IObject *value = this->value ? this->value->eval(context)->as(type) : 0;
 
     return new Parameter(type, name, value);

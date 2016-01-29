@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <map>
 
 class IObject;
 class Class;
@@ -18,7 +19,7 @@ class Runtime {
     static IObject *falseObject;
     static IObject *nullObject;
 
-    static map<string, RootClass *> rootClasses;
+    static std::map<std::string, RootClass *> rootClasses;
 
 public:
     static void initialize();
@@ -31,11 +32,11 @@ public:
     static IObject *getFalse();
     static IObject *getNull();
 
-    static bool hasRootClass(string name);
-    static Class *getRootClass(string name);
+    static bool hasRootClass(const std::string &name);
+    static Class *getRootClass(const std::string &name);
     static void setRootClass(RootClass *rootClass);
 
     static IObject *toBoolean(bool value);
 
-    static void runtimeError(string message);
+    static void runtimeError(const std::string &message);
 };

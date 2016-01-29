@@ -6,7 +6,7 @@
 
 OverloadedMethodBlock::OverloadedMethodBlock(OverloadedMethod *method)
     : NativeBlock([method](IObject *self, Tuple * args) -> IObject * {
-          list<Method *> methods = method->getMethods();
+          std::list<Method *> methods = method->getMethods();
 
           Method *firstAccept = 0;
 

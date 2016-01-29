@@ -1,7 +1,8 @@
 #pragma once
-#include "common.h"
+
+#include <string>
 
 class Esther {
 public:
-    static void runFile(const string &fileName);
+    static void runFile(const std::string &fileName);
 };

@@ -33,7 +33,7 @@ ValueObject::ValueObject(char value)
     : Object("Character"), value(value) {
 }
 
-ValueObject::ValueObject(string value)
+ValueObject::ValueObject(const std::string &value)
     : Object("String"), value(value) {
 }
 
@@ -53,7 +53,7 @@ void ValueObject::setVariant(Variant value) {
     this->value = value;
 }
 
-string ValueObject::typeToClassName(Variant::Type type) {
+std::string ValueObject::typeToClassName(Variant::Type type) {
     switch (type) {
     case Variant::Integer:
         return "Integer";

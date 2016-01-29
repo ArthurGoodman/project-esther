@@ -1,10 +1,10 @@
 #include "lexicalerror.h"
 
-LexicalError::LexicalError(string message, Position position)
+LexicalError::LexicalError(const std::string &message, Position position)
     : ErrorException(message, position) {
 }
 
-string LexicalError::message() {
+std::string LexicalError::message() {
     return "lexical error: " + ErrorException::message();
 }
 

@@ -10,7 +10,7 @@ ClassExpression::ClassExpression(Expression *name, Expression *superclass, Expre
 }
 
 IObject *ClassExpression::exec(Context *context) {
-    string name;
+    std::string name;
     Class *_class = 0, *superclass = 0;
 
     if (this->superclass) {

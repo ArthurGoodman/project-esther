@@ -7,25 +7,25 @@
 
 int DebugExpression::indent = 0;
 
-DebugExpression::DebugExpression(string name, list<Object *> args)
+DebugExpression::DebugExpression(const std::string &name, std::list<IObject *> args)
     : name(name), args(args) {
 }
 
-Object *DebugExpression::exec(Context *) {
-    Logger::write("parser", immediateToString());
+IObject *DebugExpression::exec(Context *) {
+    Logger::write("parser", toString());
 
     return Runtime::getNull();
 }
 
-string DebugExpression::immediateToString() {
-    string spacing;
+std::string DebugExpression::toString() {
+    std::string spacing;
     spacing.insert(0, 4 * indent, ' ');
 
-    string str = "\n";
+    std::string str = "\n";
 
     bool fp = true;
 
-    for (Object *obj : args) {
+    for (IObject *obj : args) {
         if (!fp)
             str += ",\n";
         else
@@ -35,7 +35,7 @@ string DebugExpression::immediateToString() {
             str += spacing + "    ";
 
         indent++;
-        str += obj->immediateToString();
+        str += obj->toString();
         indent--;
     }
 

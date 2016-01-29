@@ -1,21 +1,22 @@
 #pragma once
-#include "common.h"
+
+#include <list>
 
 #include "position.h"
 
 class Token {
     int id;
-    string text;
+    std::string text;
     Position position;
 
 public:
     Token();
-    Token(int id, const string &text);
+    Token(int id, const std::string &text);
 
     int getId();
     void setId(int getId);
 
-    string getText();
+    std::string getText();
 
     Token &operator=(int getId);
     Token &operator+=(char c);
@@ -27,4 +28,4 @@ public:
     void setPosition(Position position);
 };
 
-typedef list<Token> Tokens;
+typedef std::list<Token> Tokens;

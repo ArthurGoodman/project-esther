@@ -19,13 +19,13 @@ Engine::~Engine() {
     Runtime::release();
 }
 
-IObject *Engine::run(const string &script, Context *context) {
+IObject *Engine::run(const std::string &script, Context *context) {
     if (!context)
         context = Runtime::getRoot();
 
     IObject *value = 0;
 
-    string src = Utility::expandTabs(script);
+    std::string src = Utility::expandTabs(script);
 
     pushSource(src);
 
@@ -50,8 +50,8 @@ IObject *Engine::run(const string &script, Context *context) {
     } catch (Exception *e) {
         IO::printLine("error: " + e->message());
         delete e;
-    } catch (exception e) {
-        IO::printLine((string) "error: " + e.what());
+    } catch (std::exception e) {
+        IO::printLine((std::string) "error: " + e.what());
     } catch (...) {
         IO::printLine("something bad happened...");
     }
@@ -61,7 +61,7 @@ IObject *Engine::run(const string &script, Context *context) {
     return value;
 }
 
-IObject *Engine::runFile(const string &fileName, Context *context) {
+IObject *Engine::runFile(const std::string &fileName, Context *context) {
     pushFileName(IO::fullPath(fileName));
 
     IObject *value = run(IO::readFile(fileName), context);
@@ -71,7 +71,7 @@ IObject *Engine::runFile(const string &fileName, Context *context) {
     return value;
 }
 
-void Engine::pushSource(const string &source) {
+void Engine::pushSource(const std::string &source) {
     sources.push(Source(source));
 }
 
@@ -80,7 +80,7 @@ void Engine::popSource() {
         sources.pop();
 }
 
-void Engine::pushFileName(const string &fileName) {
+void Engine::pushFileName(const std::string &fileName) {
     fileNames.push(fileName);
 }
 
@@ -93,6 +93,6 @@ const Source &Engine::source() {
     return sources.top();
 }
 
-const string &Engine::fileName() {
+const std::string &Engine::fileName() {
     return fileNames.top();
 }

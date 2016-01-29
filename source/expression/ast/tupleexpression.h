@@ -1,15 +1,14 @@
 #pragma once
-#include "common.h"
 
 #include "expression.h"
 
 class TupleExpression : public Expression {
-    list<Expression *> nodes;
+    std::list<Expression *> nodes;
 
 public:
-    TupleExpression(list<Expression *> nodes);
+    TupleExpression(std::list<Expression *> nodes);
 
-    list<Expression *> getNodes();
+    std::list<Expression *> getNodes();
 
     IObject *exec(Context *context);
 };

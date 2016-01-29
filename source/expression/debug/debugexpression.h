@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "debug.h"
 #include "expression.h"
@@ -7,17 +6,17 @@
 #if DEBUG_PARSER
 
 class DebugExpression : public Expression {
-    string name;
-    list<Object *> args;
+    std::string name;
+    std::list<IObject *> args;
 
     static int indent;
 
 public:
-    DebugExpression(string name, list<Object *> args = list<Object *>());
+    DebugExpression(const std::string &name, std::list<IObject *> args = std::list<IObject *>());
 
-    Object *exec(Context *context);
+    IObject *exec(Context *context);
 
-    string immediateToString();
+    std::string toString();
 };
 
 #endif

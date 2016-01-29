@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 class Math {
 public:

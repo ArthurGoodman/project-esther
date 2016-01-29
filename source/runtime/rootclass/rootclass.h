@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <functional>
 
 #include "class.h"
 
@@ -7,12 +8,12 @@ class Signature;
 
 class RootClass : public Class {
 public:
-    RootClass(string name, Class *superclass);
-    RootClass(string name, string superclassName);
-    RootClass(string name);
+    RootClass(const std::string &name, Class *superclass);
+    RootClass(const std::string &name, const std::string &superclassName);
+    RootClass(const std::string &name);
 
-    void setMethod(string name, Signature *signature, function<IObject *(IObject *, Tuple *)> body);
-    void setStaticMethod(string name, Signature *signature, function<IObject *(IObject *, Tuple *)> body);
+    void setMethod(const std::string &name, Signature *signature, std::function<IObject *(IObject *, Tuple *)> body);
+    void setStaticMethod(const std::string &name, Signature *signature, std::function<IObject *(IObject *, Tuple *)> body);
 
     virtual void setupMethods() = 0;
 };

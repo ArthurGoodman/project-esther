@@ -1,13 +1,12 @@
 #pragma once
-#include "common.h"
 
 #include "variantprivate.h"
 
 class StringVariant : public VariantPrivate {
-    string value;
+    std::string value;
 
 public:
-    StringVariant(string value);
+    StringVariant(const std::string &value);
 
     VariantPrivate *clone() const;
 
@@ -16,5 +15,5 @@ public:
     int toInteger() const;
     double toFloat() const;
     char toChar() const;
-    string toString() const;
+    std::string toString() const;
 };

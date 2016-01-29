@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "debug.h"
 #include "utility.h"
@@ -8,21 +7,21 @@
 #if DEBUG
 
 class Logger {
-    static string activeLog;
+    static std::string activeLog;
 
 public:
-    static void setActiveLog(string log);
+    static void setActiveLog(const std::string &log);
 
     template <class T>
-    static void write(string log, T data);
+    static void write(const std::string &log, T data);
 
     template <class T>
     static void write(T data);
 };
 
 template <class T>
-void Logger::write(string log, T data) {
-    string fileName = "logs\\" + log + ".log";
+void Logger::write(const std::string &log, T data) {
+    std::string fileName = "logs\\" + log + ".log";
 
     if (!IO::isOpen(fileName)) {
         IO::createDirectory("logs");

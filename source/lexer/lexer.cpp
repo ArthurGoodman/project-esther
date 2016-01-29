@@ -1,24 +1,27 @@
 #include "lexer.h"
 
+#include <algorithm>
+
+#include "common.h"
 #include "tokens.h"
 #include "lexicalerror.h"
 #include "logger.h"
 #include "utility.h"
 
-vector<string> Lexer::operators = {
+std::vector<std::string> Lexer::operators = {
 #define X(a, b) b,
 #include "operators.def"
 #undef X
 };
 
-vector<string> Lexer::keywords = {
+std::vector<std::string> Lexer::keywords = {
 #define X(a, b) b,
 #include "keywords.def"
 #undef X
 };
 
 #if DEBUG_LEXER
-vector<string> Lexer::tokenTypes = {
+std::vector<std::string> Lexer::tokenTypes = {
 #define X(a, b) #a,
 #include "operators.def"
 #include "keywords.def"
@@ -27,7 +30,7 @@ vector<string> Lexer::tokenTypes = {
 };
 #endif
 
-Tokens &Lexer::lex(const string &source) {
+Tokens &Lexer::lex(const std::string &source) {
     this->source = &source;
     pos = 0;
     line = column = 1;
@@ -56,7 +59,7 @@ Tokens &Lexer::lex(const string &source) {
     return tokens;
 }
 
-void Lexer::error(string msg, int delta) {
+void Lexer::error(const std::string &msg, int delta) {
     ErrorException *e = new LexicalError(msg, token.getPosition().shifted(delta));
     e->raise();
 }
@@ -128,7 +131,7 @@ void Lexer::scan() {
 
                 default:
                     token.setPosition(Position(pos, line, column));
-                    error((string) "invalid escape sequence '\\" + at(pos) + "'");
+                    error((std::string) "invalid escape sequence '\\" + at(pos) + "'");
                 }
 
                 pos++;
@@ -176,14 +179,14 @@ void Lexer::scan() {
             token += at(pos++);
         while (Utility::isLetterOrDigit(at(pos)));
 
-        vector<string>::iterator i;
+        std::vector<std::string>::iterator i;
 
         if ((i = find(keywords.begin(), keywords.end(), token.getText())) != keywords.end())
             token = tKeywordMarker + distance(keywords.begin(), i);
         else
             token = tId;
     } else {
-        vector<string>::iterator i;
+        std::vector<std::string>::iterator i;
 
         while (i != operators.end())
             for (i = operators.begin(); i != operators.end(); ++i)

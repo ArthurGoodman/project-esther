@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "object.h"
 
@@ -7,15 +6,15 @@ class Method;
 
 class Class : public Object {
 protected:
-    string name;
+    std::string name;
     Class *superclass;
 
 public:
-    Class(string name, Class *superclass);
-    Class(string name, string superclassName);
-    Class(string name);
+    Class(const std::string &name, Class *superclass);
+    Class(const std::string &name, const std::string &superclassName);
+    Class(const std::string &name);
 
-    string getName();
+    std::string getName();
 
     Class *getSuperclass();
     void setSuperclass(Class *superclass);
@@ -25,16 +24,16 @@ public:
     IObject *newInstance();
     IObject *newInstance(Tuple *args);
 
-    bool hasMethod(string name);
-    Method *getMethod(string name);
+    bool hasMethod(const std::string &name);
+    Method *getMethod(const std::string &name);
     void setMethod(Method *method);
-    void setMethod(string name, Method *method);
+    void setMethod(const std::string &name, Method *method);
 
-    IObject *lookup(string name);
+    IObject *lookup(const std::string &name);
 
-    IObject *call(string name, Tuple *args);
+    IObject *call(const std::string &name, Tuple *args);
 
-    string toString();
+    std::string toString();
 
 protected:
     virtual IObject *createNewInstance();

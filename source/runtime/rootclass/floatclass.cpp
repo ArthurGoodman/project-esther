@@ -1,5 +1,7 @@
 #include "floatclass.h"
 
+#include <cmath>
+
 #include "runtime.h"
 #include "float.h"
 #include "tuple.h"

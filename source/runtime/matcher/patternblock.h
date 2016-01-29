@@ -1,15 +1,16 @@
 #pragma once
-#include "common.h"
+
+#include <list>
 
 #include "block.h"
 
 class Case;
 
 class PatternBlock : public Block {
-    list<Case *> cases;
+    std::list<Case *> cases;
 
 public:
-    PatternBlock(list<Case *> cases);
+    PatternBlock(std::list<Case *> cases);
 
     IObject *eval(Context *context);
     IObject *eval(IObject *object, Context *context);

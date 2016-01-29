@@ -1,10 +1,11 @@
 #pragma once
-#include "common.h"
+
+#include <string>
 
 class Exception {
 public:
     virtual ~Exception();
 
-    virtual string message();
+    virtual std::string message();
     virtual void raise() = 0;
 };

@@ -1,17 +1,18 @@
 #pragma once
-#include "common.h"
+
+#include <string>
 
 class Position;
 
 class Source {
     const static int maxQuoteLength = 150;
 
-    string source;
+    std::string source;
 
 public:
-    Source(const string &source);
+    Source(const std::string &source);
 
-    const string &getSource() const;
+    const std::string &getSource() const;
 
-    string quote(Position pos) const;
+    std::string quote(Position pos) const;
 };

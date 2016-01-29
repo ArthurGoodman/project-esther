@@ -2,7 +2,7 @@
 
 #include "utility.h"
 
-StringVariant::StringVariant(string value)
+StringVariant::StringVariant(const std::string &value)
     : value(value) {
 }
 
@@ -26,6 +26,6 @@ char StringVariant::toChar() const {
     return Utility::fromString<char>(value);
 }
 
-string StringVariant::toString() const {
+std::string StringVariant::toString() const {
     return value;
 }

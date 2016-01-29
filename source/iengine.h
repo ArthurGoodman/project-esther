@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <string>
 
 class IObject;
 class Context;
@@ -10,6 +11,6 @@ public:
 
     virtual ~IEngine();
 
-    virtual IObject *run(const string &script, Context *context = 0) = 0;
-    virtual IObject *runFile(const string &fileName, Context *context = 0) = 0;
+    virtual IObject *run(const std::string &script, Context *context = 0) = 0;
+    virtual IObject *runFile(const std::string &fileName, Context *context = 0) = 0;
 };

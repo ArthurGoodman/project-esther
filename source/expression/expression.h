@@ -1,13 +1,14 @@
 #pragma once
-#include "common.h"
 
+#include <list>
+
+#include "object.h"
 #include "position.h"
 
-class IObject;
 class Variant;
 class Context;
 
-class Expression {
+class Expression : public Object {
     Position position;
 
 public:
@@ -15,10 +16,10 @@ public:
 
     static Expression *Empty();
 
-    static Expression *Block(list<Expression *> nodes);
-    static Expression *List(list<Expression *> nodes);
+    static Expression *Block(std::list<Expression *> nodes);
+    static Expression *List(std::list<Expression *> nodes);
 
-    static Expression *TupleLiteral(list<Expression *> nodes = list<Expression *>());
+    static Expression *TupleLiteral(std::list<Expression *> nodes = std::list<Expression *>());
     static Expression *Assignment(Expression *expression, Expression *value);
 
     static Expression *Literal(const Variant &value);
@@ -39,9 +40,9 @@ public:
 
     static Expression *ParameterDefinition(Expression *type, Expression *name, Expression *value, bool dynamic);
 
-    static Expression *Call(Expression *self, string name, list<Expression *> args);
-    static Expression *Call(Expression *self, string name, Expression *arg);
-    static Expression *Call(Expression *self, string name);
+    static Expression *Call(Expression *self, const std::string &name, std::list<Expression *> args);
+    static Expression *Call(Expression *self, const std::string &name, Expression *arg);
+    static Expression *Call(Expression *self, const std::string &name);
 
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *While(Expression *condition, Expression *body, Expression *elseBody);
@@ -49,12 +50,12 @@ public:
     static Expression *Do(Expression *body, Expression *condition);
 
     static Expression *ContextResolution(Expression *self, Expression *body);
-    static Expression *ContextCall(Expression *self, Expression *body, list<Expression *> args);
+    static Expression *ContextCall(Expression *self, Expression *body, std::list<Expression *> args);
 
     static Expression *ClassDefinition(Expression *name, Expression *superclass, Expression *body);
 
-    static Expression *FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic);
-    static Expression *MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic);
+    static Expression *FunctionDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic);
+    static Expression *MethodDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic);
 
     static Expression *Return(Expression *value);
     static Expression *Break(Expression *value);

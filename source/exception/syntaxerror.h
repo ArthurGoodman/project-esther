@@ -1,12 +1,11 @@
 #pragma once
-#include "common.h"
 
 #include "errorexception.h"
 
 class SyntaxError : public ErrorException {
 public:
-    SyntaxError(string message, Position getPosition);
+    SyntaxError(const std::string &message, Position getPosition);
 
-    string message();
+    std::string message();
     void raise();
 };

@@ -10,15 +10,15 @@ Expression *Expression::Empty() {
     return IExpressionManager::instance()->createEmpty();
 }
 
-Expression *Expression::Block(list<Expression *> nodes) {
+Expression *Expression::Block(std::list<Expression *> nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
-Expression *Expression::List(list<Expression *> nodes) {
+Expression *Expression::List(std::list<Expression *> nodes) {
     return IExpressionManager::instance()->createList(nodes);
 }
 
-Expression *Expression::TupleLiteral(list<Expression *> nodes) {
+Expression *Expression::TupleLiteral(std::list<Expression *> nodes) {
     return IExpressionManager::instance()->createTuple(nodes);
 }
 
@@ -74,16 +74,16 @@ Expression *Expression::ParameterDefinition(Expression *type, Expression *name, 
     return IExpressionManager::instance()->createParameter(type, name, value, dynamic);
 }
 
-Expression *Expression::Call(Expression *self, string name, list<Expression *> args) {
+Expression *Expression::Call(Expression *self, const std::string &name, std::list<Expression *> args) {
     return IExpressionManager::instance()->createCall(self, name, args);
 }
 
-Expression *Expression::Call(Expression *self, string name, Expression *arg) {
-    return Call(self, name, list<Expression *>(1, arg));
+Expression *Expression::Call(Expression *self, const std::string &name, Expression *arg) {
+    return Call(self, name, std::list<Expression *>(1, arg));
 }
 
-Expression *Expression::Call(Expression *self, string name) {
-    return Call(self, name, list<Expression *>());
+Expression *Expression::Call(Expression *self, const std::string &name) {
+    return Call(self, name, std::list<Expression *>());
 }
 
 Expression *Expression::If(Expression *condition, Expression *body, Expression *elseBody) {
@@ -106,7 +106,7 @@ Expression *Expression::ContextResolution(Expression *self, Expression *body) {
     return IExpressionManager::instance()->createContextResolution(self, body);
 }
 
-Expression *Expression::ContextCall(Expression *self, Expression *body, list<Expression *> args) {
+Expression *Expression::ContextCall(Expression *self, Expression *body, std::list<Expression *> args) {
     return IExpressionManager::instance()->createContextCall(self, body, args);
 }
 
@@ -114,11 +114,11 @@ Expression *Expression::ClassDefinition(Expression *name, Expression *superclass
     return IExpressionManager::instance()->createClassDefinition(name, superclass, body);
 }
 
-Expression *Expression::FunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+Expression *Expression::FunctionDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
     return IExpressionManager::instance()->createFunctionDefinition(type, name, params, body, variadic, dynamic);
 }
 
-Expression *Expression::MethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+Expression *Expression::MethodDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
     return IExpressionManager::instance()->createMethodDefinition(type, name, params, body, variadic, dynamic);
 }
 

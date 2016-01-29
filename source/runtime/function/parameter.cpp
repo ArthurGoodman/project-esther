@@ -2,7 +2,7 @@
 
 #include "class.h"
 
-Parameter::Parameter(Class *type, string name, IObject *value)
+Parameter::Parameter(Class *type, const std::string &name, IObject *value)
     : type(type), name(name), value(value) {
 }
 
@@ -10,7 +10,7 @@ Class *Parameter::getType() {
     return type;
 }
 
-string Parameter::getName() {
+std::string Parameter::getName() {
     return name;
 }
 

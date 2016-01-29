@@ -1,5 +1,6 @@
 #include "methodexpression.h"
 
+#include "common.h"
 #include "runtime.h"
 #include "class.h"
 #include "parameter.h"
@@ -8,7 +9,7 @@
 #include "context.h"
 #include "interpretedblock.h"
 
-MethodExpression::MethodExpression(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic)
+MethodExpression::MethodExpression(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic)
     : type(type), name(name), params(params), body(body), variadic(variadic), dynamic(dynamic) {
 }
 
@@ -20,9 +21,9 @@ IObject *MethodExpression::exec(Context *context) {
         Runtime::runtimeError("class expected in method return type");
     }
 
-    string name = this->name ? (dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString()) : "";
+    std::string name = this->name ? (dynamic ? this->name->eval(context)->callToString() : this->name->eval(context)->toString()) : "";
 
-    list<Parameter *> evaledParams;
+    std::list<Parameter *> evaledParams;
 
     for (Expression *e : params)
         evaledParams << (Parameter *)e->eval(context);

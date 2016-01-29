@@ -11,19 +11,19 @@ ObjectContext::ObjectContext()
     : Context() {
 }
 
-bool ObjectContext::hasLocal(string name) {
+bool ObjectContext::hasLocal(const std::string &name) {
     return currentSelf->hasAttribute(name);
 }
 
-IObject *ObjectContext::getLocal(string name) {
+IObject *ObjectContext::getLocal(const std::string &name) {
     return currentSelf->getAttribute(name);
 }
 
-void ObjectContext::setLocal(string name, IObject *value) {
+void ObjectContext::setLocal(const std::string &name, IObject *value) {
     currentSelf->setAttribute(name, value);
 }
 
-bool ObjectContext::hasId(string name) {
+bool ObjectContext::hasId(const std::string &name) {
     if (currentSelf->hasAttribute(name))
         return true;
 
@@ -33,7 +33,7 @@ bool ObjectContext::hasId(string name) {
     return Context::hasId(name);
 }
 
-IObject *ObjectContext::getId(string name) {
+IObject *ObjectContext::getId(const std::string &name) {
     if (currentSelf->hasAttribute(name))
         return currentSelf->getAttribute(name);
 
@@ -43,7 +43,7 @@ IObject *ObjectContext::getId(string name) {
     return Context::getId(name);
 }
 
-bool ObjectContext::setId(string name, IObject *value) {
+bool ObjectContext::setId(const std::string &name, IObject *value) {
     if (currentSelf->hasAttribute(name)) {
         currentSelf->setAttribute(name, value);
         return true;

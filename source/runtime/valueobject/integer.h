@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "valueobject.h"
 
@@ -11,5 +10,5 @@ public:
     void setValue(int value);
 
     bool equals(IObject *other);
-    string toString();
+    std::string toString();
 };

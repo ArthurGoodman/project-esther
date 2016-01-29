@@ -1,16 +1,15 @@
 #pragma once
-#include "common.h"
 
 #include "valueobject.h"
 
 class String : public ValueObject {
 public:
-    String(string value);
+    String(const std::string &value);
     String(const char *value);
     String();
 
-    void setValue(string value);
+    void setValue(const std::string &value);
 
     bool equals(IObject *other);
-    string toString();
+    std::string toString();
 };

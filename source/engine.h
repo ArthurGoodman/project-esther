@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <stack>
 
 #include "iengine.h"
 #include "source.h"
@@ -7,23 +8,23 @@
 class Context;
 
 class Engine : public IEngine {
-    stack<Source> sources;
-    stack<string> fileNames;
+    std::stack<Source> sources;
+    std::stack<std::string> fileNames;
 
 public:
     Engine();
     ~Engine();
 
-    IObject *run(const string &script, Context *context = 0);
-    IObject *runFile(const string &fileName, Context *context = 0);
+    IObject *run(const std::string &script, Context *context = 0);
+    IObject *runFile(const std::string &fileName, Context *context = 0);
 
 private:
-    void pushSource(const string &source);
+    void pushSource(const std::string &source);
     void popSource();
 
-    void pushFileName(const string &fileName);
+    void pushFileName(const std::string &fileName);
     void popFileName();
 
     const Source &source();
-    const string &fileName();
+    const std::string &fileName();
 };

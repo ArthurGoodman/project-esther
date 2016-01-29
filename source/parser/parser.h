@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "iparser.h"
 #include "lexer.h"
@@ -16,7 +15,7 @@ public:
     Expression *parse(Tokens &tokens);
 
 private:
-    void error(string msg, int delta = 0);
+    void error(const std::string &msg, int delta = 0);
 
     bool check(int id);
     bool realCheck(int id);
@@ -25,8 +24,8 @@ private:
 
     void getToken();
 
-    list<Expression *> parseBlock();
-    list<Expression *> parseList();
+    std::list<Expression *> parseBlock();
+    std::list<Expression *> parseList();
 
     Expression *parseIdentifier(bool &dynamic);
 

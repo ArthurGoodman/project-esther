@@ -28,8 +28,8 @@ bool Utility::isLetterOrDigit(char c) {
     return isLetter(c) || isDigit(c);
 }
 
-string Utility::expandTabs(const string &str) {
-    string result;
+std::string Utility::expandTabs(const std::string &str) {
+    std::string result;
 
     for (int i = 0, c = 0; i < (int)str.size(); i++)
         if (str[i] == '\t') {

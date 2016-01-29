@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "variantprivate.h"
 
@@ -12,5 +11,5 @@ public:
     int toInteger() const;
     double toFloat() const;
     char toChar() const;
-    string toString() const;
+    std::string toString() const;
 };

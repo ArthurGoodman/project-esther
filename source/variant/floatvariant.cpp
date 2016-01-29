@@ -26,6 +26,6 @@ char FloatVariant::toChar() const {
     return value;
 }
 
-string FloatVariant::toString() const {
+std::string FloatVariant::toString() const {
     return Utility::toString(value);
 }

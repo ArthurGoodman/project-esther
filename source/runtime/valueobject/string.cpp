@@ -1,18 +1,18 @@
 #include "string.h"
 
-String::String(string value)
+String::String(const std::string &value)
     : ValueObject(value) {
 }
 
 String::String(const char *value)
-    : ValueObject(string(value)) {
+    : ValueObject(std::string(value)) {
 }
 
 String::String()
-    : ValueObject((string)"") {
+    : ValueObject((std::string)"") {
 }
 
-void String::setValue(string value) {
+void String::setValue(const std::string &value) {
     setVariant(Variant(value));
 }
 
@@ -20,6 +20,6 @@ bool String::equals(IObject *other) {
     return dynamic_cast<String *>(other) && value.toString() == ((String *)other)->value.toString();
 }
 
-string String::toString() {
+std::string String::toString() {
     return value.toString();
 }

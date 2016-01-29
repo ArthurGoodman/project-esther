@@ -41,15 +41,15 @@ Expression *ExpressionManager::createEmpty() {
     return new EmptyExpression;
 }
 
-Expression *ExpressionManager::createBlock(list<Expression *> nodes) {
+Expression *ExpressionManager::createBlock(std::list<Expression *> nodes) {
     return new BlockExpression(nodes);
 }
 
-Expression *ExpressionManager::createList(list<Expression *> nodes) {
+Expression *ExpressionManager::createList(std::list<Expression *> nodes) {
     return new ListExpression(nodes);
 }
 
-Expression *ExpressionManager::createTuple(list<Expression *> nodes) {
+Expression *ExpressionManager::createTuple(std::list<Expression *> nodes) {
     return new TupleExpression(nodes);
 }
 
@@ -105,7 +105,7 @@ Expression *ExpressionManager::createParameter(Expression *type, Expression *nam
     return new ParameterExpression(type, name, value, dynamic);
 }
 
-Expression *ExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {
+Expression *ExpressionManager::createCall(Expression *self, const std::string &name, std::list<Expression *> args) {
     return new CallExpression(self, name, args);
 }
 
@@ -129,7 +129,7 @@ Expression *ExpressionManager::createContextResolution(Expression *self, Express
     return new ContextResolutionExpression(self, body);
 }
 
-Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, list<Expression *> args) {
+Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, std::list<Expression *> args) {
     return new ContextCallExpression(self, body, args);
 }
 
@@ -137,11 +137,11 @@ Expression *ExpressionManager::createClassDefinition(Expression *name, Expressio
     return new ClassExpression(name, superclass, body);
 }
 
-Expression *ExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+Expression *ExpressionManager::createFunctionDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
     return new FunctionExpression(type, name, params, body, variadic, dynamic);
 }
 
-Expression *ExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+Expression *ExpressionManager::createMethodDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
     return new MethodExpression(type, name, params, body, variadic, dynamic);
 }
 

@@ -1,31 +1,32 @@
 #pragma once
-#include "common.h"
+
+#include <vector>
 
 #include "debug.h"
 #include "ilexer.h"
 
 class Lexer : public ILexer {
-    static vector<string> operators;
-    static vector<string> keywords;
+    static std::vector<std::string> operators;
+    static std::vector<std::string> keywords;
 
 #if DEBUG_LEXER
-    static vector<string> tokenTypes;
+    static std::vector<std::string> tokenTypes;
 #endif
 
     Tokens tokens;
 
-    const string *source;
+    const std::string *source;
     Token token;
     int pos, line, column;
 
 public:
-    Tokens &lex(const string &source);
+    Tokens &lex(const std::string &source);
 
 private:
     template <int N>
-    static int count(string(&)[N]);
+    static int count(std::string(&)[N]);
 
-    void error(string msg, int shift = 0);
+    void error(const std::string &msg, int shift = 0);
     void scan();
     void skipSpacesExceptForNewLine();
     void skipSpaces();

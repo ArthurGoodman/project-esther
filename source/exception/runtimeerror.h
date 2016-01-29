@@ -1,12 +1,11 @@
 #pragma once
-#include "common.h"
 
 #include "errorexception.h"
 
 class RuntimeError : public ErrorException {
 public:
-    RuntimeError(string message);
+    RuntimeError(const std::string &message);
 
-    string message();
+    std::string message();
     void raise();
 };

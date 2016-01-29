@@ -20,6 +20,6 @@ char NullVariant::toChar() const {
     return 0;
 }
 
-string NullVariant::toString() const {
+std::string NullVariant::toString() const {
     return "";
 }

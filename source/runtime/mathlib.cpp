@@ -1,5 +1,7 @@
 #include "mathlib.h"
 
+#include <cmath>
+
 #include "object.h"
 #include "runtime.h"
 #include "context.h"

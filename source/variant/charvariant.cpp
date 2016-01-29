@@ -26,6 +26,6 @@ char CharVariant::toChar() const {
     return value;
 }
 
-string CharVariant::toString() const {
+std::string CharVariant::toString() const {
     return Utility::toString(value);
 }

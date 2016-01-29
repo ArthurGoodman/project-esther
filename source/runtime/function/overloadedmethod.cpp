@@ -1,11 +1,12 @@
 #include "overloadedmethod.h"
 
+#include "common.h"
 #include "runtime.h"
 #include "block.h"
 #include "multisignature.h"
 #include "overloadedmethodblock.h"
 
-OverloadedMethod::OverloadedMethod(string name, IObject *self, bool staticFlag)
+OverloadedMethod::OverloadedMethod(const std::string &name, IObject *self, bool staticFlag)
     : NativeMethod("OverloadedMethod", name, 0, new MultiSignature(this), new OverloadedMethodBlock(this), self, staticFlag) {
 }
 
@@ -13,7 +14,7 @@ void OverloadedMethod::addMethod(Method *method) {
     methods << method;
 }
 
-list<Method *> OverloadedMethod::getMethods() {
+std::list<Method *> OverloadedMethod::getMethods() {
     return methods;
 }
 

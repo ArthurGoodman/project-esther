@@ -9,7 +9,6 @@
 #include "false.h"
 #include "null.h"
 #include "runtimeerror.h"
-//#include "callstack.h"
 #include "objectclass.h"
 #include "classclass.h"
 #include "functionclass.h"
@@ -36,7 +35,7 @@ IObject *Runtime::trueObject;
 IObject *Runtime::falseObject;
 IObject *Runtime::nullObject;
 
-map<string, RootClass *> Runtime::rootClasses;
+std::map<std::string, RootClass *> Runtime::rootClasses;
 
 void Runtime::initialize() {
     objectClass = new ObjectClass;
@@ -115,11 +114,11 @@ IObject *Runtime::getNull() {
     return nullObject;
 }
 
-bool Runtime::hasRootClass(string name) {
+bool Runtime::hasRootClass(const std::string &name) {
     return rootClasses.find(name) != rootClasses.end();
 }
 
-Class *Runtime::getRootClass(string name) {
+Class *Runtime::getRootClass(const std::string &name) {
     return rootClasses.find(name) != rootClasses.end() ? rootClasses[name] : 0;
 }
 
@@ -131,6 +130,6 @@ IObject *Runtime::toBoolean(bool value) {
     return value ? trueObject : falseObject;
 }
 
-void Runtime::runtimeError(string message) {
+void Runtime::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
 }

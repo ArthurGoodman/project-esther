@@ -1,5 +1,7 @@
 #pragma once
-#include "common.h"
+
+#include <map>
+#include <string>
 
 #include "iobject.h"
 
@@ -9,39 +11,39 @@ class Tuple;
 class DynamicObject : public IObject {
     Class *objectClass;
 
-    map<string, IObject *> attributes;
+    std::map<std::string, IObject *> attributes;
 
 public:
     DynamicObject();
     DynamicObject(Class *objectClass);
-    DynamicObject(string className);
+    DynamicObject(const std::string &className);
 
     Class *getClass();
     void setClass(Class *objectClass);
 
-    virtual bool hasAttribute(string name);
-    virtual IObject *getAttribute(string name);
-    virtual void setAttribute(string name, IObject *value);
+    virtual bool hasAttribute(const std::string &name);
+    virtual IObject *getAttribute(const std::string &name);
+    virtual void setAttribute(const std::string &name, IObject *value);
 
     bool is(Class *_class);
-    bool is(string className);
+    bool is(const std::string &className);
 
     bool converts(Class *_class);
 
     IObject *as(Class *_class);
 
-    virtual IObject *call(string name, Tuple *args);
-    IObject *call(string name, IObject *arg, string expectedClassName);
-    IObject *call(string name, string expectedClassName);
+    virtual IObject *call(const std::string &name, Tuple *args);
+    IObject *call(const std::string &name, IObject *arg, const std::string &expectedClassName);
+    IObject *call(const std::string &name, const std::string &expectedClassName);
 
     virtual bool isTrue();
     virtual bool isFalse();
 
     bool callEquals(IObject *other);
-    string callToString();
+    std::string callToString();
 
     virtual bool equals(IObject *other);
-    virtual string toString();
+    virtual std::string toString();
 
     virtual IObject *clone();
 };

@@ -3,6 +3,6 @@
 Exception::~Exception() {
 }
 
-string Exception::message() {
+std::string Exception::message() {
     return "";
 }

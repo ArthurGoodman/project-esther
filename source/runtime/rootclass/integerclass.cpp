@@ -1,5 +1,7 @@
 #include "integerclass.h"
 
+#include <cmath>
+
 #include "runtime.h"
 #include "integer.h"
 #include "tuple.h"

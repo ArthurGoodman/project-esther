@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <list>
 
 #include "object.h"
 
@@ -13,10 +14,10 @@ public:
 
     Tuple(int size = 0);
     Tuple(const Tuple &other);
-    Tuple(list<IObject *> data);
+    Tuple(std::list<IObject *> data);
     ~Tuple();
 
-    void initialize(list<IObject *> data);
+    void initialize(std::list<IObject *> data);
 
     int size() const;
     bool isEmpty() const;

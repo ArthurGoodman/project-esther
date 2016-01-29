@@ -2,9 +2,9 @@
 
 #if DEBUG
 
-string Logger::activeLog;
+std::string Logger::activeLog;
 
-void Logger::setActiveLog(string log) {
+void Logger::setActiveLog(const std::string &log) {
     activeLog = log;
 }
 

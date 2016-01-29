@@ -11,7 +11,7 @@ Tuple::Tuple(const Tuple &other)
     memcpy(data, other.data, n * sizeof(IObject *));
 }
 
-Tuple::Tuple(list<IObject *> data)
+Tuple::Tuple(std::list<IObject *> data)
     : Object("Tuple"), n(data.size()), data(new IObject *[n]) {
     int i = 0;
     for (IObject *o : data)
@@ -22,7 +22,7 @@ Tuple::~Tuple() {
     delete[] data;
 }
 
-void Tuple::initialize(list<IObject *> data) {
+void Tuple::initialize(std::list<IObject *> data) {
     if (this->data)
         delete[] this->data;
 

@@ -1,5 +1,6 @@
 #include "debugexpressionmanager.h"
 
+#include "common.h"
 #include "debugexpression.h"
 #include "valueobject.h"
 #include "class.h"
@@ -12,8 +13,8 @@ Expression *DebugExpressionManager::createEmpty() {
     return new DebugExpression("Empty");
 }
 
-Expression *DebugExpressionManager::createBlock(list<Expression *> nodes) {
-    list<Object *> arguments;
+Expression *DebugExpressionManager::createBlock(std::list<Expression *> nodes) {
+    std::list<IObject *> arguments;
 
     for (Expression *e : nodes)
         arguments << e;
@@ -21,8 +22,8 @@ Expression *DebugExpressionManager::createBlock(list<Expression *> nodes) {
     return new DebugExpression("Block", arguments);
 }
 
-Expression *DebugExpressionManager::createList(list<Expression *> nodes) {
-    list<Object *> arguments;
+Expression *DebugExpressionManager::createList(std::list<Expression *> nodes) {
+    std::list<IObject *> arguments;
 
     for (Expression *e : nodes)
         arguments << e;
@@ -30,8 +31,8 @@ Expression *DebugExpressionManager::createList(list<Expression *> nodes) {
     return new DebugExpression("List", arguments);
 }
 
-Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
-    list<Object *> arguments;
+Expression *DebugExpressionManager::createTuple(std::list<Expression *> nodes) {
+    std::list<IObject *> arguments;
 
     for (Expression *e : nodes)
         arguments << e;
@@ -40,7 +41,7 @@ Expression *DebugExpressionManager::createTuple(list<Expression *> nodes) {
 }
 
 Expression *DebugExpressionManager::createAssignment(Expression *expresion, Expression *value) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << expresion;
     arguments << value;
@@ -49,24 +50,24 @@ Expression *DebugExpressionManager::createAssignment(Expression *expresion, Expr
 }
 
 Expression *DebugExpressionManager::createLiteral(const Variant &value) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
-    Object *object = ValueObject::createNewInstance(value);
-    arguments << new String("<" + object->getClass()->getName() + " : \"" + object->immediateToString() + "\">");
+    IObject *object = ValueObject::createNewInstance(value);
+    arguments << new String("<" + object->getClass()->getName() + " : \"" + object->toString() + "\">");
 
     return new DebugExpression("Literal", arguments);
 }
 
-Expression *DebugExpressionManager::createConstant(Object *value) {
-    list<Object *> arguments;
+Expression *DebugExpressionManager::createConstant(IObject *value) {
+    std::list<IObject *> arguments;
 
-    arguments << new String("<" + value->getClass()->getName() + " : \"" + value->immediateToString() + "\">");
+    arguments << new String("<" + value->getClass()->getName() + " : \"" + value->toString() + "\">");
 
     return new DebugExpression("Constant", arguments);
 }
 
 Expression *DebugExpressionManager::createOr(Expression *self, Expression *arg) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
     arguments << arg;
@@ -75,7 +76,7 @@ Expression *DebugExpressionManager::createOr(Expression *self, Expression *arg) 
 }
 
 Expression *DebugExpressionManager::createAnd(Expression *self, Expression *arg) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
     arguments << arg;
@@ -84,7 +85,7 @@ Expression *DebugExpressionManager::createAnd(Expression *self, Expression *arg)
 }
 
 Expression *DebugExpressionManager::createNegate(Expression *self) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
 
@@ -92,7 +93,7 @@ Expression *DebugExpressionManager::createNegate(Expression *self) {
 }
 
 Expression *DebugExpressionManager::createPreDecrement(Expression *self) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
 
@@ -100,7 +101,7 @@ Expression *DebugExpressionManager::createPreDecrement(Expression *self) {
 }
 
 Expression *DebugExpressionManager::createPreIncrement(Expression *self) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
 
@@ -108,7 +109,7 @@ Expression *DebugExpressionManager::createPreIncrement(Expression *self) {
 }
 
 Expression *DebugExpressionManager::createPostDecrement(Expression *self) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
 
@@ -116,7 +117,7 @@ Expression *DebugExpressionManager::createPostDecrement(Expression *self) {
 }
 
 Expression *DebugExpressionManager::createPostIncrement(Expression *self) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
 
@@ -124,7 +125,7 @@ Expression *DebugExpressionManager::createPostIncrement(Expression *self) {
 }
 
 Expression *DebugExpressionManager::createIdentifier(Expression *name, bool dynamic) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << name;
 
@@ -134,7 +135,7 @@ Expression *DebugExpressionManager::createIdentifier(Expression *name, bool dyna
 }
 
 Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     if (type)
         arguments << type;
@@ -150,7 +151,7 @@ Expression *DebugExpressionManager::createIdentifierDefinition(Expression *type,
 }
 
 Expression *DebugExpressionManager::createParameter(Expression *type, Expression *name, Expression *value, bool dynamic) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     if (type)
         arguments << type;
@@ -165,8 +166,8 @@ Expression *DebugExpressionManager::createParameter(Expression *type, Expression
     return new DebugExpression("Parameter", arguments);
 }
 
-Expression *DebugExpressionManager::createCall(Expression *self, string name, list<Expression *> args) {
-    list<Object *> arguments, callArguments;
+Expression *DebugExpressionManager::createCall(Expression *self, const std::string &name, std::list<Expression *> args) {
+    std::list<IObject *> arguments, callArguments;
 
     arguments << self;
     arguments << new String("<String : \"" + name + "\">");
@@ -180,7 +181,7 @@ Expression *DebugExpressionManager::createCall(Expression *self, string name, li
 }
 
 Expression *DebugExpressionManager::createIf(Expression *condition, Expression *body, Expression *elseBody) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << condition;
     arguments << body;
@@ -192,7 +193,7 @@ Expression *DebugExpressionManager::createIf(Expression *condition, Expression *
 }
 
 Expression *DebugExpressionManager::createWhile(Expression *condition, Expression *body, Expression *elseBody) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << condition;
     arguments << body;
@@ -204,7 +205,7 @@ Expression *DebugExpressionManager::createWhile(Expression *condition, Expressio
 }
 
 Expression *DebugExpressionManager::createFor(Expression *param, Expression *expression, Expression *body) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << param;
     arguments << expression;
@@ -214,7 +215,7 @@ Expression *DebugExpressionManager::createFor(Expression *param, Expression *exp
 }
 
 Expression *DebugExpressionManager::createDo(Expression *body, Expression *condition) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << body;
     arguments << condition;
@@ -223,7 +224,7 @@ Expression *DebugExpressionManager::createDo(Expression *body, Expression *condi
 }
 
 Expression *DebugExpressionManager::createContextResolution(Expression *self, Expression *body) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << self;
     arguments << body;
@@ -231,8 +232,8 @@ Expression *DebugExpressionManager::createContextResolution(Expression *self, Ex
     return new DebugExpression("ContextResolution", arguments);
 }
 
-Expression *DebugExpressionManager::createContextCall(Expression *self, Expression *body, list<Expression *> args) {
-    list<Object *> arguments, callArguments;
+Expression *DebugExpressionManager::createContextCall(Expression *self, Expression *body, std::list<Expression *> args) {
+    std::list<IObject *> arguments, callArguments;
 
     arguments << self;
     arguments << body;
@@ -246,7 +247,7 @@ Expression *DebugExpressionManager::createContextCall(Expression *self, Expressi
 }
 
 Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expression *superclass, Expression *body) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     if (name)
         arguments << name;
@@ -259,8 +260,8 @@ Expression *DebugExpressionManager::createClassDefinition(Expression *name, Expr
     return new DebugExpression("Class", arguments);
 }
 
-Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
-    list<Object *> arguments, paramsArguments;
+Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+    std::list<IObject *> arguments, paramsArguments;
 
     if (type)
         arguments << type;
@@ -282,8 +283,8 @@ Expression *DebugExpressionManager::createFunctionDefinition(Expression *type, E
     return new DebugExpression("Function", arguments);
 }
 
-Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
-    list<Object *> arguments, paramsArguments;
+Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) {
+    std::list<IObject *> arguments, paramsArguments;
 
     if (type)
         arguments << type;
@@ -306,7 +307,7 @@ Expression *DebugExpressionManager::createMethodDefinition(Expression *type, Exp
 }
 
 Expression *DebugExpressionManager::createReturn(Expression *value) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     if (value)
         arguments << value;
@@ -315,7 +316,7 @@ Expression *DebugExpressionManager::createReturn(Expression *value) {
 }
 
 Expression *DebugExpressionManager::createBreak(Expression *value) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     if (value)
         arguments << value;
@@ -336,7 +337,7 @@ Expression *DebugExpressionManager::createHere() {
 }
 
 Expression *DebugExpressionManager::createStatic(Expression *body) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << body;
 
@@ -344,7 +345,7 @@ Expression *DebugExpressionManager::createStatic(Expression *body) {
 }
 
 Expression *DebugExpressionManager::createInclude(Expression *fileName) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << fileName;
 
@@ -352,7 +353,7 @@ Expression *DebugExpressionManager::createInclude(Expression *fileName) {
 }
 
 Expression *DebugExpressionManager::createObjectLiteral(Expression *body) {
-    list<Object *> arguments;
+    std::list<IObject *> arguments;
 
     arguments << body;
 

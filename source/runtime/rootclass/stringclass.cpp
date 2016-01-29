@@ -43,7 +43,7 @@ void StringClass::setupMethods() {
     setMethod("size", new Signature("Integer", {}), sizeMethod);
 
     auto atMethod = [](IObject *self, Tuple *args) -> IObject * {
-        string str = ((ValueObject *)self)->getVariant().toString();
+        std::string str = ((ValueObject *)self)->getVariant().toString();
         int index = ((Integer *)args->at(0))->getVariant().toInteger();
 
         if (index >= (int)str.size())
@@ -62,7 +62,7 @@ void StringClass::setupMethods() {
     setMethod("empty", new Signature("Boolean", {}), emptyMethod);
 
     auto containsMethod = [](IObject *self, Tuple *args) -> IObject * {
-        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString().find(((ValueObject *)args->at(0))->getVariant().toChar()) != string::npos);
+        return Runtime::toBoolean(((ValueObject *)self)->getVariant().toString().find(((ValueObject *)args->at(0))->getVariant().toChar()) != std::string::npos);
     };
 
     setMethod("contains", new Signature("Boolean", {"Character"}), containsMethod);
@@ -82,7 +82,7 @@ void StringClass::setupMethods() {
     setMethod("+=", new Signature("String", {"String"}), plusAssignMethod);
 
     auto capitalizeMethod = [](IObject *self, Tuple *) -> IObject * {
-        string value = ((String *)self)->getVariant().toString();
+        std::string value = ((String *)self)->getVariant().toString();
 
         if (value.empty())
             return self;

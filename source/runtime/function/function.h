@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <list>
 
 #include "object.h"
 
@@ -11,26 +12,26 @@ class FunctionFeature;
 
 class Function : public Object {
 protected:
-    string name;
+    std::string name;
     Context *context;
     Signature *signature;
     Block *body;
 
-    list<FunctionFeature *> features;
+    std::list<FunctionFeature *> features;
 
-    Function(string className, string name, Context *context, Signature *signature, Block *body);
+    Function(const std::string &className, const std::string &name, Context *context, Signature *signature, Block *body);
 
 public:
-    Function(string name, Context *context, Signature *signature, Block *body);
+    Function(const std::string &name, Context *context, Signature *signature, Block *body);
 
-    string getName();
+    std::string getName();
     Signature *getSignature();
     Block *getBody();
 
     virtual IObject *invoke(IObject *self, Tuple *args);
     virtual IObject *execute(IObject *self, Tuple *args);
 
-    virtual string toString();
+    virtual std::string toString();
 
     virtual IObject *clone();
 

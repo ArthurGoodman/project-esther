@@ -12,7 +12,7 @@ bool True::isFalse() {
     return false;
 }
 
-string True::toString() {
+std::string True::toString() {
     return "true";
 }
 

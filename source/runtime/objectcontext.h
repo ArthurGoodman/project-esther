@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "context.h"
 
@@ -8,13 +7,13 @@ public:
     ObjectContext(IObject *currentSelf, Class *currentClass, Context *parent, int modifiers);
     ObjectContext();
 
-    bool hasLocal(string name);
-    IObject *getLocal(string name);
-    void setLocal(string name, IObject *value);
+    bool hasLocal(const std::string &name);
+    IObject *getLocal(const std::string &name);
+    void setLocal(const std::string &name, IObject *value);
 
-    bool hasId(string name);
-    IObject *getId(string name);
-    bool setId(string name, IObject *value);
+    bool hasId(const std::string &name);
+    IObject *getId(const std::string &name);
+    bool setId(const std::string &name, IObject *value);
 
     IObject *clone();
 };

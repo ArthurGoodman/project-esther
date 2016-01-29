@@ -22,7 +22,7 @@ Variant::Variant(char value)
     : data(new CharVariant(value)) {
 }
 
-Variant::Variant(string value)
+Variant::Variant(const std::string &value)
     : data(new StringVariant(value)) {
 }
 
@@ -60,7 +60,7 @@ char Variant::toChar() const {
     return data->toChar();
 }
 
-string Variant::toString() const {
+std::string Variant::toString() const {
     return data->toString();
 }
 

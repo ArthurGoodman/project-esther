@@ -4,7 +4,7 @@ Token::Token()
     : id(-1), text("") {
 }
 
-Token::Token(int id, const string &text)
+Token::Token(int id, const std::string &text)
     : id(id), text(text) {
 }
 
@@ -16,7 +16,7 @@ void Token::setId(int id) {
     this->id = id;
 }
 
-string Token::getText() {
+std::string Token::getText() {
     return text;
 }
 

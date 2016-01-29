@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <string>
 
 class Position {
     int offset, line, column;
@@ -19,5 +20,5 @@ public:
 
     void set(int offset, int line, int column);
 
-    string toString() const;
+    std::string toString() const;
 };

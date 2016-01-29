@@ -1,10 +1,11 @@
 #pragma once
-#include "common.h"
+
+#include <list>
 
 class Expression;
 class Token;
 
-typedef list<Token> Tokens;
+typedef std::list<Token> Tokens;
 
 class IParser {
 public:

@@ -1,18 +1,17 @@
 #pragma once
-#include "common.h"
 
 #include "object.h"
 
 class Parameter : public Object {
     Class *type;
-    string name;
+    std::string name;
     IObject *value;
 
 public:
-    Parameter(Class *type, string name, IObject *value);
+    Parameter(Class *type, const std::string &name, IObject *value);
 
     Class *getType();
-    string getName();
+    std::string getName();
     IObject *getValue();
 
     bool equals(Parameter *other);

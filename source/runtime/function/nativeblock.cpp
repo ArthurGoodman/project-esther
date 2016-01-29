@@ -2,7 +2,7 @@
 
 #include "runtime.h"
 
-NativeBlock::NativeBlock(function<IObject *(IObject *, Tuple *)> body)
+NativeBlock::NativeBlock(std::function<IObject *(IObject *, Tuple *)> body)
     : body(body) {
 }
 

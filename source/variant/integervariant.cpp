@@ -26,6 +26,6 @@ char IntegerVariant::toChar() const {
     return value;
 }
 
-string IntegerVariant::toString() const {
+std::string IntegerVariant::toString() const {
     return Utility::toString(value);
 }

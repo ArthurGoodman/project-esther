@@ -4,7 +4,7 @@
 #include "runtime.h"
 #include "context.h"
 
-BlockExpression::BlockExpression(list<Expression *> nodes)
+BlockExpression::BlockExpression(std::list<Expression *> nodes)
     : nodes(nodes) {
 }
 

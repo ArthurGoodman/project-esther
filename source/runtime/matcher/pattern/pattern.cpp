@@ -1,6 +1,6 @@
 #include "pattern.h"
 
-Pattern::Pattern(string className)
+Pattern::Pattern(const std::string &className)
     : Object(className) {
 }
 

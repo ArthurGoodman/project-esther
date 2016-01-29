@@ -1,10 +1,10 @@
 #include "syntaxerror.h"
 
-SyntaxError::SyntaxError(string message, Position position)
+SyntaxError::SyntaxError(const std::string &message, Position position)
     : ErrorException(message, position) {
 }
 
-string SyntaxError::message() {
+std::string SyntaxError::message() {
     return "syntax error: " + ErrorException::message();
 }
 

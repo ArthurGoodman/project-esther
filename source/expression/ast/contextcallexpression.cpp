@@ -1,11 +1,12 @@
 #include "contextcallexpression.h"
 
+#include "common.h"
 #include "context.h"
 #include "function.h"
 #include "method.h"
 #include "tuple.h"
 
-ContextCallExpression::ContextCallExpression(Expression *self, Expression *body, list<Expression *> args)
+ContextCallExpression::ContextCallExpression(Expression *self, Expression *body, std::list<Expression *> args)
     : self(self), body(body), args(args) {
 }
 
@@ -16,7 +17,7 @@ IObject *ContextCallExpression::exec(Context *context) {
 
     IObject *body = this->body->eval(selfContext);
 
-    list<IObject *> evaledArgs;
+    std::list<IObject *> evaledArgs;
 
     for (Expression *e : args)
         evaledArgs << e->eval(context);

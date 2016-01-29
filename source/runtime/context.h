@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <map>
 
 #include "object.h"
 
@@ -13,7 +14,7 @@ protected:
 
     int modifiers;
 
-    map<string, IObject *> locals;
+    std::map<std::string, IObject *> locals;
 
     Context(IObject *currentSelf, Class *currentClass, Context *parent, int modifiers);
 
@@ -29,13 +30,13 @@ public:
 
     //    bool isObjectContext();
 
-    virtual bool hasLocal(string name);
-    virtual IObject *getLocal(string name);
-    virtual void setLocal(string name, IObject *value);
+    virtual bool hasLocal(const std::string &name);
+    virtual IObject *getLocal(const std::string &name);
+    virtual void setLocal(const std::string &name, IObject *value);
 
-    virtual bool hasId(string name);
-    virtual IObject *getId(string name);
-    virtual bool setId(string name, IObject *value);
+    virtual bool hasId(const std::string &name);
+    virtual IObject *getId(const std::string &name);
+    virtual bool setId(const std::string &name, IObject *value);
 
     Context *childContext(IObject *currentSelf, Class *currentClass);
     Context *childContext(IObject *currentSelf);

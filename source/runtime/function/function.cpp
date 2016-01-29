@@ -1,5 +1,6 @@
 #include "function.h"
 
+#include "common.h"
 #include "runtime.h"
 #include "context.h"
 #include "block.h"
@@ -10,17 +11,17 @@
 #include "functionfeature.h"
 #include "argumentscheckerfeature.h"
 
-Function::Function(string className, string name, Context *context, Signature *signature, Block *body)
+Function::Function(const std::string &className, const std::string &name, Context *context, Signature *signature, Block *body)
     : Object(className), name(name), context(context), signature(signature), body(body) {
     addFeature(new ArgumentsCheckerFeature(signature));
 }
 
-Function::Function(string name, Context *context, Signature *signature, Block *body)
+Function::Function(const std::string &name, Context *context, Signature *signature, Block *body)
     : Object("Function"), name(name), context(context), signature(signature), body(body) {
     addFeature(new ArgumentsCheckerFeature(signature));
 }
 
-string Function::getName() {
+std::string Function::getName() {
     return name;
 }
 
@@ -44,13 +45,13 @@ IObject *Function::execute(IObject *self, Tuple *args) {
 
     context = context->objectChildContext(self)->childContext();
 
-    list<string> params = signature->paramsNames();
+    std::list<std::string> params = signature->paramsNames();
 
     context->setLocal(name, this);
     context->setLocal("arguments", args);
 
     int i = 0;
-    for (string s : params)
+    for (std::string s : params)
         context->setLocal(s, args->at(i++));
 
     IObject *returnValue = 0;
@@ -68,7 +69,7 @@ IObject *Function::execute(IObject *self, Tuple *args) {
     return signature->convertReturnValue(returnValue);
 }
 
-string Function::toString() {
+std::string Function::toString() {
     return name.empty() ? "<anonymous function>" : "<function " + name + ">";
 }
 

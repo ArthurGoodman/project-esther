@@ -6,7 +6,7 @@
 #include "matchfailureexception.h"
 #include "context.h"
 
-PatternBlock::PatternBlock(list<Case *> cases)
+PatternBlock::PatternBlock(std::list<Case *> cases)
     : cases(cases) {
 }
 

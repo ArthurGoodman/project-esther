@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 #include "object.h"
 
@@ -10,7 +9,7 @@ public:
     bool isTrue();
     bool isFalse();
 
-    string toString();
+    std::string toString();
 
     IObject *clone();
 };

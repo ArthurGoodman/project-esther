@@ -18,7 +18,7 @@ DynamicObject::DynamicObject(Class *objectClass)
     : objectClass(objectClass) {
 }
 
-DynamicObject::DynamicObject(string className)
+DynamicObject::DynamicObject(const std::string &className)
     : objectClass((Class *)Runtime::getRootClass(className)) {
 }
 
@@ -30,15 +30,15 @@ void DynamicObject::setClass(Class *objectClass) {
     this->objectClass = objectClass;
 }
 
-bool DynamicObject::hasAttribute(string name) {
+bool DynamicObject::hasAttribute(const std::string &name) {
     return attributes.find(name) != attributes.end();
 }
 
-IObject *DynamicObject::getAttribute(string name) {
+IObject *DynamicObject::getAttribute(const std::string &name) {
     return hasAttribute(name) ? attributes.at(name) : 0;
 }
 
-void DynamicObject::setAttribute(string name, IObject *value) {
+void DynamicObject::setAttribute(const std::string &name, IObject *value) {
     attributes[name] = value;
 }
 
@@ -46,7 +46,7 @@ bool DynamicObject::is(Class *_class) {
     return objectClass->isChild(_class);
 }
 
-bool DynamicObject::is(string className) {
+bool DynamicObject::is(const std::string &className) {
     return is((Class *)Runtime::getRootClass(className));
 }
 
@@ -77,7 +77,7 @@ IObject *DynamicObject::as(Class *_class) {
     return _class->newInstance(new Tuple({this}));
 }
 
-IObject *DynamicObject::call(string name, Tuple *args) {
+IObject *DynamicObject::call(const std::string &name, Tuple *args) {
     IObject *function = hasAttribute(name) ? getAttribute(name) : objectClass->lookup(name);
 
     if (!function)
@@ -89,8 +89,8 @@ IObject *DynamicObject::call(string name, Tuple *args) {
         return function->call("()", args);
 }
 
-IObject *DynamicObject::call(string name, IObject *arg, string expectedClassName) {
-    IObject *value = call(name, new Tuple(list<IObject *>(1, arg)));
+IObject *DynamicObject::call(const std::string &name, IObject *arg, const std::string &expectedClassName) {
+    IObject *value = call(name, new Tuple(std::list<IObject *>(1, arg)));
 
     if (!value->is(Runtime::getRootClass(expectedClassName)))
         Runtime::runtimeError(value->getClass()->callToString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
@@ -98,8 +98,8 @@ IObject *DynamicObject::call(string name, IObject *arg, string expectedClassName
     return value;
 }
 
-IObject *DynamicObject::call(string name, string expectedClassName) {
-    IObject *value = call(name, new Tuple(list<IObject *>()));
+IObject *DynamicObject::call(const std::string &name, const std::string &expectedClassName) {
+    IObject *value = call(name, new Tuple(std::list<IObject *>()));
 
     if (!value->is(Runtime::getRootClass(expectedClassName)))
         Runtime::runtimeError(value->getClass()->callToString() + " is not a valid return type for " + name + " (" + expectedClassName + " expected)");
@@ -119,7 +119,7 @@ bool DynamicObject::callEquals(IObject *other) {
     return call("equals", other, "Boolean")->isTrue();
 }
 
-string DynamicObject::callToString() {
+std::string DynamicObject::callToString() {
     return ((String *)call("toString", "String"))->getVariant().toString();
 }
 
@@ -127,7 +127,7 @@ bool DynamicObject::equals(IObject *other) {
     return this == other;
 }
 
-string DynamicObject::toString() {
+std::string DynamicObject::toString() {
     return "<" + getClass()->callToString() + ":" + Utility::toString((void *)this) + ">";
 }
 

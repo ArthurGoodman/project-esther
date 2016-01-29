@@ -34,19 +34,19 @@ Class *Context::getCurrentClass() {
 //    return !parent || currentSelf != parent->currentSelf;
 //}
 
-bool Context::hasLocal(string name) {
+bool Context::hasLocal(const std::string &name) {
     return locals.find(name) != locals.end();
 }
 
-IObject *Context::getLocal(string name) {
+IObject *Context::getLocal(const std::string &name) {
     return Context::hasLocal(name) ? locals.at(name) : 0;
 }
 
-void Context::setLocal(string name, IObject *value) {
+void Context::setLocal(const std::string &name, IObject *value) {
     locals[name] = value;
 }
 
-bool Context::hasId(string name) {
+bool Context::hasId(const std::string &name) {
     if (Context::hasLocal(name))
         return true;
 
@@ -59,7 +59,7 @@ bool Context::hasId(string name) {
     return false;
 }
 
-IObject *Context::getId(string name) {
+IObject *Context::getId(const std::string &name) {
     if (Context::hasLocal(name))
         return Context::getLocal(name);
 
@@ -72,7 +72,7 @@ IObject *Context::getId(string name) {
     return 0;
 }
 
-bool Context::setId(string name, IObject *value) {
+bool Context::setId(const std::string &name, IObject *value) {
     if (Context::hasLocal(name)) {
         Context::setLocal(name, value);
         return true;

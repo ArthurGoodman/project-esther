@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 
 class IObject;
 class Pattern;

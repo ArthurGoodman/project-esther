@@ -16,6 +16,6 @@ bool Integer::equals(IObject *other) {
     return dynamic_cast<Integer *>(other) && value.toInteger() == ((Integer *)other)->value.toInteger();
 }
 
-string Integer::toString() {
+std::string Integer::toString() {
     return value.toString();
 }

@@ -6,19 +6,19 @@
 #include "overloadedmethod.h"
 #include "signature.h"
 
-Class::Class(string name, Class *superclass)
+Class::Class(const std::string &name, Class *superclass)
     : Object("Class"), name(name), superclass(superclass) {
 }
 
-Class::Class(string name, string superclassName)
+Class::Class(const std::string &name, const std::string &superclassName)
     : Object("Class"), name(name), superclass((Class *)Runtime::getRootClass(superclassName)) {
 }
 
-Class::Class(string name)
+Class::Class(const std::string &name)
     : Object("Class"), name(name), superclass(Runtime::getObjectClass()) {
 }
 
-string Class::getName() {
+std::string Class::getName() {
     return name;
 }
 
@@ -49,11 +49,11 @@ IObject *Class::newInstance(Tuple *args) {
     return instance;
 }
 
-bool Class::hasMethod(string name) {
+bool Class::hasMethod(const std::string &name) {
     return hasAttribute(name) && dynamic_cast<Method *>(getAttribute(name));
 }
 
-Method *Class::getMethod(string name) {
+Method *Class::getMethod(const std::string &name) {
     return hasMethod(name) ? (Method *)getAttribute(name) : 0;
 }
 
@@ -61,7 +61,7 @@ void Class::setMethod(Method *method) {
     setMethod(method->getName(), method);
 }
 
-void Class::setMethod(string name, Method *method) {
+void Class::setMethod(const std::string &name, Method *method) {
     if (hasMethod(name)) {
         Method *existing = getMethod(name);
 
@@ -89,7 +89,7 @@ void Class::setMethod(string name, Method *method) {
     setAttribute(name, method);
 }
 
-IObject *Class::lookup(string name) {
+IObject *Class::lookup(const std::string &name) {
     if (hasAttribute(name))
         return getAttribute(name);
 
@@ -99,7 +99,7 @@ IObject *Class::lookup(string name) {
     return 0;
 }
 
-IObject *Class::call(string name, Tuple *args) {
+IObject *Class::call(const std::string &name, Tuple *args) {
     if (hasMethod(name)) {
         Method *m = getMethod(name);
 
@@ -110,7 +110,7 @@ IObject *Class::call(string name, Tuple *args) {
     return Object::call(name, args);
 }
 
-string Class::toString() {
+std::string Class::toString() {
     return name.empty() ? "<anonymous class>" : name;
 }
 

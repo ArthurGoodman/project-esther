@@ -1,5 +1,6 @@
 #include "parser.h"
 
+#include "common.h"
 #include "tokens.h"
 #include "syntaxerror.h"
 #include "expression.h"
@@ -17,7 +18,7 @@ Expression *Parser::parse(Tokens &tokens) {
 
     lastAcceptedNewLine = false;
 
-    list<Expression *> nodes;
+    std::list<Expression *> nodes;
 
     Position p = token->getPosition();
 
@@ -30,7 +31,7 @@ Expression *Parser::parse(Tokens &tokens) {
     return e;
 }
 
-void Parser::error(string msg, int delta) {
+void Parser::error(const std::string &msg, int delta) {
     ErrorException *e = new SyntaxError(msg, token->getPosition().shifted(delta));
     e->raise();
 }
@@ -67,8 +68,8 @@ void Parser::getToken() {
     ++token;
 }
 
-list<Expression *> Parser::parseBlock() {
-    list<Expression *> nodes;
+std::list<Expression *> Parser::parseBlock() {
+    std::list<Expression *> nodes;
 
     while (!check(tRBrace) && !check(tEnd))
         nodes << oper();
@@ -79,8 +80,8 @@ list<Expression *> Parser::parseBlock() {
     return nodes;
 }
 
-list<Expression *> Parser::parseList() {
-    list<Expression *> nodes;
+std::list<Expression *> Parser::parseList() {
+    std::list<Expression *> nodes;
 
     do
         nodes << logicOr();
@@ -170,7 +171,7 @@ Expression *Parser::expr() {
 Expression *Parser::tuple() {
     Position p = token->getPosition();
 
-    list<Expression *> nodes = parseList();
+    std::list<Expression *> nodes = parseList();
 
     if (nodes.size() == 1)
         return nodes.front();
@@ -363,7 +364,7 @@ Expression *Parser::dot() {
             Position p = token->getPosition();
 
             if (!lastAcceptedNewLine && realAccept(tLPar)) {
-                e = Expression::ContextCall(e, body, check(tRPar) ? list<Expression *>() : parseList());
+                e = Expression::ContextCall(e, body, check(tRPar) ? std::list<Expression *>() : parseList());
                 e->setPosition(p);
 
                 if (!accept(tRPar))
@@ -413,12 +414,12 @@ Expression *Parser::suffix() {
                 Position p = token->getPosition();
 
                 if (realAccept(tLPar)) {
-                    e = Expression::Call(e, "()", check(tRPar) ? list<Expression *>() : parseList());
+                    e = Expression::Call(e, "()", check(tRPar) ? std::list<Expression *>() : parseList());
 
                     if (!accept(tRPar))
                         error("unmatched parentheses");
                 } else if (realAccept(tLBracket)) {
-                    e = Expression::Call(e, "[]", check(tRBracket) ? list<Expression *>() : parseList());
+                    e = Expression::Call(e, "[]", check(tRBracket) ? std::list<Expression *>() : parseList());
 
                     if (!accept(tRBracket))
                         error("unmatched brackets");
@@ -634,7 +635,7 @@ Expression *Parser::term() {
 
         bool dynamic = false;
         Expression *type = 0, *name = parseIdentifier(dynamic), *body;
-        list<Expression *> params;
+        std::list<Expression *> params;
         bool variadic = false;
 
         //    if (name && (type = parseIdentifier())) {
@@ -673,7 +674,7 @@ Expression *Parser::term() {
 
                 bool dynamicType;
                 if ((type = parseIdentifier(dynamicType))) {
-                    swap(type, name);
+                    std::swap(type, name);
                     type = Expression::Identifier(type, dynamicType);
                     type->setPosition(p);
                 } else if (accept(tColon)) {
@@ -736,10 +737,10 @@ Expression *Parser::term() {
         } else {
             Expression *body = term();
 
-            list<Expression *> args;
+            std::list<Expression *> args;
 
             if (accept(tLPar)) {
-                args = check(tRPar) ? list<Expression *>() : parseList();
+                args = check(tRPar) ? std::list<Expression *>() : parseList();
 
                 if (!accept(tRPar))
                     error("unmatched parentheses");

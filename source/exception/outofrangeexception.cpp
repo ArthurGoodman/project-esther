@@ -1,6 +1,6 @@
 #include "outofrangeexception.h"
 
-string OutOfRangeException::message() {
+std::string OutOfRangeException::message() {
     return "index out of range";
 }
 

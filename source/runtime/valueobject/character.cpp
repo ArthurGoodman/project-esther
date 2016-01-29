@@ -16,6 +16,6 @@ bool Character::equals(IObject *other) {
     return dynamic_cast<Character *>(other) && value.toChar() == ((Character *)other)->value.toChar();
 }
 
-string Character::toString() {
+std::string Character::toString() {
     return value.toString();
 }

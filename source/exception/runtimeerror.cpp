@@ -1,10 +1,10 @@
 #include "runtimeerror.h"
 
-RuntimeError::RuntimeError(string message)
+RuntimeError::RuntimeError(const std::string &message)
     : ErrorException(message) {
 }
 
-string RuntimeError::message() {
+std::string RuntimeError::message() {
     return "runtime error: " + ErrorException::message();
 }
 

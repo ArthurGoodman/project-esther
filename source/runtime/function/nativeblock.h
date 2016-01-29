@@ -1,13 +1,14 @@
 #pragma once
-#include "common.h"
+
+#include <functional>
 
 #include "block.h"
 
 class NativeBlock : public Block {
-    function<IObject *(IObject *, Tuple *)> body;
+    std::function<IObject *(IObject *, Tuple *)> body;
 
 public:
-    NativeBlock(function<IObject *(IObject *, Tuple *)> body);
+    NativeBlock(std::function<IObject *(IObject *, Tuple *)> body);
 
     IObject *eval(Context *context);
 

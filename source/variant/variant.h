@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+
+#include <string>
 
 class VariantPrivate;
 
@@ -22,7 +23,7 @@ public:
     Variant(int value);
     Variant(double value);
     Variant(char value);
-    Variant(string value);
+    Variant(const std::string &value);
     Variant(const char *value);
 
     Variant(const Variant &v);
@@ -35,7 +36,7 @@ public:
     int toInteger() const;
     double toFloat() const;
     char toChar() const;
-    string toString() const;
+    std::string toString() const;
 
     bool isNull() const;
 };

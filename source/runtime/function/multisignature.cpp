@@ -8,7 +8,7 @@ MultiSignature::MultiSignature(OverloadedMethod *method)
 }
 
 bool MultiSignature::accepts(Tuple *args) {
-    list<Method *> methods = method->getMethods();
+    std::list<Method *> methods = method->getMethods();
 
     for (Method *m : methods)
         if (m->getSignature()->accepts(args))
@@ -23,7 +23,7 @@ void MultiSignature::apply(Tuple *args) {
 }
 
 Tuple *MultiSignature::convert(Tuple *args) {
-    list<Method *> methods = method->getMethods();
+    std::list<Method *> methods = method->getMethods();
 
     Method *firstAccept = 0;
 
@@ -39,7 +39,7 @@ Tuple *MultiSignature::convert(Tuple *args) {
 }
 
 bool MultiSignature::equals(Signature *other) {
-    list<Method *> methods = method->getMethods();
+    std::list<Method *> methods = method->getMethods();
 
     for (Method *m : methods)
         if (m->getSignature()->equals(other))
@@ -49,7 +49,7 @@ bool MultiSignature::equals(Signature *other) {
 }
 
 bool MultiSignature::weakEquals(Signature *other) {
-    list<Method *> methods = method->getMethods();
+    std::list<Method *> methods = method->getMethods();
 
     for (Method *m : methods)
         if (m->getSignature()->weakEquals(other))

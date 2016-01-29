@@ -37,6 +37,6 @@ void Position::set(int offset, int line, int column) {
     valid = true;
 }
 
-string Position::toString() const {
+std::string Position::toString() const {
     return Utility::toString(line) + ":" + Utility::toString(column);
 }

@@ -1,5 +1,7 @@
 #pragma once
-#include "common.h"
+
+#include <list>
+#include <string>
 
 class Variant;
 class Expression;
@@ -13,10 +15,10 @@ public:
 
     virtual Expression *createEmpty() = 0;
 
-    virtual Expression *createBlock(list<Expression *> nodes) = 0;
-    virtual Expression *createList(list<Expression *> nodes) = 0;
+    virtual Expression *createBlock(std::list<Expression *> nodes) = 0;
+    virtual Expression *createList(std::list<Expression *> nodes) = 0;
 
-    virtual Expression *createTuple(list<Expression *> nodes) = 0;
+    virtual Expression *createTuple(std::list<Expression *> nodes) = 0;
     virtual Expression *createAssignment(Expression *expression, Expression *value) = 0;
 
     virtual Expression *createLiteral(const Variant &value) = 0;
@@ -36,7 +38,7 @@ public:
     virtual Expression *createIdentifierDefinition(Expression *type, Expression *name, Expression *value, bool dynamic) = 0;
 
     virtual Expression *createParameter(Expression *type, Expression *name, Expression *value, bool dynamic) = 0;
-    virtual Expression *createCall(Expression *self, string name, list<Expression *> args) = 0;
+    virtual Expression *createCall(Expression *self, const std::string &name, std::list<Expression *> args) = 0;
 
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createWhile(Expression *condition, Expression *body, Expression *elseBody) = 0;
@@ -44,12 +46,12 @@ public:
     virtual Expression *createDo(Expression *body, Expression *condition) = 0;
 
     virtual Expression *createContextResolution(Expression *self, Expression *body) = 0;
-    virtual Expression *createContextCall(Expression *self, Expression *body, list<Expression *> args) = 0;
+    virtual Expression *createContextCall(Expression *self, Expression *body, std::list<Expression *> args) = 0;
 
     virtual Expression *createClassDefinition(Expression *name, Expression *superclass, Expression *body) = 0;
 
-    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) = 0;
-    virtual Expression *createMethodDefinition(Expression *type, Expression *name, list<Expression *> params, Expression *body, bool variadic, bool dynamic) = 0;
+    virtual Expression *createFunctionDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) = 0;
+    virtual Expression *createMethodDefinition(Expression *type, Expression *name, std::list<Expression *> params, Expression *body, bool variadic, bool dynamic) = 0;
 
     virtual Expression *createReturn(Expression *value) = 0;
     virtual Expression *createBreak(Expression *value) = 0;

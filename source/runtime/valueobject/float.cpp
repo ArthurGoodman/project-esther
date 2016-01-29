@@ -16,6 +16,6 @@ bool Float::equals(IObject *other) {
     return dynamic_cast<Float *>(other) && value.toFloat() == ((Float *)other)->value.toFloat();
 }
 
-string Float::toString() {
+std::string Float::toString() {
     return value.toString();
 }

@@ -1,10 +1,10 @@
 #include "errorexception.h"
 
-ErrorException::ErrorException(string message, Position position)
+ErrorException::ErrorException(const std::string &message, Position position)
     : position(position), msg(message) {
 }
 
-string ErrorException::message() {
+std::string ErrorException::message() {
     return msg;
 }
 

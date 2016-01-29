@@ -1,15 +1,19 @@
 #pragma once
-#include "common.h"
+
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <cmath>
 
 class Utility {
     static const int tabSize = 4;
 
 public:
     template <class T>
-    static string toString(T t, int base = 10, int precision = 16);
+    static std::string toString(T t, int base = 10, int precision = 16);
 
     template <class T>
-    static T fromString(string str);
+    static T fromString(const std::string &str);
 
     static char toLower(char c);
     static char toUpper(char c);
@@ -19,32 +23,40 @@ public:
     static bool isLetter(char c);
     static bool isLetterOrDigit(char c);
 
-    static string expandTabs(const string &str);
+    static std::string expandTabs(const std::string &str);
 };
 
 template <class T>
-string Utility::toString(T t, int base, int precision) {
-    ostringstream s;
-    s << setbase(base) << setprecision(precision) << t;
+std::string Utility::toString(T t, int base, int precision) {
+    std::ostringstream s;
+
+    s << std::setbase(base) << std::setprecision(precision) << t;
+
     return s.str();
 }
 
 template <class T>
-T Utility::fromString(string str) {
-    istringstream s(str);
+T Utility::fromString(const std::string &str) {
+    std::istringstream s(str);
+
     T t;
     s >> t;
+
     return t;
 }
 
 template <>
-inline double Utility::fromString<double>(string str) {
+inline double Utility::fromString<double>(const std::string &str) {
     if (str == "inf")
         return INFINITY;
+
     if (str == "nan")
         return NAN;
-    istringstream s(str);
+
+    std::istringstream s(str);
+
     double t;
     s >> t;
+
     return t;
 }

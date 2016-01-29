@@ -1,5 +1,6 @@
 #include "callexpression.h"
 
+#include "common.h"
 #include "iobject.h"
 #include "runtime.h"
 #include "tuple.h"
@@ -7,14 +8,14 @@
 #include "context.h"
 #include "method.h"
 
-CallExpression::CallExpression(Expression *self, string name, list<Expression *> args)
+CallExpression::CallExpression(Expression *self, const std::string &name, std::list<Expression *> args)
     : self(self), name(name), args(args) {
 }
 
 IObject *CallExpression::exec(Context *context) {
     IObject *self = this->self->eval(context);
 
-    list<IObject *> evaledArgs;
+    std::list<IObject *> evaledArgs;
 
     for (Expression *e : args)
         evaledArgs << e->eval(context);

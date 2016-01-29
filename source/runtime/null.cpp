@@ -12,7 +12,7 @@ bool Null::isFalse() {
     return true;
 }
 
-string Null::toString() {
+std::string Null::toString() {
     return "null";
 }
 
