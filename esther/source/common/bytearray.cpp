@@ -1,7 +1,6 @@
 #include "bytearray.h"
 
 #include <memory>
-#include <cmath>
 
 uint ByteArray::initialCapacity = 1;
 
@@ -13,18 +12,50 @@ ByteArray::ByteArray()
     : size(0), capacity(0), data(0) {
 }
 
+ByteArray::ByteArray(const ByteArray &array)
+    : data(0) {
+    *this = array;
+}
+
+ByteArray::ByteArray(ByteArray &&array)
+    : data(0) {
+    *this = std::move(array);
+}
+
 ByteArray::~ByteArray() {
     release();
 }
 
+ByteArray &ByteArray::operator=(const ByteArray &array) {
+    size = array.size;
+    capacity = array.capacity;
+
+    ::free(data);
+
+    data = (byte *)malloc(capacity);
+    memcpy(data, array.data, size);
+
+    return *this;
+}
+
+ByteArray &ByteArray::operator=(ByteArray &&array) {
+    size = array.size;
+    capacity = array.capacity;
+
+    ::free(data);
+
+    data = array.data;
+
+    array.data = 0;
+    array.size = 0;
+    array.capacity = 0;
+
+    return *this;
+}
+
 byte *ByteArray::allocate(uint count) {
     if (!enoughSpace(count)) {
-        int newCapacity = capacity;
-
-        if (!newCapacity)
-            newCapacity = initialCapacity;
-
-        newCapacity *= pow(2, std::max(0.0, ceil(log2(double(size + count) / newCapacity))));
+        uint newCapacity = ceilToPowerOf2(std::max(initialCapacity, size + count));
 
         byte *newData = (byte *)realloc(data, newCapacity);
 
@@ -40,27 +71,6 @@ byte *ByteArray::allocate(uint count) {
     return data + size - count;
 }
 
-bool ByteArray::free(uint count) {
-    if (size < count)
-        return false;
-
-    size -= count;
-    return true;
-}
-
-void ByteArray::release() {
-    if (data)
-        ::free(data);
-
-    size = 0;
-    capacity = 0;
-    data = 0;
-}
-
-bool ByteArray::enoughSpace(uint count) const {
-    return size + count <= capacity;
-}
-
 int ByteArray::reallocate() {
     byte *newData = (byte *)malloc(capacity);
 
@@ -72,6 +82,30 @@ int ByteArray::reallocate() {
     data = newData;
 
     return delta;
+}
+
+byte &ByteArray::operator[](int index) {
+    return data[index];
+}
+
+bool ByteArray::free(uint count) {
+    if (size < count)
+        return false;
+
+    size -= count;
+    return true;
+}
+
+void ByteArray::release() {
+    ::free(data);
+
+    size = 0;
+    capacity = 0;
+    data = 0;
+}
+
+bool ByteArray::enoughSpace(uint count) const {
+    return size + count <= capacity;
 }
 
 byte *ByteArray::getData() const {

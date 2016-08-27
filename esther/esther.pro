@@ -4,7 +4,9 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH = \
-    source
+    source \
+    source\common\
+    source\common\definitions
 
 SOURCES += \
     source/main.cpp \
@@ -15,7 +17,8 @@ SOURCES += \
     source/common/position.cpp \
     source/common/source.cpp \
     source/common/token.cpp \
-    source/common/utility.cpp
+    source/common/utility.cpp \
+    source/common/common.cpp
 
 HEADERS += \
     source/esther.h \

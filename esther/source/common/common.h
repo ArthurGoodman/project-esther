@@ -30,3 +30,5 @@ std::vector<B> *operator<<(std::vector<B> *v, const A &e) {
     v->push_back((B)e);
     return v;
 }
+
+uint ceilToPowerOf2(uint n);
