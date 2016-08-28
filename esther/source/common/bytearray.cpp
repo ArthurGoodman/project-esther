@@ -74,6 +74,9 @@ byte *ByteArray::allocate(uint count) {
 int ByteArray::reallocate() {
     byte *newData = (byte *)malloc(capacity);
 
+    if (!newData)
+        return 0;
+
     memcpy(newData, data, size);
 
     int delta = newData - data;

@@ -6,7 +6,9 @@ CONFIG -= qt
 INCLUDEPATH = \
     source \
     source\common\
-    source\common\definitions
+    source\common\definitions \
+    source\lexer \
+    source\parser
 
 SOURCES += \
     source/main.cpp \
@@ -18,7 +20,10 @@ SOURCES += \
     source/common/source.cpp \
     source/common/token.cpp \
     source/common/utility.cpp \
-    source/common/common.cpp
+    source/common/common.cpp \
+    source/iengine.cpp \
+    source/lexer/ilexer.cpp \
+    source/parser/iparser.cpp
 
 HEADERS += \
     source/esther.h \
@@ -31,7 +36,10 @@ HEADERS += \
     source/common/source.h \
     source/common/token.h \
     source/common/utility.h \
-    source/common/definitions/tokens.h
+    source/common/definitions/tokens.h \
+    source/iengine.h \
+    source/lexer/ilexer.h \
+    source/parser/iparser.h
 
 OTHER_FILES += \
     scripts/script.es \
