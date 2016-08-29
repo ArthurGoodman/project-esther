@@ -1,7 +1,9 @@
 #include "iengine.h"
+#include "engine.h"
 
 IEngine *IEngine::instance() {
-    return 0;
+    static Engine engine;
+    return &engine;
 }
 
 IEngine::~IEngine() {

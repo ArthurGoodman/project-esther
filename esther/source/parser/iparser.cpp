@@ -1,7 +1,9 @@
 #include "iparser.h"
+#include "parser.h"
 
 IParser *IParser::instance() {
-    return 0;
+    static Parser parser;
+    return &parser;
 }
 
 IParser::~IParser() {

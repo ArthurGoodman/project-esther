@@ -8,7 +8,8 @@ INCLUDEPATH = \
     source\common\
     source\common\definitions \
     source\lexer \
-    source\parser
+    source\parser \
+    source\runtime
 
 SOURCES += \
     source/main.cpp \
@@ -23,7 +24,12 @@ SOURCES += \
     source/common/common.cpp \
     source/iengine.cpp \
     source/lexer/ilexer.cpp \
-    source/parser/iparser.cpp
+    source/parser/iparser.cpp \
+    source/runtime/object.cpp \
+    source/parser/parser.cpp \
+    source/lexer/lexer.cpp \
+    source/expression/expression.cpp \
+    source/engine.cpp
 
 HEADERS += \
     source/esther.h \
@@ -39,7 +45,12 @@ HEADERS += \
     source/common/definitions/tokens.h \
     source/iengine.h \
     source/lexer/ilexer.h \
-    source/parser/iparser.h
+    source/parser/iparser.h \
+    source/runtime/object.h \
+    source/parser/parser.h \
+    source/lexer/lexer.h \
+    source/expression/expression.h \
+    source/engine.h
 
 OTHER_FILES += \
     scripts/script.es \

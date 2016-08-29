@@ -12,5 +12,5 @@ public:
     static ILexer *instance();
 
     virtual ~ILexer();
-    virtual Tokens &lex(const std::string &source) = 0;
+    virtual Tokens lex(const std::string &source) = 0;
 };

@@ -1,7 +1,9 @@
 #include "ilexer.h"
+#include "lexer.h"
 
 ILexer *ILexer::instance() {
-    return 0;
+    static Lexer lexer;
+    return &lexer;
 }
 
 ILexer::~ILexer() {
