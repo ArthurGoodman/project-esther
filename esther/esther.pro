@@ -7,6 +7,7 @@ INCLUDEPATH = \
     source \
     source\common\
     source\common\definitions \
+    source\expression \
     source\lexer \
     source\parser \
     source\runtime
@@ -28,7 +29,9 @@ SOURCES += \
     source/parser/parser.cpp \
     source/lexer/lexer.cpp \
     source/expression/expression.cpp \
-    source/engine.cpp
+    source/engine.cpp \
+    source/runtime/runtime.cpp \
+    source/runtime/class.cpp
 
 HEADERS += \
     source/esther.h \
@@ -48,7 +51,9 @@ HEADERS += \
     source/parser/parser.h \
     source/lexer/lexer.h \
     source/expression/expression.h \
-    source/engine.h
+    source/engine.h \
+    source/runtime/runtime.h \
+    source/runtime/class.h
 
 OTHER_FILES += \
     scripts/script.es \

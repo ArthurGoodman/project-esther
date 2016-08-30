@@ -4,13 +4,16 @@
 #include "iparser.h"
 #include "io.h"
 #include "utility.h"
+#include "expression.h"
+#include "token.h"
+#include "runtime.h"
 
 Engine::Engine() {
-    //Runtime::initialize();
+    Runtime::initialize();
 }
 
 Engine::~Engine() {
-    //Runtime::release();
+    Runtime::release();
 }
 
 Object *Engine::run(const std::string &script) {
@@ -21,9 +24,9 @@ Object *Engine::run(const std::string &script) {
     pushSource(src);
 
     try {
-        //Expression *e = IParser::instance()->parse(ILexer::instance()->lex(src));
-        //value = e->eval(context);
-        //delete e;
+        Expression *e = IParser::instance()->parse(ILexer::instance()->lex(src));
+        value = e->eval(Runtime::getRoot());
+        delete e;
     } catch (std::exception e) {
         IO::printLine((std::string) "error: " + e.what());
     } catch (...) {
