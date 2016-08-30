@@ -7,6 +7,9 @@ typedef unsigned char byte;
 typedef unsigned int uint;
 typedef unsigned long long ulong;
 
+class Token;
+typedef std::list<Token> Tokens;
+
 template <class A, class B>
 std::list<B> &operator<<(std::list<B> &l, const A &e) {
     l.push_back((B)e);

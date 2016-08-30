@@ -1,6 +1,7 @@
 #include "source.h"
 
 #include <algorithm>
+
 #include "position.h"
 
 Source::Source(const std::string &source)

@@ -2,15 +2,12 @@
 
 #include <list>
 
-class Token;
-class Expression;
+#include "common.h"
 
-typedef std::list<Token> Tokens;
+class Expression;
 
 class IParser {
 public:
-    static IParser *instance();
-
     virtual ~IParser();
     virtual Expression *parse(Tokens &tokens) = 0;
 };

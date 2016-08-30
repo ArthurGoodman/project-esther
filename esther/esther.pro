@@ -22,7 +22,6 @@ SOURCES += \
     source/common/token.cpp \
     source/common/utility.cpp \
     source/common/common.cpp \
-    source/iengine.cpp \
     source/lexer/ilexer.cpp \
     source/parser/iparser.cpp \
     source/runtime/object.cpp \
@@ -43,7 +42,6 @@ HEADERS += \
     source/common/token.h \
     source/common/utility.h \
     source/common/definitions/tokens.h \
-    source/iengine.h \
     source/lexer/ilexer.h \
     source/parser/iparser.h \
     source/runtime/object.h \
