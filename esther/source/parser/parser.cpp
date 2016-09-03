@@ -1,5 +1,7 @@
 #include "parser.h"
 
-Expression *Parser::parse(Tokens &tokens) {
-    return 0;
+#include "expression.h"
+
+Expression *Parser::parse(Tokens & /*tokens*/) {
+    return Expression::Empty();
 }

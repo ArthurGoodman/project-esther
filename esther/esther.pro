@@ -10,8 +10,11 @@ INCLUDEPATH = \
     source\exception \
     source\expression \
     source\lexer \
+    source\expression\ast \
+    source\expression\debug \
     source\parser \
-    source\runtime
+    source\runtime \
+    source\variant
 
 SOURCES += \
     source/main.cpp \
@@ -41,7 +44,19 @@ SOURCES += \
     source/exception/returnexception.cpp \
     source/exception/runtimeerror.cpp \
     source/exception/syntaxerror.cpp \
-    source/exception/valueexception.cpp
+    source/exception/valueexception.cpp \
+    source/expression/expressionmanager.cpp \
+    source/expression/iexpressionmanager.cpp \
+    source/expression/debug/debugexpression.cpp \
+    source/expression/debug/debugexpressionmanager.cpp \
+    source/variant/charvariant.cpp \
+    source/variant/floatvariant.cpp \
+    source/variant/integervariant.cpp \
+    source/variant/nullvariant.cpp \
+    source/variant/stringvariant.cpp \
+    source/variant/variant.cpp \
+    source/variant/variantprivate.cpp \
+    source/expression/ast/emptyexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -72,7 +87,19 @@ HEADERS += \
     source/exception/returnexception.h \
     source/exception/runtimeerror.h \
     source/exception/syntaxerror.h \
-    source/exception/valueexception.h
+    source/exception/valueexception.h \
+    source/expression/expressionmanager.h \
+    source/expression/iexpressionmanager.h \
+    source/expression/debug/debugexpression.h \
+    source/expression/debug/debugexpressionmanager.h \
+    source/variant/charvariant.h \
+    source/variant/floatvariant.h \
+    source/variant/integervariant.h \
+    source/variant/nullvariant.h \
+    source/variant/stringvariant.h \
+    source/variant/variant.h \
+    source/variant/variantprivate.h \
+    source/expression/ast/emptyexpression.h
 
 OTHER_FILES += \
     scripts/script.es \

@@ -1,6 +1,7 @@
 #include "runtime.h"
 
 #include "class.h"
+#include "runtimeerror.h"
 
 Context *Runtime::root;
 
@@ -60,4 +61,5 @@ Object *Runtime::toBoolean(bool value) {
 }
 
 void Runtime::runtimeError(const std::string &message) {
+    throw new RuntimeError(message);
 }

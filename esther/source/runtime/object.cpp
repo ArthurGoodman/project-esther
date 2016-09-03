@@ -2,3 +2,7 @@
 
 Object::~Object() {
 }
+
+std::string Object::toString() const {
+    return "";
+}
