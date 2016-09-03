@@ -31,7 +31,16 @@ SOURCES += \
     source/expression/expression.cpp \
     source/engine.cpp \
     source/runtime/runtime.cpp \
-    source/runtime/class.cpp
+    source/runtime/class.cpp \
+    source/exception/breakexception.cpp \
+    source/exception/continueexception.cpp \
+    source/exception/errorexception.cpp \
+    source/exception/exception.cpp \
+    source/exception/lexicalerror.cpp \
+    source/exception/returnexception.cpp \
+    source/exception/runtimeerror.cpp \
+    source/exception/syntaxerror.cpp \
+    source/exception/valueexception.cpp
 
 HEADERS += \
     source/esther.h \
@@ -53,7 +62,16 @@ HEADERS += \
     source/expression/expression.h \
     source/engine.h \
     source/runtime/runtime.h \
-    source/runtime/class.h
+    source/runtime/class.h \
+    source/exception/breakexception.h \
+    source/exception/continueexception.h \
+    source/exception/errorexception.h \
+    source/exception/exception.h \
+    source/exception/lexicalerror.h \
+    source/exception/returnexception.h \
+    source/exception/runtimeerror.h \
+    source/exception/syntaxerror.h \
+    source/exception/valueexception.h
 
 OTHER_FILES += \
     scripts/script.es \
