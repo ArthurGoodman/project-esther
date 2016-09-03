@@ -7,6 +7,7 @@ INCLUDEPATH = \
     source \
     source\common\
     source\common\definitions \
+    source\exception \
     source\expression \
     source\lexer \
     source\parser \

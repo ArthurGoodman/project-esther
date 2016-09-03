@@ -25,7 +25,7 @@ Object *Engine::run(const std::string &script) {
 
     try {
         Expression *e = IParser::instance()->parse(ILexer::instance()->lex(src));
-        value = e->eval(Runtime::getRoot());
+        // value = e->eval(Runtime::getRoot());
         delete e;
     } catch (std::exception e) {
         IO::printLine((std::string) "error: " + e.what());
