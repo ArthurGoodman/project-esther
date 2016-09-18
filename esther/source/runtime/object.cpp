@@ -37,3 +37,7 @@ void Object::setAttribute(const std::string &name, Object *value) {
 std::string Object::toString() const {
     return "<" + getClass()->toString() + ":" + Utility::toString((void *)this) + ">";
 }
+
+bool Object::isTrue() const {
+    return true;
+}

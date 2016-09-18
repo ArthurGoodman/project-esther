@@ -14,6 +14,7 @@ INCLUDEPATH = \
     source\expression\debug \
     source\parser \
     source\runtime \
+    source\runtime\valueobject \
     source\variant
 
 SOURCES += \
@@ -75,6 +76,7 @@ SOURCES += \
     source/expression/ast/constantexpression.cpp \
     source/expression/ast/contextresolutionexpression.cpp \
     source/expression/ast/functionexpression.cpp \
+    source/expression/ast/identifierexpression.cpp \
     source/expression/ast/ifexpression.cpp \
     source/expression/ast/literalexpression.cpp \
     source/expression/ast/localassignmentexpression.cpp \
@@ -143,6 +145,7 @@ HEADERS += \
     source/expression/ast/constantexpression.h \
     source/expression/ast/contextresolutionexpression.h \
     source/expression/ast/functionexpression.h \
+    source/expression/ast/identifierexpression.h \
     source/expression/ast/ifexpression.h \
     source/expression/ast/literalexpression.h \
     source/expression/ast/localassignmentexpression.h \

@@ -13,6 +13,7 @@ public:
     Object();
     Object(Class *objectClass);
     Object(const std::string &className);
+
     virtual ~Object();
 
     Class *getClass() const;
@@ -22,4 +23,6 @@ public:
     void setAttribute(const std::string &name, Object *value);
 
     std::string toString() const;
+
+    virtual bool isTrue() const;
 };

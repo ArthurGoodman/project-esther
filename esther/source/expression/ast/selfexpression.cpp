@@ -1,5 +1,7 @@
 #include "selfexpression.h"
 
-Object *SelfExpression::exec(Context *) {
-    return 0;
+#include "context.h"
+
+Object *SelfExpression::exec(Context *context) {
+    return context->getSelf();
 }
