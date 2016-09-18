@@ -8,6 +8,7 @@
 #include "contextresolutionexpression.h"
 #include "emptyexpression.h"
 #include "functionexpression.h"
+#include "identifierexpression.h"
 #include "ifexpression.h"
 #include "literalexpression.h"
 #include "localassignmentexpression.h"
@@ -21,7 +22,7 @@ Expression *ExpressionManager::createAnd() {
 }
 
 Expression *ExpressionManager::createAttributeAssignment() {
-    return new AttributeAssignmentExpression;
+    return new AttributeAssignmentExpression(0, 0);
 }
 
 Expression *ExpressionManager::createBlock() {
@@ -48,6 +49,10 @@ Expression *ExpressionManager::createFunction() {
     return new FunctionExpression;
 }
 
+Expression *ExpressionManager::createIdentifier() {
+    return new IdentifierExpression(0);
+}
+
 Expression *ExpressionManager::createIf() {
     return new IfExpression(0, 0, 0);
 }
@@ -57,7 +62,7 @@ Expression *ExpressionManager::createLiteral() {
 }
 
 Expression *ExpressionManager::createLocalAssignment() {
-    return new LocalAssignmentExpression;
+    return new LocalAssignmentExpression(0, 0);
 }
 
 Expression *ExpressionManager::createLoop() {

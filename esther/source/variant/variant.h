@@ -5,8 +5,6 @@
 class VariantPrivate;
 
 class Variant {
-    friend class VariantPrivate;
-
     VariantPrivate *data;
 
 public:
@@ -27,7 +25,10 @@ public:
     Variant(const char *value);
 
     Variant(const Variant &v);
+    Variant(Variant &&v);
+
     Variant &operator=(const Variant &v);
+    Variant &operator=(Variant &&v);
 
     ~Variant();
 

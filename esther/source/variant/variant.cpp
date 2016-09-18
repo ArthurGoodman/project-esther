@@ -30,13 +30,26 @@ Variant::Variant(const char *value)
     : data(new StringVariant(value)) {
 }
 
-Variant::Variant(const Variant &v) {
-    data = v.data->clone();
+Variant::Variant(const Variant &v)
+    : data(0) {
+    *this = v;
+}
+
+Variant::Variant(Variant &&v)
+    : data(0) {
+    *this = std::move(v);
 }
 
 Variant &Variant::operator=(const Variant &v) {
     delete data;
     data = v.data->clone();
+    return *this;
+}
+
+Variant &Variant::operator=(Variant &&v) {
+    delete data;
+    data = v.data;
+    v.data = 0;
     return *this;
 }
 

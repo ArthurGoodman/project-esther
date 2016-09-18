@@ -1,10 +1,10 @@
 #pragma once
 
-#include "debug.h"
-#include "expression.h"
-
 #include <string>
 #include <list>
+
+#include "debug.h"
+#include "expression.h"
 
 #if DEBUG_PARSER
 

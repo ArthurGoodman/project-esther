@@ -7,7 +7,6 @@ public:
     True();
 
     bool isTrue();
-    bool isFalse();
 
     std::string toString();
 };

@@ -39,6 +39,10 @@ Expression *DebugExpressionManager::createFunction() {
     return new DebugExpression("Function");
 }
 
+Expression *DebugExpressionManager::createIdentifier() {
+    return new DebugExpression("Identifier");
+}
+
 Expression *DebugExpressionManager::createIf() {
     return new DebugExpression("If");
 }

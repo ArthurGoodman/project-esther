@@ -1,7 +1,5 @@
 #include "esther.h"
 
-#include "io.h"
-
 Engine Esther::engine;
 
 void Esther::run(const std::string &script) {

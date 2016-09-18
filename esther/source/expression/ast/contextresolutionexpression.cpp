@@ -14,5 +14,6 @@ ContextResolutionExpression::~ContextResolutionExpression() {
 Object *ContextResolutionExpression::exec(Context *context) {
     this->context->setSelf(self->eval(context));
     this->context->clear();
+
     return body->eval(this->context);
 }

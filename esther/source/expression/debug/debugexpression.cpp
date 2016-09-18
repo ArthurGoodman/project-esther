@@ -3,8 +3,6 @@
 #include "runtime.h"
 #include "logger.h"
 
-#include "object.h"
-
 #if DEBUG_PARSER
 
 int DebugExpression::indent = 0;

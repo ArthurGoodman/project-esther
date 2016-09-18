@@ -13,6 +13,7 @@ public:
     Expression *createContextResolution();
     Expression *createEmpty();
     Expression *createFunction();
+    Expression *createIdentifier();
     Expression *createIf();
     Expression *createLiteral();
     Expression *createLocalAssignment();
