@@ -66,7 +66,22 @@ SOURCES += \
     source/runtime/valueobject/float.cpp \
     source/runtime/valueobject/integer.cpp \
     source/runtime/valueobject/stringvalueobject.cpp \
-    source/runtime/valueobject/valueobject.cpp
+    source/runtime/valueobject/valueobject.cpp \
+    source/expression/ast/andexpression.cpp \
+    source/expression/ast/attributeassignmentexpression.cpp \
+    source/expression/ast/blockexpression.cpp \
+    source/expression/ast/callexpression.cpp \
+    source/expression/ast/classexpression.cpp \
+    source/expression/ast/constantexpression.cpp \
+    source/expression/ast/contextresolutionexpression.cpp \
+    source/expression/ast/functionexpression.cpp \
+    source/expression/ast/ifexpression.cpp \
+    source/expression/ast/literalexpression.cpp \
+    source/expression/ast/localassignmentexpression.cpp \
+    source/expression/ast/loopexpression.cpp \
+    source/expression/ast/notexpression.cpp \
+    source/expression/ast/orexpression.cpp \
+    source/expression/ast/selfexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -119,7 +134,22 @@ HEADERS += \
     source/runtime/valueobject/float.h \
     source/runtime/valueobject/integer.h \
     source/runtime/valueobject/stringvalueobject.h \
-    source/runtime/valueobject/valueobject.h
+    source/runtime/valueobject/valueobject.h \
+    source/expression/ast/andexpression.h \
+    source/expression/ast/attributeassignmentexpression.h \
+    source/expression/ast/blockexpression.h \
+    source/expression/ast/callexpression.h \
+    source/expression/ast/classexpression.h \
+    source/expression/ast/constantexpression.h \
+    source/expression/ast/contextresolutionexpression.h \
+    source/expression/ast/functionexpression.h \
+    source/expression/ast/ifexpression.h \
+    source/expression/ast/literalexpression.h \
+    source/expression/ast/localassignmentexpression.h \
+    source/expression/ast/loopexpression.h \
+    source/expression/ast/notexpression.h \
+    source/expression/ast/orexpression.h \
+    source/expression/ast/selfexpression.h
 
 OTHER_FILES += \
     scripts/script.es \

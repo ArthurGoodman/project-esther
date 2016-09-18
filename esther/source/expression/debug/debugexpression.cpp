@@ -9,7 +9,7 @@
 
 int DebugExpression::indent = 0;
 
-DebugExpression::DebugExpression(const std::string &name, std::list<Object *> args)
+DebugExpression::DebugExpression(const std::string &name, std::list<DebugExpression *> args)
     : name(name), args(args) {
 }
 
@@ -27,17 +27,17 @@ std::string DebugExpression::toString() {
 
     bool fp = true;
 
-    for (Object *obj : args) {
+    for (DebugExpression *expr : args) {
         if (!fp)
             str += ",\n";
         else
             fp = false;
 
-        if (dynamic_cast<Expression *>(obj) == 0)
+        if (dynamic_cast<Expression *>(expr) == 0)
             str += spacing + "    ";
 
         indent++;
-        str += obj->toString();
+        str += expr->toString();
         indent--;
     }
 

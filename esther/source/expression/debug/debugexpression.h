@@ -10,12 +10,12 @@
 
 class DebugExpression : public Expression {
     std::string name;
-    std::list<Object *> args;
+    std::list<DebugExpression *> args;
 
     static int indent;
 
 public:
-    DebugExpression(const std::string &name, std::list<Object *> args = std::list<Object *>());
+    DebugExpression(const std::string &name, std::list<DebugExpression *> args = std::list<DebugExpression *>());
 
     Object *exec(Context *context);
 
