@@ -46,7 +46,7 @@ Expression *ExpressionManager::createEmpty() {
 }
 
 Expression *ExpressionManager::createFunction() {
-    return new FunctionExpression;
+    return new FunctionExpression(0);
 }
 
 Expression *ExpressionManager::createIdentifier() {

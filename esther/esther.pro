@@ -83,7 +83,10 @@ SOURCES += \
     source/expression/ast/loopexpression.cpp \
     source/expression/ast/notexpression.cpp \
     source/expression/ast/orexpression.cpp \
-    source/expression/ast/selfexpression.cpp
+    source/expression/ast/selfexpression.cpp \
+    source/runtime/block.cpp \
+    source/runtime/interpretedblock.cpp \
+    source/runtime/nativeblock.cpp
 
 HEADERS += \
     source/esther.h \
@@ -152,7 +155,10 @@ HEADERS += \
     source/expression/ast/loopexpression.h \
     source/expression/ast/notexpression.h \
     source/expression/ast/orexpression.h \
-    source/expression/ast/selfexpression.h
+    source/expression/ast/selfexpression.h \
+    source/runtime/block.h \
+    source/runtime/interpretedblock.h \
+    source/runtime/nativeblock.h
 
 OTHER_FILES += \
     scripts/script.es \
