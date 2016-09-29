@@ -3,11 +3,11 @@
 #include "runtime.h"
 
 Context::Context()
-    : self(Runtime::getMainObject()), parent(0) {
+    : self(Runtime::getMainObject()), here(new Object), parent(0) {
 }
 
 Context::Context(Object *self, Context *parent)
-    : self(self), parent(parent) {
+    : self(self), here(new Object), parent(parent) {
 }
 
 Object *Context::getSelf() const {
@@ -18,16 +18,20 @@ void Context::setSelf(Object *self) {
     this->self = self;
 }
 
+Object *Context::getHere() const {
+    return here;
+}
+
 bool Context::hasLocal(const std::string &name) const {
-    return locals.find(name) != locals.end();
+    return here->hasAttribute(name);
 }
 
 Object *Context::getLocal(const std::string &name) const {
-    return locals.at(name);
+    return here->getAttribute(name);
 }
 
 void Context::setLocal(const std::string &name, Object *value) {
-    locals[name] = value;
+    here->setAttribute(name, value);
 }
 
 Object *Context::get(const std::string &name) const {
@@ -35,5 +39,5 @@ Object *Context::get(const std::string &name) const {
 }
 
 void Context::clear() {
-    locals.clear();
+    here->clear();
 }

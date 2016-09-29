@@ -13,7 +13,7 @@ Object *InterpretedFunction::execute(Object *self, const std::list<Object *> &ar
     context->clear();
 
     std::list<Object *>::const_iterator i = args.begin();
-    for (std::string s : params)
+    for (const std::string &s : params)
         context->setLocal(s, *i++);
 
     return body->eval(context);

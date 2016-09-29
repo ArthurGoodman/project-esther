@@ -85,7 +85,8 @@ SOURCES += \
     source/expression/ast/selfexpression.cpp \
     source/runtime/interpretedfunction.cpp \
     source/runtime/function.cpp \
-    source/runtime/nativefunction.cpp
+    source/runtime/nativefunction.cpp \
+    source/expression/ast/hereexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -156,7 +157,8 @@ HEADERS += \
     source/expression/ast/selfexpression.h \
     source/runtime/interpretedfunction.h \
     source/runtime/function.h \
-    source/runtime/nativefunction.h
+    source/runtime/nativefunction.h \
+    source/expression/ast/hereexpression.h
 
 OTHER_FILES += \
     scripts/script.es \

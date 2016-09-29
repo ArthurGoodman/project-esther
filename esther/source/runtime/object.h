@@ -22,6 +22,8 @@ public:
     Object *getAttribute(const std::string &name) const;
     void setAttribute(const std::string &name, Object *value);
 
+    void clear();
+
     std::string toString() const;
 
     virtual bool isTrue() const;

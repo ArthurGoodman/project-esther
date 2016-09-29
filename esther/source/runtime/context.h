@@ -3,8 +3,7 @@
 #include "object.h"
 
 class Context {
-    Object *self;
-    std::map<std::string, Object *> locals;
+    Object *self, *here;
     Context *parent;
 
 public:
@@ -13,6 +12,8 @@ public:
 
     Object *getSelf() const;
     void setSelf(Object *self);
+
+    Object *getHere() const;
 
     bool hasLocal(const std::string &name) const;
     Object *getLocal(const std::string &name) const;

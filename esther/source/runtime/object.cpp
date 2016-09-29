@@ -34,6 +34,10 @@ void Object::setAttribute(const std::string &name, Object *value) {
     attributes[name] = value;
 }
 
+void Object::clear() {
+    attributes.clear();
+}
+
 std::string Object::toString() const {
     return "<" + getClass()->toString() + ":" + Utility::toString((void *)this) + ">";
 }
