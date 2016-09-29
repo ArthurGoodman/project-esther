@@ -2,13 +2,13 @@
 
 #include "expression.h"
 
-#include "function.h"
+#include "interpretedfunction.h"
 
 class FunctionExpression : public Expression {
-    ::Function *f;
+    InterpretedFunction *f;
 
 public:
-    FunctionExpression(::Function *f);
+    FunctionExpression(InterpretedFunction *f);
 
     Object *exec(Context *context);
 };

@@ -1,6 +1,6 @@
 #include "functionexpression.h"
 
-FunctionExpression::FunctionExpression(::Function *f)
+FunctionExpression::FunctionExpression(InterpretedFunction *f)
     : f(f) {
 }
 

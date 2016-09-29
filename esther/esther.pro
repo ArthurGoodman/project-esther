@@ -60,7 +60,6 @@ SOURCES += \
     source/expression/ast/emptyexpression.cpp \
     source/runtime/context.cpp \
     source/runtime/false.cpp \
-    source/runtime/function.cpp \
     source/runtime/null.cpp \
     source/runtime/true.cpp \
     source/runtime/valueobject/character.cpp \
@@ -84,9 +83,9 @@ SOURCES += \
     source/expression/ast/notexpression.cpp \
     source/expression/ast/orexpression.cpp \
     source/expression/ast/selfexpression.cpp \
-    source/runtime/block.cpp \
-    source/runtime/interpretedblock.cpp \
-    source/runtime/nativeblock.cpp
+    source/runtime/interpretedfunction.cpp \
+    source/runtime/function.cpp \
+    source/runtime/nativefunction.cpp
 
 HEADERS += \
     source/esther.h \
@@ -132,7 +131,6 @@ HEADERS += \
     source/expression/ast/emptyexpression.h \
     source/runtime/context.h \
     source/runtime/false.h \
-    source/runtime/function.h \
     source/runtime/null.h \
     source/runtime/true.h \
     source/runtime/valueobject/character.h \
@@ -156,9 +154,9 @@ HEADERS += \
     source/expression/ast/notexpression.h \
     source/expression/ast/orexpression.h \
     source/expression/ast/selfexpression.h \
-    source/runtime/block.h \
-    source/runtime/interpretedblock.h \
-    source/runtime/nativeblock.h
+    source/runtime/interpretedfunction.h \
+    source/runtime/function.h \
+    source/runtime/nativefunction.h
 
 OTHER_FILES += \
     scripts/script.es \
