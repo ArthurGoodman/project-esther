@@ -42,7 +42,7 @@ Expression *ExpressionManager::createEmpty() {
 }
 
 Expression *ExpressionManager::createFunction() {
-    return new FunctionExpression(0);
+    return new FunctionExpression(0, 0);
 }
 
 Expression *ExpressionManager::createHere() {

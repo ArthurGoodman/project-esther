@@ -6,9 +6,10 @@
 
 class FunctionExpression : public Expression {
     InterpretedFunction *f;
+    Expression *name;
 
 public:
-    FunctionExpression(InterpretedFunction *f);
+    FunctionExpression(InterpretedFunction *f, Expression *name);
 
     Object *exec(Context *context);
 };

@@ -13,6 +13,7 @@ public:
     Function(const std::string &name, uint arity);
 
     std::string getName() const;
+    void setName(const std::string &name);
 
     Object *invoke(Object *self, const std::list<Object *> &args);
     virtual Object *execute(Object *self, const std::list<Object *> &args) = 0;
