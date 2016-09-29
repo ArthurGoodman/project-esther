@@ -8,11 +8,11 @@ public:
     Expression *createAnd();
     Expression *createAttributeAssignment();
     Expression *createBlock();
-    Expression *createClass();
     Expression *createConstant();
     Expression *createContextResolution();
     Expression *createEmpty();
     Expression *createFunction();
+    Expression *createHere();
     Expression *createIdentifier();
     Expression *createIf();
     Expression *createLiteral();

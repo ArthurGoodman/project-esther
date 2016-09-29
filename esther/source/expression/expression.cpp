@@ -15,10 +15,6 @@ Expression *Expression::Block() {
     return IExpressionManager::instance()->createBlock();
 }
 
-Expression *Expression::Class() {
-    return IExpressionManager::instance()->createClass();
-}
-
 Expression *Expression::Constant() {
     return IExpressionManager::instance()->createConstant();
 }
@@ -33,6 +29,10 @@ Expression *Expression::Empty() {
 
 Expression *Expression::Function() {
     return IExpressionManager::instance()->createFunction();
+}
+
+Expression *Expression::Here() {
+    return IExpressionManager::instance()->createHere();
 }
 
 Expression *Expression::If() {

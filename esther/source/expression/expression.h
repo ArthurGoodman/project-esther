@@ -15,11 +15,11 @@ public:
     static Expression *And();
     static Expression *AttributeAssignment();
     static Expression *Block();
-    static Expression *Class();
     static Expression *Constant();
     static Expression *ContextResolution();
     static Expression *Empty();
     static Expression *Function();
+    static Expression *Here();
     static Expression *If();
     static Expression *Literal();
     static Expression *LocalAssignment();

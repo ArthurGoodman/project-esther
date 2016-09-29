@@ -71,7 +71,6 @@ SOURCES += \
     source/expression/ast/attributeassignmentexpression.cpp \
     source/expression/ast/blockexpression.cpp \
     source/expression/ast/callexpression.cpp \
-    source/expression/ast/classexpression.cpp \
     source/expression/ast/constantexpression.cpp \
     source/expression/ast/contextresolutionexpression.cpp \
     source/expression/ast/functionexpression.cpp \
@@ -143,10 +142,10 @@ HEADERS += \
     source/expression/ast/attributeassignmentexpression.h \
     source/expression/ast/blockexpression.h \
     source/expression/ast/callexpression.h \
-    source/expression/ast/classexpression.h \
     source/expression/ast/constantexpression.h \
     source/expression/ast/contextresolutionexpression.h \
     source/expression/ast/functionexpression.h \
+    source/expression/ast/hereexpression.h \
     source/expression/ast/identifierexpression.h \
     source/expression/ast/ifexpression.h \
     source/expression/ast/literalexpression.h \
@@ -157,8 +156,7 @@ HEADERS += \
     source/expression/ast/selfexpression.h \
     source/runtime/interpretedfunction.h \
     source/runtime/function.h \
-    source/runtime/nativefunction.h \
-    source/expression/ast/hereexpression.h
+    source/runtime/nativefunction.h
 
 OTHER_FILES += \
     scripts/script.es \

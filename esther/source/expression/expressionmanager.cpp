@@ -3,11 +3,11 @@
 #include "andexpression.h"
 #include "attributeassignmentexpression.h"
 #include "blockexpression.h"
-#include "classexpression.h"
 #include "constantexpression.h"
 #include "contextresolutionexpression.h"
 #include "emptyexpression.h"
 #include "functionexpression.h"
+#include "hereexpression.h"
 #include "identifierexpression.h"
 #include "ifexpression.h"
 #include "literalexpression.h"
@@ -29,10 +29,6 @@ Expression *ExpressionManager::createBlock() {
     return new BlockExpression(std::list<Expression *>());
 }
 
-Expression *ExpressionManager::createClass() {
-    return new ClassExpression;
-}
-
 Expression *ExpressionManager::createConstant() {
     return new ConstantExpression(0);
 }
@@ -47,6 +43,10 @@ Expression *ExpressionManager::createEmpty() {
 
 Expression *ExpressionManager::createFunction() {
     return new FunctionExpression(0);
+}
+
+Expression *ExpressionManager::createHere() {
+    return new HereExpression;
 }
 
 Expression *ExpressionManager::createIdentifier() {
