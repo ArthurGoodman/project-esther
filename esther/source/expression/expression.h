@@ -18,7 +18,6 @@ public:
     static Expression *Constant();
     static Expression *ContextResolution();
     static Expression *Empty();
-    static Expression *Function();
     static Expression *Here();
     static Expression *If();
     static Expression *Literal();

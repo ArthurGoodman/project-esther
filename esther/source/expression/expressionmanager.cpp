@@ -6,7 +6,6 @@
 #include "constantexpression.h"
 #include "contextresolutionexpression.h"
 #include "emptyexpression.h"
-#include "functionexpression.h"
 #include "hereexpression.h"
 #include "identifierexpression.h"
 #include "ifexpression.h"
@@ -39,10 +38,6 @@ Expression *ExpressionManager::createContextResolution() {
 
 Expression *ExpressionManager::createEmpty() {
     return new EmptyExpression;
-}
-
-Expression *ExpressionManager::createFunction() {
-    return new FunctionExpression(0, 0);
 }
 
 Expression *ExpressionManager::createHere() {

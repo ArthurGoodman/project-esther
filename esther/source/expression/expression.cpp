@@ -27,10 +27,6 @@ Expression *Expression::Empty() {
     return IExpressionManager::instance()->createEmpty();
 }
 
-Expression *Expression::Function() {
-    return IExpressionManager::instance()->createFunction();
-}
-
 Expression *Expression::Here() {
     return IExpressionManager::instance()->createHere();
 }

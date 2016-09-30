@@ -73,7 +73,6 @@ SOURCES += \
     source/expression/ast/callexpression.cpp \
     source/expression/ast/constantexpression.cpp \
     source/expression/ast/contextresolutionexpression.cpp \
-    source/expression/ast/functionexpression.cpp \
     source/expression/ast/identifierexpression.cpp \
     source/expression/ast/ifexpression.cpp \
     source/expression/ast/literalexpression.cpp \
@@ -144,7 +143,6 @@ HEADERS += \
     source/expression/ast/callexpression.h \
     source/expression/ast/constantexpression.h \
     source/expression/ast/contextresolutionexpression.h \
-    source/expression/ast/functionexpression.h \
     source/expression/ast/hereexpression.h \
     source/expression/ast/identifierexpression.h \
     source/expression/ast/ifexpression.h \

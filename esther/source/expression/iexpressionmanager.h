@@ -22,7 +22,6 @@ public:
     virtual Expression *createConstant() = 0;
     virtual Expression *createContextResolution() = 0;
     virtual Expression *createEmpty() = 0;
-    virtual Expression *createFunction() = 0;
     virtual Expression *createHere() = 0;
     virtual Expression *createIdentifier() = 0;
     virtual Expression *createIf() = 0;
