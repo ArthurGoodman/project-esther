@@ -1,7 +1,5 @@
 #include "expressiontest.h"
 
-#include "esther.h"
-
 ExpressionTest::ExpressionTest()
     : TestSet("expressions") {
     defineTests();
