@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <list>
 
 class Class;
 
@@ -27,4 +28,6 @@ public:
     std::string toString() const;
 
     virtual bool isTrue() const;
+
+    Object *call(const std::string &name, const std::list<Object *> &args);
 };

@@ -3,11 +3,12 @@
 #include "expression.h"
 
 class CallExpression : public Expression {
-    Expression *self, *body;
+    Expression *body;
     std::list<Expression *> args;
 
 public:
-    CallExpression(Expression *self, Expression *body, const std::list<Expression *> &args);
+    CallExpression(Expression *body, const std::list<Expression *> &args);
+    ~CallExpression();
 
     Object *exec(Context *context);
 };

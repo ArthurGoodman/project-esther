@@ -45,3 +45,7 @@ std::string Object::toString() const {
 bool Object::isTrue() const {
     return true;
 }
+
+Object *Object::call(const std::__cxx11::string &name, const std::list<Object *> &args) {
+    return 0;
+}

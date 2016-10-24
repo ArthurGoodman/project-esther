@@ -1,9 +1,18 @@
 #include "callexpression.h"
 
-CallExpression::CallExpression(Expression *self, Expression *body, const std::list<Expression *> &args)
-    : self(self), body(body), args(args) {
+#include "common.h"
+
+CallExpression::CallExpression(Expression *body, const std::list<Expression *> &args)
+    : body(body), args(args) {
 }
 
-Object *CallExpression::exec(Context *) {
+CallExpression::~CallExpression() {
+    delete body;
+
+    for (Expression *e : args)
+        delete e;
+}
+
+Object *CallExpression::exec(Context *context) {
     return 0;
 }
