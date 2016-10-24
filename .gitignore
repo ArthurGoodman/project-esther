@@ -1,6 +1,6 @@
-logs
+libesther/logs/
+Makefile
 *.user
-Makefile*
 *.Debug
 *.Release
 *.autosave
