@@ -5,4 +5,6 @@ Makefile
 *.Release
 *.autosave
 *.o
+*.a
 *.exe
+*.dll
