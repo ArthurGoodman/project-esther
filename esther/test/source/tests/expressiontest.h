@@ -5,7 +5,4 @@
 class ExpressionTest : public unit::TestSet {
 public:
     ExpressionTest();
-
-private:
-    void defineTests();
 };

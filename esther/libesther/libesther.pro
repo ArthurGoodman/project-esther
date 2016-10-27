@@ -7,17 +7,16 @@ CONFIG -= qt
 
 INCLUDEPATH = \
     source \
-    source\common\
-    source\common\definitions \
-    source\exception \
-    source\expression \
-    source\lexer \
-    source\expression\ast \
-    source\expression\debug \
-    source\parser \
-    source\runtime \
-    source\runtime\valueobject \
-    source\variant
+    source/common\
+    source/common\definitions \
+    source/exception \
+    source/expression \
+    source/lexer \
+    source/expression\ast \
+    source/expression\debug \
+    source/parser \
+    source/runtime \
+    source/runtime\valueobject
 
 SOURCES += \
     source/esther.cpp \
@@ -51,13 +50,6 @@ SOURCES += \
     source/expression/iexpressionmanager.cpp \
     source/expression/debug/debugexpression.cpp \
     source/expression/debug/debugexpressionmanager.cpp \
-    source/variant/charvariant.cpp \
-    source/variant/floatvariant.cpp \
-    source/variant/integervariant.cpp \
-    source/variant/nullvariant.cpp \
-    source/variant/stringvariant.cpp \
-    source/variant/variant.cpp \
-    source/variant/variantprivate.cpp \
     source/expression/ast/emptyexpression.cpp \
     source/runtime/context.cpp \
     source/runtime/false.cpp \
@@ -86,7 +78,8 @@ SOURCES += \
     source/runtime/function.cpp \
     source/runtime/nativefunction.cpp \
     source/expression/ast/hereexpression.cpp \
-    source/expression/ast/contextcallepression.cpp
+    source/expression/ast/contextcallepression.cpp \
+    source/common/variant.cpp
 
 HEADERS += \
     source/esther.h \
@@ -157,7 +150,8 @@ HEADERS += \
     source/runtime/interpretedfunction.h \
     source/runtime/function.h \
     source/runtime/nativefunction.h \
-    source/expression/ast/contextcallepression.h
+    source/expression/ast/contextcallepression.h \
+    source/common/variant.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

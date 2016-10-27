@@ -6,11 +6,11 @@
 #include "stringvalueobject.h"
 
 ValueObject *ValueObject::createNewInstance(const Variant &value) {
-    switch (value.type()) {
+    switch (value.getType()) {
     case Variant::Integer:
         return new Integer(value.toInteger());
-    case Variant::Float:
-        return new Float(value.toFloat());
+    case Variant::Real:
+        return new Float(value.toReal());
     case Variant::Char:
         return new Character(value.toChar());
     case Variant::String:
@@ -38,7 +38,7 @@ ValueObject::ValueObject(const std::string &value)
 }
 
 ValueObject::ValueObject(const Variant &value)
-    : Object(typeToClassName(value.type())), value(value) {
+    : Object(typeToClassName(value.getType())), value(value) {
 }
 
 Variant ValueObject::getVariant() {
@@ -53,7 +53,7 @@ std::string ValueObject::typeToClassName(Variant::Type type) {
     switch (type) {
     case Variant::Integer:
         return "Integer";
-    case Variant::Float:
+    case Variant::Real:
         return "Float";
     case Variant::Char:
         return "Character";

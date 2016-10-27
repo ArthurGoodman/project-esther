@@ -2,10 +2,6 @@
 
 ExpressionTest::ExpressionTest()
     : TestSet("expressions") {
-    defineTests();
-}
-
-void ExpressionTest::defineTests() {
     $("And", [=]() {
     }).should.be.ok();
 

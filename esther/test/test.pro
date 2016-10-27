@@ -12,9 +12,14 @@ DEPENDPATH += ../../../unit
 INCLUDEPATH += ../../../unit
 LIBS += -L../../../unit/release -lunit
 
+INCLUDEPATH += \
+    source/tests
+
 SOURCES += \
     source/main.cpp \
-    source/expressiontest.cpp
+    source/tests/expressiontest.cpp \
+    source/tests/varianttest.cpp
 
 HEADERS += \
-    source/expressiontest.h
+    source/tests/expressiontest.h \
+    source/tests/varianttest.h
