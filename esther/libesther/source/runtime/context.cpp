@@ -3,12 +3,8 @@
 #include "object.h"
 #include "runtime.h"
 
-//Context::Context()
-//    : self(Runtime::getMainObject()), here(new Object), parent(0) {
-//}
-
-Context::Context(Object *self, Context *parent)
-    : self(self), here(new Object), parent(parent) {
+Context::Context(Runtime *runtime)
+    : self(runtime->getMainObject()), here(new Object), runtime(runtime), parent(0) {
 }
 
 Object *Context::getSelf() const {
@@ -45,4 +41,12 @@ Object *Context::get(const std::string &name) const {
 
 void Context::clear() {
     here->clear();
+}
+
+Context *Context::childContext(Object *self) {
+    return new Context(self, this);
+}
+
+Context::Context(Object *self, Context *parent)
+    : self(self), here(new Object), runtime(parent->runtime), parent(parent) {
 }

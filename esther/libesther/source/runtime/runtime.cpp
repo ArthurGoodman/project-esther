@@ -15,10 +15,6 @@ Runtime::~Runtime() {
     release();
 }
 
-Context *Runtime::getRoot() {
-    return root;
-}
-
 Object *Runtime::getMainObject() {
     return mainObject;
 }

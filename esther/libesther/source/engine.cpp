@@ -6,6 +6,7 @@
 #include "utility.h"
 #include "expression.h"
 #include "token.h"
+#include "context.h"
 #include "runtime.h"
 
 Engine::Engine() {
@@ -22,8 +23,9 @@ Object *Engine::run(const std::string &script) {
     pushSource(src);
 
     try {
+        Context root(&runtime);
         Expression *e = IParser::instance()->parse(ILexer::instance()->lex(src));
-        value = e->eval(runtime.getRoot());
+        value = e->eval(&root);
         delete e;
     } catch (std::exception e) {
         IO::printLine((std::string) "error: " + e.what());

@@ -7,8 +7,6 @@ class Class;
 class Context;
 
 class Runtime {
-    Context *root;
-
     Object *mainObject;
     Class *objectClass;
 
@@ -24,7 +22,6 @@ public:
     Runtime();
     ~Runtime();
 
-    Context *getRoot();
     Object *getMainObject();
     Class *getObjectClass();
     Object *getTrue();

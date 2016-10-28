@@ -11,8 +11,7 @@ class Context {
     Context *parent;
 
 public:
-    //Context();
-    Context(Object *self, Context *parent);
+    Context(Runtime *runtime);
 
     Object *getSelf() const;
     void setSelf(Object *self);
@@ -28,4 +27,9 @@ public:
     Object *get(const std::string &name) const;
 
     void clear();
+
+    Context *childContext(Object *self);
+
+private:
+    Context(Object *self, Context *parent);
 };
