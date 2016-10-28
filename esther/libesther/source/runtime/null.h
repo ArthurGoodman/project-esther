@@ -3,10 +3,13 @@
 #include "object.h"
 
 class Null : public Object {
-public:
-    Null();
+    friend class NullClass;
 
+public:
     bool isTrue();
 
     std::string toString();
+
+private:
+    Null(Class *objectClass);
 };

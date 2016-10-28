@@ -3,21 +3,16 @@
 #include "class.h"
 #include "runtimeerror.h"
 
-Context *Runtime::root;
-
-Object *Runtime::mainObject = 0;
-Class *Runtime::objectClass = 0;
-
-Object *Runtime::trueObject = 0;
-Object *Runtime::falseObject = 0;
-Object *Runtime::nullObject = 0;
-
-std::map<std::string, Class *> Runtime::rootClasses;
-
-void Runtime::initialize() {
+void Runtime::runtimeError(const std::string &message) {
+    throw new RuntimeError(message);
 }
 
-void Runtime::release() {
+Runtime::Runtime() {
+    initialize();
+}
+
+Runtime::~Runtime() {
+    release();
 }
 
 Context *Runtime::getRoot() {
@@ -60,6 +55,8 @@ Object *Runtime::toBoolean(bool value) {
     return value ? trueObject : falseObject;
 }
 
-void Runtime::runtimeError(const std::string &message) {
-    throw new RuntimeError(message);
+void Runtime::initialize() {
+}
+
+void Runtime::release() {
 }

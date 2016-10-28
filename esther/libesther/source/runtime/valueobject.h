@@ -3,18 +3,14 @@
 #include "object.h"
 #include "variant.h"
 
+class Context;
+
 class ValueObject : public Object {
 protected:
     Variant value;
 
 public:
-    static ValueObject *createNewInstance(const Variant &value);
-
-    ValueObject(int value);
-    ValueObject(double value);
-    ValueObject(char value);
-    ValueObject(const std::string &value);
-    ValueObject(const Variant &value);
+    static ValueObject *createNewInstance(Context *context, const Variant &value);
 
     Variant getVariant();
 
@@ -23,4 +19,6 @@ protected:
 
 private:
     static std::string typeToClassName(Variant::Type type);
+
+    ValueObject(Context *context, const Variant &value);
 };

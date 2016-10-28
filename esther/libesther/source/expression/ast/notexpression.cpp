@@ -1,5 +1,6 @@
 #include "notexpression.h"
 
+#include "context.h"
 #include "runtime.h"
 
 NotExpression::NotExpression(Expression *self)
@@ -11,5 +12,5 @@ NotExpression::~NotExpression() {
 }
 
 Object *NotExpression::exec(Context *context) {
-    return Runtime::toBoolean(!self->eval(context)->isTrue());
+    return context->getRuntime()->toBoolean(!self->eval(context)->isTrue());
 }

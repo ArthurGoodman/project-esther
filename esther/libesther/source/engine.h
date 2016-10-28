@@ -3,11 +3,14 @@
 #include <stack>
 
 #include "common/source.h"
+#include "runtime/runtime.h"
 
 class Object;
 class Context;
 
 class Engine {
+    Runtime runtime;
+
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 

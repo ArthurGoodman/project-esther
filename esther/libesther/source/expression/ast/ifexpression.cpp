@@ -1,5 +1,6 @@
 #include "ifexpression.h"
 
+#include "context.h"
 #include "runtime.h"
 
 IfExpression::IfExpression(Expression *condition, Expression *body, Expression *elseBody)
@@ -13,7 +14,7 @@ IfExpression::~IfExpression() {
 }
 
 Object *IfExpression::exec(Context *context) {
-    Object *value = Runtime::getNull();
+    Object *value = context->getRuntime()->getNull();
 
     if (condition->eval(context)->isTrue())
         value = body->eval(context);

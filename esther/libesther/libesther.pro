@@ -55,11 +55,6 @@ SOURCES += \
     source/runtime/false.cpp \
     source/runtime/null.cpp \
     source/runtime/true.cpp \
-    source/runtime/valueobject/character.cpp \
-    source/runtime/valueobject/float.cpp \
-    source/runtime/valueobject/integer.cpp \
-    source/runtime/valueobject/stringvalueobject.cpp \
-    source/runtime/valueobject/valueobject.cpp \
     source/expression/ast/andexpression.cpp \
     source/expression/ast/attributeassignmentexpression.cpp \
     source/expression/ast/blockexpression.cpp \
@@ -85,7 +80,11 @@ SOURCES += \
     source/variant/nullvariant.cpp \
     source/variant/stringvariant.cpp \
     source/variant/variant.cpp \
-    source/variant/variantprivate.cpp
+    source/variant/variantprivate.cpp \
+    source/runtime/rootclass/rootclass.cpp \
+    source/runtime/rootclass/booleanclass.cpp \
+    source/runtime/rootclass/nullclass.cpp \
+    source/runtime/valueobject.cpp
 
 HEADERS += \
     source/esther.h \
@@ -132,11 +131,6 @@ HEADERS += \
     source/runtime/false.h \
     source/runtime/null.h \
     source/runtime/true.h \
-    source/runtime/valueobject/character.h \
-    source/runtime/valueobject/float.h \
-    source/runtime/valueobject/integer.h \
-    source/runtime/valueobject/stringvalueobject.h \
-    source/runtime/valueobject/valueobject.h \
     source/expression/ast/andexpression.h \
     source/expression/ast/attributeassignmentexpression.h \
     source/expression/ast/blockexpression.h \
@@ -155,7 +149,11 @@ HEADERS += \
     source/runtime/interpretedfunction.h \
     source/runtime/function.h \
     source/runtime/nativefunction.h \
-    source/expression/ast/contextcallepression.h
+    source/expression/ast/contextcallepression.h \
+    source/runtime/rootclass/rootclass.h \
+    source/runtime/rootclass/booleanclass.h \
+    source/runtime/rootclass/nullclass.h \
+    source/runtime/valueobject.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

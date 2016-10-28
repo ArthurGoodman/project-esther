@@ -1,5 +1,6 @@
 #include "loopexpression.h"
 
+#include "context.h"
 #include "runtime.h"
 
 LoopExpression::LoopExpression(Expression *condition, Expression *body)
@@ -12,7 +13,7 @@ LoopExpression::~LoopExpression() {
 }
 
 Object *LoopExpression::exec(Context *context) {
-    Object *value = Runtime::getNull();
+    Object *value = context->getRuntime()->getNull();
 
     while (condition->eval(context)->isTrue())
         value = body->eval(context);

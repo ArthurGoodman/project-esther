@@ -1,10 +1,11 @@
 #include "context.h"
 
+#include "object.h"
 #include "runtime.h"
 
-Context::Context()
-    : self(Runtime::getMainObject()), here(new Object), parent(0) {
-}
+//Context::Context()
+//    : self(Runtime::getMainObject()), here(new Object), parent(0) {
+//}
 
 Context::Context(Object *self, Context *parent)
     : self(self), here(new Object), parent(parent) {
@@ -20,6 +21,10 @@ void Context::setSelf(Object *self) {
 
 Object *Context::getHere() const {
     return here;
+}
+
+Runtime *Context::getRuntime() const {
+    return runtime;
 }
 
 bool Context::hasLocal(const std::string &name) const {

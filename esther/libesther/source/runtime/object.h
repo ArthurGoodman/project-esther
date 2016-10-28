@@ -13,7 +13,7 @@ class Object {
 public:
     Object();
     Object(Class *objectClass);
-    Object(const std::string &className);
+    //Object(const std::string &className);
 
     virtual ~Object();
 
