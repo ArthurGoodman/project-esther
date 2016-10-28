@@ -1,6 +1,6 @@
 #pragma once
 
-#include "debug.h"
+#include "common.h"
 #include "iexpressionmanager.h"
 
 #if DEBUG_PARSER

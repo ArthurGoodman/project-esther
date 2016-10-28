@@ -47,3 +47,7 @@ std::string Utility::expandTabs(const std::string &str) {
 
     return result;
 }
+
+uint Utility::ceilToPowerOf2(uint n) {
+    return 1 << (sizeof(n) * 8 - __builtin_clz(n - 1));
+}

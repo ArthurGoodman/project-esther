@@ -1,6 +1,6 @@
 #include "varianttest.h"
 
-#include "common/variant.h"
+#include "variant/variant.h"
 
 VariantTest::VariantTest()
     : TestSet("variant") {
@@ -65,7 +65,7 @@ VariantTest::VariantTest()
         .should.be = '3';
 
     $("toString(Null)", []() { return Variant().toString(); })
-        .should.be = "null";
+        .should.be = "";
 
     $("toString(Integer)", []() { return Variant(3).toString(); })
         .should.be = "3";
@@ -84,4 +84,10 @@ VariantTest::VariantTest()
 
     $("isNull(Integer)", []() { return Variant(0).isNull(); })
         .should.be = false;
+
+    $("operator =", []() {
+        Variant v("");
+        v = 3;
+        return v.toInteger();
+    }).should.be = 3;
 }

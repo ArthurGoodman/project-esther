@@ -3,7 +3,7 @@
 #include <string>
 #include <list>
 
-#include "debug.h"
+#include "common.h"
 #include "expression.h"
 
 #if DEBUG_PARSER

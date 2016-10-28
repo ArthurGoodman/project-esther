@@ -1,6 +1,6 @@
 #pragma once
 
-#include "debug.h"
+#include "common.h"
 #include "utility.h"
 #include "io.h"
 

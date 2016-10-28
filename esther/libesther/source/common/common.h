@@ -3,6 +3,16 @@
 #include <list>
 #include <vector>
 
+#define DEBUG 0
+
+#if DEBUG
+#define DEBUG_LEXER 0
+#define DEBUG_PARSER 0
+#define DEBUG_RUNTIME 0
+#endif
+
+#define HEAP_VARIANT 0
+
 typedef unsigned char byte;
 typedef unsigned int uint;
 typedef unsigned long long ulong;
@@ -33,5 +43,3 @@ std::vector<B> *operator<<(std::vector<B> *v, const A &e) {
     v->push_back((B)e);
     return v;
 }
-
-uint ceilToPowerOf2(uint n);

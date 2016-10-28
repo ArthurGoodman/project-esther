@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "utility.h"
+
 uint ByteArray::initialCapacity = 1;
 
 void ByteArray::setInitialCapacity(uint initialCapacity) {
@@ -55,7 +57,7 @@ ByteArray &ByteArray::operator=(ByteArray &&array) {
 
 byte *ByteArray::allocate(uint count) {
     if (!enoughSpace(count)) {
-        uint newCapacity = ceilToPowerOf2(std::max(initialCapacity, size + count));
+        uint newCapacity = Utility::ceilToPowerOf2(std::max(initialCapacity, size + count));
 
         byte *newData = (byte *)realloc(data, newCapacity);
 

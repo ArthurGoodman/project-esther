@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "common.h"
 #include "tokens.h"
 #include "lexicalerror.h"
 #include "logger.h"

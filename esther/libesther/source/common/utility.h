@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <cmath>
 
+#include "common.h"
+
 class Utility {
     static const int tabSize = 4;
 
@@ -24,6 +26,8 @@ public:
     static bool isLetterOrDigit(char c);
 
     static std::string expandTabs(const std::string &str);
+
+    static uint ceilToPowerOf2(uint n);
 };
 
 template <class T>

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "debug.h"
+#include "common.h"
 #include "ilexer.h"
 
 class Lexer : public ILexer {

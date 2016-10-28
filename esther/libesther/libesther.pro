@@ -16,7 +16,8 @@ INCLUDEPATH = \
     source/expression\debug \
     source/parser \
     source/runtime \
-    source/runtime\valueobject
+    source/runtime\valueobject \
+    source/variant
 
 SOURCES += \
     source/esther.cpp \
@@ -27,7 +28,6 @@ SOURCES += \
     source/common/source.cpp \
     source/common/token.cpp \
     source/common/utility.cpp \
-    source/common/common.cpp \
     source/lexer/ilexer.cpp \
     source/parser/iparser.cpp \
     source/runtime/object.cpp \
@@ -79,13 +79,18 @@ SOURCES += \
     source/runtime/nativefunction.cpp \
     source/expression/ast/hereexpression.cpp \
     source/expression/ast/contextcallepression.cpp \
-    source/common/variant.cpp
+    source/variant/charvariant.cpp \
+    source/variant/floatvariant.cpp \
+    source/variant/integervariant.cpp \
+    source/variant/nullvariant.cpp \
+    source/variant/stringvariant.cpp \
+    source/variant/variant.cpp \
+    source/variant/variantprivate.cpp
 
 HEADERS += \
     source/esther.h \
     source/common/bytearray.h \
     source/common/common.h \
-    source/common/debug.h \
     source/common/io.h \
     source/common/logger.h \
     source/common/position.h \
@@ -150,8 +155,7 @@ HEADERS += \
     source/runtime/interpretedfunction.h \
     source/runtime/function.h \
     source/runtime/nativefunction.h \
-    source/expression/ast/contextcallepression.h \
-    source/common/variant.h
+    source/expression/ast/contextcallepression.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \
