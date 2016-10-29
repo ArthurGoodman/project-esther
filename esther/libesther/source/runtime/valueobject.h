@@ -6,11 +6,15 @@
 class Context;
 
 class ValueObject : public Object {
-protected:
+    friend class IntegerClass;
+    friend class FloatClass;
+    friend class CharacterClass;
+    friend class StringClass;
+
     Variant value;
 
 public:
-    static ValueObject *createNewInstance(Context *context, const Variant &value);
+    static Object *createNewInstance(Context *context, const Variant &value);
 
     Variant getVariant();
 
@@ -18,7 +22,5 @@ protected:
     void setVariant(Variant value);
 
 private:
-    static std::string typeToClassName(Variant::Type type);
-
-    ValueObject(Context *context, const Variant &value);
+    ValueObject(Class *objectClass, const Variant &value);
 };

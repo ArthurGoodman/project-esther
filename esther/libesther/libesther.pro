@@ -16,7 +16,7 @@ INCLUDEPATH = \
     source/expression\debug \
     source/parser \
     source/runtime \
-    source/runtime\valueobject \
+    source/runtime\rootclass \
     source/variant
 
 SOURCES += \
@@ -84,7 +84,14 @@ SOURCES += \
     source/runtime/rootclass/rootclass.cpp \
     source/runtime/rootclass/booleanclass.cpp \
     source/runtime/rootclass/nullclass.cpp \
-    source/runtime/valueobject.cpp
+    source/runtime/valueobject.cpp \
+    source/runtime/rootclass/integerclass.cpp \
+    source/runtime/rootclass/characterclass.cpp \
+    source/runtime/rootclass/floatclass.cpp \
+    source/runtime/rootclass/stringclass.cpp \
+    source/runtime/rootclass/objectclass.cpp \
+    source/runtime/rootclass/classclass.cpp \
+    source/runtime/rootclass/functionclass.cpp
 
 HEADERS += \
     source/esther.h \
@@ -153,7 +160,14 @@ HEADERS += \
     source/runtime/rootclass/rootclass.h \
     source/runtime/rootclass/booleanclass.h \
     source/runtime/rootclass/nullclass.h \
-    source/runtime/valueobject.h
+    source/runtime/valueobject.h \
+    source/runtime/rootclass/integerclass.h \
+    source/runtime/rootclass/characterclass.h \
+    source/runtime/rootclass/floatclass.h \
+    source/runtime/rootclass/stringclass.h \
+    source/runtime/rootclass/objectclass.h \
+    source/runtime/rootclass/classclass.h \
+    source/runtime/rootclass/functionclass.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

@@ -6,6 +6,7 @@
 
 class Class : public Object {
     std::string name;
+    Class *superclass;
 
 public:
     std::string getName() const;
