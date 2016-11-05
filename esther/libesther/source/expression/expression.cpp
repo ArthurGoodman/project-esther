@@ -3,8 +3,8 @@
 #include "iexpressionmanager.h"
 #include "errorexception.h"
 
-Expression *Expression::And() {
-    return IExpressionManager::instance()->createAnd();
+Expression *Expression::And(Expression *self, Expression *arg) {
+    return IExpressionManager::instance()->createAnd(self, arg);
 }
 
 Expression *Expression::AttributeAssignment() {
@@ -15,8 +15,8 @@ Expression *Expression::Block() {
     return IExpressionManager::instance()->createBlock();
 }
 
-Expression *Expression::Constant() {
-    return IExpressionManager::instance()->createConstant();
+Expression *Expression::Constant(Object *value) {
+    return IExpressionManager::instance()->createConstant(value);
 }
 
 Expression *Expression::ContextResolution() {
@@ -35,8 +35,8 @@ Expression *Expression::If() {
     return IExpressionManager::instance()->createIf();
 }
 
-Expression *Expression::Literal() {
-    return IExpressionManager::instance()->createLiteral();
+Expression *Expression::Literal(const Variant &value) {
+    return IExpressionManager::instance()->createLiteral(value);
 }
 
 Expression *Expression::LocalAssignment() {
@@ -51,8 +51,8 @@ Expression *Expression::Not() {
     return IExpressionManager::instance()->createNot();
 }
 
-Expression *Expression::Or() {
-    return IExpressionManager::instance()->createOr();
+Expression *Expression::Or(Expression *self, Expression *arg) {
+    return IExpressionManager::instance()->createOr(self, arg);
 }
 
 Expression *Expression::Self() {

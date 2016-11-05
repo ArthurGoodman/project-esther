@@ -1,11 +1,11 @@
 #include "null.h"
 
-bool Null::isTrue() {
-    return false;
+std::string Null::toString() const {
+    return "null";
 }
 
-std::string Null::toString() {
-    return "null";
+bool Null::isTrue() const {
+    return false;
 }
 
 Null::Null(Class *objectClass)

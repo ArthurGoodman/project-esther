@@ -16,8 +16,8 @@
 #include "orexpression.h"
 #include "selfexpression.h"
 
-Expression *ExpressionManager::createAnd() {
-    return new AndExpression(0, 0);
+Expression *ExpressionManager::createAnd(Expression *self, Expression *arg) {
+    return new AndExpression(self, arg);
 }
 
 Expression *ExpressionManager::createAttributeAssignment() {
@@ -28,8 +28,8 @@ Expression *ExpressionManager::createBlock() {
     return new BlockExpression(std::list<Expression *>());
 }
 
-Expression *ExpressionManager::createConstant() {
-    return new ConstantExpression(0);
+Expression *ExpressionManager::createConstant(Object *value) {
+    return new ConstantExpression(value);
 }
 
 Expression *ExpressionManager::createContextResolution() {
@@ -52,8 +52,8 @@ Expression *ExpressionManager::createIf() {
     return new IfExpression(0, 0, 0);
 }
 
-Expression *ExpressionManager::createLiteral() {
-    return new LiteralExpression(Variant());
+Expression *ExpressionManager::createLiteral(const Variant &value) {
+    return new LiteralExpression(value);
 }
 
 Expression *ExpressionManager::createLocalAssignment() {
@@ -68,8 +68,8 @@ Expression *ExpressionManager::createNot() {
     return new NotExpression(0);
 }
 
-Expression *ExpressionManager::createOr() {
-    return new OrExpression(0, 0);
+Expression *ExpressionManager::createOr(Expression *self, Expression *arg) {
+    return new OrExpression(self, arg);
 }
 
 Expression *ExpressionManager::createSelf() {

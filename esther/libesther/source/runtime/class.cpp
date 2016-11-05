@@ -28,10 +28,10 @@ Object *Class::createNewInstance() {
     return new Object(this);
 }
 
-Class::Class(const std::string &name)
-    : Object(nullptr), name(name), superclass(nullptr) {
-}
-
 Class::Class(Class *objectClass, const std::string &name, Class *superclass)
     : Object(objectClass), name(name), superclass(superclass) {
+}
+
+Class::Class(const std::string &name)
+    : Object(nullptr), name(name), superclass(nullptr) {
 }

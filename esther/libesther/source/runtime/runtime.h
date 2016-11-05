@@ -19,8 +19,8 @@ class Runtime {
 public:
     static void runtimeError(const std::string &message);
 
-    Runtime();
-    ~Runtime();
+    void initialize();
+    void release();
 
     Object *getMainObject();
     Class *getObjectClass();
@@ -33,8 +33,5 @@ public:
     Object *toBoolean(bool value);
 
 private:
-    void initialize();
-    void release();
-
     void registerRootClass(Class *rootClass);
 };

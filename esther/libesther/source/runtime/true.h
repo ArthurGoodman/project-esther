@@ -6,7 +6,7 @@ class True : public Object {
     friend class BooleanClass;
 
 public:
-    std::string toString();
+    std::string toString() const;
 
 private:
     True(Class *objectClass);

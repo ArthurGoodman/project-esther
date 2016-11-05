@@ -2,8 +2,8 @@
 
 #include <list>
 
-#include "object.h"
-#include "position.h"
+#include "common/position.h"
+#include "runtime/object.h"
 
 class Variant;
 class Context;
@@ -12,19 +12,19 @@ class Expression {
     Position position;
 
 public:
-    static Expression *And();
+    static Expression *And(Expression *self, Expression *arg);
     static Expression *AttributeAssignment();
     static Expression *Block();
-    static Expression *Constant();
+    static Expression *Constant(Object *value);
     static Expression *ContextResolution();
     static Expression *Empty();
     static Expression *Here();
     static Expression *If();
-    static Expression *Literal();
+    static Expression *Literal(const Variant &value);
     static Expression *LocalAssignment();
     static Expression *Loop();
     static Expression *Not();
-    static Expression *Or();
+    static Expression *Or(Expression *self, Expression *arg);
     static Expression *Self();
 
     virtual ~Expression();

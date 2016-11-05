@@ -1,6 +1,6 @@
 #include "true.h"
 
-std::string True::toString() {
+std::string True::toString() const {
     return "true";
 }
 

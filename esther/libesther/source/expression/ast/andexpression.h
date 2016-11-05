@@ -1,6 +1,6 @@
 #pragma once
 
-#include "expression.h"
+#include "expression/expression.h"
 
 class AndExpression : public Expression {
     Expression *self, *arg;

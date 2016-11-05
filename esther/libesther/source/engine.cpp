@@ -10,9 +10,11 @@
 #include "runtime.h"
 
 Engine::Engine() {
+    runtime.initialize();
 }
 
 Engine::~Engine() {
+    runtime.release();
 }
 
 Object *Engine::run(const std::string &script) {

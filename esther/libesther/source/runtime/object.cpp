@@ -36,7 +36,7 @@ void Object::clear() {
 }
 
 std::string Object::toString() const {
-    return "<" + getClass()->toString() + ":" + Utility::toString((void *)this) + ">";
+    return "<" + getClass()->getName() + ":" + Utility::toString((void *)this) + ">";
 }
 
 bool Object::isTrue() const {

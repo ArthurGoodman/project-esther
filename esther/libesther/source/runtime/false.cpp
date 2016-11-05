@@ -1,11 +1,11 @@
 #include "false.h"
 
-bool False::isTrue() {
-    return false;
+std::string False::toString() const {
+    return "false";
 }
 
-std::string False::toString() {
-    return "false";
+bool False::isTrue() const {
+    return false;
 }
 
 False::False(Class *objectClass)

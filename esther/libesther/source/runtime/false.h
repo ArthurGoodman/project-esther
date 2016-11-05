@@ -6,9 +6,9 @@ class False : public Object {
     friend class BooleanClass;
 
 public:
-    bool isTrue();
+    std::string toString() const;
 
-    std::string toString();
+    bool isTrue() const;
 
 private:
     False(Class *objectClass);

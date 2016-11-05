@@ -18,6 +18,8 @@ public:
 
     Variant getVariant();
 
+    std::string toString() const;
+
 private:
     ValueObject(Class *objectClass, const Variant &value);
 };
