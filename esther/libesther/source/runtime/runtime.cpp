@@ -14,6 +14,8 @@
 #include "true.h"
 #include "false.h"
 #include "null.h"
+#include "function.h"
+#include "valueobject.h"
 
 void Runtime::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
@@ -47,6 +49,34 @@ void Runtime::initialize() {
     registerRootClass(stringClass = new StringClass(classClass));
 
     registerRootClass(functionClass = new FunctionClass(classClass));
+
+    integerClass->setAttribute("+", createNativeFunction("+", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+                                   if (self->getClass() != integerClass) {
+                                       runtimeError("Integer.+: invalid self");
+                                       return nullptr;
+                                   }
+
+                                   if (args[0]->getClass() != integerClass) {
+                                       runtimeError("Integer.+: invalid argument");
+                                       return nullptr;
+                                   }
+
+                                   return createInteger(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args[0])->getVariant().toInteger());
+                               }));
+
+    integerClass->setAttribute("<", createNativeFunction("<", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+                                   if (self->getClass() != integerClass) {
+                                       runtimeError("Integer.<: invalid self");
+                                       return nullptr;
+                                   }
+
+                                   if (args[0]->getClass() != integerClass) {
+                                       runtimeError("Integer.<: invalid argument");
+                                       return nullptr;
+                                   }
+
+                                   return toBoolean(((ValueObject *)self)->getVariant().toInteger() < ((ValueObject *)args[0])->getVariant().toInteger());
+                               }));
 }
 
 void Runtime::release() {
@@ -104,7 +134,7 @@ Class *Runtime::createClass(const std::string &name, Class *superclass) {
     return classClass->createClass(name, superclass);
 }
 
-Function *Runtime::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::list<Object *> &)> &body) {
+Function *Runtime::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
     return functionClass->createNativeFunction(name, arity, body);
 }
 

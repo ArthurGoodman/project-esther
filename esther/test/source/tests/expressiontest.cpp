@@ -118,8 +118,8 @@ void ExpressionTest::defineTests() {
     }).should.be = "3.14";
 
     $("Loop", [=]() {
-        fail();
-    }).should.be.ok();
+        return "0";
+    }).should.be = "10";
 
     $("Not", [=]() {
         expr = Expression::Not(Expression::Constant(runtime.getTrue()));

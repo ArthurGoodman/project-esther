@@ -4,7 +4,7 @@
 #include "interpretedfunction.h"
 #include "runtime.h"
 
-Function *FunctionClass::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::list<Object *> &)> &body) {
+Function *FunctionClass::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
     return new NativeFunction(this, name, arity, body);
 }
 

@@ -21,6 +21,8 @@ public:
 
     std::string toString() const;
 
+    Object *lookup(const std::string &name) const;
+
 protected:
     virtual Object *createNewInstance();
 

@@ -1,10 +1,10 @@
 #include "interpretedfunction.h"
 
-Object *InterpretedFunction::execute(Object *self, const std::list<Object *> &args) {
+Object *InterpretedFunction::execute(Object *self, const std::vector<Object *> &args) {
     context->setSelf(self);
     context->clear();
 
-    std::list<Object *>::const_iterator i = args.begin();
+    std::vector<Object *>::const_iterator i = args.begin();
     for (const std::string &s : params)
         context->setLocal(s, *i++);
 

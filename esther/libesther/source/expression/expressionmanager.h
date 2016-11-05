@@ -18,7 +18,7 @@ public:
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
     Expression *createLiteral(const Variant &value);
     Expression *createLocalAssignment(Expression *name, Expression *value);
-    Expression *createLoop();
+    Expression *createLoop(Expression *condition, Expression *body);
     Expression *createNot(Expression *self);
     Expression *createOr(Expression *self, Expression *arg);
     Expression *createSelf();

@@ -55,8 +55,8 @@ Expression *Expression::LocalAssignment(Expression *name, Expression *value) {
     return IExpressionManager::instance()->createLocalAssignment(name, value);
 }
 
-Expression *Expression::Loop() {
-    return IExpressionManager::instance()->createLoop();
+Expression *Expression::Loop(Expression *condition, Expression *body) {
+    return IExpressionManager::instance()->createLoop(condition, body);
 }
 
 Expression *Expression::Not(Expression *self) {

@@ -2,6 +2,7 @@
 
 #include <map>
 #include <list>
+#include <vector>
 #include <functional>
 
 class Object;
@@ -62,7 +63,7 @@ public:
 
     Class *createClass(const std::string &name, Class *superclass = nullptr);
 
-    Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::list<Object *> &)> &body);
+    Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
     Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
 
 private:

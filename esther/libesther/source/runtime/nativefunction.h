@@ -8,11 +8,11 @@
 class NativeFunction : public Function {
     friend class FunctionClass;
 
-    std::function<Object *(Object *, const std::list<Object *> &)> body;
+    std::function<Object *(Object *, const std::vector<Object *> &)> body;
 
-public:
-    Object *execute(Object *self, const std::list<Object *> &args);
+protected:
+    Object *execute(Object *self, const std::vector<Object *> &args);
 
 private:
-    NativeFunction(Class *objectClass, const std::string &name, int arity, const std::function<Object *(Object *, const std::list<Object *> &)> &body);
+    NativeFunction(Class *objectClass, const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
 };

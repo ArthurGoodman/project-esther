@@ -24,6 +24,10 @@ std::string Class::toString() const {
     return getName().empty() ? "<anonymous class>" : "<class " + getName() + ">";
 }
 
+Object *Class::lookup(const std::string &name) const {
+    return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
+}
+
 Object *Class::createNewInstance() {
     return new Object(this);
 }

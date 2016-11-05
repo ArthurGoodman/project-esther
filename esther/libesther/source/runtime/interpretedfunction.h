@@ -11,8 +11,8 @@ class InterpretedFunction : public Function {
     Expression *body;
     Context *context;
 
-public:
-    Object *execute(Object *self, const std::list<Object *> &args);
+protected:
+    Object *execute(Object *self, const std::vector<Object *> &args);
 
 private:
     InterpretedFunction(Class *objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);

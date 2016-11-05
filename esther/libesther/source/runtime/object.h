@@ -2,7 +2,7 @@
 
 #include <map>
 #include <string>
-#include <list>
+#include <vector>
 
 class Class;
 
@@ -22,11 +22,13 @@ public:
     Object *getAttribute(const std::string &name) const;
     void setAttribute(const std::string &name, Object *value);
 
+    Object *get(const std::string &name) const;
+
     void clear();
 
     virtual std::string toString() const;
 
     virtual bool isTrue() const;
 
-    Object *call(const std::string &name, const std::list<Object *> &args);
+    Object *call(const std::string &name, const std::vector<Object *> &args);
 };

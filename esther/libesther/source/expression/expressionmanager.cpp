@@ -31,7 +31,7 @@ Expression *ExpressionManager::createBlock(const std::list<Expression *> &nodes)
 }
 
 Expression *ExpressionManager::createCall() {
-    return new CallExpression(0, {});
+    return new CallExpression(nullptr, {});
 }
 
 Expression *ExpressionManager::createConstant(Object *value) {
@@ -39,11 +39,11 @@ Expression *ExpressionManager::createConstant(Object *value) {
 }
 
 Expression *ExpressionManager::createContextCall() {
-    return new ContextCallEpression(0, 0, {});
+    return new ContextCallEpression(nullptr, nullptr, {});
 }
 
 Expression *ExpressionManager::createContextResolution() {
-    return new ContextResolutionExpression(0, 0, 0);
+    return new ContextResolutionExpression(nullptr, nullptr, nullptr);
 }
 
 Expression *ExpressionManager::createEmpty() {
@@ -70,8 +70,8 @@ Expression *ExpressionManager::createLocalAssignment(Expression *name, Expressio
     return new LocalAssignmentExpression(name, value);
 }
 
-Expression *ExpressionManager::createLoop() {
-    return new LoopExpression(0, 0);
+Expression *ExpressionManager::createLoop(Expression *condition, Expression *body) {
+    return new LoopExpression(condition, body);
 }
 
 Expression *ExpressionManager::createNot(Expression *self) {

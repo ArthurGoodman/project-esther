@@ -25,7 +25,7 @@ public:
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *Literal(const Variant &value);
     static Expression *LocalAssignment(Expression *name, Expression *value);
-    static Expression *Loop();
+    static Expression *Loop(Expression *condition, Expression *body);
     static Expression *Not(Expression *self);
     static Expression *Or(Expression *self, Expression *arg);
     static Expression *Self();

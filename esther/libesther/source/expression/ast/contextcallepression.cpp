@@ -16,7 +16,7 @@ ContextCallEpression::~ContextCallEpression() {
 }
 
 Object *ContextCallEpression::exec(Context *context) {
-    std::list<Object *> evaledArgs;
+    std::vector<Object *> evaledArgs;
 
     evaledArgs << (self == 0 ? context->getSelf() : self->eval(context));
 

@@ -29,7 +29,7 @@ public:
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createLiteral(const Variant &value) = 0;
     virtual Expression *createLocalAssignment(Expression *name, Expression *value) = 0;
-    virtual Expression *createLoop() = 0;
+    virtual Expression *createLoop(Expression *condition, Expression *body) = 0;
     virtual Expression *createNot(Expression *self) = 0;
     virtual Expression *createOr(Expression *self, Expression *arg) = 0;
     virtual Expression *createSelf() = 0;
