@@ -21,6 +21,7 @@ public:
     static Expression *ContextResolution();
     static Expression *Empty();
     static Expression *Here();
+    static Expression *Identifier(Expression *name);
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *Literal(const Variant &value);
     static Expression *LocalAssignment(Expression *name, Expression *value);

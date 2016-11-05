@@ -25,7 +25,7 @@ public:
     virtual Expression *createContextResolution() = 0;
     virtual Expression *createEmpty() = 0;
     virtual Expression *createHere() = 0;
-    virtual Expression *createIdentifier() = 0;
+    virtual Expression *createIdentifier(Expression *name) = 0;
     virtual Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) = 0;
     virtual Expression *createLiteral(const Variant &value) = 0;
     virtual Expression *createLocalAssignment(Expression *name, Expression *value) = 0;

@@ -54,8 +54,8 @@ Expression *ExpressionManager::createHere() {
     return new HereExpression;
 }
 
-Expression *ExpressionManager::createIdentifier() {
-    return new IdentifierExpression(0);
+Expression *ExpressionManager::createIdentifier(Expression *name) {
+    return new IdentifierExpression(name);
 }
 
 Expression *ExpressionManager::createIf(Expression *condition, Expression *body, Expression *elseBody) {

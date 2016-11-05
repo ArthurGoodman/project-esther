@@ -39,6 +39,10 @@ Expression *Expression::Here() {
     return IExpressionManager::instance()->createHere();
 }
 
+Expression *Expression::Identifier(Expression *name) {
+    return IExpressionManager::instance()->createIdentifier(name);
+}
+
 Expression *Expression::If(Expression *condition, Expression *body, Expression *elseBody) {
     return IExpressionManager::instance()->createIf(condition, body, elseBody);
 }

@@ -14,7 +14,7 @@ public:
     Expression *createContextResolution();
     Expression *createEmpty();
     Expression *createHere();
-    Expression *createIdentifier();
+    Expression *createIdentifier(Expression *name);
     Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
     Expression *createLiteral(const Variant &value);
     Expression *createLocalAssignment(Expression *name, Expression *value);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "object.h"
-#include "variant.h"
+#include "variant/variant.h"
 
 class Runtime;
 

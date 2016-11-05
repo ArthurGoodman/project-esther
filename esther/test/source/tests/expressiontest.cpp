@@ -2,6 +2,7 @@
 
 #include "expression/expression.h"
 #include "variant/variant.h"
+#include "runtime/valueobject.h"
 
 ExpressionTest::ExpressionTest()
     : TestSet("expressions"), context(&runtime), expr(nullptr) {
@@ -75,9 +76,25 @@ void ExpressionTest::defineTests() {
         return expr->eval(&context) == here;
     }).should.be = true;
 
-    $("Identifier", [=]() {
-        fail();
-    }).should.be.ok();
+    $("Identifier // local", [=]() {
+        Object *here = runtime.createObject();
+        here->setAttribute("pi", runtime.createFloat(3.14));
+        Context *childContext = context.childContext(runtime.createObject(), here);
+        expr = Expression::Identifier(Expression::Literal("pi"));
+        Object *value = expr->eval(childContext);
+        delete childContext;
+        return value->toString();
+    }).should.be = "3.14";
+
+    $("Identifier // attribute", [=]() {
+        Object *self = runtime.createObject();
+        self->setAttribute("pi", runtime.createFloat(3.14));
+        Context *childContext = context.childContext(self, runtime.createObject());
+        expr = Expression::Identifier(Expression::Literal("pi"));
+        Object *value = expr->eval(childContext);
+        delete childContext;
+        return value->toString();
+    }).should.be = "3.14";
 
     $("If -> 1", [=]() {
         expr = Expression::If(Expression::Constant(runtime.getTrue()), Expression::Literal(1), Expression::Literal(2));

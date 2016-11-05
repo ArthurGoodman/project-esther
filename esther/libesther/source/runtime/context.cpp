@@ -40,7 +40,7 @@ void Context::setLocal(const std::string &name, Object *value) {
 }
 
 Object *Context::get(const std::string &name) const {
-    return hasLocal(name) ? getLocal(name) : parent ? parent->get(name) : 0;
+    return hasLocal(name) ? getLocal(name) : self->hasAttribute(name) ? self->getAttribute(name) : parent ? parent->get(name) : 0;
 }
 
 void Context::clear() {
