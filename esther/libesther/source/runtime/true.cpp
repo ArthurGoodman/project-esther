@@ -1,9 +1,5 @@
 #include "true.h"
 
-bool True::isTrue() {
-    return true;
-}
-
 std::string True::toString() {
     return "true";
 }

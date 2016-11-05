@@ -11,10 +11,6 @@ Object::Object(Class *objectClass)
     : objectClass(objectClass) {
 }
 
-//Object::Object(const std::string &className)
-//    : objectClass((Class *)Runtime::getRootClass(className)) {
-//}
-
 Object::~Object() {
 }
 

@@ -4,10 +4,6 @@
 #include "runtime.h"
 #include "utility.h"
 
-Function::Function(const std::string &name, uint arity)
-    : name(name), arity(arity) {
-}
-
 std::string Function::getName() const {
     return name;
 }
@@ -21,4 +17,12 @@ Object *Function::invoke(Object *self, const std::list<Object *> &args) {
         Runtime::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(arity) + ")");
 
     return execute(self, args);
+}
+
+std::string Function::toString() const {
+    return getName().empty() ? "<anonymous function>" : "<function " + getName() + ">";
+}
+
+Function::Function(Class *objectClass, const std::string &name, uint arity)
+    : Object(objectClass), name(name), arity(arity) {
 }

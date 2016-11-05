@@ -13,7 +13,6 @@ class Object {
 public:
     Object();
     Object(Class *objectClass);
-    //Object(const std::string &className);
 
     virtual ~Object();
 
@@ -25,7 +24,7 @@ public:
 
     void clear();
 
-    std::string toString() const;
+    virtual std::string toString() const;
 
     virtual bool isTrue() const;
 
