@@ -18,9 +18,6 @@ public:
 
     Variant getVariant();
 
-protected:
-    void setVariant(Variant value);
-
 private:
     ValueObject(Class *objectClass, const Variant &value);
 };

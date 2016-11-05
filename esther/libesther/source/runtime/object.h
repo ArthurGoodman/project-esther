@@ -11,12 +11,12 @@ class Object {
     std::map<std::string, Object *> attributes;
 
 public:
-    Object();
     Object(Class *objectClass);
 
     virtual ~Object();
 
     Class *getClass() const;
+    void setClass(Class *objectClass);
 
     bool hasAttribute(const std::string &name) const;
     Object *getAttribute(const std::string &name) const;

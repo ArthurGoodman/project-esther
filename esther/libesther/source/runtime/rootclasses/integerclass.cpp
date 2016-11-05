@@ -2,13 +2,14 @@
 
 #include "valueobject.h"
 
-Object *IntegerClass::createInteger(int value) {
+ValueObject *IntegerClass::createInteger(int value) {
     return new ValueObject(this, value);
-}
-
-void IntegerClass::setupMethods() {
 }
 
 Object *IntegerClass::createNewInstance() {
     return createInteger(0);
+}
+
+IntegerClass::IntegerClass(Class *objectClass)
+    : Class(objectClass, "Integer", objectClass->getSuperclass()) {
 }

@@ -4,7 +4,7 @@
 #include "runtime.h"
 
 Context::Context(Runtime *runtime)
-    : self(runtime->getMainObject()), here(new Object), runtime(runtime), parent(0) {
+    : self(runtime->getMainObject()), here(runtime->getMainObject()), runtime(runtime), parent(nullptr) {
 }
 
 Object *Context::getSelf() const {
@@ -43,10 +43,10 @@ void Context::clear() {
     here->clear();
 }
 
-Context *Context::childContext(Object *self) {
-    return new Context(self, this);
+Context *Context::childContext(Object *self, Object *here) {
+    return new Context(self, here, this);
 }
 
-Context::Context(Object *self, Context *parent)
-    : self(self), here(new Object), runtime(parent->runtime), parent(parent) {
+Context::Context(Object *self, Object *here, Context *parent)
+    : self(self), here(here), runtime(parent->runtime), parent(parent) {
 }

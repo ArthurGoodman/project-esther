@@ -3,6 +3,16 @@
 #include "class.h"
 #include "runtimeerror.h"
 
+#include "booleanclass.h"
+#include "characterclass.h"
+#include "floatclass.h"
+#include "classclass.h"
+#include "functionclass.h"
+#include "integerclass.h"
+#include "nullclass.h"
+#include "objectclass.h"
+#include "stringclass.h"
+
 void Runtime::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
 }
@@ -35,16 +45,8 @@ Object *Runtime::getNull() {
     return nullObject;
 }
 
-bool Runtime::hasRootClass(const std::string &name) {
-    return rootClasses.find(name) != rootClasses.end();
-}
-
 Class *Runtime::getRootClass(const std::string &name) {
-    return rootClasses.find(name) != rootClasses.end() ? rootClasses[name] : 0;
-}
-
-void Runtime::setRootClass(Class *rootClass) {
-    rootClasses[rootClass->getName()] = rootClass;
+    return rootClasses[name];
 }
 
 Object *Runtime::toBoolean(bool value) {
@@ -52,7 +54,39 @@ Object *Runtime::toBoolean(bool value) {
 }
 
 void Runtime::initialize() {
+    ClassClass *classClass = new ClassClass();
+    registerRootClass(classClass);
+    classClass->setClass(classClass);
+
+    objectClass = classClass->createObjectClass();
+    registerRootClass(objectClass);
+
+    classClass->setSuperclass(objectClass);
+
+    mainObject = objectClass->newInstance();
+
+    BooleanClass *booleanClass = classClass->createBooleanClass();
+    registerRootClass(booleanClass);
+
+    trueObject = booleanClass->createTrue();
+    falseObject = booleanClass->createFalse();
+
+    NullClass *nullClass = classClass->createNullClass();
+    registerRootClass(nullClass);
+
+    nullObject = nullClass->createNull();
+
+    registerRootClass(classClass->createCharacterClass());
+    registerRootClass(classClass->createFloatClass());
+    registerRootClass(classClass->createIntegerClass());
+    registerRootClass(classClass->createStringClass());
+
+    registerRootClass(classClass->createFunctionClass());
 }
 
 void Runtime::release() {
+}
+
+void Runtime::registerRootClass(Class *rootClass) {
+    rootClasses[rootClass->getName()] = rootClass;
 }

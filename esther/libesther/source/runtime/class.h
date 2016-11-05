@@ -24,6 +24,7 @@ public:
 protected:
     virtual Object *createNewInstance();
 
-private:
+protected:
+    Class(const std::string &name);
     Class(Class *objectClass, const std::string &name, Class *superclass);
 };

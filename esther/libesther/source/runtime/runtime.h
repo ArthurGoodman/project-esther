@@ -28,13 +28,13 @@ public:
     Object *getFalse();
     Object *getNull();
 
-    bool hasRootClass(const std::string &name);
     Class *getRootClass(const std::string &name);
-    void setRootClass(Class *rootClass);
 
     Object *toBoolean(bool value);
 
 private:
     void initialize();
     void release();
+
+    void registerRootClass(Class *rootClass);
 };

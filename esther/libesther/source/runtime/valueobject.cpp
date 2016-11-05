@@ -30,10 +30,6 @@ Variant ValueObject::getVariant() {
     return value;
 }
 
-void ValueObject::setVariant(Variant value) {
-    this->value = value;
-}
-
 ValueObject::ValueObject(Class *objectClass, const Variant &value)
     : Object(objectClass), value(value) {
 }

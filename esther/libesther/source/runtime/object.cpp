@@ -4,9 +4,6 @@
 #include "runtime.h"
 #include "utility.h"
 
-Object::Object() {
-}
-
 Object::Object(Class *objectClass)
     : objectClass(objectClass) {
 }
@@ -16,6 +13,10 @@ Object::~Object() {
 
 Class *Object::getClass() const {
     return objectClass;
+}
+
+void Object::setClass(Class *objectClass) {
+    this->objectClass = objectClass;
 }
 
 bool Object::hasAttribute(const std::string &name) const {

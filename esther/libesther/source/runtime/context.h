@@ -28,8 +28,8 @@ public:
 
     void clear();
 
-    Context *childContext(Object *self);
+    Context *childContext(Object *self, Object *here);
 
 private:
-    Context(Object *self, Context *parent);
+    Context(Object *self, Object *here, Context *parent);
 };

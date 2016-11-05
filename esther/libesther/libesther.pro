@@ -16,7 +16,7 @@ INCLUDEPATH = \
     source/expression\debug \
     source/parser \
     source/runtime \
-    source/runtime\rootclass \
+    source/runtime\rootclasses \
     source/variant
 
 SOURCES += \
@@ -81,17 +81,16 @@ SOURCES += \
     source/variant/stringvariant.cpp \
     source/variant/variant.cpp \
     source/variant/variantprivate.cpp \
-    source/runtime/rootclass/rootclass.cpp \
-    source/runtime/rootclass/booleanclass.cpp \
-    source/runtime/rootclass/nullclass.cpp \
+    source/runtime/rootclasses/booleanclass.cpp \
+    source/runtime/rootclasses/nullclass.cpp \
     source/runtime/valueobject.cpp \
-    source/runtime/rootclass/integerclass.cpp \
-    source/runtime/rootclass/characterclass.cpp \
-    source/runtime/rootclass/floatclass.cpp \
-    source/runtime/rootclass/stringclass.cpp \
-    source/runtime/rootclass/objectclass.cpp \
-    source/runtime/rootclass/classclass.cpp \
-    source/runtime/rootclass/functionclass.cpp
+    source/runtime/rootclasses/integerclass.cpp \
+    source/runtime/rootclasses/characterclass.cpp \
+    source/runtime/rootclasses/floatclass.cpp \
+    source/runtime/rootclasses/stringclass.cpp \
+    source/runtime/rootclasses/objectclass.cpp \
+    source/runtime/rootclasses/classclass.cpp \
+    source/runtime/rootclasses/functionclass.cpp
 
 HEADERS += \
     source/esther.h \
@@ -157,17 +156,16 @@ HEADERS += \
     source/runtime/function.h \
     source/runtime/nativefunction.h \
     source/expression/ast/contextcallepression.h \
-    source/runtime/rootclass/rootclass.h \
-    source/runtime/rootclass/booleanclass.h \
-    source/runtime/rootclass/nullclass.h \
+    source/runtime/rootclasses/booleanclass.h \
+    source/runtime/rootclasses/nullclass.h \
     source/runtime/valueobject.h \
-    source/runtime/rootclass/integerclass.h \
-    source/runtime/rootclass/characterclass.h \
-    source/runtime/rootclass/floatclass.h \
-    source/runtime/rootclass/stringclass.h \
-    source/runtime/rootclass/objectclass.h \
-    source/runtime/rootclass/classclass.h \
-    source/runtime/rootclass/functionclass.h
+    source/runtime/rootclasses/integerclass.h \
+    source/runtime/rootclasses/characterclass.h \
+    source/runtime/rootclasses/floatclass.h \
+    source/runtime/rootclasses/stringclass.h \
+    source/runtime/rootclasses/objectclass.h \
+    source/runtime/rootclasses/classclass.h \
+    source/runtime/rootclasses/functionclass.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

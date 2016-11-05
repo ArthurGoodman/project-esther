@@ -2,13 +2,14 @@
 
 #include "valueobject.h"
 
-Object *FloatClass::createFloat(double value) {
+ValueObject *FloatClass::createFloat(double value) {
     return new ValueObject(this, value);
-}
-
-void FloatClass::setupMethods() {
 }
 
 Object *FloatClass::createNewInstance() {
     return createFloat(0.0);
+}
+
+FloatClass::FloatClass(Class *objectClass)
+    : Class(objectClass, "Float", objectClass->getSuperclass()) {
 }
