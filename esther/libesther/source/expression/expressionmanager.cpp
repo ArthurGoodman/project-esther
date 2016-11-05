@@ -5,7 +5,7 @@
 #include "blockexpression.h"
 #include "callexpression.h"
 #include "constantexpression.h"
-#include "contextcallepression.h"
+#include "dynamiccallepression.h"
 #include "contextresolutionexpression.h"
 #include "emptyexpression.h"
 #include "hereexpression.h"
@@ -30,20 +30,20 @@ Expression *ExpressionManager::createBlock(const std::list<Expression *> &nodes)
     return new BlockExpression(nodes);
 }
 
-Expression *ExpressionManager::createCall() {
-    return new CallExpression(nullptr, {});
+Expression *ExpressionManager::createCall(Expression *name, const std::list<Expression *> &args) {
+    return new CallExpression(name, args);
 }
 
 Expression *ExpressionManager::createConstant(Object *value) {
     return new ConstantExpression(value);
 }
 
-Expression *ExpressionManager::createContextCall() {
-    return new ContextCallEpression(nullptr, nullptr, {});
+Expression *ExpressionManager::createDynamicCall(Expression *body, const std::list<Expression *> &args) {
+    return new DynamicCallEpression(body, args);
 }
 
-Expression *ExpressionManager::createContextResolution() {
-    return new ContextResolutionExpression(nullptr, nullptr, nullptr);
+Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body, Context *context) {
+    return new ContextResolutionExpression(self, body, context);
 }
 
 Expression *ExpressionManager::createEmpty() {

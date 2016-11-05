@@ -1,12 +1,13 @@
 #include "literalexpression.h"
 
-#include "valueobject.h"
+#include "runtime.h"
 #include "context.h"
+#include "valueobject.h"
 
 LiteralExpression::LiteralExpression(const Variant &value)
     : value(value) {
 }
 
 Object *LiteralExpression::exec(Context *context) {
-    return ValueObject::createNewInstance(context->getRuntime(), value);
+    return context->getRuntime()->createValueObject(value);
 }

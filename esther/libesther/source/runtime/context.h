@@ -26,6 +26,7 @@ public:
     void setLocal(const std::string &name, Object *value);
 
     Object *get(const std::string &name) const;
+    std::pair<Object *, Object *> getWithSource(const std::string &name) const;
 
     void clear();
 

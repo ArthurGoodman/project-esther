@@ -73,7 +73,6 @@ SOURCES += \
     source/runtime/function.cpp \
     source/runtime/nativefunction.cpp \
     source/expression/ast/hereexpression.cpp \
-    source/expression/ast/contextcallepression.cpp \
     source/variant/charvariant.cpp \
     source/variant/floatvariant.cpp \
     source/variant/integervariant.cpp \
@@ -90,7 +89,8 @@ SOURCES += \
     source/runtime/rootclasses/stringclass.cpp \
     source/runtime/rootclasses/objectclass.cpp \
     source/runtime/rootclasses/classclass.cpp \
-    source/runtime/rootclasses/functionclass.cpp
+    source/runtime/rootclasses/functionclass.cpp \
+    source/expression/ast/dynamiccallepression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -155,7 +155,6 @@ HEADERS += \
     source/runtime/interpretedfunction.h \
     source/runtime/function.h \
     source/runtime/nativefunction.h \
-    source/expression/ast/contextcallepression.h \
     source/runtime/rootclasses/booleanclass.h \
     source/runtime/rootclasses/nullclass.h \
     source/runtime/valueobject.h \
@@ -165,7 +164,8 @@ HEADERS += \
     source/runtime/rootclasses/stringclass.h \
     source/runtime/rootclasses/objectclass.h \
     source/runtime/rootclasses/classclass.h \
-    source/runtime/rootclasses/functionclass.h
+    source/runtime/rootclasses/functionclass.h \
+    source/expression/ast/dynamiccallepression.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

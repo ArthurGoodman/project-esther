@@ -3,6 +3,9 @@
 #include "expression/expression.h"
 #include "variant/variant.h"
 #include "runtime/valueobject.h"
+#include "runtime/function.h"
+
+#include "exception/runtimeerror.h"
 
 ExpressionTest::ExpressionTest()
     : TestSet("expressions"), context(&runtime), expr(nullptr) {
@@ -40,29 +43,52 @@ void ExpressionTest::defineTests() {
 
     $("Block", [=]() {
         std::list<Expression *> nodes;
+
         nodes << Expression::Literal(1);
         nodes << Expression::Literal(2);
         nodes << Expression::Literal(3);
+
         expr = Expression::Block(nodes);
+
         return expr->eval(&context)->toString();
     }).should.be = "3";
 
     $("Call", [=]() {
-        fail();
-    }).should.be.ok();
+        context.setSelf(runtime.createInteger(3));
+        context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
+
+        Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
+
+        expr = Expression::Call(Expression::Literal("f"), {});
+
+        Object *value = expr->eval(childContext);
+        delete childContext;
+        return value->toString();
+    }).should.be = "3";
 
     $("Constant", [=]() {
         expr = Expression::Constant(runtime.getTrue());
         return expr->eval(&context)->toString();
     }).should.be = "true";
 
-    $("ContextCall", [=]() {
-        fail();
-    }).should.be.ok();
+    $("DynamicCall", [=]() {
+        context.setSelf(runtime.createInteger(3));
+        context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
+
+        Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
+
+        expr = Expression::DynamicCall(Expression::Identifier(Expression::Literal("f")), {});
+
+        Object *value = expr->eval(childContext);
+        delete childContext;
+        return value->toString();
+    }).should.be = "4";
 
     $("ContextResolution", [=]() {
-        fail();
-    }).should.be.ok();
+        Context *childContext = context.childContext(runtime.createInteger(3), runtime.createObject());
+        expr = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
+        return expr->eval(&context)->toString();
+    }).should.be = "4";
 
     $("Empty", [=]() {
         expr = Expression::Empty();
@@ -70,27 +96,27 @@ void ExpressionTest::defineTests() {
     }).should.be = "null";
 
     $("Here", [=]() {
-        Object *here = runtime.createObject();
-        context.setHere(here);
         expr = Expression::Here();
-        return expr->eval(&context) == here;
+        return expr->eval(&context) == context.getHere();
     }).should.be = true;
 
     $("Identifier // local", [=]() {
-        Object *here = runtime.createObject();
-        here->setAttribute("pi", runtime.createFloat(3.14));
-        Context *childContext = context.childContext(runtime.createObject(), here);
+        context.setLocal("pi", runtime.createFloat(3.14));
+
         expr = Expression::Identifier(Expression::Literal("pi"));
+
+        Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
         Object *value = expr->eval(childContext);
         delete childContext;
         return value->toString();
     }).should.be = "3.14";
 
     $("Identifier // attribute", [=]() {
-        Object *self = runtime.createObject();
-        self->setAttribute("pi", runtime.createFloat(3.14));
-        Context *childContext = context.childContext(self, runtime.createObject());
+        context.getSelf()->setAttribute("pi", runtime.createFloat(3.14));
+
         expr = Expression::Identifier(Expression::Literal("pi"));
+
+        Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
         Object *value = expr->eval(childContext);
         delete childContext;
         return value->toString();
@@ -118,7 +144,19 @@ void ExpressionTest::defineTests() {
     }).should.be = "3.14";
 
     $("Loop", [=]() {
-        return "0";
+        Context *c1 = context.childContext(runtime.createObject(), runtime.createObject());
+        Context *c2 = context.childContext(runtime.createObject(), runtime.createObject());
+
+        expr = Expression::Block({Expression::LocalAssignment(Expression::Literal("i"), Expression::Literal(0)),
+                                  Expression::Loop(Expression::ContextResolution(Expression::Identifier(Expression::Literal("i")),
+                                                                                 Expression::Call(Expression::Literal("<"), {Expression::Literal(10)}), c1),
+                                                   Expression::LocalAssignment(Expression::Literal("i"), Expression::ContextResolution(Expression::Identifier(Expression::Literal("i")),
+                                                                                                                                       Expression::Call(Expression::Literal("+"), {Expression::Literal(1)}), c2)))});
+
+        Object *value = expr->eval(&context);
+        delete c1;
+        delete c2;
+        return value->toString();
     }).should.be = "10";
 
     $("Not", [=]() {
@@ -137,9 +175,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "2";
 
     $("Self", [=]() {
-        Object *self = runtime.createObject();
-        context.setSelf(self);
         expr = Expression::Self();
-        return expr->eval(&context) == self;
+        return expr->eval(&context) == context.getSelf();
     }).should.be = true;
 }

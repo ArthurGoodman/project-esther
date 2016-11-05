@@ -5,6 +5,8 @@
 #include <vector>
 #include <functional>
 
+#include "variant/variant.h"
+
 class Object;
 class Class;
 class Context;
@@ -55,6 +57,8 @@ public:
     Object *toBoolean(bool value);
 
     Object *createObject();
+
+    ValueObject *createValueObject(const Variant &value);
 
     ValueObject *createCharacter(char value);
     ValueObject *createFloat(double value);

@@ -1,18 +1,40 @@
 #include "callexpression.h"
 
-#include "common.h"
+#include "context.h"
+#include "runtime.h"
+#include "function.h"
 
-CallExpression::CallExpression(Expression *body, const std::list<Expression *> &args)
-    : body(body), args(args) {
+CallExpression::CallExpression(Expression *name, const std::list<Expression *> &args)
+    : name(name), args(args) {
 }
 
 CallExpression::~CallExpression() {
-    delete body;
+    delete name;
 
     for (Expression *e : args)
         delete e;
 }
 
 Object *CallExpression::exec(Context *context) {
-    return 0;
+    std::string name = this->name->eval(context)->toString();
+    std::pair<Object *, Object *> f = context->getWithSource(name);
+
+    if (!f.first)
+        Runtime::runtimeError("undefined identifier '" + name + "'");
+
+    std::vector<Object *> evaledArgs;
+
+    if (dynamic_cast<Function *>(f.first)) {
+        for (Expression *e : args)
+            evaledArgs << e->eval(context);
+
+        return ((Function *)f.first)->invoke(f.second, evaledArgs);
+    }
+
+    evaledArgs << f.second;
+
+    for (Expression *e : args)
+        evaledArgs << e->eval(context);
+
+    return f.first->call("()", evaledArgs);
 }

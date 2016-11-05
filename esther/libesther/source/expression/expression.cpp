@@ -15,20 +15,20 @@ Expression *Expression::Block(const std::list<Expression *> &nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
-Expression *Expression::Call() {
-    return IExpressionManager::instance()->createCall();
+Expression *Expression::Call(Expression *name, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createCall(name, args);
 }
 
 Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
-Expression *Expression::ContextCall() {
-    return IExpressionManager::instance()->createContextCall();
+Expression *Expression::DynamicCall(Expression *body, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createDynamicCall(body, args);
 }
 
-Expression *Expression::ContextResolution() {
-    return IExpressionManager::instance()->createContextResolution();
+Expression *Expression::ContextResolution(Expression *self, Expression *body, Context *context) {
+    return IExpressionManager::instance()->createContextResolution(self, body, context);
 }
 
 Expression *Expression::Empty() {

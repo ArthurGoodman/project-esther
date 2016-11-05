@@ -15,10 +15,10 @@ public:
     static Expression *And(Expression *self, Expression *arg);
     static Expression *AttributeAssignment(Expression *name, Expression *value);
     static Expression *Block(const std::list<Expression *> &nodes);
-    static Expression *Call();
+    static Expression *Call(Expression *name, const std::list<Expression *> &args);
     static Expression *Constant(Object *value);
-    static Expression *ContextCall();
-    static Expression *ContextResolution();
+    static Expression *DynamicCall(Expression *body, const std::list<Expression *> &args);
+    static Expression *ContextResolution(Expression *self, Expression *body, Context *context);
     static Expression *Empty();
     static Expression *Here();
     static Expression *Identifier(Expression *name);

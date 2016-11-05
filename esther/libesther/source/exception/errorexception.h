@@ -1,7 +1,7 @@
 #pragma once
 
 #include "exception.h"
-#include "position.h"
+#include "common/position.h"
 
 class ErrorException : public Exception {
     Position position;

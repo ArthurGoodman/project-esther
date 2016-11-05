@@ -14,8 +14,6 @@ class ValueObject : public Object {
     Variant value;
 
 public:
-    static Object *createNewInstance(Runtime *runtime, const Variant &value);
-
     Variant getVariant();
 
     std::string toString() const;

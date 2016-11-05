@@ -8,10 +8,10 @@ public:
     Expression *createAnd(Expression *self, Expression *arg);
     Expression *createAttributeAssignment(Expression *name, Expression *value);
     Expression *createBlock(const std::list<Expression *> &nodes);
-    Expression *createCall();
+    Expression *createCall(Expression *name, const std::list<Expression *> &args);
     Expression *createConstant(Object *value);
-    Expression *createContextCall();
-    Expression *createContextResolution();
+    Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args);
+    Expression *createContextResolution(Expression *self, Expression *body, Context *context);
     Expression *createEmpty();
     Expression *createHere();
     Expression *createIdentifier(Expression *name);

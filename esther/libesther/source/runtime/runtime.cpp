@@ -114,6 +114,25 @@ Object *Runtime::createObject() {
     return objectClass->newInstance();
 }
 
+ValueObject *Runtime::createValueObject(const Variant &value) {
+    switch (value.getType()) {
+    case Variant::Integer:
+        return createInteger(value.toInteger());
+
+    case Variant::Real:
+        return createFloat(value.toReal());
+
+    case Variant::Char:
+        return createCharacter(value.toChar());
+
+    case Variant::String:
+        return createString(value.toString());
+
+    default:
+        return nullptr;
+    }
+}
+
 ValueObject *Runtime::createCharacter(char value) {
     return characterClass->createCharacter(value);
 }

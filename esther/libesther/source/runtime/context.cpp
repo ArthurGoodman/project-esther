@@ -44,6 +44,11 @@ Object *Context::get(const std::string &name) const {
     return hasLocal(name) ? getLocal(name) : (temp = self->get(name)) ? temp : parent ? parent->get(name) : nullptr;
 }
 
+std::pair<Object *, Object *> Context::getWithSource(const std::string &name) const {
+    Object *temp = nullptr;
+    return hasLocal(name) ? std::make_pair(getLocal(name), self) : (temp = self->get(name)) ? std::make_pair(temp, self) : parent ? parent->getWithSource(name) : std::make_pair(nullptr, nullptr);
+}
+
 void Context::clear() {
     here->clear();
 }
