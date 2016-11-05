@@ -3,7 +3,7 @@
 #include "object.h"
 #include "variant.h"
 
-class Context;
+class Runtime;
 
 class ValueObject : public Object {
     friend class IntegerClass;
@@ -14,7 +14,7 @@ class ValueObject : public Object {
     Variant value;
 
 public:
-    static Object *createNewInstance(Context *context, const Variant &value);
+    static Object *createNewInstance(Runtime *runtime, const Variant &value);
 
     Variant getVariant();
 

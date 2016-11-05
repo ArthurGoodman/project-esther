@@ -1,10 +1,23 @@
 #pragma once
 
 #include <map>
+#include <list>
+#include <functional>
 
 class Object;
 class Class;
 class Context;
+class ValueObject;
+class Function;
+class Expression;
+
+class CharacterClass;
+class FloatClass;
+class IntegerClass;
+class StringClass;
+
+class ClassClass;
+class FunctionClass;
 
 class Runtime {
     Object *mainObject;
@@ -15,6 +28,14 @@ class Runtime {
     Object *nullObject;
 
     std::map<std::string, Class *> rootClasses;
+
+    CharacterClass *characterClass;
+    FloatClass *floatClass;
+    IntegerClass *integerClass;
+    StringClass *stringClass;
+
+    ClassClass *classClass;
+    FunctionClass *functionClass;
 
 public:
     static void runtimeError(const std::string &message);
@@ -31,6 +52,18 @@ public:
     Class *getRootClass(const std::string &name);
 
     Object *toBoolean(bool value);
+
+    Object *createObject();
+
+    ValueObject *createCharacter(char value);
+    ValueObject *createFloat(double value);
+    ValueObject *createInteger(int value);
+    ValueObject *createString(const std::string &value);
+
+    Class *createClass(const std::string &name, Class *superclass = nullptr);
+
+    Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::list<Object *> &)> &body);
+    Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
 
 private:
     void registerRootClass(Class *rootClass);

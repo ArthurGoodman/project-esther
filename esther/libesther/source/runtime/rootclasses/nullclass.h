@@ -3,10 +3,7 @@
 #include "class.h"
 
 class NullClass : public Class {
-    friend class ClassClass;
-
-public:
-    Object *createNull();
+    friend class Runtime;
 
 protected:
     Object *createNewInstance();

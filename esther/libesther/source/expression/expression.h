@@ -13,17 +13,19 @@ class Expression {
 
 public:
     static Expression *And(Expression *self, Expression *arg);
-    static Expression *AttributeAssignment();
-    static Expression *Block();
+    static Expression *AttributeAssignment(Expression *name, Expression *value);
+    static Expression *Block(const std::list<Expression *> &nodes);
+    static Expression *Call();
     static Expression *Constant(Object *value);
+    static Expression *ContextCall();
     static Expression *ContextResolution();
     static Expression *Empty();
     static Expression *Here();
-    static Expression *If();
+    static Expression *If(Expression *condition, Expression *body, Expression *elseBody);
     static Expression *Literal(const Variant &value);
-    static Expression *LocalAssignment();
+    static Expression *LocalAssignment(Expression *name, Expression *value);
     static Expression *Loop();
-    static Expression *Not();
+    static Expression *Not(Expression *self);
     static Expression *Or(Expression *self, Expression *arg);
     static Expression *Self();
 

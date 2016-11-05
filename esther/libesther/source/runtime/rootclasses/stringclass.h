@@ -5,7 +5,7 @@
 class ValueObject;
 
 class StringClass : public Class {
-    friend class ClassClass;
+    friend class Runtime;
 
 public:
     ValueObject *createString(const std::string &value);

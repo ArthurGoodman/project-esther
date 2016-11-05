@@ -19,6 +19,10 @@ Object *Context::getHere() const {
     return here;
 }
 
+void Context::setHere(Object *here) {
+    this->here = here;
+}
+
 Runtime *Context::getRuntime() const {
     return runtime;
 }

@@ -6,19 +6,20 @@
 class ExpressionManager : public IExpressionManager {
 public:
     Expression *createAnd(Expression *self, Expression *arg);
-    Expression *createAttributeAssignment();
-    Expression *createBlock();
+    Expression *createAttributeAssignment(Expression *name, Expression *value);
+    Expression *createBlock(const std::list<Expression *> &nodes);
+    Expression *createCall();
     Expression *createConstant(Object *value);
+    Expression *createContextCall();
     Expression *createContextResolution();
     Expression *createEmpty();
-    Expression *createFunction();
     Expression *createHere();
     Expression *createIdentifier();
-    Expression *createIf();
+    Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
     Expression *createLiteral(const Variant &value);
-    Expression *createLocalAssignment();
+    Expression *createLocalAssignment(Expression *name, Expression *value);
     Expression *createLoop();
-    Expression *createNot();
+    Expression *createNot(Expression *self);
     Expression *createOr(Expression *self, Expression *arg);
     Expression *createSelf();
 };

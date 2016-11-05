@@ -3,7 +3,7 @@
 #include "class.h"
 
 class ObjectClass : public Class {
-    friend class ClassClass;
+    friend class Runtime;
 
 private:
     ObjectClass(Class *objectClass);

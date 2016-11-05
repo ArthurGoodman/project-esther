@@ -3,7 +3,7 @@
 #include "object.h"
 
 class False : public Object {
-    friend class BooleanClass;
+    friend class Runtime;
 
 public:
     std::string toString() const;

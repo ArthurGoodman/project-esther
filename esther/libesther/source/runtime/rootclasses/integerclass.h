@@ -5,7 +5,7 @@
 class ValueObject;
 
 class IntegerClass : public Class {
-    friend class ClassClass;
+    friend class Runtime;
 
 public:
     ValueObject *createInteger(int value);

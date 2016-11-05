@@ -7,16 +7,24 @@ Expression *Expression::And(Expression *self, Expression *arg) {
     return IExpressionManager::instance()->createAnd(self, arg);
 }
 
-Expression *Expression::AttributeAssignment() {
-    return IExpressionManager::instance()->createAttributeAssignment();
+Expression *Expression::AttributeAssignment(Expression *name, Expression *value) {
+    return IExpressionManager::instance()->createAttributeAssignment(name, value);
 }
 
-Expression *Expression::Block() {
-    return IExpressionManager::instance()->createBlock();
+Expression *Expression::Block(const std::list<Expression *> &nodes) {
+    return IExpressionManager::instance()->createBlock(nodes);
+}
+
+Expression *Expression::Call() {
+    return IExpressionManager::instance()->createCall();
 }
 
 Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
+}
+
+Expression *Expression::ContextCall() {
+    return IExpressionManager::instance()->createContextCall();
 }
 
 Expression *Expression::ContextResolution() {
@@ -31,24 +39,24 @@ Expression *Expression::Here() {
     return IExpressionManager::instance()->createHere();
 }
 
-Expression *Expression::If() {
-    return IExpressionManager::instance()->createIf();
+Expression *Expression::If(Expression *condition, Expression *body, Expression *elseBody) {
+    return IExpressionManager::instance()->createIf(condition, body, elseBody);
 }
 
 Expression *Expression::Literal(const Variant &value) {
     return IExpressionManager::instance()->createLiteral(value);
 }
 
-Expression *Expression::LocalAssignment() {
-    return IExpressionManager::instance()->createLocalAssignment();
+Expression *Expression::LocalAssignment(Expression *name, Expression *value) {
+    return IExpressionManager::instance()->createLocalAssignment(name, value);
 }
 
 Expression *Expression::Loop() {
     return IExpressionManager::instance()->createLoop();
 }
 
-Expression *Expression::Not() {
-    return IExpressionManager::instance()->createNot();
+Expression *Expression::Not(Expression *self) {
+    return IExpressionManager::instance()->createNot(self);
 }
 
 Expression *Expression::Or(Expression *self, Expression *arg) {

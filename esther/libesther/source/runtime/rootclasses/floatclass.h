@@ -5,7 +5,7 @@
 class ValueObject;
 
 class FloatClass : public Class {
-    friend class ClassClass;
+    friend class Runtime;
 
 public:
     ValueObject *createFloat(double value);

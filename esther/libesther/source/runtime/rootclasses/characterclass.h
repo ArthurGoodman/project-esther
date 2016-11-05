@@ -5,7 +5,7 @@
 class ValueObject;
 
 class CharacterClass : public Class {
-    friend class ClassClass;
+    friend class Runtime;
 
 public:
     ValueObject *createCharacter(char value);

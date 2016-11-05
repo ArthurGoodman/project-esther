@@ -17,6 +17,7 @@ public:
     void setSelf(Object *self);
 
     Object *getHere() const;
+    void setHere(Object *here);
 
     Runtime *getRuntime() const;
 

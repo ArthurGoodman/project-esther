@@ -3,11 +3,7 @@
 #include "class.h"
 
 class BooleanClass : public Class {
-    friend class ClassClass;
-
-public:
-    Object *createTrue();
-    Object *createFalse();
+    friend class Runtime;
 
 protected:
     Object *createNewInstance();
