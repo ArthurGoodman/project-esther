@@ -14,6 +14,8 @@ class ValueObject;
 class Function;
 class Expression;
 
+class RootClass;
+
 class CharacterClass;
 class FloatClass;
 class IntegerClass;
@@ -24,13 +26,13 @@ class FunctionClass;
 
 class Runtime {
     Object *mainObject;
-    Class *objectClass;
+    RootClass *objectClass;
 
     Object *trueObject;
     Object *falseObject;
     Object *nullObject;
 
-    std::map<std::string, Class *> rootClasses;
+    std::map<std::string, RootClass *> rootClasses;
 
     CharacterClass *characterClass;
     FloatClass *floatClass;
@@ -54,6 +56,14 @@ public:
 
     Class *getRootClass(const std::string &name);
 
+    CharacterClass *getCharacterClass();
+    FloatClass *getFloatClass();
+    IntegerClass *getIntegerClass();
+    StringClass *getStringClass();
+
+    ClassClass *getClassClass();
+    FunctionClass *getFunctionClass();
+
     Object *toBoolean(bool value);
 
     Object *createObject();
@@ -71,5 +81,6 @@ public:
     Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
 
 private:
-    void registerRootClass(Class *rootClass);
+    void registerRootClass(RootClass *rootClass);
+    void setupMethods();
 };

@@ -10,6 +10,9 @@ Object *CharacterClass::createNewInstance() {
     return createCharacter('\0');
 }
 
-CharacterClass::CharacterClass(Class *objectClass)
-    : Class(objectClass, "Character", objectClass->getSuperclass()) {
+void CharacterClass::setupMethods() {
+}
+
+CharacterClass::CharacterClass(Runtime *runtime, Class *objectClass)
+    : RootClass(runtime, objectClass, "Character", objectClass->getSuperclass()) {
 }

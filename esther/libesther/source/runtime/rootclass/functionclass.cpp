@@ -17,6 +17,9 @@ Object *FunctionClass::createNewInstance() {
     return nullptr;
 }
 
-FunctionClass::FunctionClass(Class *objectClass)
-    : Class(objectClass, "Function", objectClass->getSuperclass()) {
+void FunctionClass::setupMethods() {
+}
+
+FunctionClass::FunctionClass(Runtime *runtime, Class *objectClass)
+    : RootClass(runtime, objectClass, "Function", objectClass->getSuperclass()) {
 }

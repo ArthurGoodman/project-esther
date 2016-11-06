@@ -7,6 +7,9 @@ Object *BooleanClass::createNewInstance() {
     return nullptr;
 }
 
-BooleanClass::BooleanClass(Class *objectClass)
-    : Class(objectClass, "Boolean", objectClass->getSuperclass()) {
+void BooleanClass::setupMethods() {
+}
+
+BooleanClass::BooleanClass(Runtime *runtime, Class *objectClass)
+    : RootClass(runtime, objectClass, "Boolean", objectClass->getSuperclass()) {
 }

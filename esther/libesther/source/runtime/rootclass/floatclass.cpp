@@ -10,6 +10,9 @@ Object *FloatClass::createNewInstance() {
     return createFloat(0.0);
 }
 
-FloatClass::FloatClass(Class *objectClass)
-    : Class(objectClass, "Float", objectClass->getSuperclass()) {
+void FloatClass::setupMethods() {
+}
+
+FloatClass::FloatClass(Runtime *runtime, Class *objectClass)
+    : RootClass(runtime, objectClass, "Float", objectClass->getSuperclass()) {
 }

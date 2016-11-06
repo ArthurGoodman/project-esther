@@ -1,10 +1,10 @@
 #pragma once
 
-#include "class.h"
+#include "rootclass.h"
 
 class ValueObject;
 
-class FloatClass : public Class {
+class FloatClass : public RootClass {
     friend class Runtime;
 
 public:
@@ -13,6 +13,8 @@ public:
 protected:
     Object *createNewInstance();
 
+    void setupMethods();
+
 private:
-    FloatClass(Class *objectClass);
+    FloatClass(Runtime *runtime, Class *objectClass);
 };

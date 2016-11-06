@@ -1,8 +1,8 @@
 #pragma once
 
-#include "class.h"
+#include "rootclass.h"
 
-class ClassClass : public Class {
+class ClassClass : public RootClass {
     friend class Runtime;
 
 public:
@@ -11,6 +11,8 @@ public:
 protected:
     Object *createNewInstance();
 
+    void setupMethods();
+
 private:
-    ClassClass();
+    ClassClass(Runtime *runtime);
 };

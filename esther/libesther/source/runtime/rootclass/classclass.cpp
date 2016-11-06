@@ -8,6 +8,9 @@ Object *ClassClass::createNewInstance() {
     return createClass("");
 }
 
-ClassClass::ClassClass()
-    : Class("Class") {
+void ClassClass::setupMethods() {
+}
+
+ClassClass::ClassClass(Runtime *runtime)
+    : RootClass(runtime, nullptr, "Class", nullptr) {
 }

@@ -3,13 +3,13 @@
 #include <functional>
 #include <list>
 
-#include "class.h"
+#include "rootclass.h"
 
 class Expression;
 class Context;
 class Function;
 
-class FunctionClass : public Class {
+class FunctionClass : public RootClass {
     friend class Runtime;
 
 public:
@@ -19,6 +19,8 @@ public:
 protected:
     Object *createNewInstance();
 
+    void setupMethods();
+
 private:
-    FunctionClass(Class *objectClass);
+    FunctionClass(Runtime *runtime, Class *objectClass);
 };

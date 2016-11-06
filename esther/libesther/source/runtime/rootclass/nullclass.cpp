@@ -8,6 +8,9 @@ Object *NullClass::createNewInstance() {
     return nullptr;
 }
 
-NullClass::NullClass(Class *objectClass)
-    : Class(objectClass, "Null", objectClass->getSuperclass()) {
+void NullClass::setupMethods() {
+}
+
+NullClass::NullClass(Runtime *runtime, Class *objectClass)
+    : RootClass(runtime, objectClass, "Null", objectClass->getSuperclass()) {
 }

@@ -28,14 +28,10 @@ Object *Class::lookup(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
 }
 
-Object *Class::createNewInstance() {
-    return new Object(this);
-}
-
 Class::Class(Class *objectClass, const std::string &name, Class *superclass)
     : Object(objectClass), name(name), superclass(superclass) {
 }
 
-Class::Class(const std::string &name)
-    : Object(nullptr), name(name), superclass(nullptr) {
+Object *Class::createNewInstance() {
+    return new Object(this);
 }

@@ -24,59 +24,33 @@ void Runtime::runtimeError(const std::string &message) {
 void Runtime::initialize() {
     rootClasses.clear();
 
-    registerRootClass(classClass = new ClassClass());
+    registerRootClass(classClass = new ClassClass(this));
     classClass->setClass(classClass);
 
-    registerRootClass(objectClass = new ObjectClass(classClass));
+    registerRootClass(objectClass = new ObjectClass(this, classClass));
     classClass->setSuperclass(objectClass);
 
     mainObject = objectClass->newInstance();
 
     BooleanClass *booleanClass;
-    registerRootClass(booleanClass = new BooleanClass(classClass));
+    registerRootClass(booleanClass = new BooleanClass(this, classClass));
 
     trueObject = new True(booleanClass);
     falseObject = new False(booleanClass);
 
     NullClass *nullClass;
-    registerRootClass(nullClass = new NullClass(classClass));
+    registerRootClass(nullClass = new NullClass(this, classClass));
 
     nullObject = new Null(nullClass);
 
-    registerRootClass(characterClass = new CharacterClass(classClass));
-    registerRootClass(floatClass = new FloatClass(classClass));
-    registerRootClass(integerClass = new IntegerClass(classClass));
-    registerRootClass(stringClass = new StringClass(classClass));
+    registerRootClass(characterClass = new CharacterClass(this, classClass));
+    registerRootClass(floatClass = new FloatClass(this, classClass));
+    registerRootClass(integerClass = new IntegerClass(this, classClass));
+    registerRootClass(stringClass = new StringClass(this, classClass));
 
-    registerRootClass(functionClass = new FunctionClass(classClass));
+    registerRootClass(functionClass = new FunctionClass(this, classClass));
 
-    integerClass->setAttribute("+", createNativeFunction("+", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-                                   if (self->getClass() != integerClass) {
-                                       runtimeError("Integer.+: invalid self");
-                                       return nullptr;
-                                   }
-
-                                   if (args[0]->getClass() != integerClass) {
-                                       runtimeError("Integer.+: invalid argument");
-                                       return nullptr;
-                                   }
-
-                                   return createInteger(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args[0])->getVariant().toInteger());
-                               }));
-
-    integerClass->setAttribute("<", createNativeFunction("<", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-                                   if (self->getClass() != integerClass) {
-                                       runtimeError("Integer.<: invalid self");
-                                       return nullptr;
-                                   }
-
-                                   if (args[0]->getClass() != integerClass) {
-                                       runtimeError("Integer.<: invalid argument");
-                                       return nullptr;
-                                   }
-
-                                   return toBoolean(((ValueObject *)self)->getVariant().toInteger() < ((ValueObject *)args[0])->getVariant().toInteger());
-                               }));
+    setupMethods();
 }
 
 void Runtime::release() {
@@ -104,6 +78,30 @@ Object *Runtime::getNull() {
 
 Class *Runtime::getRootClass(const std::string &name) {
     return rootClasses[name];
+}
+
+CharacterClass *Runtime::getCharacterClass() {
+    return characterClass;
+}
+
+FloatClass *Runtime::getFloatClass() {
+    return floatClass;
+}
+
+IntegerClass *Runtime::getIntegerClass() {
+    return integerClass;
+}
+
+StringClass *Runtime::getStringClass() {
+    return stringClass;
+}
+
+ClassClass *Runtime::getClassClass() {
+    return classClass;
+}
+
+FunctionClass *Runtime::getFunctionClass() {
+    return functionClass;
 }
 
 Object *Runtime::toBoolean(bool value) {
@@ -161,6 +159,11 @@ Function *Runtime::createInterpretedFunction(const std::string &name, const std:
     return functionClass->createInterpretedFunction(name, params, body, context);
 }
 
-void Runtime::registerRootClass(Class *rootClass) {
+void Runtime::registerRootClass(RootClass *rootClass) {
     rootClasses[rootClass->getName()] = rootClass;
+}
+
+void Runtime::setupMethods() {
+    for (auto &rootClass : rootClasses)
+        rootClass.second->setupMethods();
 }

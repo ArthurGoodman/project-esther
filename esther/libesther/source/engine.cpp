@@ -8,6 +8,7 @@
 #include "token.h"
 #include "context.h"
 #include "runtime.h"
+#include "exception.h"
 
 Engine::Engine() {
     runtime.initialize();
@@ -28,6 +29,9 @@ Object *Engine::run(const std::string &script) {
         Context root(&runtime);
         Expression *e = IParser::instance()->parse(ILexer::instance()->lex(src));
         value = e->eval(&root);
+        delete e;
+    } catch (Exception *e) {
+        IO::printLine(e->message());
         delete e;
     } catch (std::exception e) {
         IO::printLine((std::string) "error: " + e.what());

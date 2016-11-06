@@ -10,6 +10,9 @@ Object *StringClass::createNewInstance() {
     return createString("");
 }
 
-StringClass::StringClass(Class *objectClass)
-    : Class(objectClass, "String", objectClass->getSuperclass()) {
+void StringClass::setupMethods() {
+}
+
+StringClass::StringClass(Runtime *runtime, Class *objectClass)
+    : RootClass(runtime, objectClass, "String", objectClass->getSuperclass()) {
 }

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "class.h"
+#include "rootclass.h"
 
 class ValueObject;
 
-class CharacterClass : public Class {
+class CharacterClass : public RootClass {
     friend class Runtime;
 
 public:
@@ -13,6 +13,8 @@ public:
 protected:
     Object *createNewInstance();
 
+    void setupMethods();
+
 private:
-    CharacterClass(Class *objectClass);
+    CharacterClass(Runtime *runtime, Class *objectClass);
 };
