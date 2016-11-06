@@ -5,7 +5,7 @@
 #include "runtime/valueobject.h"
 #include "runtime/function.h"
 
-#include "exception/runtimeerror.h"
+//#include "exception/runtimeerror.h"
 
 ExpressionTest::ExpressionTest()
     : TestSet("expressions"), context(&runtime), expr(nullptr) {
