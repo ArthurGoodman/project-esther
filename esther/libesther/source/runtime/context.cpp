@@ -40,13 +40,37 @@ void Context::setLocal(const std::string &name, Object *value) {
 }
 
 Object *Context::get(const std::string &name) const {
+    if (hasLocal(name))
+        return getLocal(name);
+
     Object *temp = nullptr;
-    return hasLocal(name) ? getLocal(name) : (temp = self->get(name)) ? temp : parent ? parent->get(name) : nullptr;
+    if ((temp = self->get(name)))
+        return temp;
+
+    if (parent)
+        return parent->get(name);
+
+    if (runtime->hasRootClass(name))
+        return (Object *)runtime->getRootClass(name);
+
+    return nullptr;
 }
 
 std::pair<Object *, Object *> Context::getWithSource(const std::string &name) const {
+    if (hasLocal(name))
+        return std::make_pair(getLocal(name), self);
+
     Object *temp = nullptr;
-    return hasLocal(name) ? std::make_pair(getLocal(name), self) : (temp = self->get(name)) ? std::make_pair(temp, self) : parent ? parent->getWithSource(name) : std::make_pair(nullptr, nullptr);
+    if ((temp = self->get(name)))
+        return std::make_pair(temp, self);
+
+    if (parent)
+        return parent->getWithSource(name);
+
+    if (runtime->hasRootClass(name))
+        return std::make_pair((Object *)runtime->getRootClass(name), runtime->getMainObject());
+
+    return std::make_pair(nullptr, nullptr);
 }
 
 void Context::clear() {

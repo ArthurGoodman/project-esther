@@ -43,7 +43,7 @@ Expression *ExpressionManager::createContextResolution(Expression *self, Express
     return new ContextResolutionExpression(self, body, context);
 }
 
-Expression *ExpressionManager::createDirectCall(Expression *self, Expression *name, const std::list<Expression *> &args) {
+Expression *ExpressionManager::createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
     return new DirectCallExpression(self, name, args);
 }
 

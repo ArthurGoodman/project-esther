@@ -48,18 +48,19 @@ public:
     void initialize();
     void release();
 
-    Object *getMainObject();
-    Class *getObjectClass();
-    Object *getTrue();
-    Object *getFalse();
-    Object *getNull();
+    Object *getMainObject() const;
+    Class *getObjectClass() const;
+    Object *getTrue() const;
+    Object *getFalse() const;
+    Object *getNull() const;
 
-    ClassClass *getClassClass();
+    ClassClass *getClassClass() const;
 
-    Class *getRootClass(const std::string &name);
+    bool hasRootClass(const std::string &name) const;
+    Class *getRootClass(const std::string &name) const;
     void registerRootClass(RootClass *rootClass);
 
-    Object *toBoolean(bool value);
+    Object *toBoolean(bool value) const;
 
     Object *createObject();
 

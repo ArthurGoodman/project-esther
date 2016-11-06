@@ -20,7 +20,7 @@ public:
     virtual Expression *createCall(Expression *name, const std::list<Expression *> &args) = 0;
     virtual Expression *createConstant(Object *value) = 0;
     virtual Expression *createContextResolution(Expression *self, Expression *body, Context *context) = 0;
-    virtual Expression *createDirectCall(Expression *self, Expression *name, const std::list<Expression *> &args) = 0;
+    virtual Expression *createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) = 0;
     virtual Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args) = 0;
     virtual Expression *createEmpty() = 0;
     virtual Expression *createHere() = 0;

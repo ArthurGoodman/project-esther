@@ -18,7 +18,7 @@ public:
     static Expression *Call(Expression *name, const std::list<Expression *> &args);
     static Expression *Constant(Object *value);
     static Expression *ContextResolution(Expression *self, Expression *body, Context *context);
-    static Expression *DirectCall(Expression *self, Expression *name, const std::list<Expression *> &args);
+    static Expression *DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
     static Expression *DynamicCall(Expression *body, const std::list<Expression *> &args);
     static Expression *Empty();
     static Expression *Here();

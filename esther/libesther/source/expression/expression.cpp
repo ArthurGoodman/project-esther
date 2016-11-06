@@ -27,7 +27,7 @@ Expression *Expression::ContextResolution(Expression *self, Expression *body, Co
     return IExpressionManager::instance()->createContextResolution(self, body, context);
 }
 
-Expression *Expression::DirectCall(Expression *self, Expression *name, const std::list<Expression *> &args) {
+Expression *Expression::DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
     return IExpressionManager::instance()->createDirectCall(self, name, args);
 }
 

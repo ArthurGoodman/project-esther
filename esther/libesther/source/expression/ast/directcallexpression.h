@@ -3,11 +3,12 @@
 #include "expression.h"
 
 class DirectCallExpression : public Expression {
-    Expression *self, *name;
+    Expression *self;
+    std::string name;
     std::list<Expression *> args;
 
 public:
-    DirectCallExpression(Expression *self, Expression *name, const std::list<Expression *> &args);
+    DirectCallExpression(Expression *self, const std::string &name, const std::list<Expression *> &args);
     ~DirectCallExpression();
 
     Object *exec(Context *context);

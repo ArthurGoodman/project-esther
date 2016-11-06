@@ -12,7 +12,7 @@ IdentifierExpression::~IdentifierExpression() {
 }
 
 Object *IdentifierExpression::exec(Context *context) {
-    std::string name = this->name->eval(context)->toString();
+    const std::string &name = this->name->eval(context)->toString();
     Object *value = context->get(name);
 
     if (!value)

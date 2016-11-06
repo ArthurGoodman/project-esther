@@ -70,7 +70,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "true";
 
     $("DirectCall", [=]() {
-        expr = Expression::DirectCall(Expression::Literal(4), Expression::Literal("+"), {Expression::Literal(5)});
+        expr = Expression::DirectCall(Expression::Literal(4), "+", {Expression::Literal(5)});
         return expr->eval(&context)->toString();
     }).should.be = "9";
 
@@ -156,8 +156,8 @@ void ExpressionTest::defineTests() {
 
     $("Loop", [=]() {
         expr = Expression::Block({Expression::LocalAssignment(Expression::Literal("i"), Expression::Literal(0)),
-                                  Expression::Loop(Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), Expression::Literal("<"), {Expression::Literal(10)}),
-                                                   Expression::LocalAssignment(Expression::Literal("i"), Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), Expression::Literal("+"), {Expression::Literal(1)})))});
+                                  Expression::Loop(Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), "<", {Expression::Literal(10)}),
+                                                   Expression::LocalAssignment(Expression::Literal("i"), Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), "+", {Expression::Literal(1)})))});
 
         return expr->eval(&context)->toString();
     }).should.be = "10";

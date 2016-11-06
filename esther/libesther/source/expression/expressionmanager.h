@@ -11,7 +11,7 @@ public:
     Expression *createCall(Expression *name, const std::list<Expression *> &args);
     Expression *createConstant(Object *value);
     Expression *createContextResolution(Expression *self, Expression *body, Context *context);
-    Expression *createDirectCall(Expression *self, Expression *name, const std::list<Expression *> &args);
+    Expression *createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
     Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args);
     Expression *createEmpty();
     Expression *createHere();

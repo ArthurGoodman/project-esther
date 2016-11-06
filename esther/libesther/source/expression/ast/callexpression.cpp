@@ -16,8 +16,8 @@ CallExpression::~CallExpression() {
 }
 
 Object *CallExpression::exec(Context *context) {
-    std::string name = this->name->eval(context)->toString();
-    std::pair<Object *, Object *> f = context->getWithSource(name);
+    const std::string &name = this->name->eval(context)->toString();
+    const std::pair<Object *, Object *> &f = context->getWithSource(name);
 
     if (!f.first)
         Runtime::runtimeError("undefined identifier '" + name + "'");

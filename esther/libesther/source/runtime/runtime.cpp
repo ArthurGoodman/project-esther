@@ -54,39 +54,43 @@ void Runtime::initialize() {
 void Runtime::release() {
 }
 
-Object *Runtime::getMainObject() {
+Object *Runtime::getMainObject() const {
     return mainObject;
 }
 
-Class *Runtime::getObjectClass() {
+Class *Runtime::getObjectClass() const {
     return objectClass;
 }
 
-Object *Runtime::getTrue() {
+Object *Runtime::getTrue() const {
     return trueObject;
 }
 
-Object *Runtime::getFalse() {
+Object *Runtime::getFalse() const {
     return falseObject;
 }
 
-Object *Runtime::getNull() {
+Object *Runtime::getNull() const {
     return nullObject;
 }
 
-ClassClass *Runtime::getClassClass() {
+ClassClass *Runtime::getClassClass() const {
     return classClass;
 }
 
-Class *Runtime::getRootClass(const std::string &name) {
-    return rootClasses[name];
+bool Runtime::hasRootClass(const std::string &name) const {
+    return rootClasses.find(name) != rootClasses.end();
+}
+
+Class *Runtime::getRootClass(const std::string &name) const {
+    return rootClasses.at(name);
 }
 
 void Runtime::registerRootClass(RootClass *rootClass) {
     rootClasses[rootClass->getName()] = rootClass;
 }
 
-Object *Runtime::toBoolean(bool value) {
+Object *Runtime::toBoolean(bool value) const {
     return value ? trueObject : falseObject;
 }
 
