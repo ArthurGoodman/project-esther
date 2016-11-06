@@ -71,6 +71,11 @@ void ExpressionTest::defineTests() {
         return expr->eval(&context)->toString();
     }).should.be = "true";
 
+    $("DirectCall", [=]() {
+        expr = Expression::DirectCall(Expression::Literal(4), Expression::Literal("+"), {Expression::Literal(5)});
+        return expr->eval(&context)->toString();
+    }).should.be = "9";
+
     $("DynamicCall", [=]() {
         context.setSelf(runtime.createInteger(3));
         context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
@@ -144,19 +149,11 @@ void ExpressionTest::defineTests() {
     }).should.be = "3.14";
 
     $("Loop", [=]() {
-        Context *c1 = context.childContext(runtime.createObject(), runtime.createObject());
-        Context *c2 = context.childContext(runtime.createObject(), runtime.createObject());
-
         expr = Expression::Block({Expression::LocalAssignment(Expression::Literal("i"), Expression::Literal(0)),
-                                  Expression::Loop(Expression::ContextResolution(Expression::Identifier(Expression::Literal("i")),
-                                                                                 Expression::Call(Expression::Literal("<"), {Expression::Literal(10)}), c1),
-                                                   Expression::LocalAssignment(Expression::Literal("i"), Expression::ContextResolution(Expression::Identifier(Expression::Literal("i")),
-                                                                                                                                       Expression::Call(Expression::Literal("+"), {Expression::Literal(1)}), c2)))});
+                                  Expression::Loop(Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), Expression::Literal("<"), {Expression::Literal(10)}),
+                                                   Expression::LocalAssignment(Expression::Literal("i"), Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), Expression::Literal("+"), {Expression::Literal(1)})))});
 
-        Object *value = expr->eval(&context);
-        delete c1;
-        delete c2;
-        return value->toString();
+        return expr->eval(&context)->toString();
     }).should.be = "10";
 
     $("Not", [=]() {

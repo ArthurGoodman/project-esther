@@ -5,8 +5,9 @@
 #include "blockexpression.h"
 #include "callexpression.h"
 #include "constantexpression.h"
-#include "dynamiccallepression.h"
 #include "contextresolutionexpression.h"
+#include "directcallexpression.h"
+#include "dynamiccallexpression.h"
 #include "emptyexpression.h"
 #include "hereexpression.h"
 #include "identifierexpression.h"
@@ -38,12 +39,16 @@ Expression *ExpressionManager::createConstant(Object *value) {
     return new ConstantExpression(value);
 }
 
-Expression *ExpressionManager::createDynamicCall(Expression *body, const std::list<Expression *> &args) {
-    return new DynamicCallEpression(body, args);
-}
-
 Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body, Context *context) {
     return new ContextResolutionExpression(self, body, context);
+}
+
+Expression *ExpressionManager::createDirectCall(Expression *self, Expression *name, const std::list<Expression *> &args) {
+    return new DirectCallExpression(self, name, args);
+}
+
+Expression *ExpressionManager::createDynamicCall(Expression *body, const std::list<Expression *> &args) {
+    return new DynamicCallExpression(body, args);
 }
 
 Expression *ExpressionManager::createEmpty() {

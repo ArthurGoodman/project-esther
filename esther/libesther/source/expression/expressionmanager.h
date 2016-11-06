@@ -10,8 +10,9 @@ public:
     Expression *createBlock(const std::list<Expression *> &nodes);
     Expression *createCall(Expression *name, const std::list<Expression *> &args);
     Expression *createConstant(Object *value);
-    Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args);
     Expression *createContextResolution(Expression *self, Expression *body, Context *context);
+    Expression *createDirectCall(Expression *self, Expression *name, const std::list<Expression *> &args);
+    Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args);
     Expression *createEmpty();
     Expression *createHere();
     Expression *createIdentifier(Expression *name);

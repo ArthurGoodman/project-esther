@@ -1,24 +1,24 @@
-#include "dynamiccallepression.h"
+#include "dynamiccallexpression.h"
 
 #include "common.h"
 #include "context.h"
 #include "function.h"
 
-DynamicCallEpression::DynamicCallEpression(Expression *body, const std::list<Expression *> &args)
+DynamicCallExpression::DynamicCallExpression(Expression *body, const std::list<Expression *> &args)
     : body(body), args(args) {
 }
 
-DynamicCallEpression::~DynamicCallEpression() {
+DynamicCallExpression::~DynamicCallExpression() {
     delete body;
 
     for (Expression *e : args)
         delete e;
 }
 
-Object *DynamicCallEpression::exec(Context *context) {
-    std::vector<Object *> evaledArgs;
-
+Object *DynamicCallExpression::exec(Context *context) {
     Object *evaledBody = body->eval(context);
+
+    std::vector<Object *> evaledArgs;
 
     if (dynamic_cast<Function *>(evaledBody)) {
         for (Expression *e : args)

@@ -23,12 +23,16 @@ Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
-Expression *Expression::DynamicCall(Expression *body, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createDynamicCall(body, args);
-}
-
 Expression *Expression::ContextResolution(Expression *self, Expression *body, Context *context) {
     return IExpressionManager::instance()->createContextResolution(self, body, context);
+}
+
+Expression *Expression::DirectCall(Expression *self, Expression *name, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createDirectCall(self, name, args);
+}
+
+Expression *Expression::DynamicCall(Expression *body, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createDynamicCall(body, args);
 }
 
 Expression *Expression::Empty() {
