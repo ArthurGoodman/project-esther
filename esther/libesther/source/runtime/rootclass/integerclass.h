@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    IntegerClass(Runtime *runtime, Class *objectClass);
+    IntegerClass(Runtime *runtime);
 };

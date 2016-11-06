@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    StringClass(Runtime *runtime, Class *objectClass);
+    StringClass(Runtime *runtime);
 };

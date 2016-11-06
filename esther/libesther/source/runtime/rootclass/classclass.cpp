@@ -12,5 +12,5 @@ void ClassClass::setupMethods() {
 }
 
 ClassClass::ClassClass(Runtime *runtime)
-    : RootClass(runtime, nullptr, "Class", nullptr) {
+    : RootClass(runtime, "Class", nullptr) {
 }

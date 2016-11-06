@@ -11,5 +11,5 @@ protected:
     void setupMethods();
 
 private:
-    NullClass(Runtime *runtime, Class *objectClass);
+    NullClass(Runtime *runtime);
 };

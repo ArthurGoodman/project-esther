@@ -12,7 +12,7 @@ class RootClass : public Class {
 protected:
     Runtime *runtime;
 
-    RootClass(Runtime *runtime, Class *objectClass, const std::string &name, Class *superclass);
+    RootClass(Runtime *runtime, const std::string &name, Class *superclass);
 
     virtual void setupMethods() = 0;
 

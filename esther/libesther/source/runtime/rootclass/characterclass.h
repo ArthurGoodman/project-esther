@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    CharacterClass(Runtime *runtime, Class *objectClass);
+    CharacterClass(Runtime *runtime);
 };

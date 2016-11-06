@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    FloatClass(Runtime *runtime, Class *objectClass);
+    FloatClass(Runtime *runtime);
 };

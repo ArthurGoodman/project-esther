@@ -2,9 +2,11 @@
 
 #include "runtime.h"
 #include "function.h"
+#include "classclass.h"
 
-RootClass::RootClass(Runtime *runtime, Class *objectClass, const std::string &name, Class *superclass)
-    : Class(objectClass, name, superclass), runtime(runtime) {
+RootClass::RootClass(Runtime *runtime, const std::string &name, Class *superclass)
+    : Class(runtime->getClassClass(), name, superclass), runtime(runtime) {
+    runtime->registerRootClass(this);
 }
 
 void RootClass::def(const std::string &name, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {

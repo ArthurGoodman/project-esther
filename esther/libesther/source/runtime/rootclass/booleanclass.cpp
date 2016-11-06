@@ -10,6 +10,6 @@ Object *BooleanClass::createNewInstance() {
 void BooleanClass::setupMethods() {
 }
 
-BooleanClass::BooleanClass(Runtime *runtime, Class *objectClass)
-    : RootClass(runtime, objectClass, "Boolean", objectClass->getSuperclass()) {
+BooleanClass::BooleanClass(Runtime *runtime)
+    : RootClass(runtime, "Boolean", runtime->getObjectClass()) {
 }

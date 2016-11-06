@@ -11,5 +11,5 @@ protected:
     void setupMethods();
 
 private:
-    BooleanClass(Runtime *runtime, Class *objectClass);
+    BooleanClass(Runtime *runtime);
 };

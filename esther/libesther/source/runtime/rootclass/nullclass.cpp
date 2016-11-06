@@ -11,6 +11,6 @@ Object *NullClass::createNewInstance() {
 void NullClass::setupMethods() {
 }
 
-NullClass::NullClass(Runtime *runtime, Class *objectClass)
-    : RootClass(runtime, objectClass, "Null", objectClass->getSuperclass()) {
+NullClass::NullClass(Runtime *runtime)
+    : RootClass(runtime, "Null", runtime->getObjectClass()) {
 }

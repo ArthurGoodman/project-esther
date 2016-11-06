@@ -24,7 +24,7 @@ public:
     Object *lookup(const std::string &name) const;
 
 protected:
-    Class(Class *objectClass, const std::string &name, Class *superclass);
+    Class(Class *classClass, const std::string &name, Class *superclass);
 
     virtual Object *createNewInstance();
 };

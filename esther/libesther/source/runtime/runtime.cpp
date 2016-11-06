@@ -24,31 +24,29 @@ void Runtime::runtimeError(const std::string &message) {
 void Runtime::initialize() {
     rootClasses.clear();
 
-    registerRootClass(classClass = new ClassClass(this));
+    classClass = new ClassClass(this);
     classClass->setClass(classClass);
 
-    registerRootClass(objectClass = new ObjectClass(this, classClass));
+    objectClass = new ObjectClass(this);
     classClass->setSuperclass(objectClass);
 
     mainObject = objectClass->newInstance();
 
-    BooleanClass *booleanClass;
-    registerRootClass(booleanClass = new BooleanClass(this, classClass));
+    BooleanClass *booleanClass = new BooleanClass(this);
 
     trueObject = new True(booleanClass);
     falseObject = new False(booleanClass);
 
-    NullClass *nullClass;
-    registerRootClass(nullClass = new NullClass(this, classClass));
+    NullClass *nullClass = new NullClass(this);
 
     nullObject = new Null(nullClass);
 
-    registerRootClass(characterClass = new CharacterClass(this, classClass));
-    registerRootClass(floatClass = new FloatClass(this, classClass));
-    registerRootClass(integerClass = new IntegerClass(this, classClass));
-    registerRootClass(stringClass = new StringClass(this, classClass));
+    characterClass = new CharacterClass(this);
+    floatClass = new FloatClass(this);
+    integerClass = new IntegerClass(this);
+    stringClass = new StringClass(this);
 
-    registerRootClass(functionClass = new FunctionClass(this, classClass));
+    functionClass = new FunctionClass(this);
 
     setupMethods();
 }
@@ -76,32 +74,16 @@ Object *Runtime::getNull() {
     return nullObject;
 }
 
-Class *Runtime::getRootClass(const std::string &name) {
-    return rootClasses[name];
-}
-
-CharacterClass *Runtime::getCharacterClass() {
-    return characterClass;
-}
-
-FloatClass *Runtime::getFloatClass() {
-    return floatClass;
-}
-
-IntegerClass *Runtime::getIntegerClass() {
-    return integerClass;
-}
-
-StringClass *Runtime::getStringClass() {
-    return stringClass;
-}
-
 ClassClass *Runtime::getClassClass() {
     return classClass;
 }
 
-FunctionClass *Runtime::getFunctionClass() {
-    return functionClass;
+Class *Runtime::getRootClass(const std::string &name) {
+    return rootClasses[name];
+}
+
+void Runtime::registerRootClass(RootClass *rootClass) {
+    rootClasses[rootClass->getName()] = rootClass;
 }
 
 Object *Runtime::toBoolean(bool value) {
@@ -157,10 +139,6 @@ Function *Runtime::createNativeFunction(const std::string &name, int arity, cons
 
 Function *Runtime::createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context) {
     return functionClass->createInterpretedFunction(name, params, body, context);
-}
-
-void Runtime::registerRootClass(RootClass *rootClass) {
-    rootClasses[rootClass->getName()] = rootClass;
 }
 
 void Runtime::setupMethods() {

@@ -25,22 +25,22 @@ class ClassClass;
 class FunctionClass;
 
 class Runtime {
-    Object *mainObject;
-    RootClass *objectClass;
+    Object *mainObject = nullptr;
+    RootClass *objectClass = nullptr;
 
-    Object *trueObject;
-    Object *falseObject;
-    Object *nullObject;
+    Object *trueObject = nullptr;
+    Object *falseObject = nullptr;
+    Object *nullObject = nullptr;
+
+    CharacterClass *characterClass = nullptr;
+    FloatClass *floatClass = nullptr;
+    IntegerClass *integerClass = nullptr;
+    StringClass *stringClass = nullptr;
+
+    ClassClass *classClass = nullptr;
+    FunctionClass *functionClass = nullptr;
 
     std::map<std::string, RootClass *> rootClasses;
-
-    CharacterClass *characterClass;
-    FloatClass *floatClass;
-    IntegerClass *integerClass;
-    StringClass *stringClass;
-
-    ClassClass *classClass;
-    FunctionClass *functionClass;
 
 public:
     static void runtimeError(const std::string &message);
@@ -54,15 +54,10 @@ public:
     Object *getFalse();
     Object *getNull();
 
-    Class *getRootClass(const std::string &name);
-
-    CharacterClass *getCharacterClass();
-    FloatClass *getFloatClass();
-    IntegerClass *getIntegerClass();
-    StringClass *getStringClass();
-
     ClassClass *getClassClass();
-    FunctionClass *getFunctionClass();
+
+    Class *getRootClass(const std::string &name);
+    void registerRootClass(RootClass *rootClass);
 
     Object *toBoolean(bool value);
 
@@ -81,6 +76,5 @@ public:
     Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
 
 private:
-    void registerRootClass(RootClass *rootClass);
     void setupMethods();
 };

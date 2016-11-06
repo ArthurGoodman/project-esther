@@ -9,5 +9,5 @@ protected:
     void setupMethods();
 
 private:
-    ObjectClass(Runtime *runtime, Class *objectClass);
+    ObjectClass(Runtime *runtime);
 };

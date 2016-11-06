@@ -28,8 +28,8 @@ Object *Class::lookup(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
 }
 
-Class::Class(Class *objectClass, const std::string &name, Class *superclass)
-    : Object(objectClass), name(name), superclass(superclass) {
+Class::Class(Class *classClass, const std::string &name, Class *superclass)
+    : Object(classClass), name(name), superclass(superclass) {
 }
 
 Object *Class::createNewInstance() {

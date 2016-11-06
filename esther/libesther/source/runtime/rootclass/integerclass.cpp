@@ -21,6 +21,6 @@ void IntegerClass::setupMethods() {
     });
 }
 
-IntegerClass::IntegerClass(Runtime *runtime, Class *objectClass)
-    : RootClass(runtime, objectClass, "Integer", objectClass->getSuperclass()) {
+IntegerClass::IntegerClass(Runtime *runtime)
+    : RootClass(runtime, "Integer", runtime->getObjectClass()) {
 }

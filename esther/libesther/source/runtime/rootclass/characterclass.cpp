@@ -1,6 +1,7 @@
 #include "characterclass.h"
 
 #include "valueobject.h"
+#include "runtime.h"
 
 ValueObject *CharacterClass::createCharacter(char value) {
     return new ValueObject(this, value);
@@ -13,6 +14,6 @@ Object *CharacterClass::createNewInstance() {
 void CharacterClass::setupMethods() {
 }
 
-CharacterClass::CharacterClass(Runtime *runtime, Class *objectClass)
-    : RootClass(runtime, objectClass, "Character", objectClass->getSuperclass()) {
+CharacterClass::CharacterClass(Runtime *runtime)
+    : RootClass(runtime, "Character", runtime->getObjectClass()) {
 }

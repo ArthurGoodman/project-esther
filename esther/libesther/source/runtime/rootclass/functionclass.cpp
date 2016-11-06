@@ -20,6 +20,6 @@ Object *FunctionClass::createNewInstance() {
 void FunctionClass::setupMethods() {
 }
 
-FunctionClass::FunctionClass(Runtime *runtime, Class *objectClass)
-    : RootClass(runtime, objectClass, "Function", objectClass->getSuperclass()) {
+FunctionClass::FunctionClass(Runtime *runtime)
+    : RootClass(runtime, "Function", runtime->getObjectClass()) {
 }

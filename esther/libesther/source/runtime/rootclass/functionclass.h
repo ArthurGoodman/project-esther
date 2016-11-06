@@ -22,5 +22,5 @@ protected:
     void setupMethods();
 
 private:
-    FunctionClass(Runtime *runtime, Class *objectClass);
+    FunctionClass(Runtime *runtime);
 };

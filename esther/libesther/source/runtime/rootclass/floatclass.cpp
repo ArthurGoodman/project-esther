@@ -1,6 +1,7 @@
 #include "floatclass.h"
 
 #include "valueobject.h"
+#include "runtime.h"
 
 ValueObject *FloatClass::createFloat(double value) {
     return new ValueObject(this, value);
@@ -13,6 +14,6 @@ Object *FloatClass::createNewInstance() {
 void FloatClass::setupMethods() {
 }
 
-FloatClass::FloatClass(Runtime *runtime, Class *objectClass)
-    : RootClass(runtime, objectClass, "Float", objectClass->getSuperclass()) {
+FloatClass::FloatClass(Runtime *runtime)
+    : RootClass(runtime, "Float", runtime->getObjectClass()) {
 }
