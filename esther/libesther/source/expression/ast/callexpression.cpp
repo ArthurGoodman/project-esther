@@ -24,17 +24,13 @@ Object *CallExpression::exec(Context *context) {
 
     std::vector<Object *> evaledArgs;
 
-    if (dynamic_cast<Function *>(f.first)) {
-        for (Expression *e : args)
-            evaledArgs << e->eval(context);
-
-        return ((Function *)f.first)->invoke(f.second, evaledArgs);
-    }
-
-    evaledArgs << f.second;
-
     for (Expression *e : args)
         evaledArgs << e->eval(context);
+
+    if (dynamic_cast<Function *>(f.first))
+        return ((Function *)f.first)->invoke(f.second, evaledArgs);
+
+    evaledArgs.insert(evaledArgs.begin(), f.second);
 
     return f.first->call("()", evaledArgs);
 }

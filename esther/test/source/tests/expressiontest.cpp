@@ -90,7 +90,10 @@ void ExpressionTest::defineTests() {
     $("ContextResolution", [=]() {
         Context *childContext = context.childContext(runtime.createInteger(3), runtime.createObject());
         expr = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
-        return expr->eval(&context)->toString();
+
+        Object *value = expr->eval(&context);
+        delete childContext;
+        return value->toString();
     }).should.be = "4";
 
     $("Empty", [=]() {
@@ -124,6 +127,11 @@ void ExpressionTest::defineTests() {
         delete childContext;
         return value->toString();
     }).should.be = "3.14";
+
+    $("Identifier // undefined", [=]() {
+        expr = Expression::Identifier(Expression::Literal("id"));
+        return expr->eval(&context)->toString();
+    }).should_not.be.ok();
 
     $("If -> 1", [=]() {
         expr = Expression::If(Expression::Constant(runtime.getTrue()), Expression::Literal(1), Expression::Literal(2));
