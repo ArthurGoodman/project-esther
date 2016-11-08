@@ -1,5 +1,6 @@
 #include "debugexpression.h"
 
+#include "context.h"
 #include "runtime.h"
 #include "logger.h"
 
@@ -7,17 +8,22 @@
 
 int DebugExpression::indent = 0;
 
-DebugExpression::DebugExpression(const std::string &name, std::list<DebugExpression *> args)
+DebugExpression::DebugExpression(const std::string &name, const std::list<DebugExpression *> &args)
     : name(name), args(args) {
 }
 
-Object *DebugExpression::exec(Context *) {
-    Logger::write("parser", toString());
-
-    return Runtime::getNull();
+DebugExpression::~DebugExpression() {
+    for (Expression *e : args)
+        delete e;
 }
 
-std::string DebugExpression::toString() {
+Object *DebugExpression::exec(Context *context) {
+    Logger::write("parser", toString() + "\n");
+
+    return context->getRuntime()->getNull();
+}
+
+std::string DebugExpression::toString() const {
     std::string spacing;
     spacing.insert(0, 4 * indent, ' ');
 
@@ -31,15 +37,12 @@ std::string DebugExpression::toString() {
         else
             fp = false;
 
-        if (dynamic_cast<Expression *>(expr) == 0)
-            str += spacing + "    ";
-
         indent++;
         str += expr->toString();
         indent--;
     }
 
-    str += "\n" + spacing;
+    str += (args.empty() ? "" : "\n") + spacing;
 
     return spacing + name + " {" + str + "}";
 }

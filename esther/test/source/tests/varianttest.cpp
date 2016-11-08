@@ -79,15 +79,33 @@ VariantTest::VariantTest()
     $("toString(String)", []() { return Variant("3.14").toString(); })
         .should.be = "3.14";
 
+    $("operator=(Integer)", []() {
+        Variant v("");
+        v = 3;
+        return v.toInteger();
+    }).should.be = 3;
+
+    $("operator=(Real)", []() {
+        Variant v("");
+        v = 3.14;
+        return v.toReal();
+    }).should.be = 3.14;
+
+    $("operator=(Character)", []() {
+        Variant v("");
+        v = '3';
+        return v.toChar();
+    }).should.be = '3';
+
+    $("operator=(String)", []() {
+        Variant v("");
+        v = "3.14";
+        return v.toString();
+    }).should.be = "3.14";
+
     $("isNull(Null)", []() { return Variant().isNull(); })
         .should.be = true;
 
     $("isNull(Integer)", []() { return Variant(0).isNull(); })
         .should.be = false;
-
-    $("operator =", []() {
-        Variant v("");
-        v = 3;
-        return v.toInteger();
-    }).should.be = 3;
 }

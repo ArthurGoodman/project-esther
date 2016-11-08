@@ -9,7 +9,7 @@ int main() {
 
     runner.addTest(new ExpressionTest);
     runner.addTest(new RuntimeTest);
-    //runner.addTest(new VariantTest);
+    runner.addTest(new VariantTest);
 
     runner.run();
 

@@ -12,14 +12,16 @@ class DebugExpression : public Expression {
     std::string name;
     std::list<DebugExpression *> args;
 
+protected:
     static int indent;
 
 public:
-    DebugExpression(const std::string &name, std::list<DebugExpression *> args = std::list<DebugExpression *>());
+    DebugExpression(const std::string &name, const std::list<DebugExpression *> &args = std::list<DebugExpression *>());
+    ~DebugExpression();
 
     Object *exec(Context *context);
 
-    std::string toString();
+    virtual std::string toString() const;
 };
 
 #endif

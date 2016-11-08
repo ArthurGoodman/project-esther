@@ -1,6 +1,5 @@
 #pragma once
 
-#include "variant.h"
 #include "iexpressionmanager.h"
 
 class ExpressionManager : public IExpressionManager {

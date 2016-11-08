@@ -92,7 +92,8 @@ SOURCES += \
     source/runtime/rootclass/functionclass.cpp \
     source/expression/ast/directcallexpression.cpp \
     source/expression/ast/dynamiccallexpression.cpp \
-    source/runtime/rootclass/rootclass.cpp
+    source/runtime/rootclass/rootclass.cpp \
+    source/expression/debug/literaldebugexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -169,7 +170,8 @@ HEADERS += \
     source/runtime/rootclass/functionclass.h \
     source/expression/ast/directcallexpression.h \
     source/expression/ast/dynamiccallexpression.h \
-    source/runtime/rootclass/rootclass.h
+    source/runtime/rootclass/rootclass.h \
+    source/expression/debug/literaldebugexpression.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \
