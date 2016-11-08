@@ -29,7 +29,7 @@ std::vector<std::string> Lexer::tokenTypes = {
 };
 #endif
 
-Tokens &Lexer::lex(const std::string &source) {
+const Tokens &Lexer::lex(const std::string &source) {
     this->source = &source;
     pos = 0;
     line = column = 1;
@@ -66,7 +66,7 @@ void Lexer::error(const std::string &msg, int delta) {
 void Lexer::scan() {
     token = Token();
 
-    skipSpacesExceptForNewLine();
+    skipSpaces();
 
     if (at(pos) == '/' && at(pos + 1) == '/') {
         while (at(pos) == '/' && at(pos + 1) == '/') {
@@ -84,14 +84,11 @@ void Lexer::scan() {
 
     if (!at(pos))
         token = tEnd;
-    else if (at(pos) == '\n') {
-        token = tNewLine;
-        skipSpaces();
-    } else if (at(pos) == '\'' || at(pos) == '"') {
+    else if (at(pos) == '\'' || at(pos) == '"') {
         char type = at(pos++);
         column++;
 
-        token = type == '"' ? tComplexString : tString;
+        token = tString;
 
         while (at(pos) && at(pos) != type) {
             if (at(pos) == '\n')
@@ -205,13 +202,6 @@ void Lexer::scan() {
     }
 
     column += token.getText().length();
-}
-
-void Lexer::skipSpacesExceptForNewLine() {
-    while (Utility::isSpace(at(pos)) && at(pos) != '\n') {
-        pos++;
-        column++;
-    }
 }
 
 void Lexer::skipSpaces() {

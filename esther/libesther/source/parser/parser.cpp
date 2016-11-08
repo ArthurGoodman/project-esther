@@ -2,6 +2,6 @@
 
 #include "expression.h"
 
-Expression *Parser::parse(Tokens & /*tokens*/) {
+Expression *Parser::parse(const Tokens & /*tokens*/) {
     return Expression::Empty();
 }

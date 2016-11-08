@@ -11,5 +11,5 @@ public:
     static IParser *instance();
 
     virtual ~IParser();
-    virtual Expression *parse(Tokens &tokens) = 0;
+    virtual Expression *parse(const Tokens &tokens) = 0;
 };

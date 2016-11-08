@@ -1,5 +1,5 @@
-libesther/logs/
 Makefile
+*.log
 *.user
 *.Debug
 *.Release

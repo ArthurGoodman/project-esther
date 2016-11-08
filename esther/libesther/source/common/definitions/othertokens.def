@@ -1,8 +1,6 @@
-X(tNewLine, "")
 X(tId, "")
 X(tInteger, "")
 X(tFloat, "")
 X(tString, "")
-X(tComplexString, "")
 X(tUnknown, "")
 X(tEnd, "")

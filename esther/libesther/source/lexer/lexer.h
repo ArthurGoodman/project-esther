@@ -20,7 +20,7 @@ class Lexer : public ILexer {
     int pos, line, column;
 
 public:
-    Tokens &lex(const std::string &source);
+    const Tokens &lex(const std::string &source);
 
 private:
     template <int N>
@@ -28,7 +28,6 @@ private:
 
     void error(const std::string &msg, int shift = 0);
     void scan();
-    void skipSpacesExceptForNewLine();
     void skipSpaces();
     const char &at(int pos);
 };

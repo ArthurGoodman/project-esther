@@ -4,12 +4,9 @@
 #include <vector>
 
 #define DEBUG 0
-
-#if DEBUG
 #define DEBUG_LEXER 0
 #define DEBUG_PARSER 0
 #define DEBUG_RUNTIME 0
-#endif
 
 #define HEAP_VARIANT 0
 

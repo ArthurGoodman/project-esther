@@ -8,7 +8,7 @@
 #include "token.h"
 #include "context.h"
 #include "runtime.h"
-#include "exception.h"
+#include "errorexception.h"
 
 Engine::Engine() {
     runtime.initialize();
@@ -29,6 +29,11 @@ Object *Engine::run(const std::string &script) {
         Context root(&runtime);
         Expression *e = IParser::instance()->parse(ILexer::instance()->lex(src));
         value = e->eval(&root);
+        delete e;
+    } catch (ErrorException *e) {
+        IO::printLine(fileName() + ":" + (e->getPosition().isValid() ? e->getPosition().toString() + ": " : " ") + e->message());
+        if (e->getPosition().isValid())
+            IO::printLine(source().quote(e->getPosition()));
         delete e;
     } catch (Exception *e) {
         IO::printLine(e->message());
