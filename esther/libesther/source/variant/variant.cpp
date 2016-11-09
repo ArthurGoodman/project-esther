@@ -85,56 +85,37 @@ bool Variant::isNull() const {
 
 #else
 
+#include <cstring>
+
 #include "utility.h"
-
-Variant::Data::Data() {
-}
-
-Variant::Data::Data(int value)
-    : integer(value) {
-}
-
-Variant::Data::Data(double value)
-    : real(value) {
-}
-
-Variant::Data::Data(char value)
-    : character(value) {
-}
-
-Variant::Data::Data(const std::string &value)
-    : string(value) {
-}
-
-Variant::Data::Data(const char *value)
-    : string(value) {
-}
-
-Variant::Data::~Data() {
-}
 
 Variant::Variant()
     : type(Null) {
 }
 
 Variant::Variant(int value)
-    : type(Integer), data(value) {
+    : type(Integer), integer(value) {
 }
 
 Variant::Variant(double value)
-    : type(Real), data(value) {
+    : type(Real), real(value) {
 }
 
 Variant::Variant(char value)
-    : type(Char), data(value) {
+    : type(Char), character(value) {
 }
 
 Variant::Variant(const std::string &value)
-    : type(String), data(value) {
+    : type(String) {
+    string = new char[value.size() + 1];
+    memcpy(string, value.data(), value.size() + 1);
 }
 
 Variant::Variant(const char *value)
-    : type(String), data(value) {
+    : type(String) {
+    int size = strlen(value) + 1;
+    string = new char[size];
+    memcpy(string, value, size);
 }
 
 Variant::Variant(const Variant &v)
@@ -142,9 +123,72 @@ Variant::Variant(const Variant &v)
     *this = v;
 }
 
+Variant::Variant(Variant &&v)
+    : type(Null) {
+    *this = std::move(v);
+}
+
 Variant &Variant::operator=(const Variant &v) {
+    if (type == String)
+        delete[] string;
+
     type = v.type;
-    memcpy(&data, &v.data, sizeof(Data));
+
+    switch (v.type) {
+    case Integer:
+        integer = v.integer;
+        break;
+
+    case Real:
+        real = v.real;
+        break;
+
+    case Char:
+        character = v.character;
+        break;
+
+    case String: {
+        int size = strlen(v.string) + 1;
+        string = new char[size];
+        memcpy(string, v.string, size);
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return *this;
+}
+
+Variant &Variant::operator=(Variant &&v) {
+    if (type == String)
+        delete[] string;
+
+    type = v.type;
+
+    switch (v.type) {
+    case Integer:
+        integer = v.integer;
+        break;
+
+    case Real:
+        real = v.real;
+        break;
+
+    case Char:
+        character = v.character;
+        break;
+
+    case String:
+        string = v.string;
+        v.string = nullptr;
+        break;
+
+    default:
+        break;
+    }
+
     return *this;
 }
 
@@ -155,16 +199,16 @@ Variant::Type Variant::getType() const {
 int Variant::toInteger() const {
     switch (type) {
     case Integer:
-        return data.integer;
+        return integer;
 
     case Real:
-        return data.real;
+        return real;
 
     case Char:
-        return data.character;
+        return character;
 
     case String:
-        return Utility::fromString<int>(data.string);
+        return Utility::fromString<int>(string);
 
     default:
         return 0;
@@ -174,16 +218,16 @@ int Variant::toInteger() const {
 double Variant::toReal() const {
     switch (type) {
     case Integer:
-        return data.integer;
+        return integer;
 
     case Real:
-        return data.real;
+        return real;
 
     case Char:
-        return data.character;
+        return character;
 
     case String:
-        return Utility::fromString<double>(data.string);
+        return Utility::fromString<double>(string);
 
     default:
         return 0;
@@ -193,16 +237,16 @@ double Variant::toReal() const {
 char Variant::toChar() const {
     switch (type) {
     case Integer:
-        return data.integer;
+        return integer;
 
     case Real:
-        return data.real;
+        return real;
 
     case Char:
-        return data.character;
+        return character;
 
     case String:
-        return Utility::fromString<char>(data.string);
+        return Utility::fromString<char>(string);
 
     default:
         return 0;
@@ -211,20 +255,17 @@ char Variant::toChar() const {
 
 std::string Variant::toString() const {
     switch (type) {
-    case Null:
-        return "";
-
     case Integer:
-        return Utility::toString(data.integer);
+        return Utility::toString(integer);
 
     case Real:
-        return Utility::toString(data.real);
+        return Utility::toString(real);
 
     case Char:
-        return Utility::toString(data.character);
+        return Utility::toString(character);
 
     case String:
-        return data.string;
+        return string;
 
     default:
         return "";

@@ -59,26 +59,14 @@ public:
     };
 
 private:
-    struct Data {
-        Data();
-        Data(int value);
-        Data(double value);
-        Data(char value);
-        Data(const std::string &value);
-        Data(const char *value);
-
-        ~Data();
-
-        union {
-            int integer;
-            double real;
-            char character;
-            std::string string;
-        };
-    };
-
     Type type;
-    Data data;
+
+    union {
+        int integer;
+        double real;
+        char character;
+        char *string;
+    };
 
 public:
     Variant();
@@ -89,8 +77,10 @@ public:
     Variant(const char *value);
 
     Variant(const Variant &v);
+    Variant(Variant &&v);
 
     Variant &operator=(const Variant &v);
+    Variant &operator=(Variant &&v);
 
     Type getType() const;
 

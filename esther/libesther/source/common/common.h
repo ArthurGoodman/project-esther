@@ -8,7 +8,7 @@
 #define DEBUG_PARSER 1
 #define DEBUG_RUNTIME 0
 
-#define HEAP_VARIANT 1
+#define HEAP_VARIANT 0
 
 typedef unsigned char byte;
 typedef unsigned int uint;
