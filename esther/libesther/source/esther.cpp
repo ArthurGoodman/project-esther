@@ -1,11 +1,23 @@
 #include "esther.h"
 
+#include "io.h"
+#include "object.h"
+#include "exception.h"
+
 void Esther::run(const std::string &script) {
     engine()->run(script);
 }
 
 void Esther::runFile(const std::string &fileName) {
-    engine()->runFile(fileName);
+    Object *value = engine()->runFile(fileName);
+
+    try {
+        if (value)
+            IO::printLine("\n=> " + value->toString());
+    } catch (Exception *e) {
+        IO::printLine(e->message());
+        delete e;
+    }
 }
 
 Engine *Esther::engine() {
