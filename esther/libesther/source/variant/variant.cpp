@@ -107,14 +107,14 @@ Variant::Variant(char value)
 
 Variant::Variant(const std::string &value)
     : type(String) {
-    string = new char[value.size() + 1];
+    string = (char *)malloc(value.size() + 1);
     memcpy(string, value.data(), value.size() + 1);
 }
 
 Variant::Variant(const char *value)
     : type(String) {
     int size = strlen(value) + 1;
-    string = new char[size];
+    string = (char *)malloc(size);
     memcpy(string, value, size);
 }
 
@@ -129,8 +129,17 @@ Variant::Variant(Variant &&v)
 }
 
 Variant &Variant::operator=(const Variant &v) {
-    if (type == String)
-        delete[] string;
+    if (type == String) {
+        if (v.type == String) {
+            int size = strlen(v.string) + 1;
+            string = (char *)realloc(string, size);
+            memcpy(string, v.string, size);
+
+            return *this;
+        }
+
+        free(string);
+    }
 
     type = v.type;
 
@@ -149,7 +158,7 @@ Variant &Variant::operator=(const Variant &v) {
 
     case String: {
         int size = strlen(v.string) + 1;
-        string = new char[size];
+        string = (char *)malloc(size);
         memcpy(string, v.string, size);
         break;
     }
@@ -163,7 +172,7 @@ Variant &Variant::operator=(const Variant &v) {
 
 Variant &Variant::operator=(Variant &&v) {
     if (type == String)
-        delete[] string;
+        free(string);
 
     type = v.type;
 
