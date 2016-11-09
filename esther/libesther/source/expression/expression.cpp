@@ -7,8 +7,8 @@ Expression *Expression::And(Expression *self, Expression *arg) {
     return IExpressionManager::instance()->createAnd(self, arg);
 }
 
-Expression *Expression::AttributeAssignment(Expression *name, Expression *value) {
-    return IExpressionManager::instance()->createAttributeAssignment(name, value);
+Expression *Expression::AttributeAssignment(Expression *self, Expression *name, Expression *value) {
+    return IExpressionManager::instance()->createAttributeAssignment(self, name, value);
 }
 
 Expression *Expression::Block(const std::list<Expression *> &nodes) {
@@ -93,7 +93,7 @@ Object *Expression::eval(Context *context) {
     return value;
 }
 
-Position Expression::getPosition() {
+Position Expression::getPosition() const {
     return position;
 }
 

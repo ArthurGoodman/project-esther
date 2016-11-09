@@ -23,8 +23,8 @@ Expression *ExpressionManager::createAnd(Expression *self, Expression *arg) {
     return new AndExpression(self, arg);
 }
 
-Expression *ExpressionManager::createAttributeAssignment(Expression *name, Expression *value) {
-    return new AttributeAssignmentExpression(name, value);
+Expression *ExpressionManager::createAttributeAssignment(Expression *self, Expression *name, Expression *value) {
+    return new AttributeAssignmentExpression(self, name, value);
 }
 
 Expression *ExpressionManager::createBlock(const std::list<Expression *> &nodes) {

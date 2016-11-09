@@ -5,7 +5,7 @@
 class ExpressionManager : public IExpressionManager {
 public:
     Expression *createAnd(Expression *self, Expression *arg);
-    Expression *createAttributeAssignment(Expression *name, Expression *value);
+    Expression *createAttributeAssignment(Expression *self, Expression *name, Expression *value);
     Expression *createBlock(const std::list<Expression *> &nodes);
     Expression *createCall(Expression *self, Expression *name, const std::list<Expression *> &args);
     Expression *createConstant(Object *value);

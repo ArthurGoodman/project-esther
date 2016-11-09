@@ -74,9 +74,6 @@ void Lexer::scan() {
 
             skipSpaces();
         }
-
-        if (at(pos) && at(pos - 1) == '\n')
-            pos--;
     }
 
     token.setPosition(Position(pos, line, column));

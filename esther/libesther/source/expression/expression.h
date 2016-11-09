@@ -13,7 +13,7 @@ class Expression {
 
 public:
     static Expression *And(Expression *self, Expression *arg);
-    static Expression *AttributeAssignment(Expression *name, Expression *value);
+    static Expression *AttributeAssignment(Expression *self, Expression *name, Expression *value);
     static Expression *Block(const std::list<Expression *> &nodes);
     static Expression *Call(Expression *self, Expression *name, const std::list<Expression *> &args);
     static Expression *Constant(Object *value);
@@ -37,6 +37,6 @@ public:
 
     virtual Object *exec(Context *context) = 0;
 
-    Position getPosition();
+    Position getPosition() const;
     void setPosition(Position position);
 };

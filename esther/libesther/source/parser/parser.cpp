@@ -8,6 +8,8 @@
 #include "utility.h"
 #include "runtime.h"
 #include "context.h"
+#include "class.h"
+#include "function.h"
 
 Expression *Parser::parse(Context *context, Tokens &tokens) {
     contexts.clear();
@@ -24,7 +26,9 @@ Expression *Parser::parse(Context *context, Tokens &tokens) {
         nodes << oper();
 
     Expression *e = nodes.empty() ? Expression::Empty() : nodes.size() == 1 ? nodes.front() : Expression::Block(nodes);
-    e->setPosition(p);
+
+    if (!e->getPosition().isValid())
+        e->setPosition(p);
 
     return e;
 }
@@ -113,7 +117,7 @@ Expression *Parser::expr() {
         Position p = token->getPosition();
 
         if (accept(tAssign))
-            e = Expression::LocalAssignment(e, logicOr());
+            e = Expression::DirectCall(e, "=", {logicOr()});
         else if (accept(tPlusAssign))
             e = Expression::DirectCall(e, "+=", {logicOr()});
         else if (accept(tMinusAssign))
@@ -272,47 +276,12 @@ Expression *Parser::negate() {
     Position p = token->getPosition();
 
     if (accept(tNot))
-        e = Expression::Not(dot());
+        e = Expression::Not(preffix());
     else
-        e = dot();
+        e = preffix();
 
     if (!e->getPosition().isValid())
         e->setPosition(p);
-
-    return e;
-}
-
-Expression *Parser::dot() {
-    Expression *e = preffix();
-
-    while (true) {
-        Position p = token->getPosition();
-
-        if (accept(tDot)) {
-            if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
-                token->setId(tId);
-
-            Expression *body = term();
-
-            Position p = token->getPosition();
-
-            if (accept(tLPar)) {
-                std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
-                //                e = Expression::DynamicCall(e, body, list);
-                e->setPosition(p);
-
-                if (!accept(tRPar))
-                    error("unmatched parentheses");
-            } else {
-                //                Expression *actualBody = accept(tAssign) ? Expression::Assignment(body, logicOr()) : body;
-                //                e = Expression::ContextResolution(e, actualBody);
-            }
-        } else
-            break;
-
-        if (!e->getPosition().isValid())
-            e->setPosition(p);
-    }
 
     return e;
 }
@@ -340,31 +309,31 @@ Expression *Parser::preffix() {
 }
 
 Expression *Parser::suffix() {
-    Expression *e = term();
+    Expression *e = dot();
 
     Position p = token->getPosition();
 
-    //    if (check(tLPar) || check(tLBracket))
-    //        while (true) {
-    //            Position p = token->getPosition();
+    if (check(tLPar) || check(tLBracket))
+        while (true) {
+            Position p = token->getPosition();
 
-    //            if (accept(tLPar)) {
-    //                std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
-    //                e = Expression::DirectCall(e, "()", list);
+            if (accept(tLPar)) {
+                std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                e = Expression::DynamicCall(nullptr, e, list);
 
-    //                if (!accept(tRPar))
-    //                    error("unmatched parentheses");
-    //            } else if (accept(tLBracket)) {
-    //                std::list<Expression *> list = check(tRBracket) ? std::list<Expression *>() : parseList();
-    //                e = Expression::DirectCall(e, "[]", list);
+                if (!accept(tRPar))
+                    error("unmatched parentheses");
+            } else if (accept(tLBracket)) {
+                std::list<Expression *> list = check(tRBracket) ? std::list<Expression *>() : parseList();
+                e = Expression::DirectCall(e, "[]", list);
 
-    //                if (!accept(tRBracket))
-    //                    error("unmatched brackets");
-    //            } else
-    //                break;
+                if (!accept(tRBracket))
+                    error("unmatched brackets");
+            } else
+                break;
 
-    //            e->setPosition(p);
-    //        }
+            e->setPosition(p);
+        }
     //    else if (realAccept(tDec))
     //        e = Expression::PostDecrement(e);
     //    else if (realAccept(tInc))
@@ -376,34 +345,88 @@ Expression *Parser::suffix() {
     return e;
 }
 
+Expression *Parser::dot() {
+    Expression *e = term();
+
+    while (true) {
+        Position p = token->getPosition();
+
+        if (accept(tDot)) {
+            if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
+                token->setId(tId);
+
+            if (check(tDollar) || check(tId)) {
+                Expression *name = parseIdentifier();
+
+                Position p = token->getPosition();
+
+                if (accept(tAssign)) {
+                    e = Expression::AttributeAssignment(e, name, logicOr());
+                    e->setPosition(p);
+                } else if (accept(tLPar)) {
+                    std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                    e = Expression::Call(e, name, list);
+                    e->setPosition(p);
+
+                    if (!accept(tRPar))
+                        error("unmatched parentheses");
+                } else {
+                    contexts << context()->childContext(context()->getRuntime()->createObject());
+                    e = Expression::ContextResolution(e, name, context());
+                }
+            } else {
+                Expression *body = term();
+
+                Position p = token->getPosition();
+
+                if (accept(tAssign)) {
+                    contexts << context()->childContext(context()->getRuntime()->createObject());
+                    e = Expression::ContextResolution(e, Expression::DirectCall(body, "=", {logicOr()}), context());
+                    e->setPosition(p);
+                } else if (accept(tLPar)) {
+                    std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                    e = Expression::DynamicCall(e, body, list);
+                    e->setPosition(p);
+
+                    if (!accept(tRPar))
+                        error("unmatched parentheses");
+                } else {
+                    contexts << context()->childContext(context()->getRuntime()->createObject());
+                    e = Expression::ContextResolution(e, body, context());
+                }
+            }
+        } else
+            break;
+
+        if (!e->getPosition().isValid())
+            e->setPosition(p);
+    }
+
+    return e;
+}
+
 Expression *Parser::term() {
     Expression *e = nullptr;
 
     Position p = token->getPosition();
 
     if (check(tId) || check(tDollar)) {
-        //        bool dynamic = false;
-        //        Expression *type = 0, *name = parseIdentifier(dynamic) /*, *value = 0*/;
+        Expression *name = parseIdentifier();
 
-        //        //    if ((type = parseIdentifier())) {
-        //        //        swap(type, name);
-        //        //        type = Expression::Identifier(type);
-        //        //    } else
-        //        if (accept(tColon)) {
-        //            Position p = token->getPosition();
+        Position p = token->getPosition();
 
-        //            bool dynamic = false;
-        //            if ((type = parseIdentifier(dynamic))) {
-        //                type = Expression::Identifier(type, dynamic);
-        //                type->setPosition(p);
-        //            } else
-        //                type = term();
-        //        }
+        if (accept(tAssign)) {
+            e = Expression::LocalAssignment(name, logicOr());
+            e->setPosition(p);
+        } else if (accept(tLPar)) {
+            std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+            e = Expression::Call(nullptr, name, {list});
+            e->setPosition(p);
 
-        //        if (type)
-        //            e = Expression::IdentifierDefinition(type, name, 0, dynamic);
-        //        else
-        //            e = Expression::Identifier(name, dynamic);
+            if (!accept(tRPar))
+                error("unmatched parentheses");
+        } else
+            e = Expression::Identifier(name);
     }
 
     else if (check(tInteger)) {
@@ -426,39 +449,23 @@ Expression *Parser::term() {
         getToken();
     }
 
-    else if (check(tIf) || check(tWhile)) {
-        //        int id = token->getId();
+    else if (accept(tIf)) {
+        Expression *condition, *body, *elseBody = nullptr;
 
-        //        getToken();
+        condition = oper();
+        body = oper();
 
-        //        Expression *condition = expr(), *body, *elseBody = 0;
+        if (accept(tElse))
+            elseBody = oper();
 
-        //        Position p = token->getPosition();
+        e = Expression::If(condition, body, elseBody);
+    } else if (accept(tWhile)) {
+        Expression *condition, *body;
 
-        //        if (accept(tLBrace)) {
-        //            body = Expression::List(parseBlock());
-        //            body->setPosition(p);
-        //        } else
-        //            body = oper();
+        condition = oper();
+        body = oper();
 
-        //        while (check(tElse) || check(tElif)) {
-        //            if (accept(tElse)) {
-        //                Position p = token->getPosition();
-
-        //                if (accept(tLBrace)) {
-        //                    elseBody = Expression::List(parseBlock());
-        //                    elseBody->setPosition(p);
-        //                } else
-        //                    elseBody = oper();
-
-        //                break;
-        //            } else if (check(tElif)) {
-        //                token->setId(tIf);
-        //                elseBody = term();
-        //            }
-        //        }
-
-        //        e = id == tIf ? Expression::If(condition, body, elseBody) : Expression::While(condition, body, elseBody);
+        e = Expression::Loop(condition, body);
     }
 
     else if (accept(tTrue))
@@ -474,150 +481,80 @@ Expression *Parser::term() {
         e = Expression::Here();
 
     else if (accept(tClass)) {
-        //        Expression *name = 0, *superClass = 0, *body;
+        if (!check(tId))
+            error("identifier expected");
 
-        //        if (check(tId)) {
-        //            name = Expression::Literal(token->getText());
-        //            name->setPosition(token->getPosition());
+        const std::string &name = token->getText();
+        getToken();
 
-        //            getToken();
-        //        }
+        contexts << context()->objectChildContext();
 
-        //        if (accept(tLt))
-        //            superClass = term();
+        Class *_class = context()->getRuntime()->createClass(name);
 
-        //        Position p = token->getPosition();
-
-        //        if (accept(tLBrace)) {
-        //            body = Expression::List(parseBlock());
-        //            body->setPosition(p);
-        //        } else
-        //            body = term();
-
-        //        e = Expression::ClassDefinition(name, superClass, body);
+        e = Expression::Block({Expression::LocalAssignment(Expression::Literal(name), Expression::Constant(_class)),
+                               Expression::ContextResolution(Expression::Constant(_class), term(), context()),
+                               Expression::Constant(_class)});
     }
 
-    else if (check(tFunction)) {
-        //        int id = token->getId();
-        //        getToken();
+    else if (accept(tFunction)) {
+        std::string name;
 
-        //        bool dynamic = false;
-        //        /*Pointer<Expression>*/ Expression *type = 0, *name = parseIdentifier(dynamic), *body;
-        //        std::list<Expression *> params;
-        //        bool variadic = false;
+        if (check(tId)) {
+            name = token->getText();
+            getToken();
+        }
 
-        //        //        GC_FRAME(LIST(params))
+        std::list<std::string> params;
 
-        //        //    if (name && (type = parseIdentifier())) {
-        //        //        swap(type, name);
-        //        //        type = Expression::Identifier(type);
-        //        //    } else
-        //        if (accept(tColon)) {
-        //            Position p = token->getPosition();
+        if (accept(tLPar) && !accept(tRPar)) {
+            do {
+                if (!check(tId))
+                    error("identifier expected");
 
-        //            bool dynamic = false;
-        //            if ((type = parseIdentifier(dynamic))) {
-        //                type = Expression::Identifier(type, dynamic);
-        //                type->setPosition(p);
-        //            } else
-        //                type = term();
-        //        }
+                params << token->getText();
+                getToken();
+            } while (accept(tComma));
 
-        //        if (accept(tLPar) && !accept(tRPar)) {
-        //            bool expectDefaultArguments = false;
+            if (!accept(tRPar))
+                error("unmatched parentheses");
+        }
 
-        //            do {
-        //                Position paramPos = token->getPosition();
+        contexts << context()->objectChildContext();
 
-        //                if (accept(tElipsis)) {
-        //                    variadic = true;
-        //                    break;
-        //                }
+        Function *function = context()->getRuntime()->createInterpretedFunction(name, params, term(), context());
 
-        //                if (!check(tId) && !check(tDollar))
-        //                    error("identifier expected");
+        e = Expression::Constant(function);
 
-        //                bool dynamic = false;
-        //                /*Pointer<Expression>*/ Expression *type = 0, *name = parseIdentifier(dynamic), *value = 0;
-
-        //                Position p = token->getPosition();
-
-        //                bool dynamicType;
-        //                if ((type = parseIdentifier(dynamicType))) {
-        //                    std::swap(type, name);
-        //                    type = Expression::Identifier(type, dynamicType);
-        //                    type->setPosition(p);
-        //                } else if (accept(tColon)) {
-        //                    Position p = token->getPosition();
-
-        //                    bool dynamic = false;
-        //                    if ((type = parseIdentifier(dynamic))) {
-        //                        type = Expression::Identifier(type, dynamic);
-        //                        type->setPosition(p);
-        //                    } else
-        //                        type = term();
-        //                }
-
-        //                if (accept(tAssign)) {
-        //                    expectDefaultArguments = true;
-        //                    value = logicOr();
-        //                } else if (expectDefaultArguments)
-        //                    error("default argument expected");
-
-        //                Expression *param = Expression::ParameterDefinition(type, name, value, dynamic);
-        //                param->setPosition(paramPos);
-
-        //                params << param;
-        //            } while (accept(tComma));
-
-        //            if (!accept(tRPar))
-        //                error("unmatched parenteses");
-        //        }
-
-        //        if (!type && accept(tArrow))
-        //            type = term();
-
-        //        Position p = token->getPosition();
-
-        //        if (accept(tLBrace)) {
-        //            body = Expression::List(parseBlock());
-        //            body->setPosition(p);
-        //        } else
-        //            body = oper();
-
-        //        switch (id) {
-        //        case tFunction:
-        //            e = Expression::FunctionDefinition(type, name, params, body, variadic, dynamic);
-        //            break;
-
-        //        case tMethod:
-        //            e = Expression::MethodDefinition(type, name, params, body, variadic, dynamic);
-        //            break;
-        //        }
+        if (!name.empty())
+            e = Expression::Block({Expression::LocalAssignment(Expression::Literal(name), Expression::Constant(function)), e});
     }
 
     else if (accept(tNew)) {
-        //        Position p = token->getPosition();
+        if (check(tLBrace))
+            e = Expression::DirectCall(Expression::Constant(context()->getRuntime()->getObjectClass()), "new", {});
+        else {
+            if (check(tId) || check(tDollar))
+                e = Expression::Identifier(parseIdentifier());
+            else
+                e = term();
 
-        //        if (accept(tLBrace)) {
-        //            Expression *body = Expression::List(parseBlock());
-        //            body->setPosition(p);
+            std::list<Expression *> args;
 
-        //            e = Expression::ObjectLiteral(body);
-        //        } else {
-        //            /*Pointer<Expression>*/ Expression *body = term();
+            if (accept(tLPar)) {
+                args = check(tRPar) ? std::list<Expression *>() : parseList();
 
-        //            std::list<Expression *> args;
+                if (!accept(tRPar))
+                    error("unmatched parentheses");
+            }
 
-        //            if (accept(tLPar)) {
-        //                args = check(tRPar) ? std::list<Expression *>() : parseList();
+            e = Expression::DirectCall(e, "new", args);
+        }
 
-        //                if (!accept(tRPar))
-        //                    error("unmatched parentheses");
-        //            }
+        if (check(tLBrace)) {
+            contexts << context()->objectChildContext();
 
-        //            e = Expression::Call(body, "new", args);
-        //        }
+            e = Expression::ContextResolution(e, Expression::Block({term(), Expression::Self()}), context());
+        }
     }
 
     else if (accept(tLPar)) {
@@ -625,8 +562,10 @@ Expression *Parser::term() {
 
         if (!accept(tRPar))
             error("unmatched parentheses");
-    } else if (accept(tLBrace))
-        e = Expression::Block(parseBlock());
+    } else if (accept(tLBrace)) {
+        const std::list<Expression *> &nodes = parseBlock();
+        e = nodes.empty() ? Expression::Empty() : nodes.size() == 1 ? nodes.front() : Expression::Block(nodes);
+    }
 
     else if (accept(tSemi))
         e = Expression::Empty();

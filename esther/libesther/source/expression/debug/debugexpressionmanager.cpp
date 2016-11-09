@@ -17,9 +17,10 @@ Expression *DebugExpressionManager::createAnd(Expression *self, Expression *arg)
     return new DebugExpression("And", arguments);
 }
 
-Expression *DebugExpressionManager::createAttributeAssignment(Expression *name, Expression *value) {
+Expression *DebugExpressionManager::createAttributeAssignment(Expression *self, Expression *name, Expression *value) {
     std::list<DebugExpression *> arguments;
 
+    arguments << self;
     arguments << name;
     arguments << value;
 

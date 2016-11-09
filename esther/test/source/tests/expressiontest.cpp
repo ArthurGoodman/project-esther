@@ -34,7 +34,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "2";
 
     $("AttributeAssignment", [=]() {
-        expr = Expression::AttributeAssignment(Expression::Literal("pi"), Expression::Literal(3.14));
+        expr = Expression::AttributeAssignment(Expression::Self(), Expression::Literal("pi"), Expression::Literal(3.14));
         expr->eval(&context);
         return context.getSelf()->getAttribute("pi")->toString();
     }).should.be = "3.14";

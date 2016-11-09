@@ -44,7 +44,7 @@ std::string DebugExpression::toString() const {
 
     str += (args.empty() ? "" : "\n") + spacing;
 
-    return spacing + name + " {" + str + "}";
+    return spacing + name + (getPosition().isValid() ? " (" + getPosition().toString() + ")" : "") + " {" + str + "}";
 }
 
 #endif

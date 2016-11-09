@@ -38,8 +38,8 @@ private:
     Expression *mulDiv();
     Expression *power();
     Expression *negate();
-    Expression *dot();
     Expression *preffix();
     Expression *suffix();
+    Expression *dot();
     Expression *term();
 };

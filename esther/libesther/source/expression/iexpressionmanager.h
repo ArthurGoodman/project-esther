@@ -15,7 +15,7 @@ public:
     virtual ~IExpressionManager();
 
     virtual Expression *createAnd(Expression *self, Expression *arg) = 0;
-    virtual Expression *createAttributeAssignment(Expression *name, Expression *value) = 0;
+    virtual Expression *createAttributeAssignment(Expression *self, Expression *name, Expression *value) = 0;
     virtual Expression *createBlock(const std::list<Expression *> &nodes) = 0;
     virtual Expression *createCall(Expression *self, Expression *name, const std::list<Expression *> &args) = 0;
     virtual Expression *createConstant(Object *value) = 0;
