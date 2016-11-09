@@ -7,11 +7,11 @@ public:
     Expression *createAnd(Expression *self, Expression *arg);
     Expression *createAttributeAssignment(Expression *name, Expression *value);
     Expression *createBlock(const std::list<Expression *> &nodes);
-    Expression *createCall(Expression *name, const std::list<Expression *> &args);
+    Expression *createCall(Expression *self, Expression *name, const std::list<Expression *> &args);
     Expression *createConstant(Object *value);
     Expression *createContextResolution(Expression *self, Expression *body, Context *context);
     Expression *createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
-    Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args);
+    Expression *createDynamicCall(Expression *self, Expression *body, const std::list<Expression *> &args);
     Expression *createEmpty();
     Expression *createHere();
     Expression *createIdentifier(Expression *name);

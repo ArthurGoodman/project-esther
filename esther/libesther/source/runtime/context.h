@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <list>
 
 class Object;
 class Runtime;
@@ -10,11 +11,14 @@ class Context {
     Runtime *runtime;
     Context *parent;
 
+    std::list<Context *> children;
+
 public:
     Context(Runtime *runtime);
+    virtual ~Context();
 
     Object *getSelf() const;
-    void setSelf(Object *self);
+    virtual void setSelf(Object *self);
 
     Object *getHere() const;
     void setHere(Object *here);
@@ -28,10 +32,13 @@ public:
     Object *get(const std::string &name) const;
     std::pair<Object *, Object *> getWithSource(const std::string &name) const;
 
-    void clear();
+    virtual void clear();
 
     Context *childContext(Object *self, Object *here);
+    Context *childContext(Object *here);
+    Context *objectChildContext(Object *self, Object *here);
+    Context *objectChildContext();
 
-private:
+protected:
     Context(Object *self, Object *here, Context *parent);
 };

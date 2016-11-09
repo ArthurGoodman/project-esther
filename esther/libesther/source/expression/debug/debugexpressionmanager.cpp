@@ -35,9 +35,10 @@ Expression *DebugExpressionManager::createBlock(const std::list<Expression *> &n
     return new DebugExpression("Block", arguments);
 }
 
-Expression *DebugExpressionManager::createCall(Expression *name, const std::list<Expression *> &args) {
+Expression *DebugExpressionManager::createCall(Expression *self, Expression *name, const std::list<Expression *> &args) {
     std::list<DebugExpression *> arguments, callArguments;
 
+    arguments << (self ? self : literal("Null", "null"));
     arguments << name;
 
     for (Expression *arg : args)
@@ -80,9 +81,10 @@ Expression *DebugExpressionManager::createDirectCall(Expression *self, const std
     return new DebugExpression("DirectCall", arguments);
 }
 
-Expression *DebugExpressionManager::createDynamicCall(Expression *body, const std::list<Expression *> &args) {
+Expression *DebugExpressionManager::createDynamicCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
     std::list<DebugExpression *> arguments, callArguments;
 
+    arguments << (self ? self : literal("Null", "null"));
     arguments << body;
 
     for (Expression *arg : args)

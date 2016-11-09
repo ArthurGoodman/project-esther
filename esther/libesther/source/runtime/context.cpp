@@ -2,9 +2,15 @@
 
 #include "object.h"
 #include "runtime.h"
+#include "objectcontext.h"
 
 Context::Context(Runtime *runtime)
     : self(runtime->getMainObject()), here(runtime->getMainObject()), runtime(runtime), parent(nullptr) {
+}
+
+Context::~Context() {
+    for (Context *child : children)
+        delete child;
 }
 
 Object *Context::getSelf() const {
@@ -78,7 +84,21 @@ void Context::clear() {
 }
 
 Context *Context::childContext(Object *self, Object *here) {
-    return new Context(self, here, this);
+    children << new Context(self, here, this);
+    return children.back();
+}
+
+Context *Context::childContext(Object *here) {
+    return childContext(self, here);
+}
+
+Context *Context::objectChildContext(Object *self, Object *here) {
+    children << new ObjectContext(self, here, this);
+    return children.back();
+}
+
+Context *Context::objectChildContext() {
+    return objectChildContext(self, here);
 }
 
 Context::Context(Object *self, Object *here, Context *parent)

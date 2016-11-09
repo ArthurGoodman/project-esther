@@ -29,7 +29,7 @@ std::vector<std::string> Lexer::tokenTypes = {
 };
 #endif
 
-const Tokens &Lexer::lex(const std::string &source) {
+Tokens &Lexer::lex(const std::string &source) {
     this->source = &source;
     pos = 0;
     line = column = 1;
@@ -59,8 +59,7 @@ const Tokens &Lexer::lex(const std::string &source) {
 }
 
 void Lexer::error(const std::string &msg, int delta) {
-    ErrorException *e = new LexicalError(msg, token.getPosition().shifted(delta));
-    e->raise();
+    throw new LexicalError(msg, token.getPosition().shifted(delta));
 }
 
 void Lexer::scan() {
@@ -88,7 +87,7 @@ void Lexer::scan() {
         char type = at(pos++);
         column++;
 
-        token = tString;
+        token = type == '\'' ? tString : tComplexString;
 
         while (at(pos) && at(pos) != type) {
             if (at(pos) == '\n')

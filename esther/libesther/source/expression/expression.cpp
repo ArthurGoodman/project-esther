@@ -15,8 +15,8 @@ Expression *Expression::Block(const std::list<Expression *> &nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
-Expression *Expression::Call(Expression *name, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createCall(name, args);
+Expression *Expression::Call(Expression *self, Expression *name, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createCall(self, name, args);
 }
 
 Expression *Expression::Constant(Object *value) {
@@ -31,8 +31,8 @@ Expression *Expression::DirectCall(Expression *self, const std::string &name, co
     return IExpressionManager::instance()->createDirectCall(self, name, args);
 }
 
-Expression *Expression::DynamicCall(Expression *body, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createDynamicCall(body, args);
+Expression *Expression::DynamicCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createDynamicCall(self, body, args);
 }
 
 Expression *Expression::Empty() {

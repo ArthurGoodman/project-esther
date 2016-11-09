@@ -93,7 +93,8 @@ SOURCES += \
     source/expression/ast/directcallexpression.cpp \
     source/expression/ast/dynamiccallexpression.cpp \
     source/runtime/rootclass/rootclass.cpp \
-    source/expression/debug/literaldebugexpression.cpp
+    source/expression/debug/literaldebugexpression.cpp \
+    source/runtime/objectcontext.cpp
 
 HEADERS += \
     source/esther.h \
@@ -171,7 +172,8 @@ HEADERS += \
     source/expression/ast/directcallexpression.h \
     source/expression/ast/dynamiccallexpression.h \
     source/runtime/rootclass/rootclass.h \
-    source/expression/debug/literaldebugexpression.h
+    source/expression/debug/literaldebugexpression.h \
+    source/runtime/objectcontext.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \
