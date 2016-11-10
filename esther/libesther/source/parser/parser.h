@@ -5,6 +5,8 @@
 #include "iparser.h"
 #include "token.h"
 
+class Object;
+
 class Parser : public IParser {
     std::list<Context *> contexts;
     Tokens tokens;
@@ -21,6 +23,9 @@ private:
     bool check(int id);
     bool accept(int id);
 
+    void pushContext(Object *here);
+    void pushObjectContext();
+    void popContext();
     Context *context();
 
     std::list<Expression *> parseBlock();
