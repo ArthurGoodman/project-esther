@@ -13,7 +13,7 @@ void Esther::runFile(const std::string &fileName) {
 
     try {
         if (value)
-            IO::printLine("\n=> " + value->toString());
+            IO::printLine("=> " + value->toString());
     } catch (Exception *e) {
         IO::printLine(e->message());
         delete e;

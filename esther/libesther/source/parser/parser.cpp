@@ -490,7 +490,7 @@ Expression *Parser::term() {
     else if (accept(tFunction)) {
         std::string name;
 
-        if (!check(tLPar) && !check(tEnd)) {
+        if (check(tId) || accept(tDollar)) {
             name = token->getText();
             getToken();
         }
