@@ -82,10 +82,9 @@ Expression *DebugExpressionManager::createDirectCall(Expression *self, const std
     return new DebugExpression("DirectCall", arguments);
 }
 
-Expression *DebugExpressionManager::createDynamicCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
+Expression *DebugExpressionManager::createDynamicCall(Expression *body, const std::list<Expression *> &args) {
     std::list<DebugExpression *> arguments, callArguments;
 
-    arguments << (self ? self : literal("Null", "null"));
     arguments << body;
 
     for (Expression *arg : args)

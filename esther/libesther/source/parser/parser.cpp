@@ -319,7 +319,7 @@ Expression *Parser::suffix() {
 
             if (accept(tLPar)) {
                 std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
-                e = Expression::DynamicCall(nullptr, e, list);
+                e = Expression::DynamicCall(e, list);
 
                 if (!accept(tRPar))
                     error("unmatched parentheses");
@@ -347,7 +347,7 @@ Expression *Parser::suffix() {
                     } else if (accept(tLPar)) {
                         std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
                         contexts << context()->objectChildContext();
-                        e = Expression::ContextResolution(e, Expression::Call(nullptr, name, list), context());
+                        e = Expression::ContextResolution(e, Expression::Call(Expression::Self(), name, list), context());
                         e->setPosition(p);
 
                         if (!accept(tRPar))
@@ -368,7 +368,7 @@ Expression *Parser::suffix() {
                     } else if (accept(tLPar)) {
                         std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
                         contexts << context()->objectChildContext();
-                        e = Expression::ContextResolution(e, Expression::DynamicCall(e, body, list), context());
+                        e = Expression::ContextResolution(e, Expression::DynamicCall(body, list), context());
                         e->setPosition(p);
 
                         if (!accept(tRPar))
@@ -488,7 +488,7 @@ Expression *Parser::term() {
     else if (accept(tFunction)) {
         std::string name;
 
-        if (check(tId)) {
+        if (!check(tLPar) && !check(tEnd)) {
             name = token->getText();
             getToken();
         }
@@ -510,7 +510,7 @@ Expression *Parser::term() {
 
         contexts << context()->objectChildContext();
 
-        Function *function = context()->getRuntime()->createInterpretedFunction(name, params, term(), context());
+        Function *function = context()->getRuntime()->createInterpretedFunction(name, params, oper(), context());
 
         e = Expression::Constant(function);
 

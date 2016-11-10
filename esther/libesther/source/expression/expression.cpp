@@ -31,8 +31,8 @@ Expression *Expression::DirectCall(Expression *self, const std::string &name, co
     return IExpressionManager::instance()->createDirectCall(self, name, args);
 }
 
-Expression *Expression::DynamicCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createDynamicCall(self, body, args);
+Expression *Expression::DynamicCall(Expression *body, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createDynamicCall(body, args);
 }
 
 Expression *Expression::Empty() {

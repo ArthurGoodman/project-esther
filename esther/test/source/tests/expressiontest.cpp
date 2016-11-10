@@ -80,7 +80,7 @@ void ExpressionTest::defineTests() {
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
 
-        expr = Expression::DynamicCall(nullptr, Expression::Identifier(Expression::Literal("f")), {});
+        expr = Expression::DynamicCall(Expression::Identifier(Expression::Literal("f")), {});
 
         Object *value = expr->eval(childContext);
         delete childContext;
