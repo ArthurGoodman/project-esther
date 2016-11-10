@@ -3,10 +3,11 @@
 #include "expression.h"
 
 class LocalAssignmentExpression : public Expression {
-    Expression *name, *value;
+    std::string name;
+    Expression *value;
 
 public:
-    LocalAssignmentExpression(Expression *name, Expression *value);
+    LocalAssignmentExpression(const std::string &name, Expression *value);
     ~LocalAssignmentExpression();
 
     Object *exec(Context *context);

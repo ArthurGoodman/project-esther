@@ -3,10 +3,12 @@
 #include "expression.h"
 
 class AttributeAssignmentExpression : public Expression {
-    Expression *self, *name, *value;
+    Expression *self;
+    std::string name;
+    Expression *value;
 
 public:
-    AttributeAssignmentExpression(Expression *self, Expression *name, Expression *value);
+    AttributeAssignmentExpression(Expression *self, const std::string &name, Expression *value);
     ~AttributeAssignmentExpression();
 
     Object *exec(Context *context);

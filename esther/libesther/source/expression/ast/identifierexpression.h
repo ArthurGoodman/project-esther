@@ -3,10 +3,10 @@
 #include "expression.h"
 
 class IdentifierExpression : public Expression {
-    Expression *name;
+    std::string name;
 
 public:
-    IdentifierExpression(Expression *name);
+    IdentifierExpression(const std::string &name);
     ~IdentifierExpression();
 
     Object *exec(Context *context);

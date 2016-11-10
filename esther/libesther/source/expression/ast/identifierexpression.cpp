@@ -3,16 +3,14 @@
 #include "context.h"
 #include "runtime.h"
 
-IdentifierExpression::IdentifierExpression(Expression *name)
+IdentifierExpression::IdentifierExpression(const std::string &name)
     : name(name) {
 }
 
 IdentifierExpression::~IdentifierExpression() {
-    delete name;
 }
 
 Object *IdentifierExpression::exec(Context *context) {
-    const std::string &name = this->name->eval(context)->toString();
     Object *value = context->get(name);
 
     if (!value)

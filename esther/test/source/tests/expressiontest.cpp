@@ -34,7 +34,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "2";
 
     $("AttributeAssignment", [=]() {
-        expr = Expression::AttributeAssignment(Expression::Self(), Expression::Literal("pi"), Expression::Literal(3.14));
+        expr = Expression::AttributeAssignment(Expression::Self(), "pi", Expression::Literal(3.14));
         expr->eval(&context);
         return context.getSelf()->getAttribute("pi")->toString();
     }).should.be = "3.14";
@@ -57,7 +57,7 @@ void ExpressionTest::defineTests() {
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
 
-        expr = Expression::Call(Expression::Literal("f"), {});
+        expr = Expression::Call("f", {});
 
         Object *value = expr->eval(childContext);
         delete childContext;
@@ -80,7 +80,7 @@ void ExpressionTest::defineTests() {
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
 
-        expr = Expression::DynamicCall(Expression::Identifier(Expression::Literal("f")), {});
+        expr = Expression::DynamicCall(Expression::Identifier("f"), {});
 
         Object *value = expr->eval(childContext);
         delete childContext;
@@ -109,7 +109,7 @@ void ExpressionTest::defineTests() {
     $("Identifier // local", [=]() {
         context.setLocal("pi", runtime.createFloat(3.14));
 
-        expr = Expression::Identifier(Expression::Literal("pi"));
+        expr = Expression::Identifier("pi");
 
         Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
         Object *value = expr->eval(childContext);
@@ -120,7 +120,7 @@ void ExpressionTest::defineTests() {
     $("Identifier // attribute", [=]() {
         context.getSelf()->setAttribute("pi", runtime.createFloat(3.14));
 
-        expr = Expression::Identifier(Expression::Literal("pi"));
+        expr = Expression::Identifier("pi");
 
         Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
         Object *value = expr->eval(childContext);
@@ -129,7 +129,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "3.14";
 
     $("Identifier // undefined", [=]() {
-        expr = Expression::Identifier(Expression::Literal("id"));
+        expr = Expression::Identifier("id");
         return expr->eval(&context)->toString();
     }).should_not.be.ok();
 
@@ -149,15 +149,15 @@ void ExpressionTest::defineTests() {
     }).should.be = "3.14";
 
     $("LocalAssignment", [=]() {
-        expr = Expression::LocalAssignment(Expression::Literal("pi"), Expression::Literal(3.14));
+        expr = Expression::LocalAssignment("pi", Expression::Literal(3.14));
         expr->eval(&context);
         return context.getLocal("pi")->toString();
     }).should.be = "3.14";
 
     $("Loop", [=]() {
-        expr = Expression::Block({Expression::LocalAssignment(Expression::Literal("i"), Expression::Literal(0)),
-                                  Expression::Loop(Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), "<", {Expression::Literal(10)}),
-                                                   Expression::LocalAssignment(Expression::Literal("i"), Expression::DirectCall(Expression::Identifier(Expression::Literal("i")), "+", {Expression::Literal(1)})))});
+        expr = Expression::Block({Expression::LocalAssignment("i", Expression::Literal(0)),
+                                  Expression::Loop(Expression::DirectCall(Expression::Identifier("i"), "<", {Expression::Literal(10)}),
+                                                   Expression::LocalAssignment("i", Expression::DirectCall(Expression::Identifier("i"), "+", {Expression::Literal(1)})))});
 
         return expr->eval(&context)->toString();
     }).should.be = "10";

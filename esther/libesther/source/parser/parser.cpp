@@ -318,13 +318,13 @@ Expression *Parser::suffix() {
             Position p = token->getPosition();
 
             if (accept(tLPar)) {
-                std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
                 e = Expression::DynamicCall(e, list);
 
                 if (!accept(tRPar))
                     error("unmatched parentheses");
             } else if (accept(tLBracket)) {
-                std::list<Expression *> list = check(tRBracket) ? std::list<Expression *>() : parseList();
+                const std::list<Expression *> &list = check(tRBracket) ? std::list<Expression *>() : parseList();
                 e = Expression::DirectCall(e, "[]", list);
 
                 if (!accept(tRBracket))
@@ -333,11 +333,11 @@ Expression *Parser::suffix() {
                 if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
                     token->setId(tId);
 
-                if (check(tDollar) || check(tId)) {
+                if (check(tId) || accept(tDollar)) {
                     Position namePos = token->getPosition();
 
-                    Expression *name = parseIdentifier();
-                    name->setPosition(namePos);
+                    const std::string &name = token->getText();
+                    getToken();
 
                     Position p = token->getPosition();
 
@@ -345,7 +345,7 @@ Expression *Parser::suffix() {
                         e = Expression::AttributeAssignment(e, name, logicOr());
                         e->setPosition(p);
                     } else if (accept(tLPar)) {
-                        std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                        const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
                         contexts << context()->objectChildContext();
                         e = Expression::ContextResolution(e, Expression::DynamicCall(Expression::Identifier(name), list), context());
                         e->setPosition(p);
@@ -368,7 +368,7 @@ Expression *Parser::suffix() {
                         e = Expression::ContextResolution(e, Expression::DirectCall(body, "=", {logicOr()}), context());
                         e->setPosition(p);
                     } else if (accept(tLPar)) {
-                        std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                        const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
                         contexts << context()->objectChildContext();
                         e = Expression::ContextResolution(e, Expression::DynamicCall(body, list), context());
                         e->setPosition(p);
@@ -401,8 +401,9 @@ Expression *Parser::term() {
 
     Position p = token->getPosition();
 
-    if (check(tId) || check(tDollar)) {
-        Expression *name = parseIdentifier();
+    if (check(tId) || accept(tDollar)) {
+        const std::string &name = token->getText();
+        getToken();
 
         Position p = token->getPosition();
 
@@ -410,7 +411,7 @@ Expression *Parser::term() {
             e = Expression::LocalAssignment(name, logicOr());
             e->setPosition(p);
         } else if (accept(tLPar)) {
-            std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+            const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
             e = Expression::Call(name, {list});
             e->setPosition(p);
 
@@ -482,7 +483,7 @@ Expression *Parser::term() {
 
         Class *_class = context()->getRuntime()->createClass(name);
 
-        e = Expression::Block({Expression::LocalAssignment(Expression::Literal(name), Expression::Constant(_class)),
+        e = Expression::Block({Expression::LocalAssignment(name, Expression::Constant(_class)),
                                Expression::ContextResolution(Expression::Constant(_class), term(), context()),
                                Expression::Constant(_class)});
     }
@@ -517,16 +518,17 @@ Expression *Parser::term() {
         e = Expression::Constant(function);
 
         if (!name.empty())
-            e = Expression::Block({Expression::LocalAssignment(Expression::Literal(name), Expression::Constant(function)), e});
+            e = Expression::Block({Expression::LocalAssignment(name, Expression::Constant(function)), e});
     }
 
     else if (accept(tNew)) {
         if (check(tLBrace))
             e = Expression::DirectCall(Expression::Constant(context()->getRuntime()->getObjectClass()), "new", {});
         else {
-            if (check(tId) || check(tDollar))
-                e = Expression::Identifier(parseIdentifier());
-            else
+            if (check(tId) || accept(tDollar)) {
+                e = Expression::Identifier(token->getText());
+                getToken();
+            } else
                 e = term();
 
             std::list<Expression *> args;

@@ -7,7 +7,7 @@ Expression *Expression::And(Expression *self, Expression *arg) {
     return IExpressionManager::instance()->createAnd(self, arg);
 }
 
-Expression *Expression::AttributeAssignment(Expression *self, Expression *name, Expression *value) {
+Expression *Expression::AttributeAssignment(Expression *self, const std::string &name, Expression *value) {
     return IExpressionManager::instance()->createAttributeAssignment(self, name, value);
 }
 
@@ -15,7 +15,7 @@ Expression *Expression::Block(const std::list<Expression *> &nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
-Expression *Expression::Call(Expression *name, const std::list<Expression *> &args) {
+Expression *Expression::Call(const std::string &name, const std::list<Expression *> &args) {
     return IExpressionManager::instance()->createCall(name, args);
 }
 
@@ -43,7 +43,7 @@ Expression *Expression::Here() {
     return IExpressionManager::instance()->createHere();
 }
 
-Expression *Expression::Identifier(Expression *name) {
+Expression *Expression::Identifier(const std::string &name) {
     return IExpressionManager::instance()->createIdentifier(name);
 }
 
@@ -55,7 +55,7 @@ Expression *Expression::Literal(const Variant &value) {
     return IExpressionManager::instance()->createLiteral(value);
 }
 
-Expression *Expression::LocalAssignment(Expression *name, Expression *value) {
+Expression *Expression::LocalAssignment(const std::string &name, Expression *value) {
     return IExpressionManager::instance()->createLocalAssignment(name, value);
 }
 

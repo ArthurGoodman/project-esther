@@ -2,17 +2,16 @@
 
 #include "context.h"
 
-LocalAssignmentExpression::LocalAssignmentExpression(Expression *name, Expression *value)
+LocalAssignmentExpression::LocalAssignmentExpression(const std::string &name, Expression *value)
     : name(name), value(value) {
 }
 
 LocalAssignmentExpression::~LocalAssignmentExpression() {
-    delete name;
     delete value;
 }
 
 Object *LocalAssignmentExpression::exec(Context *context) {
     Object *value = this->value->eval(context);
-    context->setLocal(name->eval(context)->toString(), value);
+    context->setLocal(name, value);
     return value;
 }

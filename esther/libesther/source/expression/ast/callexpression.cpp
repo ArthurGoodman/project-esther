@@ -4,19 +4,16 @@
 #include "runtime.h"
 #include "function.h"
 
-CallExpression::CallExpression(Expression *name, const std::list<Expression *> &args)
+CallExpression::CallExpression(const std::string &name, const std::list<Expression *> &args)
     : name(name), args(args) {
 }
 
 CallExpression::~CallExpression() {
-    delete name;
-
     for (Expression *e : args)
         delete e;
 }
 
 Object *CallExpression::exec(Context *context) {
-    const std::string &name = this->name->eval(context)->toString();
     const std::pair<Object *, Object *> &f = context->getWithSource(name);
 
     if (!f.first)
