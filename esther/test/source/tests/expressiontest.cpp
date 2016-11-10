@@ -6,7 +6,7 @@
 #include "runtime/function.h"
 
 ExpressionTest::ExpressionTest()
-    : TestSet("expressions"), context(&runtime), expr(nullptr) {
+    : TestSet("expressions"), context(&runtime), e(nullptr) {
     defineTests();
 }
 
@@ -18,24 +18,24 @@ void ExpressionTest::preTest() {
 }
 
 void ExpressionTest::postTest() {
-    delete expr;
-    expr = nullptr;
+    delete e;
+    e = nullptr;
 }
 
 void ExpressionTest::defineTests() {
     $("And -> 1", [=]() {
-        expr = Expression::And(Expression::Empty(), Expression::Literal(2));
-        return expr->eval(&context)->toString();
+        e = Expression::And(Expression::Empty(), Expression::Literal(2));
+        return e->eval(&context)->toString();
     }).should.be = "null";
 
     $("And -> 2", [=]() {
-        expr = Expression::And(Expression::Literal(1), Expression::Literal(2));
-        return expr->eval(&context)->toString();
+        e = Expression::And(Expression::Literal(1), Expression::Literal(2));
+        return e->eval(&context)->toString();
     }).should.be = "2";
 
     $("AttributeAssignment", [=]() {
-        expr = Expression::AttributeAssignment(Expression::Self(), "pi", Expression::Literal(3.14));
-        expr->eval(&context);
+        e = Expression::AttributeAssignment(Expression::Self(), "pi", Expression::Literal(3.14));
+        e->eval(&context);
         return context.getSelf()->getAttribute("pi")->toString();
     }).should.be = "3.14";
 
@@ -46,9 +46,9 @@ void ExpressionTest::defineTests() {
         nodes << Expression::Literal(2);
         nodes << Expression::Literal(3);
 
-        expr = Expression::Block(nodes);
+        e = Expression::Block(nodes);
 
-        return expr->eval(&context)->toString();
+        return e->eval(&context)->toString();
     }).should.be = "3";
 
     $("Call", [=]() {
@@ -57,21 +57,21 @@ void ExpressionTest::defineTests() {
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
 
-        expr = Expression::Call("f", {});
+        e = Expression::Call("f", {});
 
-        Object *value = expr->eval(childContext);
+        Object *value = e->eval(childContext);
         delete childContext;
         return value->toString();
     }).should.be = "3";
 
     $("Constant", [=]() {
-        expr = Expression::Constant(runtime.getTrue());
-        return expr->eval(&context)->toString();
+        e = Expression::Constant(runtime.getTrue());
+        return e->eval(&context)->toString();
     }).should.be = "true";
 
     $("DirectCall", [=]() {
-        expr = Expression::DirectCall(Expression::Literal(4), "+", {Expression::Literal(5)});
-        return expr->eval(&context)->toString();
+        e = Expression::DirectCall(Expression::Literal(4), "+", {Expression::Literal(5)});
+        return e->eval(&context)->toString();
     }).should.be = "9";
 
     $("DynamicCall", [=]() {
@@ -80,39 +80,39 @@ void ExpressionTest::defineTests() {
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
 
-        expr = Expression::DynamicCall(Expression::Identifier("f"), {});
+        e = Expression::DynamicCall(Expression::Identifier("f"), {});
 
-        Object *value = expr->eval(childContext);
+        Object *value = e->eval(childContext);
         delete childContext;
         return value->toString();
     }).should.be = "4";
 
     $("ContextResolution", [=]() {
         Context *childContext = context.childContext(runtime.createInteger(3), runtime.createObject());
-        expr = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
+        e = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
 
-        Object *value = expr->eval(&context);
+        Object *value = e->eval(&context);
         delete childContext;
         return value->toString();
     }).should.be = "4";
 
     $("Empty", [=]() {
-        expr = Expression::Empty();
-        return expr->eval(&context)->toString();
+        e = Expression::Empty();
+        return e->eval(&context)->toString();
     }).should.be = "null";
 
     $("Here", [=]() {
-        expr = Expression::Here();
-        return expr->eval(&context) == context.getHere();
+        e = Expression::Here();
+        return e->eval(&context) == context.getHere();
     }).should.be = true;
 
     $("Identifier // local", [=]() {
         context.setLocal("pi", runtime.createFloat(3.14));
 
-        expr = Expression::Identifier("pi");
+        e = Expression::Identifier("pi");
 
         Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
-        Object *value = expr->eval(childContext);
+        Object *value = e->eval(childContext);
         delete childContext;
         return value->toString();
     }).should.be = "3.14";
@@ -120,65 +120,74 @@ void ExpressionTest::defineTests() {
     $("Identifier // attribute", [=]() {
         context.getSelf()->setAttribute("pi", runtime.createFloat(3.14));
 
-        expr = Expression::Identifier("pi");
+        e = Expression::Identifier("pi");
 
         Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
-        Object *value = expr->eval(childContext);
+        Object *value = e->eval(childContext);
         delete childContext;
         return value->toString();
     }).should.be = "3.14";
 
     $("Identifier // undefined", [=]() {
-        expr = Expression::Identifier("id");
-        return expr->eval(&context)->toString();
+        e = Expression::Identifier("id");
+        return e->eval(&context)->toString();
     }).should_not.be.ok();
 
     $("If -> 1", [=]() {
-        expr = Expression::If(Expression::Constant(runtime.getTrue()), Expression::Literal(1), Expression::Literal(2));
-        return expr->eval(&context)->toString();
+        e = Expression::If(Expression::Constant(runtime.getTrue()), Expression::Literal(1), Expression::Literal(2));
+        return e->eval(&context)->toString();
     }).should.be = "1";
 
     $("If -> 2", [=]() {
-        expr = Expression::If(Expression::Constant(runtime.getFalse()), Expression::Literal(1), Expression::Literal(2));
-        return expr->eval(&context)->toString();
+        e = Expression::If(Expression::Constant(runtime.getFalse()), Expression::Literal(1), Expression::Literal(2));
+        return e->eval(&context)->toString();
     }).should.be = "2";
 
     $("Literal", [=]() {
-        expr = Expression::Literal(3.14);
-        return expr->eval(&context)->toString();
+        e = Expression::Literal(3.14);
+        return e->eval(&context)->toString();
     }).should.be = "3.14";
 
     $("LocalAssignment", [=]() {
-        expr = Expression::LocalAssignment("pi", Expression::Literal(3.14));
-        expr->eval(&context);
+        e = Expression::LocalAssignment("pi", Expression::Literal(3.14));
+        e->eval(&context);
         return context.getLocal("pi")->toString();
     }).should.be = "3.14";
 
     $("Loop", [=]() {
-        expr = Expression::Block({Expression::LocalAssignment("i", Expression::Literal(0)),
-                                  Expression::Loop(Expression::DirectCall(Expression::Identifier("i"), "<", {Expression::Literal(10)}),
-                                                   Expression::LocalAssignment("i", Expression::DirectCall(Expression::Identifier("i"), "+", {Expression::Literal(1)})))});
+        e = Expression::Block({Expression::LocalAssignment("i", Expression::Literal(0)),
+                               Expression::Loop(Expression::DirectCall(Expression::Identifier("i"), "<", {Expression::Literal(10)}),
+                                                Expression::LocalAssignment("i", Expression::DirectCall(Expression::Identifier("i"), "+", {Expression::Literal(1)})))});
 
-        return expr->eval(&context)->toString();
+        return e->eval(&context)->toString();
     }).should.be = "10";
 
+    $("NativeCall", [=]() {
+        e = Expression::NativeCall((Object * (*)(Context *...))ExpressionTest::nativePlus, {Expression::Literal(4), Expression::Literal(5)});
+        return e->eval(&context)->toString();
+    }).should.be = "9";
+
     $("Not", [=]() {
-        expr = Expression::Not(Expression::Constant(runtime.getTrue()));
-        return expr->eval(&context)->toString();
+        e = Expression::Not(Expression::Constant(runtime.getTrue()));
+        return e->eval(&context)->toString();
     }).should.be = "false";
 
     $("Or -> 1", [=]() {
-        expr = Expression::Or(Expression::Literal(1), Expression::Literal(2));
-        return expr->eval(&context)->toString();
+        e = Expression::Or(Expression::Literal(1), Expression::Literal(2));
+        return e->eval(&context)->toString();
     }).should.be = "1";
 
     $("Or -> 2", [=]() {
-        expr = Expression::Or(Expression::Empty(), Expression::Literal(2));
-        return expr->eval(&context)->toString();
+        e = Expression::Or(Expression::Empty(), Expression::Literal(2));
+        return e->eval(&context)->toString();
     }).should.be = "2";
 
     $("Self", [=]() {
-        expr = Expression::Self();
-        return expr->eval(&context) == context.getSelf();
+        e = Expression::Self();
+        return e->eval(&context) == context.getSelf();
     }).should.be = true;
+}
+
+Object *ExpressionTest::nativePlus(Context *context, ValueObject *x, ValueObject *y) {
+    return context->getRuntime()->createInteger(x->getVariant().toInteger() + y->getVariant().toInteger());
 }

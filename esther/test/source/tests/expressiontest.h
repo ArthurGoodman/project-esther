@@ -9,7 +9,7 @@ class Expression;
 class ExpressionTest : public unit::TestSet {
     Runtime runtime;
     Context context;
-    Expression *expr;
+    Expression *e;
 
 public:
     ExpressionTest();
@@ -20,4 +20,6 @@ protected:
 
 private:
     void defineTests();
+
+    static Object *nativePlus(Context *context, ValueObject *x, ValueObject *y);
 };
