@@ -163,7 +163,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "10";
 
     $("NativeCall", [=]() {
-        e = Expression::NativeCall((Object * (*)(Context *...))ExpressionTest::nativePlus, {Expression::Literal(4), Expression::Literal(5)});
+        e = Expression::NativeCall((Object * (*)(Context *...))nativePlus, {Expression::Literal(4), Expression::Literal(5)});
         return e->eval(&context)->toString();
     }).should.be = "9";
 
