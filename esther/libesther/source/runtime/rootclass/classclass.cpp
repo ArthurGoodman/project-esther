@@ -9,6 +9,9 @@ Object *ClassClass::createNewInstance() {
 }
 
 void ClassClass::setupMethods() {
+    def("new", [=](Object *self, const std::vector<Object *> &) -> Object * {
+        return ((Class *)self)->newInstance();
+    });
 }
 
 ClassClass::ClassClass(Runtime *runtime)

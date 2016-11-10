@@ -19,6 +19,8 @@ public:
 
     Object *newInstance();
 
+    bool isChild(Class *_class) const;
+
     std::string toString() const;
 
     Object *lookup(const std::string &name) const;

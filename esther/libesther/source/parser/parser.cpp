@@ -309,11 +309,11 @@ Expression *Parser::preffix() {
 }
 
 Expression *Parser::suffix() {
-    Expression *e = dot();
+    Expression *e = term();
 
     Position p = token->getPosition();
 
-    if (check(tLPar) || check(tLBracket))
+    if (check(tLPar) || check(tLBracket) || check(tDot))
         while (true) {
             Position p = token->getPosition();
 
@@ -329,6 +329,55 @@ Expression *Parser::suffix() {
 
                 if (!accept(tRBracket))
                     error("unmatched brackets");
+            } else if (accept(tDot)) {
+                if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
+                    token->setId(tId);
+
+                if (check(tDollar) || check(tId)) {
+                    Position p = token->getPosition();
+
+                    Expression *name = parseIdentifier();
+                    name->setPosition(p);
+
+                    p = token->getPosition();
+
+                    if (accept(tAssign)) {
+                        e = Expression::AttributeAssignment(e, name, logicOr());
+                        e->setPosition(p);
+                    } else if (accept(tLPar)) {
+                        std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                        contexts << context()->objectChildContext();
+                        e = Expression::ContextResolution(e, Expression::Call(nullptr, name, list), context());
+                        e->setPosition(p);
+
+                        if (!accept(tRPar))
+                            error("unmatched parentheses");
+                    } else {
+                        contexts << context()->childContext(context()->getRuntime()->createObject());
+                        e = Expression::ContextResolution(e, Expression::Identifier(name), context());
+                    }
+                } else {
+                    Expression *body = term();
+
+                    Position p = token->getPosition();
+
+                    if (accept(tAssign)) {
+                        contexts << context()->objectChildContext();
+                        e = Expression::ContextResolution(e, Expression::DirectCall(body, "=", {logicOr()}), context());
+                        e->setPosition(p);
+                    } else if (accept(tLPar)) {
+                        std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
+                        contexts << context()->objectChildContext();
+                        e = Expression::ContextResolution(e, Expression::DynamicCall(e, body, list), context());
+                        e->setPosition(p);
+
+                        if (!accept(tRPar))
+                            error("unmatched parentheses");
+                    } else {
+                        contexts << context()->childContext(context()->getRuntime()->createObject());
+                        e = Expression::ContextResolution(e, body, context());
+                    }
+                }
             } else
                 break;
 
@@ -341,66 +390,6 @@ Expression *Parser::suffix() {
 
     if (!e->getPosition().isValid())
         e->setPosition(p);
-
-    return e;
-}
-
-Expression *Parser::dot() {
-    Expression *e = term();
-
-    while (true) {
-        Position p = token->getPosition();
-
-        if (accept(tDot)) {
-            if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
-                token->setId(tId);
-
-            if (check(tDollar) || check(tId)) {
-                Expression *name = parseIdentifier();
-
-                Position p = token->getPosition();
-
-                if (accept(tAssign)) {
-                    e = Expression::AttributeAssignment(e, name, logicOr());
-                    e->setPosition(p);
-                } else if (accept(tLPar)) {
-                    std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
-                    e = Expression::Call(e, name, list);
-                    e->setPosition(p);
-
-                    if (!accept(tRPar))
-                        error("unmatched parentheses");
-                } else {
-                    contexts << context()->childContext(context()->getRuntime()->createObject());
-                    e = Expression::ContextResolution(e, name, context());
-                }
-            } else {
-                Expression *body = term();
-
-                Position p = token->getPosition();
-
-                if (accept(tAssign)) {
-                    contexts << context()->childContext(context()->getRuntime()->createObject());
-                    e = Expression::ContextResolution(e, Expression::DirectCall(body, "=", {logicOr()}), context());
-                    e->setPosition(p);
-                } else if (accept(tLPar)) {
-                    std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
-                    e = Expression::DynamicCall(e, body, list);
-                    e->setPosition(p);
-
-                    if (!accept(tRPar))
-                        error("unmatched parentheses");
-                } else {
-                    contexts << context()->childContext(context()->getRuntime()->createObject());
-                    e = Expression::ContextResolution(e, body, context());
-                }
-            }
-        } else
-            break;
-
-        if (!e->getPosition().isValid())
-            e->setPosition(p);
-    }
 
     return e;
 }

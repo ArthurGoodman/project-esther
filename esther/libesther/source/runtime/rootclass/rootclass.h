@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <list>
 
 #include "class.h"
 
@@ -17,4 +18,6 @@ protected:
     virtual void setupMethods() = 0;
 
     void def(const std::string &name, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    void def(const std::string &name, const std::list<std::string> &paramsClassesNames, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    void def(const std::string &name, const std::list<Class *> &paramsClasses, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
 };

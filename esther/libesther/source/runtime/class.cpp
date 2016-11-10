@@ -20,6 +20,10 @@ Object *Class::newInstance() {
     return createNewInstance();
 }
 
+bool Class::isChild(Class *_class) const {
+    return this == _class || (superclass && superclass->isChild(_class));
+}
+
 std::string Class::toString() const {
     return getName().empty() ? "<anonymous class>" : "<class " + getName() + ">";
 }

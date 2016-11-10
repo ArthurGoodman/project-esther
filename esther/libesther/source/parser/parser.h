@@ -40,6 +40,5 @@ private:
     Expression *negate();
     Expression *preffix();
     Expression *suffix();
-    Expression *dot();
     Expression *term();
 };

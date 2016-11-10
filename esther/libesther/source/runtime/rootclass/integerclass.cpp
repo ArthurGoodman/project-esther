@@ -12,11 +12,11 @@ Object *IntegerClass::createNewInstance() {
 }
 
 void IntegerClass::setupMethods() {
-    def("+", [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    def("+", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->createInteger(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args[0])->getVariant().toInteger());
     });
 
-    def("<", [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    def("<", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(((ValueObject *)self)->getVariant().toInteger() < ((ValueObject *)args[0])->getVariant().toInteger());
     });
 }
