@@ -15,8 +15,8 @@ Expression *Expression::Block(const std::list<Expression *> &nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
-Expression *Expression::Call(Expression *self, Expression *name, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createCall(self, name, args);
+Expression *Expression::Call(Expression *name, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createCall(name, args);
 }
 
 Expression *Expression::Constant(Object *value) {

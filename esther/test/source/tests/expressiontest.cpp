@@ -57,7 +57,7 @@ void ExpressionTest::defineTests() {
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
 
-        expr = Expression::Call(nullptr, Expression::Literal("f"), {});
+        expr = Expression::Call(Expression::Literal("f"), {});
 
         Object *value = expr->eval(childContext);
         delete childContext;

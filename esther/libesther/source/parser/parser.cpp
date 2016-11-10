@@ -334,12 +334,12 @@ Expression *Parser::suffix() {
                     token->setId(tId);
 
                 if (check(tDollar) || check(tId)) {
-                    Position p = token->getPosition();
+                    Position namePos = token->getPosition();
 
                     Expression *name = parseIdentifier();
-                    name->setPosition(p);
+                    name->setPosition(namePos);
 
-                    p = token->getPosition();
+                    Position p = token->getPosition();
 
                     if (accept(tAssign)) {
                         e = Expression::AttributeAssignment(e, name, logicOr());
@@ -347,14 +347,16 @@ Expression *Parser::suffix() {
                     } else if (accept(tLPar)) {
                         std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
                         contexts << context()->objectChildContext();
-                        e = Expression::ContextResolution(e, Expression::Call(Expression::Self(), name, list), context());
+                        e = Expression::ContextResolution(e, Expression::DynamicCall(Expression::Identifier(name), list), context());
                         e->setPosition(p);
 
                         if (!accept(tRPar))
                             error("unmatched parentheses");
                     } else {
                         contexts << context()->childContext(context()->getRuntime()->createObject());
-                        e = Expression::ContextResolution(e, Expression::Identifier(name), context());
+                        Expression *id = Expression::Identifier(name);
+                        id->setPosition(namePos);
+                        e = Expression::ContextResolution(e, id, context());
                     }
                 } else {
                     Expression *body = term();
@@ -409,7 +411,7 @@ Expression *Parser::term() {
             e->setPosition(p);
         } else if (accept(tLPar)) {
             std::list<Expression *> list = check(tRPar) ? std::list<Expression *>() : parseList();
-            e = Expression::Call(nullptr, name, {list});
+            e = Expression::Call(name, {list});
             e->setPosition(p);
 
             if (!accept(tRPar))
