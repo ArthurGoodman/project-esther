@@ -16,6 +16,7 @@
 #include "null.h"
 #include "function.h"
 #include "valueobject.h"
+#include "context.h"
 
 void Runtime::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
@@ -148,4 +149,8 @@ Function *Runtime::createInterpretedFunction(const std::string &name, const std:
 void Runtime::setupMethods() {
     for (auto &rootClass : rootClasses)
         rootClass.second->setupMethods();
+}
+
+Object *runtimeCreateNewObject(Context *context...) {
+    return context->getRuntime()->createObject();
 }

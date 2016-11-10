@@ -63,6 +63,10 @@ Expression *Expression::Loop(Expression *condition, Expression *body) {
     return IExpressionManager::instance()->createLoop(condition, body);
 }
 
+Expression *Expression::NativeCall(Object *(*f)(Context *...), const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createNativeCall(f, args);
+}
+
 Expression *Expression::Not(Expression *self) {
     return IExpressionManager::instance()->createNot(self);
 }

@@ -29,6 +29,7 @@ public:
     virtual Expression *createLiteral(const Variant &value) = 0;
     virtual Expression *createLocalAssignment(const std::string &name, Expression *value) = 0;
     virtual Expression *createLoop(Expression *condition, Expression *body) = 0;
+    virtual Expression *createNativeCall(Object *(*f)(Context *...), const std::list<Expression *> &args) = 0;
     virtual Expression *createNot(Expression *self) = 0;
     virtual Expression *createOr(Expression *self, Expression *arg) = 0;
     virtual Expression *createSelf() = 0;

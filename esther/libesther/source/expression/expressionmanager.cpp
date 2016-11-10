@@ -15,6 +15,7 @@
 #include "literalexpression.h"
 #include "localassignmentexpression.h"
 #include "loopexpression.h"
+#include "nativecallexpression.h"
 #include "notexpression.h"
 #include "orexpression.h"
 #include "selfexpression.h"
@@ -77,6 +78,10 @@ Expression *ExpressionManager::createLocalAssignment(const std::string &name, Ex
 
 Expression *ExpressionManager::createLoop(Expression *condition, Expression *body) {
     return new LoopExpression(condition, body);
+}
+
+Expression *ExpressionManager::createNativeCall(Object *(*f)(Context *...), const std::list<Expression *> &args) {
+    return new NativeCallExpression(f, args);
 }
 
 Expression *ExpressionManager::createNot(Expression *self) {

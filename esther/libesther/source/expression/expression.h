@@ -27,6 +27,7 @@ public:
     static Expression *Literal(const Variant &value);
     static Expression *LocalAssignment(const std::string &name, Expression *value);
     static Expression *Loop(Expression *condition, Expression *body);
+    static Expression *NativeCall(Object *(*f)(Context *...), const std::list<Expression *> &args);
     static Expression *Not(Expression *self);
     static Expression *Or(Expression *self, Expression *arg);
     static Expression *Self();

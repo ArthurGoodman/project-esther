@@ -544,7 +544,7 @@ Expression *Parser::term() {
 
     else if (accept(tNew)) {
         if (check(tLBrace))
-            e = Expression::DirectCall(Expression::Constant(context()->getRuntime()->getObjectClass()), "new", {});
+            e = Expression::NativeCall(runtimeCreateNewObject, {});
         else {
             if (check(tId) || accept(tDollar)) {
                 e = Expression::Identifier(token->getText());

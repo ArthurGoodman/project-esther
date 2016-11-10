@@ -5,6 +5,8 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
+QMAKE_CXXFLAGS += -masm=intel
+
 INCLUDEPATH = \
     source \
     source/common\
@@ -94,7 +96,8 @@ SOURCES += \
     source/expression/ast/dynamiccallexpression.cpp \
     source/runtime/rootclass/rootclass.cpp \
     source/expression/debug/literaldebugexpression.cpp \
-    source/runtime/objectcontext.cpp
+    source/runtime/objectcontext.cpp \
+    source/expression/ast/nativecallexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -173,7 +176,8 @@ HEADERS += \
     source/expression/ast/dynamiccallexpression.h \
     source/runtime/rootclass/rootclass.h \
     source/expression/debug/literaldebugexpression.h \
-    source/runtime/objectcontext.h
+    source/runtime/objectcontext.h \
+    source/expression/ast/nativecallexpression.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \
