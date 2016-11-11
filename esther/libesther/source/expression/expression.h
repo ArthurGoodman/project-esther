@@ -17,11 +17,13 @@ public:
     static Expression *Block(const std::list<Expression *> &nodes);
     static Expression *Cached(Expression *body);
     static Expression *Call(const std::string &name, const std::list<Expression *> &args);
+    static Expression *ClassDefinition(const std::string &name, Expression *superclass);
     static Expression *Constant(Object *value);
     static Expression *ContextResolution(Expression *self, Expression *body, Context *context);
     static Expression *DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
     static Expression *DynamicCall(Expression *body, const std::list<Expression *> &args);
     static Expression *Empty();
+    static Expression *FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
     static Expression *Here();
     static Expression *Identifier(const std::string &name);
     static Expression *If(Expression *condition, Expression *body, Expression *elseBody);

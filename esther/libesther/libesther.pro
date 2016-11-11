@@ -98,7 +98,9 @@ SOURCES += \
     source/expression/debug/literaldebugexpression.cpp \
     source/runtime/objectcontext.cpp \
     source/expression/ast/nativecallexpression.cpp \
-    source/expression/ast/cachedexpression.cpp
+    source/expression/ast/cachedexpression.cpp \
+    source/expression/ast/classdefinitionexpression.cpp \
+    source/expression/ast/functiondefinitionexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -179,7 +181,9 @@ HEADERS += \
     source/expression/debug/literaldebugexpression.h \
     source/runtime/objectcontext.h \
     source/expression/ast/nativecallexpression.h \
-    source/expression/ast/cachedexpression.h
+    source/expression/ast/cachedexpression.h \
+    source/expression/ast/classdefinitionexpression.h \
+    source/expression/ast/functiondefinitionexpression.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

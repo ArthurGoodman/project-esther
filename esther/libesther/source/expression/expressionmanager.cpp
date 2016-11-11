@@ -5,11 +5,13 @@
 #include "blockexpression.h"
 #include "cachedexpression.h"
 #include "callexpression.h"
+#include "classdefinitionexpression.h"
 #include "constantexpression.h"
 #include "contextresolutionexpression.h"
 #include "directcallexpression.h"
 #include "dynamiccallexpression.h"
 #include "emptyexpression.h"
+#include "functiondefinitionexpression.h"
 #include "hereexpression.h"
 #include "identifierexpression.h"
 #include "ifexpression.h"
@@ -41,6 +43,10 @@ Expression *ExpressionManager::createCall(const std::string &name, const std::li
     return new CallExpression(name, args);
 }
 
+Expression *ExpressionManager::createClassDefinition(const std::string &name, Expression *superclass) {
+    return new ClassDefinitionExpression(name, superclass);
+}
+
 Expression *ExpressionManager::createConstant(Object *value) {
     return new ConstantExpression(value);
 }
@@ -59,6 +65,10 @@ Expression *ExpressionManager::createDynamicCall(Expression *body, const std::li
 
 Expression *ExpressionManager::createEmpty() {
     return new EmptyExpression;
+}
+
+Expression *ExpressionManager::createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context) {
+    return new FunctionDefinitionExpression(name, params, body, context);
 }
 
 Expression *ExpressionManager::createHere() {

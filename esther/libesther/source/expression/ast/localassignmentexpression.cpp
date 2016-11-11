@@ -11,7 +11,7 @@ LocalAssignmentExpression::~LocalAssignmentExpression() {
 }
 
 Object *LocalAssignmentExpression::exec(Context *context) {
-    Object *value = this->value->eval(context);
-    context->setLocal(name, value);
-    return value;
+    Object *evaledValue = value->eval(context);
+    context->setLocal(name, evaledValue);
+    return evaledValue;
 }

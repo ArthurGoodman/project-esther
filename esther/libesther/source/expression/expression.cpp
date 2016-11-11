@@ -23,6 +23,10 @@ Expression *Expression::Call(const std::string &name, const std::list<Expression
     return IExpressionManager::instance()->createCall(name, args);
 }
 
+Expression *Expression::ClassDefinition(const std::string &name, Expression *superclass) {
+    return IExpressionManager::instance()->createClassDefinition(name, superclass);
+}
+
 Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
@@ -41,6 +45,10 @@ Expression *Expression::DynamicCall(Expression *body, const std::list<Expression
 
 Expression *Expression::Empty() {
     return IExpressionManager::instance()->createEmpty();
+}
+
+Expression *Expression::FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context) {
+    return IExpressionManager::instance()->createFunctionDefinition(name, params, body, context);
 }
 
 Expression *Expression::Here() {
@@ -87,7 +95,7 @@ Expression::~Expression() {
 }
 
 Object *Expression::eval(Context *context) {
-    Object *value = 0;
+    Object *value = nullptr;
 
     try {
         value = exec(context);

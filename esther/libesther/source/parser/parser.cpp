@@ -490,16 +490,14 @@ Expression *Parser::term() {
             getToken();
         }
 
+        Expression *superclass = accept(tLt) ? expr() : Expression::Constant(context()->getRuntime()->getObjectClass());
+
         pushObjectContext();
-
-        Class *_class = context()->getRuntime()->createClass(name);
-
-        e = Expression::Block({Expression::ContextResolution(Expression::Constant(_class), term(), context()), Expression::Constant(_class)});
+        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({term(), Expression::Self()}), context());
+        popContext();
 
         if (!name.empty())
             e = Expression::LocalAssignment(name, e);
-
-        popContext();
     }
 
     else if (accept(tFunction)) {
@@ -526,12 +524,8 @@ Expression *Parser::term() {
         }
 
         pushContext();
-
-        Function *function = context()->getRuntime()->createInterpretedFunction(name, params, expr(), context());
-
+        e = Expression::Cached(Expression::FunctionDefinition(name, params, expr(), context()));
         popContext();
-
-        e = Expression::Constant(function);
 
         if (!name.empty())
             e = Expression::LocalAssignment(name, e);
@@ -561,9 +555,7 @@ Expression *Parser::term() {
 
         if (check(tLBrace)) {
             pushObjectContext();
-
             e = Expression::ContextResolution(e, Expression::Block({term(), Expression::Self()}), context());
-
             popContext();
         }
     }
