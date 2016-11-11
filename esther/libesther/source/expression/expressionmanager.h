@@ -7,6 +7,7 @@ public:
     Expression *createAnd(Expression *self, Expression *arg);
     Expression *createAttributeAssignment(Expression *self, const std::string &name, Expression *value);
     Expression *createBlock(const std::list<Expression *> &nodes);
+    Expression *createCached(Expression *body);
     Expression *createCall(const std::string &name, const std::list<Expression *> &args);
     Expression *createConstant(Object *value);
     Expression *createContextResolution(Expression *self, Expression *body, Context *context);

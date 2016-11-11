@@ -15,6 +15,7 @@ public:
     static Expression *And(Expression *self, Expression *arg);
     static Expression *AttributeAssignment(Expression *self, const std::string &name, Expression *value);
     static Expression *Block(const std::list<Expression *> &nodes);
+    static Expression *Cached(Expression *body);
     static Expression *Call(const std::string &name, const std::list<Expression *> &args);
     static Expression *Constant(Object *value);
     static Expression *ContextResolution(Expression *self, Expression *body, Context *context);

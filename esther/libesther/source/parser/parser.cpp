@@ -342,6 +342,8 @@ Expression *Parser::suffix() {
                 if (!accept(tRBracket))
                     error("unmatched brackets");
             } else if (accept(tDot)) {
+                pushContext();
+
                 if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
                     token->setId(tId);
 
@@ -358,19 +360,15 @@ Expression *Parser::suffix() {
                         e->setPosition(p);
                     } else if (accept(tLPar)) {
                         const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-                        pushObjectContext();
                         e = Expression::ContextResolution(e, Expression::DynamicCall(Expression::Identifier(name), list), context());
-                        popContext();
                         e->setPosition(p);
 
                         if (!accept(tRPar))
                             error("unmatched parentheses");
                     } else {
-                        pushContext();
                         Expression *id = Expression::Identifier(name);
                         id->setPosition(namePos);
                         e = Expression::ContextResolution(e, id, context());
-                        popContext();
                     }
                 } else {
                     Expression *body = term();
@@ -378,25 +376,20 @@ Expression *Parser::suffix() {
                     Position p = token->getPosition();
 
                     if (accept(tAssign)) {
-                        pushObjectContext();
                         e = Expression::ContextResolution(e, Expression::DirectCall(body, "=", {logicOr()}), context());
                         e->setPosition(p);
-                        popContext();
                     } else if (accept(tLPar)) {
                         const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-                        pushObjectContext();
                         e = Expression::ContextResolution(e, Expression::DynamicCall(body, list), context());
                         e->setPosition(p);
-                        popContext();
 
                         if (!accept(tRPar))
                             error("unmatched parentheses");
-                    } else {
-                        pushContext();
+                    } else
                         e = Expression::ContextResolution(e, body, context());
-                        popContext();
-                    }
                 }
+
+                popContext();
             } else
                 break;
 

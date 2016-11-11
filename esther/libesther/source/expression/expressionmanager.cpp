@@ -3,6 +3,7 @@
 #include "andexpression.h"
 #include "attributeassignmentexpression.h"
 #include "blockexpression.h"
+#include "cachedexpression.h"
 #include "callexpression.h"
 #include "constantexpression.h"
 #include "contextresolutionexpression.h"
@@ -30,6 +31,10 @@ Expression *ExpressionManager::createAttributeAssignment(Expression *self, const
 
 Expression *ExpressionManager::createBlock(const std::list<Expression *> &nodes) {
     return new BlockExpression(nodes);
+}
+
+Expression *ExpressionManager::createCached(Expression *body) {
+    return new CachedExpression(body);
 }
 
 Expression *ExpressionManager::createCall(const std::string &name, const std::list<Expression *> &args) {

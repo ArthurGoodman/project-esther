@@ -15,6 +15,10 @@ Expression *Expression::Block(const std::list<Expression *> &nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
+Expression *Expression::Cached(Expression *body) {
+    return IExpressionManager::instance()->createCached(body);
+}
+
 Expression *Expression::Call(const std::string &name, const std::list<Expression *> &args) {
     return IExpressionManager::instance()->createCall(name, args);
 }
