@@ -16,17 +16,25 @@ DynamicCallExpression::~DynamicCallExpression() {
 }
 
 Object *DynamicCallExpression::exec(Context *context) {
-    Object *evaledBody = body->eval(context);
+    Object *f = body->eval(context);
 
-    std::vector<Object *> evaledArgs;
+    if (dynamic_cast<Function *>(f)) {
+        std::vector<Object *> evaledArgs;
+        evaledArgs.reserve(args.size());
 
-    for (Expression *e : args)
-        evaledArgs << e->eval(context);
+        for (Expression *e : args)
+            evaledArgs << e->eval(context);
 
-    if (dynamic_cast<Function *>(evaledBody))
-        return ((Function *)evaledBody)->invoke(context->getSelf(), evaledArgs);
+        return ((Function *)f)->invoke(context->getSelf(), evaledArgs);
+    } else {
+        std::vector<Object *> evaledArgs;
+        evaledArgs.reserve(args.size() + 1);
 
-    evaledArgs.insert(evaledArgs.begin(), context->getSelf());
+        evaledArgs << context->getSelf();
 
-    return evaledBody->call("()", evaledArgs);
+        for (Expression *e : args)
+            evaledArgs << e->eval(context);
+
+        return f->call("()", evaledArgs);
+    }
 }

@@ -19,15 +19,23 @@ Object *CallExpression::exec(Context *context) {
     if (!f.first)
         Runtime::runtimeError("undefined identifier '" + name + "'");
 
-    std::vector<Object *> evaledArgs;
+    if (dynamic_cast<Function *>(f.first)) {
+        std::vector<Object *> evaledArgs;
+        evaledArgs.reserve(args.size());
 
-    for (Expression *e : args)
-        evaledArgs << e->eval(context);
+        for (Expression *e : args)
+            evaledArgs << e->eval(context);
 
-    if (dynamic_cast<Function *>(f.first))
         return ((Function *)f.first)->invoke(f.second, evaledArgs);
+    } else {
+        std::vector<Object *> evaledArgs;
+        evaledArgs.reserve(args.size() + 1);
 
-    evaledArgs.insert(evaledArgs.begin(), f.second);
+        evaledArgs << f.second;
 
-    return f.first->call("()", evaledArgs);
+        for (Expression *e : args)
+            evaledArgs << e->eval(context);
+
+        return f.first->call("()", evaledArgs);
+    }
 }
