@@ -23,7 +23,7 @@ private:
     bool check(int id);
     bool accept(int id);
 
-    void pushContext(Object *here);
+    void pushContext();
     void pushObjectContext();
     void popContext();
     Context *context();

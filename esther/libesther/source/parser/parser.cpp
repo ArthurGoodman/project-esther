@@ -54,8 +54,8 @@ bool Parser::accept(int id) {
     return false;
 }
 
-void Parser::pushContext(Object *here) {
-    contexts << context()->childContext(here);
+void Parser::pushContext() {
+    contexts << context()->childContext(context()->getRuntime()->createObject());
 }
 
 void Parser::pushObjectContext() {
@@ -366,7 +366,7 @@ Expression *Parser::suffix() {
                         if (!accept(tRPar))
                             error("unmatched parentheses");
                     } else {
-                        pushContext(context()->getRuntime()->createObject());
+                        pushContext();
                         Expression *id = Expression::Identifier(name);
                         id->setPosition(namePos);
                         e = Expression::ContextResolution(e, id, context());
@@ -392,7 +392,7 @@ Expression *Parser::suffix() {
                         if (!accept(tRPar))
                             error("unmatched parentheses");
                     } else {
-                        pushContext(context()->getRuntime()->createObject());
+                        pushContext();
                         e = Expression::ContextResolution(e, body, context());
                         popContext();
                     }
@@ -461,7 +461,7 @@ Expression *Parser::term() {
     else if (accept(tIf)) {
         Expression *condition, *body, *elseBody = nullptr;
 
-        condition = oper();
+        condition = expr();
         body = oper();
 
         if (accept(tElse))
@@ -471,7 +471,7 @@ Expression *Parser::term() {
     } else if (accept(tWhile)) {
         Expression *condition, *body;
 
-        condition = oper();
+        condition = expr();
         body = oper();
 
         e = Expression::Loop(condition, body);
@@ -490,19 +490,21 @@ Expression *Parser::term() {
         e = Expression::Here();
 
     else if (accept(tClass)) {
-        if (!check(tId))
-            error("identifier expected");
+        std::string name;
 
-        const std::string &name = token->getText();
-        getToken();
+        if (check(tId) || accept(tDollar)) {
+            name = token->getText();
+            getToken();
+        }
 
         pushObjectContext();
 
         Class *_class = context()->getRuntime()->createClass(name);
 
-        e = Expression::Block({Expression::LocalAssignment(name, Expression::Constant(_class)),
-                               Expression::ContextResolution(Expression::Constant(_class), term(), context()),
-                               Expression::Constant(_class)});
+        e = Expression::Block({Expression::ContextResolution(Expression::Constant(_class), term(), context()), Expression::Constant(_class)});
+
+        if (!name.empty())
+            e = Expression::LocalAssignment(name, e);
 
         popContext();
     }
@@ -530,16 +532,16 @@ Expression *Parser::term() {
                 error("unmatched parentheses");
         }
 
-        pushObjectContext();
+        pushContext();
 
-        Function *function = context()->getRuntime()->createInterpretedFunction(name, params, oper(), context());
+        Function *function = context()->getRuntime()->createInterpretedFunction(name, params, expr(), context());
 
         popContext();
 
         e = Expression::Constant(function);
 
         if (!name.empty())
-            e = Expression::Block({Expression::LocalAssignment(name, Expression::Constant(function)), e});
+            e = Expression::LocalAssignment(name, e);
     }
 
     else if (accept(tNew)) {
