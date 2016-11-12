@@ -3,6 +3,7 @@
 #include "runtime.h"
 #include "function.h"
 #include "classclass.h"
+#include "valueobject.h"
 
 RootClass::RootClass(Runtime *runtime, const std::string &name, Class *superclass)
     : Class(runtime->getClassClass(), name, superclass), runtime(runtime) {
@@ -20,6 +21,38 @@ void RootClass::def(const std::string &name, const std::list<std::string> &param
         paramsClasses << runtime->getRootClass(name);
 
     def(name, paramsClasses, body);
+}
+
+void RootClass::def(const std::string &name, Variant (*body)(const Variant &, const Variant &)) {
+    setAttribute(name, runtime->createNativeFunction(name, 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        if (!dynamic_cast<ValueObject *>(self)) {
+            Runtime::runtimeError(getName() + "." + name + ": invalid self");
+            return nullptr;
+        }
+
+        if (!dynamic_cast<ValueObject *>(args[0])) {
+            Runtime::runtimeError(getName() + "." + name + ": invalid argument");
+            return nullptr;
+        }
+
+        return runtime->createValueObject(body(((ValueObject *)self)->getVariant(), ((ValueObject *)args[0])->getVariant()));
+    }));
+}
+
+void RootClass::def(const std::string &name, bool (*body)(const Variant &, const Variant &)) {
+    setAttribute(name, runtime->createNativeFunction(name, 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        if (!dynamic_cast<ValueObject *>(self)) {
+            Runtime::runtimeError(getName() + "." + name + ": invalid self");
+            return nullptr;
+        }
+
+        if (!dynamic_cast<ValueObject *>(args[0])) {
+            Runtime::runtimeError(getName() + "." + name + ": invalid argument");
+            return nullptr;
+        }
+
+        return runtime->toBoolean(body(((ValueObject *)self)->getVariant(), ((ValueObject *)args[0])->getVariant()));
+    }));
 }
 
 void RootClass::def(const std::string &name, const std::list<Class *> &paramsClasses, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {

@@ -12,6 +12,29 @@ Object *StringClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void StringClass::setupMethods() {
+    def("+", [](const Variant &a, const Variant &b) -> Variant {
+        return a.toString() + b.toString();
+    });
+
+    def("<", [](const Variant &a, const Variant &b) -> bool {
+        return a.toString() < b.toString();
+    });
+
+    def("<=", [](const Variant &a, const Variant &b) -> bool {
+        return a.toString() <= b.toString();
+    });
+
+    def(">", [](const Variant &a, const Variant &b) -> bool {
+        return a.toString() > b.toString();
+    });
+
+    def(">=", [](const Variant &a, const Variant &b) -> bool {
+        return a.toString() >= b.toString();
+    });
+
+    def("equals", [](const Variant &a, const Variant &b) -> bool {
+        return a.toString() == b.toString();
+    });
 }
 
 StringClass::StringClass(Runtime *runtime)

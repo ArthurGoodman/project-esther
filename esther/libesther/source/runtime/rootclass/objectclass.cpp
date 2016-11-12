@@ -25,6 +25,10 @@ void ObjectClass::setupMethods() {
     def("class", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return self->getClass();
     });
+
+    def("==", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        return self->call("equals", args);
+    });
 }
 
 ObjectClass::ObjectClass(Runtime *runtime)

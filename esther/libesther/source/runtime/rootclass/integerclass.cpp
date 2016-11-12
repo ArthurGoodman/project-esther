@@ -12,12 +12,44 @@ Object *IntegerClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void IntegerClass::setupMethods() {
-    def("+", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return runtime->createInteger(((ValueObject *)self)->getVariant().toInteger() + ((ValueObject *)args[0])->getVariant().toInteger());
+    def("+", [](const Variant &a, const Variant &b) -> Variant {
+        return a.toInteger() + b.toInteger();
     });
 
-    def("<", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return runtime->toBoolean(((ValueObject *)self)->getVariant().toInteger() < ((ValueObject *)args[0])->getVariant().toInteger());
+    def("-", [](const Variant &a, const Variant &b) -> Variant {
+        return a.toInteger() - b.toInteger();
+    });
+
+    def("*", [](const Variant &a, const Variant &b) -> Variant {
+        return a.toInteger() * b.toInteger();
+    });
+
+    def("/", [](const Variant &a, const Variant &b) -> Variant {
+        return a.toInteger() / b.toInteger();
+    });
+
+    def("%", [](const Variant &a, const Variant &b) -> Variant {
+        return a.toInteger() % b.toInteger();
+    });
+
+    def("<", [](const Variant &a, const Variant &b) -> bool {
+        return a.toInteger() < b.toInteger();
+    });
+
+    def("<=", [](const Variant &a, const Variant &b) -> bool {
+        return a.toInteger() <= b.toInteger();
+    });
+
+    def(">", [](const Variant &a, const Variant &b) -> bool {
+        return a.toInteger() > b.toInteger();
+    });
+
+    def(">=", [](const Variant &a, const Variant &b) -> bool {
+        return a.toInteger() >= b.toInteger();
+    });
+
+    def("equals", [](const Variant &a, const Variant &b) -> bool {
+        return a.toInteger() == b.toInteger();
     });
 }
 
