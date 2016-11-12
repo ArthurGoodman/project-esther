@@ -12,7 +12,7 @@ Function *FunctionClass::createInterpretedFunction(const std::string &name, cons
     return new InterpretedFunction(this, name, params, body, context);
 }
 
-Object *FunctionClass::createNewInstance() {
+Object *FunctionClass::createNewInstance(const std::vector<Object *> &) {
     Runtime::runtimeError("cannot create new instance of Function class yet...");
     return nullptr;
 }

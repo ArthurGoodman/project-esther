@@ -7,7 +7,7 @@ ValueObject *StringClass::createString(const std::string &value) {
     return new ValueObject(this, value);
 }
 
-Object *StringClass::createNewInstance() {
+Object *StringClass::createNewInstance(const std::vector<Object *> &) {
     return createString("");
 }
 

@@ -17,7 +17,7 @@ public:
     Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
 
 protected:
-    Object *createNewInstance();
+    Object *createNewInstance(const std::vector<Object *> &args);
 
     void setupMethods();
 

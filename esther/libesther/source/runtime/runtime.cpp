@@ -31,7 +31,7 @@ void Runtime::initialize() {
     objectClass = new ObjectClass(this);
     classClass->setSuperclass(objectClass);
 
-    mainObject = objectClass->newInstance();
+    mainObject = createObject();
 
     BooleanClass *booleanClass = new BooleanClass(this);
 

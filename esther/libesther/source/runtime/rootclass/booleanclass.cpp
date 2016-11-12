@@ -2,7 +2,7 @@
 
 #include "runtime.h"
 
-Object *BooleanClass::createNewInstance() {
+Object *BooleanClass::createNewInstance(const std::vector<Object *> &) {
     Runtime::runtimeError("cannot create new instance of Boolean class");
     return nullptr;
 }

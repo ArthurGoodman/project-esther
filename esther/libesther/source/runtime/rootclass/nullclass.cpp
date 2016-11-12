@@ -3,7 +3,7 @@
 #include "null.h"
 #include "runtime.h"
 
-Object *NullClass::createNewInstance() {
+Object *NullClass::createNewInstance(const std::vector<Object *> &) {
     Runtime::runtimeError("cannot create new instance of Null class");
     return nullptr;
 }

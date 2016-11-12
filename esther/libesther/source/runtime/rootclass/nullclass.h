@@ -6,7 +6,7 @@ class NullClass : public RootClass {
     friend class Runtime;
 
 protected:
-    Object *createNewInstance();
+    Object *createNewInstance(const std::vector<Object *> &args);
 
     void setupMethods();
 

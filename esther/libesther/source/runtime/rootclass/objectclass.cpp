@@ -3,6 +3,14 @@
 #include "io.h"
 #include "runtime.h"
 
+Object *ObjectClass::createObject(Class *objectClass) {
+    return new Object(objectClass);
+}
+
+Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
+    return createObject(runtime->getObjectClass());
+}
+
 void ObjectClass::setupMethods() {
     def("write", {this}, [=](Object *, const std::vector<Object *> &args) -> Object * {
         IO::print(args[0]->toString());

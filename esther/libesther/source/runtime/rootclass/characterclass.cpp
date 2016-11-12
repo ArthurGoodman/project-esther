@@ -7,7 +7,7 @@ ValueObject *CharacterClass::createCharacter(char value) {
     return new ValueObject(this, value);
 }
 
-Object *CharacterClass::createNewInstance() {
+Object *CharacterClass::createNewInstance(const std::vector<Object *> &) {
     return createCharacter('\0');
 }
 

@@ -7,7 +7,7 @@ ValueObject *FloatClass::createFloat(double value) {
     return new ValueObject(this, value);
 }
 
-Object *FloatClass::createNewInstance() {
+Object *FloatClass::createNewInstance(const std::vector<Object *> &) {
     return createFloat(0.0);
 }
 

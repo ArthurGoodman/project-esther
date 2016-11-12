@@ -11,7 +11,7 @@ public:
     ValueObject *createString(const std::string &value);
 
 protected:
-    Object *createNewInstance();
+    Object *createNewInstance(const std::vector<Object *> &args);
 
     void setupMethods();
 

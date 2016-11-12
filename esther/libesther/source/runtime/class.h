@@ -17,7 +17,7 @@ public:
     Class *getSuperclass() const;
     void setSuperclass(Class *superclass);
 
-    Object *newInstance();
+    Object *newInstance(const std::vector<Object *> &args = std::vector<Object *>());
 
     bool isChild(Class *_class) const;
 
@@ -28,5 +28,5 @@ public:
 protected:
     Class(Class *classClass, const std::string &name, Class *superclass);
 
-    virtual Object *createNewInstance();
+    virtual Object *createNewInstance(const std::vector<Object *> &args);
 };

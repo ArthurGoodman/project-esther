@@ -16,8 +16,8 @@ void Class::setSuperclass(Class *superclass) {
     this->superclass = superclass;
 }
 
-Object *Class::newInstance() {
-    return createNewInstance();
+Object *Class::newInstance(const std::vector<Object *> &args) {
+    return createNewInstance(args);
 }
 
 bool Class::isChild(Class *_class) const {
@@ -36,6 +36,8 @@ Class::Class(Class *classClass, const std::string &name, Class *superclass)
     : Object(classClass), name(name), superclass(superclass) {
 }
 
-Object *Class::createNewInstance() {
-    return new Object(this);
+Object *Class::createNewInstance(const std::vector<Object *> &args) {
+    Object *instance = superclass->createNewInstance(args);
+    instance->setClass(this);
+    return instance;
 }

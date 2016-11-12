@@ -7,7 +7,7 @@ ValueObject *IntegerClass::createInteger(int value) {
     return new ValueObject(this, value);
 }
 
-Object *IntegerClass::createNewInstance() {
+Object *IntegerClass::createNewInstance(const std::vector<Object *> &) {
     return createInteger(0);
 }
 
