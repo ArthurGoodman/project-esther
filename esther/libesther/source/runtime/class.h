@@ -17,6 +17,8 @@ public:
     Class *getSuperclass() const;
     void setSuperclass(Class *superclass);
 
+    Object *get(const std::string &name) const;
+
     Object *newInstance(const std::vector<Object *> &args = std::vector<Object *>());
 
     bool isChild(Class *_class) const;

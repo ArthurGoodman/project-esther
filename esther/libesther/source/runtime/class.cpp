@@ -16,6 +16,11 @@ void Class::setSuperclass(Class *superclass) {
     this->superclass = superclass;
 }
 
+Object *Class::get(const std::string &name) const {
+    Object *temp = nullptr;
+    return (temp = Object::get(name)) ? temp : superclass ? superclass->lookup(name) : nullptr;
+}
+
 Object *Class::newInstance(const std::vector<Object *> &args) {
     return createNewInstance(args);
 }

@@ -22,7 +22,7 @@ public:
     Object *getAttribute(const std::string &name) const;
     void setAttribute(const std::string &name, Object *value);
 
-    Object *get(const std::string &name) const;
+    virtual Object *get(const std::string &name) const;
 
     void clear();
 
