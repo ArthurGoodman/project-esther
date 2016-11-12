@@ -2,6 +2,8 @@
 
 #include "io.h"
 #include "runtime.h"
+#include "valueobject.h"
+#include "stringclass.h"
 
 Object *ObjectClass::createObject(Class *objectClass) {
     return new Object(objectClass);
@@ -13,12 +15,12 @@ Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
 
 void ObjectClass::setupMethods() {
     def("write", {this}, [=](Object *, const std::vector<Object *> &args) -> Object * {
-        IO::print(args[0]->toString());
+        IO::write(args[0]->call("toString", {}, runtime->getStringClass())->toString());
         return runtime->getNull();
     });
 
     def("writeLine", {this}, [=](Object *, const std::vector<Object *> &args) -> Object * {
-        IO::printLine(args[0]->toString());
+        IO::writeLine(args[0]->call("toString", {}, runtime->getStringClass())->toString());
         return runtime->getNull();
     });
 
@@ -32,6 +34,10 @@ void ObjectClass::setupMethods() {
 
     def("!=", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(!self->call("equals", args)->isTrue());
+    });
+
+    def("toString", [=](Object *self, const std::vector<Object *> &) -> Object * {
+        return runtime->createString(self->toString());
     });
 }
 

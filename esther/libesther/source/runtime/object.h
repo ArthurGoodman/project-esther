@@ -24,6 +24,8 @@ public:
 
     virtual Object *get(const std::string &name) const;
 
+    bool is(Class *_class) const;
+
     void clear();
 
     virtual std::string toString() const;
@@ -31,4 +33,5 @@ public:
     virtual bool isTrue() const;
 
     Object *call(const std::string &name, const std::vector<Object *> &args);
+    Object *call(const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
 };

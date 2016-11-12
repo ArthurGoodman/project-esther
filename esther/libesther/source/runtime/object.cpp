@@ -36,6 +36,10 @@ Object *Object::get(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : objectClass->lookup(name);
 }
 
+bool Object::is(Class *_class) const {
+    return objectClass->isChild(_class);
+}
+
 void Object::clear() {
     attributes.clear();
 }
@@ -58,4 +62,13 @@ Object *Object::call(const std::string &name, const std::vector<Object *> &args)
         return ((Function *)f)->invoke(this, args);
 
     return f->call("()", args);
+}
+
+Object *Object::call(const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass) {
+    Object *value = call(name, args);
+
+    if (!value->is(expectedReturnClass))
+        Runtime::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedReturnClass->getName() + " expected)");
+
+    return value;
 }

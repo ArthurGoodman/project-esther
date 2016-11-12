@@ -65,11 +65,11 @@ void IO::closeAllFiles() {
     files.clear();
 }
 
-void IO::print(const std::string &data) {
+void IO::write(const std::string &data) {
     std::cout << data;
 }
 
-void IO::printLine(const std::string &data) {
+void IO::writeLine(const std::string &data) {
     std::cout << data << std::endl;
 }
 

@@ -13,9 +13,9 @@ void Esther::runFile(const std::string &fileName) {
 
     try {
         if (value)
-            IO::printLine("=> " + value->toString());
+            IO::writeLine("=> " + value->toString());
     } catch (Exception *e) {
-        IO::printLine(e->message());
+        IO::writeLine(e->message());
         delete e;
     }
 }

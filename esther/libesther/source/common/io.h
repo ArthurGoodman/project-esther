@@ -21,8 +21,8 @@ public:
     static void closeFile(const std::string &fileName);
     static void closeAllFiles();
 
-    static void print(const std::string &data);
-    static void printLine(const std::string &data);
+    static void write(const std::string &data);
+    static void writeLine(const std::string &data);
 
     static std::string scan();
     static std::string scanLine();

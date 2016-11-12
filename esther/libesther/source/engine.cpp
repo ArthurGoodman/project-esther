@@ -31,17 +31,17 @@ Object *Engine::run(const std::string &script) {
         value = e->eval(&root);
         delete e;
     } catch (ErrorException *e) {
-        IO::printLine(fileName() + ":" + (e->getPosition().isValid() ? e->getPosition().toString() + ": " : " ") + e->message());
+        IO::writeLine(fileName() + ":" + (e->getPosition().isValid() ? e->getPosition().toString() + ": " : " ") + e->message());
         if (e->getPosition().isValid())
-            IO::printLine(source().quote(e->getPosition()));
+            IO::writeLine(source().quote(e->getPosition()));
         delete e;
     } catch (Exception *e) {
-        IO::printLine(e->message());
+        IO::writeLine(e->message());
         delete e;
     } catch (std::exception e) {
-        IO::printLine((std::string) "error: " + e.what());
+        IO::writeLine((std::string) "error: " + e.what());
     } catch (...) {
-        IO::printLine("something bad happened...");
+        IO::writeLine("something bad happened...");
     }
 
     popSource();

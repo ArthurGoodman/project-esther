@@ -86,6 +86,10 @@ NumericClass *Runtime::getNumericClass() const {
     return numericClass;
 }
 
+StringClass *Runtime::getStringClass() const {
+    return stringClass;
+}
+
 bool Runtime::hasRootClass(const std::string &name) const {
     return rootClasses.find(name) != rootClasses.end();
 }

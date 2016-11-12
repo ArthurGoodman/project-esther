@@ -58,6 +58,7 @@ public:
 
     ClassClass *getClassClass() const;
     NumericClass *getNumericClass() const;
+    StringClass *getStringClass() const;
 
     bool hasRootClass(const std::string &name) const;
     Class *getRootClass(const std::string &name) const;
