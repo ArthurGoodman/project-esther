@@ -14,7 +14,8 @@ class ValueObject : public Object {
     Variant value;
 
 public:
-    Variant getVariant();
+    Variant getVariant() const;
+    void setVariant(const Variant &value);
 
     std::string toString() const;
 

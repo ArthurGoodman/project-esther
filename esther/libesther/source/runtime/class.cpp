@@ -23,7 +23,7 @@ Object *Class::get(const std::string &name) const {
 
 Object *Class::newInstance(const std::vector<Object *> &args) {
     Object *instance = createNewInstance(args);
-    callIfFound("initialize", args);
+    instance->callIfFound("initialize", args);
     return instance;
 }
 

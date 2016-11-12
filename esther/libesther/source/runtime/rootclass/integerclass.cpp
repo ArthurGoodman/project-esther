@@ -27,6 +27,22 @@ void IntegerClass::setupMethods() {
 
         return runtime->createInteger(((ValueObject *)args[1])->getVariant().toInteger());
     }));
+
+    def("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        if ((int)args.size() > 1)
+            Runtime::runtimeError(getName() + ".initialize: invalid number of arguments");
+
+        if (!args.empty()) {
+            if (!dynamic_cast<ValueObject *>(args[0])) {
+                Runtime::runtimeError(getName() + ".initialize: invalid argument");
+                return nullptr;
+            }
+
+            ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toInteger());
+        }
+
+        return self;
+    });
 }
 
 IntegerClass::IntegerClass(Runtime *runtime)
