@@ -14,13 +14,23 @@ Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void ObjectClass::setupMethods() {
-    def("write", {this}, [=](Object *, const std::vector<Object *> &args) -> Object * {
-        IO::write(args[0]->call("toString", {}, runtime->getStringClass())->toString());
+    def("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        if (!args.empty())
+            for (Object *arg : args)
+                IO::write(arg->call("toString", {}, runtime->getStringClass())->toString());
+        else
+            IO::write(self->call("toString", {}, runtime->getStringClass())->toString());
+
         return runtime->getNull();
     });
 
-    def("writeLine", {this}, [=](Object *, const std::vector<Object *> &args) -> Object * {
-        IO::writeLine(args[0]->call("toString", {}, runtime->getStringClass())->toString());
+    def("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        if (!args.empty())
+            for (Object *arg : args)
+                IO::writeLine(arg->call("toString", {}, runtime->getStringClass())->toString());
+        else
+            IO::writeLine(self->call("toString", {}, runtime->getStringClass())->toString());
+
         return runtime->getNull();
     });
 

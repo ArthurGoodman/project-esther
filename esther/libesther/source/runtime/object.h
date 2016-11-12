@@ -33,5 +33,6 @@ public:
     virtual bool isTrue() const;
 
     Object *call(const std::string &name, const std::vector<Object *> &args);
+    Object *callIfFound(const std::string &name, const std::vector<Object *> &args);
     Object *call(const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
 };

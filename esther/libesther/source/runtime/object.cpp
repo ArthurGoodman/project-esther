@@ -64,6 +64,18 @@ Object *Object::call(const std::string &name, const std::vector<Object *> &args)
     return f->call("()", args);
 }
 
+Object *Object::callIfFound(const std::string &name, const std::vector<Object *> &args) {
+    Object *f = get(name);
+
+    if (!f)
+        return nullptr;
+
+    if (dynamic_cast<Function *>(f))
+        return ((Function *)f)->invoke(this, args);
+
+    return f->call("()", args);
+}
+
 Object *Object::call(const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass) {
     Object *value = call(name, args);
 

@@ -11,7 +11,7 @@ Object *ClassClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void ClassClass::setupMethods() {
-    def("new", [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    def("new", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return ((Class *)self)->newInstance(args);
     });
 

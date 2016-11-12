@@ -7,7 +7,7 @@
 
 class Function : public Object {
     std::string name;
-    uint arity;
+    int arity;
 
 public:
     std::string getName() const;
@@ -21,5 +21,5 @@ protected:
     virtual Object *execute(Object *self, const std::vector<Object *> &args) = 0;
 
 protected:
-    Function(Class *objectClass, const std::string &name, uint arity);
+    Function(Class *objectClass, const std::string &name, int arity);
 };

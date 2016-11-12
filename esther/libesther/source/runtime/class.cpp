@@ -22,7 +22,9 @@ Object *Class::get(const std::string &name) const {
 }
 
 Object *Class::newInstance(const std::vector<Object *> &args) {
-    return createNewInstance(args);
+    Object *instance = createNewInstance(args);
+    callIfFound("initialize", args);
+    return instance;
 }
 
 bool Class::isChild(Class *_class) const {
