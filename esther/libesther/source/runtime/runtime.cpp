@@ -7,6 +7,7 @@
 #include "floatclass.h"
 #include "classclass.h"
 #include "functionclass.h"
+#include "numericclass.h"
 #include "integerclass.h"
 #include "nullclass.h"
 #include "objectclass.h"
@@ -41,6 +42,8 @@ void Runtime::initialize() {
     NullClass *nullClass = new NullClass(this);
 
     nullObject = new Null(nullClass);
+
+    numericClass = new NumericClass(this);
 
     characterClass = new CharacterClass(this);
     floatClass = new FloatClass(this);
@@ -77,6 +80,10 @@ Object *Runtime::getNull() const {
 
 ClassClass *Runtime::getClassClass() const {
     return classClass;
+}
+
+NumericClass *Runtime::getNumericClass() const {
+    return numericClass;
 }
 
 bool Runtime::hasRootClass(const std::string &name) const {

@@ -52,9 +52,9 @@ class Variant {
 public:
     enum Type {
         Null,
+        Char,
         Integer,
         Real,
-        Char,
         String
     };
 
@@ -62,17 +62,17 @@ private:
     Type type;
 
     union {
+        char character;
         int integer;
         double real;
-        char character;
         char *string;
     };
 
 public:
     Variant();
+    Variant(char value);
     Variant(int value);
     Variant(double value);
-    Variant(char value);
     Variant(const std::string &value);
     Variant(const char *value);
 
@@ -84,12 +84,30 @@ public:
 
     Type getType() const;
 
+    Variant convertTo(Type type) const;
+
+    char toChar() const;
     int toInteger() const;
     double toReal() const;
-    char toChar() const;
     std::string toString() const;
 
     bool isNull() const;
+
+    Variant operator+(const Variant &v) const;
+    Variant operator-(const Variant &v) const;
+    Variant operator*(const Variant &v) const;
+    Variant operator/(const Variant &v) const;
+    Variant operator%(const Variant &v) const;
+
+    bool operator<(const Variant &v) const;
+    bool operator<=(const Variant &v) const;
+    bool operator>(const Variant &v) const;
+    bool operator>=(const Variant &v) const;
+    bool operator==(const Variant &v) const;
+    bool operator!=(const Variant &v) const;
+
+private:
+    static std::pair<Variant, Variant> coerce(const Variant &a, const Variant &b);
 };
 
 #endif

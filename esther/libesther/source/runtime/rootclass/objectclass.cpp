@@ -27,7 +27,11 @@ void ObjectClass::setupMethods() {
     });
 
     def("==", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return self->call("equals", args);
+        return runtime->toBoolean(self->call("equals", args)->isTrue());
+    });
+
+    def("!=", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        return runtime->toBoolean(!self->call("equals", args)->isTrue());
     });
 }
 

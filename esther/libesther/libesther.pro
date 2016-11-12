@@ -100,7 +100,8 @@ SOURCES += \
     source/expression/ast/nativecallexpression.cpp \
     source/expression/ast/cachedexpression.cpp \
     source/expression/ast/classdefinitionexpression.cpp \
-    source/expression/ast/functiondefinitionexpression.cpp
+    source/expression/ast/functiondefinitionexpression.cpp \
+    source/runtime/rootclass/numericclass.cpp
 
 HEADERS += \
     source/esther.h \
@@ -183,7 +184,8 @@ HEADERS += \
     source/expression/ast/nativecallexpression.h \
     source/expression/ast/cachedexpression.h \
     source/expression/ast/classdefinitionexpression.h \
-    source/expression/ast/functiondefinitionexpression.h
+    source/expression/ast/functiondefinitionexpression.h \
+    source/runtime/rootclass/numericclass.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

@@ -93,16 +93,16 @@ Variant::Variant()
     : type(Null) {
 }
 
+Variant::Variant(char value)
+    : type(Char), character(value) {
+}
+
 Variant::Variant(int value)
     : type(Integer), integer(value) {
 }
 
 Variant::Variant(double value)
     : type(Real), real(value) {
-}
-
-Variant::Variant(char value)
-    : type(Char), character(value) {
 }
 
 Variant::Variant(const std::string &value)
@@ -144,16 +144,16 @@ Variant &Variant::operator=(const Variant &v) {
     type = v.type;
 
     switch (v.type) {
+    case Char:
+        character = v.character;
+        break;
+
     case Integer:
         integer = v.integer;
         break;
 
     case Real:
         real = v.real;
-        break;
-
-    case Char:
-        character = v.character;
         break;
 
     case String: {
@@ -177,16 +177,16 @@ Variant &Variant::operator=(Variant &&v) {
     type = v.type;
 
     switch (v.type) {
+    case Char:
+        character = v.character;
+        break;
+
     case Integer:
         integer = v.integer;
         break;
 
     case Real:
         real = v.real;
-        break;
-
-    case Char:
-        character = v.character;
         break;
 
     case String:
@@ -205,16 +205,35 @@ Variant::Type Variant::getType() const {
     return type;
 }
 
+Variant Variant::convertTo(Type type) const {
+    switch (type) {
+    case Char:
+        return toChar();
+
+    case Integer:
+        return toInteger();
+
+    case Real:
+        return toReal();
+
+    case String:
+        return toString();
+
+    default:
+        return Variant();
+    }
+}
+
 int Variant::toInteger() const {
     switch (type) {
+    case Char:
+        return character;
+
     case Integer:
         return integer;
 
     case Real:
         return real;
-
-    case Char:
-        return character;
 
     case String:
         return Utility::fromString<int>(string);
@@ -226,14 +245,14 @@ int Variant::toInteger() const {
 
 double Variant::toReal() const {
     switch (type) {
+    case Char:
+        return character;
+
     case Integer:
         return integer;
 
     case Real:
         return real;
-
-    case Char:
-        return character;
 
     case String:
         return Utility::fromString<double>(string);
@@ -245,14 +264,14 @@ double Variant::toReal() const {
 
 char Variant::toChar() const {
     switch (type) {
+    case Char:
+        return character;
+
     case Integer:
         return integer;
 
     case Real:
         return real;
-
-    case Char:
-        return character;
 
     case String:
         return Utility::fromString<char>(string);
@@ -264,14 +283,14 @@ char Variant::toChar() const {
 
 std::string Variant::toString() const {
     switch (type) {
+    case Char:
+        return Utility::toString(character);
+
     case Integer:
         return Utility::toString(integer);
 
     case Real:
         return Utility::toString(real);
-
-    case Char:
-        return Utility::toString(character);
 
     case String:
         return string;
@@ -283,6 +302,230 @@ std::string Variant::toString() const {
 
 bool Variant::isNull() const {
     return type == Null;
+}
+
+Variant Variant::operator+(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() + c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() + c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() + c.second.toReal();
+
+    case String:
+        return c.first.toString() + c.second.toString();
+
+    default:
+        return Variant();
+    }
+}
+
+Variant Variant::operator-(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() - c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() - c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() - c.second.toReal();
+
+    default:
+        return Variant();
+    }
+}
+
+Variant Variant::operator*(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() * c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() * c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() * c.second.toReal();
+
+    default:
+        return Variant();
+    }
+}
+
+Variant Variant::operator/(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() / c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() / c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() / c.second.toReal();
+
+    default:
+        return Variant();
+    }
+}
+
+Variant Variant::operator%(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() % c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() % c.second.toInteger();
+
+    case Real:
+        return fmod(c.first.toReal(), c.second.toReal());
+
+    default:
+        return Variant();
+    }
+}
+
+bool Variant::operator<(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() < c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() < c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() < c.second.toReal();
+
+    case String:
+        return c.first.toString() < c.second.toString();
+
+    default:
+        return false;
+    }
+}
+
+bool Variant::operator<=(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() <= c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() <= c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() <= c.second.toReal();
+
+    case String:
+        return c.first.toString() <= c.second.toString();
+
+    default:
+        return false;
+    }
+}
+
+bool Variant::operator>(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() > c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() > c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() > c.second.toReal();
+
+    case String:
+        return c.first.toString() > c.second.toString();
+
+    default:
+        return false;
+    }
+}
+
+bool Variant::operator>=(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() >= c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() >= c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() >= c.second.toReal();
+
+    case String:
+        return c.first.toString() >= c.second.toString();
+
+    default:
+        return false;
+    }
+}
+
+bool Variant::operator==(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() == c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() == c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() == c.second.toReal();
+
+    case String:
+        return c.first.toString() == c.second.toString();
+
+    default:
+        return false;
+    }
+}
+
+bool Variant::operator!=(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return c.first.toChar() != c.second.toChar();
+
+    case Integer:
+        return c.first.toInteger() != c.second.toInteger();
+
+    case Real:
+        return c.first.toReal() != c.second.toReal();
+
+    case String:
+        return c.first.toString() != c.second.toString();
+
+    default:
+        return false;
+    }
+}
+
+std::pair<Variant, Variant> Variant::coerce(const Variant &a, const Variant &b) {
+    Type type = std::max(a.getType(), b.getType());
+    return std::make_pair(a.convertTo(type), b.convertTo(type));
 }
 
 #endif

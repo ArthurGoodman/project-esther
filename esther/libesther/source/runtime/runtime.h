@@ -16,6 +16,7 @@ class Expression;
 
 class RootClass;
 
+class NumericClass;
 class CharacterClass;
 class FloatClass;
 class IntegerClass;
@@ -32,6 +33,7 @@ class Runtime {
     Object *falseObject = nullptr;
     Object *nullObject = nullptr;
 
+    NumericClass *numericClass = nullptr;
     CharacterClass *characterClass = nullptr;
     FloatClass *floatClass = nullptr;
     IntegerClass *integerClass = nullptr;
@@ -55,6 +57,7 @@ public:
     Object *getNull() const;
 
     ClassClass *getClassClass() const;
+    NumericClass *getNumericClass() const;
 
     bool hasRootClass(const std::string &name) const;
     Class *getRootClass(const std::string &name) const;
