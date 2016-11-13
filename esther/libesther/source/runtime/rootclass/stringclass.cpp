@@ -43,6 +43,17 @@ void StringClass::setupMethods() {
         return self;
     });
 
+    def("+=", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        if (!dynamic_cast<ValueObject *>(args[0])) {
+            Runtime::runtimeError(getName() + ".+=: invalid argument");
+            return nullptr;
+        }
+
+        ((ValueObject *)self)->setVariant(((ValueObject *)self)->getVariant() + ((ValueObject *)args[0])->getVariant().toString());
+
+        return self;
+    });
+
     def("+", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString() + b.toString();
     });
@@ -65,6 +76,14 @@ void StringClass::setupMethods() {
 
     def("equals", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() == b.toString();
+    });
+
+    def("size", [=](Object *self, const std::vector<Object *> &) -> Object * {
+        return runtime->createInteger(((ValueObject *)self)->toString().size());
+    });
+
+    def("[]", [](const Variant &a, const Variant &b) -> Variant {
+        return a.toString()[b.toInteger()];
     });
 }
 

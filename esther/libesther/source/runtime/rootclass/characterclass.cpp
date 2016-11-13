@@ -4,6 +4,7 @@
 #include "runtime.h"
 #include "numericclass.h"
 #include "function.h"
+#include "utility.h"
 
 ValueObject *CharacterClass::createCharacter(char value) {
     return new ValueObject(this, value);
@@ -42,6 +43,14 @@ void CharacterClass::setupMethods() {
         }
 
         return self;
+    });
+
+    def("isSpace", [=](Object *self, const std::vector<Object *> &) -> Object * {
+        return runtime->toBoolean(Utility::isSpace(((ValueObject *)self)->getVariant().toChar()));
+    });
+
+    def("isDigit", [=](Object *self, const std::vector<Object *> &) -> Object * {
+        return runtime->toBoolean(Utility::isDigit(((ValueObject *)self)->getVariant().toChar()));
     });
 }
 
