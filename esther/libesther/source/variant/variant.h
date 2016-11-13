@@ -98,6 +98,7 @@ public:
     Variant operator*(const Variant &v) const;
     Variant operator/(const Variant &v) const;
     Variant operator%(const Variant &v) const;
+    Variant pow(const Variant &v) const;
 
     bool operator<(const Variant &v) const;
     bool operator<=(const Variant &v) const;

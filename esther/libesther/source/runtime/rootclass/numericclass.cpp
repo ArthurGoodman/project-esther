@@ -23,6 +23,10 @@ void NumericClass::setupMethods() {
         return a % b;
     });
 
+    def("**", [](const Variant &a, const Variant &b) -> Variant {
+        return a.pow(b);
+    });
+
     def("<", [](const Variant &a, const Variant &b) -> bool {
         return a < b;
     });

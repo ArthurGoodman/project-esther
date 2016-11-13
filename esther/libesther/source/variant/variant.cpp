@@ -397,6 +397,24 @@ Variant Variant::operator%(const Variant &v) const {
     }
 }
 
+Variant Variant::pow(const Variant &v) const {
+    std::pair<Variant, Variant> c = coerce(*this, v);
+
+    switch (c.first.getType()) {
+    case Char:
+        return (char)::pow(c.first.toChar(), c.second.toChar());
+
+    case Integer:
+        return (int)::pow(c.first.toInteger(), c.second.toInteger());
+
+    case Real:
+        return ::pow(c.first.toReal(), c.second.toReal());
+
+    default:
+        return Variant();
+    }
+}
+
 bool Variant::operator<(const Variant &v) const {
     std::pair<Variant, Variant> c = coerce(*this, v);
 

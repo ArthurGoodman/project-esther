@@ -29,7 +29,7 @@ class Parser {
     class MultiplyNode < BinaryNode
         function initialize(left, right) {
             super(left, right)
-            self.oper = function (a) self * a
+            self.oper = Float.*
         }
 
     class DivideNode < BinaryNode
@@ -59,7 +59,7 @@ class Parser {
         }
 
         function inspect
-            print("<" + text + ", " + id + ">\n")
+            writeLine("<" + text + ", " + id + ">")
     }
 
     function initialize
@@ -70,43 +70,45 @@ class Parser {
         else code[pos]
 
     function getToken {
-        while (at(pos).isSpace())
-            pos = pos + 1
+        this = self
 
-        if (at(pos) == '\0') token = new Token('e')
-        else if (at(pos).isDigit()) token = new Token('e') {
+        while (at(pos).isSpace())
+            self.pos = pos + 1
+
+        if (at(pos) == '\0') self.token = new Token('e')
+        else if (at(pos).isDigit()) self.token = new Token('e') {
             self.id = 'n'
             self.text = ""
 
             while (at(pos).isDigit()) {
                 text += at(pos)
-                pos = pos + 1
+                this.pos = pos + 1
             }
             
             if (at(pos) == '.') {
                 text += at(pos)
-                pos = pos + 1
+                this.pos = pos + 1
 
                 while (at(pos).isDigit()) {
                     text += at(pos)
-                    pos = pos + 1
+                    this.pos = pos + 1
                 }
             }
         } else if (operators.contains(at(pos))) {
-            token = Token(at(pos))
-            pos = pos + 1
-        } else if (at(pos).isLetter() || at(pos) == '_') token = new Token('e') {
+            self.token = new Token(at(pos))
+            this.pos = pos + 1
+        } else if (at(pos).isLetter() || at(pos) == '_') self.token = new Token('e') {
             self.id = 'u'
             self.text = ""
             
             while (at(pos).isLetter() || at(pos) == '_') {
                 text += at(pos)
-                pos = pos + 1
+                this.pos = pos + 1
             }
-        } else token = new Token {
+        } else self.token = new Token {
             self.id = 'u'
             self.text = at(pos)
-            pos = pos + 1
+            this.pos = pos + 1
         }
     }
 
@@ -131,7 +133,7 @@ class Parser {
 
         getToken()
 
-        // while (token) {
+        // while (token.id != 'e') {
         //    token.inspect()
         //    getToken()
         // }
@@ -150,13 +152,11 @@ class Parser {
     function addSub {
         node = mulDiv()
 
-        forever {
+        while (check('+') || check('-')) {
             if (accept('+'))
                 node = new PlusNode(node, mulDiv())
             else if (accept('-'))
                 node = new MinusNode(node, mulDiv())
-            else
-                break
         }
 
         node
@@ -165,13 +165,11 @@ class Parser {
     function mulDiv {
         node = power()
 
-        forever {
+        while (check('*') || check('/')) {
             if (accept('*'))
                 node = new MultiplyNode(node, power())
             else if (accept('/'))
                 node = new DivideNode(node, power())
-            else
-                break
         }
 
         node
@@ -180,12 +178,8 @@ class Parser {
     function power {
         node = unary()
 
-        forever {
-            if (accept('^'))
-                node = new PowerNode(node, unary())
-            else
-                break
-        }
+        while (accept('^'))
+            node = new PowerNode(node, unary())
 
         node
     }
@@ -225,9 +219,9 @@ class Parser {
     }
 }
 
-new Parser.parse("2 * (3 + 2^-1) - 6").eval()
+new Parser.parse("").eval()
 
-// forever {
+// while true {
 //     "$ ".print()
 
 //     str = scanLine()

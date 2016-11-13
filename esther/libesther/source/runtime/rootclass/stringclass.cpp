@@ -85,6 +85,10 @@ void StringClass::setupMethods() {
     def("[]", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString()[b.toInteger()];
     });
+
+    def("contains", [](const Variant &a, const Variant &b) -> bool {
+        return a.toString().find(b.toChar()) != std::string::npos;
+    });
 }
 
 StringClass::StringClass(Runtime *runtime)

@@ -304,9 +304,9 @@ Expression *Parser::preffix() {
     Position p = token->getPosition();
 
     if (accept(tPlus))
-        e = Expression::DirectCall(suffix(), "+", {});
+        e = Expression::DirectCall(Expression::Literal('\0'), "+", {suffix()});
     else if (accept(tMinus))
-        e = Expression::DirectCall(suffix(), "-", {});
+        e = Expression::DirectCall(Expression::Literal('\0'), "-", {suffix()});
     //    else if (accept(tDec))
     //        e = Expression::PreDecrement(suffix());
     //    else if (accept(tInc))

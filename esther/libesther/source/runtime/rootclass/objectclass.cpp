@@ -49,6 +49,10 @@ void ObjectClass::setupMethods() {
     def("toString", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return runtime->createString(self->toString());
     });
+
+    def("equals", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        return runtime->toBoolean(self == args[0]);
+    });
 }
 
 ObjectClass::ObjectClass(Runtime *runtime)
