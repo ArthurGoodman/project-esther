@@ -1,21 +1,19 @@
 #include "objectcontext.h"
 
-//void ObjectContext::setSelf(Object *self) {
-//    Context::setSelf(self);
-//    setHere(self);
-//}
-
-//void ObjectContext::clear() {
-//}
-
 void ObjectContext::pushSelf(Object *self) {
     Context::pushSelf(self);
-    pushHere(self);
+    Context::pushHere(self);
 }
 
 void ObjectContext::popSelf() {
     Context::popSelf();
-    popHere();
+    Context::popHere();
+}
+
+void ObjectContext::pushHere(Object *) {
+}
+
+void ObjectContext::popHere() {
 }
 
 ObjectContext::ObjectContext(Object *self, Object *here, Context *parent)

@@ -26,8 +26,6 @@ public:
 
     bool is(Class *_class) const;
 
-    void clear();
-
     virtual std::string toString() const;
 
     virtual bool isTrue() const;

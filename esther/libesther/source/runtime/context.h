@@ -18,16 +18,16 @@ public:
     virtual ~Context();
 
     Object *getSelf() const;
-    //void setSelf(Object *self);
+    void setSelf(Object *self);
 
     Object *getHere() const;
-    //void setHere(Object *here);
+    void setHere(Object *here);
 
     virtual void pushSelf(Object *self);
     virtual void popSelf();
 
-    void pushHere(Object *here);
-    void popHere();
+    virtual void pushHere(Object *here);
+    virtual void popHere();
 
     Runtime *getRuntime() const;
 
@@ -37,8 +37,6 @@ public:
 
     Object *get(const std::string &name) const;
     std::pair<Object *, Object *> getWithSource(const std::string &name) const;
-
-    virtual void clear();
 
     Context *childContext(Object *self, Object *here);
     Context *childContext(Object *here);

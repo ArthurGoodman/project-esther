@@ -19,17 +19,9 @@ Object *Context::getSelf() const {
     return selves.back();
 }
 
-//void Context::setSelf(Object *self) {
-//    this->self = self;
-//}
-
 Object *Context::getHere() const {
     return heres.back();
 }
-
-//void Context::setHere(Object *here) {
-//    this->here = here;
-//}
 
 void Context::pushSelf(Object *self) {
     selves << self;
@@ -95,10 +87,6 @@ std::pair<Object *, Object *> Context::getWithSource(const std::string &name) co
         return std::make_pair((Object *)runtime->getRootClass(name), runtime->getMainObject());
 
     return std::make_pair(nullptr, nullptr);
-}
-
-void Context::clear() {
-    getHere()->clear();
 }
 
 Context *Context::childContext(Object *self, Object *here) {

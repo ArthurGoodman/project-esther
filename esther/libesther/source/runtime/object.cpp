@@ -40,10 +40,6 @@ bool Object::is(Class *_class) const {
     return objectClass->isChild(_class);
 }
 
-void Object::clear() {
-    attributes.clear();
-}
-
 std::string Object::toString() const {
     return "<" + getClass()->getName() + ":" + Utility::toString((void *)this) + ">";
 }
