@@ -7,7 +7,7 @@ class Object;
 class Runtime;
 
 class Context {
-    Object *self, *here;
+    std::list<Object *> selves, heres;
     Runtime *runtime;
     Context *parent;
 
@@ -18,10 +18,16 @@ public:
     virtual ~Context();
 
     Object *getSelf() const;
-    virtual void setSelf(Object *self);
+    //void setSelf(Object *self);
 
     Object *getHere() const;
-    void setHere(Object *here);
+    //void setHere(Object *here);
+
+    virtual void pushSelf(Object *self);
+    virtual void popSelf();
+
+    void pushHere(Object *here);
+    void popHere();
 
     Runtime *getRuntime() const;
 

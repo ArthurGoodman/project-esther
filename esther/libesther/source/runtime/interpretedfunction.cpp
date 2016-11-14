@@ -1,14 +1,18 @@
 #include "interpretedfunction.h"
 
 Object *InterpretedFunction::execute(Object *self, const std::vector<Object *> &args) {
-    context->setSelf(self);
-    context->clear();
+    context->pushSelf(self);
+    //context->clear();
 
     std::vector<Object *>::const_iterator i = args.begin();
     for (const std::string &s : params)
         context->setLocal(s, *i++);
 
-    return body->eval(context);
+    Object *value = body->eval(context);
+
+    context->popSelf();
+
+    return value;
 }
 
 InterpretedFunction::InterpretedFunction(Class *objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context)

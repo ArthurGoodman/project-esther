@@ -5,7 +5,9 @@
 #include "objectcontext.h"
 
 Context::Context(Runtime *runtime)
-    : self(runtime->getMainObject()), here(runtime->getMainObject()), runtime(runtime), parent(nullptr) {
+    : runtime(runtime), parent(nullptr) {
+    pushSelf(runtime->getMainObject());
+    pushHere(runtime->getMainObject());
 }
 
 Context::~Context() {
@@ -14,19 +16,35 @@ Context::~Context() {
 }
 
 Object *Context::getSelf() const {
-    return self;
+    return selves.back();
 }
 
-void Context::setSelf(Object *self) {
-    this->self = self;
-}
+//void Context::setSelf(Object *self) {
+//    this->self = self;
+//}
 
 Object *Context::getHere() const {
-    return here;
+    return heres.back();
 }
 
-void Context::setHere(Object *here) {
-    this->here = here;
+//void Context::setHere(Object *here) {
+//    this->here = here;
+//}
+
+void Context::pushSelf(Object *self) {
+    selves << self;
+}
+
+void Context::popSelf() {
+    selves.pop_back();
+}
+
+void Context::pushHere(Object *here) {
+    heres << here;
+}
+
+void Context::popHere() {
+    heres.pop_back();
 }
 
 Runtime *Context::getRuntime() const {
@@ -34,15 +52,15 @@ Runtime *Context::getRuntime() const {
 }
 
 bool Context::hasLocal(const std::string &name) const {
-    return here->hasAttribute(name);
+    return getHere()->hasAttribute(name);
 }
 
 Object *Context::getLocal(const std::string &name) const {
-    return here->getAttribute(name);
+    return getHere()->getAttribute(name);
 }
 
 void Context::setLocal(const std::string &name, Object *value) {
-    here->setAttribute(name, value);
+    getHere()->setAttribute(name, value);
 }
 
 Object *Context::get(const std::string &name) const {
@@ -50,7 +68,7 @@ Object *Context::get(const std::string &name) const {
         return getLocal(name);
 
     Object *temp = nullptr;
-    if ((temp = self->get(name)))
+    if ((temp = getSelf()->get(name)))
         return temp;
 
     if (parent)
@@ -64,11 +82,11 @@ Object *Context::get(const std::string &name) const {
 
 std::pair<Object *, Object *> Context::getWithSource(const std::string &name) const {
     if (hasLocal(name))
-        return std::make_pair(getLocal(name), self);
+        return std::make_pair(getLocal(name), getSelf());
 
     Object *temp = nullptr;
-    if ((temp = self->get(name)))
-        return std::make_pair(temp, self);
+    if ((temp = getSelf()->get(name)))
+        return std::make_pair(temp, getSelf());
 
     if (parent)
         return parent->getWithSource(name);
@@ -80,7 +98,7 @@ std::pair<Object *, Object *> Context::getWithSource(const std::string &name) co
 }
 
 void Context::clear() {
-    here->clear();
+    getHere()->clear();
 }
 
 Context *Context::childContext(Object *self, Object *here) {
@@ -89,7 +107,7 @@ Context *Context::childContext(Object *self, Object *here) {
 }
 
 Context *Context::childContext(Object *here) {
-    return childContext(self, here);
+    return childContext(getSelf(), here);
 }
 
 Context *Context::objectChildContext(Object *self, Object *here) {
@@ -98,9 +116,11 @@ Context *Context::objectChildContext(Object *self, Object *here) {
 }
 
 Context *Context::objectChildContext() {
-    return objectChildContext(self, here);
+    return objectChildContext(getSelf(), getHere());
 }
 
 Context::Context(Object *self, Object *here, Context *parent)
-    : self(self), here(here), runtime(parent->runtime), parent(parent) {
+    : runtime(parent->runtime), parent(parent) {
+    pushSelf(self);
+    pushHere(here);
 }

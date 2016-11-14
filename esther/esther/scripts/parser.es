@@ -231,6 +231,4 @@ class Parser {
     }
 }
 
-node = new Parser.parse("(1 + 6) - (1 * 9)")
-node.inspect("")
-node.eval()
+new Parser.parse("2 * (3 + 2^-1) - 6").eval()

@@ -12,8 +12,12 @@ ContextResolutionExpression::~ContextResolutionExpression() {
 }
 
 Object *ContextResolutionExpression::exec(Context *context) {
-    this->context->setSelf(self->eval(context));
-    this->context->clear();
+    this->context->pushSelf(self->eval(context));
+    //this->context->clear();
 
-    return body->eval(this->context);
+    Object *value = body->eval(this->context);
+
+    this->context->popSelf();
+
+    return value;
 }

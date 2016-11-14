@@ -13,8 +13,8 @@ ExpressionTest::ExpressionTest()
 void ExpressionTest::preTest() {
     runtime.initialize();
 
-    context.setSelf(runtime.getMainObject());
-    context.setHere(runtime.getMainObject());
+    context.pushSelf(runtime.getMainObject());
+    context.pushHere(runtime.getMainObject());
 }
 
 void ExpressionTest::postTest() {
@@ -52,7 +52,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "3";
 
     $("Call", [=]() {
-        context.setSelf(runtime.createInteger(3));
+        context.pushSelf(runtime.createInteger(3));
         context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
@@ -75,7 +75,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "9";
 
     $("DynamicCall", [=]() {
-        context.setSelf(runtime.createInteger(3));
+        context.pushSelf(runtime.createInteger(3));
         context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
