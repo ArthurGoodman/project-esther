@@ -56,18 +56,25 @@ bool Parser::accept(int id) {
 
 void Parser::pushContext() {
     contexts << context()->childContext();
+    contextTypes << RegularContext;
 }
 
 void Parser::pushObjectContext() {
-    contexts << context()->objectChildContext();
+    contexts << context()->childContext();
+    contextTypes << ObjectContext;
 }
 
 void Parser::popContext() {
     contexts.pop_back();
+    contextTypes.pop_back();
 }
 
 Context *Parser::context() {
     return contexts.back();
+}
+
+Parser::ContextType Parser::contextType() {
+    return contextTypes.back();
 }
 
 std::list<Expression *> Parser::parseBlock() {
@@ -418,7 +425,7 @@ Expression *Parser::term() {
         Position p = token->getPosition();
 
         if (accept(tAssign)) {
-            e = Expression::LocalAssignment(name, logicOr());
+            e = contextType() == ObjectContext ? Expression::AttributeAssignment(Expression::Self(), name, logicOr()) : Expression::LocalAssignment(name, logicOr());
             e->setPosition(p);
         } else if (accept(tLPar)) {
             const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
@@ -497,7 +504,7 @@ Expression *Parser::term() {
         popContext();
 
         if (!name.empty())
-            e = Expression::LocalAssignment(name, e);
+            e = contextType() == ObjectContext ? Expression::AttributeAssignment(Expression::Self(), name, e) : Expression::LocalAssignment(name, e);
     }
 
     else if (accept(tFunction)) {
@@ -528,7 +535,7 @@ Expression *Parser::term() {
         popContext();
 
         if (!name.empty())
-            e = Expression::LocalAssignment(name, e);
+            e = contextType() == ObjectContext ? Expression::AttributeAssignment(Expression::Self(), name, e) : Expression::LocalAssignment(name, e);
     }
 
     else if (accept(tNew)) {

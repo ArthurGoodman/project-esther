@@ -96,7 +96,6 @@ SOURCES += \
     source/expression/ast/dynamiccallexpression.cpp \
     source/runtime/rootclass/rootclass.cpp \
     source/expression/debug/literaldebugexpression.cpp \
-    source/runtime/objectcontext.cpp \
     source/expression/ast/nativecallexpression.cpp \
     source/expression/ast/cachedexpression.cpp \
     source/expression/ast/classdefinitionexpression.cpp \
@@ -180,7 +179,6 @@ HEADERS += \
     source/expression/ast/dynamiccallexpression.h \
     source/runtime/rootclass/rootclass.h \
     source/expression/debug/literaldebugexpression.h \
-    source/runtime/objectcontext.h \
     source/expression/ast/nativecallexpression.h \
     source/expression/ast/cachedexpression.h \
     source/expression/ast/classdefinitionexpression.h \

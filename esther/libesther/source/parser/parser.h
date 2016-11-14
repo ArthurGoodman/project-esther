@@ -8,7 +8,14 @@
 class Object;
 
 class Parser : public IParser {
+    enum ContextType {
+        RegularContext,
+        ObjectContext
+    };
+
     std::list<Context *> contexts;
+    std::list<ContextType> contextTypes;
+
     Tokens tokens;
     Tokens::iterator token;
 
@@ -26,7 +33,9 @@ private:
     void pushContext();
     void pushObjectContext();
     void popContext();
+
     Context *context();
+    ContextType contextType();
 
     std::list<Expression *> parseBlock();
     std::list<Expression *> parseList();

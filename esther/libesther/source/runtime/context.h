@@ -23,11 +23,11 @@ public:
     Object *getHere() const;
     void setHere(Object *here);
 
-    virtual void pushSelf(Object *self);
-    virtual void popSelf();
+    void pushSelf(Object *self);
+    void popSelf();
 
-    virtual void pushHere(Object *here);
-    virtual void popHere();
+    void pushHere(Object *here);
+    void popHere();
 
     Runtime *getRuntime() const;
 
@@ -40,8 +40,7 @@ public:
 
     Context *childContext();
     Context *childContext(Object *self, Object *here);
-    Context *objectChildContext();
 
-protected:
+private:
     Context(Object *self, Object *here, Context *parent);
 };

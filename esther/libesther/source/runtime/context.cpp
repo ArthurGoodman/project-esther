@@ -2,7 +2,6 @@
 
 #include "object.h"
 #include "runtime.h"
-#include "objectcontext.h"
 
 Context::Context(Runtime *runtime)
     : runtime(runtime), parent(nullptr) {
@@ -102,11 +101,6 @@ Context *Context::childContext(Object *self, Object *here) {
     context->pushHere(here);
 
     return context;
-}
-
-Context *Context::objectChildContext() {
-    children << new ObjectContext(getSelf(), getHere(), this);
-    return children.back();
 }
 
 Context::Context(Object *self, Object *here, Context *parent)
