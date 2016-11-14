@@ -42,7 +42,6 @@ private:
 
     Expression *parseIdentifier();
 
-    Expression *oper();
     Expression *expr();
     Expression *logicOr();
     Expression *logicAnd();

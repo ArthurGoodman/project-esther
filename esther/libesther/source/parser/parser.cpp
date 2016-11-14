@@ -23,7 +23,7 @@ Expression *Parser::parse(Context *context, Tokens &tokens) {
     std::list<Expression *> nodes;
 
     while (!check(tEnd))
-        nodes << oper();
+        nodes << expr();
 
     Expression *e = nodes.empty() ? Expression::Empty() : nodes.size() == 1 ? nodes.front() : Expression::Block(nodes);
 
@@ -81,7 +81,7 @@ std::list<Expression *> Parser::parseBlock() {
     std::list<Expression *> nodes;
 
     while (!check(tRBrace) && !check(tEnd))
-        nodes << oper();
+        nodes << expr();
 
     if (!accept(tRBrace))
         error("unmatched braces");
@@ -121,14 +121,6 @@ Expression *Parser::parseIdentifier() {
     return e;
 }
 
-Expression *Parser::oper() {
-    Expression *e = expr();
-
-    accept(tSemi);
-
-    return e;
-}
-
 Expression *Parser::expr() {
     Expression *e = logicOr();
 
@@ -152,6 +144,8 @@ Expression *Parser::expr() {
 
         e->setPosition(p);
     }
+
+    accept(tSemi);
 
     return e;
 }
@@ -462,17 +456,17 @@ Expression *Parser::term() {
         Expression *condition, *body, *elseBody = nullptr;
 
         condition = expr();
-        body = oper();
+        body = expr();
 
         if (accept(tElse))
-            elseBody = oper();
+            elseBody = expr();
 
         e = Expression::If(condition, body, elseBody);
     } else if (accept(tWhile)) {
         Expression *condition, *body;
 
         condition = expr();
-        body = oper();
+        body = expr();
 
         e = Expression::Loop(condition, body);
     }
