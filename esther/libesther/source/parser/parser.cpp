@@ -55,7 +55,7 @@ bool Parser::accept(int id) {
 }
 
 void Parser::pushContext() {
-    contexts << context()->childContext(context()->getRuntime()->createObject());
+    contexts << context()->childContext();
 }
 
 void Parser::pushObjectContext() {

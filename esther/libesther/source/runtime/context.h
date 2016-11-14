@@ -38,9 +38,8 @@ public:
     Object *get(const std::string &name) const;
     std::pair<Object *, Object *> getWithSource(const std::string &name) const;
 
+    Context *childContext();
     Context *childContext(Object *self, Object *here);
-    Context *childContext(Object *here);
-    Context *objectChildContext(Object *self, Object *here);
     Context *objectChildContext();
 
 protected:
