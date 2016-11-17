@@ -21,6 +21,7 @@ public:
     virtual Expression *createCall(const std::string &name, const std::list<Expression *> &args) = 0;
     virtual Expression *createClassDefinition(const std::string &name, Expression *superclass) = 0;
     virtual Expression *createConstant(Object *value) = 0;
+    virtual Expression *createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args, Context *context) = 0;
     virtual Expression *createContextResolution(Expression *self, Expression *body, Context *context) = 0;
     virtual Expression *createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) = 0;
     virtual Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args) = 0;

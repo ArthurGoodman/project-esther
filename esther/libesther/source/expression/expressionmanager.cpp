@@ -7,6 +7,7 @@
 #include "callexpression.h"
 #include "classdefinitionexpression.h"
 #include "constantexpression.h"
+#include "contextcallexpression.h"
 #include "contextresolutionexpression.h"
 #include "directcallexpression.h"
 #include "dynamiccallexpression.h"
@@ -49,6 +50,10 @@ Expression *ExpressionManager::createClassDefinition(const std::string &name, Ex
 
 Expression *ExpressionManager::createConstant(Object *value) {
     return new ConstantExpression(value);
+}
+
+Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args, Context *context) {
+    return new ContextCallExpression(self, body, args, context);
 }
 
 Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body, Context *context) {

@@ -31,6 +31,10 @@ Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
+Expression *Expression::ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args, Context *context) {
+    return IExpressionManager::instance()->createContextCall(self, body, args, context);
+}
+
 Expression *Expression::ContextResolution(Expression *self, Expression *body, Context *context) {
     return IExpressionManager::instance()->createContextResolution(self, body, context);
 }

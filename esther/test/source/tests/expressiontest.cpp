@@ -51,6 +51,10 @@ void ExpressionTest::defineTests() {
         return e->eval(&context)->toString();
     }).should.be = "3";
 
+    $("Cached", [=]() {
+        fail();
+    }).should.be.ok();
+
     $("Call", [=]() {
         context.pushSelf(runtime.createInteger(3));
         context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
@@ -64,10 +68,27 @@ void ExpressionTest::defineTests() {
         return value->toString();
     }).should.be = "3";
 
+    $("ClassDefinition", [=]() {
+        fail();
+    }).should.be.ok();
+
     $("Constant", [=]() {
         e = Expression::Constant(runtime.getTrue());
         return e->eval(&context)->toString();
     }).should.be = "true";
+
+    $("ContextCall", [=]() {
+        fail();
+    }).should.be.ok();
+
+    $("ContextResolution", [=]() {
+        Context *childContext = context.childContext(runtime.createInteger(3), runtime.createObject());
+        e = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
+
+        Object *value = e->eval(&context);
+        delete childContext;
+        return value->toString();
+    }).should.be = "4";
 
     $("DirectCall", [=]() {
         e = Expression::DirectCall(Expression::Literal(4), "+", {Expression::Literal(5)});
@@ -87,19 +108,14 @@ void ExpressionTest::defineTests() {
         return value->toString();
     }).should.be = "4";
 
-    $("ContextResolution", [=]() {
-        Context *childContext = context.childContext(runtime.createInteger(3), runtime.createObject());
-        e = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
-
-        Object *value = e->eval(&context);
-        delete childContext;
-        return value->toString();
-    }).should.be = "4";
-
     $("Empty", [=]() {
         e = Expression::Empty();
         return e->eval(&context)->toString();
     }).should.be = "null";
+
+    $("FunctionDefinition", [=]() {
+        fail();
+    }).should.be.ok();
 
     $("Here", [=]() {
         e = Expression::Here();
