@@ -82,45 +82,43 @@ class Parser {
         else code[pos]
 
     function getToken {
-        this = self
-
         while (at(pos).isSpace())
-            self.pos = pos + 1
+            {pos} = pos + 1
 
         if (at(pos) == '\0') self.token = new Token('e')
         else if (at(pos).isDigit()) self.token = new Token('e') {
-            self.id = 'n'
-            self.text = ""
+            {id} = 'n'
+            {text} = ""
 
             while (at(pos).isDigit()) {
-                text += at(pos)
-                this.pos = pos + 1
+                {text} = text + at(pos)
+                {pos} = pos + 1
             }
             
             if (at(pos) == '.') {
-                text += at(pos)
-                this.pos = pos + 1
+                {text} = text + at(pos)
+                {pos} = pos + 1
 
                 while (at(pos).isDigit()) {
-                    text += at(pos)
-                    this.pos = pos + 1
+                    {text} = text + at(pos)
+                    {pos} = pos + 1
                 }
             }
         } else if (operators.contains(at(pos))) {
             self.token = new Token(at(pos))
-            self.pos = pos + 1
+            ;{pos} = pos + 1
         } else if (at(pos).isLetter() || at(pos) == '_') self.token = new Token('e') {
-            self.id = 'u'
-            self.text = ""
+            {id} = 'u'
+            {text} = ""
             
             while (at(pos).isLetter() || at(pos) == '_') {
-                text += at(pos)
-                this.pos = pos + 1
+                {text} = text + at(pos)
+                {pos} = pos + 1
             }
-        } else self.token = new Token {
-            self.id = 'u'
-            self.text = at(pos)
-            this.pos = pos + 1
+        } else self.token = new Token('e') {
+            {id} = 'u'
+            {text} = at(pos)
+            {pos} = pos + 1
         }
     }
 
