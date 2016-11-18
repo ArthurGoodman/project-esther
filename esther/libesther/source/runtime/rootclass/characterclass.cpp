@@ -29,28 +29,27 @@ void CharacterClass::setupMethods() {
         return runtime->createCharacter(((ValueObject *)args[1])->getVariant().toChar());
     }));
 
-    def("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
             Runtime::runtimeError(getName() + ".initialize: invalid number of arguments");
 
-        if (!args.empty()) {
-            if (!dynamic_cast<ValueObject *>(args[0])) {
-                Runtime::runtimeError(getName() + ".initialize: invalid argument");
-                return nullptr;
-            }
-
+        if (!args.empty())
             ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toChar());
-        }
 
         return self;
     });
 
-    def("isSpace", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("isSpace", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return runtime->toBoolean(Utility::isSpace(((ValueObject *)self)->getVariant().toChar()));
     });
 
-    def("isDigit", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("isDigit", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return runtime->toBoolean(Utility::isDigit(((ValueObject *)self)->getVariant().toChar()));
+    });
+
+    defValueObjectFunc("=", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toChar());
+        return self;
     });
 }
 

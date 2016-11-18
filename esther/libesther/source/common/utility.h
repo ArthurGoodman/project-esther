@@ -41,6 +41,9 @@ std::string Utility::toString(T t, int base, int precision) {
 
 template <class T>
 T Utility::fromString(const std::string &str) {
+    if (str.empty())
+        return 0;
+
     std::istringstream s(str);
 
     T t;
@@ -51,6 +54,9 @@ T Utility::fromString(const std::string &str) {
 
 template <>
 inline double Utility::fromString<double>(const std::string &str) {
+    if (str.empty())
+        return 0;
+
     if (str == "inf")
         return INFINITY;
 

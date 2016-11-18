@@ -14,7 +14,7 @@ Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void ObjectClass::setupMethods() {
-    def("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!args.empty())
             for (Object *arg : args)
                 IO::write(arg->call("toString", {}, runtime->getStringClass())->toString());
@@ -24,7 +24,7 @@ void ObjectClass::setupMethods() {
         return runtime->getNull();
     });
 
-    def("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!args.empty())
             for (Object *arg : args)
                 IO::writeLine(arg->call("toString", {}, runtime->getStringClass())->toString());
@@ -34,23 +34,23 @@ void ObjectClass::setupMethods() {
         return runtime->getNull();
     });
 
-    def("class", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("class", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return self->getClass();
     });
 
-    def("==", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("==", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(self->call("equals", args)->isTrue());
     });
 
-    def("!=", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("!=", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(!self->call("equals", args)->isTrue());
     });
 
-    def("toString", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("toString", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return runtime->createString(self->toString());
     });
 
-    def("equals", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("equals", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(self == args[0]);
     });
 }

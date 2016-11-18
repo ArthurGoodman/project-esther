@@ -11,11 +11,11 @@ Object *ClassClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void ClassClass::setupMethods() {
-    def("new", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("new", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return ((Class *)self)->newInstance(args);
     });
 
-    def("superclass", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("superclass", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return ((Class *)self)->getSuperclass() ? ((Class *)self)->getSuperclass() : runtime->getNull();
     });
 }

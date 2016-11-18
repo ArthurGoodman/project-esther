@@ -4,32 +4,28 @@
 #include "function.h"
 #include "classclass.h"
 #include "valueobject.h"
+#include "utility.h"
 
 RootClass::RootClass(Runtime *runtime, const std::string &name, Class *superclass)
     : Class(runtime->getClassClass(), name, superclass), runtime(runtime) {
     runtime->registerRootClass(this);
 }
 
-void RootClass::def(const std::string &name, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
-    def(name, std::list<Class *>(), body);
+void RootClass::defFunc(const std::string &name, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
+    defFunc(name, std::list<Class *>(), body);
 }
 
-void RootClass::def(const std::string &name, const std::list<std::string> &paramsClassesNames, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
+void RootClass::defFunc(const std::string &name, const std::list<std::string> &paramsClassesNames, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
     std::list<Class *> paramsClasses;
 
     for (const std::string &name : paramsClassesNames)
         paramsClasses << runtime->getRootClass(name);
 
-    def(name, paramsClasses, body);
+    defFunc(name, paramsClasses, body);
 }
 
-void RootClass::def(const std::string &name, const std::list<Class *> &paramsClasses, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
-    setAttribute(name, runtime->createNativeFunction(name, paramsClasses.size(), [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        if (!self->getClass()->isChild(this)) {
-            Runtime::runtimeError(getName() + "." + name + ": invalid self");
-            return nullptr;
-        }
-
+void RootClass::defFunc(const std::string &name, const std::list<Class *> &paramsClasses, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
+    defFunc(name, paramsClasses.size(), [=](Object *self, const std::vector<Object *> &args) -> Object * {
         int i = 0;
         for (Class *_class : paramsClasses)
             if (!args[i++]->getClass()->isChild(_class)) {
@@ -38,10 +34,22 @@ void RootClass::def(const std::string &name, const std::list<Class *> &paramsCla
             }
 
         return body(self, args);
-    }));
+    });
 }
 
-void RootClass::def(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
+void RootClass::defValueObjectFunc(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
+    defFunc(name, arity, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        for (int i = 0; i < (int)args.size(); i++)
+            if (!dynamic_cast<ValueObject *>(args[i])) {
+                Runtime::runtimeError(getName() + "." + name + ": invalid argument #" + Utility::toString(i));
+                return nullptr;
+            }
+
+        return body(self, args);
+    });
+}
+
+void RootClass::defFunc(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
     setAttribute(name, runtime->createNativeFunction(name, arity, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!self->getClass()->isChild(this)) {
             Runtime::runtimeError(getName() + "." + name + ": invalid self");
@@ -52,7 +60,7 @@ void RootClass::def(const std::string &name, int arity, const std::function<Obje
     }));
 }
 
-void RootClass::def(const std::string &name, Variant (*body)(const Variant &, const Variant &)) {
+void RootClass::defOper(const std::string &name, Variant (*body)(const Variant &, const Variant &)) {
     setAttribute(name, runtime->createNativeFunction(name, 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<ValueObject *>(self)) {
             Runtime::runtimeError(getName() + "." + name + ": invalid self");
@@ -68,7 +76,7 @@ void RootClass::def(const std::string &name, Variant (*body)(const Variant &, co
     }));
 }
 
-void RootClass::def(const std::string &name, bool (*body)(const Variant &, const Variant &)) {
+void RootClass::defPred(const std::string &name, bool (*body)(const Variant &, const Variant &)) {
     setAttribute(name, runtime->createNativeFunction(name, 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<ValueObject *>(self)) {
             Runtime::runtimeError(getName() + "." + name + ": invalid self");

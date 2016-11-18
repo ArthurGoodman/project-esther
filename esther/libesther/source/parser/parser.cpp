@@ -11,6 +11,8 @@
 #include "class.h"
 #include "function.h"
 
+#include <iostream>
+
 Expression *Parser::parse(Context *context, Tokens &tokens) {
     contexts.clear();
     contexts << context;
@@ -118,16 +120,17 @@ Expression *Parser::expr() {
     while (true) {
         if (accept(tAssign))
             e = Expression::DirectCall(e, "=", {logicOr()});
+        // TODO: get rid of this, this is terrible
         else if (accept(tPlusAssign))
-            e = Expression::DirectCall(e, "+=", {logicOr()});
+            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "+", {logicOr()})});
         else if (accept(tMinusAssign))
-            e = Expression::DirectCall(e, "-=", {logicOr()});
+            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "-", {logicOr()})});
         else if (accept(tMultiplyAssign))
-            e = Expression::DirectCall(e, "*=", {logicOr()});
+            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "*", {logicOr()})});
         else if (accept(tDivideAssign))
-            e = Expression::DirectCall(e, "/=", {logicOr()});
+            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "/", {logicOr()})});
         else if (accept(tModAssign))
-            e = Expression::DirectCall(e, "%=", {logicOr()});
+            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "%", {logicOr()})});
         else
             break;
     }

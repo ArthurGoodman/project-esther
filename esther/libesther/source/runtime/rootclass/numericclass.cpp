@@ -3,47 +3,47 @@
 #include "runtime.h"
 
 void NumericClass::setupMethods() {
-    def("+", [](const Variant &a, const Variant &b) -> Variant {
+    defOper("+", [](const Variant &a, const Variant &b) -> Variant {
         return a + b;
     });
 
-    def("-", [](const Variant &a, const Variant &b) -> Variant {
+    defOper("-", [](const Variant &a, const Variant &b) -> Variant {
         return a - b;
     });
 
-    def("*", [](const Variant &a, const Variant &b) -> Variant {
+    defOper("*", [](const Variant &a, const Variant &b) -> Variant {
         return a * b;
     });
 
-    def("/", [](const Variant &a, const Variant &b) -> Variant {
+    defOper("/", [](const Variant &a, const Variant &b) -> Variant {
         return a / b;
     });
 
-    def("%", [](const Variant &a, const Variant &b) -> Variant {
+    defOper("%", [](const Variant &a, const Variant &b) -> Variant {
         return a % b;
     });
 
-    def("**", [](const Variant &a, const Variant &b) -> Variant {
+    defOper("**", [](const Variant &a, const Variant &b) -> Variant {
         return a.pow(b);
     });
 
-    def("<", [](const Variant &a, const Variant &b) -> bool {
+    defPred("<", [](const Variant &a, const Variant &b) -> bool {
         return a < b;
     });
 
-    def("<=", [](const Variant &a, const Variant &b) -> bool {
+    defPred("<=", [](const Variant &a, const Variant &b) -> bool {
         return a <= b;
     });
 
-    def(">", [](const Variant &a, const Variant &b) -> bool {
+    defPred(">", [](const Variant &a, const Variant &b) -> bool {
         return a > b;
     });
 
-    def(">=", [](const Variant &a, const Variant &b) -> bool {
+    defPred(">=", [](const Variant &a, const Variant &b) -> bool {
         return a >= b;
     });
 
-    def("equals", [](const Variant &a, const Variant &b) -> bool {
+    defPred("equals", [](const Variant &a, const Variant &b) -> bool {
         return a == b;
     });
 }

@@ -18,10 +18,11 @@ protected:
 
     virtual void setupMethods() = 0;
 
-    void def(const std::string &name, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
-    void def(const std::string &name, const std::list<std::string> &paramsClassesNames, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
-    void def(const std::string &name, const std::list<Class *> &paramsClasses, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
-    void def(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
-    void def(const std::string &name, Variant (*body)(const Variant &, const Variant &));
-    void def(const std::string &name, bool (*body)(const Variant &, const Variant &));
+    void defFunc(const std::string &name, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    void defFunc(const std::string &name, const std::list<std::string> &paramsClassesNames, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    void defFunc(const std::string &name, const std::list<Class *> &paramsClasses, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    void defValueObjectFunc(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    void defFunc(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    void defOper(const std::string &name, Variant (*body)(const Variant &, const Variant &));
+    void defPred(const std::string &name, bool (*body)(const Variant &, const Variant &));
 };

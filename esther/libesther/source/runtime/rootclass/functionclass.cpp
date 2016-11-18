@@ -18,7 +18,7 @@ Object *FunctionClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void FunctionClass::setupMethods() {
-    def("()", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("()", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (args.empty())
             Runtime::runtimeError(getName() + ".(): invalid number of arguments");
 
