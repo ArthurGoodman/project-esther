@@ -4,9 +4,7 @@
 #include "runtime.h"
 
 Context::Context(Runtime *runtime)
-    : runtime(runtime), parent(nullptr) {
-    pushSelf(runtime->getMainObject());
-    pushHere(runtime->getMainObject());
+    : runtime(runtime), parent(nullptr), self(runtime->getMainObject()), here(runtime->getMainObject()) {
 }
 
 Context::~Context() {
@@ -15,27 +13,19 @@ Context::~Context() {
 }
 
 Object *Context::getSelf() const {
-    return selves.back();
+    return self;
+}
+
+void Context::setSelf(Object *self) {
+    this->self = self;
 }
 
 Object *Context::getHere() const {
-    return heres.back();
+    return here;
 }
 
-void Context::pushSelf(Object *self) {
-    selves << self;
-}
-
-void Context::popSelf() {
-    selves.pop_back();
-}
-
-void Context::pushHere(Object *here) {
-    heres << here;
-}
-
-void Context::popHere() {
-    heres.pop_back();
+void Context::setHere(Object *here) {
+    this->here = here;
 }
 
 Runtime *Context::getRuntime() const {
@@ -43,16 +33,15 @@ Runtime *Context::getRuntime() const {
 }
 
 bool Context::hasLocal(const std::string &name) const {
-    return !heres.empty() && getHere()->hasAttribute(name);
+    return getHere()->hasAttribute(name);
 }
 
 Object *Context::getLocal(const std::string &name) const {
-    return heres.empty() ? nullptr : getHere()->getAttribute(name);
+    return getHere()->getAttribute(name);
 }
 
 void Context::setLocal(const std::string &name, Object *value) {
-    if (!heres.empty())
-        getHere()->setAttribute(name, value);
+    getHere()->setAttribute(name, value);
 }
 
 Object *Context::get(const std::string &name) const {
@@ -97,14 +86,12 @@ Context *Context::childContext() {
 Context *Context::childContext(Object *self, Object *here) {
     Context *context = childContext();
 
-    context->pushSelf(self);
-    context->pushHere(here);
+    context->setSelf(self);
+    context->setHere(here);
 
     return context;
 }
 
 Context::Context(Object *self, Object *here, Context *parent)
-    : runtime(parent->runtime), parent(parent) {
-    pushSelf(self);
-    pushHere(here);
+    : runtime(parent->runtime), parent(parent), self(self), here(here) {
 }

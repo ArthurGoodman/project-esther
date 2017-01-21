@@ -31,12 +31,12 @@ Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
-Expression *Expression::ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args, Context *context) {
-    return IExpressionManager::instance()->createContextCall(self, body, args, context);
+Expression *Expression::ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createContextCall(self, body, args);
 }
 
-Expression *Expression::ContextResolution(Expression *self, Expression *body, Context *context) {
-    return IExpressionManager::instance()->createContextResolution(self, body, context);
+Expression *Expression::ContextResolution(Expression *self, Expression *body) {
+    return IExpressionManager::instance()->createContextResolution(self, body);
 }
 
 Expression *Expression::DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
@@ -51,8 +51,8 @@ Expression *Expression::Empty() {
     return IExpressionManager::instance()->createEmpty();
 }
 
-Expression *Expression::FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context) {
-    return IExpressionManager::instance()->createFunctionDefinition(name, params, body, context);
+Expression *Expression::FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body) {
+    return IExpressionManager::instance()->createFunctionDefinition(name, params, body);
 }
 
 Expression *Expression::Here() {

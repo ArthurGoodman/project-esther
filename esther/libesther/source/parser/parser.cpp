@@ -14,9 +14,7 @@
 #include <iostream>
 
 Expression *Parser::parse(Context *context, Tokens &tokens) {
-    contexts.clear();
-    contexts << context;
-
+    this->context = context;
     this->tokens.swap(tokens);
     token = this->tokens.begin();
 
@@ -52,22 +50,15 @@ bool Parser::accept(int id) {
 }
 
 void Parser::pushContext() {
-    contexts << context()->childContext();
     contextTypes << RegularContext;
 }
 
 void Parser::pushObjectContext() {
-    contexts << context()->childContext();
     contextTypes << ObjectContext;
 }
 
 void Parser::popContext() {
-    contexts.pop_back();
     contextTypes.pop_back();
-}
-
-Context *Parser::context() {
-    return contexts.back();
 }
 
 Parser::ContextType Parser::contextType() {
@@ -302,14 +293,14 @@ Expression *Parser::suffix() {
                 else if (accept(tLPar)) {
                     const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
                     pushContext();
-                    e = Expression::ContextCall(e, Expression::Identifier(name), list, context());
+                    e = Expression::ContextCall(e, Expression::Identifier(name), list);
                     popContext();
 
                     if (!accept(tRPar))
                         error("unmatched parentheses");
                 } else {
                     pushContext();
-                    e = Expression::ContextResolution(e, Expression::Identifier(name), context());
+                    e = Expression::ContextResolution(e, Expression::Identifier(name));
                     popContext();
                 }
             } else {
@@ -317,19 +308,19 @@ Expression *Parser::suffix() {
 
                 if (accept(tAssign)) {
                     pushContext();
-                    e = Expression::DirectCall(Expression::ContextResolution(e, body, context()), "=", {logicOr()});
+                    e = Expression::DirectCall(Expression::ContextResolution(e, body), "=", {logicOr()});
                     popContext();
                 } else if (accept(tLPar)) {
                     const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
                     pushContext();
-                    e = Expression::ContextCall(e, body, list, context());
+                    e = Expression::ContextCall(e, body, list);
                     popContext();
 
                     if (!accept(tRPar))
                         error("unmatched parentheses");
                 } else {
                     pushContext();
-                    e = Expression::ContextResolution(e, body, context());
+                    e = Expression::ContextResolution(e, body);
                     popContext();
                 }
             }
@@ -402,11 +393,11 @@ Expression *Parser::term() {
     }
 
     else if (accept(tTrue))
-        e = Expression::Constant(context()->getRuntime()->getTrue());
+        e = Expression::Constant(context->getRuntime()->getTrue());
     else if (accept(tFalse))
-        e = Expression::Constant(context()->getRuntime()->getFalse());
+        e = Expression::Constant(context->getRuntime()->getFalse());
     else if (accept(tNull))
-        e = Expression::Constant(context()->getRuntime()->getNull());
+        e = Expression::Constant(context->getRuntime()->getNull());
 
     else if (accept(tSelf))
         e = Expression::Self();
@@ -421,10 +412,10 @@ Expression *Parser::term() {
             getToken();
         }
 
-        Expression *superclass = accept(tLt) ? expr() : Expression::Constant(context()->getRuntime()->getObjectClass());
+        Expression *superclass = accept(tLt) ? expr() : Expression::Constant(context->getRuntime()->getObjectClass());
 
         pushObjectContext();
-        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({term(), Expression::Self()}), context());
+        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({term(), Expression::Self()}));
         popContext();
 
         if (!name.empty())
@@ -455,7 +446,7 @@ Expression *Parser::term() {
         }
 
         pushContext();
-        e = Expression::Cached(Expression::FunctionDefinition(name, params, expr(), context()));
+        e = Expression::Cached(Expression::FunctionDefinition(name, params, expr()));
         popContext();
 
         if (!name.empty())
@@ -486,7 +477,7 @@ Expression *Parser::term() {
 
         if (check(tLBrace)) {
             pushObjectContext();
-            e = Expression::ContextResolution(e, Expression::Block({term(), Expression::Self()}), context());
+            e = Expression::ContextResolution(e, Expression::Block({term(), Expression::Self()}));
             popContext();
         }
     }

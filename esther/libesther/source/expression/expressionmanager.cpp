@@ -52,12 +52,12 @@ Expression *ExpressionManager::createConstant(Object *value) {
     return new ConstantExpression(value);
 }
 
-Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args, Context *context) {
-    return new ContextCallExpression(self, body, args, context);
+Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
+    return new ContextCallExpression(self, body, args);
 }
 
-Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body, Context *context) {
-    return new ContextResolutionExpression(self, body, context);
+Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body) {
+    return new ContextResolutionExpression(self, body);
 }
 
 Expression *ExpressionManager::createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
@@ -72,8 +72,8 @@ Expression *ExpressionManager::createEmpty() {
     return new EmptyExpression;
 }
 
-Expression *ExpressionManager::createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context) {
-    return new FunctionDefinitionExpression(name, params, body, context);
+Expression *ExpressionManager::createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body) {
+    return new FunctionDefinitionExpression(name, params, body);
 }
 
 Expression *ExpressionManager::createHere() {

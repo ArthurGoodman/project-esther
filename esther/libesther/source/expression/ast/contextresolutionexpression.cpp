@@ -3,8 +3,8 @@
 #include "context.h"
 #include "runtime.h"
 
-ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body, Context *context)
-    : self(self), body(body), context(context) {
+ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body)
+    : self(self), body(body) {
 }
 
 ContextResolutionExpression::~ContextResolutionExpression() {
@@ -13,13 +13,6 @@ ContextResolutionExpression::~ContextResolutionExpression() {
 }
 
 Object *ContextResolutionExpression::exec(Context *context) {
-    this->context->pushSelf(self->eval(context));
-    this->context->pushHere(context->getRuntime()->createObject());
-
-    Object *value = body->eval(this->context);
-
-    this->context->popSelf();
-    this->context->popHere();
-
+    Object *value = body->eval(context->childContext(self->eval(context), context->getRuntime()->createObject()));
     return value;
 }

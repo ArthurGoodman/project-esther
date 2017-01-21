@@ -4,10 +4,9 @@
 
 class ContextResolutionExpression : public Expression {
     Expression *self, *body;
-    Context *context;
 
 public:
-    ContextResolutionExpression(Expression *self, Expression *body, Context *context);
+    ContextResolutionExpression(Expression *self, Expression *body);
     ~ContextResolutionExpression();
 
     Object *exec(Context *context);

@@ -3,17 +3,13 @@
 #include "runtime.h"
 
 Object *InterpretedFunction::execute(Object *self, const std::vector<Object *> &args) {
-    context->pushSelf(self);
-    context->pushHere(context->getRuntime()->createObject());
+    Context *childContext = context->childContext(self, context->getRuntime()->createObject());
 
     std::vector<Object *>::const_iterator i = args.begin();
     for (const std::string &s : params)
-        context->setLocal(s, *i++);
+        childContext->setLocal(s, *i++);
 
-    Object *value = body->eval(context);
-
-    context->popSelf();
-    context->popHere();
+    Object *value = body->eval(childContext);
 
     return value;
 }

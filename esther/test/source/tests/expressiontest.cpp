@@ -13,8 +13,8 @@ ExpressionTest::ExpressionTest()
 void ExpressionTest::preTest() {
     runtime.initialize();
 
-    context.pushSelf(runtime.getMainObject());
-    context.pushHere(runtime.getMainObject());
+    context.setSelf(runtime.getMainObject());
+    context.setHere(runtime.getMainObject());
 }
 
 void ExpressionTest::postTest() {
@@ -56,7 +56,7 @@ void ExpressionTest::defineTests() {
     }).should.be.ok();
 
     $("Call", [=]() {
-        context.pushSelf(runtime.createInteger(3));
+        context.setSelf(runtime.createInteger(3));
         context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
@@ -82,13 +82,15 @@ void ExpressionTest::defineTests() {
     }).should.be.ok();
 
     $("ContextResolution", [=]() {
-        Context *childContext = context.childContext(runtime.createInteger(3), runtime.createObject());
-        e = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
+        //        Context *childContext = context.childContext(runtime.createInteger(3), runtime.createObject());
+        //        e = Expression::ContextResolution(Expression::Literal(4), Expression::Self(), childContext);
 
-        Object *value = e->eval(&context);
-        delete childContext;
-        return value->toString();
-    }).should.be = "4";
+        //        Object *value = e->eval(&context);
+        //        delete childContext;
+        //        return value->toString();
+        fail();
+    }).should.be.ok();
+    //            .should.be = "4";
 
     $("DirectCall", [=]() {
         e = Expression::DirectCall(Expression::Literal(4), "+", {Expression::Literal(5)});
@@ -96,7 +98,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "9";
 
     $("DynamicCall", [=]() {
-        context.pushSelf(runtime.createInteger(3));
+        context.setSelf(runtime.createInteger(3));
         context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
         Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());

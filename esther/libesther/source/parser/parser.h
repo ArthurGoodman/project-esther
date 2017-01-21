@@ -13,7 +13,7 @@ class Parser : public IParser {
         ObjectContext
     };
 
-    std::list<Context *> contexts;
+    Context *context;
     std::list<ContextType> contextTypes;
 
     Tokens tokens;
@@ -34,7 +34,6 @@ private:
     void pushObjectContext();
     void popContext();
 
-    Context *context();
     ContextType contextType();
 
     std::list<Expression *> parseBlock();
