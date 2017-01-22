@@ -4,7 +4,9 @@
 #include "runtime.h"
 
 IfExpression::IfExpression(Expression *condition, Expression *body, Expression *elseBody)
-    : condition(condition), body(body), elseBody(elseBody) {
+    : condition(condition)
+    , body(body)
+    , elseBody(elseBody) {
 }
 
 IfExpression::~IfExpression() {

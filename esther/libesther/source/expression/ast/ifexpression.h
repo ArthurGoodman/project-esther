@@ -9,5 +9,6 @@ public:
     IfExpression(Expression *condition, Expression *body, Expression *elseBody);
     ~IfExpression();
 
+protected:
     Object *exec(Context *context);
 };

@@ -9,5 +9,6 @@ public:
     IdentifierExpression(const std::string &name);
     ~IdentifierExpression();
 
+protected:
     Object *exec(Context *context);
 };

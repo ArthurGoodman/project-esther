@@ -6,7 +6,9 @@
 #include "function.h"
 
 ContextCallExpression::ContextCallExpression(Expression *self, Expression *body, const std::list<Expression *> &args)
-    : self(self), body(body), args(args) {
+    : self(self)
+    , body(body)
+    , args(args) {
 }
 
 ContextCallExpression::~ContextCallExpression() {
@@ -20,7 +22,7 @@ ContextCallExpression::~ContextCallExpression() {
 Object *ContextCallExpression::exec(Context *context) {
     Object *evaledSelf = self->eval(context);
 
-    Object *f = body->eval(context->childContext(self->eval(context), context->getRuntime()->createObject()));
+    Object *f = body->eval(context->childContext(evaledSelf, context->getRuntime()->createObject()));
 
     if (dynamic_cast<Function *>(f)) {
         std::vector<Object *> evaledArgs;

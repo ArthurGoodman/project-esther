@@ -15,5 +15,8 @@ Object *InterpretedFunction::execute(Object *self, const std::vector<Object *> &
 }
 
 InterpretedFunction::InterpretedFunction(Class *objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context)
-    : Function(objectClass, name, params.size()), params(params), body(body), context(context) {
+    : Function(objectClass, name, params.size())
+    , params(params)
+    , body(body)
+    , context(context) {
 }

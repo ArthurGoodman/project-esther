@@ -83,5 +83,3 @@ public:
 private:
     void setupMethods();
 };
-
-Object *runtimeCreateNewObject(Context *context...);

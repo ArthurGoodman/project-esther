@@ -4,7 +4,8 @@
 #include "runtime.h"
 
 ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body)
-    : self(self), body(body) {
+    : self(self)
+    , body(body) {
 }
 
 ContextResolutionExpression::~ContextResolutionExpression() {
@@ -13,6 +14,5 @@ ContextResolutionExpression::~ContextResolutionExpression() {
 }
 
 Object *ContextResolutionExpression::exec(Context *context) {
-    Object *value = body->eval(context->childContext(self->eval(context), context->getRuntime()->createObject()));
-    return value;
+    return body->eval(context->childContext(self->eval(context), context->getRuntime()->createObject()));
 }

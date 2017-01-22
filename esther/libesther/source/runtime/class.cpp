@@ -40,7 +40,9 @@ Object *Class::lookup(const std::string &name) const {
 }
 
 Class::Class(Class *classClass, const std::string &name, Class *superclass)
-    : Object(classClass), name(name), superclass(superclass) {
+    : Object(classClass)
+    , name(name)
+    , superclass(superclass) {
 }
 
 Object *Class::createNewInstance(const std::vector<Object *> &args) {

@@ -9,5 +9,6 @@ public:
     OrExpression(Expression *self, Expression *arg);
     ~OrExpression();
 
+protected:
     Object *exec(Context *context);
 };

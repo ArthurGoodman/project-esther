@@ -11,43 +11,43 @@ class Parser {
         }
 
         function eval
-            left.eval().oper(right.eval())
+            self.oper.'()'(self.left.eval(), self.right.eval())
 
         function inspect(indent) {
-            write(indent)
-            writeLine(self)
-            left.inspect(indent + "  ")
-            right.inspect(indent + "  ")
+            self.write(indent)
+            self.writeLine(self)
+            self.left.inspect(indent + "  ")
+            self.right.inspect(indent + "  ")
         }
     }
 
     class PlusNode < BinaryNode
         function initialize(left, right) {
-            super(left, right)
+            self.super(left, right)
             self.oper = Float.+
         }
 
     class MinusNode < BinaryNode
         function initialize(left, right) {
-            super(left, right)
+            self.super(left, right)
             self.oper = Float.-
         }
 
     class MultiplyNode < BinaryNode
         function initialize(left, right) {
-            super(left, right)
+            self.super(left, right)
             self.oper = Float.*
         }
 
     class DivideNode < BinaryNode
         function initialize(left, right) {
-            super(left, right)
+            self.super(left, right)
             self.oper = Float./
         }
 
     class PowerNode < BinaryNode
         function initialize(left, right) {
-            super(left, right)
+            self.super(left, right)
             self.oper = Float.**
         }
 
@@ -56,11 +56,11 @@ class Parser {
             self.value = value
 
         function eval
-            value
+            self.value
 
         function inspect(indent) {
-            write(indent)
-            writeLine(value)
+            self.write(indent)
+            self.writeLine(self.value)
         }
     }
 
@@ -78,54 +78,56 @@ class Parser {
         self.operators = "+-/*^()[]"
 
     function at(pos)
-        if pos >= code.size() '\0'
-        else code[pos]
+        if pos >= self.code.size() '\0'
+        else self.code[pos]
 
     function getToken {
-        while (at(pos).isSpace())
-            {pos} = pos + 1
+        parser = self
 
-        if (at(pos) == '\0') self.token = new Token('e')
-        else if (at(pos).isDigit()) self.token = new Token('e') {
-            {id} = 'n'
-            {text} = ""
+        while (at(self.pos).isSpace())
+            self.pos = self.pos + 1
 
-            while (at(pos).isDigit()) {
-                {text} = text + at(pos)
-                {pos} = pos + 1
+        if (at(self.pos) == '\0') self.token = new Token('e')
+        else if (at(self.pos).isDigit()) self.token = new Token('e') {
+            id = 'n'
+            text = ""
+
+            while (parser.at(parser.pos).isDigit()) {
+                text = self.text + parser.at(parser.pos)
+                parser.pos = parser.pos + 1
             }
             
-            if (at(pos) == '.') {
-                {text} = text + at(pos)
-                {pos} = pos + 1
+            if (parser.at(parser.pos) == '.') {
+                text = self.text + parser.at(parser.pos)
+                parser.pos = parser.pos + 1
 
-                while (at(pos).isDigit()) {
-                    {text} = text + at(pos)
-                    {pos} = pos + 1
+                while (parser.at(parser.pos).isDigit()) {
+                    text = self.text + parser.at(parser.pos)
+                    parser.pos = parser.pos + 1
                 }
             }
-        } else if (operators.contains(at(pos))) {
-            self.token = new Token(at(pos))
-            ;{pos} = pos + 1
-        } else if (at(pos).isLetter() || at(pos) == '_') self.token = new Token('e') {
-            {id} = 'u'
-            {text} = ""
+        } else if (self.operators.contains(at(self.pos))) {
+            self.token = new Token(at(self.pos))
+            self.pos = self.pos + 1
+        } else if (at(self.pos).isLetter() || at(self.pos) == '_') self.token = new Token('e') {
+            id = 'u'
+            text = ""
             
-            while (at(pos).isLetter() || at(pos) == '_') {
-                {text} = text + at(pos)
-                {pos} = pos + 1
+            while (parser.at(parser.pos).isLetter() || parser.at(parser.pos) == '_') {
+                text = text + parser.at(parser.pos)
+                parser.pos = parser.pos + 1
             }
         } else self.token = new Token('e') {
-            {id} = 'u'
-            {text} = at(pos)
-            {pos} = pos + 1
+            id = 'u'
+            text = parser.at(parser.pos)
+            parser.pos = parser.pos + 1
         }
     }
 
     function accept(id) {
         value = false
 
-        if (token.id == id) {
+        if (self.token.id == id) {
             getToken()
             value = true
         }
@@ -134,7 +136,7 @@ class Parser {
     }
 
     function check(id)
-        token.id == id
+        self.token.id == id
 
     function parse(code) {
         self.code = code
@@ -143,8 +145,8 @@ class Parser {
 
         getToken()
 
-        // while (token.id != 'e') {
-        //    token.inspect()
+        // while (self.token.id != 'e') {
+        //    self.token.inspect()
         //    getToken()
         // }
 
@@ -211,7 +213,7 @@ class Parser {
         node = null
 
         if (check('n')) {
-            node = new ValueNode(new Float(token.text))
+            node = new ValueNode(new Float(self.token.text))
             getToken()
         } else if (accept('(')) {
             node = addSub()

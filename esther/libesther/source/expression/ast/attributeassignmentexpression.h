@@ -11,5 +11,6 @@ public:
     AttributeAssignmentExpression(Expression *self, const std::string &name, Expression *value);
     ~AttributeAssignmentExpression();
 
+protected:
     Object *exec(Context *context);
 };

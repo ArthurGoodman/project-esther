@@ -60,13 +60,11 @@ SOURCES += \
     source/expression/ast/andexpression.cpp \
     source/expression/ast/attributeassignmentexpression.cpp \
     source/expression/ast/blockexpression.cpp \
-    source/expression/ast/callexpression.cpp \
     source/expression/ast/constantexpression.cpp \
     source/expression/ast/contextresolutionexpression.cpp \
     source/expression/ast/identifierexpression.cpp \
     source/expression/ast/ifexpression.cpp \
     source/expression/ast/literalexpression.cpp \
-    source/expression/ast/localassignmentexpression.cpp \
     source/expression/ast/loopexpression.cpp \
     source/expression/ast/notexpression.cpp \
     source/expression/ast/orexpression.cpp \
@@ -96,12 +94,14 @@ SOURCES += \
     source/expression/ast/dynamiccallexpression.cpp \
     source/runtime/rootclass/rootclass.cpp \
     source/expression/debug/literaldebugexpression.cpp \
-    source/expression/ast/nativecallexpression.cpp \
-    source/expression/ast/cachedexpression.cpp \
     source/expression/ast/classdefinitionexpression.cpp \
     source/expression/ast/functiondefinitionexpression.cpp \
     source/runtime/rootclass/numericclass.cpp \
-    source/expression/ast/contextcallexpression.cpp
+    source/expression/ast/assignmentexpression.cpp \
+    source/expression/ast/attributeexpression.cpp \
+    source/expression/ast/contextcallexpression.cpp \
+    source/expression/ast/localassignmentexpression.cpp \
+    source/expression/ast/callexpression.cpp
 
 HEADERS += \
     source/esther.h \
@@ -158,7 +158,6 @@ HEADERS += \
     source/expression/ast/identifierexpression.h \
     source/expression/ast/ifexpression.h \
     source/expression/ast/literalexpression.h \
-    source/expression/ast/localassignmentexpression.h \
     source/expression/ast/loopexpression.h \
     source/expression/ast/notexpression.h \
     source/expression/ast/orexpression.h \
@@ -185,7 +184,12 @@ HEADERS += \
     source/expression/ast/classdefinitionexpression.h \
     source/expression/ast/functiondefinitionexpression.h \
     source/runtime/rootclass/numericclass.h \
-    source/expression/ast/contextcallexpression.h
+    source/expression/ast/contextcallexpression.h \
+    source/expression/ast/assignmentexpression.h \
+    source/expression/ast/attributeexpression.h \
+    source/expression/ast/contextcallexpression.h \
+    source/expression/ast/localassignmentexpression.h \
+    source/expression/ast/callexpression.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

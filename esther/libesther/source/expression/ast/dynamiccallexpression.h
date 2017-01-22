@@ -10,5 +10,6 @@ public:
     DynamicCallExpression(Expression *body, const std::list<Expression *> &args);
     ~DynamicCallExpression();
 
+protected:
     Object *exec(Context *context);
 };

@@ -5,7 +5,8 @@
 #include "function.h"
 
 CallExpression::CallExpression(const std::string &name, const std::list<Expression *> &args)
-    : name(name), args(args) {
+    : name(name)
+    , args(args) {
 }
 
 CallExpression::~CallExpression() {
@@ -14,28 +15,28 @@ CallExpression::~CallExpression() {
 }
 
 Object *CallExpression::exec(Context *context) {
-    const std::pair<Object *, Object *> &f = context->getWithSource(name);
+    Object *f = context->get(name);
 
-    if (!f.first)
+    if (f == nullptr)
         Runtime::runtimeError("undefined identifier '" + name + "'");
 
-    if (dynamic_cast<Function *>(f.first)) {
+    if (dynamic_cast<Function *>(f)) {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size());
 
         for (Expression *e : args)
             evaledArgs << e->eval(context);
 
-        return ((Function *)f.first)->invoke(f.second, evaledArgs);
+        return ((Function *)f)->invoke(context->getSelf(), evaledArgs);
     } else {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size() + 1);
 
-        evaledArgs << f.second;
+        evaledArgs << context->getSelf();
 
         for (Expression *e : args)
             evaledArgs << e->eval(context);
 
-        return f.first->call("()", evaledArgs);
+        return f->call("()", evaledArgs);
     }
 }

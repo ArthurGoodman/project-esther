@@ -4,7 +4,8 @@
 #include "runtime.h"
 
 LoopExpression::LoopExpression(Expression *condition, Expression *body)
-    : condition(condition), body(body) {
+    : condition(condition)
+    , body(body) {
 }
 
 LoopExpression::~LoopExpression() {

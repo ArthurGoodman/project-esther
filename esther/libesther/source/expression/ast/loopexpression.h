@@ -9,5 +9,6 @@ public:
     LoopExpression(Expression *condition, Expression *body);
     ~LoopExpression();
 
+protected:
     Object *exec(Context *context);
 };

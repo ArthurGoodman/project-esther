@@ -38,11 +38,11 @@ void ObjectClass::setupMethods() {
         return self->getClass();
     });
 
-    defFunc("==", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("==", { this }, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(self->call("equals", args)->isTrue());
     });
 
-    defFunc("!=", {this}, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("!=", { this }, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(!self->call("equals", args)->isTrue());
     });
 

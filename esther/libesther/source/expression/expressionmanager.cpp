@@ -2,13 +2,13 @@
 
 #include "andexpression.h"
 #include "attributeassignmentexpression.h"
+#include "attributeexpression.h"
 #include "blockexpression.h"
-#include "cachedexpression.h"
 #include "callexpression.h"
 #include "classdefinitionexpression.h"
 #include "constantexpression.h"
-#include "contextcallexpression.h"
 #include "contextresolutionexpression.h"
+#include "contextcallexpression.h"
 #include "directcallexpression.h"
 #include "dynamiccallexpression.h"
 #include "emptyexpression.h"
@@ -18,8 +18,8 @@
 #include "ifexpression.h"
 #include "literalexpression.h"
 #include "localassignmentexpression.h"
+#include "assignmentexpression.h"
 #include "loopexpression.h"
-#include "nativecallexpression.h"
 #include "notexpression.h"
 #include "orexpression.h"
 #include "selfexpression.h"
@@ -28,36 +28,40 @@ Expression *ExpressionManager::createAnd(Expression *self, Expression *arg) {
     return new AndExpression(self, arg);
 }
 
+Expression *ExpressionManager::createAssignment(const std::string &name, Expression *value) {
+    return new AssignmentExpression(name, value);
+}
+
 Expression *ExpressionManager::createAttributeAssignment(Expression *self, const std::string &name, Expression *value) {
     return new AttributeAssignmentExpression(self, name, value);
+}
+
+Expression *ExpressionManager::createAttribute(Expression *self, const std::string &name) {
+    return new AttributeExpression(self, name);
 }
 
 Expression *ExpressionManager::createBlock(const std::list<Expression *> &nodes) {
     return new BlockExpression(nodes);
 }
 
-Expression *ExpressionManager::createCached(Expression *body) {
-    return new CachedExpression(body);
-}
-
 Expression *ExpressionManager::createCall(const std::string &name, const std::list<Expression *> &args) {
     return new CallExpression(name, args);
 }
 
-Expression *ExpressionManager::createClassDefinition(const std::string &name, Expression *superclass) {
-    return new ClassDefinitionExpression(name, superclass);
+Expression *ExpressionManager::createClassDefinition(const std::string &name, Expression *superclass, Expression *body) {
+    return new ClassDefinitionExpression(name, superclass, body);
 }
 
 Expression *ExpressionManager::createConstant(Object *value) {
     return new ConstantExpression(value);
 }
 
-Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
-    return new ContextCallExpression(self, body, args);
-}
-
 Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body) {
     return new ContextResolutionExpression(self, body);
+}
+
+Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
+    return new ContextCallExpression(self, body, args);
 }
 
 Expression *ExpressionManager::createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
@@ -98,10 +102,6 @@ Expression *ExpressionManager::createLocalAssignment(const std::string &name, Ex
 
 Expression *ExpressionManager::createLoop(Expression *condition, Expression *body) {
     return new LoopExpression(condition, body);
-}
-
-Expression *ExpressionManager::createNativeCall(Object *(*f)(Context *...), const std::list<Expression *> &args) {
-    return new NativeCallExpression(f, args);
 }
 
 Expression *ExpressionManager::createNot(Expression *self) {

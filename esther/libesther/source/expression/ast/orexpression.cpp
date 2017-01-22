@@ -1,7 +1,8 @@
 #include "orexpression.h"
 
 OrExpression::OrExpression(Expression *self, Expression *arg)
-    : self(self), arg(arg) {
+    : self(self)
+    , arg(arg) {
 }
 
 OrExpression::~OrExpression() {

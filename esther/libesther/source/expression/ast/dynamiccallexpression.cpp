@@ -5,7 +5,8 @@
 #include "function.h"
 
 DynamicCallExpression::DynamicCallExpression(Expression *body, const std::list<Expression *> &args)
-    : body(body), args(args) {
+    : body(body)
+    , args(args) {
 }
 
 DynamicCallExpression::~DynamicCallExpression() {

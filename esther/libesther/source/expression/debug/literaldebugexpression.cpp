@@ -3,7 +3,8 @@
 #if DEBUG_PARSER
 
 LiteralDebugExpression::LiteralDebugExpression(const Variant &value)
-    : DebugExpression(""), value(value) {
+    : DebugExpression("")
+    , value(value) {
 }
 
 std::string LiteralDebugExpression::toString() const {

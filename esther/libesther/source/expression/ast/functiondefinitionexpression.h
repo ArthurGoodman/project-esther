@@ -11,5 +11,6 @@ public:
     FunctionDefinitionExpression(const std::string &name, const std::list<std::string> &params, Expression *body);
     ~FunctionDefinitionExpression();
 
+protected:
     Object *exec(Context *context);
 };

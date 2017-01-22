@@ -3,7 +3,8 @@
 #include "context.h"
 
 LocalAssignmentExpression::LocalAssignmentExpression(const std::string &name, Expression *value)
-    : name(name), value(value) {
+    : name(name)
+    , value(value) {
 }
 
 LocalAssignmentExpression::~LocalAssignmentExpression() {

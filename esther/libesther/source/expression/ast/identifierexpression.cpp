@@ -13,7 +13,7 @@ IdentifierExpression::~IdentifierExpression() {
 Object *IdentifierExpression::exec(Context *context) {
     Object *value = context->get(name);
 
-    if (!value)
+    if (value == nullptr)
         Runtime::runtimeError("undefined identifier '" + name + "'");
 
     return value;

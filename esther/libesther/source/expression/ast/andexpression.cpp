@@ -1,7 +1,8 @@
 #include "andexpression.h"
 
 AndExpression::AndExpression(Expression *self, Expression *arg)
-    : self(self), arg(arg) {
+    : self(self)
+    , arg(arg) {
 }
 
 AndExpression::~AndExpression() {

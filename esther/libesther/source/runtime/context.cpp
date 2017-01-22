@@ -4,7 +4,10 @@
 #include "runtime.h"
 
 Context::Context(Runtime *runtime)
-    : runtime(runtime), parent(nullptr), self(runtime->getMainObject()), here(runtime->getMainObject()) {
+    : runtime(runtime)
+    , parent(nullptr)
+    , self(runtime->getMainObject())
+    , here(runtime->getMainObject()) {
 }
 
 Context::~Context() {
@@ -48,10 +51,6 @@ Object *Context::get(const std::string &name) const {
     if (hasLocal(name))
         return getLocal(name);
 
-    Object *temp = nullptr;
-    if ((temp = getSelf()->get(name)))
-        return temp;
-
     if (parent)
         return parent->get(name);
 
@@ -61,21 +60,16 @@ Object *Context::get(const std::string &name) const {
     return nullptr;
 }
 
-std::pair<Object *, Object *> Context::getWithSource(const std::string &name) const {
-    if (hasLocal(name))
-        return std::make_pair(getLocal(name), getSelf());
-
-    Object *temp = nullptr;
-    if ((temp = getSelf()->get(name)))
-        return std::make_pair(temp, getSelf());
+bool Context::set(const std::string &name, Object *value) {
+    if (hasLocal(name)) {
+        setLocal(name, value);
+        return true;
+    }
 
     if (parent)
-        return parent->getWithSource(name);
+        return parent->set(name, value);
 
-    if (runtime->hasRootClass(name))
-        return std::make_pair((Object *)runtime->getRootClass(name), runtime->getMainObject());
-
-    return std::make_pair(nullptr, nullptr);
+    return false;
 }
 
 Context *Context::childContext() {
@@ -84,14 +78,13 @@ Context *Context::childContext() {
 }
 
 Context *Context::childContext(Object *self, Object *here) {
-    Context *context = childContext();
-
-    context->setSelf(self);
-    context->setHere(here);
-
-    return context;
+    children << new Context(self, here, this);
+    return children.back();
 }
 
 Context::Context(Object *self, Object *here, Context *parent)
-    : runtime(parent->runtime), parent(parent), self(self), here(here) {
+    : runtime(parent->runtime)
+    , parent(parent)
+    , self(self)
+    , here(here) {
 }

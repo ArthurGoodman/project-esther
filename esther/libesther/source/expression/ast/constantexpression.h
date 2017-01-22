@@ -8,5 +8,6 @@ class ConstantExpression : public Expression {
 public:
     ConstantExpression(Object *value);
 
+protected:
     Object *exec(Context *context);
 };

@@ -6,7 +6,7 @@
 
 #if DEBUG_PARSER
 
-std::vector<const char *> DebugExpressionManager::typenames = {"Null", "Integer", "Float", "Character", "String"};
+std::vector<const char *> DebugExpressionManager::typenames = { "Null", "Integer", "Float", "Character", "String" };
 
 Expression *DebugExpressionManager::createAnd(Expression *self, Expression *arg) {
     std::list<DebugExpression *> arguments;

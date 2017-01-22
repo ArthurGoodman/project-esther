@@ -9,5 +9,6 @@ public:
     AndExpression(Expression *self, Expression *arg);
     ~AndExpression();
 
+protected:
     Object *exec(Context *context);
 };

@@ -11,5 +11,6 @@ public:
     DirectCallExpression(Expression *self, const std::string &name, const std::list<Expression *> &args);
     ~DirectCallExpression();
 
+protected:
     Object *exec(Context *context);
 };

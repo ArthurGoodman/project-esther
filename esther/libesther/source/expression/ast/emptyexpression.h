@@ -3,6 +3,6 @@
 #include "expression.h"
 
 class EmptyExpression : public Expression {
-public:
+protected:
     Object *exec(Context *context);
 };

@@ -9,5 +9,6 @@ class LiteralExpression : public Expression {
 public:
     LiteralExpression(const Variant &value);
 
+protected:
     Object *exec(Context *context);
 };

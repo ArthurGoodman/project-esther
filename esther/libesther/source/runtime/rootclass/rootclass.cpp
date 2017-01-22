@@ -7,7 +7,8 @@
 #include "utility.h"
 
 RootClass::RootClass(Runtime *runtime, const std::string &name, Class *superclass)
-    : Class(runtime->getClassClass(), name, superclass), runtime(runtime) {
+    : Class(runtime->getClassClass(), name, superclass)
+    , runtime(runtime) {
     runtime->registerRootClass(this);
 }
 

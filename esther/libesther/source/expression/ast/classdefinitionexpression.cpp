@@ -4,8 +4,10 @@
 #include "runtime.h"
 #include "class.h"
 
-ClassDefinitionExpression::ClassDefinitionExpression(const std::string &name, Expression *superclass)
-    : name(name), superclass(superclass) {
+ClassDefinitionExpression::ClassDefinitionExpression(const std::string &name, Expression *superclass, Expression *body)
+    : name(name)
+    , superclass(superclass)
+    , body(body) {
 }
 
 ClassDefinitionExpression::~ClassDefinitionExpression() {
@@ -20,5 +22,7 @@ Object *ClassDefinitionExpression::exec(Context *context) {
         Runtime::runtimeError("class expected");
     }
 
-    return context->getRuntime()->createClass(name, (Class *)evaledSuperclass);
+    Class *_class = context->getRuntime()->createClass(name, (Class *)evaledSuperclass);
+
+    return _class;
 }

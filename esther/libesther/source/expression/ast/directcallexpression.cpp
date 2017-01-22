@@ -3,7 +3,9 @@
 #include "common.h"
 
 DirectCallExpression::DirectCallExpression(Expression *self, const std::string &name, const std::list<Expression *> &args)
-    : self(self), name(name), args(args) {
+    : self(self)
+    , name(name)
+    , args(args) {
 }
 
 DirectCallExpression::~DirectCallExpression() {

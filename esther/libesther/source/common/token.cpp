@@ -1,11 +1,13 @@
 #include "token.h"
 
 Token::Token()
-    : id(-1), text("") {
+    : id(-1)
+    , text("") {
 }
 
 Token::Token(int id, const std::string &text)
-    : id(id), text(text) {
+    : id(id)
+    , text(text) {
 }
 
 int Token::getId() const {

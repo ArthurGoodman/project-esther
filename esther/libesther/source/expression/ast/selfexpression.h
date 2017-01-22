@@ -3,6 +3,6 @@
 #include "expression.h"
 
 class SelfExpression : public Expression {
-public:
+protected:
     Object *exec(Context *context);
 };

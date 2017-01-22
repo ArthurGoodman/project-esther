@@ -94,15 +94,18 @@ Variant::Variant()
 }
 
 Variant::Variant(char value)
-    : type(Char), character(value) {
+    : type(Char)
+    , character(value) {
 }
 
 Variant::Variant(int value)
-    : type(Integer), integer(value) {
+    : type(Integer)
+    , integer(value) {
 }
 
 Variant::Variant(double value)
-    : type(Real), real(value) {
+    : type(Real)
+    , real(value) {
 }
 
 Variant::Variant(const std::string &value)

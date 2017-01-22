@@ -5,7 +5,9 @@
 #include "function.h"
 
 FunctionDefinitionExpression::FunctionDefinitionExpression(const std::string &name, const std::list<std::string> &params, Expression *body)
-    : name(name), params(params), body(body) {
+    : name(name)
+    , params(params)
+    , body(body) {
 }
 
 FunctionDefinitionExpression::~FunctionDefinitionExpression() {

@@ -110,18 +110,18 @@ Expression *Parser::expr() {
 
     while (true) {
         if (accept(tAssign))
-            e = Expression::DirectCall(e, "=", {logicOr()});
+            e = Expression::DirectCall(e, "=", { logicOr() });
         // TODO: get rid of this, this is terrible
         else if (accept(tPlusAssign))
-            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "+", {logicOr()})});
+            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "+", { logicOr() }) });
         else if (accept(tMinusAssign))
-            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "-", {logicOr()})});
+            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "-", { logicOr() }) });
         else if (accept(tMultiplyAssign))
-            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "*", {logicOr()})});
+            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "*", { logicOr() }) });
         else if (accept(tDivideAssign))
-            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "/", {logicOr()})});
+            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "/", { logicOr() }) });
         else if (accept(tModAssign))
-            e = Expression::DirectCall(e, "=", {Expression::DirectCall(e, "%", {logicOr()})});
+            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "%", { logicOr() }) });
         else
             break;
     }
@@ -162,9 +162,9 @@ Expression *Parser::equality() {
 
     while (true) {
         if (accept(tEq))
-            e = Expression::DirectCall(e, "==", {relation()});
+            e = Expression::DirectCall(e, "==", { relation() });
         else if (accept(tNe))
-            e = Expression::DirectCall(e, "!=", {relation()});
+            e = Expression::DirectCall(e, "!=", { relation() });
         else
             break;
     }
@@ -177,13 +177,13 @@ Expression *Parser::relation() {
 
     while (true) {
         if (accept(tLt))
-            e = Expression::DirectCall(e, "<", {addSub()});
+            e = Expression::DirectCall(e, "<", { addSub() });
         else if (accept(tGt))
-            e = Expression::DirectCall(e, ">", {addSub()});
+            e = Expression::DirectCall(e, ">", { addSub() });
         else if (accept(tLe))
-            e = Expression::DirectCall(e, "<=", {addSub()});
+            e = Expression::DirectCall(e, "<=", { addSub() });
         else if (accept(tGe))
-            e = Expression::DirectCall(e, ">=", {addSub()});
+            e = Expression::DirectCall(e, ">=", { addSub() });
         else
             break;
     }
@@ -196,9 +196,9 @@ Expression *Parser::addSub() {
 
     while (true) {
         if (accept(tPlus))
-            e = Expression::DirectCall(e, "+", {mulDiv()});
+            e = Expression::DirectCall(e, "+", { mulDiv() });
         else if (accept(tMinus))
-            e = Expression::DirectCall(e, "-", {mulDiv()});
+            e = Expression::DirectCall(e, "-", { mulDiv() });
         else
             break;
     }
@@ -211,11 +211,11 @@ Expression *Parser::mulDiv() {
 
     while (true) {
         if (accept(tMultiply))
-            e = Expression::DirectCall(e, "*", {power()});
+            e = Expression::DirectCall(e, "*", { power() });
         else if (accept(tDivide))
-            e = Expression::DirectCall(e, "/", {power()});
+            e = Expression::DirectCall(e, "/", { power() });
         else if (accept(tMod))
-            e = Expression::DirectCall(e, "%", {power()});
+            e = Expression::DirectCall(e, "%", { power() });
         else
             break;
     }
@@ -228,7 +228,7 @@ Expression *Parser::power() {
 
     while (true) {
         if (accept(tPower))
-            e = Expression::DirectCall(e, "**", {negate()});
+            e = Expression::DirectCall(e, "**", { negate() });
         else
             break;
     }
@@ -251,9 +251,9 @@ Expression *Parser::preffix() {
     Expression *e = nullptr;
 
     if (accept(tPlus))
-        e = Expression::DirectCall(Expression::Literal('\0'), "+", {suffix()});
+        e = Expression::DirectCall(Expression::Literal('\0'), "+", { suffix() });
     else if (accept(tMinus))
-        e = Expression::DirectCall(Expression::Literal('\0'), "-", {suffix()});
+        e = Expression::DirectCall(Expression::Literal('\0'), "-", { suffix() });
     //    else if (accept(tDec))
     //        e = Expression::PreDecrement(suffix());
     //    else if (accept(tInc))
@@ -292,37 +292,27 @@ Expression *Parser::suffix() {
                     e = Expression::AttributeAssignment(e, name, logicOr());
                 else if (accept(tLPar)) {
                     const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-                    pushContext();
-                    e = Expression::ContextCall(e, Expression::Identifier(name), list);
-                    popContext();
+                    e = Expression::DirectCall(e, name, list);
 
                     if (!accept(tRPar))
                         error("unmatched parentheses");
-                } else {
-                    pushContext();
-                    e = Expression::ContextResolution(e, Expression::Identifier(name));
-                    popContext();
-                }
+                } else
+                    e = Expression::Attribute(e, name);
             } else {
                 Expression *body = term();
 
                 if (accept(tAssign)) {
                     pushContext();
-                    e = Expression::DirectCall(Expression::ContextResolution(e, body), "=", {logicOr()});
+                    e = Expression::DirectCall(Expression::ContextResolution(e, body), "=", { logicOr() });
                     popContext();
                 } else if (accept(tLPar)) {
                     const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-                    pushContext();
                     e = Expression::ContextCall(e, body, list);
-                    popContext();
 
                     if (!accept(tRPar))
                         error("unmatched parentheses");
-                } else {
-                    pushContext();
+                } else
                     e = Expression::ContextResolution(e, body);
-                    popContext();
-                }
             }
         }
     }
@@ -342,10 +332,10 @@ Expression *Parser::term() {
         getToken();
 
         if (accept(tAssign))
-            e = contextType() == ObjectContext ? Expression::AttributeAssignment(Expression::Self(), name, logicOr()) : Expression::LocalAssignment(name, logicOr());
+            e = contextType() == ObjectContext ? Expression::AttributeAssignment(Expression::Self(), name, logicOr()) : Expression::Assignment(name, logicOr());
         else if (accept(tLPar)) {
             const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-            e = Expression::Call(name, {list});
+            e = Expression::Call(name, list);
 
             if (!accept(tRPar))
                 error("unmatched parentheses");
@@ -415,11 +405,15 @@ Expression *Parser::term() {
         Expression *superclass = accept(tLt) ? expr() : Expression::Constant(context->getRuntime()->getObjectClass());
 
         pushObjectContext();
-        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({term(), Expression::Self()}));
+        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({ term(), Expression::Self() }));
         popContext();
 
-        if (!name.empty())
-            e = contextType() == ObjectContext ? Expression::AttributeAssignment(Expression::Self(), name, e) : Expression::LocalAssignment(name, e);
+        if (!name.empty()) {
+            e = Expression::LocalAssignment(name, e);
+
+            if (contextType() == ObjectContext)
+                e = Expression::AttributeAssignment(Expression::Self(), name, e);
+        }
     }
 
     else if (accept(tFunction)) {
@@ -446,16 +440,20 @@ Expression *Parser::term() {
         }
 
         pushContext();
-        e = Expression::Cached(Expression::FunctionDefinition(name, params, expr()));
+        e = Expression::FunctionDefinition(name, params, expr());
         popContext();
 
-        if (!name.empty())
-            e = contextType() == ObjectContext ? Expression::AttributeAssignment(Expression::Self(), name, e) : Expression::LocalAssignment(name, e);
+        if (!name.empty()) {
+            e = Expression::LocalAssignment(name, e);
+
+            if (contextType() == ObjectContext)
+                e = Expression::AttributeAssignment(Expression::Self(), name, e);
+        }
     }
 
     else if (accept(tNew)) {
         if (check(tLBrace))
-            e = Expression::NativeCall(runtimeCreateNewObject, {});
+            e = Expression::DirectCall(Expression::Constant(context->getRuntime()->getObjectClass()), "new", {});
         else {
             if (check(tId) || accept(tDollar)) {
                 e = Expression::Identifier(token->getText());
@@ -477,7 +475,7 @@ Expression *Parser::term() {
 
         if (check(tLBrace)) {
             pushObjectContext();
-            e = Expression::ContextResolution(e, Expression::Block({term(), Expression::Self()}));
+            e = Expression::ContextResolution(e, Expression::Block({ term(), Expression::Self() }));
             popContext();
         }
     }

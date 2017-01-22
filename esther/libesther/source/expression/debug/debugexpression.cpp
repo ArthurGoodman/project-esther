@@ -9,7 +9,8 @@
 int DebugExpression::indent = 0;
 
 DebugExpression::DebugExpression(const std::string &name, const std::list<DebugExpression *> &args)
-    : name(name), args(args) {
+    : name(name)
+    , args(args) {
 }
 
 DebugExpression::~DebugExpression() {

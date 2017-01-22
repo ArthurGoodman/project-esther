@@ -7,36 +7,40 @@ Expression *Expression::And(Expression *self, Expression *arg) {
     return IExpressionManager::instance()->createAnd(self, arg);
 }
 
+Expression *Expression::Assignment(const std::string &name, Expression *value) {
+    return IExpressionManager::instance()->createAssignment(name, value);
+}
+
 Expression *Expression::AttributeAssignment(Expression *self, const std::string &name, Expression *value) {
     return IExpressionManager::instance()->createAttributeAssignment(self, name, value);
+}
+
+Expression *Expression::Attribute(Expression *self, const std::string &name) {
+    return IExpressionManager::instance()->createAttribute(self, name);
 }
 
 Expression *Expression::Block(const std::list<Expression *> &nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
-Expression *Expression::Cached(Expression *body) {
-    return IExpressionManager::instance()->createCached(body);
-}
-
 Expression *Expression::Call(const std::string &name, const std::list<Expression *> &args) {
     return IExpressionManager::instance()->createCall(name, args);
 }
 
-Expression *Expression::ClassDefinition(const std::string &name, Expression *superclass) {
-    return IExpressionManager::instance()->createClassDefinition(name, superclass);
+Expression *Expression::ClassDefinition(const std::string &name, Expression *superclass, Expression *body) {
+    return IExpressionManager::instance()->createClassDefinition(name, superclass, body);
 }
 
 Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
-Expression *Expression::ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createContextCall(self, body, args);
-}
-
 Expression *Expression::ContextResolution(Expression *self, Expression *body) {
     return IExpressionManager::instance()->createContextResolution(self, body);
+}
+
+Expression *Expression::ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
+    return IExpressionManager::instance()->createContextCall(self, body, args);
 }
 
 Expression *Expression::DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
@@ -77,10 +81,6 @@ Expression *Expression::LocalAssignment(const std::string &name, Expression *val
 
 Expression *Expression::Loop(Expression *condition, Expression *body) {
     return IExpressionManager::instance()->createLoop(condition, body);
-}
-
-Expression *Expression::NativeCall(Object *(*f)(Context *...), const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createNativeCall(f, args);
 }
 
 Expression *Expression::Not(Expression *self) {

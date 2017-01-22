@@ -30,7 +30,7 @@ public:
     void setLocal(const std::string &name, Object *value);
 
     Object *get(const std::string &name) const;
-    std::pair<Object *, Object *> getWithSource(const std::string &name) const;
+    bool set(const std::string &name, Object *value);
 
     Context *childContext();
     Context *childContext(Object *self, Object *here);

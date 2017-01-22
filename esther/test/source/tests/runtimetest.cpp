@@ -17,14 +17,14 @@ void RuntimeTest::postTest() {
 
 void RuntimeTest::defineTests() {
     $("Integer.+", [=]() {
-        return ((ValueObject *)runtime.createInteger(4)->call("+", {runtime.createInteger(5)}))->getVariant().toInteger();
+        return ((ValueObject *)runtime.createInteger(4)->call("+", { runtime.createInteger(5) }))->getVariant().toInteger();
     }).should.be = 9;
 
     $("Integer.< -> true", [=]() {
-        return ((ValueObject *)runtime.createInteger(4)->call("<", {runtime.createInteger(5)}))->toString();
+        return ((ValueObject *)runtime.createInteger(4)->call("<", { runtime.createInteger(5) }))->toString();
     }).should.be = "true";
 
     $("Integer.< -> false", [=]() {
-        return ((ValueObject *)runtime.createInteger(5)->call("<", {runtime.createInteger(4)}))->toString();
+        return ((ValueObject *)runtime.createInteger(5)->call("<", { runtime.createInteger(4) }))->toString();
     }).should.be = "false";
 }

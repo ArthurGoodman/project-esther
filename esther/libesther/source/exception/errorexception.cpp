@@ -1,7 +1,8 @@
 #include "errorexception.h"
 
 ErrorException::ErrorException(const std::string &message, Position position)
-    : position(position), msg(message) {
+    : position(position)
+    , msg(message) {
 }
 
 std::string ErrorException::message() {

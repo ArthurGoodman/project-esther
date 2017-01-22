@@ -9,5 +9,6 @@ public:
     ContextResolutionExpression(Expression *self, Expression *body);
     ~ContextResolutionExpression();
 
+protected:
     Object *exec(Context *context);
 };

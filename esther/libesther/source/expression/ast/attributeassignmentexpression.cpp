@@ -3,7 +3,9 @@
 #include "context.h"
 
 AttributeAssignmentExpression::AttributeAssignmentExpression(Expression *self, const std::string &name, Expression *value)
-    : self(self), name(name), value(value) {
+    : self(self)
+    , name(name)
+    , value(value) {
 }
 
 AttributeAssignmentExpression::~AttributeAssignmentExpression() {

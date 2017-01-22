@@ -13,5 +13,6 @@ std::string ValueObject::toString() const {
 }
 
 ValueObject::ValueObject(Class *objectClass, const Variant &value)
-    : Object(objectClass), value(value) {
+    : Object(objectClass)
+    , value(value) {
 }

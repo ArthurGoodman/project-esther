@@ -3,6 +3,6 @@
 #include "expression.h"
 
 class HereExpression : public Expression {
-public:
+protected:
     Object *exec(Context *context);
 };

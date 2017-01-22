@@ -59,7 +59,7 @@ void IO::closeFile(const std::string &fileName) {
 }
 
 void IO::closeAllFiles() {
-    for(auto &i : files)
+    for (auto &i : files)
         i.second->close();
 
     files.clear();

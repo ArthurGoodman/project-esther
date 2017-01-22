@@ -161,7 +161,3 @@ void Runtime::setupMethods() {
     for (auto &rootClass : rootClasses)
         rootClass.second->setupMethods();
 }
-
-Object *runtimeCreateNewObject(Context *context...) {
-    return context->getRuntime()->createObject();
-}

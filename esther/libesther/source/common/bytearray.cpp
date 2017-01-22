@@ -11,7 +11,9 @@ void ByteArray::setInitialCapacity(uint initialCapacity) {
 }
 
 ByteArray::ByteArray()
-    : size(0), capacity(0), data(0) {
+    : size(0)
+    , capacity(0)
+    , data(0) {
 }
 
 ByteArray::ByteArray(const ByteArray &array)

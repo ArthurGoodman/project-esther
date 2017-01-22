@@ -24,5 +24,7 @@ std::string Function::toString() const {
 }
 
 Function::Function(Class *objectClass, const std::string &name, int arity)
-    : Object(objectClass), name(name), arity(arity) {
+    : Object(objectClass)
+    , name(name)
+    , arity(arity) {
 }
