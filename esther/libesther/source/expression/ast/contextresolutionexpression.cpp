@@ -3,9 +3,10 @@
 #include "context.h"
 #include "runtime.h"
 
-ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body)
+ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body, bool object)
     : self(self)
-    , body(body) {
+    , body(body)
+    , object(object) {
 }
 
 ContextResolutionExpression::~ContextResolutionExpression() {
@@ -14,5 +15,7 @@ ContextResolutionExpression::~ContextResolutionExpression() {
 }
 
 Object *ContextResolutionExpression::exec(Context *context) {
-    return body->eval(context->childContext(self->eval(context), context->getRuntime()->createObject()));
+    Object *evaledSelf = self->eval(context);
+    Object *evaledHere = object ? evaledSelf : context->getRuntime()->createObject();
+    return body->eval(context->childContext(evaledSelf, evaledHere));
 }

@@ -20,7 +20,7 @@ public:
     static Expression *Call(const std::string &name, const std::list<Expression *> &args);
     static Expression *ClassDefinition(const std::string &name, Expression *superclass, Expression *body = nullptr);
     static Expression *Constant(Object *value);
-    static Expression *ContextResolution(Expression *self, Expression *body);
+    static Expression *ContextResolution(Expression *self, Expression *body, bool object = true);
     static Expression *ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args);
     static Expression *DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
     static Expression *DynamicCall(Expression *body, const std::list<Expression *> &args);

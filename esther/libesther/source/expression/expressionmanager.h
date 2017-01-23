@@ -12,7 +12,7 @@ public:
     Expression *createCall(const std::string &name, const std::list<Expression *> &args);
     Expression *createClassDefinition(const std::string &name, Expression *superclass, Expression *body);
     Expression *createConstant(Object *value);
-    Expression *createContextResolution(Expression *self, Expression *body);
+    Expression *createContextResolution(Expression *self, Expression *body, bool object);
     Expression *createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args);
     Expression *createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
     Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args);

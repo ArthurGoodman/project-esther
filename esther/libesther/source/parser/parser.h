@@ -30,12 +30,6 @@ private:
     bool check(int id);
     bool accept(int id);
 
-    void pushContext();
-    void pushObjectContext();
-    void popContext();
-
-    ContextType contextType();
-
     std::list<Expression *> parseBlock();
     std::list<Expression *> parseList();
 
