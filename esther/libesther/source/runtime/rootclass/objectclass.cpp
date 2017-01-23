@@ -14,25 +14,25 @@ Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void ObjectClass::setupMethods() {
-    defFunc("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        if (!args.empty())
-            for (Object *arg : args)
-                IO::write(arg->call("toString", {}, runtime->getStringClass())->toString());
-        else
-            IO::write(self->call("toString", {}, runtime->getStringClass())->toString());
+    //    defFunc("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    //        if (!args.empty())
+    //            for (Object *arg : args)
+    //                IO::write(arg->call("toString", {}, runtime->getStringClass())->toString());
+    //        else
+    //            IO::write(self->call("toString", {}, runtime->getStringClass())->toString());
 
-        return runtime->getNull();
-    });
+    //        return runtime->getNull();
+    //    });
 
-    defFunc("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        if (!args.empty())
-            for (Object *arg : args)
-                IO::writeLine(arg->call("toString", {}, runtime->getStringClass())->toString());
-        else
-            IO::writeLine(self->call("toString", {}, runtime->getStringClass())->toString());
+    //    defFunc("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    //        if (!args.empty())
+    //            for (Object *arg : args)
+    //                IO::writeLine(arg->call("toString", {}, runtime->getStringClass())->toString());
+    //        else
+    //            IO::writeLine(self->call("toString", {}, runtime->getStringClass())->toString());
 
-        return runtime->getNull();
-    });
+    //        return runtime->getNull();
+    //    });
 
     defFunc("class", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return self->getClass();

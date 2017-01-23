@@ -7,7 +7,7 @@ Context::Context(Runtime *runtime)
     : runtime(runtime)
     , parent(nullptr)
     , self(runtime->getMainObject())
-    , here(runtime->getMainObject()) {
+    , here(self) {
 }
 
 Context::~Context() {

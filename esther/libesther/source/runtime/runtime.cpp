@@ -18,6 +18,7 @@
 #include "function.h"
 #include "valueobject.h"
 #include "context.h"
+#include "io.h"
 
 void Runtime::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
@@ -53,6 +54,31 @@ void Runtime::initialize() {
     functionClass = new FunctionClass(this);
 
     setupMethods();
+
+    Object *console = createObject();
+    mainObject->setAttribute("console", console);
+
+    Runtime *runtime = this;
+
+    console->setAttribute("write", createNativeFunction("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+                              if (!args.empty())
+                                  for (Object *arg : args)
+                                      IO::write(arg->call("toString", {}, runtime->getStringClass())->toString());
+                              else
+                                  IO::write(self->call("toString", {}, runtime->getStringClass())->toString());
+
+                              return runtime->getNull();
+                          }));
+
+    console->setAttribute("writeLine", createNativeFunction("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+                              if (!args.empty())
+                                  for (Object *arg : args)
+                                      IO::writeLine(arg->call("toString", {}, runtime->getStringClass())->toString());
+                              else
+                                  IO::writeLine(self->call("toString", {}, runtime->getStringClass())->toString());
+
+                              return runtime->getNull();
+                          }));
 }
 
 void Runtime::release() {

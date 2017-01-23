@@ -11,8 +11,6 @@
 #include "class.h"
 #include "function.h"
 
-#include <iostream>
-
 Expression *Parser::parse(Context *context, Tokens &tokens) {
     this->context = context;
     this->tokens.swap(tokens);

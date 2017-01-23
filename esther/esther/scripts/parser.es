@@ -14,8 +14,8 @@ class Parser {
             self.oper.'()'(self.left.eval(), self.right.eval())
 
         function inspect(indent) {
-            self.write(indent)
-            self.writeLine(self)
+            console.write(indent)
+            console.writeLine(self)
             self.left.inspect(indent + "  ")
             self.right.inspect(indent + "  ")
         }
@@ -59,8 +59,8 @@ class Parser {
             self.value
 
         function inspect(indent) {
-            self.write(indent)
-            self.writeLine(self.value)
+            console.write(indent)
+            console.writeLine(self.value)
         }
     }
 
@@ -71,7 +71,7 @@ class Parser {
         }
 
         function inspect
-            writeLine("<" + text + ", " + id + ">")
+            console.writeLine("<" + self.text + ", " + self.id + ">")
     }
 
     function initialize
