@@ -80,58 +80,62 @@ class Parser {
         @debugAST = false
     }
 
-    function at(pos) {
-        if pos >= @code.size() '\0'
-        else @code[pos]
-    }
+    function symbol
+        if (@pos >= @code.size())
+            '\0'
+        else
+            @code[@pos]
 
     function getToken {
-        p = self
+        parser = self
 
-        while (at(@pos).isSpace())
-            @pos = @pos + 1
+        while (symbol().isSpace())
+            @pos += 1
 
-        if (at(@pos) == '\0')
+        if (symbol() == '\0')
             @token = new Token('e')
-        else if (at(@pos).isDigit())
+        else if (symbol().isDigit())
             @token = new Token('e') {
                 @id = 'n'
                 @text = ""
 
-                while (p.at(p.pos).isDigit()) {
-                    @text += p.at(p.pos)
-                    p.pos = p.pos + 1
+                while (parser.symbol().isDigit()) {
+                    @text += parser.symbol()
+                    parser.pos += 1
                 }
                 
-                if (p.at(p.pos) == '.') {
-                    @text += p.at(p.pos)
-                    p.pos = p.pos + 1
+                if (parser.symbol() == '.') {
+                    @text += parser.symbol()
+                    parser.pos += 1
 
-                    while (p.at(p.pos).isDigit()) {
-                        @text += p.at(p.pos)
-                        p.pos = p.pos + 1
+                    while (parser.symbol().isDigit()) {
+                        @text += parser.symbol()
+                        parser.pos += 1
                     }
                 }
             }
-        else if (@operators.contains(at(@pos))) {
-            @token = new Token(at(@pos))
-            @pos = @pos + 1
-        } else if (at(@pos).isLetter() || at(@pos) == '_')
+        else if (@operators.contains(symbol())) {
+            @token = new Token(symbol())
+            @pos += 1
+        } else if (symbol().isLetter() || symbol() == '_')
             @token = new Token('e') {
                 @id = 'u'
                 @text = ""
                 
-                while (p.at(p.pos).isLetter() || p.at(p.pos) == '_') {
-                    @text += p.at(p.pos)
-                    p.pos = p.pos + 1
+                while (parser.symbol().isLetter() || parser.symbol() == '_') {
+                    @text += parser.symbol()
+                    parser.pos += 1
                 }
             }
         else
             @token = new Token('e') {
                 @id = 'u'
-                @text = p.at(p.pos)
-                p.pos = p.pos + 1
+                @text = parser.symbol()
+                parser.pos += 1
             }
+
+        if (@debugLexer)
+            @token.inspect()
     }
 
     function accept(id) {
@@ -160,25 +164,16 @@ class Parser {
 
         getToken()
 
-        node = null
+        node = addSub()
 
-        if (@debugLexer) {
-            while (!check('e')) {
-               @token.inspect()
-               getToken()
-            }
-        } else {
-            node = addSub()
-
-            if (!check('e'))
-                error("there is an excess part of expression")
-
-            if (@debugAST)
-                node.inspect("")
-        }
+        if (!check('e'))
+            error("there is an excess part of expression")
 
         if (node == null)
             node = new ValueNode(0)
+
+        if (@debugAST)
+            node.inspect("")
 
         node
     }
