@@ -1,133 +1,143 @@
 class Parser {
-    class Node {
+    class Node
         function eval
             null
-    }
 
     class BinaryNode < Node {
         super = function initialize(left, right) {
-            self.left = left
-            self.right = right
+            @left = left
+            @right = right
         }
 
         function eval
-            self.oper.'()'(self.left.eval(), self.right.eval())
+            @oper.call(@left.eval(), @right.eval())
 
         function inspect(indent) {
             console.write(indent)
             console.writeLine(self)
-            self.left.inspect(indent + "  ")
-            self.right.inspect(indent + "  ")
+            @left.inspect(indent + "  ")
+            @right.inspect(indent + "  ")
         }
     }
 
     class PlusNode < BinaryNode
         function initialize(left, right) {
-            self.super(left, right)
-            self.oper = Float.+
+            @super(left, right)
+            @oper = Float.+
         }
 
     class MinusNode < BinaryNode
         function initialize(left, right) {
-            self.super(left, right)
-            self.oper = Float.-
+            @super(left, right)
+            @oper = Float.-
         }
 
     class MultiplyNode < BinaryNode
         function initialize(left, right) {
-            self.super(left, right)
-            self.oper = Float.*
+            @super(left, right)
+            @oper = Float.*
         }
 
     class DivideNode < BinaryNode
         function initialize(left, right) {
-            self.super(left, right)
-            self.oper = Float./
+            @super(left, right)
+            @oper = Float./
         }
 
     class PowerNode < BinaryNode
         function initialize(left, right) {
-            self.super(left, right)
-            self.oper = Float.**
+            @super(left, right)
+            @oper = Float.**
         }
 
     class ValueNode < Node {
         function initialize(value)
-            self.value = value
+            @value = value
 
         function eval
-            self.value
+            @value
 
         function inspect(indent) {
             console.write(indent)
-            console.writeLine(self.value)
+            console.writeLine(@value)
         }
     }
 
     class Token {
         function initialize(id) {
-            self.text = String(id)
-            self.id = id
+            @text = String(id)
+            @id = id
         }
 
         function inspect
-            console.writeLine("<" + self.text + ", " + self.id + ">")
+            console.writeLine("<" + @text + ", " + @id + ">")
     }
 
-    function initialize
-        self.operators = "+-/*^()[]"
+    function initialize {
+        @operators = "+-/*^()[]"
 
-    function at(pos)
-        if pos >= self.code.size() '\0'
-        else self.code[pos]
+        @debugLexer = false
+        @debugAST = false
+    }
+
+    function at(pos) {
+        if pos >= @code.size() '\0'
+        else @code[pos]
+    }
 
     function getToken {
-        parser = self
+        p = self
 
-        while (at(self.pos).isSpace())
-            self.pos = self.pos + 1
+        while (at(@pos).isSpace())
+            @pos = @pos + 1
 
-        if (at(self.pos) == '\0') self.token = new Token('e')
-        else if (at(self.pos).isDigit()) self.token = new Token('e') {
-            id = 'n'
-            text = ""
+        if (at(@pos) == '\0')
+            @token = new Token('e')
+        else if (at(@pos).isDigit())
+            @token = new Token('e') {
+                @id = 'n'
+                @text = ""
 
-            while (parser.at(parser.pos).isDigit()) {
-                text = self.text + parser.at(parser.pos)
-                parser.pos = parser.pos + 1
-            }
-            
-            if (parser.at(parser.pos) == '.') {
-                text = self.text + parser.at(parser.pos)
-                parser.pos = parser.pos + 1
+                while (p.at(p.pos).isDigit()) {
+                    @text += p.at(p.pos)
+                    p.pos = p.pos + 1
+                }
+                
+                if (p.at(p.pos) == '.') {
+                    @text += p.at(p.pos)
+                    p.pos = p.pos + 1
 
-                while (parser.at(parser.pos).isDigit()) {
-                    text = self.text + parser.at(parser.pos)
-                    parser.pos = parser.pos + 1
+                    while (p.at(p.pos).isDigit()) {
+                        @text += p.at(p.pos)
+                        p.pos = p.pos + 1
+                    }
                 }
             }
-        } else if (self.operators.contains(at(self.pos))) {
-            self.token = new Token(at(self.pos))
-            self.pos = self.pos + 1
-        } else if (at(self.pos).isLetter() || at(self.pos) == '_') self.token = new Token('e') {
-            id = 'u'
-            text = ""
-            
-            while (parser.at(parser.pos).isLetter() || parser.at(parser.pos) == '_') {
-                text = text + parser.at(parser.pos)
-                parser.pos = parser.pos + 1
+        else if (@operators.contains(at(@pos))) {
+            @token = new Token(at(@pos))
+            @pos = @pos + 1
+        } else if (at(@pos).isLetter() || at(@pos) == '_')
+            @token = new Token('e') {
+                @id = 'u'
+                @text = ""
+                
+                while (p.at(p.pos).isLetter() || p.at(p.pos) == '_') {
+                    @text += p.at(p.pos)
+                    p.pos = p.pos + 1
+                }
             }
-        } else self.token = new Token('e') {
-            id = 'u'
-            text = parser.at(parser.pos)
-            parser.pos = parser.pos + 1
-        }
+        else
+            @token = new Token('e') {
+                @id = 'u'
+                @text = p.at(p.pos)
+                p.pos = p.pos + 1
+            }
     }
 
     function accept(id) {
         value = false
 
-        if (self.token.id == id) {
+        if (@token.id == id) {
             getToken()
             value = true
         }
@@ -136,27 +146,39 @@ class Parser {
     }
 
     function check(id)
-        self.token.id == id
+        @token.id == id
+
+    function error(message)
+        if (!@error)
+            @error = message
 
     function parse(code) {
-        self.code = code
-        self.pos = 0
-        self.token = null
+        @code = code
+        @pos = 0
+        @token = null
+        @error = null
 
         getToken()
 
-        // while (self.token.id != 'e') {
-        //    self.token.inspect()
-        //    getToken()
-        // }
+        node = null
 
-        node = addSub()
+        if (@debugLexer) {
+            while (!check('e')) {
+               @token.inspect()
+               getToken()
+            }
+        } else {
+            node = addSub()
+
+            if (!check('e'))
+                error("there is an excess part of expression")
+
+            if (@debugAST)
+                node.inspect("")
+        }
 
         if (node == null)
             node = new ValueNode(0)
-
-        // if (!check('e'))
-        //     ...
 
         node
     }
@@ -213,22 +235,36 @@ class Parser {
         node = null
 
         if (check('n')) {
-            node = new ValueNode(new Float(self.token.text))
+            node = new ValueNode(Float(@token.text))
             getToken()
         } else if (accept('(')) {
             node = addSub()
 
             if (!accept(')'))
-                node = null
+                error("unmatched parentheses")
         } else if (accept('[')) {
             node = addSub()
 
             if (!accept(']'))
-                node = null
-        }
+                error("unmatched brackets")
+        } else if(check('e'))
+            error("unexpected end of expression")
+        else if(check('u'))
+            error("unknown token '" + @token.text + "'")
+        else
+            error("unexpected token '" + @token.text + "'")
 
         node
     }
 }
 
-new Parser.parse("2 * (3 + 2^-1) - 6").eval()
+parser = new Parser
+// parser.debugLexer = true
+// parser.debugAST = true
+
+node = parser.parse("2 * (3 + 2^-1) - 6")
+
+if (parser.error)
+    console.writeLine("error: " + parser.error)
+else
+    node.eval()

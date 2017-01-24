@@ -14,26 +14,6 @@ Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void ObjectClass::setupMethods() {
-    //    defFunc("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-    //        if (!args.empty())
-    //            for (Object *arg : args)
-    //                IO::write(arg->call("toString", {}, runtime->getStringClass())->toString());
-    //        else
-    //            IO::write(self->call("toString", {}, runtime->getStringClass())->toString());
-
-    //        return runtime->getNull();
-    //    });
-
-    //    defFunc("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-    //        if (!args.empty())
-    //            for (Object *arg : args)
-    //                IO::writeLine(arg->call("toString", {}, runtime->getStringClass())->toString());
-    //        else
-    //            IO::writeLine(self->call("toString", {}, runtime->getStringClass())->toString());
-
-    //        return runtime->getNull();
-    //    });
-
     defFunc("class", [=](Object *self, const std::vector<Object *> &) -> Object * {
         return self->getClass();
     });
@@ -52,6 +32,15 @@ void ObjectClass::setupMethods() {
 
     defFunc("equals", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         return runtime->toBoolean(self == args[0]);
+    });
+
+    defFunc("is", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+        if (!dynamic_cast<Class *>(args[0])) {
+            Runtime::runtimeError(getName() + ".is: invalid argument");
+            return nullptr;
+        }
+
+        return runtime->toBoolean(self->is((Class *)args[0]));
     });
 }
 

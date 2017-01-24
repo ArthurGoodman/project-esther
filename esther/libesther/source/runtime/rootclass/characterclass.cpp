@@ -47,6 +47,10 @@ void CharacterClass::setupMethods() {
         return runtime->toBoolean(Utility::isDigit(((ValueObject *)self)->getVariant().toChar()));
     });
 
+    defFunc("isLetter", [=](Object *self, const std::vector<Object *> &) -> Object * {
+        return runtime->toBoolean(Utility::isLetter(((ValueObject *)self)->getVariant().toChar()));
+    });
+
     defValueObjectFunc("=", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toChar());
         return self;

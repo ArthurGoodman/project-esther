@@ -18,9 +18,9 @@ Object *FunctionClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void FunctionClass::setupMethods() {
-    defFunc("()", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("call", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (args.empty())
-            Runtime::runtimeError(getName() + ".(): invalid number of arguments");
+            Runtime::runtimeError(getName() + ".call: invalid number of arguments");
 
         Object *actualSelf = args[0];
 
@@ -29,6 +29,8 @@ void FunctionClass::setupMethods() {
 
         return ((Function *)self)->invoke(actualSelf, actualArgs);
     });
+
+    setAttribute("()", getAttribute("call"));
 }
 
 FunctionClass::FunctionClass(Runtime *runtime)

@@ -33,6 +33,8 @@ private:
     std::list<Expression *> parseBlock();
     std::list<Expression *> parseList();
 
+    Expression *parseDot(Expression *e);
+
     Expression *parseIdentifier();
 
     Expression *expr();

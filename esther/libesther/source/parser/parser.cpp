@@ -69,6 +69,42 @@ std::list<Expression *> Parser::parseList() {
     return nodes;
 }
 
+Expression *Parser::parseDot(Expression *e) {
+    if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
+        token->setId(tId);
+
+    if (check(tId) || accept(tDollar)) {
+        const std::string &name = token->getText();
+        getToken();
+
+        if (accept(tAssign))
+            e = Expression::AttributeAssignment(e, name, logicOr());
+        else if (accept(tLPar)) {
+            const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
+            e = Expression::DirectCall(e, name, list);
+
+            if (!accept(tRPar))
+                error("unmatched parentheses");
+        } else
+            e = Expression::Attribute(e, name);
+    } else {
+        Expression *body = term();
+
+        if (accept(tAssign))
+            e = Expression::DirectCall(Expression::ContextResolution(e, body), "=", { logicOr() });
+        else if (accept(tLPar)) {
+            const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
+            e = Expression::ContextCall(e, body, list);
+
+            if (!accept(tRPar))
+                error("unmatched parentheses");
+        } else
+            e = Expression::ContextResolution(e, body);
+    }
+
+    return e;
+}
+
 Expression *Parser::parseIdentifier() {
     Expression *e = nullptr;
 
@@ -262,39 +298,8 @@ Expression *Parser::suffix() {
 
             if (!accept(tRBracket))
                 error("unmatched brackets");
-        } else if (accept(tDot)) {
-            if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
-                token->setId(tId);
-
-            if (check(tId) || accept(tDollar)) {
-                const std::string &name = token->getText();
-                getToken();
-
-                if (accept(tAssign))
-                    e = Expression::AttributeAssignment(e, name, logicOr());
-                else if (accept(tLPar)) {
-                    const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-                    e = Expression::DirectCall(e, name, list);
-
-                    if (!accept(tRPar))
-                        error("unmatched parentheses");
-                } else
-                    e = Expression::Attribute(e, name);
-            } else {
-                Expression *body = term();
-
-                if (accept(tAssign))
-                    e = Expression::DirectCall(Expression::ContextResolution(e, body), "=", { logicOr() });
-                else if (accept(tLPar)) {
-                    const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-                    e = Expression::ContextCall(e, body, list);
-
-                    if (!accept(tRPar))
-                        error("unmatched parentheses");
-                } else
-                    e = Expression::ContextResolution(e, body);
-            }
-        }
+        } else if (accept(tDot))
+            e = parseDot(e);
     }
     //    else if (realAccept(tDec))
     //        e = Expression::PostDecrement(e);
@@ -444,6 +449,9 @@ Expression *Parser::term() {
         if (check(tLBrace))
             e = Expression::ContextResolution(e, Expression::Block({ term(), Expression::Self() }), true);
     }
+
+    else if (accept(tAt))
+        e = parseDot(Expression::Self());
 
     else if (accept(tLPar)) {
         e = expr();

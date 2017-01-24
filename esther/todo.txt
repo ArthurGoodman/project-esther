@@ -1,0 +1,5 @@
+Think about:
+    - simplifying calls 
+
+Implement:
+    - var keyword
