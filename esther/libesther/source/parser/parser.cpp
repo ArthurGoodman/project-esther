@@ -328,6 +328,16 @@ Expression *Parser::term() {
             e = Expression::Identifier(name);
     }
 
+    else if (accept(tVar)) {
+        if (!check(tId) && !accept(tDollar))
+            error("identifier expected");
+
+        const std::string &name = token->getText();
+        getToken();
+
+        e = Expression::LocalAssignment(name, accept(tAssign) ? logicOr() : Expression::Constant(context->getRuntime()->getNull()));
+    }
+
     else if (check(tInteger)) {
         e = Expression::Literal(Utility::fromString<int>(token->getText()));
         getToken();

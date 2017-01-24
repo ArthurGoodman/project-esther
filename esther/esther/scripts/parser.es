@@ -87,7 +87,7 @@ class Parser {
             @code[@pos]
 
     function getToken {
-        parser = self
+        var parser = self
 
         while (symbol().isSpace())
             @pos += 1
@@ -139,7 +139,7 @@ class Parser {
     }
 
     function accept(id) {
-        value = false
+        var value = false
 
         if (@token.id == id) {
             getToken()
@@ -164,7 +164,7 @@ class Parser {
 
         getToken()
 
-        node = addSub()
+        var node = addSub()
 
         if (!check('e'))
             error("there is an excess part of expression")
@@ -179,7 +179,7 @@ class Parser {
     }
 
     function addSub {
-        node = mulDiv()
+        var node = mulDiv()
 
         while (check('+') || check('-')) {
             if (accept('+'))
@@ -192,7 +192,7 @@ class Parser {
     }
 
     function mulDiv {
-        node = power()
+        var node = power()
 
         while (check('*') || check('/')) {
             if (accept('*'))
@@ -205,7 +205,7 @@ class Parser {
     }
 
     function power {
-        node = unary()
+        var node = unary()
 
         while (accept('^'))
             node = new PowerNode(node, unary())
@@ -214,7 +214,7 @@ class Parser {
     }
 
     function unary {
-        node = null
+        var node = null
 
         if (accept('+'))
             node = new PlusNode(new ValueNode(0), term())
@@ -227,7 +227,7 @@ class Parser {
     }
 
     function term {
-        node = null
+        var node = null
 
         if (check('n')) {
             node = new ValueNode(Float(@token.text))
