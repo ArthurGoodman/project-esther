@@ -1,6 +1,6 @@
 #include "classclass.h"
 
-#include "runtime.h"
+#include "esther.h"
 
 Class *ClassClass::createClass(const std::string &name, Class *superclass) {
     return new Class(this, name, superclass ? superclass : getSuperclass());
@@ -16,10 +16,10 @@ void ClassClass::setupMethods() {
     });
 
     defFunc("superclass", [=](Object *self, const std::vector<Object *> &) -> Object * {
-        return ((Class *)self)->getSuperclass() ? ((Class *)self)->getSuperclass() : runtime->getNull();
+        return ((Class *)self)->getSuperclass() ? ((Class *)self)->getSuperclass() : esther->getNull();
     });
 }
 
-ClassClass::ClassClass(Runtime *runtime)
-    : RootClass(runtime, "Class", nullptr) {
+ClassClass::ClassClass(Esther *e)
+    : RootClass(e, "Class", nullptr) {
 }

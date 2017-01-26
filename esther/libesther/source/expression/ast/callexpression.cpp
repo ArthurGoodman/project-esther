@@ -1,7 +1,7 @@
 #include "callexpression.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 #include "function.h"
 
 CallExpression::CallExpression(const std::string &name, const std::list<Expression *> &args)
@@ -18,7 +18,7 @@ Object *CallExpression::exec(Context *context) {
     Object *f = context->get(name);
 
     if (f == nullptr)
-        Runtime::runtimeError("undefined identifier '" + name + "'");
+        Esther::runtimeError("undefined identifier '" + name + "'");
 
     if (dynamic_cast<Function *>(f)) {
         std::vector<Object *> evaledArgs;

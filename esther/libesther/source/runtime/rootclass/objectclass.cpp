@@ -1,7 +1,7 @@
 #include "objectclass.h"
 
 #include "io.h"
-#include "runtime.h"
+#include "esther.h"
 #include "valueobject.h"
 #include "stringclass.h"
 
@@ -10,7 +10,7 @@ Object *ObjectClass::createObject(Class *objectClass) {
 }
 
 Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
-    return createObject(runtime->getObjectClass());
+    return createObject(esther->getObjectClass());
 }
 
 void ObjectClass::setupMethods() {
@@ -19,31 +19,31 @@ void ObjectClass::setupMethods() {
     });
 
     defFunc("==", { this }, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return runtime->toBoolean(self->call("equals", args)->isTrue());
+        return esther->toBoolean(self->call("equals", args)->isTrue());
     });
 
     defFunc("!=", { this }, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return runtime->toBoolean(!self->call("equals", args)->isTrue());
+        return esther->toBoolean(!self->call("equals", args)->isTrue());
     });
 
     defFunc("toString", [=](Object *self, const std::vector<Object *> &) -> Object * {
-        return runtime->createString(self->toString());
+        return esther->createString(self->toString());
     });
 
     defFunc("equals", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return runtime->toBoolean(self == args[0]);
+        return esther->toBoolean(self == args[0]);
     });
 
     defFunc("is", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<Class *>(args[0])) {
-            Runtime::runtimeError(getName() + ".is: invalid argument");
+            Esther::runtimeError(getName() + ".is: invalid argument");
             return nullptr;
         }
 
-        return runtime->toBoolean(self->is((Class *)args[0]));
+        return esther->toBoolean(self->is((Class *)args[0]));
     });
 }
 
-ObjectClass::ObjectClass(Runtime *runtime)
-    : RootClass(runtime, "Object", nullptr) {
+ObjectClass::ObjectClass(Esther *e)
+    : RootClass(e, "Object", nullptr) {
 }

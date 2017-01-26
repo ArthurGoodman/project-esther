@@ -1,13 +1,13 @@
 #pragma once
 
 #include "testset.h"
-#include "runtime/runtime.h"
+#include "runtime/esther.h"
 #include "runtime/context.h"
 
 class Expression;
 
 class ExpressionTest : public unit::TestSet {
-    Runtime runtime;
+    Esther esther;
     Context context;
     Expression *e;
 

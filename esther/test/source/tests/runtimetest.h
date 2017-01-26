@@ -1,10 +1,10 @@
 #pragma once
 
 #include "testset.h"
-#include "runtime/runtime.h"
+#include "runtime/esther.h"
 
 class RuntimeTest : public unit::TestSet {
-    Runtime runtime;
+    Esther esther;
 
 public:
     RuntimeTest();

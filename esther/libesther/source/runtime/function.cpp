@@ -1,7 +1,7 @@
 #include "function.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 #include "utility.h"
 
 std::string Function::getName() const {
@@ -14,7 +14,7 @@ void Function::setName(const std::string &name) {
 
 Object *Function::invoke(Object *self, const std::vector<Object *> &args) {
     if (arity >= 0 && arity != (int)args.size())
-        Runtime::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(arity) + ")");
+        Esther::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(arity) + ")");
 
     return execute(self, args);
 }

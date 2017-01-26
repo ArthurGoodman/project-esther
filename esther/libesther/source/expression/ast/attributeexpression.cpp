@@ -1,7 +1,7 @@
 #include "attributeexpression.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 
 AttributeExpression::AttributeExpression(Expression *self, const std::string &name)
     : self(self)
@@ -16,7 +16,7 @@ Object *AttributeExpression::exec(Context *context) {
     Object *value = self->eval(context)->get(name);
 
     if (value == nullptr)
-        Runtime::runtimeError("undefined identifier '" + name + "'");
+        Esther::runtimeError("undefined identifier '" + name + "'");
 
     return value;
 }

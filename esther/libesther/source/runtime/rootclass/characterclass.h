@@ -5,7 +5,7 @@
 class ValueObject;
 
 class CharacterClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     ValueObject *createCharacter(char value);
@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    CharacterClass(Runtime *runtime);
+    CharacterClass(Esther *e);
 };

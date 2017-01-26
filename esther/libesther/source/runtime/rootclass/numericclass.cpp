@@ -1,6 +1,6 @@
 #include "numericclass.h"
 
-#include "runtime.h"
+#include "esther.h"
 
 void NumericClass::setupMethods() {
     defOper("+", [](const Variant &a, const Variant &b) -> Variant {
@@ -48,6 +48,6 @@ void NumericClass::setupMethods() {
     });
 }
 
-NumericClass::NumericClass(Runtime *runtime)
-    : RootClass(runtime, "Numeric", runtime->getObjectClass()) {
+NumericClass::NumericClass(Esther *e)
+    : RootClass(e, "Numeric", e->getObjectClass()) {
 }

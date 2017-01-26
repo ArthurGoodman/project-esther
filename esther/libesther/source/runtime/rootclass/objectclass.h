@@ -3,7 +3,7 @@
 #include "rootclass.h"
 
 class ObjectClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     Object *createObject(Class *objectClass);
@@ -14,5 +14,5 @@ protected:
     void setupMethods();
 
 private:
-    ObjectClass(Runtime *runtime);
+    ObjectClass(Esther *e);
 };

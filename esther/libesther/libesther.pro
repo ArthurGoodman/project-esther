@@ -22,7 +22,6 @@ INCLUDEPATH = \
     source/variant
 
 SOURCES += \
-    source/esther.cpp \
     source/common/bytearray.cpp \
     source/common/io.cpp \
     source/common/logger.cpp \
@@ -36,8 +35,6 @@ SOURCES += \
     source/parser/parser.cpp \
     source/lexer/lexer.cpp \
     source/expression/expression.cpp \
-    source/engine.cpp \
-    source/runtime/runtime.cpp \
     source/runtime/class.cpp \
     source/exception/breakexception.cpp \
     source/exception/continueexception.cpp \
@@ -101,10 +98,11 @@ SOURCES += \
     source/expression/ast/attributeexpression.cpp \
     source/expression/ast/contextcallexpression.cpp \
     source/expression/ast/localassignmentexpression.cpp \
-    source/expression/ast/callexpression.cpp
+    source/expression/ast/callexpression.cpp \
+    source/estherstaticinterface.cpp \
+    source/runtime/esther.cpp
 
 HEADERS += \
-    source/esther.h \
     source/common/bytearray.h \
     source/common/common.h \
     source/common/io.h \
@@ -120,8 +118,6 @@ HEADERS += \
     source/parser/parser.h \
     source/lexer/lexer.h \
     source/expression/expression.h \
-    source/engine.h \
-    source/runtime/runtime.h \
     source/runtime/class.h \
     source/exception/breakexception.h \
     source/exception/continueexception.h \
@@ -189,7 +185,9 @@ HEADERS += \
     source/expression/ast/attributeexpression.h \
     source/expression/ast/contextcallexpression.h \
     source/expression/ast/localassignmentexpression.h \
-    source/expression/ast/callexpression.h
+    source/expression/ast/callexpression.h \
+    source/estherstaticinterface.h \
+    source/runtime/esther.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

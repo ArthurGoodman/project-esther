@@ -3,7 +3,7 @@
 #include "object.h"
 #include "variant/variant.h"
 
-class Runtime;
+class Esther;
 
 class ValueObject : public Object {
     friend class IntegerClass;

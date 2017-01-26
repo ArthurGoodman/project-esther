@@ -3,7 +3,7 @@
 #include "object.h"
 
 class Null : public Object {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     std::string toString() const;

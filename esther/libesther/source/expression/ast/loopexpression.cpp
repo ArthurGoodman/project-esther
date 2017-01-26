@@ -1,7 +1,7 @@
 #include "loopexpression.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 
 LoopExpression::LoopExpression(Expression *condition, Expression *body)
     : condition(condition)

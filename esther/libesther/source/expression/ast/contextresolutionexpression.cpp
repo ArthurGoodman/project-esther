@@ -1,7 +1,7 @@
 #include "contextresolutionexpression.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 
 ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body, bool object)
     : self(self)

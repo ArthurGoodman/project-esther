@@ -6,15 +6,15 @@
 #include "class.h"
 #include "variant.h"
 
-class Runtime;
+class Esther;
 
 class RootClass : public Class {
-    friend class Runtime;
+    friend class Esther;
 
 protected:
-    Runtime *runtime;
+    Esther *esther;
 
-    RootClass(Runtime *runtime, const std::string &name, Class *superclass);
+    RootClass(Esther *esther, const std::string &name, Class *superclass);
 
     virtual void setupMethods() = 0;
 

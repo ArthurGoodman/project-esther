@@ -2,7 +2,7 @@
 
 #include "nativefunction.h"
 #include "interpretedfunction.h"
-#include "runtime.h"
+#include "esther.h"
 
 Function *FunctionClass::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
     return new NativeFunction(this, name, arity, body);
@@ -13,14 +13,14 @@ Function *FunctionClass::createInterpretedFunction(const std::string &name, cons
 }
 
 Object *FunctionClass::createNewInstance(const std::vector<Object *> &) {
-    Runtime::runtimeError("cannot create new instance of Function class yet...");
+    Esther::runtimeError("cannot create new instance of Function class yet...");
     return nullptr;
 }
 
 void FunctionClass::setupMethods() {
     defFunc("call", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (args.empty())
-            Runtime::runtimeError(getName() + ".call: invalid number of arguments");
+            Esther::runtimeError(getName() + ".call: invalid number of arguments");
 
         Object *actualSelf = args[0];
 
@@ -33,6 +33,6 @@ void FunctionClass::setupMethods() {
     setAttribute("()", getAttribute("call"));
 }
 
-FunctionClass::FunctionClass(Runtime *runtime)
-    : RootClass(runtime, "Function", runtime->getObjectClass()) {
+FunctionClass::FunctionClass(Esther *e)
+    : RootClass(e, "Function", e->getObjectClass()) {
 }

@@ -3,7 +3,7 @@
 #include "Rootclass.h"
 
 class BooleanClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 protected:
     Object *createNewInstance(const std::vector<Object *> &args);
@@ -11,5 +11,5 @@ protected:
     void setupMethods();
 
 private:
-    BooleanClass(Runtime *runtime);
+    BooleanClass(Esther *e);
 };

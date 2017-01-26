@@ -4,8 +4,10 @@
 #include <list>
 #include <vector>
 #include <functional>
+#include <stack>
 
 #include "variant/variant.h"
+#include "common/source.h"
 
 class Object;
 class Class;
@@ -25,7 +27,7 @@ class StringClass;
 class ClassClass;
 class FunctionClass;
 
-class Runtime {
+class Esther {
     Object *mainObject = nullptr;
     RootClass *objectClass = nullptr;
 
@@ -44,11 +46,14 @@ class Runtime {
 
     std::map<std::string, RootClass *> rootClasses;
 
+    std::stack<Source> sources;
+    std::stack<std::string> fileNames;
+
 public:
     static void runtimeError(const std::string &message);
 
-    void initialize();
-    void release();
+    Esther();
+    ~Esther();
 
     Object *getMainObject() const;
     Class *getObjectClass() const;
@@ -80,6 +85,22 @@ public:
     Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
     Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
 
+    Object *run(const std::string &script);
+    Object *runFile(const std::string &fileName);
+
+    //private:
+    void initialize();
+    void release();
+
 private:
     void setupMethods();
+
+    void pushSource(const std::string &source);
+    void popSource();
+
+    void pushFileName(const std::string &fileName);
+    void popFileName();
+
+    const Source &source();
+    const std::string &fileName();
 };

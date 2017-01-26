@@ -1,7 +1,7 @@
 #include "notexpression.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 
 NotExpression::NotExpression(Expression *self)
     : self(self) {

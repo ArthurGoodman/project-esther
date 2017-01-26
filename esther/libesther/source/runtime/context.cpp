@@ -1,9 +1,9 @@
 #include "context.h"
 
 #include "object.h"
-#include "runtime.h"
+#include "esther.h"
 
-Context::Context(Runtime *runtime)
+Context::Context(Esther *runtime)
     : runtime(runtime)
     , parent(nullptr)
     , self(runtime->getMainObject())
@@ -31,7 +31,7 @@ void Context::setHere(Object *here) {
     this->here = here;
 }
 
-Runtime *Context::getRuntime() const {
+Esther *Context::getRuntime() const {
     return runtime;
 }
 

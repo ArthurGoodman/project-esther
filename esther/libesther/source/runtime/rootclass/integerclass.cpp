@@ -1,7 +1,7 @@
 #include "integerclass.h"
 
 #include "valueobject.h"
-#include "runtime.h"
+#include "esther.h"
 #include "numericclass.h"
 #include "function.h"
 
@@ -14,23 +14,23 @@ Object *IntegerClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void IntegerClass::setupMethods() {
-    setAttribute("()", runtime->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    setAttribute("()", esther->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<IntegerClass *>(self)) {
-            Runtime::runtimeError(getName() + ".(): invalid self");
+            Esther::runtimeError(getName() + ".(): invalid self");
             return nullptr;
         }
 
         if (!dynamic_cast<ValueObject *>(args[1])) {
-            Runtime::runtimeError(getName() + ".(): invalid argument");
+            Esther::runtimeError(getName() + ".(): invalid argument");
             return nullptr;
         }
 
-        return runtime->createInteger(((ValueObject *)args[1])->getVariant().toInteger());
+        return esther->createInteger(((ValueObject *)args[1])->getVariant().toInteger());
     }));
 
     defValueObjectFunc("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
-            Runtime::runtimeError(getName() + ".initialize: invalid number of arguments");
+            Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
 
         if (!args.empty())
             ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toInteger());
@@ -44,6 +44,6 @@ void IntegerClass::setupMethods() {
     });
 }
 
-IntegerClass::IntegerClass(Runtime *runtime)
-    : RootClass(runtime, "Integer", runtime->getNumericClass()) {
+IntegerClass::IntegerClass(Esther *e)
+    : RootClass(e, "Integer", e->getNumericClass()) {
 }

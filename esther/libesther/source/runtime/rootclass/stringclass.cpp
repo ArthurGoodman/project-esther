@@ -1,7 +1,7 @@
 #include "stringclass.h"
 
 #include "valueobject.h"
-#include "runtime.h"
+#include "esther.h"
 #include "function.h"
 
 ValueObject *StringClass::createString(const std::string &value) {
@@ -13,23 +13,23 @@ Object *StringClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void StringClass::setupMethods() {
-    setAttribute("()", runtime->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    setAttribute("()", esther->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<StringClass *>(self)) {
-            Runtime::runtimeError(getName() + ".(): invalid self");
+            Esther::runtimeError(getName() + ".(): invalid self");
             return nullptr;
         }
 
         if (!dynamic_cast<ValueObject *>(args[1])) {
-            Runtime::runtimeError(getName() + ".(): invalid argument");
+            Esther::runtimeError(getName() + ".(): invalid argument");
             return nullptr;
         }
 
-        return runtime->createString(((ValueObject *)args[1])->getVariant().toString());
+        return esther->createString(((ValueObject *)args[1])->getVariant().toString());
     }));
 
     defValueObjectFunc("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
-            Runtime::runtimeError(getName() + ".initialize: invalid number of arguments");
+            Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
 
         if (!args.empty())
             ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toString());
@@ -62,7 +62,7 @@ void StringClass::setupMethods() {
     });
 
     defFunc("size", [=](Object *self, const std::vector<Object *> &) -> Object * {
-        return runtime->createInteger(((ValueObject *)self)->toString().size());
+        return esther->createInteger(((ValueObject *)self)->toString().size());
     });
 
     defOper("[]", [](const Variant &a, const Variant &b) -> Variant {
@@ -79,6 +79,6 @@ void StringClass::setupMethods() {
     });
 }
 
-StringClass::StringClass(Runtime *runtime)
-    : RootClass(runtime, "String", runtime->getObjectClass()) {
+StringClass::StringClass(Esther *e)
+    : RootClass(e, "String", e->getObjectClass()) {
 }

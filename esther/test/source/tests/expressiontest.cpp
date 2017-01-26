@@ -7,16 +7,16 @@
 
 ExpressionTest::ExpressionTest()
     : TestSet("expressions")
-    , context(&runtime)
+    , context(&esther)
     , e(nullptr) {
     defineTests();
 }
 
 void ExpressionTest::preTest() {
-    runtime.initialize();
+    esther.initialize();
 
-    context.setSelf(runtime.getMainObject());
-    context.setHere(runtime.getMainObject());
+    context.setSelf(esther.getMainObject());
+    context.setHere(esther.getMainObject());
 }
 
 void ExpressionTest::postTest() {
@@ -58,10 +58,10 @@ void ExpressionTest::defineTests() {
     }).should.be = "3";
 
     $("Call", [=]() {
-        context.setSelf(runtime.createInteger(3));
-        context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
+        context.setSelf(esther.createInteger(3));
+        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
-        Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
+        Context *childContext = context.childContext(esther.createInteger(4), esther.createObject());
 
         e = Expression::Call("f", {});
 
@@ -75,7 +75,7 @@ void ExpressionTest::defineTests() {
     }).should.be.ok();
 
     $("Constant", [=]() {
-        e = Expression::Constant(runtime.getTrue());
+        e = Expression::Constant(esther.getTrue());
         return e->eval(&context)->toString();
     }).should.be = "true";
 
@@ -94,10 +94,10 @@ void ExpressionTest::defineTests() {
     }).should.be = "9";
 
     $("DynamicCall", [=]() {
-        context.setSelf(runtime.createInteger(3));
-        context.setLocal("f", runtime.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
+        context.setSelf(esther.createInteger(3));
+        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
-        Context *childContext = context.childContext(runtime.createInteger(4), runtime.createObject());
+        Context *childContext = context.childContext(esther.createInteger(4), esther.createObject());
 
         e = Expression::DynamicCall(Expression::Identifier("f"), {});
 
@@ -121,22 +121,22 @@ void ExpressionTest::defineTests() {
     }).should.be = true;
 
     $("Identifier // local", [=]() {
-        context.setLocal("pi", runtime.createFloat(3.14));
+        context.setLocal("pi", esther.createFloat(3.14));
 
         e = Expression::Identifier("pi");
 
-        Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
+        Context *childContext = context.childContext(esther.createObject(), esther.createObject());
         Object *value = e->eval(childContext);
         delete childContext;
         return value->toString();
     }).should.be = "3.14";
 
     $("Identifier // attribute", [=]() {
-        context.getSelf()->setAttribute("pi", runtime.createFloat(3.14));
+        context.getSelf()->setAttribute("pi", esther.createFloat(3.14));
 
         e = Expression::Identifier("pi");
 
-        Context *childContext = context.childContext(runtime.createObject(), runtime.createObject());
+        Context *childContext = context.childContext(esther.createObject(), esther.createObject());
         Object *value = e->eval(childContext);
         delete childContext;
         return value->toString();
@@ -148,12 +148,12 @@ void ExpressionTest::defineTests() {
     }).should_not.be.ok();
 
     $("If -> 1", [=]() {
-        e = Expression::If(Expression::Constant(runtime.getTrue()), Expression::Literal(1), Expression::Literal(2));
+        e = Expression::If(Expression::Constant(esther.getTrue()), Expression::Literal(1), Expression::Literal(2));
         return e->eval(&context)->toString();
     }).should.be = "1";
 
     $("If -> 2", [=]() {
-        e = Expression::If(Expression::Constant(runtime.getFalse()), Expression::Literal(1), Expression::Literal(2));
+        e = Expression::If(Expression::Constant(esther.getFalse()), Expression::Literal(1), Expression::Literal(2));
         return e->eval(&context)->toString();
     }).should.be = "2";
 
@@ -177,7 +177,7 @@ void ExpressionTest::defineTests() {
     }).should.be = "10";
 
     $("Not", [=]() {
-        e = Expression::Not(Expression::Constant(runtime.getTrue()));
+        e = Expression::Not(Expression::Constant(esther.getTrue()));
         return e->eval(&context)->toString();
     }).should.be = "false";
 

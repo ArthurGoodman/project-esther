@@ -5,7 +5,7 @@
 class ValueObject;
 
 class IntegerClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     ValueObject *createInteger(int value);
@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    IntegerClass(Runtime *runtime);
+    IntegerClass(Esther *e);
 };

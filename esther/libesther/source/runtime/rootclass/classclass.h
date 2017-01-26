@@ -3,7 +3,7 @@
 #include "rootclass.h"
 
 class ClassClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     Class *createClass(const std::string &name, Class *superclass = nullptr);
@@ -14,5 +14,5 @@ protected:
     void setupMethods();
 
 private:
-    ClassClass(Runtime *runtime);
+    ClassClass(Esther *e);
 };

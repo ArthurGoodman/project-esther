@@ -1,7 +1,7 @@
 #include "floatclass.h"
 
 #include "valueobject.h"
-#include "runtime.h"
+#include "esther.h"
 #include "numericclass.h"
 #include "function.h"
 
@@ -14,23 +14,23 @@ Object *FloatClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void FloatClass::setupMethods() {
-    setAttribute("()", runtime->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    setAttribute("()", esther->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<FloatClass *>(self)) {
-            Runtime::runtimeError(getName() + ".(): invalid self");
+            Esther::runtimeError(getName() + ".(): invalid self");
             return nullptr;
         }
 
         if (!dynamic_cast<ValueObject *>(args[1])) {
-            Runtime::runtimeError(getName() + ".(): invalid argument");
+            Esther::runtimeError(getName() + ".(): invalid argument");
             return nullptr;
         }
 
-        return runtime->createFloat(((ValueObject *)args[1])->getVariant().toReal());
+        return esther->createFloat(((ValueObject *)args[1])->getVariant().toReal());
     }));
 
     defValueObjectFunc("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
-            Runtime::runtimeError(getName() + ".initialize: invalid number of arguments");
+            Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
 
         if (!args.empty())
             ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toReal());
@@ -44,6 +44,6 @@ void FloatClass::setupMethods() {
     });
 }
 
-FloatClass::FloatClass(Runtime *runtime)
-    : RootClass(runtime, "Float", runtime->getNumericClass()) {
+FloatClass::FloatClass(Esther *e)
+    : RootClass(e, "Float", e->getNumericClass()) {
 }

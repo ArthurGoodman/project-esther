@@ -4,17 +4,17 @@
 #include <list>
 
 class Object;
-class Runtime;
+class Esther;
 
 class Context {
-    Runtime *runtime;
+    Esther *runtime;
     Context *parent;
     Object *self, *here;
 
     std::list<Context *> children;
 
 public:
-    Context(Runtime *runtime);
+    Context(Esther *runtime);
     virtual ~Context();
 
     Object *getSelf() const;
@@ -23,7 +23,7 @@ public:
     Object *getHere() const;
     void setHere(Object *here);
 
-    Runtime *getRuntime() const;
+    Esther *getRuntime() const;
 
     bool hasLocal(const std::string &name) const;
     Object *getLocal(const std::string &name) const;

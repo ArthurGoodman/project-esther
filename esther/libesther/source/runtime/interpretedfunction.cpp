@@ -1,6 +1,6 @@
 #include "interpretedfunction.h"
 
-#include "runtime.h"
+#include "esther.h"
 
 Object *InterpretedFunction::execute(Object *self, const std::vector<Object *> &args) {
     Context *childContext = context->childContext(self, context->getRuntime()->createObject());

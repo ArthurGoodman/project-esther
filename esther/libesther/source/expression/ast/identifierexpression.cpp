@@ -1,7 +1,7 @@
 #include "identifierexpression.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 
 IdentifierExpression::IdentifierExpression(const std::string &name)
     : name(name) {
@@ -14,7 +14,7 @@ Object *IdentifierExpression::exec(Context *context) {
     Object *value = context->get(name);
 
     if (value == nullptr)
-        Runtime::runtimeError("undefined identifier '" + name + "'");
+        Esther::runtimeError("undefined identifier '" + name + "'");
 
     return value;
 }

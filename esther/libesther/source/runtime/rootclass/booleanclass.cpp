@@ -1,15 +1,15 @@
 #include "booleanclass.h"
 
-#include "runtime.h"
+#include "esther.h"
 
 Object *BooleanClass::createNewInstance(const std::vector<Object *> &) {
-    Runtime::runtimeError("cannot create new instance of Boolean class");
+    Esther::runtimeError("cannot create new instance of Boolean class");
     return nullptr;
 }
 
 void BooleanClass::setupMethods() {
 }
 
-BooleanClass::BooleanClass(Runtime *runtime)
-    : RootClass(runtime, "Boolean", runtime->getObjectClass()) {
+BooleanClass::BooleanClass(Esther *e)
+    : RootClass(e, "Boolean", e->getObjectClass()) {
 }

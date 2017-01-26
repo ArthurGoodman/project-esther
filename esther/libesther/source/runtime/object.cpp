@@ -1,7 +1,7 @@
 #include "object.h"
 
 #include "class.h"
-#include "runtime.h"
+#include "esther.h"
 #include "utility.h"
 #include "function.h"
 
@@ -52,7 +52,7 @@ Object *Object::call(const std::string &name, const std::vector<Object *> &args)
     Object *f = get(name);
 
     if (!f)
-        Runtime::runtimeError("undefined identifier '" + name + "'");
+        Esther::runtimeError("undefined identifier '" + name + "'");
 
     if (dynamic_cast<Function *>(f))
         return ((Function *)f)->invoke(this, args);
@@ -76,7 +76,7 @@ Object *Object::call(const std::string &name, const std::vector<Object *> &args,
     Object *value = call(name, args);
 
     if (!value->is(expectedReturnClass))
-        Runtime::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedReturnClass->getName() + " expected)");
+        Esther::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedReturnClass->getName() + " expected)");
 
     return value;
 }

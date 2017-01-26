@@ -1,7 +1,7 @@
 #include "classdefinitionexpression.h"
 
 #include "context.h"
-#include "runtime.h"
+#include "esther.h"
 #include "class.h"
 
 ClassDefinitionExpression::ClassDefinitionExpression(const std::string &name, Expression *superclass, Expression *body)
@@ -19,7 +19,7 @@ Object *ClassDefinitionExpression::exec(Context *context) {
 
     if (!dynamic_cast<Class *>(evaledSuperclass)) {
         setPosition(superclass->getPosition());
-        Runtime::runtimeError("class expected");
+        Esther::runtimeError("class expected");
     }
 
     Class *_class = context->getRuntime()->createClass(name, (Class *)evaledSuperclass);

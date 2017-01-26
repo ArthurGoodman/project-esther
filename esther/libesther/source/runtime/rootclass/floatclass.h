@@ -5,7 +5,7 @@
 class ValueObject;
 
 class FloatClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     ValueObject *createFloat(double value);
@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    FloatClass(Runtime *runtime);
+    FloatClass(Esther *e);
 };

@@ -10,7 +10,7 @@ class Context;
 class Function;
 
 class FunctionClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
@@ -22,5 +22,5 @@ protected:
     void setupMethods();
 
 private:
-    FunctionClass(Runtime *runtime);
+    FunctionClass(Esther *e);
 };

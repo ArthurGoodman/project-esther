@@ -3,11 +3,11 @@
 #include "rootclass.h"
 
 class NumericClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 protected:
     void setupMethods();
 
 private:
-    NumericClass(Runtime *runtime);
+    NumericClass(Esther *e);
 };

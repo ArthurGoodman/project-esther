@@ -5,7 +5,7 @@
 class ValueObject;
 
 class StringClass : public RootClass {
-    friend class Runtime;
+    friend class Esther;
 
 public:
     ValueObject *createString(const std::string &value);
@@ -16,5 +16,5 @@ protected:
     void setupMethods();
 
 private:
-    StringClass(Runtime *runtime);
+    StringClass(Esther *e);
 };
