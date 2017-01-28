@@ -85,7 +85,7 @@ Object *Esther::toBoolean(bool value) const {
 }
 
 Object *Esther::createObject() {
-    return objectClass->newInstance();
+    return objectClass->newInstance(this);
 }
 
 ValueObject *Esther::createValueObject(const Variant &value) {
@@ -127,7 +127,7 @@ Class *Esther::createClass(const std::string &name, Class *superclass) {
     return classClass->createClass(name, superclass);
 }
 
-Function *Esther::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
+Function *Esther::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> &body) {
     return functionClass->createNativeFunction(name, arity, body);
 }
 
@@ -169,25 +169,27 @@ void Esther::initialize() {
     Object *console = createObject();
     mainObject->setAttribute("console", console);
 
-    console->setAttribute("write", createNativeFunction("write", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    console->setAttribute("write", createNativeFunction("write", -1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
                               if (!args.empty())
                                   for (Object *arg : args)
-                                      IO::write(arg->call("toString", {}, getStringClass())->toString());
+                                      IO::write(arg->call(esther, "toString", {}, getStringClass())->toString());
                               else
-                                  IO::write(self->call("toString", {}, getStringClass())->toString());
+                                  IO::write(self->call(esther, "toString", {}, getStringClass())->toString());
 
                               return getNull();
                           }));
 
-    console->setAttribute("writeLine", createNativeFunction("writeLine", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    console->setAttribute("writeLine", createNativeFunction("writeLine", -1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
                               if (!args.empty())
                                   for (Object *arg : args)
-                                      IO::writeLine(arg->call("toString", {}, getStringClass())->toString());
+                                      IO::writeLine(arg->call(esther, "toString", {}, getStringClass())->toString());
                               else
-                                  IO::writeLine(self->call("toString", {}, getStringClass())->toString());
+                                  IO::writeLine(self->call(esther, "toString", {}, getStringClass())->toString());
 
                               return getNull();
                           }));
+
+    context = new Context(this);
 }
 
 void Esther::release() {
@@ -206,9 +208,8 @@ Object *Esther::run(const std::string &script) {
     pushSource(src);
 
     try {
-        Context root(this);
-        Expression *e = IParser::instance()->parse(&root, ILexer::instance()->lex(src));
-        value = e->eval(&root);
+        Expression *e = IParser::instance()->parse(this, ILexer::instance()->lex(src));
+        value = e->eval(this);
         delete e;
     } catch (ErrorException *e) {
         IO::writeLine(fileName() + ":" + (e->getPosition().isValid() ? e->getPosition().toString() + ": " : " ") + e->message());
@@ -237,6 +238,18 @@ Object *Esther::runFile(const std::string &fileName) {
     popFileName();
 
     return value;
+}
+
+Context *Esther::getContext() const {
+    return context;
+}
+
+void Esther::pushChildContext(Object *self, Object *here) {
+    context = context->childContext(self, here);
+}
+
+void Esther::popContext() {
+    context = context->getParent();
 }
 
 void Esther::pushSource(const std::string &source) {

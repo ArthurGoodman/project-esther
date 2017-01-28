@@ -10,5 +10,5 @@ public:
     ContextCallExpression(Expression *self, Expression *body, const std::list<Expression *> &args);
     ~ContextCallExpression();
 
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 };

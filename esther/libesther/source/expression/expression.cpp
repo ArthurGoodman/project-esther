@@ -35,8 +35,12 @@ Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
-Expression *Expression::ContextResolution(Expression *self, Expression *body, bool object) {
-    return IExpressionManager::instance()->createContextResolution(self, body, object);
+Expression *Expression::ContextResolution(Expression *self, Expression *here, Expression *body) {
+    return IExpressionManager::instance()->createContextResolution(self, here, body);
+}
+
+Expression *Expression::ContextResolution(Expression *self, Expression *body) {
+    return IExpressionManager::instance()->createContextResolution(self, nullptr, body);
 }
 
 Expression *Expression::ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
@@ -98,11 +102,11 @@ Expression *Expression::Self() {
 Expression::~Expression() {
 }
 
-Object *Expression::eval(Context *context) {
+Object *Expression::eval(Esther *esther) {
     Object *value = nullptr;
 
     try {
-        value = exec(context);
+        value = exec(esther);
     } catch (ErrorException *e) {
         if (!e->getPosition().isValid())
             e->setPosition(getPosition());

@@ -3,16 +3,20 @@
 #include "object.h"
 #include "esther.h"
 
-Context::Context(Esther *runtime)
-    : runtime(runtime)
+Context::Context(Esther *esther)
+    : esther(esther)
     , parent(nullptr)
-    , self(runtime->getMainObject())
+    , self(esther->getMainObject())
     , here(self) {
 }
 
 Context::~Context() {
     for (Context *child : children)
         delete child;
+}
+
+Context *Context::getParent() const {
+    return parent;
 }
 
 Object *Context::getSelf() const {
@@ -29,10 +33,6 @@ Object *Context::getHere() const {
 
 void Context::setHere(Object *here) {
     this->here = here;
-}
-
-Esther *Context::getRuntime() const {
-    return runtime;
 }
 
 bool Context::hasLocal(const std::string &name) const {
@@ -54,8 +54,8 @@ Object *Context::get(const std::string &name) const {
     if (parent)
         return parent->get(name);
 
-    if (runtime->hasRootClass(name))
-        return (Object *)runtime->getRootClass(name);
+    if (esther->hasRootClass(name))
+        return (Object *)esther->getRootClass(name);
 
     return nullptr;
 }
@@ -83,7 +83,7 @@ Context *Context::childContext(Object *self, Object *here) {
 }
 
 Context::Context(Object *self, Object *here, Context *parent)
-    : runtime(parent->runtime)
+    : esther(parent->esther)
     , parent(parent)
     , self(self)
     , here(here) {

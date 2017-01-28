@@ -10,5 +10,5 @@ public:
     LiteralExpression(const Variant &value);
 
 protected:
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 };

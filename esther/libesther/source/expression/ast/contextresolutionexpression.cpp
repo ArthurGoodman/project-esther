@@ -3,19 +3,25 @@
 #include "context.h"
 #include "esther.h"
 
-ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body, bool object)
+ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *here, Expression *body)
     : self(self)
-    , body(body)
-    , object(object) {
+    , here(here)
+    , body(body) {
 }
 
 ContextResolutionExpression::~ContextResolutionExpression() {
     delete self;
+    delete here;
     delete body;
 }
 
-Object *ContextResolutionExpression::exec(Context *context) {
-    Object *evaledSelf = self->eval(context);
-    Object *evaledHere = object ? evaledSelf : context->getRuntime()->createObject();
-    return body->eval(context->childContext(evaledSelf, evaledHere));
+Object *ContextResolutionExpression::exec(Esther *esther) {
+    Object *evaledSelf = self->eval(esther);
+    Object *evaledHere = here ? here->eval(esther) : evaledSelf;
+
+    esther->pushChildContext(evaledSelf, evaledHere);
+    Object *value = body->eval(esther);
+    esther->popContext();
+
+    return value;
 }

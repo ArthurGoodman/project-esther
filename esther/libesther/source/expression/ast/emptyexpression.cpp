@@ -3,6 +3,6 @@
 #include "context.h"
 #include "esther.h"
 
-Object *EmptyExpression::exec(Context *context) {
-    return context->getRuntime()->getNull();
+Object *EmptyExpression::exec(Esther *esther) {
+    return esther->getNull();
 }

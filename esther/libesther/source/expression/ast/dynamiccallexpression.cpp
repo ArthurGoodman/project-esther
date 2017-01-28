@@ -3,6 +3,7 @@
 #include "common.h"
 #include "context.h"
 #include "function.h"
+#include "esther.h"
 
 DynamicCallExpression::DynamicCallExpression(Expression *body, const std::list<Expression *> &args)
     : body(body)
@@ -16,26 +17,26 @@ DynamicCallExpression::~DynamicCallExpression() {
         delete e;
 }
 
-Object *DynamicCallExpression::exec(Context *context) {
-    Object *f = body->eval(context);
+Object *DynamicCallExpression::exec(Esther *esther) {
+    Object *f = body->eval(esther);
 
     if (dynamic_cast<Function *>(f)) {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size());
 
         for (Expression *e : args)
-            evaledArgs << e->eval(context);
+            evaledArgs << e->eval(esther);
 
-        return ((Function *)f)->invoke(context->getSelf(), evaledArgs);
+        return ((Function *)f)->invoke(esther, esther->getContext()->getSelf(), evaledArgs);
     } else {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size() + 1);
 
-        evaledArgs << context->getSelf();
+        evaledArgs << esther->getContext()->getSelf();
 
         for (Expression *e : args)
-            evaledArgs << e->eval(context);
+            evaledArgs << e->eval(esther);
 
-        return f->call("()", evaledArgs);
+        return f->call(esther, "()", evaledArgs);
     }
 }

@@ -4,6 +4,6 @@ ConstantExpression::ConstantExpression(Object *value)
     : value(value) {
 }
 
-Object *ConstantExpression::exec(Context *) {
+Object *ConstantExpression::exec(Esther *) {
     return value;
 }

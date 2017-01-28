@@ -3,13 +3,12 @@
 #include "expression.h"
 
 class ContextResolutionExpression : public Expression {
-    Expression *self, *body;
-    bool object;
+    Expression *self, *here, *body;
 
 public:
-    ContextResolutionExpression(Expression *self, Expression *body, bool object);
+    ContextResolutionExpression(Expression *self, Expression *here, Expression *body);
     ~ContextResolutionExpression();
 
 protected:
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 };

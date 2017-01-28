@@ -13,11 +13,11 @@ LoopExpression::~LoopExpression() {
     delete body;
 }
 
-Object *LoopExpression::exec(Context *context) {
-    Object *value = context->getRuntime()->getNull();
+Object *LoopExpression::exec(Esther *esther) {
+    Object *value = esther->getNull();
 
-    while (condition->eval(context)->isTrue())
-        value = body->eval(context);
+    while (condition->eval(esther)->isTrue())
+        value = body->eval(esther);
 
     return value;
 }

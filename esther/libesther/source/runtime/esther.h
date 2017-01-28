@@ -49,6 +49,8 @@ class Esther {
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 
+    Context *context;
+
 public:
     static void runtimeError(const std::string &message);
 
@@ -82,17 +84,21 @@ public:
 
     Class *createClass(const std::string &name, Class *superclass = nullptr);
 
-    Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body);
+    Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> &body);
     Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
 
     Object *run(const std::string &script);
     Object *runFile(const std::string &fileName);
 
-    //private:
+    Context *getContext() const;
+
+    void pushChildContext(Object *self, Object *here);
+    void popContext();
+
+private:
     void initialize();
     void release();
 
-private:
     void setupMethods();
 
     void pushSource(const std::string &source);

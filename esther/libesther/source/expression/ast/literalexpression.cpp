@@ -8,6 +8,6 @@ LiteralExpression::LiteralExpression(const Variant &value)
     : value(value) {
 }
 
-Object *LiteralExpression::exec(Context *context) {
-    return context->getRuntime()->createValueObject(value);
+Object *LiteralExpression::exec(Esther *esther) {
+    return esther->createValueObject(value);
 }

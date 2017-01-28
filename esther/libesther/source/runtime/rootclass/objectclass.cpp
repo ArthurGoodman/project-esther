@@ -14,27 +14,27 @@ Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void ObjectClass::setupMethods() {
-    defFunc("class", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("class", [=](Esther *, Object *self, const std::vector<Object *> &) -> Object * {
         return self->getClass();
     });
 
-    defFunc("==", { this }, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return esther->toBoolean(self->call("equals", args)->isTrue());
+    defFunc("==", { this }, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+        return esther->toBoolean(self->call(esther, "equals", args)->isTrue());
     });
 
-    defFunc("!=", { this }, [=](Object *self, const std::vector<Object *> &args) -> Object * {
-        return esther->toBoolean(!self->call("equals", args)->isTrue());
+    defFunc("!=", { this }, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+        return esther->toBoolean(!self->call(esther, "equals", args)->isTrue());
     });
 
-    defFunc("toString", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("toString", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
         return esther->createString(self->toString());
     });
 
-    defFunc("equals", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("equals", 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         return esther->toBoolean(self == args[0]);
     });
 
-    defFunc("is", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("is", 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<Class *>(args[0])) {
             Esther::runtimeError(getName() + ".is: invalid argument");
             return nullptr;

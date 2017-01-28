@@ -1,7 +1,8 @@
 #include "selfexpression.h"
 
+#include "esther.h"
 #include "context.h"
 
-Object *SelfExpression::exec(Context *context) {
-    return context->getSelf();
+Object *SelfExpression::exec(Esther *esther) {
+    return esther->getContext()->getSelf();
 }

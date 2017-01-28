@@ -12,7 +12,7 @@ class InterpretedFunction : public Function {
     Context *context;
 
 protected:
-    Object *execute(Object *self, const std::vector<Object *> &args);
+    Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args);
 
 private:
     InterpretedFunction(Class *objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);

@@ -11,6 +11,6 @@ NotExpression::~NotExpression() {
     delete self;
 }
 
-Object *NotExpression::exec(Context *context) {
-    return context->getRuntime()->toBoolean(!self->eval(context)->isTrue());
+Object *NotExpression::exec(Esther *esther) {
+    return esther->toBoolean(!self->eval(esther)->isTrue());
 }

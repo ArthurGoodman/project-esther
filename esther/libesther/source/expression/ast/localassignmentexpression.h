@@ -10,5 +10,5 @@ public:
     LocalAssignmentExpression(const std::string &name, Expression *value);
     ~LocalAssignmentExpression();
 
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 };

@@ -10,11 +10,11 @@ OrExpression::~OrExpression() {
     delete arg;
 }
 
-Object *OrExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+Object *OrExpression::exec(Esther *esther) {
+    Object *self = this->self->eval(esther);
 
     if (self->isTrue())
         return self;
 
-    return arg->eval(context);
+    return arg->eval(esther);
 }

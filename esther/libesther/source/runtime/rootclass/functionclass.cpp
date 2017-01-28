@@ -4,7 +4,7 @@
 #include "interpretedfunction.h"
 #include "esther.h"
 
-Function *FunctionClass::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Object *, const std::vector<Object *> &)> &body) {
+Function *FunctionClass::createNativeFunction(const std::string &name, int arity, const std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> &body) {
     return new NativeFunction(this, name, arity, body);
 }
 
@@ -18,7 +18,7 @@ Object *FunctionClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void FunctionClass::setupMethods() {
-    defFunc("call", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc("call", -1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (args.empty())
             Esther::runtimeError(getName() + ".call: invalid number of arguments");
 
@@ -27,7 +27,7 @@ void FunctionClass::setupMethods() {
         std::vector<Object *> actualArgs = args;
         actualArgs.erase(actualArgs.begin());
 
-        return ((Function *)self)->invoke(actualSelf, actualArgs);
+        return ((Function *)self)->invoke(esther, actualSelf, actualArgs);
     });
 
     setAttribute("()", getAttribute("call"));

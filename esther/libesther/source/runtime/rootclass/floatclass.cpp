@@ -14,7 +14,7 @@ Object *FloatClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void FloatClass::setupMethods() {
-    setAttribute("()", esther->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    setAttribute("()", esther->createNativeFunction("()", 2, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<FloatClass *>(self)) {
             Esther::runtimeError(getName() + ".(): invalid self");
             return nullptr;
@@ -28,7 +28,7 @@ void FloatClass::setupMethods() {
         return esther->createFloat(((ValueObject *)args[1])->getVariant().toReal());
     }));
 
-    defValueObjectFunc("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc("initialize", -1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
             Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
 
@@ -38,7 +38,7 @@ void FloatClass::setupMethods() {
         return self;
     });
 
-    defValueObjectFunc("=", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc("=", 1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toReal());
         return self;
     });

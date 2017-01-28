@@ -12,8 +12,8 @@ AttributeExpression::~AttributeExpression() {
     delete self;
 }
 
-Object *AttributeExpression::exec(Context *context) {
-    Object *value = self->eval(context)->get(name);
+Object *AttributeExpression::exec(Esther *esther) {
+    Object *value = self->eval(esther)->get(name);
 
     if (value == nullptr)
         Esther::runtimeError("undefined identifier '" + name + "'");

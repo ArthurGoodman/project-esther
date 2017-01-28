@@ -1,5 +1,6 @@
 #include "assignmentexpression.h"
 
+#include "esther.h"
 #include "context.h"
 
 AssignmentExpression::AssignmentExpression(const std::string &name, Expression *value)
@@ -11,11 +12,11 @@ AssignmentExpression::~AssignmentExpression() {
     delete value;
 }
 
-Object *AssignmentExpression::exec(Context *context) {
-    Object *evaledValue = value->eval(context);
+Object *AssignmentExpression::exec(Esther *esther) {
+    Object *evaledValue = value->eval(esther);
 
-    if (!context->set(name, evaledValue))
-        context->setLocal(name, evaledValue);
+    if (!esther->getContext()->set(name, evaledValue))
+        esther->getContext()->setLocal(name, evaledValue);
 
     return evaledValue;
 }

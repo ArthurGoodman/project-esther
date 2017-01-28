@@ -13,7 +13,7 @@ Object *StringClass::createNewInstance(const std::vector<Object *> &) {
 }
 
 void StringClass::setupMethods() {
-    setAttribute("()", esther->createNativeFunction("()", 2, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    setAttribute("()", esther->createNativeFunction("()", 2, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<StringClass *>(self)) {
             Esther::runtimeError(getName() + ".(): invalid self");
             return nullptr;
@@ -27,7 +27,7 @@ void StringClass::setupMethods() {
         return esther->createString(((ValueObject *)args[1])->getVariant().toString());
     }));
 
-    defValueObjectFunc("initialize", -1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc("initialize", -1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
             Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
 
@@ -61,7 +61,7 @@ void StringClass::setupMethods() {
         return a.toString() == b.toString();
     });
 
-    defFunc("size", [=](Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc("size", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
         return esther->createInteger(((ValueObject *)self)->toString().size());
     });
 
@@ -73,7 +73,7 @@ void StringClass::setupMethods() {
         return a.toString().find(b.toChar()) != std::string::npos;
     });
 
-    defValueObjectFunc("=", 1, [=](Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc("=", 1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toString());
         return self;
     });

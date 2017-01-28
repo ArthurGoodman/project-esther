@@ -6,7 +6,7 @@
 #include "runtime/object.h"
 
 class Variant;
-class Context;
+class Esther;
 
 class Expression {
     Position position;
@@ -20,7 +20,8 @@ public:
     static Expression *Call(const std::string &name, const std::list<Expression *> &args);
     static Expression *ClassDefinition(const std::string &name, Expression *superclass, Expression *body = nullptr);
     static Expression *Constant(Object *value);
-    static Expression *ContextResolution(Expression *self, Expression *body, bool object = true);
+    static Expression *ContextResolution(Expression *self, Expression *here, Expression *body);
+    static Expression *ContextResolution(Expression *self, Expression *body);
     static Expression *ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args);
     static Expression *DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
     static Expression *DynamicCall(Expression *body, const std::list<Expression *> &args);
@@ -38,11 +39,11 @@ public:
 
     virtual ~Expression();
 
-    Object *eval(Context *context);
+    Object *eval(Esther *esther);
 
     Position getPosition() const;
     void setPosition(Position position);
 
 protected:
-    virtual Object *exec(Context *context) = 0;
+    virtual Object *exec(Esther *esther) = 0;
 };

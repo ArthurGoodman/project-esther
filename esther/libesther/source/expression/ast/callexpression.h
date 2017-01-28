@@ -10,5 +10,5 @@ public:
     CallExpression(const std::string &name, const std::list<Expression *> &args);
     ~CallExpression();
 
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 };

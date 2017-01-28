@@ -19,7 +19,7 @@ public:
 
     Object *get(const std::string &name) const;
 
-    Object *newInstance(const std::vector<Object *> &args = std::vector<Object *>());
+    Object *newInstance(Esther *esther, const std::vector<Object *> &args = std::vector<Object *>());
 
     bool isChild(Class *_class) const;
 

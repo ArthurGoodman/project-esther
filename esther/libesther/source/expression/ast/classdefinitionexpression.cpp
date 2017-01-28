@@ -14,15 +14,15 @@ ClassDefinitionExpression::~ClassDefinitionExpression() {
     delete superclass;
 }
 
-Object *ClassDefinitionExpression::exec(Context *context) {
-    Object *evaledSuperclass = superclass->eval(context);
+Object *ClassDefinitionExpression::exec(Esther *esther) {
+    Object *evaledSuperclass = superclass->eval(esther);
 
     if (!dynamic_cast<Class *>(evaledSuperclass)) {
         setPosition(superclass->getPosition());
         Esther::runtimeError("class expected");
     }
 
-    Class *_class = context->getRuntime()->createClass(name, (Class *)evaledSuperclass);
+    Class *_class = esther->createClass(name, (Class *)evaledSuperclass);
 
     return _class;
 }

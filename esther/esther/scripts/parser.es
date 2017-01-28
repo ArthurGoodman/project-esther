@@ -121,7 +121,7 @@ class Parser {
             @token = new Token('e') {
                 @id = 'u'
                 @text = ""
-                
+
                 while (parser.symbol().isLetter() || parser.symbol() == '_') {
                     @text += parser.symbol()
                     parser.pos += 1

@@ -5,6 +5,7 @@
 #include <vector>
 
 class Class;
+class Esther;
 
 class Object {
     Class *objectClass;
@@ -30,7 +31,7 @@ public:
 
     virtual bool isTrue() const;
 
-    Object *call(const std::string &name, const std::vector<Object *> &args);
-    Object *callIfFound(const std::string &name, const std::vector<Object *> &args);
-    Object *call(const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
+    Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args);
+    Object *callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args);
+    Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
 };

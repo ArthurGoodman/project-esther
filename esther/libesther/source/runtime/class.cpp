@@ -21,9 +21,9 @@ Object *Class::get(const std::string &name) const {
     return (temp = Object::get(name)) ? temp : superclass ? superclass->lookup(name) : nullptr;
 }
 
-Object *Class::newInstance(const std::vector<Object *> &args) {
+Object *Class::newInstance(Esther *esther, const std::vector<Object *> &args) {
     Object *instance = createNewInstance(args);
-    instance->callIfFound("initialize", args);
+    instance->callIfFound(esther, "initialize", args);
     return instance;
 }
 

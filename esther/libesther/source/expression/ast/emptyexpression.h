@@ -4,5 +4,5 @@
 
 class EmptyExpression : public Expression {
 protected:
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 };

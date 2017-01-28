@@ -13,10 +13,10 @@ ExpressionTest::ExpressionTest()
 }
 
 void ExpressionTest::preTest() {
-    esther.initialize();
+    //    esther.initialize();
 
-    context.setSelf(esther.getMainObject());
-    context.setHere(esther.getMainObject());
+    //    context.setSelf(esther.getMainObject());
+    //    context.setHere(esther.getMainObject());
 }
 
 void ExpressionTest::postTest() {
@@ -25,178 +25,174 @@ void ExpressionTest::postTest() {
 }
 
 void ExpressionTest::defineTests() {
-    $("And -> 1", [=]() {
-        e = Expression::And(Expression::Empty(), Expression::Literal(2));
-        return e->eval(&context)->toString();
-    }).should.be = "null";
+    //    $("And -> 1", [=]() {
+    //        e = Expression::And(Expression::Empty(), Expression::Literal(2));
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "null";
 
-    $("And -> 2", [=]() {
-        e = Expression::And(Expression::Literal(1), Expression::Literal(2));
-        return e->eval(&context)->toString();
-    }).should.be = "2";
+    //    $("And -> 2", [=]() {
+    //        e = Expression::And(Expression::Literal(1), Expression::Literal(2));
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "2";
 
-    $("Assignment", [=]() {
-        fail();
-    }).should.be.ok();
+    //    $("Assignment", [=]() {
+    //        fail();
+    //    }).should.be.ok();
 
-    $("AttributeAssignment", [=]() {
-        e = Expression::AttributeAssignment(Expression::Self(), "pi", Expression::Literal(3.14));
-        e->eval(&context);
-        return context.getSelf()->getAttribute("pi")->toString();
-    }).should.be = "3.14";
+    //    $("AttributeAssignment", [=]() {
+    //        e = Expression::AttributeAssignment(Expression::Self(), "pi", Expression::Literal(3.14));
+    //        e->eval(&context);
+    //        return context.getSelf()->getAttribute("pi")->toString();
+    //    }).should.be = "3.14";
 
-    $("Block", [=]() {
-        std::list<Expression *> nodes;
+    //    $("Block", [=]() {
+    //        std::list<Expression *> nodes;
 
-        nodes << Expression::Literal(1);
-        nodes << Expression::Literal(2);
-        nodes << Expression::Literal(3);
+    //        nodes << Expression::Literal(1);
+    //        nodes << Expression::Literal(2);
+    //        nodes << Expression::Literal(3);
 
-        e = Expression::Block(nodes);
+    //        e = Expression::Block(nodes);
 
-        return e->eval(&context)->toString();
-    }).should.be = "3";
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "3";
 
-    $("Call", [=]() {
-        context.setSelf(esther.createInteger(3));
-        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
+    //    $("Call", [=]() {
+    //        context.setSelf(esther.createInteger(3));
+    //        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
-        Context *childContext = context.childContext(esther.createInteger(4), esther.createObject());
+    //        Context *childContext = context.childContext(esther.createInteger(4), esther.createObject());
 
-        e = Expression::Call("f", {});
+    //        e = Expression::Call("f", {});
 
-        Object *value = e->eval(childContext);
-        delete childContext;
-        return value->toString();
-    }).should.be = "4";
+    //        Object *value = e->eval(childContext);
+    //        delete childContext;
+    //        return value->toString();
+    //    }).should.be = "4";
 
-    $("ClassDefinition", [=]() {
-        fail();
-    }).should.be.ok();
+    //    $("ClassDefinition", [=]() {
+    //        fail();
+    //    }).should.be.ok();
 
-    $("Constant", [=]() {
-        e = Expression::Constant(esther.getTrue());
-        return e->eval(&context)->toString();
-    }).should.be = "true";
+    //    $("Constant", [=]() {
+    //        e = Expression::Constant(esther.getTrue());
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "true";
 
-    $("ContextCall", [=]() {
-        fail();
-    }).should.be.ok();
+    //    $("ContextCall", [=]() {
+    //        fail();
+    //    }).should.be.ok();
 
-    $("ContextResolution", [=]() {
-        e = Expression::ContextResolution(Expression::Literal(4), Expression::Self());
-        return e->eval(&context)->toString();
-    }).should.be = "4";
+    //    $("ContextResolution", [=]() {
+    //        e = Expression::ContextResolution(Expression::Literal(4), Expression::Self());
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "4";
 
-    $("DirectCall", [=]() {
-        e = Expression::DirectCall(Expression::Literal(4), "+", { Expression::Literal(5) });
-        return e->eval(&context)->toString();
-    }).should.be = "9";
+    //    $("DirectCall", [=]() {
+    //        e = Expression::DirectCall(Expression::Literal(4), "+", { Expression::Literal(5) });
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "9";
 
-    $("DynamicCall", [=]() {
-        context.setSelf(esther.createInteger(3));
-        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
+    //    $("DynamicCall", [=]() {
+    //        context.setSelf(esther.createInteger(3));
+    //        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
-        Context *childContext = context.childContext(esther.createInteger(4), esther.createObject());
+    //        Context *childContext = context.childContext(esther.createInteger(4), esther.createObject());
 
-        e = Expression::DynamicCall(Expression::Identifier("f"), {});
+    //        e = Expression::DynamicCall(Expression::Identifier("f"), {});
 
-        Object *value = e->eval(childContext);
-        delete childContext;
-        return value->toString();
-    }).should.be = "4";
+    //        Object *value = e->eval(childContext);
+    //        delete childContext;
+    //        return value->toString();
+    //    }).should.be = "4";
 
-    $("Empty", [=]() {
-        e = Expression::Empty();
-        return e->eval(&context)->toString();
-    }).should.be = "null";
+    //    $("Empty", [=]() {
+    //        e = Expression::Empty();
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "null";
 
-    $("FunctionDefinition", [=]() {
-        fail();
-    }).should.be.ok();
+    //    $("FunctionDefinition", [=]() {
+    //        fail();
+    //    }).should.be.ok();
 
-    $("Here", [=]() {
-        e = Expression::Here();
-        return e->eval(&context) == context.getHere();
-    }).should.be = true;
+    //    $("Here", [=]() {
+    //        e = Expression::Here();
+    //        return e->eval(&context) == context.getHere();
+    //    }).should.be = true;
 
-    $("Identifier // local", [=]() {
-        context.setLocal("pi", esther.createFloat(3.14));
+    //    $("Identifier // local", [=]() {
+    //        context.setLocal("pi", esther.createFloat(3.14));
 
-        e = Expression::Identifier("pi");
+    //        e = Expression::Identifier("pi");
 
-        Context *childContext = context.childContext(esther.createObject(), esther.createObject());
-        Object *value = e->eval(childContext);
-        delete childContext;
-        return value->toString();
-    }).should.be = "3.14";
+    //        Context *childContext = context.childContext(esther.createObject(), esther.createObject());
+    //        Object *value = e->eval(childContext);
+    //        delete childContext;
+    //        return value->toString();
+    //    }).should.be = "3.14";
 
-    $("Identifier // attribute", [=]() {
-        context.getSelf()->setAttribute("pi", esther.createFloat(3.14));
+    //    $("Identifier // attribute", [=]() {
+    //        context.getSelf()->setAttribute("pi", esther.createFloat(3.14));
 
-        e = Expression::Identifier("pi");
+    //        e = Expression::Identifier("pi");
 
-        Context *childContext = context.childContext(esther.createObject(), esther.createObject());
-        Object *value = e->eval(childContext);
-        delete childContext;
-        return value->toString();
-    }).should.be = "3.14";
+    //        Context *childContext = context.childContext(esther.createObject(), esther.createObject());
+    //        Object *value = e->eval(childContext);
+    //        delete childContext;
+    //        return value->toString();
+    //    }).should.be = "3.14";
 
-    $("Identifier // undefined", [=]() {
-        e = Expression::Identifier("id");
-        return e->eval(&context)->toString();
-    }).should_not.be.ok();
+    //    $("Identifier // undefined", [=]() {
+    //        e = Expression::Identifier("id");
+    //        return e->eval(&context)->toString();
+    //    }).should_not.be.ok();
 
-    $("If -> 1", [=]() {
-        e = Expression::If(Expression::Constant(esther.getTrue()), Expression::Literal(1), Expression::Literal(2));
-        return e->eval(&context)->toString();
-    }).should.be = "1";
+    //    $("If -> 1", [=]() {
+    //        e = Expression::If(Expression::Constant(esther.getTrue()), Expression::Literal(1), Expression::Literal(2));
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "1";
 
-    $("If -> 2", [=]() {
-        e = Expression::If(Expression::Constant(esther.getFalse()), Expression::Literal(1), Expression::Literal(2));
-        return e->eval(&context)->toString();
-    }).should.be = "2";
+    //    $("If -> 2", [=]() {
+    //        e = Expression::If(Expression::Constant(esther.getFalse()), Expression::Literal(1), Expression::Literal(2));
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "2";
 
-    $("Literal", [=]() {
-        e = Expression::Literal(3.14);
-        return e->eval(&context)->toString();
-    }).should.be = "3.14";
+    //    $("Literal", [=]() {
+    //        e = Expression::Literal(3.14);
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "3.14";
 
-    $("LocalAssignment", [=]() {
-        e = Expression::LocalAssignment("pi", Expression::Literal(3.14));
-        e->eval(&context);
-        return context.getLocal("pi")->toString();
-    }).should.be = "3.14";
+    //    $("LocalAssignment", [=]() {
+    //        e = Expression::LocalAssignment("pi", Expression::Literal(3.14));
+    //        e->eval(&context);
+    //        return context.getLocal("pi")->toString();
+    //    }).should.be = "3.14";
 
-    $("Loop", [=]() {
-        e = Expression::Block({ Expression::Assignment("i", Expression::Literal(0)),
-                                Expression::Loop(Expression::DirectCall(Expression::Identifier("i"), "<", { Expression::Literal(10) }),
-                                                 Expression::Assignment("i", Expression::DirectCall(Expression::Identifier("i"), "+", { Expression::Literal(1) }))) });
+    //    $("Loop", [=]() {
+    //        e = Expression::Block({ Expression::Assignment("i", Expression::Literal(0)),
+    //                                Expression::Loop(Expression::DirectCall(Expression::Identifier("i"), "<", { Expression::Literal(10) }),
+    //                                                 Expression::Assignment("i", Expression::DirectCall(Expression::Identifier("i"), "+", { Expression::Literal(1) }))) });
 
-        return e->eval(&context)->toString();
-    }).should.be = "10";
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "10";
 
-    $("Not", [=]() {
-        e = Expression::Not(Expression::Constant(esther.getTrue()));
-        return e->eval(&context)->toString();
-    }).should.be = "false";
+    //    $("Not", [=]() {
+    //        e = Expression::Not(Expression::Constant(esther.getTrue()));
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "false";
 
-    $("Or -> 1", [=]() {
-        e = Expression::Or(Expression::Literal(1), Expression::Literal(2));
-        return e->eval(&context)->toString();
-    }).should.be = "1";
+    //    $("Or -> 1", [=]() {
+    //        e = Expression::Or(Expression::Literal(1), Expression::Literal(2));
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "1";
 
-    $("Or -> 2", [=]() {
-        e = Expression::Or(Expression::Empty(), Expression::Literal(2));
-        return e->eval(&context)->toString();
-    }).should.be = "2";
+    //    $("Or -> 2", [=]() {
+    //        e = Expression::Or(Expression::Empty(), Expression::Literal(2));
+    //        return e->eval(&context)->toString();
+    //    }).should.be = "2";
 
-    $("Self", [=]() {
-        e = Expression::Self();
-        return e->eval(&context) == context.getSelf();
-    }).should.be = true;
-}
-
-Object *ExpressionTest::nativePlus(Context *context, ValueObject *x, ValueObject *y) {
-    return context->getRuntime()->createInteger(x->getVariant().toInteger() + y->getVariant().toInteger());
+    //    $("Self", [=]() {
+    //        e = Expression::Self();
+    //        return e->eval(&context) == context.getSelf();
+    //    }).should.be = true;
 }

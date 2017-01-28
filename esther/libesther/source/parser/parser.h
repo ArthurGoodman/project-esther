@@ -5,6 +5,7 @@
 #include "iparser.h"
 #include "token.h"
 
+class Esther;
 class Object;
 
 class Parser : public IParser {
@@ -13,14 +14,14 @@ class Parser : public IParser {
         ObjectContext
     };
 
-    Context *context;
+    Esther *esther;
     std::list<ContextType> contextTypes;
 
     Tokens tokens;
     Tokens::iterator token;
 
 public:
-    Expression *parse(Context *context, Tokens &tokens);
+    Expression *parse(Esther *esther, Tokens &tokens);
 
 private:
     void error(const std::string &msg, int delta = 0);

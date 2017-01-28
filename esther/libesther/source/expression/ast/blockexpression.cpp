@@ -14,11 +14,11 @@ BlockExpression::~BlockExpression() {
         delete e;
 }
 
-Object *BlockExpression::exec(Context *context) {
-    Object *value = context->getRuntime()->getNull();
+Object *BlockExpression::exec(Esther *esther) {
+    Object *value = esther->getNull();
 
     for (Expression *e : nodes)
-        value = e->eval(context);
+        value = e->eval(esther);
 
     return value;
 }

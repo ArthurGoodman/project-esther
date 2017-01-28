@@ -15,13 +15,13 @@ IfExpression::~IfExpression() {
     delete elseBody;
 }
 
-Object *IfExpression::exec(Context *context) {
-    Object *value = context->getRuntime()->getNull();
+Object *IfExpression::exec(Esther *esther) {
+    Object *value = esther->getNull();
 
-    if (condition->eval(context)->isTrue())
-        value = body->eval(context);
+    if (condition->eval(esther)->isTrue())
+        value = body->eval(esther);
     else if (elseBody)
-        value = elseBody->eval(context);
+        value = elseBody->eval(esther);
 
     return value;
 }

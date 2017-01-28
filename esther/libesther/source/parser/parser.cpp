@@ -11,8 +11,8 @@
 #include "class.h"
 #include "function.h"
 
-Expression *Parser::parse(Context *context, Tokens &tokens) {
-    this->context = context;
+Expression *Parser::parse(Esther *esther, Tokens &tokens) {
+    this->esther = esther;
     this->tokens.swap(tokens);
     token = this->tokens.begin();
 
@@ -91,7 +91,7 @@ Expression *Parser::parseDot(Expression *e) {
         Expression *body = term();
 
         if (accept(tAssign))
-            e = Expression::DirectCall(Expression::ContextResolution(e, body), "=", { logicOr() });
+            e = Expression::DirectCall(Expression::ContextResolution(e, Expression::Constant(esther->createObject()), body), "=", { logicOr() });
         else if (accept(tLPar)) {
             const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
             e = Expression::ContextCall(e, body, list);
@@ -99,7 +99,7 @@ Expression *Parser::parseDot(Expression *e) {
             if (!accept(tRPar))
                 error("unmatched parentheses");
         } else
-            e = Expression::ContextResolution(e, body);
+            e = Expression::ContextResolution(e, Expression::Constant(esther->createObject()), body);
     }
 
     return e;
@@ -335,7 +335,7 @@ Expression *Parser::term() {
         const std::string &name = token->getText();
         getToken();
 
-        e = Expression::LocalAssignment(name, accept(tAssign) ? logicOr() : Expression::Constant(context->getRuntime()->getNull()));
+        e = Expression::LocalAssignment(name, accept(tAssign) ? logicOr() : Expression::Constant(esther->getNull()));
     }
 
     else if (check(tInteger)) {
@@ -378,11 +378,11 @@ Expression *Parser::term() {
     }
 
     else if (accept(tTrue))
-        e = Expression::Constant(context->getRuntime()->getTrue());
+        e = Expression::Constant(esther->getTrue());
     else if (accept(tFalse))
-        e = Expression::Constant(context->getRuntime()->getFalse());
+        e = Expression::Constant(esther->getFalse());
     else if (accept(tNull))
-        e = Expression::Constant(context->getRuntime()->getNull());
+        e = Expression::Constant(esther->getNull());
 
     else if (accept(tSelf))
         e = Expression::Self();
@@ -397,9 +397,9 @@ Expression *Parser::term() {
             getToken();
         }
 
-        Expression *superclass = accept(tLt) ? expr() : Expression::Constant(context->getRuntime()->getObjectClass());
+        Expression *superclass = accept(tLt) ? expr() : Expression::Constant(esther->getObjectClass());
 
-        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({ term(), Expression::Self() }), true);
+        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({ term(), Expression::Self() }));
 
         if (!name.empty())
             e = Expression::LocalAssignment(name, e);
@@ -436,7 +436,7 @@ Expression *Parser::term() {
 
     else if (accept(tNew)) {
         if (check(tLBrace))
-            e = Expression::DirectCall(Expression::Constant(context->getRuntime()->getObjectClass()), "new", {});
+            e = Expression::DirectCall(Expression::Constant(esther->getObjectClass()), "new", {});
         else {
             if (check(tId) || accept(tDollar)) {
                 e = Expression::Identifier(token->getText());
@@ -457,7 +457,7 @@ Expression *Parser::term() {
         }
 
         if (check(tLBrace))
-            e = Expression::ContextResolution(e, Expression::Block({ term(), Expression::Self() }), true);
+            e = Expression::ContextResolution(e, Expression::Block({ term(), Expression::Self() }));
     }
 
     else if (accept(tAt))

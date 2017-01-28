@@ -19,19 +19,21 @@ ContextCallExpression::~ContextCallExpression() {
         delete e;
 }
 
-Object *ContextCallExpression::exec(Context *context) {
-    Object *evaledSelf = self->eval(context);
+Object *ContextCallExpression::exec(Esther *esther) {
+    Object *evaledSelf = self->eval(esther);
 
-    Object *f = body->eval(context->childContext(evaledSelf, context->getRuntime()->createObject()));
+    esther->pushChildContext(evaledSelf, esther->createObject());
+    Object *f = body->eval(esther);
+    esther->popContext();
 
     if (dynamic_cast<Function *>(f)) {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size());
 
         for (Expression *e : args)
-            evaledArgs << e->eval(context);
+            evaledArgs << e->eval(esther);
 
-        return ((Function *)f)->invoke(evaledSelf, evaledArgs);
+        return ((Function *)f)->invoke(esther, evaledSelf, evaledArgs);
     } else {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size() + 1);
@@ -39,8 +41,8 @@ Object *ContextCallExpression::exec(Context *context) {
         evaledArgs << evaledSelf;
 
         for (Expression *e : args)
-            evaledArgs << e->eval(context);
+            evaledArgs << e->eval(esther);
 
-        return f->call("()", evaledArgs);
+        return f->call(esther, "()", evaledArgs);
     }
 }

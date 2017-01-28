@@ -10,5 +10,5 @@ public:
     ~NotExpression();
 
 protected:
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 };

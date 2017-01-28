@@ -7,23 +7,23 @@ class Object;
 class Esther;
 
 class Context {
-    Esther *runtime;
+    Esther *esther;
     Context *parent;
     Object *self, *here;
 
     std::list<Context *> children;
 
 public:
-    Context(Esther *runtime);
+    Context(Esther *esther);
     virtual ~Context();
+
+    Context *getParent() const;
 
     Object *getSelf() const;
     void setSelf(Object *self);
 
     Object *getHere() const;
     void setHere(Object *here);
-
-    Esther *getRuntime() const;
 
     bool hasLocal(const std::string &name) const;
     Object *getLocal(const std::string &name) const;

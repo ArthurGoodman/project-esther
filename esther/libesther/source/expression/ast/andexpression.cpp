@@ -10,11 +10,11 @@ AndExpression::~AndExpression() {
     delete arg;
 }
 
-Object *AndExpression::exec(Context *context) {
-    Object *self = this->self->eval(context);
+Object *AndExpression::exec(Esther *esther) {
+    Object *self = this->self->eval(esther);
 
     if (self->isTrue())
-        return arg->eval(context);
+        return arg->eval(esther);
 
     return self;
 }

@@ -6,7 +6,7 @@ CONFIG -= qt
 
 DEPENDPATH += ../libesther
 INCLUDEPATH += ../libesther/source
-LIBS += -L../libesther/release -lesther
+LIBS += -L../libesther/debug -lesther
 
 SOURCES += \
     source/main.cpp

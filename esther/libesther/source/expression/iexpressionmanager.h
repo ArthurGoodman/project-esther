@@ -22,7 +22,7 @@ public:
     virtual Expression *createCall(const std::string &name, const std::list<Expression *> &args) = 0;
     virtual Expression *createClassDefinition(const std::string &name, Expression *superclass, Expression *body) = 0;
     virtual Expression *createConstant(Object *value) = 0;
-    virtual Expression *createContextResolution(Expression *self, Expression *body, bool object) = 0;
+    virtual Expression *createContextResolution(Expression *self, Expression *here, Expression *body) = 0;
     virtual Expression *createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) = 0;
     virtual Expression *createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) = 0;
     virtual Expression *createDynamicCall(Expression *body, const std::list<Expression *> &args) = 0;

@@ -13,9 +13,9 @@ AttributeAssignmentExpression::~AttributeAssignmentExpression() {
     delete value;
 }
 
-Object *AttributeAssignmentExpression::exec(Context *context) {
-    Object *evaledSelf = self->eval(context);
-    Object *evaledValue = value->eval(context);
+Object *AttributeAssignmentExpression::exec(Esther *esther) {
+    Object *evaledSelf = self->eval(esther);
+    Object *evaledValue = value->eval(esther);
 
     evaledSelf->setAttribute(name, evaledValue);
 

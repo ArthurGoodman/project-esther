@@ -20,6 +20,4 @@ protected:
 
 private:
     void defineTests();
-
-    static Object *nativePlus(Context *context, ValueObject *x, ValueObject *y);
 };

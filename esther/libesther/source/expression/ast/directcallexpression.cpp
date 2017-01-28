@@ -15,13 +15,13 @@ DirectCallExpression::~DirectCallExpression() {
         delete e;
 }
 
-Object *DirectCallExpression::exec(Context *context) {
-    Object *evaledSelf = self->eval(context);
+Object *DirectCallExpression::exec(Esther *esther) {
+    Object *evaledSelf = self->eval(esther);
 
     std::vector<Object *> evaledArgs;
 
     for (Expression *e : args)
-        evaledArgs << e->eval(context);
+        evaledArgs << e->eval(esther);
 
-    return evaledSelf->call(name, evaledArgs);
+    return evaledSelf->call(esther, name, evaledArgs);
 }

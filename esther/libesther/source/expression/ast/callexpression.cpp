@@ -14,8 +14,8 @@ CallExpression::~CallExpression() {
         delete e;
 }
 
-Object *CallExpression::exec(Context *context) {
-    Object *f = context->get(name);
+Object *CallExpression::exec(Esther *esther) {
+    Object *f = esther->getContext()->get(name);
 
     if (f == nullptr)
         Esther::runtimeError("undefined identifier '" + name + "'");
@@ -25,18 +25,18 @@ Object *CallExpression::exec(Context *context) {
         evaledArgs.reserve(args.size());
 
         for (Expression *e : args)
-            evaledArgs << e->eval(context);
+            evaledArgs << e->eval(esther);
 
-        return ((Function *)f)->invoke(context->getSelf(), evaledArgs);
+        return ((Function *)f)->invoke(esther, esther->getContext()->getSelf(), evaledArgs);
     } else {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size() + 1);
 
-        evaledArgs << context->getSelf();
+        evaledArgs << esther->getContext()->getSelf();
 
         for (Expression *e : args)
-            evaledArgs << e->eval(context);
+            evaledArgs << e->eval(esther);
 
-        return f->call("()", evaledArgs);
+        return f->call(esther, "()", evaledArgs);
     }
 }

@@ -12,11 +12,11 @@ void Function::setName(const std::string &name) {
     this->name = name;
 }
 
-Object *Function::invoke(Object *self, const std::vector<Object *> &args) {
+Object *Function::invoke(Esther *esther, Object *self, const std::vector<Object *> &args) {
     if (arity >= 0 && arity != (int)args.size())
         Esther::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(arity) + ")");
 
-    return execute(self, args);
+    return execute(esther, self, args);
 }
 
 std::string Function::toString() const {
