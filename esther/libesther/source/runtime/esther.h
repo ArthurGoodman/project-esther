@@ -49,7 +49,7 @@ class Esther {
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 
-    Context *context;
+    std::stack<Context *> contexts;
 
 public:
     static void runtimeError(const std::string &message);
@@ -92,7 +92,8 @@ public:
 
     Context *getContext() const;
 
-    void pushChildContext(Object *self, Object *here);
+    void pushContext(Object *self, Object *here);
+    void pushContext(Context *context);
     void popContext();
 
 private:

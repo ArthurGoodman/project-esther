@@ -189,7 +189,7 @@ void Esther::initialize() {
                               return getNull();
                           }));
 
-    context = new Context(this);
+    pushContext(new Context(this));
 }
 
 void Esther::release() {
@@ -241,15 +241,19 @@ Object *Esther::runFile(const std::string &fileName) {
 }
 
 Context *Esther::getContext() const {
-    return context;
+    return contexts.top();
 }
 
-void Esther::pushChildContext(Object *self, Object *here) {
-    context = context->childContext(self, here);
+void Esther::pushContext(Object *self, Object *here) {
+    pushContext(getContext()->childContext(self, here));
+}
+
+void Esther::pushContext(Context *context) {
+    contexts.push(context);
 }
 
 void Esther::popContext() {
-    context = context->getParent();
+    contexts.pop();
 }
 
 void Esther::pushSource(const std::string &source) {

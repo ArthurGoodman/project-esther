@@ -3,7 +3,7 @@
 #include "esther.h"
 
 Object *InterpretedFunction::execute(Esther *esther, Object *self, const std::vector<Object *> &args) {
-    esther->pushChildContext(self, esther->createObject());
+    esther->pushContext(context->childContext(self, esther->createObject()));
 
     std::vector<Object *>::const_iterator i = args.begin();
     for (const std::string &s : params)

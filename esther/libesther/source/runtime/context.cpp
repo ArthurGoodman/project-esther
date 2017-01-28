@@ -15,10 +15,6 @@ Context::~Context() {
         delete child;
 }
 
-Context *Context::getParent() const {
-    return parent;
-}
-
 Object *Context::getSelf() const {
     return self;
 }

@@ -19,7 +19,7 @@ Object *ContextResolutionExpression::exec(Esther *esther) {
     Object *evaledSelf = self->eval(esther);
     Object *evaledHere = here ? here->eval(esther) : evaledSelf;
 
-    esther->pushChildContext(evaledSelf, evaledHere);
+    esther->pushContext(evaledSelf, evaledHere);
     Object *value = body->eval(esther);
     esther->popContext();
 

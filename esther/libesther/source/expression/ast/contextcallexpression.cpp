@@ -22,7 +22,7 @@ ContextCallExpression::~ContextCallExpression() {
 Object *ContextCallExpression::exec(Esther *esther) {
     Object *evaledSelf = self->eval(esther);
 
-    esther->pushChildContext(evaledSelf, esther->createObject());
+    esther->pushContext(evaledSelf, esther->createObject());
     Object *f = body->eval(esther);
     esther->popContext();
 

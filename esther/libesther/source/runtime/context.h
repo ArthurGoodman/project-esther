@@ -17,8 +17,6 @@ public:
     Context(Esther *esther);
     virtual ~Context();
 
-    Context *getParent() const;
-
     Object *getSelf() const;
     void setSelf(Object *self);
 
