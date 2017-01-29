@@ -10,31 +10,31 @@ Object *ObjectClass::createObject(Class *objectClass) {
 }
 
 Object *ObjectClass::createNewInstance(const std::vector<Object *> &) {
-    return createObject(esther->getObjectClass());
+    return createObject(this);
 }
 
-void ObjectClass::setupMethods() {
-    defFunc("class", [=](Esther *, Object *self, const std::vector<Object *> &) -> Object * {
+void ObjectClass::setupMethods(Esther *esther) {
+    defFunc(esther, "class", [=](Esther *, Object *self, const std::vector<Object *> &) -> Object * {
         return self->getClass();
     });
 
-    defFunc("==", { this }, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "==", { this }, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         return esther->toBoolean(self->call(esther, "equals", args)->isTrue());
     });
 
-    defFunc("!=", { this }, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "!=", { this }, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         return esther->toBoolean(!self->call(esther, "equals", args)->isTrue());
     });
 
-    defFunc("toString", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc(esther, "toString", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
         return esther->createString(self->toString());
     });
 
-    defFunc("equals", 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "equals", 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         return esther->toBoolean(self == args[0]);
     });
 
-    defFunc("is", 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "is", 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<Class *>(args[0])) {
             Esther::runtimeError(getName() + ".is: invalid argument");
             return nullptr;
@@ -44,6 +44,6 @@ void ObjectClass::setupMethods() {
     });
 }
 
-ObjectClass::ObjectClass(Esther *e)
-    : RootClass(e, "Object", nullptr) {
+ObjectClass::ObjectClass(Esther *esther)
+    : RootClass(esther, "Object", nullptr) {
 }

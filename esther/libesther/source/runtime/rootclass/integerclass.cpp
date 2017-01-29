@@ -13,7 +13,7 @@ Object *IntegerClass::createNewInstance(const std::vector<Object *> &) {
     return createInteger(0);
 }
 
-void IntegerClass::setupMethods() {
+void IntegerClass::setupMethods(Esther *esther) {
     setAttribute("()", esther->createNativeFunction("()", 2, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<IntegerClass *>(self)) {
             Esther::runtimeError(getName() + ".(): invalid self");
@@ -28,7 +28,7 @@ void IntegerClass::setupMethods() {
         return esther->createInteger(((ValueObject *)args[1])->getVariant().toInteger());
     }));
 
-    defValueObjectFunc("initialize", -1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc(esther, "initialize", -1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
             Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
 
@@ -38,12 +38,12 @@ void IntegerClass::setupMethods() {
         return self;
     });
 
-    defValueObjectFunc("=", 1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc(esther, "=", 1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toInteger());
         return self;
     });
 }
 
-IntegerClass::IntegerClass(Esther *e)
-    : RootClass(e, "Integer", e->getNumericClass()) {
+IntegerClass::IntegerClass(Esther *esther)
+    : RootClass(esther, "Integer", esther->getNumericClass()) {
 }

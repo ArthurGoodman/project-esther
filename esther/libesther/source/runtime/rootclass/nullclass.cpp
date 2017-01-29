@@ -8,9 +8,9 @@ Object *NullClass::createNewInstance(const std::vector<Object *> &) {
     return nullptr;
 }
 
-void NullClass::setupMethods() {
+void NullClass::setupMethods(Esther *) {
 }
 
-NullClass::NullClass(Esther *e)
-    : RootClass(e, "Null", e->getObjectClass()) {
+NullClass::NullClass(Esther *esther)
+    : RootClass(esther, "Null", esther->getObjectClass()) {
 }

@@ -197,7 +197,7 @@ void Esther::release() {
 
 void Esther::setupMethods() {
     for (auto &rootClass : rootClasses)
-        rootClass.second->setupMethods();
+        rootClass.second->setupMethods(this);
 }
 
 Object *Esther::run(const std::string &script) {
@@ -240,12 +240,12 @@ Object *Esther::runFile(const std::string &fileName) {
     return value;
 }
 
-Context *Esther::getContext() const {
+Context *Esther::context() const {
     return contexts.top();
 }
 
 void Esther::pushContext(Object *self, Object *here) {
-    pushContext(getContext()->childContext(self, here));
+    pushContext(context()->childContext(self, here));
 }
 
 void Esther::pushContext(Context *context) {

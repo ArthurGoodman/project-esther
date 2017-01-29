@@ -8,8 +8,8 @@ class BooleanClass : public RootClass {
 protected:
     Object *createNewInstance(const std::vector<Object *> &args);
 
-    void setupMethods();
+    void setupMethods(Esther *esther);
 
 private:
-    BooleanClass(Esther *e);
+    BooleanClass(Esther *esther);
 };

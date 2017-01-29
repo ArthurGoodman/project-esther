@@ -12,7 +12,7 @@ Object *StringClass::createNewInstance(const std::vector<Object *> &) {
     return createString("");
 }
 
-void StringClass::setupMethods() {
+void StringClass::setupMethods(Esther *esther) {
     setAttribute("()", esther->createNativeFunction("()", 2, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (!dynamic_cast<StringClass *>(self)) {
             Esther::runtimeError(getName() + ".(): invalid self");
@@ -27,7 +27,7 @@ void StringClass::setupMethods() {
         return esther->createString(((ValueObject *)args[1])->getVariant().toString());
     }));
 
-    defValueObjectFunc("initialize", -1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc(esther, "initialize", -1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
             Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
 
@@ -37,48 +37,48 @@ void StringClass::setupMethods() {
         return self;
     });
 
-    defOper("+", [](const Variant &a, const Variant &b) -> Variant {
+    defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString() + b.toString();
     });
 
-    defPred("<", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "<", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() < b.toString();
     });
 
-    defPred("<=", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "<=", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() <= b.toString();
     });
 
-    defPred(">", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, ">", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() > b.toString();
     });
 
-    defPred(">=", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, ">=", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() >= b.toString();
     });
 
-    defPred("equals", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() == b.toString();
     });
 
-    defFunc("size", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc(esther, "size", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
         return esther->createInteger(((ValueObject *)self)->toString().size());
     });
 
-    defOper("[]", [](const Variant &a, const Variant &b) -> Variant {
+    defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString()[b.toInteger()];
     });
 
-    defPred("contains", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "contains", [](const Variant &a, const Variant &b) -> bool {
         return a.toString().find(b.toChar()) != std::string::npos;
     });
 
-    defValueObjectFunc("=", 1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc(esther, "=", 1, [=](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         ((ValueObject *)self)->setVariant(((ValueObject *)args[0])->getVariant().toString());
         return self;
     });
 }
 
-StringClass::StringClass(Esther *e)
-    : RootClass(e, "String", e->getObjectClass()) {
+StringClass::StringClass(Esther *esther)
+    : RootClass(esther, "String", esther->getObjectClass()) {
 }

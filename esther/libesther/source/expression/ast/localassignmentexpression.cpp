@@ -14,6 +14,6 @@ LocalAssignmentExpression::~LocalAssignmentExpression() {
 
 Object *LocalAssignmentExpression::exec(Esther *esther) {
     Object *evaledValue = value->eval(esther);
-    esther->getContext()->setLocal(name, evaledValue);
+    esther->context()->setLocal(name, evaledValue);
     return evaledValue;
 }

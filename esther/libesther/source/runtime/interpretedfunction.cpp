@@ -7,7 +7,7 @@ Object *InterpretedFunction::execute(Esther *esther, Object *self, const std::ve
 
     std::vector<Object *>::const_iterator i = args.begin();
     for (const std::string &s : params)
-        esther->getContext()->setLocal(s, *i++);
+        esther->context()->setLocal(s, *i++);
 
     Object *value = body->eval(esther);
 

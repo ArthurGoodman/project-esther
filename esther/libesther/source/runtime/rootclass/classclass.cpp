@@ -10,16 +10,16 @@ Object *ClassClass::createNewInstance(const std::vector<Object *> &) {
     return createClass("");
 }
 
-void ClassClass::setupMethods() {
-    defFunc("new", -1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+void ClassClass::setupMethods(Esther *esther) {
+    defFunc(esther, "new", -1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         return ((Class *)self)->newInstance(esther, args);
     });
 
-    defFunc("superclass", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc(esther, "superclass", [=](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
         return ((Class *)self)->getSuperclass() ? ((Class *)self)->getSuperclass() : esther->getNull();
     });
 }
 
-ClassClass::ClassClass(Esther *e)
-    : RootClass(e, "Class", nullptr) {
+ClassClass::ClassClass(Esther *esther)
+    : RootClass(esther, "Class", nullptr) {
 }

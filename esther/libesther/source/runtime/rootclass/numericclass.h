@@ -6,8 +6,8 @@ class NumericClass : public RootClass {
     friend class Esther;
 
 protected:
-    void setupMethods();
+    void setupMethods(Esther *esther);
 
 private:
-    NumericClass(Esther *e);
+    NumericClass(Esther *esther);
 };

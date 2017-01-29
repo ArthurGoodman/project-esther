@@ -4,5 +4,5 @@
 #include "context.h"
 
 Object *SelfExpression::exec(Esther *esther) {
-    return esther->getContext()->getSelf();
+    return esther->context()->getSelf();
 }

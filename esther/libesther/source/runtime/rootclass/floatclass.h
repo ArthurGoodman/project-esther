@@ -13,8 +13,8 @@ public:
 protected:
     Object *createNewInstance(const std::vector<Object *> &args);
 
-    void setupMethods();
+    void setupMethods(Esther *esther);
 
 private:
-    FloatClass(Esther *e);
+    FloatClass(Esther *esther);
 };

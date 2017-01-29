@@ -90,7 +90,7 @@ public:
     Object *run(const std::string &script);
     Object *runFile(const std::string &fileName);
 
-    Context *getContext() const;
+    Context *context() const;
 
     void pushContext(Object *self, Object *here);
     void pushContext(Context *context);

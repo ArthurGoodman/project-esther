@@ -4,5 +4,5 @@
 #include "context.h"
 
 Object *HereExpression::exec(Esther *esther) {
-    return esther->getContext()->getHere();
+    return esther->context()->getHere();
 }

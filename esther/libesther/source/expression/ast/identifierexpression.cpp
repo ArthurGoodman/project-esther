@@ -11,7 +11,7 @@ IdentifierExpression::~IdentifierExpression() {
 }
 
 Object *IdentifierExpression::exec(Esther *esther) {
-    Object *value = esther->getContext()->get(name);
+    Object *value = esther->context()->get(name);
 
     if (value == nullptr)
         Esther::runtimeError("undefined identifier '" + name + "'");

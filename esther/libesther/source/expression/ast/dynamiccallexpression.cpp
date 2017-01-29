@@ -27,12 +27,12 @@ Object *DynamicCallExpression::exec(Esther *esther) {
         for (Expression *e : args)
             evaledArgs << e->eval(esther);
 
-        return ((Function *)f)->invoke(esther, esther->getContext()->getSelf(), evaledArgs);
+        return ((Function *)f)->invoke(esther, esther->context()->getSelf(), evaledArgs);
     } else {
         std::vector<Object *> evaledArgs;
         evaledArgs.reserve(args.size() + 1);
 
-        evaledArgs << esther->getContext()->getSelf();
+        evaledArgs << esther->context()->getSelf();
 
         for (Expression *e : args)
             evaledArgs << e->eval(esther);

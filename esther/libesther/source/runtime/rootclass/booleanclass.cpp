@@ -7,9 +7,9 @@ Object *BooleanClass::createNewInstance(const std::vector<Object *> &) {
     return nullptr;
 }
 
-void BooleanClass::setupMethods() {
+void BooleanClass::setupMethods(Esther *) {
 }
 
-BooleanClass::BooleanClass(Esther *e)
-    : RootClass(e, "Boolean", e->getObjectClass()) {
+BooleanClass::BooleanClass(Esther *esther)
+    : RootClass(esther, "Boolean", esther->getObjectClass()) {
 }

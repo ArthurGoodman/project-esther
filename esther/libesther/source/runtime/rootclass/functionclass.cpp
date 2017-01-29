@@ -17,8 +17,8 @@ Object *FunctionClass::createNewInstance(const std::vector<Object *> &) {
     return nullptr;
 }
 
-void FunctionClass::setupMethods() {
-    defFunc("call", -1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+void FunctionClass::setupMethods(Esther *esther) {
+    defFunc(esther, "call", -1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (args.empty())
             Esther::runtimeError(getName() + ".call: invalid number of arguments");
 
@@ -33,6 +33,6 @@ void FunctionClass::setupMethods() {
     setAttribute("()", getAttribute("call"));
 }
 
-FunctionClass::FunctionClass(Esther *e)
-    : RootClass(e, "Function", e->getObjectClass()) {
+FunctionClass::FunctionClass(Esther *esther)
+    : RootClass(esther, "Function", esther->getObjectClass()) {
 }

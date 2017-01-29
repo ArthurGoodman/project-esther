@@ -8,8 +8,8 @@ class NullClass : public RootClass {
 protected:
     Object *createNewInstance(const std::vector<Object *> &args);
 
-    void setupMethods();
+    void setupMethods(Esther *esther);
 
 private:
-    NullClass(Esther *e);
+    NullClass(Esther *esther);
 };

@@ -15,5 +15,5 @@ FunctionDefinitionExpression::~FunctionDefinitionExpression() {
 }
 
 Object *FunctionDefinitionExpression::exec(Esther *esther) {
-    return esther->createInterpretedFunction(name, params, body, esther->getContext());
+    return esther->createInterpretedFunction(name, params, body, esther->context());
 }
