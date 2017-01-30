@@ -3,16 +3,16 @@
 #include "context.h"
 #include "esther.h"
 
-ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *here, Expression *body)
+ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body, Expression *here)
     : self(self)
-    , here(here)
-    , body(body) {
+    , body(body)
+    , here(here) {
 }
 
 ContextResolutionExpression::~ContextResolutionExpression() {
     delete self;
-    delete here;
     delete body;
+    delete here;
 }
 
 Object *ContextResolutionExpression::exec(Esther *esther) {

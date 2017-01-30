@@ -4,10 +4,9 @@
 #include "esther.h"
 #include "class.h"
 
-ClassDefinitionExpression::ClassDefinitionExpression(const std::string &name, Expression *superclass, Expression *body)
+ClassDefinitionExpression::ClassDefinitionExpression(const std::string &name, Expression *superclass)
     : name(name)
-    , superclass(superclass)
-    , body(body) {
+    , superclass(superclass) {
 }
 
 ClassDefinitionExpression::~ClassDefinitionExpression() {
@@ -22,7 +21,5 @@ Object *ClassDefinitionExpression::exec(Esther *esther) {
         Esther::runtimeError("class expected");
     }
 
-    Class *_class = esther->createClass(name, (Class *)evaledSuperclass);
-
-    return _class;
+    return esther->createClass(name, (Class *)evaledSuperclass);
 }

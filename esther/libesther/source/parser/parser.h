@@ -4,6 +4,7 @@
 
 #include "iparser.h"
 #include "token.h"
+#include "tokens.h"
 
 class Esther;
 class Object;
@@ -15,7 +16,6 @@ class Parser : public IParser {
     };
 
     Esther *esther;
-    std::list<ContextType> contextTypes;
 
     Tokens tokens;
     Tokens::iterator token;
@@ -31,12 +31,13 @@ private:
     bool check(int id);
     bool accept(int id);
 
-    std::list<Expression *> parseBlock();
-    std::list<Expression *> parseList();
+    std::list<Expression *> block();
+    std::list<Expression *> list();
 
-    Expression *parseDot(Expression *e);
-
-    Expression *parseIdentifier();
+    Expression *binOper(Expression *left, const std::string &oper, Expression *right);
+    Expression *assignOper(Expression *left, const std::string &oper, Expression *right);
+    Expression *call(Expression *self, Expression *f, int closingBracketId = tRPar);
+    Expression *dot(Expression *e);
 
     Expression *expr();
     Expression *logicOr();

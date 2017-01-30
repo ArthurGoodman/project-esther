@@ -18,10 +18,9 @@ DebugExpression::~DebugExpression() {
         delete e;
 }
 
-Object *DebugExpression::exec(Context *context) {
+Object *DebugExpression::exec(Esther *esther) {
     Logger::write("parser", toString() + "\n");
-
-    return context->getRuntime()->getNull();
+    return esther->getNull();
 }
 
 std::string DebugExpression::toString() const {

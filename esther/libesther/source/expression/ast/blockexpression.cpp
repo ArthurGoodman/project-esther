@@ -6,7 +6,11 @@
 
 BlockExpression::BlockExpression(const std::list<Expression *> &nodes) {
     for (Expression *e : nodes)
-        this->nodes << e;
+        if (dynamic_cast<BlockExpression *>(e)) {
+            this->nodes.insert(this->nodes.end(), ((BlockExpression *)e)->nodes.begin(), ((BlockExpression *)e)->nodes.end());
+            delete e;
+        } else
+            this->nodes << e;
 }
 
 BlockExpression::~BlockExpression() {

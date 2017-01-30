@@ -51,6 +51,9 @@ class Esther {
 
     std::stack<Context *> contexts;
 
+    std::vector<Object *> stack;
+    Object *reg;
+
 public:
     static void runtimeError(const std::string &message);
 
@@ -95,6 +98,13 @@ public:
     void pushContext(Object *self, Object *here);
     void pushContext(Context *context);
     void popContext();
+
+    void push(Object *value);
+    void pop(int count = 1);
+    Object *top(int index = 0);
+
+    Object *getReg() const;
+    void setReg(Object *value);
 
 private:
     void initialize();

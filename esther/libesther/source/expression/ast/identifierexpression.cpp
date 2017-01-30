@@ -14,7 +14,7 @@ Object *IdentifierExpression::exec(Esther *esther) {
     Object *value = esther->context()->get(name);
 
     if (value == nullptr)
-        Esther::runtimeError("undefined identifier '" + name + "'");
+        Esther::runtimeError("IdentifierExpression:exec: undefined identifier '" + name + "'");
 
     return value;
 }

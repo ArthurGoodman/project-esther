@@ -19,7 +19,7 @@ public:
     DebugExpression(const std::string &name, const std::list<DebugExpression *> &args = std::list<DebugExpression *>());
     ~DebugExpression();
 
-    Object *exec(Context *context);
+    Object *exec(Esther *esther);
 
     virtual std::string toString() const;
 };

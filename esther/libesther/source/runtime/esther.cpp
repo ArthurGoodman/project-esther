@@ -209,7 +209,7 @@ Object *Esther::run(const std::string &script) {
 
     try {
         Expression *e = IParser::instance()->parse(this, ILexer::instance()->lex(src));
-        value = e->eval(this);
+        value = e ? e->eval(this) : nullptr;
         delete e;
     } catch (ErrorException *e) {
         IO::writeLine(fileName() + ":" + (e->getPosition().isValid() ? e->getPosition().toString() + ": " : " ") + e->message());
@@ -254,6 +254,26 @@ void Esther::pushContext(Context *context) {
 
 void Esther::popContext() {
     contexts.pop();
+}
+
+void Esther::push(Object *value) {
+    stack.push_back(value);
+}
+
+void Esther::pop(int count) {
+    stack.erase(stack.end() - count, stack.end());
+}
+
+Object *Esther::top(int index) {
+    return stack[stack.size() - 1 - index];
+}
+
+Object *Esther::getReg() const {
+    return reg;
+}
+
+void Esther::setReg(Object *value) {
+    reg = value;
 }
 
 void Esther::pushSource(const std::string &source) {

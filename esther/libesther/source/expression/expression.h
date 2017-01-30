@@ -17,14 +17,10 @@ public:
     static Expression *AttributeAssignment(Expression *self, const std::string &name, Expression *value);
     static Expression *Attribute(Expression *self, const std::string &name);
     static Expression *Block(const std::list<Expression *> &nodes);
-    static Expression *Call(const std::string &name, const std::list<Expression *> &args);
-    static Expression *ClassDefinition(const std::string &name, Expression *superclass, Expression *body = nullptr);
+    static Expression *Call(Expression *f, Expression *self, int args);
+    static Expression *ClassDefinition(const std::string &name, Expression *superclass);
     static Expression *Constant(Object *value);
-    static Expression *ContextResolution(Expression *self, Expression *here, Expression *body);
-    static Expression *ContextResolution(Expression *self, Expression *body);
-    static Expression *ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args);
-    static Expression *DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args);
-    static Expression *DynamicCall(Expression *body, const std::list<Expression *> &args);
+    static Expression *ContextResolution(Expression *self, Expression *body, Expression *here = nullptr);
     static Expression *Empty();
     static Expression *FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body);
     static Expression *Here();
@@ -35,7 +31,10 @@ public:
     static Expression *Loop(Expression *condition, Expression *body);
     static Expression *Not(Expression *self);
     static Expression *Or(Expression *self, Expression *arg);
+    static Expression *Pop(int count);
+    static Expression *Push(Expression *arg);
     static Expression *Self();
+    static Expression *Stack(int index);
 
     virtual ~Expression();
 

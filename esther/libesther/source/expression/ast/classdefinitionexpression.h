@@ -4,10 +4,10 @@
 
 class ClassDefinitionExpression : public Expression {
     std::string name;
-    Expression *superclass, *body;
+    Expression *superclass;
 
 public:
-    ClassDefinitionExpression(const std::string &name, Expression *superclass, Expression *body);
+    ClassDefinitionExpression(const std::string &name, Expression *superclass);
     ~ClassDefinitionExpression();
 
 protected:

@@ -32,6 +32,8 @@ public:
     virtual bool isTrue() const;
 
     Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args);
-    Object *callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args);
+    Object *call(Esther *esther, Object *f, const std::vector<Object *> &args);
     Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
+
+    Object *callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args);
 };

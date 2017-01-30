@@ -4,39 +4,25 @@
 #include "esther.h"
 #include "function.h"
 
-CallExpression::CallExpression(const std::string &name, const std::list<Expression *> &args)
-    : name(name)
+CallExpression::CallExpression(Expression *f, Expression *self, int args)
+    : f(f)
+    , self(self)
     , args(args) {
 }
 
 CallExpression::~CallExpression() {
-    for (Expression *e : args)
-        delete e;
+    delete f;
+    delete self;
 }
 
 Object *CallExpression::exec(Esther *esther) {
-    Object *f = esther->context()->get(name);
+    Object *evaledF = f->eval(esther);
+    Object *evaledSelf = self->eval(esther);
 
-    if (f == nullptr)
-        Esther::runtimeError("undefined identifier '" + name + "'");
+    std::vector<Object *> evaledArgs;
 
-    if (dynamic_cast<Function *>(f)) {
-        std::vector<Object *> evaledArgs;
-        evaledArgs.reserve(args.size());
+    for (int i = args - 1; i >= 0; i--)
+        evaledArgs << esther->top(i);
 
-        for (Expression *e : args)
-            evaledArgs << e->eval(esther);
-
-        return ((Function *)f)->invoke(esther, esther->context()->getSelf(), evaledArgs);
-    } else {
-        std::vector<Object *> evaledArgs;
-        evaledArgs.reserve(args.size() + 1);
-
-        evaledArgs << esther->context()->getSelf();
-
-        for (Expression *e : args)
-            evaledArgs << e->eval(esther);
-
-        return f->call(esther, "()", evaledArgs);
-    }
+    return evaledSelf->call(esther, evaledF, evaledArgs);
 }

@@ -3,13 +3,13 @@
 #include "common.h"
 #include "expression.h"
 #include "syntaxerror.h"
-#include "tokens.h"
 #include "variant.h"
 #include "utility.h"
 #include "esther.h"
 #include "context.h"
 #include "class.h"
 #include "function.h"
+#include "classclass.h"
 
 Expression *Parser::parse(Esther *esther, Tokens &tokens) {
     this->esther = esther;
@@ -18,8 +18,12 @@ Expression *Parser::parse(Esther *esther, Tokens &tokens) {
 
     std::list<Expression *> nodes;
 
-    while (!check(tEnd))
+    while (!check(tEnd)) {
         nodes << expr();
+
+        if (!nodes.back())
+            return nullptr;
+    }
 
     Expression *e = nodes.empty() ? Expression::Empty() : nodes.size() == 1 ? nodes.front() : Expression::Block(nodes);
 
@@ -47,7 +51,7 @@ bool Parser::accept(int id) {
     return false;
 }
 
-std::list<Expression *> Parser::parseBlock() {
+std::list<Expression *> Parser::block() {
     std::list<Expression *> nodes;
 
     while (!check(tRBrace) && !check(tEnd))
@@ -59,7 +63,7 @@ std::list<Expression *> Parser::parseBlock() {
     return nodes;
 }
 
-std::list<Expression *> Parser::parseList() {
+std::list<Expression *> Parser::list() {
     std::list<Expression *> nodes;
 
     do
@@ -69,7 +73,55 @@ std::list<Expression *> Parser::parseList() {
     return nodes;
 }
 
-Expression *Parser::parseDot(Expression *e) {
+Expression *Parser::binOper(Expression *left, const std::string &oper, Expression *right) {
+    std::list<Expression *> nodes;
+
+    nodes << Expression::Push(left);
+    nodes << Expression::Push(Expression::Attribute(Expression::Stack(0), oper));
+    nodes << Expression::Push(right);
+    nodes << Expression::Call(Expression::Stack(1), Expression::Stack(2), 1);
+    nodes << Expression::Pop(3);
+
+    return Expression::Block(nodes);
+}
+
+Expression *Parser::assignOper(Expression *left, const std::string &oper, Expression *right) {
+    std::list<Expression *> nodes;
+
+    nodes << Expression::Push(left);
+    nodes << Expression::Push(Expression::Attribute(Expression::Stack(0), oper));
+    nodes << Expression::Push(Expression::Attribute(Expression::Stack(1), "="));
+    nodes << Expression::Push(right);
+    nodes << Expression::Push(Expression::Call(Expression::Stack(2), Expression::Stack(3), 1));
+    nodes << Expression::Call(Expression::Stack(2), Expression::Stack(4), 1);
+    nodes << Expression::Pop(5);
+
+    return Expression::Block(nodes);
+}
+
+Expression *Parser::call(Expression *self, Expression *f, int closingBracketId) {
+    std::list<Expression *> nodes;
+    int args = 0;
+
+    nodes << Expression::Push(self);
+    nodes << Expression::Push(f);
+
+    if (!check(closingBracketId))
+        do {
+            nodes << Expression::Push(logicOr());
+            args++;
+        } while (accept(tComma));
+
+    if (!accept(closingBracketId))
+        error("unmatched parentheses");
+
+    nodes << Expression::Call(Expression::Stack(args), Expression::Stack(args + 1), args);
+    nodes << Expression::Pop(args + 2);
+
+    return Expression::Block(nodes);
+}
+
+Expression *Parser::dot(Expression *e) {
     if (!check(tDollar) && !check(tLPar) && !check(tLBrace) && !check(tEnd))
         token->setId(tId);
 
@@ -79,45 +131,18 @@ Expression *Parser::parseDot(Expression *e) {
 
         if (accept(tAssign))
             e = Expression::AttributeAssignment(e, name, logicOr());
-        else if (accept(tLPar)) {
-            const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-            e = Expression::DirectCall(e, name, list);
-
-            if (!accept(tRPar))
-                error("unmatched parentheses");
-        } else
+        else if (accept(tLPar))
+            e = call(e, Expression::Attribute(Expression::Stack(0), name));
+        else
             e = Expression::Attribute(e, name);
     } else {
         Expression *body = term();
+        Expression *newObject = Expression::Call(Expression::Constant(esther->getClassClass()->getAttribute("new")), Expression::Constant(esther->getObjectClass()), 0);
 
-        if (accept(tAssign))
-            e = Expression::DirectCall(Expression::ContextResolution(e, Expression::Constant(esther->createObject()), body), "=", { logicOr() });
-        else if (accept(tLPar)) {
-            const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-            e = Expression::ContextCall(e, body, list);
-
-            if (!accept(tRPar))
-                error("unmatched parentheses");
-        } else
-            e = Expression::ContextResolution(e, Expression::Constant(esther->createObject()), body);
-    }
-
-    return e;
-}
-
-Expression *Parser::parseIdentifier() {
-    Expression *e = nullptr;
-
-    if (check(tId)) {
-        e = Expression::Literal(token->getText());
-        getToken();
-    } else if (accept(tDollar)) {
-        if (check(tLPar) || check(tLBrace) || check(tEnd))
-            e = term();
-        else {
-            e = Expression::Literal(token->getText());
-            getToken();
-        }
+        if (accept(tLPar))
+            e = call(e, Expression::ContextResolution(Expression::Stack(0), body, newObject));
+        else
+            e = Expression::ContextResolution(e, body, newObject);
     }
 
     return e;
@@ -128,18 +153,17 @@ Expression *Parser::expr() {
 
     while (true) {
         if (accept(tAssign))
-            e = Expression::DirectCall(e, "=", { logicOr() });
-        // TODO: get rid of this, this is terrible
+            e = binOper(e, "=", logicOr());
         else if (accept(tPlusAssign))
-            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "+", { logicOr() }) });
+            e = assignOper(e, "+", logicOr());
         else if (accept(tMinusAssign))
-            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "-", { logicOr() }) });
+            e = assignOper(e, "-", logicOr());
         else if (accept(tMultiplyAssign))
-            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "*", { logicOr() }) });
+            e = assignOper(e, "*", logicOr());
         else if (accept(tDivideAssign))
-            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "/", { logicOr() }) });
+            e = assignOper(e, "/", logicOr());
         else if (accept(tModAssign))
-            e = Expression::DirectCall(e, "=", { Expression::DirectCall(e, "%", { logicOr() }) });
+            e = assignOper(e, "%", logicOr());
         else
             break;
     }
@@ -180,9 +204,9 @@ Expression *Parser::equality() {
 
     while (true) {
         if (accept(tEq))
-            e = Expression::DirectCall(e, "==", { relation() });
+            e = binOper(e, "==", relation());
         else if (accept(tNe))
-            e = Expression::DirectCall(e, "!=", { relation() });
+            e = binOper(e, "!=", relation());
         else
             break;
     }
@@ -195,13 +219,13 @@ Expression *Parser::relation() {
 
     while (true) {
         if (accept(tLt))
-            e = Expression::DirectCall(e, "<", { addSub() });
+            e = binOper(e, "<", addSub());
         else if (accept(tGt))
-            e = Expression::DirectCall(e, ">", { addSub() });
+            e = binOper(e, ">", addSub());
         else if (accept(tLe))
-            e = Expression::DirectCall(e, "<=", { addSub() });
+            e = binOper(e, "<=", addSub());
         else if (accept(tGe))
-            e = Expression::DirectCall(e, ">=", { addSub() });
+            e = binOper(e, ">=", addSub());
         else
             break;
     }
@@ -214,9 +238,9 @@ Expression *Parser::addSub() {
 
     while (true) {
         if (accept(tPlus))
-            e = Expression::DirectCall(e, "+", { mulDiv() });
+            e = binOper(e, "+", mulDiv());
         else if (accept(tMinus))
-            e = Expression::DirectCall(e, "-", { mulDiv() });
+            e = binOper(e, "-", mulDiv());
         else
             break;
     }
@@ -229,11 +253,11 @@ Expression *Parser::mulDiv() {
 
     while (true) {
         if (accept(tMultiply))
-            e = Expression::DirectCall(e, "*", { power() });
+            e = binOper(e, "*", power());
         else if (accept(tDivide))
-            e = Expression::DirectCall(e, "/", { power() });
+            e = binOper(e, "/", power());
         else if (accept(tMod))
-            e = Expression::DirectCall(e, "%", { power() });
+            e = binOper(e, "%", power());
         else
             break;
     }
@@ -246,7 +270,7 @@ Expression *Parser::power() {
 
     while (true) {
         if (accept(tPower))
-            e = Expression::DirectCall(e, "**", { negate() });
+            e = binOper(e, "**", negate());
         else
             break;
     }
@@ -269,9 +293,9 @@ Expression *Parser::preffix() {
     Expression *e = nullptr;
 
     if (accept(tPlus))
-        e = Expression::DirectCall(Expression::Literal('\0'), "+", { suffix() });
+        e = binOper(Expression::Literal('\0'), "+", suffix());
     else if (accept(tMinus))
-        e = Expression::DirectCall(Expression::Literal('\0'), "-", { suffix() });
+        e = binOper(Expression::Literal('\0'), "-", suffix());
     //    else if (accept(tDec))
     //        e = Expression::PreDecrement(suffix());
     //    else if (accept(tInc))
@@ -286,20 +310,12 @@ Expression *Parser::suffix() {
     Expression *e = term();
 
     while (check(tLPar) || check(tLBracket) || check(tDot)) {
-        if (accept(tLPar)) {
-            const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-            e = Expression::DynamicCall(e, list);
-
-            if (!accept(tRPar))
-                error("unmatched parentheses");
-        } else if (accept(tLBracket)) {
-            const std::list<Expression *> &list = check(tRBracket) ? std::list<Expression *>() : parseList();
-            e = Expression::DirectCall(e, "[]", list);
-
-            if (!accept(tRBracket))
-                error("unmatched brackets");
-        } else if (accept(tDot))
-            e = parseDot(e);
+        if (accept(tLPar))
+            e = call(Expression::Self(), e);
+        else if (accept(tLBracket))
+            e = call(e, Expression::Attribute(Expression::Stack(0), "[]"), tRBracket);
+        else if (accept(tDot))
+            e = dot(e);
     }
     //    else if (realAccept(tDec))
     //        e = Expression::PostDecrement(e);
@@ -318,13 +334,9 @@ Expression *Parser::term() {
 
         if (accept(tAssign))
             e = Expression::Assignment(name, logicOr());
-        else if (accept(tLPar)) {
-            const std::list<Expression *> &list = check(tRPar) ? std::list<Expression *>() : parseList();
-            e = Expression::Call(name, list);
-
-            if (!accept(tRPar))
-                error("unmatched parentheses");
-        } else
+        else if (accept(tLPar))
+            e = call(Expression::Self(), Expression::Identifier(name));
+        else
             e = Expression::Identifier(name);
     }
 
@@ -399,10 +411,17 @@ Expression *Parser::term() {
 
         Expression *superclass = accept(tLt) ? expr() : Expression::Constant(esther->getObjectClass());
 
-        e = Expression::ContextResolution(Expression::ClassDefinition(name, superclass), Expression::Block({ term(), Expression::Self() }));
+        std::list<Expression *> nodes;
+
+        nodes << Expression::Push(Expression::ClassDefinition(name, superclass));
+        nodes << Expression::ContextResolution(Expression::Stack(0), term());
 
         if (!name.empty())
-            e = Expression::LocalAssignment(name, e);
+            nodes << Expression::LocalAssignment(name, Expression::Stack(0));
+
+        nodes << Expression::Pop(1);
+
+        e = Expression::Block(nodes);
     }
 
     else if (accept(tFunction)) {
@@ -428,40 +447,61 @@ Expression *Parser::term() {
                 error("unmatched parentheses");
         }
 
-        e = Expression::FunctionDefinition(name, params, expr());
+        e = Expression::FunctionDefinition(name, params, term());
 
         if (!name.empty())
             e = Expression::LocalAssignment(name, e);
     }
 
     else if (accept(tNew)) {
-        if (check(tLBrace))
-            e = Expression::DirectCall(Expression::Constant(esther->getObjectClass()), "new", {});
-        else {
+        if (check(tLBrace)) {
+            Expression *newObject = Expression::Call(Expression::Constant(esther->getClassClass()->getAttribute("new")), Expression::Constant(esther->getObjectClass()), 0);
+
+            std::list<Expression *> nodes;
+
+            nodes << Expression::Push(newObject);
+            nodes << Expression::ContextResolution(Expression::Stack(0), term());
+            nodes << Expression::Pop(1);
+
+            e = Expression::Block(nodes);
+        } else {
             if (check(tId) || accept(tDollar)) {
                 e = Expression::Identifier(token->getText());
                 getToken();
             } else
                 e = term();
 
-            std::list<Expression *> args;
+            std::list<Expression *> nodes;
+            int args = 0;
+
+            nodes << Expression::Push(e);
+            nodes << Expression::Push(Expression::Attribute(Expression::Stack(0), "new"));
 
             if (accept(tLPar)) {
-                args = check(tRPar) ? std::list<Expression *>() : parseList();
+                do {
+                    nodes << Expression::Push(logicOr());
+                    args++;
+                } while (accept(tComma));
 
                 if (!accept(tRPar))
                     error("unmatched parentheses");
             }
 
-            e = Expression::DirectCall(e, "new", args);
-        }
+            if (check(tLBrace)) {
+                nodes << Expression::Push(Expression::Call(Expression::Stack(args), Expression::Stack(args + 1), args));
+                nodes << Expression::ContextResolution(Expression::Stack(0), term());
+                nodes << Expression::Pop(args + 3);
+            } else {
+                nodes << Expression::Call(Expression::Stack(args), Expression::Stack(args + 1), args);
+                nodes << Expression::Pop(args + 2);
+            }
 
-        if (check(tLBrace))
-            e = Expression::ContextResolution(e, Expression::Block({ term(), Expression::Self() }));
+            e = Expression::Block(nodes);
+        }
     }
 
     else if (accept(tAt))
-        e = parseDot(Expression::Self());
+        e = dot(Expression::Self());
 
     else if (accept(tLPar)) {
         e = expr();
@@ -469,7 +509,7 @@ Expression *Parser::term() {
         if (!accept(tRPar))
             error("unmatched parentheses");
     } else if (accept(tLBrace)) {
-        const std::list<Expression *> &nodes = parseBlock();
+        const std::list<Expression *> &nodes = block();
         e = nodes.empty() ? Expression::Empty() : nodes.size() == 1 ? nodes.front() : Expression::Block(nodes);
     }
 

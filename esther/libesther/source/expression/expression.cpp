@@ -1,5 +1,6 @@
 #include "expression.h"
 
+#include "esther.h"
 #include "iexpressionmanager.h"
 #include "errorexception.h"
 
@@ -23,36 +24,20 @@ Expression *Expression::Block(const std::list<Expression *> &nodes) {
     return IExpressionManager::instance()->createBlock(nodes);
 }
 
-Expression *Expression::Call(const std::string &name, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createCall(name, args);
+Expression *Expression::Call(Expression *f, Expression *self, int args) {
+    return IExpressionManager::instance()->createCall(f, self, args);
 }
 
-Expression *Expression::ClassDefinition(const std::string &name, Expression *superclass, Expression *body) {
-    return IExpressionManager::instance()->createClassDefinition(name, superclass, body);
+Expression *Expression::ClassDefinition(const std::string &name, Expression *superclass) {
+    return IExpressionManager::instance()->createClassDefinition(name, superclass);
 }
 
 Expression *Expression::Constant(Object *value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
-Expression *Expression::ContextResolution(Expression *self, Expression *here, Expression *body) {
-    return IExpressionManager::instance()->createContextResolution(self, here, body);
-}
-
-Expression *Expression::ContextResolution(Expression *self, Expression *body) {
-    return IExpressionManager::instance()->createContextResolution(self, nullptr, body);
-}
-
-Expression *Expression::ContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createContextCall(self, body, args);
-}
-
-Expression *Expression::DirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createDirectCall(self, name, args);
-}
-
-Expression *Expression::DynamicCall(Expression *body, const std::list<Expression *> &args) {
-    return IExpressionManager::instance()->createDynamicCall(body, args);
+Expression *Expression::ContextResolution(Expression *self, Expression *body, Expression *here) {
+    return IExpressionManager::instance()->createContextResolution(self, body, here);
 }
 
 Expression *Expression::Empty() {
@@ -95,8 +80,20 @@ Expression *Expression::Or(Expression *self, Expression *arg) {
     return IExpressionManager::instance()->createOr(self, arg);
 }
 
+Expression *Expression::Pop(int count) {
+    return IExpressionManager::instance()->createPop(count);
+}
+
+Expression *Expression::Push(Expression *arg) {
+    return IExpressionManager::instance()->createPush(arg);
+}
+
 Expression *Expression::Self() {
     return IExpressionManager::instance()->createSelf();
+}
+
+Expression *Expression::Stack(int index) {
+    return IExpressionManager::instance()->createStack(index);
 }
 
 Expression::~Expression() {
@@ -113,6 +110,8 @@ Object *Expression::eval(Esther *esther) {
 
         e->raise();
     }
+
+    esther->setReg(value);
 
     return value;
 }

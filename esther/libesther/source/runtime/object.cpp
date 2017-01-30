@@ -52,12 +52,30 @@ Object *Object::call(Esther *esther, const std::string &name, const std::vector<
     Object *f = get(name);
 
     if (!f)
-        Esther::runtimeError("undefined identifier '" + name + "'");
+        Esther::runtimeError("Object::call: undefined identifier '" + name + "'");
 
+    return call(esther, f, args);
+}
+
+Object *Object::call(Esther *esther, Object *f, const std::vector<Object *> &args) {
     if (dynamic_cast<Function *>(f))
         return ((Function *)f)->invoke(esther, this, args);
 
-    return f->call(esther, "()", args);
+    std::vector<Object *> actualArgs;
+    actualArgs.reserve(args.size() + 1);
+    actualArgs << this;
+    actualArgs.insert(actualArgs.end(), args.begin(), args.end());
+
+    return f->call(esther, "()", actualArgs);
+}
+
+Object *Object::call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass) {
+    Object *value = call(esther, name, args);
+
+    if (!value->is(expectedReturnClass))
+        Esther::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedReturnClass->getName() + " expected)");
+
+    return value;
 }
 
 Object *Object::callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args) {
@@ -70,13 +88,4 @@ Object *Object::callIfFound(Esther *esther, const std::string &name, const std::
         return ((Function *)f)->invoke(esther, this, args);
 
     return f->call(esther, "()", args);
-}
-
-Object *Object::call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass) {
-    Object *value = call(esther, name, args);
-
-    if (!value->is(expectedReturnClass))
-        Esther::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedReturnClass->getName() + " expected)");
-
-    return value;
 }

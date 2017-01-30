@@ -87,8 +87,6 @@ SOURCES += \
     source/runtime/rootclass/objectclass.cpp \
     source/runtime/rootclass/classclass.cpp \
     source/runtime/rootclass/functionclass.cpp \
-    source/expression/ast/directcallexpression.cpp \
-    source/expression/ast/dynamiccallexpression.cpp \
     source/runtime/rootclass/rootclass.cpp \
     source/expression/debug/literaldebugexpression.cpp \
     source/expression/ast/classdefinitionexpression.cpp \
@@ -96,11 +94,13 @@ SOURCES += \
     source/runtime/rootclass/numericclass.cpp \
     source/expression/ast/assignmentexpression.cpp \
     source/expression/ast/attributeexpression.cpp \
-    source/expression/ast/contextcallexpression.cpp \
     source/expression/ast/localassignmentexpression.cpp \
     source/expression/ast/callexpression.cpp \
     source/estherstaticinterface.cpp \
-    source/runtime/esther.cpp
+    source/runtime/esther.cpp \
+    source/expression/ast/popexpression.cpp \
+    source/expression/ast/pushexpression.cpp \
+    source/expression/ast/stackexpression.cpp
 
 HEADERS += \
     source/common/bytearray.h \
@@ -171,8 +171,6 @@ HEADERS += \
     source/runtime/rootclass/objectclass.h \
     source/runtime/rootclass/classclass.h \
     source/runtime/rootclass/functionclass.h \
-    source/expression/ast/directcallexpression.h \
-    source/expression/ast/dynamiccallexpression.h \
     source/runtime/rootclass/rootclass.h \
     source/expression/debug/literaldebugexpression.h \
     source/expression/ast/nativecallexpression.h \
@@ -180,14 +178,15 @@ HEADERS += \
     source/expression/ast/classdefinitionexpression.h \
     source/expression/ast/functiondefinitionexpression.h \
     source/runtime/rootclass/numericclass.h \
-    source/expression/ast/contextcallexpression.h \
     source/expression/ast/assignmentexpression.h \
     source/expression/ast/attributeexpression.h \
-    source/expression/ast/contextcallexpression.h \
     source/expression/ast/localassignmentexpression.h \
     source/expression/ast/callexpression.h \
     source/estherstaticinterface.h \
-    source/runtime/esther.h
+    source/runtime/esther.h \
+    source/expression/ast/popexpression.h \
+    source/expression/ast/pushexpression.h \
+    source/expression/ast/stackexpression.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

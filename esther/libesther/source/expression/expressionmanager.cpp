@@ -8,9 +8,6 @@
 #include "classdefinitionexpression.h"
 #include "constantexpression.h"
 #include "contextresolutionexpression.h"
-#include "contextcallexpression.h"
-#include "directcallexpression.h"
-#include "dynamiccallexpression.h"
 #include "emptyexpression.h"
 #include "functiondefinitionexpression.h"
 #include "hereexpression.h"
@@ -22,7 +19,10 @@
 #include "loopexpression.h"
 #include "notexpression.h"
 #include "orexpression.h"
+#include "popexpression.h"
+#include "pushexpression.h"
 #include "selfexpression.h"
+#include "stackexpression.h"
 
 Expression *ExpressionManager::createAnd(Expression *self, Expression *arg) {
     return new AndExpression(self, arg);
@@ -44,32 +44,20 @@ Expression *ExpressionManager::createBlock(const std::list<Expression *> &nodes)
     return new BlockExpression(nodes);
 }
 
-Expression *ExpressionManager::createCall(const std::string &name, const std::list<Expression *> &args) {
-    return new CallExpression(name, args);
+Expression *ExpressionManager::createCall(Expression *f, Expression *self, int args) {
+    return new CallExpression(f, self, args);
 }
 
-Expression *ExpressionManager::createClassDefinition(const std::string &name, Expression *superclass, Expression *body) {
-    return new ClassDefinitionExpression(name, superclass, body);
+Expression *ExpressionManager::createClassDefinition(const std::string &name, Expression *superclass) {
+    return new ClassDefinitionExpression(name, superclass);
 }
 
 Expression *ExpressionManager::createConstant(Object *value) {
     return new ConstantExpression(value);
 }
 
-Expression *ExpressionManager::createContextResolution(Expression *self, Expression *here, Expression *body) {
-    return new ContextResolutionExpression(self, here, body);
-}
-
-Expression *ExpressionManager::createContextCall(Expression *self, Expression *body, const std::list<Expression *> &args) {
-    return new ContextCallExpression(self, body, args);
-}
-
-Expression *ExpressionManager::createDirectCall(Expression *self, const std::string &name, const std::list<Expression *> &args) {
-    return new DirectCallExpression(self, name, args);
-}
-
-Expression *ExpressionManager::createDynamicCall(Expression *body, const std::list<Expression *> &args) {
-    return new DynamicCallExpression(body, args);
+Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body, Expression *here) {
+    return new ContextResolutionExpression(self, body, here);
 }
 
 Expression *ExpressionManager::createEmpty() {
@@ -112,6 +100,18 @@ Expression *ExpressionManager::createOr(Expression *self, Expression *arg) {
     return new OrExpression(self, arg);
 }
 
+Expression *ExpressionManager::createPop(int count) {
+    return new PopExpression(count);
+}
+
+Expression *ExpressionManager::createPush(Expression *arg) {
+    return new PushExpression(arg);
+}
+
 Expression *ExpressionManager::createSelf() {
     return new SelfExpression;
+}
+
+Expression *ExpressionManager::createStack(int index) {
+    return new StackExpression(index);
 }

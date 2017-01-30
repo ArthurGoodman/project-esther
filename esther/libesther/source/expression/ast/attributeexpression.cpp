@@ -16,7 +16,7 @@ Object *AttributeExpression::exec(Esther *esther) {
     Object *value = self->eval(esther)->get(name);
 
     if (value == nullptr)
-        Esther::runtimeError("undefined identifier '" + name + "'");
+        Esther::runtimeError("undefined attribute '" + name + "'");
 
     return value;
 }
