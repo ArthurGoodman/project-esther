@@ -214,7 +214,7 @@ class Parser {
     }
 
     function unary {
-        var node = null
+        var node
 
         if (accept('+'))
             node = new PlusNode(new ValueNode(0), term())
@@ -227,7 +227,7 @@ class Parser {
     }
 
     function term {
-        var node = null
+        var node
 
         if (check('n')) {
             node = new ValueNode(Float(@token.text))

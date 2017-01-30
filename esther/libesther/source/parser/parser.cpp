@@ -447,7 +447,7 @@ Expression *Parser::term() {
                 error("unmatched parentheses");
         }
 
-        e = Expression::FunctionDefinition(name, params, term());
+        e = Expression::FunctionDefinition(name, params, expr());
 
         if (!name.empty())
             e = Expression::LocalAssignment(name, e);
@@ -461,6 +461,7 @@ Expression *Parser::term() {
 
             nodes << Expression::Push(newObject);
             nodes << Expression::ContextResolution(Expression::Stack(0), term());
+            nodes << Expression::Stack(0);
             nodes << Expression::Pop(1);
 
             e = Expression::Block(nodes);
@@ -478,10 +479,11 @@ Expression *Parser::term() {
             nodes << Expression::Push(Expression::Attribute(Expression::Stack(0), "new"));
 
             if (accept(tLPar)) {
-                do {
-                    nodes << Expression::Push(logicOr());
-                    args++;
-                } while (accept(tComma));
+                if (!check(tRPar))
+                    do {
+                        nodes << Expression::Push(logicOr());
+                        args++;
+                    } while (accept(tComma));
 
                 if (!accept(tRPar))
                     error("unmatched parentheses");
@@ -490,6 +492,7 @@ Expression *Parser::term() {
             if (check(tLBrace)) {
                 nodes << Expression::Push(Expression::Call(Expression::Stack(args), Expression::Stack(args + 1), args));
                 nodes << Expression::ContextResolution(Expression::Stack(0), term());
+                nodes << Expression::Stack(0);
                 nodes << Expression::Pop(args + 3);
             } else {
                 nodes << Expression::Call(Expression::Stack(args), Expression::Stack(args + 1), args);

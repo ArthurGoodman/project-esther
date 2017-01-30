@@ -84,8 +84,5 @@ Object *Object::callIfFound(Esther *esther, const std::string &name, const std::
     if (!f)
         return nullptr;
 
-    if (dynamic_cast<Function *>(f))
-        return ((Function *)f)->invoke(esther, this, args);
-
-    return f->call(esther, "()", args);
+    return call(esther, f, args);
 }
