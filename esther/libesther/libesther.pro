@@ -14,6 +14,7 @@ INCLUDEPATH = \
     source/exception \
     source/expression \
     source/lexer \
+    source/memory \
     source/expression\ast \
     source/expression\debug \
     source/parser \
@@ -100,7 +101,14 @@ SOURCES += \
     source/runtime/esther.cpp \
     source/expression/ast/popexpression.cpp \
     source/expression/ast/pushexpression.cpp \
-    source/expression/ast/stackexpression.cpp
+    source/expression/ast/stackexpression.cpp \
+    source/memory/frame.cpp \
+    source/memory/managedobject.cpp \
+    source/memory/markcompactmemorymanager.cpp \
+    source/memory/memorymanager.cpp \
+    source/memory/nomemorymanager.cpp \
+    source/memory/pointer.cpp \
+    source/memory/semispacememorymanager.cpp
 
 HEADERS += \
     source/common/bytearray.h \
@@ -186,7 +194,14 @@ HEADERS += \
     source/runtime/esther.h \
     source/expression/ast/popexpression.h \
     source/expression/ast/pushexpression.h \
-    source/expression/ast/stackexpression.h
+    source/expression/ast/stackexpression.h \
+    source/memory/frame.h \
+    source/memory/managedobject.h \
+    source/memory/markcompactmemorymanager.h \
+    source/memory/memorymanager.h \
+    source/memory/nomemorymanager.h \
+    source/memory/pointer.h \
+    source/memory/semispacememorymanager.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \

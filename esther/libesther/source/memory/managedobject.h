@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "common.h"
+#include "common/common.h"
 
 class ManagedObject {
     uint flags;

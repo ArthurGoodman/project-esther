@@ -1,7 +1,7 @@
 #include "memorymanager.h"
 
 #include "pointer.h"
-#include "markcompactmemorymanager.h"
+#include "nomemorymanager.h"
 
 Pointer<ManagedObject> *&MemoryManager::pointers() {
     static Pointer<ManagedObject> *pointers = 0;
@@ -14,7 +14,7 @@ Frame *&MemoryManager::frames() {
 }
 
 MemoryManager *MemoryManager::instance() {
-    static MarkCompactMemoryManager instance;
+    static NoMemoryManager instance;
     return &instance;
 }
 

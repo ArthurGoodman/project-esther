@@ -86,3 +86,7 @@ Object *Object::callIfFound(Esther *esther, const std::string &name, const std::
 
     return call(esther, f, args);
 }
+
+int Object::getSize() const {
+    return sizeof *this;
+}

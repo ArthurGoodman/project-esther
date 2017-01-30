@@ -4,10 +4,16 @@
 #include <string>
 #include <vector>
 
+#include "memory/managedobject.h"
+#include "memory/pointer.h"
+
+class Object;
 class Class;
 class Esther;
 
-class Object {
+typedef Pointer<Object> Ptr;
+
+class Object : public ManagedObject {
     Class *objectClass;
     std::map<std::string, Object *> attributes;
 
@@ -36,4 +42,6 @@ public:
     Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
 
     Object *callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args);
+
+    int getSize() const;
 };

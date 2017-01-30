@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common.h"
-#include "frame.h"
+#include "common/common.h"
+#include "memory/frame.h"
 
 class ManagedObject;
 
