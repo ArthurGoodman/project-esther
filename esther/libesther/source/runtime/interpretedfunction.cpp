@@ -2,21 +2,21 @@
 
 #include "esther.h"
 
-Object *InterpretedFunction::execute(Esther *esther, Object *self, const std::vector<Object *> &args) {
+Pointer<Object> InterpretedFunction::execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) {
     esther->pushContext(context->childContext(self, esther->createObject()));
 
-    std::vector<Object *>::const_iterator i = args.begin();
+    std::vector<Pointer<Object>>::const_iterator i = args.begin();
     for (const std::string &s : params)
         esther->context()->setLocal(s, *i++);
 
-    Object *value = body->eval(esther);
+    Pointer<Object> value = body->eval(esther);
 
     esther->popContext();
 
     return value;
 }
 
-InterpretedFunction::InterpretedFunction(Class *objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context)
+InterpretedFunction::InterpretedFunction(Pointer<Class> objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context)
     : Function(objectClass, name, params.size())
     , params(params)
     , body(body)

@@ -6,7 +6,7 @@ class BooleanClass : public RootClass {
     friend class Esther;
 
 protected:
-    Object *createNewInstance(const std::vector<Object *> &args);
+    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 
     void setupMethods(Esther *esther);
 

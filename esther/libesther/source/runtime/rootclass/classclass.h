@@ -6,10 +6,10 @@ class ClassClass : public RootClass {
     friend class Esther;
 
 public:
-    Class *createClass(const std::string &name, Class *superclass = nullptr);
+    Pointer<Class> createClass(const std::string &name, Pointer<Class> superclass = nullptr);
 
 protected:
-    Object *createNewInstance(const std::vector<Object *> &args);
+    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 
     void setupMethods(Esther *esther);
 

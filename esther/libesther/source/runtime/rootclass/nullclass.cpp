@@ -3,7 +3,7 @@
 #include "null.h"
 #include "esther.h"
 
-Object *NullClass::createNewInstance(const std::vector<Object *> &) {
+Pointer<Object> NullClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     Esther::runtimeError("cannot create new instance of Null class");
     return nullptr;
 }

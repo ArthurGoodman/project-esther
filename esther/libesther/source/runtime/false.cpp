@@ -8,6 +8,6 @@ bool False::isTrue() const {
     return false;
 }
 
-False::False(Class *objectClass)
+False::False(Pointer<Class> objectClass)
     : Object(objectClass) {
 }

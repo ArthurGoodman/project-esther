@@ -11,6 +11,6 @@ NotExpression::~NotExpression() {
     delete self;
 }
 
-Object *NotExpression::exec(Esther *esther) {
+Pointer<Object> NotExpression::exec(Esther *esther) {
     return esther->toBoolean(!self->eval(esther)->isTrue());
 }

@@ -16,6 +16,7 @@ public:
     Pointer<T> &operator=(const Pointer<T> &p);
 
     T *&operator*();
+    T *operator*() const;
     T *operator->() const;
     operator T *() const;
 
@@ -49,6 +50,11 @@ Pointer<T> &Pointer<T>::operator=(const Pointer<T> &p) {
 
 template <class T>
 T *&Pointer<T>::operator*() {
+    return pointer;
+}
+
+template <class T>
+T *Pointer<T>::operator*() const {
     return pointer;
 }
 

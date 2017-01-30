@@ -20,5 +20,5 @@ public:
     std::string toString() const;
 
 private:
-    ValueObject(Class *objectClass, const Variant &value);
+    ValueObject(Pointer<Class> objectClass, const Variant &value);
 };

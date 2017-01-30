@@ -3,36 +3,38 @@
 #include <string>
 #include <list>
 
+#include "memory/pointer.h"
+
 class Object;
 class Esther;
 
 class Context {
     Esther *esther;
-    Context *parent;
-    Object *self, *here;
+    Pointer<Context> parent;
+    Pointer<Object> self, here;
 
-    std::list<Context *> children;
+    //    std::list<Pointer<Context>> children;
 
 public:
     Context(Esther *esther);
     virtual ~Context();
 
-    Object *getSelf() const;
-    void setSelf(Object *self);
+    Pointer<Object> getSelf() const;
+    void setSelf(Pointer<Object> self);
 
-    Object *getHere() const;
-    void setHere(Object *here);
+    Pointer<Object> getHere() const;
+    void setHere(Pointer<Object> here);
 
     bool hasLocal(const std::string &name) const;
-    Object *getLocal(const std::string &name) const;
-    void setLocal(const std::string &name, Object *value);
+    Pointer<Object> getLocal(const std::string &name) const;
+    void setLocal(const std::string &name, Pointer<Object> value);
 
-    Object *get(const std::string &name) const;
-    bool set(const std::string &name, Object *value);
+    Pointer<Object> get(const std::string &name) const;
+    bool set(const std::string &name, Pointer<Object> value);
 
-    Context *childContext();
-    Context *childContext(Object *self, Object *here);
+    Pointer<Context> childContext();
+    Pointer<Context> childContext(Pointer<Object> self, Pointer<Object> here);
 
 private:
-    Context(Object *self, Object *here, Context *parent);
+    Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent);
 };

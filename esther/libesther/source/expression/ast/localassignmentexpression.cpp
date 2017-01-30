@@ -12,8 +12,8 @@ LocalAssignmentExpression::~LocalAssignmentExpression() {
     delete value;
 }
 
-Object *LocalAssignmentExpression::exec(Esther *esther) {
-    Object *evaledValue = value->eval(esther);
+Pointer<Object> LocalAssignmentExpression::exec(Esther *esther) {
+    Pointer<Object> evaledValue = value->eval(esther);
     esther->context()->setLocal(name, evaledValue);
     return evaledValue;
 }

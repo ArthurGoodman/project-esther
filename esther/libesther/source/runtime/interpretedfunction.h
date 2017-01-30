@@ -9,11 +9,11 @@ class InterpretedFunction : public Function {
 
     std::list<std::string> params;
     Expression *body;
-    Context *context;
+    Pointer<Context> context;
 
 protected:
-    Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args);
+    Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args);
 
 private:
-    InterpretedFunction(Class *objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
+    InterpretedFunction(Pointer<Class> objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context);
 };

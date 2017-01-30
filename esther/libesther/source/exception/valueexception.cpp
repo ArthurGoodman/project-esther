@@ -1,9 +1,9 @@
 #include "valueexception.h"
 
-ValueException::ValueException(Object *value)
+ValueException::ValueException(Pointer<Object> value)
     : value(value) {
 }
 
-Object *ValueException::getValue() {
+Pointer<Object> ValueException::getValue() {
     return value;
 }

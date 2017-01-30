@@ -9,5 +9,5 @@ public:
     std::string toString() const;
 
 private:
-    True(Class *objectClass);
+    True(Pointer<Class> objectClass);
 };

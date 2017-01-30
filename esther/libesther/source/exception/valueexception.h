@@ -1,14 +1,13 @@
 #pragma once
 
 #include "exception.h"
-
-class Object;
+#include "object.h"
 
 class ValueException : public Exception {
-    Object *value;
+    Pointer<Object> value;
 
 protected:
-    ValueException(Object *value);
+    ValueException(Pointer<Object> value);
 
-    Object *getValue();
+    Pointer<Object> getValue();
 };

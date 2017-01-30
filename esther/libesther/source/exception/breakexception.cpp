@@ -1,10 +1,10 @@
 #include "breakexception.h"
 
-BreakException::BreakException(Object *value)
+BreakException::BreakException(Pointer<Object> value)
     : ValueException(value) {
 }
 
-Object *BreakException::value() {
+Pointer<Object> BreakException::value() {
     return getValue();
 }
 

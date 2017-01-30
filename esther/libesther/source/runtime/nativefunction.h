@@ -7,11 +7,11 @@
 class NativeFunction : public Function {
     friend class FunctionClass;
 
-    std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> body;
+    std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> body;
 
 protected:
-    Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args);
+    Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args);
 
 private:
-    NativeFunction(Class *objectClass, const std::string &name, int arity, const std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> &body);
+    NativeFunction(Pointer<Class> objectClass, const std::string &name, int arity, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body);
 };

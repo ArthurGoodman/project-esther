@@ -3,11 +3,11 @@
 #include "expression.h"
 
 class ConstantExpression : public Expression {
-    Object *value;
+    Pointer<Object> value;
 
 public:
-    ConstantExpression(Object *value);
+    ConstantExpression(Pointer<Object> value);
 
 protected:
-    Object *exec(Esther *esther);
+    Pointer<Object> exec(Esther *esther);
 };

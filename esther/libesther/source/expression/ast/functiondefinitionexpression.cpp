@@ -14,6 +14,6 @@ FunctionDefinitionExpression::~FunctionDefinitionExpression() {
     delete body;
 }
 
-Object *FunctionDefinitionExpression::exec(Esther *esther) {
-    return esther->createInterpretedFunction(name, params, body, esther->context());
+Pointer<Object> FunctionDefinitionExpression::exec(Esther *esther) {
+    return *esther->createInterpretedFunction(name, params, body, esther->context());
 }

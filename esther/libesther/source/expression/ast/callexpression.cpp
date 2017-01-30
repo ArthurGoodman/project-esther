@@ -15,11 +15,11 @@ CallExpression::~CallExpression() {
     delete self;
 }
 
-Object *CallExpression::exec(Esther *esther) {
-    Object *evaledF = f->eval(esther);
-    Object *evaledSelf = self->eval(esther);
+Pointer<Object> CallExpression::exec(Esther *esther) {
+    Pointer<Object> evaledF = f->eval(esther);
+    Pointer<Object> evaledSelf = self->eval(esther);
 
-    std::vector<Object *> evaledArgs;
+    std::vector<Pointer<Object>> evaledArgs;
 
     for (int i = args - 1; i >= 0; i--)
         evaledArgs << esther->top(i);

@@ -13,13 +13,13 @@ ClassDefinitionExpression::~ClassDefinitionExpression() {
     delete superclass;
 }
 
-Object *ClassDefinitionExpression::exec(Esther *esther) {
-    Object *evaledSuperclass = superclass->eval(esther);
+Pointer<Object> ClassDefinitionExpression::exec(Esther *esther) {
+    Pointer<Object> evaledSuperclass = superclass->eval(esther);
 
-    if (!dynamic_cast<Class *>(evaledSuperclass)) {
+    if (!dynamic_cast<Class *>(*evaledSuperclass)) {
         setPosition(superclass->getPosition());
         Esther::runtimeError("class expected");
     }
 
-    return esther->createClass(name, (Class *)evaledSuperclass);
+    return *esther->createClass(name, (Class *)*evaledSuperclass);
 }

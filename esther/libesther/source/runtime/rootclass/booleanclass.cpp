@@ -2,7 +2,7 @@
 
 #include "esther.h"
 
-Object *BooleanClass::createNewInstance(const std::vector<Object *> &) {
+Pointer<Object> BooleanClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     Esther::runtimeError("cannot create new instance of Boolean class");
     return nullptr;
 }

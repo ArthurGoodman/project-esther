@@ -8,27 +8,27 @@ class Class : public Object {
     friend class ClassClass;
 
     std::string name;
-    Class *superclass;
+    Pointer<Class> superclass;
 
 public:
     std::string getName() const;
     void setName(const std::string &name);
 
-    Class *getSuperclass() const;
-    void setSuperclass(Class *superclass);
+    Pointer<Class> getSuperclass() const;
+    void setSuperclass(Pointer<Class> superclass);
 
-    Object *get(const std::string &name) const;
+    Pointer<Object> get(const std::string &name) const;
 
-    Object *newInstance(Esther *esther, const std::vector<Object *> &args = std::vector<Object *>());
+    Pointer<Object> newInstance(Esther *esther, const std::vector<Pointer<Object>> &args = std::vector<Pointer<Object>>());
 
-    bool isChild(Class *_class) const;
+    bool isChild(Pointer<Class> _class) const;
 
     std::string toString() const;
 
-    Object *lookup(const std::string &name) const;
+    Pointer<Object> lookup(const std::string &name) const;
 
 protected:
-    Class(Class *classClass, const std::string &name, Class *superclass);
+    Class(Pointer<Class> classClass, const std::string &name, Pointer<Class> superclass);
 
-    virtual Object *createNewInstance(const std::vector<Object *> &args);
+    virtual Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 };

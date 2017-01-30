@@ -15,8 +15,8 @@ IfExpression::~IfExpression() {
     delete elseBody;
 }
 
-Object *IfExpression::exec(Esther *esther) {
-    Object *value = esther->getNull();
+Pointer<Object> IfExpression::exec(Esther *esther) {
+    Pointer<Object> value = esther->getNull();
 
     if (condition->eval(esther)->isTrue())
         value = body->eval(esther);

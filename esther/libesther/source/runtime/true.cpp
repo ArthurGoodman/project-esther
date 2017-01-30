@@ -4,6 +4,6 @@ std::string True::toString() const {
     return "true";
 }
 
-True::True(Class *objectClass)
+True::True(Pointer<Class> objectClass)
     : Object(objectClass) {
 }

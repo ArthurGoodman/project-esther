@@ -10,8 +10,8 @@ OrExpression::~OrExpression() {
     delete arg;
 }
 
-Object *OrExpression::exec(Esther *esther) {
-    Object *self = this->self->eval(esther);
+Pointer<Object> OrExpression::exec(Esther *esther) {
+    Pointer<Object> self = this->self->eval(esther);
 
     if (self->isTrue())
         return self;

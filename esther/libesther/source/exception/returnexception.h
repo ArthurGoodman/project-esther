@@ -4,9 +4,9 @@
 
 class ReturnException : public ValueException {
 public:
-    ReturnException(Object *value);
+    ReturnException(Pointer<Object> value);
 
-    Object *value();
+    Pointer<Object> value();
 
     void raise();
 };

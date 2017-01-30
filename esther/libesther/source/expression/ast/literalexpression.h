@@ -10,5 +10,5 @@ public:
     LiteralExpression(const Variant &value);
 
 protected:
-    Object *exec(Esther *esther);
+    Pointer<Object> exec(Esther *esther);
 };

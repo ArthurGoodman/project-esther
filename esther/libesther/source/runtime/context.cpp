@@ -11,23 +11,23 @@ Context::Context(Esther *esther)
 }
 
 Context::~Context() {
-    for (Context *child : children)
-        delete child;
+    //    for (Context *child : children)
+    //        delete child;
 }
 
-Object *Context::getSelf() const {
+Pointer<Object> Context::getSelf() const {
     return self;
 }
 
-void Context::setSelf(Object *self) {
+void Context::setSelf(Pointer<Object> self) {
     this->self = self;
 }
 
-Object *Context::getHere() const {
+Pointer<Object> Context::getHere() const {
     return here;
 }
 
-void Context::setHere(Object *here) {
+void Context::setHere(Pointer<Object> here) {
     this->here = here;
 }
 
@@ -35,15 +35,15 @@ bool Context::hasLocal(const std::string &name) const {
     return getHere()->hasAttribute(name);
 }
 
-Object *Context::getLocal(const std::string &name) const {
+Pointer<Object> Context::getLocal(const std::string &name) const {
     return getHere()->getAttribute(name);
 }
 
-void Context::setLocal(const std::string &name, Object *value) {
+void Context::setLocal(const std::string &name, Pointer<Object> value) {
     getHere()->setAttribute(name, value);
 }
 
-Object *Context::get(const std::string &name) const {
+Pointer<Object> Context::get(const std::string &name) const {
     if (hasLocal(name))
         return getLocal(name);
 
@@ -51,12 +51,12 @@ Object *Context::get(const std::string &name) const {
         return parent->get(name);
 
     if (esther->hasRootClass(name))
-        return (Object *)esther->getRootClass(name);
+        return (Object *)*esther->getRootClass(name);
 
     return nullptr;
 }
 
-bool Context::set(const std::string &name, Object *value) {
+bool Context::set(const std::string &name, Pointer<Object> value) {
     if (hasLocal(name)) {
         setLocal(name, value);
         return true;
@@ -68,17 +68,21 @@ bool Context::set(const std::string &name, Object *value) {
     return false;
 }
 
-Context *Context::childContext() {
-    children << new Context(getSelf(), getHere(), this);
-    return children.back();
+Pointer<Context> Context::childContext() {
+    //    children << new Context(getSelf(), getHere(), this);
+    //    return children.back();
+
+    return new Context(getSelf(), getHere(), this);
 }
 
-Context *Context::childContext(Object *self, Object *here) {
-    children << new Context(self, here, this);
-    return children.back();
+Pointer<Context> Context::childContext(Pointer<Object> self, Pointer<Object> here) {
+    //    children << new Context(self, here, this);
+    //    return children.back();
+
+    return new Context(self, here, this);
 }
 
-Context::Context(Object *self, Object *here, Context *parent)
+Context::Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent)
     : esther(parent->esther)
     , parent(parent)
     , self(self)

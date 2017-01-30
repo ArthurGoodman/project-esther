@@ -4,9 +4,9 @@
 
 class BreakException : public ValueException {
 public:
-    BreakException(Object *value);
+    BreakException(Pointer<Object> value);
 
-    Object *value();
+    Pointer<Object> value();
 
     void raise();
 };

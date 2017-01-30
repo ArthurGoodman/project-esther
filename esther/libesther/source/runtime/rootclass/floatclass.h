@@ -8,10 +8,10 @@ class FloatClass : public RootClass {
     friend class Esther;
 
 public:
-    ValueObject *createFloat(double value);
+    Pointer<ValueObject> createFloat(double value);
 
 protected:
-    Object *createNewInstance(const std::vector<Object *> &args);
+    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 
     void setupMethods(Esther *esther);
 

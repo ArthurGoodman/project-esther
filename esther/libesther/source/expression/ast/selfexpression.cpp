@@ -3,6 +3,6 @@
 #include "esther.h"
 #include "context.h"
 
-Object *SelfExpression::exec(Esther *esther) {
+Pointer<Object> SelfExpression::exec(Esther *esther) {
     return esther->context()->getSelf();
 }

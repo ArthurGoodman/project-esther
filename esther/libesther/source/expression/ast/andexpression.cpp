@@ -10,8 +10,8 @@ AndExpression::~AndExpression() {
     delete arg;
 }
 
-Object *AndExpression::exec(Esther *esther) {
-    Object *self = this->self->eval(esther);
+Pointer<Object> AndExpression::exec(Esther *esther) {
+    Pointer<Object> self = this->self->eval(esther);
 
     if (self->isTrue())
         return arg->eval(esther);

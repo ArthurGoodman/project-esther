@@ -1,10 +1,10 @@
 #include "nativefunction.h"
 
-Object *NativeFunction::execute(Esther *esther, Object *self, const std::vector<Object *> &args) {
+Pointer<Object> NativeFunction::execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) {
     return body(esther, self, args);
 }
 
-NativeFunction::NativeFunction(Class *objectClass, const std::string &name, int arity, const std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> &body)
+NativeFunction::NativeFunction(Pointer<Class> objectClass, const std::string &name, int arity, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body)
     : Function(objectClass, name, arity)
     , body(body) {
 }

@@ -8,6 +8,6 @@ bool Null::isTrue() const {
     return false;
 }
 
-Null::Null(Class *objectClass)
+Null::Null(Pointer<Class> objectClass)
     : Object(objectClass) {
 }

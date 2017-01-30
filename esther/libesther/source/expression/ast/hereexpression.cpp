@@ -3,6 +3,6 @@
 #include "esther.h"
 #include "context.h"
 
-Object *HereExpression::exec(Esther *esther) {
+Pointer<Object> HereExpression::exec(Esther *esther) {
     return esther->context()->getHere();
 }

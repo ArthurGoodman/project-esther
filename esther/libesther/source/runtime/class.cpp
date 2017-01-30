@@ -8,26 +8,26 @@ void Class::setName(const std::string &name) {
     this->name = name;
 }
 
-Class *Class::getSuperclass() const {
+Pointer<Class> Class::getSuperclass() const {
     return superclass;
 }
 
-void Class::setSuperclass(Class *superclass) {
+void Class::setSuperclass(Pointer<Class> superclass) {
     this->superclass = superclass;
 }
 
-Object *Class::get(const std::string &name) const {
-    Object *temp = nullptr;
+Pointer<Object> Class::get(const std::string &name) const {
+    Pointer<Object> temp = nullptr;
     return (temp = Object::get(name)) ? temp : superclass ? superclass->lookup(name) : nullptr;
 }
 
-Object *Class::newInstance(Esther *esther, const std::vector<Object *> &args) {
-    Object *instance = createNewInstance(args);
+Pointer<Object> Class::newInstance(Esther *esther, const std::vector<Pointer<Object>> &args) {
+    Pointer<Object> instance = createNewInstance(args);
     instance->callIfFound(esther, "initialize", args);
     return instance;
 }
 
-bool Class::isChild(Class *_class) const {
+bool Class::isChild(Pointer<Class> _class) const {
     return this == _class || (superclass && superclass->isChild(_class));
 }
 
@@ -35,18 +35,18 @@ std::string Class::toString() const {
     return getName().empty() ? "<anonymous class>" : "<class " + getName() + ">";
 }
 
-Object *Class::lookup(const std::string &name) const {
+Pointer<Object> Class::lookup(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
 }
 
-Class::Class(Class *classClass, const std::string &name, Class *superclass)
+Class::Class(Pointer<Class> classClass, const std::string &name, Pointer<Class> superclass)
     : Object(classClass)
     , name(name)
     , superclass(superclass) {
 }
 
-Object *Class::createNewInstance(const std::vector<Object *> &args) {
-    Object *instance = superclass->createNewInstance(args);
+Pointer<Object> Class::createNewInstance(const std::vector<Pointer<Object>> &args) {
+    Pointer<Object> instance = superclass->createNewInstance(args);
     instance->setClass(this);
     return instance;
 }

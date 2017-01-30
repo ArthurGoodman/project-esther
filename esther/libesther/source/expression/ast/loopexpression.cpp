@@ -13,8 +13,8 @@ LoopExpression::~LoopExpression() {
     delete body;
 }
 
-Object *LoopExpression::exec(Esther *esther) {
-    Object *value = esther->getNull();
+Pointer<Object> LoopExpression::exec(Esther *esther) {
+    Pointer<Object> value = esther->getNull();
 
     while (condition->eval(esther)->isTrue())
         value = body->eval(esther);

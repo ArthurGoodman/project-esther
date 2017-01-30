@@ -9,6 +9,8 @@
 #include "variant/variant.h"
 #include "common/source.h"
 
+#include "memory/pointer.h"
+
 class Object;
 class Class;
 class Context;
@@ -28,31 +30,31 @@ class ClassClass;
 class FunctionClass;
 
 class Esther {
-    Object *mainObject = nullptr;
-    RootClass *objectClass = nullptr;
+    Pointer<Object> mainObject = nullptr;
+    Pointer<RootClass> objectClass = nullptr;
 
-    Object *trueObject = nullptr;
-    Object *falseObject = nullptr;
-    Object *nullObject = nullptr;
+    Pointer<Object> trueObject = nullptr;
+    Pointer<Object> falseObject = nullptr;
+    Pointer<Object> nullObject = nullptr;
 
-    NumericClass *numericClass = nullptr;
-    CharacterClass *characterClass = nullptr;
-    FloatClass *floatClass = nullptr;
-    IntegerClass *integerClass = nullptr;
-    StringClass *stringClass = nullptr;
+    Pointer<NumericClass> numericClass = nullptr;
+    Pointer<CharacterClass> characterClass = nullptr;
+    Pointer<FloatClass> floatClass = nullptr;
+    Pointer<IntegerClass> integerClass = nullptr;
+    Pointer<StringClass> stringClass = nullptr;
 
-    ClassClass *classClass = nullptr;
-    FunctionClass *functionClass = nullptr;
+    Pointer<ClassClass> classClass = nullptr;
+    Pointer<FunctionClass> functionClass = nullptr;
 
-    std::map<std::string, RootClass *> rootClasses;
+    std::map<std::string, Pointer<RootClass>> rootClasses;
 
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 
-    std::stack<Context *> contexts;
+    std::stack<Pointer<Context>> contexts;
 
-    std::vector<Object *> stack;
-    Object *reg;
+    std::vector<Pointer<Object>> stack;
+    Pointer<Object> reg;
 
 public:
     static void runtimeError(const std::string &message);
@@ -60,51 +62,51 @@ public:
     Esther();
     ~Esther();
 
-    Object *getMainObject() const;
-    Class *getObjectClass() const;
-    Object *getTrue() const;
-    Object *getFalse() const;
-    Object *getNull() const;
+    Pointer<Object> getMainObject() const;
+    Pointer<Class> getObjectClass() const;
+    Pointer<Object> getTrue() const;
+    Pointer<Object> getFalse() const;
+    Pointer<Object> getNull() const;
 
-    ClassClass *getClassClass() const;
-    NumericClass *getNumericClass() const;
-    StringClass *getStringClass() const;
+    Pointer<ClassClass> getClassClass() const;
+    Pointer<NumericClass> getNumericClass() const;
+    Pointer<StringClass> getStringClass() const;
 
     bool hasRootClass(const std::string &name) const;
-    Class *getRootClass(const std::string &name) const;
-    void registerRootClass(RootClass *rootClass);
+    Pointer<Class> getRootClass(const std::string &name) const;
+    void registerRootClass(Pointer<RootClass> rootClass);
 
-    Object *toBoolean(bool value) const;
+    Pointer<Object> toBoolean(bool value) const;
 
-    Object *createObject();
+    Pointer<Object> createObject();
 
-    ValueObject *createValueObject(const Variant &value);
+    Pointer<ValueObject> createValueObject(const Variant &value);
 
-    ValueObject *createCharacter(char value);
-    ValueObject *createFloat(double value);
-    ValueObject *createInteger(int value);
-    ValueObject *createString(const std::string &value);
+    Pointer<ValueObject> createCharacter(char value);
+    Pointer<ValueObject> createFloat(double value);
+    Pointer<ValueObject> createInteger(int value);
+    Pointer<ValueObject> createString(const std::string &value);
 
-    Class *createClass(const std::string &name, Class *superclass = nullptr);
+    Pointer<Class> createClass(const std::string &name, Pointer<Class> superclass = nullptr);
 
-    Function *createNativeFunction(const std::string &name, int arity, const std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> &body);
-    Function *createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Context *context);
+    Pointer<Function> createNativeFunction(const std::string &name, int arity, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body);
+    Pointer<Function> createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context);
 
-    Object *run(const std::string &script);
-    Object *runFile(const std::string &fileName);
+    Pointer<Object> run(const std::string &script);
+    Pointer<Object> runFile(const std::string &fileName);
 
-    Context *context() const;
+    Pointer<Context> context() const;
 
-    void pushContext(Object *self, Object *here);
-    void pushContext(Context *context);
+    void pushContext(Pointer<Object> self, Pointer<Object> here);
+    void pushContext(Pointer<Context> context);
     void popContext();
 
-    void push(Object *value);
+    void push(Pointer<Object> value);
     void pop(int count = 1);
-    Object *top(int index = 0);
+    Pointer<Object> top(int index = 0);
 
-    Object *getReg() const;
-    void setReg(Object *value);
+    Pointer<Object> getReg() const;
+    void setReg(Pointer<Object> value);
 
 private:
     void initialize();

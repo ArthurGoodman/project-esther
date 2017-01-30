@@ -15,12 +15,12 @@ ContextResolutionExpression::~ContextResolutionExpression() {
     delete here;
 }
 
-Object *ContextResolutionExpression::exec(Esther *esther) {
-    Object *evaledSelf = self->eval(esther);
-    Object *evaledHere = here ? here->eval(esther) : evaledSelf;
+Pointer<Object> ContextResolutionExpression::exec(Esther *esther) {
+    Pointer<Object> evaledSelf = self->eval(esther);
+    Pointer<Object> evaledHere = here ? here->eval(esther) : evaledSelf;
 
     esther->pushContext(evaledSelf, evaledHere);
-    Object *value = body->eval(esther);
+    Pointer<Object> value = body->eval(esther);
     esther->popContext();
 
     return value;

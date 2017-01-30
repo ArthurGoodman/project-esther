@@ -10,5 +10,5 @@ public:
     bool isTrue() const;
 
 private:
-    Null(Class *objectClass);
+    Null(Pointer<Class> objectClass);
 };

@@ -11,5 +11,5 @@ public:
     bool isTrue() const;
 
 private:
-    False(Class *objectClass);
+    False(Pointer<Class> objectClass);
 };

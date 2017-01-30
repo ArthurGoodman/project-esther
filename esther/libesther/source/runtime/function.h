@@ -15,13 +15,13 @@ public:
     std::string getName() const;
     void setName(const std::string &name);
 
-    Object *invoke(Esther *esther, Object *self, const std::vector<Object *> &args);
+    Pointer<Object> invoke(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args);
 
     std::string toString() const;
 
 protected:
-    virtual Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args) = 0;
+    virtual Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) = 0;
 
 protected:
-    Function(Class *objectClass, const std::string &name, int arity);
+    Function(Pointer<Class> objectClass, const std::string &name, int arity);
 };

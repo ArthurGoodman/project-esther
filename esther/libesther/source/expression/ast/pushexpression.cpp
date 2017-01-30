@@ -6,8 +6,8 @@ PushExpression::PushExpression(Expression *arg)
     : arg(arg) {
 }
 
-Object *PushExpression::exec(Esther *esther) {
-    Object *evaledArg = arg->eval(esther);
+Pointer<Object> PushExpression::exec(Esther *esther) {
+    Pointer<Object> evaledArg = arg->eval(esther);
     esther->push(evaledArg);
     return evaledArg;
 }

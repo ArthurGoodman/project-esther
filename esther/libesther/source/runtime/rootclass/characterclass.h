@@ -8,10 +8,10 @@ class CharacterClass : public RootClass {
     friend class Esther;
 
 public:
-    ValueObject *createCharacter(char value);
+    Pointer<ValueObject> createCharacter(char value);
 
 protected:
-    Object *createNewInstance(const std::vector<Object *> &args);
+    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 
     void setupMethods(Esther *esther);
 
