@@ -40,5 +40,5 @@ public:
 
     Pointer<Object> callIfFound(Esther *esther, const std::string &name, const std::vector<Pointer<Object>> &args);
 
-    int getSize() const;
+    virtual int getSize() const;
 };

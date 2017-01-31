@@ -27,6 +27,8 @@ public:
 
     Pointer<Object> lookup(const std::string &name) const;
 
+    virtual int getSize() const;
+
 protected:
     Class(Pointer<Class> classClass, const std::string &name, Pointer<Class> superclass);
 

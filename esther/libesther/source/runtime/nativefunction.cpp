@@ -1,5 +1,9 @@
 #include "nativefunction.h"
 
+int NativeFunction::getSize() const {
+    return sizeof *this;
+}
+
 Pointer<Object> NativeFunction::execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) {
     return body(esther, self, args);
 }

@@ -2,6 +2,10 @@
 
 #include "esther.h"
 
+int InterpretedFunction::getSize() const {
+    return sizeof *this;
+}
+
 Pointer<Object> InterpretedFunction::execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) {
     esther->pushContext(context->childContext(self, esther->createObject()));
 

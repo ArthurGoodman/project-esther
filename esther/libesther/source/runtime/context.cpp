@@ -82,6 +82,10 @@ Pointer<Context> Context::childContext(Pointer<Object> self, Pointer<Object> her
     return new Context(self, here, this);
 }
 
+int Context::getSize() const {
+    return sizeof *this;
+}
+
 Context::Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent)
     : esther(parent->esther)
     , parent(parent)

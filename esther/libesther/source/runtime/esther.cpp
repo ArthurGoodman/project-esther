@@ -169,24 +169,24 @@ void Esther::initialize() {
     Pointer<Object> console = createObject();
     mainObject->setAttribute("console", console);
 
-    console->setAttribute("write", *createNativeFunction("write", -1, [=](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    console->setAttribute("write", *createNativeFunction("write", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
                               if (!args.empty())
                                   for (auto &arg : args)
-                                      IO::write(arg->call(esther, "toString", {}, *getStringClass())->toString());
+                                      IO::write(arg->call(esther, "toString", {}, *esther->getStringClass())->toString());
                               else
-                                  IO::write(self->call(esther, "toString", {}, *getStringClass())->toString());
+                                  IO::write(self->call(esther, "toString", {}, *esther->getStringClass())->toString());
 
-                              return getNull();
+                              return esther->getNull();
                           }));
 
-    console->setAttribute("writeLine", *createNativeFunction("writeLine", -1, [=](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    console->setAttribute("writeLine", *createNativeFunction("writeLine", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
                               if (!args.empty())
                                   for (auto &arg : args)
-                                      IO::writeLine(arg->call(esther, "toString", {}, *getStringClass())->toString());
+                                      IO::writeLine(arg->call(esther, "toString", {}, *esther->getStringClass())->toString());
                               else
-                                  IO::writeLine(self->call(esther, "toString", {}, *getStringClass())->toString());
+                                  IO::writeLine(self->call(esther, "toString", {}, *esther->getStringClass())->toString());
 
-                              return getNull();
+                              return esther->getNull();
                           }));
 
     pushContext(new Context(this));

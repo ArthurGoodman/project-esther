@@ -12,6 +12,10 @@ std::string ValueObject::toString() const {
     return value.toString();
 }
 
+int ValueObject::getSize() const {
+    return sizeof *this;
+}
+
 ValueObject::ValueObject(Pointer<Class> objectClass, const Variant &value)
     : Object(objectClass)
     , value(value) {

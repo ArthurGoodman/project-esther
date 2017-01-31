@@ -19,6 +19,8 @@ public:
 
     std::string toString() const;
 
+    virtual int getSize() const;
+
 private:
     ValueObject(Pointer<Class> objectClass, const Variant &value);
 };

@@ -9,6 +9,9 @@ class NativeFunction : public Function {
 
     std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> body;
 
+public:
+    virtual int getSize() const;
+
 protected:
     Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args);
 

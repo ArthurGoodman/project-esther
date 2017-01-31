@@ -3,12 +3,13 @@
 #include <string>
 #include <list>
 
+#include "memory/managedobject.h"
 #include "memory/pointer.h"
 
 class Object;
 class Esther;
 
-class Context {
+class Context : public ManagedObject {
     Esther *esther;
     Pointer<Context> parent;
     Pointer<Object> self, here;
@@ -34,6 +35,8 @@ public:
 
     Pointer<Context> childContext();
     Pointer<Context> childContext(Pointer<Object> self, Pointer<Object> here);
+
+    virtual int getSize() const;
 
 private:
     Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent);

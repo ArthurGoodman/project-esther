@@ -11,11 +11,11 @@ Pointer<Object> ClassClass::createNewInstance(const std::vector<Pointer<Object>>
 }
 
 void ClassClass::setupMethods(Esther *esther) {
-    defFunc(esther, "new", -1, [=](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    defFunc(esther, "new", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         return ((Class *)*self)->newInstance(esther, args);
     });
 
-    defFunc(esther, "superclass", [=](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
+    defFunc(esther, "superclass", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
         return ((Class *)*self)->getSuperclass() ? ((Class *)*self)->getSuperclass() : esther->getNull();
     });
 }

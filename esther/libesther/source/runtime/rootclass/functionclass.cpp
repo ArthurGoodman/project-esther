@@ -18,9 +18,9 @@ Pointer<Object> FunctionClass::createNewInstance(const std::vector<Pointer<Objec
 }
 
 void FunctionClass::setupMethods(Esther *esther) {
-    defFunc(esther, "call", -1, [=](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    defFunc(esther, "call", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if (args.empty())
-            Esther::runtimeError(getName() + ".call: invalid number of arguments");
+            Esther::runtimeError("Function.call: invalid number of arguments");
 
         Pointer<Object> actualSelf = args[0];
 

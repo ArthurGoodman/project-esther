@@ -14,23 +14,23 @@ Pointer<Object> IntegerClass::createNewInstance(const std::vector<Pointer<Object
 }
 
 void IntegerClass::setupMethods(Esther *esther) {
-    setAttribute("()", *esther->createNativeFunction("()", 2, [=](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    setAttribute("()", *esther->createNativeFunction("()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if (!dynamic_cast<IntegerClass *>(*self)) {
-            Esther::runtimeError(getName() + ".(): invalid self");
+            Esther::runtimeError("Integer.(): invalid self");
             return nullptr;
         }
 
         if (!dynamic_cast<ValueObject *>(*args[1])) {
-            Esther::runtimeError(getName() + ".(): invalid argument");
+            Esther::runtimeError("Integer.(): invalid argument");
             return nullptr;
         }
 
         return *esther->createInteger(((ValueObject *)*args[1])->getVariant().toInteger());
     }));
 
-    defValueObjectFunc(esther, "initialize", -1, [=](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if ((int)args.size() > 1)
-            Esther::runtimeError(getName() + ".initialize: invalid number of arguments");
+            Esther::runtimeError("Integer.initialize: invalid number of arguments");
 
         if (!args.empty())
             ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toInteger());
@@ -38,7 +38,7 @@ void IntegerClass::setupMethods(Esther *esther) {
         return self;
     });
 
-    defValueObjectFunc(esther, "=", 1, [=](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    defValueObjectFunc(esther, "=", 1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toInteger());
         return self;
     });

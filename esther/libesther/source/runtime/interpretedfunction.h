@@ -11,6 +11,9 @@ class InterpretedFunction : public Function {
     Expression *body;
     Pointer<Context> context;
 
+public:
+    virtual int getSize() const;
+
 protected:
     Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args);
 
