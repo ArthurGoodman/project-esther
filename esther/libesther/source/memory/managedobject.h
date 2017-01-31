@@ -28,6 +28,7 @@ public:
     void setForwardAddress(ManagedObject *forwardAddress);
 
     virtual void mapOnReferences(const std::function<void(ManagedObject *&)> &f);
+    virtual void copy(ManagedObject *dst) = 0;
     virtual int getSize() const = 0;
 };
 

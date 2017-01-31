@@ -6,6 +6,10 @@ Pointer<Class> ClassClass::createClass(const std::string &name, Pointer<Class> s
     return new Class(this, name, superclass ? superclass : getSuperclass());
 }
 
+void ClassClass::copy(ManagedObject *dst) {
+    new (dst) ClassClass(*this);
+}
+
 Pointer<Object> ClassClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     return *createClass("");
 }

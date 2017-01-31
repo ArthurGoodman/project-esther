@@ -15,7 +15,8 @@ void ManagedObject::operator delete(void *p) noexcept {
 }
 
 ManagedObject::ManagedObject()
-    : flags(0), forwardAddress(0) {
+    : flags(0)
+    , forwardAddress(0) {
 }
 
 ManagedObject::~ManagedObject() {

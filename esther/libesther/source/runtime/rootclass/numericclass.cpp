@@ -2,6 +2,10 @@
 
 #include "esther.h"
 
+void NumericClass::copy(ManagedObject *dst) {
+    new (dst) NumericClass(*this);
+}
+
 void NumericClass::setupMethods(Esther *esther) {
     defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
         return a + b;

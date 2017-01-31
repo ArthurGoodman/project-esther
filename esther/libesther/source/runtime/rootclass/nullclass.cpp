@@ -3,6 +3,10 @@
 #include "null.h"
 #include "esther.h"
 
+void NullClass::copy(ManagedObject *dst) {
+    new (dst) NullClass(*this);
+}
+
 Pointer<Object> NullClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     Esther::runtimeError("cannot create new instance of Null class");
     return nullptr;

@@ -9,6 +9,10 @@ Pointer<ValueObject> FloatClass::createFloat(double value) {
     return new ValueObject(this, value);
 }
 
+void FloatClass::copy(ManagedObject *dst) {
+    new (dst) FloatClass(*this);
+}
+
 Pointer<Object> FloatClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     return *createFloat(0.0);
 }

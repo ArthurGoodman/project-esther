@@ -10,6 +10,8 @@ class IntegerClass : public RootClass {
 public:
     Pointer<ValueObject> createInteger(int value);
 
+    void copy(ManagedObject *dst);
+
 protected:
     Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 

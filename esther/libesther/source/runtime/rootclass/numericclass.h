@@ -5,6 +5,9 @@
 class NumericClass : public RootClass {
     friend class Esther;
 
+public:
+    void copy(ManagedObject *dst);
+
 protected:
     void setupMethods(Esther *esther);
 

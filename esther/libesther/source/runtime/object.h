@@ -40,5 +40,6 @@ public:
 
     Pointer<Object> callIfFound(Esther *esther, const std::string &name, const std::vector<Pointer<Object>> &args);
 
+    virtual void copy(ManagedObject *dst);
     virtual int getSize() const;
 };

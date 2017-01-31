@@ -10,6 +10,8 @@ class FloatClass : public RootClass {
 public:
     Pointer<ValueObject> createFloat(double value);
 
+    void copy(ManagedObject *dst);
+
 protected:
     Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 

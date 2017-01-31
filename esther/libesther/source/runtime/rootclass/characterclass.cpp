@@ -10,6 +10,10 @@ Pointer<ValueObject> CharacterClass::createCharacter(char value) {
     return new ValueObject(this, value);
 }
 
+void CharacterClass::copy(ManagedObject *dst) {
+    new (dst) CharacterClass(*this);
+}
+
 Pointer<Object> CharacterClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     return *createCharacter('\0');
 }

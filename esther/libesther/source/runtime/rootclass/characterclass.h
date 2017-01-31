@@ -10,6 +10,8 @@ class CharacterClass : public RootClass {
 public:
     Pointer<ValueObject> createCharacter(char value);
 
+    void copy(ManagedObject *dst);
+
 protected:
     Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 

@@ -9,6 +9,10 @@ Pointer<Object> ObjectClass::createObject(Pointer<Class> objectClass) {
     return new Object(objectClass);
 }
 
+void ObjectClass::copy(ManagedObject *dst) {
+    new (dst) ObjectClass(*this);
+}
+
 Pointer<Object> ObjectClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     return createObject(this);
 }

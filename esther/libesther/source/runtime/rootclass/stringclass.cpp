@@ -8,6 +8,10 @@ Pointer<ValueObject> StringClass::createString(const std::string &value) {
     return new ValueObject(this, value);
 }
 
+void StringClass::copy(ManagedObject *dst) {
+    new (dst) StringClass(*this);
+}
+
 Pointer<Object> StringClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     return *createString("");
 }

@@ -16,6 +16,8 @@ public:
     Pointer<Function> createNativeFunction(const std::string &name, int arity, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body);
     Pointer<Function> createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context);
 
+    void copy(ManagedObject *dst);
+
 protected:
     Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 

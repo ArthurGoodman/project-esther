@@ -23,10 +23,6 @@ std::string Function::toString() const {
     return getName().empty() ? "<anonymous function>" : "<function " + getName() + ">";
 }
 
-int Function::getSize() const {
-    return sizeof *this;
-}
-
 Function::Function(Pointer<Class> objectClass, const std::string &name, int arity)
     : Object(objectClass)
     , name(name)

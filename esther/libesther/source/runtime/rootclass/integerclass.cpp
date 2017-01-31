@@ -9,6 +9,10 @@ Pointer<ValueObject> IntegerClass::createInteger(int value) {
     return new ValueObject(this, value);
 }
 
+void IntegerClass::copy(ManagedObject *dst) {
+    new (dst) IntegerClass(*this);
+}
+
 Pointer<Object> IntegerClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     return *createInteger(0);
 }

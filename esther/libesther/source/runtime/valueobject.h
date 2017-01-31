@@ -19,6 +19,7 @@ public:
 
     std::string toString() const;
 
+    virtual void copy(ManagedObject *dst);
     virtual int getSize() const;
 
 private:

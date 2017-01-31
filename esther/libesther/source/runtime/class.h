@@ -27,6 +27,7 @@ public:
 
     Pointer<Object> lookup(const std::string &name) const;
 
+    virtual void copy(ManagedObject *dst);
     virtual int getSize() const;
 
 protected:

@@ -39,6 +39,10 @@ Pointer<Object> Class::lookup(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
 }
 
+void Class::copy(ManagedObject *dst) {
+    new (dst) Class(*this);
+}
+
 int Class::getSize() const {
     return sizeof *this;
 }

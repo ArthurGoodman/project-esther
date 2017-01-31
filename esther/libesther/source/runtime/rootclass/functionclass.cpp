@@ -12,6 +12,10 @@ Pointer<Function> FunctionClass::createInterpretedFunction(const std::string &na
     return new InterpretedFunction(this, name, params, body, context);
 }
 
+void FunctionClass::copy(ManagedObject *dst) {
+    new (dst) FunctionClass(*this);
+}
+
 Pointer<Object> FunctionClass::createNewInstance(const std::vector<Pointer<Object>> &) {
     Esther::runtimeError("cannot create new instance of Function class yet...");
     return nullptr;

@@ -1,7 +1,10 @@
 #include "memorymanager.h"
 
 #include "pointer.h"
+
 #include "nomemorymanager.h"
+#include "markcompactmemorymanager.h"
+#include "semispacememorymanager.h"
 
 Pointer<ManagedObject> *&MemoryManager::pointers() {
     static Pointer<ManagedObject> *pointers = 0;
@@ -14,7 +17,7 @@ Frame *&MemoryManager::frames() {
 }
 
 MemoryManager *MemoryManager::instance() {
-    static NoMemoryManager instance;
+    static SemispaceMemoryManager instance;
     return &instance;
 }
 

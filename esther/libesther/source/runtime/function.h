@@ -19,8 +19,6 @@ public:
 
     std::string toString() const;
 
-    virtual int getSize() const;
-
 protected:
     virtual Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) = 0;
 

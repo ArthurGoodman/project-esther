@@ -87,6 +87,10 @@ Pointer<Object> Object::callIfFound(Esther *esther, const std::string &name, con
     return call(esther, f, args);
 }
 
+void Object::copy(ManagedObject *dst) {
+    new (dst) Object(*this);
+}
+
 int Object::getSize() const {
     return sizeof *this;
 }

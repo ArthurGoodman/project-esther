@@ -8,6 +8,8 @@ class ObjectClass : public RootClass {
 public:
     Pointer<Object> createObject(Pointer<Class> objectClass);
 
+    void copy(ManagedObject *dst);
+
 protected:
     Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 

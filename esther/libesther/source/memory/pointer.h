@@ -8,7 +8,7 @@ class Pointer {
     Pointer<T> *prev, *next;
 
 public:
-    Pointer(T *p = 0);
+    Pointer(T *p = nullptr);
     Pointer(const Pointer<T> &p);
     ~Pointer();
 
@@ -28,7 +28,7 @@ public:
 
 template <class T>
 Pointer<T>::Pointer(T *p)
-    : pointer(p), prev(0), next(0) {
+    : pointer(p), prev(nullptr), next(nullptr) {
     MemoryManager::registerPointer((Pointer<ManagedObject> *)this);
 }
 

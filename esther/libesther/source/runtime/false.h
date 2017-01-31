@@ -10,6 +10,8 @@ public:
 
     bool isTrue() const;
 
+    void copy(ManagedObject *dst);
+
 private:
     False(Pointer<Class> objectClass);
 };

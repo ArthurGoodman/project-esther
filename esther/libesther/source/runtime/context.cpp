@@ -82,6 +82,10 @@ Pointer<Context> Context::childContext(Pointer<Object> self, Pointer<Object> her
     return new Context(self, here, this);
 }
 
+void Context::copy(ManagedObject *dst) {
+    new (dst) Context(*this);
+}
+
 int Context::getSize() const {
     return sizeof *this;
 }

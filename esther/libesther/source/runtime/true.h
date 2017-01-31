@@ -8,6 +8,8 @@ class True : public Object {
 public:
     std::string toString() const;
 
+    void copy(ManagedObject *dst);
+
 private:
     True(Pointer<Class> objectClass);
 };

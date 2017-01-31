@@ -36,6 +36,7 @@ public:
     Pointer<Context> childContext();
     Pointer<Context> childContext(Pointer<Object> self, Pointer<Object> here);
 
+    virtual void copy(ManagedObject *dst);
     virtual int getSize() const;
 
 private:

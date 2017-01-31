@@ -10,6 +10,7 @@ class NativeFunction : public Function {
     std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> body;
 
 public:
+    virtual void copy(ManagedObject *dst);
     virtual int getSize() const;
 
 protected:

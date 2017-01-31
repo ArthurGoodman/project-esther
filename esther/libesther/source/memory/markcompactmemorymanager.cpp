@@ -134,7 +134,8 @@ void MarkCompactMemoryManager::compact() {
         if (((ManagedObject *)object)->hasFlag(ManagedObject::FlagMark)) {
             byte *dst = (byte *)((ManagedObject *)object)->getForwardAddress();
 
-            memmove(dst, object, size);
+            // memmove(dst, object, size);
+            ((ManagedObject *)object)->copy((ManagedObject *)dst);
 
             ((ManagedObject *)dst)->removeFlag(ManagedObject::FlagMark);
             ((ManagedObject *)dst)->setForwardAddress(0);

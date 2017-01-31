@@ -2,6 +2,10 @@
 
 #include "esther.h"
 
+void InterpretedFunction::copy(ManagedObject *dst) {
+    new (dst) InterpretedFunction(*this);
+}
+
 int InterpretedFunction::getSize() const {
     return sizeof *this;
 }

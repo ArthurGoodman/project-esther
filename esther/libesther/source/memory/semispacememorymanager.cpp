@@ -1,14 +1,16 @@
 #include "semispacememorymanager.h"
 
-#include <utility>
-
 #include "pointer.h"
 #include "managedobject.h"
 
 #include <iostream>
+#include <cstring>
 
 SemispaceMemoryManager::SemispaceMemoryManager()
-    : objectCount(0), memoryUsed(0), capacity(InitialCapacity), delta(0) {
+    : objectCount(0)
+    , memoryUsed(0)
+    , capacity(InitialCapacity)
+    , delta(0) {
     initialize();
 }
 
@@ -48,10 +50,10 @@ void SemispaceMemoryManager::collectGarbage() {
         if (*p)
             *p = copy((ManagedObject *)((byte *)**p + delta));
 
-    for (Frame *frame = frames(); frame; frame = frame->getNext())
-        frame->mapOnLocals([this](ManagedObject *&p) {
-            p = copy((ManagedObject *)((byte *)p + delta));
-        });
+    // for (Frame *frame = frames(); frame; frame = frame->getNext())
+    //     frame->mapOnLocals([this](ManagedObject *&p) {
+    //         p = copy((ManagedObject *)((byte *)p + delta));
+    //     });
 }
 
 void SemispaceMemoryManager::reallocate() {
@@ -78,13 +80,14 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
         ManagedObject *newObject = (ManagedObject *)allocPtr;
         allocPtr += object->getSize();
 
-        memcpy(newObject, object, object->getSize());
+        // memcpy(newObject, object, object->getSize());
+        object->copy((ManagedObject *)newObject);
 
         object->setForwardAddress(newObject);
 
-        newObject->mapOnReferences([this](ManagedObject *&ref) {
-            ref = copy((ManagedObject *)((byte *)ref + delta));
-        });
+        // newObject->mapOnReferences([this](ManagedObject *&ref) {
+        //     ref = copy((ManagedObject *)((byte *)ref + delta));
+        // });
     }
 
     return object->getForwardAddress();

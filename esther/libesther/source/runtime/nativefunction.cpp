@@ -1,5 +1,9 @@
 #include "nativefunction.h"
 
+void NativeFunction::copy(ManagedObject *dst) {
+    new (dst) NativeFunction(*this);
+}
+
 int NativeFunction::getSize() const {
     return sizeof *this;
 }

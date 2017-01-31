@@ -12,6 +12,7 @@ class InterpretedFunction : public Function {
     Pointer<Context> context;
 
 public:
+    virtual void copy(ManagedObject *dst);
     virtual int getSize() const;
 
 protected:

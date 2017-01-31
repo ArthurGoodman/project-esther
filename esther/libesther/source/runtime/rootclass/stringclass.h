@@ -10,6 +10,8 @@ class StringClass : public RootClass {
 public:
     Pointer<ValueObject> createString(const std::string &value);
 
+    void copy(ManagedObject *dst);
+
 protected:
     Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
 
