@@ -2,20 +2,24 @@
 
 #include "memorymanager.h"
 
+Frame *frames = nullptr;
+
 Frame::Frame(const std::function<void(const std::function<void(ManagedObject *&)> &)> &map)
-    : map(map), prev(0), next(0) {
-    MemoryManager::registerFrame(this);
+    : map(map)
+    , prev(0)
+    , next(0) {
+    link();
 }
 
 Frame::~Frame() {
-    MemoryManager::removeFrame(this);
+    unlink();
 }
 
 void Frame::mapOnLocals(const std::function<void(ManagedObject *&)> &f) {
     map(f);
 }
 
-void Frame::link(Frame *&frames) {
+void Frame::link() {
     next = frames;
 
     if (frames)
@@ -24,7 +28,7 @@ void Frame::link(Frame *&frames) {
     frames = this;
 }
 
-void Frame::unlink(Frame *&frames) {
+void Frame::unlink() {
     if (next)
         next->prev = prev;
 

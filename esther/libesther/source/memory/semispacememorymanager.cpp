@@ -46,9 +46,9 @@ void SemispaceMemoryManager::collectGarbage() {
     objectCount = 0;
     memoryUsed = 0;
 
-    for (Pointer<ManagedObject> *p = pointers(); p; p = p->getNext())
-        if (*p)
-            *p = copy((ManagedObject *)((byte *)**p + delta));
+    for (Pointer<ManagedObject>::Aux *p = pointers; p; p = p->next)
+        if (p->pointer)
+            p->pointer = copy((ManagedObject *)((byte *)p->pointer + delta));
 
     // for (Frame *frame = frames(); frame; frame = frame->getNext())
     //     frame->mapOnLocals([this](ManagedObject *&p) {

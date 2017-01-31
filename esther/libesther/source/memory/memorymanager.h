@@ -2,25 +2,13 @@
 
 #include "common/common.h"
 #include "memory/frame.h"
+#include "memory/pointer.h"
 
 class ManagedObject;
 
-template <class>
-class Pointer;
-
 class MemoryManager {
-protected:
-    static Pointer<ManagedObject> *&pointers();
-    static Frame *&frames();
-
 public:
     static MemoryManager *instance();
-
-    static void registerPointer(Pointer<ManagedObject> *pointer);
-    static void removePointer(Pointer<ManagedObject> *pointer);
-
-    static void registerFrame(Frame *frame);
-    static void removeFrame(Frame *frame);
 
     template <class T>
     T *allocateArray(uint size);

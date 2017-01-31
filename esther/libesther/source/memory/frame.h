@@ -14,8 +14,10 @@ public:
 
     void mapOnLocals(const std::function<void(ManagedObject *&)> &map);
 
-    void link(Frame *&frames);
-    void unlink(Frame *&frames);
+    void link();
+    void unlink();
 
     Frame *getNext();
 };
+
+extern Frame *frames;

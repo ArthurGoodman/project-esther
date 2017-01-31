@@ -76,22 +76,22 @@ void MarkCompactMemoryManager::updatePointers() {
     for (int i = 0; i < objectCount; i++, object += ((ManagedObject *)object)->getSize())
         updatePointers((ManagedObject *)object);
 
-    for (Pointer<ManagedObject> *p = pointers(); p; p = p->getNext())
-        if (*p)
-            updatePointer(**p);
+    for (Pointer<ManagedObject>::Aux *p = pointers; p; p = p->next)
+        if (p->pointer)
+            updatePointer(p->pointer);
 
-    for (Frame *frame = frames(); frame; frame = frame->getNext())
+    for (Frame *frame = frames; frame; frame = frame->getNext())
         frame->mapOnLocals([this](ManagedObject *&p) {
             updatePointer(p);
         });
 }
 
 void MarkCompactMemoryManager::mark() {
-    for (Pointer<ManagedObject> *p = pointers(); p; p = p->getNext())
-        if (*p && !(*p)->hasFlag(ManagedObject::FlagMark))
-            mark(*p);
+    for (Pointer<ManagedObject>::Aux *p = pointers; p; p = p->next)
+        if (p->pointer && !p->pointer->hasFlag(ManagedObject::FlagMark))
+            mark(p->pointer);
 
-    for (Frame *frame = frames(); frame; frame = frame->getNext())
+    for (Frame *frame = frames; frame; frame = frame->getNext())
         frame->mapOnLocals([this](ManagedObject *&p) {
             if (!p->hasFlag(ManagedObject::FlagMark))
                 mark(p);
@@ -114,11 +114,11 @@ void MarkCompactMemoryManager::compact() {
         if (((ManagedObject *)object)->hasFlag(ManagedObject::FlagMark))
             forwardPointers((ManagedObject *)object);
 
-    for (Pointer<ManagedObject> *p = pointers(); p; p = p->getNext())
-        if (*p && (*p)->hasFlag(ManagedObject::FlagMark))
-            *p = (*p)->getForwardAddress();
+    for (Pointer<ManagedObject>::Aux *p = pointers; p; p = p->next)
+        if (p->pointer && p->pointer->hasFlag(ManagedObject::FlagMark))
+            p->pointer = p->pointer->getForwardAddress();
 
-    for (Frame *frame = frames(); frame; frame = frame->getNext())
+    for (Frame *frame = frames; frame; frame = frame->getNext())
         frame->mapOnLocals([this](ManagedObject *&p) {
             if (p->hasFlag(ManagedObject::FlagMark))
                 p = p->getForwardAddress();
