@@ -6,9 +6,7 @@ class False : public Object {
 public:
     False(Esther *esther);
 
-    std::string toString() const;
+    std::string toString() const override;
 
-    bool isTrue() const;
-
-    void copy(ManagedObject *dst);
+    bool isTrue() const override;
 };

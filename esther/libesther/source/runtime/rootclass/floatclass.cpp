@@ -42,10 +42,6 @@ void FloatClass::setupMethods(Esther *esther) {
     });
 }
 
-void FloatClass::copy(ManagedObject *dst) {
-    new (dst) FloatClass(*this);
-}
-
 Pointer<Object> FloatClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
     return new ValueObject(esther, 0.0);
 }

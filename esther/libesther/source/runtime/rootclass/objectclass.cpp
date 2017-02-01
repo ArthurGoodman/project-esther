@@ -42,10 +42,6 @@ void ObjectClass::setupMethods(Esther *esther) {
     });
 }
 
-void ObjectClass::copy(ManagedObject *dst) {
-    new (dst) ObjectClass(*this);
-}
-
 Pointer<Object> ObjectClass::createNewInstance(Esther *, const std::vector<Pointer<Object>> &) {
     return new Object(this);
 }

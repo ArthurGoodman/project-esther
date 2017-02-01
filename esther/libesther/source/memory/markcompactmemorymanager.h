@@ -11,11 +11,11 @@ public:
     MarkCompactMemoryManager();
     ~MarkCompactMemoryManager();
 
-    ManagedObject *allocate(uint size, int count);
-    void free(ManagedObject *p);
+    ManagedObject *allocate(uint size, int count) override;
+    void free(ManagedObject *p) override;
 
-    void collectGarbage();
-    void reallocate();
+    void collectGarbage() override;
+    void reallocate() override;
 
 private:
     void initialize();

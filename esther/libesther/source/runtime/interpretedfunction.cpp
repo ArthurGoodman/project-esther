@@ -13,8 +13,8 @@ InterpretedFunction::~InterpretedFunction() {
     delete params;
 }
 
-void InterpretedFunction::copy(ManagedObject *dst) {
-    new (dst) InterpretedFunction(*this);
+void InterpretedFunction::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+    f((ManagedObject *&)context);
 }
 
 int InterpretedFunction::getSize() const {

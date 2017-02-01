@@ -3,8 +3,8 @@
 #include "pointer.h"
 #include "managedobject.h"
 
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
 SemispaceMemoryManager::SemispaceMemoryManager()
     : objectCount(0)
@@ -19,7 +19,9 @@ SemispaceMemoryManager::~SemispaceMemoryManager() {
 }
 
 ManagedObject *SemispaceMemoryManager::allocate(uint size, int count) {
-    std::cout << "SemispaceMemoryManager::allocate()\n";
+#if VERBOSE_GC
+    std::cout << "SemispaceMemoryManager::allocate(size=" << size << ")\n" << std::flush;
+#endif
 
     if (!enoughSpace(size))
         collectGarbage();
@@ -42,10 +44,10 @@ void SemispaceMemoryManager::free(ManagedObject *) {
 }
 
 void SemispaceMemoryManager::collectGarbage() {
-    std::cout << "\nSemispaceMemoryManager::collectGarbage()\n";
-
-    int oldSize = memory.getSize();
-    int oldObjectCount = objectCount;
+#if VERBOSE_GC
+    std::cout << "\nSemispaceMemoryManager::collectGarbage()\n" << std::flush;
+    int oldSize = memoryUsed, oldObjectCount = objectCount;
+#endif
 
     std::swap(fromSpace, toSpace);
     allocPtr = toSpace;
@@ -57,12 +59,14 @@ void SemispaceMemoryManager::collectGarbage() {
         if (p->pointer)
             p->pointer = copy((ManagedObject *)((byte *)p->pointer + delta));
 
-    // for (Frame *frame = frames(); frame; frame = frame->getNext())
-    //     frame->mapOnLocals([this](ManagedObject *&p) {
-    //         p = copy((ManagedObject *)((byte *)p + delta));
-    //     });
+// for (Frame *frame = frames(); frame; frame = frame->getNext())
+//     frame->mapOnLocals([this](ManagedObject *&p) {
+//         p = copy((ManagedObject *)((byte *)p + delta));
+//     });
 
-    std::cout << "//freed=" << oldSize - memory.getSize() << ", freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n";
+#if VERBOSE_GC
+    std::cout << "//freed=" << oldSize - memoryUsed << " freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
+#endif
 }
 
 void SemispaceMemoryManager::reallocate() {
@@ -75,6 +79,12 @@ void SemispaceMemoryManager::initialize() {
 }
 
 void SemispaceMemoryManager::finalize() {
+#if VERBOSE_GC
+    std::cout << "\nObject count: " << objectCount << "\n" << std::flush;
+    std::cout << "Memory used: " << memoryUsed << "\n" << std::flush;
+    std::cout << "Total memory: " << memory.getCapacity() << "\n" << std::flush;
+    std::cout << "\nSemispaceMemoryManager::finalize()\n" << std::flush;
+#endif
 }
 
 bool SemispaceMemoryManager::enoughSpace(int size) const {
@@ -90,20 +100,21 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
         allocPtr += object->getSize();
 
         memcpy(newObject, object, object->getSize());
-        // object->copy((ManagedObject *)newObject);
 
         object->setForwardAddress(newObject);
 
-        // newObject->mapOnReferences([this](ManagedObject *&ref) {
-        //     ref = copy((ManagedObject *)((byte *)ref + delta));
-        // });
+        newObject->mapOnReferences([this](ManagedObject *&ref) {
+            ref = copy((ManagedObject *)((byte *)ref + delta));
+        });
     }
 
     return object->getForwardAddress();
 }
 
 void SemispaceMemoryManager::expand() {
-    std::cout << "SemispaceMemoryManager::expand()";
+#if VERBOSE_GC
+    std::cout << "SemispaceMemoryManager::expand()" << std::flush;
+#endif
 
     byte *oldData = memory.getData();
 
@@ -113,7 +124,9 @@ void SemispaceMemoryManager::expand() {
 
     delta = memory.getData() - oldData;
 
-    std::cout << " // delta=" << delta << "\n";
+#if VERBOSE_GC
+    std::cout << " //capacity=" << capacity << ", delta=" << delta << "\n" << std::flush;
+#endif
 
     collectGarbage();
 }

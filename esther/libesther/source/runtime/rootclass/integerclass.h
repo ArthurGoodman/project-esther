@@ -8,10 +8,8 @@ class IntegerClass : public RootClass {
 public:
     IntegerClass(Esther *esther);
 
-    void setupMethods(Esther *esther);
-
-    void copy(ManagedObject *dst);
+    void setupMethods(Esther *esther) override;
 
 protected:
-    Pointer<Object> createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args);
+    Pointer<Object> createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args) override;
 };

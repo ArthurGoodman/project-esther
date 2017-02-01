@@ -4,8 +4,8 @@
 
 class LexicalError : public ErrorException {
 public:
-    LexicalError(const std::string &message, Position getPosition);
+    LexicalError(const std::string &message, Position position);
 
-    std::string message();
-    void raise();
+    std::string message() override;
+    void raise() override;
 };

@@ -26,11 +26,7 @@ void FunctionClass::setupMethods(Esther *esther) {
     _this->setAttribute("()", _this->getAttribute("call"));
 }
 
-void FunctionClass::copy(ManagedObject *dst) {
-    new (dst) FunctionClass(*this);
-}
-
-Pointer<Object> FunctionClass::createNewInstance(const std::vector<Pointer<Object>> &) {
+Pointer<Object> FunctionClass::createNewInstance(Esther *, const std::vector<Pointer<Object>> &) {
     Esther::runtimeError("cannot create new instance of Function class yet...");
     return nullptr;
 }

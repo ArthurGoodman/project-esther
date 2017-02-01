@@ -6,10 +6,8 @@ class NullClass : public RootClass {
 public:
     NullClass(Esther *esther);
 
-    void setupMethods(Esther *esther);
-
-    void copy(ManagedObject *dst);
+    void setupMethods(Esther *esther) override;
 
 protected:
-    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
+    Pointer<Object> createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args) override;
 };

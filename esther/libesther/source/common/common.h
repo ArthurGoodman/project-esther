@@ -10,6 +10,8 @@
 
 #define HEAP_VARIANT 0
 
+#define VERBOSE_GC 0
+
 typedef unsigned char byte;
 typedef unsigned int uint;
 typedef unsigned long long ulong;

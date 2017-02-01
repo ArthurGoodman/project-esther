@@ -10,7 +10,7 @@ class ErrorException : public Exception {
 public:
     ErrorException(const std::string &message, Position position = Position());
 
-    std::string message();
+    std::string message() override;
 
     Position getPosition();
     void setPosition(Position position);

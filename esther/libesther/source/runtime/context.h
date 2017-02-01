@@ -3,16 +3,15 @@
 #include <string>
 #include <list>
 
+#include "memory/managedobject.h"
 #include "memory/pointer.h"
 
 class Object;
 class Esther;
 
-class Context {
-    Pointer<Context> parent;
-    Pointer<Object> self, here;
-
-    std::list<Pointer<Context>> children;
+class Context : public ManagedObject {
+    Context *parent;
+    Object *self, *here;
 
 public:
     Context(Esther *esther);
@@ -31,11 +30,10 @@ public:
     Pointer<Object> get(Esther *esther, const std::string &name) const;
     bool set(const std::string &name, Pointer<Object> value);
 
-    Pointer<Context> childContext();
     Pointer<Context> childContext(Pointer<Object> self, Pointer<Object> here);
 
-    virtual void copy(ManagedObject *dst);
-    virtual int getSize() const;
+    void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
+    int getSize() const override;
 
 private:
     Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent);

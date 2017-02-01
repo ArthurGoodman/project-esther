@@ -11,5 +11,5 @@ public:
     ~AssignmentExpression();
 
 protected:
-    Pointer<Object> exec(Esther *esther);
+    Pointer<Object> exec(Esther *esther) override;
 };

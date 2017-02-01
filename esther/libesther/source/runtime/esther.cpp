@@ -190,10 +190,6 @@ Pointer<Context> Esther::context() const {
     return contexts.top();
 }
 
-void Esther::pushContext(Pointer<Object> self, Pointer<Object> here) {
-    pushContext(context()->childContext(self, here));
-}
-
 void Esther::pushContext(Pointer<Context> context) {
     contexts.push(context);
 }

@@ -62,8 +62,11 @@ Pointer<Object> Class::lookup(const std::string &name) const {
     return _this->hasAttribute(name) ? _this->getAttribute(name) : _this->superclass ? _this->superclass->lookup(name) : nullptr;
 }
 
-void Class::copy(ManagedObject *dst) {
-    new (dst) Class(*this);
+void Class::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+    Object::mapOnReferences(f);
+
+    if (superclass)
+        f((ManagedObject *&)superclass);
 }
 
 int Class::getSize() const {

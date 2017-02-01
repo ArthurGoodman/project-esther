@@ -32,28 +32,20 @@ public:
 
 extern Pointer<ManagedObject>::Aux *pointers;
 
-#include <iostream>
-
 template <class T>
 Pointer<T>::Pointer(T *p)
     : aux(new Aux({ p, nullptr, nullptr })) {
-    std::cout << "Pointer<T>::Pointer(T *)";
-
     link((Pointer<T>::Aux *&)pointers);
 }
 
 template <class T>
 Pointer<T>::Pointer(const Pointer<T> &p)
     : aux(new Aux({ p.aux->pointer, nullptr, nullptr })) {
-    std::cout << "Pointer<T>::Pointer(const Pointe<T> &)";
-
     link((Pointer<T>::Aux *&)pointers);
 }
 
 template <class T>
 Pointer<T>::~Pointer() {
-    std::cout << "Pointer<T>::~Pointer()";
-
     unlink((Pointer<T>::Aux *&)pointers);
     delete aux;
 }
@@ -92,8 +84,6 @@ Pointer<T> &Pointer<T>::operator=(T *p) {
 
 template <class T>
 void Pointer<T>::link(Pointer<T>::Aux *&pointers) {
-    std::cout << ", Pointer<T>::link()\n";
-
     aux->next = pointers;
 
     if (pointers)
@@ -104,8 +94,6 @@ void Pointer<T>::link(Pointer<T>::Aux *&pointers) {
 
 template <class T>
 void Pointer<T>::unlink(Pointer<T>::Aux *&pointers) {
-    std::cout << ", Pointer<T>::unlink()\n";
-
     if (aux->next)
         aux->next->prev = aux->prev;
 

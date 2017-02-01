@@ -8,5 +8,5 @@ public:
 
     Pointer<Object> value();
 
-    void raise();
+    void raise() override;
 };

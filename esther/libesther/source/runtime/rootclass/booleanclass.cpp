@@ -9,11 +9,7 @@ BooleanClass::BooleanClass(Esther *esther)
 void BooleanClass::setupMethods(Esther *) {
 }
 
-void BooleanClass::copy(ManagedObject *dst) {
-    new (dst) BooleanClass(*this);
-}
-
-Pointer<Object> BooleanClass::createNewInstance(const std::vector<Pointer<Object>> &) {
+Pointer<Object> BooleanClass::createNewInstance(Esther *, const std::vector<Pointer<Object>> &) {
     Esther::runtimeError("cannot create new instance of Boolean class");
     return nullptr;
 }

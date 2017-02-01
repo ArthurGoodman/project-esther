@@ -82,7 +82,6 @@ public:
 
     Pointer<Context> context() const;
 
-    void pushContext(Pointer<Object> self, Pointer<Object> here);
     void pushContext(Pointer<Context> context);
     void popContext();
 

@@ -53,7 +53,3 @@ void NumericClass::setupMethods(Esther *esther) {
         return a == b;
     });
 }
-
-void NumericClass::copy(ManagedObject *dst) {
-    new (dst) NumericClass(*this);
-}

@@ -15,7 +15,9 @@ MarkCompactMemoryManager::~MarkCompactMemoryManager() {
 }
 
 ManagedObject *MarkCompactMemoryManager::allocate(uint size, int count) {
-    std::cout << "MarkCompactMemoryManager::allocate()\n";
+#if VERBOSE_GC
+    std::cout << "MarkCompactMemoryManager::allocate(size=" << size << ")\n" << std::flush;
+#endif
 
     if (!memory.enoughSpace(size))
         collectGarbage();
@@ -36,14 +38,17 @@ void MarkCompactMemoryManager::free(ManagedObject *) {
 }
 
 void MarkCompactMemoryManager::collectGarbage() {
-    std::cout << "\nMarkCompactMemoryManager::collectGarbage()\n";
-
+#if VERBOSE_GC
+    std::cout << "\nMarkCompactMemoryManager::collectGarbage()\n" << std::flush;
     int oldSize = memory.getSize(), oldObjectCount = objectCount;
+#endif
 
     mark();
     compact();
 
-    std::cout << "//freed=" << oldSize - memory.getSize() << ", freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n";
+#if VERBOSE_GC
+    std::cout << "//freed=" << oldSize - memory.getSize() << ", freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
+#endif
 }
 
 void MarkCompactMemoryManager::reallocate() {
@@ -56,9 +61,12 @@ void MarkCompactMemoryManager::initialize() {
 }
 
 void MarkCompactMemoryManager::finalize() {
-    std::cout << "Memory used: " << memory.getSize() << "\n";
-    std::cout << "Total memory: " << memory.getCapacity() << "\n";
-    std::cout << "\nMarkCompactMemoryManager::finalize()\n";
+#if VERBOSE_GC
+    std::cout << "\nObject count: " << objectCount << "\n" << std::flush;
+    std::cout << "Memory used: " << memory.getSize() << "\n" << std::flush;
+    std::cout << "Total memory: " << memory.getCapacity() << "\n" << std::flush;
+    std::cout << "\nMarkCompactMemoryManager::finalize()\n" << std::flush;
+#endif
 
     // byte *p = memory.getData();
 
@@ -69,7 +77,9 @@ void MarkCompactMemoryManager::finalize() {
 }
 
 void MarkCompactMemoryManager::updatePointers() {
-    std::cout << "MarkCompactMemoryManager::updatePointers() //delta=" << delta << "\n\n";
+#if VERBOSE_GC
+    std::cout << "MarkCompactMemoryManager::updatePointers() //delta=" << delta << "\n\n" << std::flush;
+#endif
 
     byte *object = memory.getData();
 
@@ -80,10 +90,10 @@ void MarkCompactMemoryManager::updatePointers() {
         if (p->pointer)
             updatePointer(p->pointer);
 
-    for (Frame *frame = frames; frame; frame = frame->getNext())
-        frame->mapOnLocals([this](ManagedObject *&p) {
-            updatePointer(p);
-        });
+    // for (Frame *frame = frames; frame; frame = frame->getNext())
+    //     frame->mapOnLocals([this](ManagedObject *&p) {
+    //         updatePointer(p);
+    //     });
 }
 
 void MarkCompactMemoryManager::mark() {
@@ -91,11 +101,11 @@ void MarkCompactMemoryManager::mark() {
         if (p->pointer && !p->pointer->hasFlag(ManagedObject::FlagMark))
             mark(p->pointer);
 
-    for (Frame *frame = frames; frame; frame = frame->getNext())
-        frame->mapOnLocals([this](ManagedObject *&p) {
-            if (!p->hasFlag(ManagedObject::FlagMark))
-                mark(p);
-        });
+    // for (Frame *frame = frames; frame; frame = frame->getNext())
+    //     frame->mapOnLocals([this](ManagedObject *&p) {
+    //         if (!p->hasFlag(ManagedObject::FlagMark))
+    //             mark(p);
+    //     });
 }
 
 void MarkCompactMemoryManager::compact() {
@@ -118,11 +128,11 @@ void MarkCompactMemoryManager::compact() {
         if (p->pointer && p->pointer->hasFlag(ManagedObject::FlagMark))
             p->pointer = p->pointer->getForwardAddress();
 
-    for (Frame *frame = frames; frame; frame = frame->getNext())
-        frame->mapOnLocals([this](ManagedObject *&p) {
-            if (p->hasFlag(ManagedObject::FlagMark))
-                p = p->getForwardAddress();
-        });
+    // for (Frame *frame = frames; frame; frame = frame->getNext())
+    //     frame->mapOnLocals([this](ManagedObject *&p) {
+    //         if (p->hasFlag(ManagedObject::FlagMark))
+    //             p = p->getForwardAddress();
+    //     });
 
     object = memory.getData();
 
@@ -134,8 +144,7 @@ void MarkCompactMemoryManager::compact() {
         if (((ManagedObject *)object)->hasFlag(ManagedObject::FlagMark)) {
             byte *dst = (byte *)((ManagedObject *)object)->getForwardAddress();
 
-            // memmove(dst, object, size);
-            ((ManagedObject *)object)->copy((ManagedObject *)dst);
+            memmove(dst, object, size);
 
             ((ManagedObject *)dst)->removeFlag(ManagedObject::FlagMark);
             ((ManagedObject *)dst)->setForwardAddress(0);

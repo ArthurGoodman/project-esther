@@ -6,8 +6,6 @@ class Null : public Object {
 public:
     Null(Esther *esther);
 
-    std::string toString() const;
-    bool isTrue() const;
-
-    void copy(ManagedObject *dst);
+    std::string toString() const override;
+    bool isTrue() const override;
 };

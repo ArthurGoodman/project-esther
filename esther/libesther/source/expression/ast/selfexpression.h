@@ -4,5 +4,5 @@
 
 class SelfExpression : public Expression {
 protected:
-    Pointer<Object> exec(Esther *esther);
+    Pointer<Object> exec(Esther *esther) override;
 };

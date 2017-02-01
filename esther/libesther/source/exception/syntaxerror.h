@@ -4,8 +4,8 @@
 
 class SyntaxError : public ErrorException {
 public:
-    SyntaxError(const std::string &message, Position getPosition);
+    SyntaxError(const std::string &message, Position position);
 
-    std::string message();
-    void raise();
+    std::string message() override;
+    void raise() override;
 };

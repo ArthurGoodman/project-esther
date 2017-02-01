@@ -77,10 +77,6 @@ void StringClass::setupMethods(Esther *esther) {
     });
 }
 
-void StringClass::copy(ManagedObject *dst) {
-    new (dst) StringClass(*this);
-}
-
 Pointer<Object> StringClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
     return new ValueObject(esther, "");
 }

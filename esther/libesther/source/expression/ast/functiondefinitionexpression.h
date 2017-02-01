@@ -12,5 +12,5 @@ public:
     ~FunctionDefinitionExpression();
 
 protected:
-    Pointer<Object> exec(Esther *esther);
+    Pointer<Object> exec(Esther *esther) override;
 };

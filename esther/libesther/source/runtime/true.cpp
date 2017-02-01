@@ -9,7 +9,3 @@ True::True(Esther *esther)
 std::string True::toString() const {
     return "true";
 }
-
-void True::copy(ManagedObject *dst) {
-    new (dst) True(*this);
-}

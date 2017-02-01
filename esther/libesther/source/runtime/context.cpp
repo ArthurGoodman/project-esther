@@ -10,8 +10,6 @@ Context::Context(Esther *esther)
 }
 
 Context::~Context() {
-    for (Context *child : children)
-        delete child;
 }
 
 Pointer<Object> Context::getSelf() const {
@@ -67,18 +65,16 @@ bool Context::set(const std::string &name, Pointer<Object> value) {
     return false;
 }
 
-Pointer<Context> Context::childContext() {
-    children << new Context(getSelf(), getHere(), this);
-    return children.back();
-}
-
 Pointer<Context> Context::childContext(Pointer<Object> self, Pointer<Object> here) {
-    children << new Context(self, here, this);
-    return children.back();
+    return new Context(self, here, this);
 }
 
-void Context::copy(ManagedObject *dst) {
-    new (dst) Context(*this);
+void Context::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+    if (parent)
+        f((ManagedObject *&)parent);
+
+    f((ManagedObject *&)self);
+    f((ManagedObject *&)here);
 }
 
 int Context::getSize() const {

@@ -32,7 +32,7 @@ Pointer<Object> Object::getAttribute(const std::string &name) const {
 
 void Object::setAttribute(const std::string &name, Pointer<Object> value) {
     if (!attributes)
-        attributes = new std::map<std::string, Pointer<Object>>;
+        attributes = new std::map<std::string, Object *>;
 
     (*attributes)[name] = value;
 }
@@ -106,8 +106,12 @@ Pointer<Object> Object::callIfFound(Esther *esther, const std::string &name, con
     return _this->call(esther, f, args);
 }
 
-void Object::copy(ManagedObject *dst) {
-    new (dst) Object(*this);
+void Object::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+    f((ManagedObject *&)objectClass);
+
+    if (attributes)
+        for (auto &attr : *attributes)
+            f((ManagedObject *&)attr.second);
 }
 
 int Object::getSize() const {

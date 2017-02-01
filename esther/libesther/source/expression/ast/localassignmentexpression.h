@@ -10,5 +10,6 @@ public:
     LocalAssignmentExpression(const std::string &name, Expression *value);
     ~LocalAssignmentExpression();
 
-    Pointer<Object> exec(Esther *esther);
+protected:
+    Pointer<Object> exec(Esther *esther) override;
 };

@@ -42,10 +42,6 @@ void IntegerClass::setupMethods(Esther *esther) {
     });
 }
 
-void IntegerClass::copy(ManagedObject *dst) {
-    new (dst) IntegerClass(*this);
-}
-
 Pointer<Object> IntegerClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
     return new ValueObject(esther, 0);
 }

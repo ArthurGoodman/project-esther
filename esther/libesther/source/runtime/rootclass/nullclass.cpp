@@ -10,11 +10,7 @@ NullClass::NullClass(Esther *esther)
 void NullClass::setupMethods(Esther *) {
 }
 
-void NullClass::copy(ManagedObject *dst) {
-    new (dst) NullClass(*this);
-}
-
-Pointer<Object> NullClass::createNewInstance(const std::vector<Pointer<Object>> &) {
+Pointer<Object> NullClass::createNewInstance(Esther *, const std::vector<Pointer<Object>> &) {
     Esther::runtimeError("cannot create new instance of Null class");
     return nullptr;
 }

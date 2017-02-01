@@ -14,10 +14,9 @@ public:
     Variant getVariant() const;
     void setVariant(const Variant &value);
 
-    std::string toString() const;
+    std::string toString() const override;
 
-    virtual void copy(ManagedObject *dst);
-    virtual int getSize() const;
+    virtual int getSize() const override;
 
 private:
     static Pointer<Class> variantTypeToObjectClass(Esther *esther, Variant::Type type);

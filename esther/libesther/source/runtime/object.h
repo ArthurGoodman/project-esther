@@ -11,8 +11,8 @@ class Class;
 class Esther;
 
 class Object : public ManagedObject {
-    Pointer<Class> objectClass;
-    std::map<std::string, Pointer<Object>> *attributes;
+    Class *objectClass;
+    std::map<std::string, Object *> *attributes;
 
 public:
     Object(Pointer<Class> objectClass);
@@ -40,6 +40,6 @@ public:
 
     Pointer<Object> callIfFound(Esther *esther, const std::string &name, const std::vector<Pointer<Object>> &args);
 
-    virtual void copy(ManagedObject *dst);
-    virtual int getSize() const;
+    void mapOnReferences(const std::function<void (ManagedObject *&)> &f) override;
+    int getSize() const override;
 };

@@ -20,7 +20,7 @@ class Lexer : public ILexer {
     int pos, line, column;
 
 public:
-    Tokens &lex(const std::string &source);
+    Tokens &lex(const std::string &source) override;
 
 private:
     template <int N>

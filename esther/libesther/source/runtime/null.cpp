@@ -13,7 +13,3 @@ std::string Null::toString() const {
 bool Null::isTrue() const {
     return false;
 }
-
-void Null::copy(ManagedObject *dst) {
-    new (dst) Null(*this);
-}

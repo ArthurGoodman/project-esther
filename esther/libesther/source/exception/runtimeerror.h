@@ -6,6 +6,6 @@ class RuntimeError : public ErrorException {
 public:
     RuntimeError(const std::string &message);
 
-    std::string message();
-    void raise();
+    std::string message() override;
+    void raise() override;
 };

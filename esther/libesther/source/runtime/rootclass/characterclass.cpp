@@ -55,10 +55,6 @@ void CharacterClass::setupMethods(Esther *esther) {
     });
 }
 
-void CharacterClass::copy(ManagedObject *dst) {
-    new (dst) CharacterClass(*this);
-}
-
 Pointer<Object> CharacterClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
     return new ValueObject(esther, '\0');
 }

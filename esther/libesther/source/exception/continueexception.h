@@ -4,5 +4,5 @@
 
 class ContinueException : public Exception {
 public:
-    void raise();
+    void raise() override;
 };

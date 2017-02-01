@@ -15,11 +15,11 @@ public:
     SemispaceMemoryManager();
     ~SemispaceMemoryManager();
 
-    ManagedObject *allocate(uint size, int count = 1);
-    void free(ManagedObject *p);
+    ManagedObject *allocate(uint size, int count = 1) override;
+    void free(ManagedObject *p) override;
 
-    void collectGarbage();
-    void reallocate();
+    void collectGarbage() override;
+    void reallocate() override;
 
 private:
     void initialize();

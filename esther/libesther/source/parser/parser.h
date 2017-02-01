@@ -21,7 +21,7 @@ class Parser : public IParser {
     Tokens::iterator token;
 
 public:
-    Expression *parse(Esther *esther, Tokens &tokens);
+    Expression *parse(Esther *esther, Tokens &tokens) override;
 
 private:
     void error(const std::string &msg, int delta = 0);

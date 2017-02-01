@@ -13,9 +13,8 @@ public:
     NativeFunction(Esther *esther, const std::string &name, int arity, const FunctionBody &body);
     ~NativeFunction();
 
-    virtual void copy(ManagedObject *dst);
-    virtual int getSize() const;
+    virtual int getSize() const override;
 
 protected:
-    Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args);
+    Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) override;
 };
