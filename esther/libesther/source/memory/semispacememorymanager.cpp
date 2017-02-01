@@ -19,6 +19,8 @@ SemispaceMemoryManager::~SemispaceMemoryManager() {
 }
 
 ManagedObject *SemispaceMemoryManager::allocate(uint size, int count) {
+    std::cout << "SemispaceMemoryManager::allocate()\n";
+
     if (!enoughSpace(size))
         collectGarbage();
 
@@ -40,6 +42,11 @@ void SemispaceMemoryManager::free(ManagedObject *) {
 }
 
 void SemispaceMemoryManager::collectGarbage() {
+    std::cout << "\nSemispaceMemoryManager::collectGarbage()\n";
+
+    int oldSize = memory.getSize();
+    int oldObjectCount = objectCount;
+
     std::swap(fromSpace, toSpace);
     allocPtr = toSpace;
 
@@ -54,6 +61,8 @@ void SemispaceMemoryManager::collectGarbage() {
     //     frame->mapOnLocals([this](ManagedObject *&p) {
     //         p = copy((ManagedObject *)((byte *)p + delta));
     //     });
+
+    std::cout << "//freed=" << oldSize - memory.getSize() << ", freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n";
 }
 
 void SemispaceMemoryManager::reallocate() {
@@ -94,6 +103,8 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
 }
 
 void SemispaceMemoryManager::expand() {
+    std::cout << "SemispaceMemoryManager::expand()";
+
     byte *oldData = memory.getData();
 
     fromSpace = memory.allocate(capacity);
@@ -101,6 +112,8 @@ void SemispaceMemoryManager::expand() {
     capacity *= 2;
 
     delta = memory.getData() - oldData;
+
+    std::cout << " // delta=" << delta << "\n";
 
     collectGarbage();
 }

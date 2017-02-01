@@ -15,7 +15,7 @@ MarkCompactMemoryManager::~MarkCompactMemoryManager() {
 }
 
 ManagedObject *MarkCompactMemoryManager::allocate(uint size, int count) {
-    std::cout << "MarkCompactMemoryManager::allocate\n";
+    std::cout << "MarkCompactMemoryManager::allocate()\n";
 
     if (!memory.enoughSpace(size))
         collectGarbage();
