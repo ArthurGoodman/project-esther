@@ -173,9 +173,7 @@ V &HashMap<K, V>::get(const K &key) const {
 
 template <class K, class V>
 V &HashMap<K, V>::put(const K &key, const V &value) {
-    HashMap *_this = this;
-
-    GC_FRAME(POINTER(_this))
+    Pointer<HashMap> _this = this;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -185,10 +183,8 @@ V &HashMap<K, V>::put(const K &key, const V &value) {
 
 template <>
 Object *&HashMap<uint, Object *>::put(const uint &key, Object *const &value) {
-    HashMap *_this = this;
-    Object *pValue = value;
-
-    GC_FRAME(POINTER(_this) POINTER(pValue))
+    Pointer<HashMap> _this = this;
+    Pointer<Object> pValue = value;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -198,10 +194,8 @@ Object *&HashMap<uint, Object *>::put(const uint &key, Object *const &value) {
 
 template <>
 uint &HashMap<Object *, uint>::put(Object *const &key, const uint &value) {
-    HashMap *_this = this;
-    Object *pKey = key;
-
-    GC_FRAME(POINTER(_this) POINTER(pKey))
+    Pointer<HashMap> _this = this;
+    Pointer<Object> pKey = key;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -285,10 +279,8 @@ ulong HashMap<Object *, uint>::hashKey(Object *const & /*key*/) {
 
 template <class K, class V>
 void HashMap<K, V>::allocate() {
-    HashMap *_this = this;
-    Array<Entry *> *oldEntries = buffer;
-
-    GC_FRAME(POINTER(_this) POINTER(oldEntries))
+    Pointer<HashMap> _this = this;
+    Pointer<Array<Entry *>> oldEntries = buffer;
 
     int oldCapacity = buffer ? capacity : 0;
 
@@ -321,11 +313,9 @@ template <class K, class V>
 V &HashMap<K, V>::insert(const K &key, const V &value) {
     int hashValue = hashKey(key) & mask;
 
-    Entry *prev = 0;
-    Entry *entry = (*buffer)[hashValue];
-    HashMap *_this = this;
-
-    GC_FRAME(POINTER(prev) POINTER(entry) POINTER(_this))
+    Pointer<Entry> prev = 0;
+    Pointer<Entry> entry = (*buffer)[hashValue];
+    Pointer<HashMap> _this = this;
 
     while (entry && !entry->equals(key)) {
         prev = entry;
