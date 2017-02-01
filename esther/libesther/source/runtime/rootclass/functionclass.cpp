@@ -9,7 +9,9 @@ FunctionClass::FunctionClass(Esther *esther)
 }
 
 void FunctionClass::setupMethods(Esther *esther) {
-    defFunc(esther, "call", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    Pointer<FunctionClass> _this = this;
+
+    _this->defFunc(esther, "call", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if (args.empty())
             Esther::runtimeError("Function.call: invalid number of arguments");
 
@@ -21,7 +23,7 @@ void FunctionClass::setupMethods(Esther *esther) {
         return ((Function *)*self)->invoke(esther, actualSelf, actualArgs);
     });
 
-    setAttribute("()", getAttribute("call"));
+    _this->setAttribute("()", _this->getAttribute("call"));
 }
 
 void FunctionClass::copy(ManagedObject *dst) {

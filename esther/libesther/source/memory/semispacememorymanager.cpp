@@ -89,8 +89,8 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
         ManagedObject *newObject = (ManagedObject *)allocPtr;
         allocPtr += object->getSize();
 
-        // memcpy(newObject, object, object->getSize());
-        object->copy((ManagedObject *)newObject);
+        memcpy(newObject, object, object->getSize());
+        // object->copy((ManagedObject *)newObject);
 
         object->setForwardAddress(newObject);
 

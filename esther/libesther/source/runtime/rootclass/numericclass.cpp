@@ -7,47 +7,49 @@ NumericClass::NumericClass(Esther *esther)
 }
 
 void NumericClass::setupMethods(Esther *esther) {
-    defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
+    Pointer<NumericClass> _this = this;
+
+    _this->defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
         return a + b;
     });
 
-    defOper(esther, "-", [](const Variant &a, const Variant &b) -> Variant {
+    _this->defOper(esther, "-", [](const Variant &a, const Variant &b) -> Variant {
         return a - b;
     });
 
-    defOper(esther, "*", [](const Variant &a, const Variant &b) -> Variant {
+    _this->defOper(esther, "*", [](const Variant &a, const Variant &b) -> Variant {
         return a * b;
     });
 
-    defOper(esther, "/", [](const Variant &a, const Variant &b) -> Variant {
+    _this->defOper(esther, "/", [](const Variant &a, const Variant &b) -> Variant {
         return a / b;
     });
 
-    defOper(esther, "%", [](const Variant &a, const Variant &b) -> Variant {
+    _this->defOper(esther, "%", [](const Variant &a, const Variant &b) -> Variant {
         return a % b;
     });
 
-    defOper(esther, "**", [](const Variant &a, const Variant &b) -> Variant {
+    _this->defOper(esther, "**", [](const Variant &a, const Variant &b) -> Variant {
         return a.pow(b);
     });
 
-    defPred(esther, "<", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, "<", [](const Variant &a, const Variant &b) -> bool {
         return a < b;
     });
 
-    defPred(esther, "<=", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, "<=", [](const Variant &a, const Variant &b) -> bool {
         return a <= b;
     });
 
-    defPred(esther, ">", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, ">", [](const Variant &a, const Variant &b) -> bool {
         return a > b;
     });
 
-    defPred(esther, ">=", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, ">=", [](const Variant &a, const Variant &b) -> bool {
         return a >= b;
     });
 
-    defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
         return a == b;
     });
 }

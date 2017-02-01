@@ -5,11 +5,12 @@
 #include "object.h"
 
 class Class : public Object {
-    std::string name;
+    std::string *name;
     Pointer<Class> superclass;
 
 public:
     Class(Esther *esther, const std::string &name, Pointer<Class> superclass);
+    ~Class();
 
     std::string getName() const;
     void setName(const std::string &name);

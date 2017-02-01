@@ -9,21 +9,23 @@ StringClass::StringClass(Esther *esther)
 }
 
 void StringClass::setupMethods(Esther *esther) {
-    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-                     if (!dynamic_cast<StringClass *>(*self)) {
-                         Esther::runtimeError("String.(): invalid self");
-                         return nullptr;
-                     }
+    Pointer<StringClass> _this = this;
 
-                     if (!dynamic_cast<ValueObject *>(*args[1])) {
-                         Esther::runtimeError("String.(): invalid argument");
-                         return nullptr;
-                     }
+    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                            if (!dynamic_cast<StringClass *>(*self)) {
+                                Esther::runtimeError("String.(): invalid self");
+                                return nullptr;
+                            }
 
-                     return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toString());
-                 }));
+                            if (!dynamic_cast<ValueObject *>(*args[1])) {
+                                Esther::runtimeError("String.(): invalid argument");
+                                return nullptr;
+                            }
 
-    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                            return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toString());
+                        }));
+
+    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if ((int)args.size() > 1)
             Esther::runtimeError("String.initialize: invalid number of arguments");
 
@@ -33,43 +35,43 @@ void StringClass::setupMethods(Esther *esther) {
         return self;
     });
 
-    defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
+    _this->defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString() + b.toString();
     });
 
-    defPred(esther, "<", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, "<", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() < b.toString();
     });
 
-    defPred(esther, "<=", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, "<=", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() <= b.toString();
     });
 
-    defPred(esther, ">", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, ">", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() > b.toString();
     });
 
-    defPred(esther, ">=", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, ">=", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() >= b.toString();
     });
 
-    defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() == b.toString();
     });
 
-    defFunc(esther, "size", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
+    _this->defFunc(esther, "size", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
         return new ValueObject(esther, (int)((ValueObject *)*self)->toString().size());
     });
 
-    defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
+    _this->defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString()[b.toInteger()];
     });
 
-    defPred(esther, "contains", [](const Variant &a, const Variant &b) -> bool {
+    _this->defPred(esther, "contains", [](const Variant &a, const Variant &b) -> bool {
         return a.toString().find(b.toChar()) != std::string::npos;
     });
 
-    defValueObjectFunc(esther, "=", 1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toString());
         return self;
     });

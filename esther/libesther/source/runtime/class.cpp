@@ -5,16 +5,20 @@
 
 Class::Class(Esther *esther, const std::string &name, Pointer<Class> superclass)
     : Object(*esther->getClassClass())
-    , name(name)
+    , name(new std::string(name))
     , superclass(superclass) {
 }
 
+Class::~Class() {
+    delete name;
+}
+
 std::string Class::getName() const {
-    return name;
+    return *name;
 }
 
 void Class::setName(const std::string &name) {
-    this->name = name;
+    *this->name = name;
 }
 
 Pointer<Class> Class::getSuperclass() const {
@@ -26,26 +30,36 @@ void Class::setSuperclass(Pointer<Class> superclass) {
 }
 
 Pointer<Object> Class::get(const std::string &name) const {
+    Pointer<const Class> _this = this;
+
     Pointer<Object> temp = nullptr;
-    return (temp = Object::get(name)) ? temp : superclass ? superclass->lookup(name) : nullptr;
+    return (temp = _this->Object::get(name)) ? temp : _this->superclass ? _this->superclass->lookup(name) : nullptr;
 }
 
 Pointer<Object> Class::newInstance(Esther *esther, const std::vector<Pointer<Object>> &args) {
-    Pointer<Object> instance = createNewInstance(esther, args);
+    Pointer<Class> _this = this;
+
+    Pointer<Object> instance = _this->createNewInstance(esther, args);
     instance->callIfFound(esther, "initialize", args);
     return instance;
 }
 
 bool Class::isChild(Pointer<Class> _class) const {
-    return this == _class || (superclass && superclass->isChild(_class));
+    Pointer<const Class> _this = this;
+
+    return _this == _class || (_this->superclass && _this->superclass->isChild(_class));
 }
 
 std::string Class::toString() const {
-    return getName().empty() ? "<anonymous class>" : "<class " + getName() + ">";
+    Pointer<const Class> _this = this;
+
+    return _this->getName().empty() ? "<anonymous class>" : "<class " + _this->getName() + ">";
 }
 
 Pointer<Object> Class::lookup(const std::string &name) const {
-    return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
+    Pointer<const Class> _this = this;
+
+    return _this->hasAttribute(name) ? _this->getAttribute(name) : _this->superclass ? _this->superclass->lookup(name) : nullptr;
 }
 
 void Class::copy(ManagedObject *dst) {
@@ -57,7 +71,9 @@ int Class::getSize() const {
 }
 
 Pointer<Object> Class::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args) {
-    Pointer<Object> instance = superclass->createNewInstance(esther, args);
-    instance->setClass(this);
+    Pointer<Class> _this = this;
+
+    Pointer<Object> instance = _this->superclass->createNewInstance(esther, args);
+    instance->setClass(_this);
     return instance;
 }

@@ -4,9 +4,13 @@
 
 InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context)
     : Function(esther->getRootClass("Function"), name, params.size())
-    , params(params)
+    , params(new std::list<std::string>(params))
     , body(body)
     , context(context) {
+}
+
+InterpretedFunction::~InterpretedFunction() {
+    delete params;
 }
 
 void InterpretedFunction::copy(ManagedObject *dst) {
@@ -18,13 +22,15 @@ int InterpretedFunction::getSize() const {
 }
 
 Pointer<Object> InterpretedFunction::execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) {
-    esther->pushContext(context->childContext(self, esther->createObject()));
+    Pointer<InterpretedFunction> _this = this;
+
+    esther->pushContext(_this->context->childContext(self, esther->createObject()));
 
     std::vector<Pointer<Object>>::const_iterator i = args.begin();
-    for (const std::string &s : params)
+    for (const std::string &s : *_this->params)
         esther->context()->setLocal(s, *i++);
 
-    Pointer<Object> value = body->eval(esther);
+    Pointer<Object> value = _this->body->eval(esther);
 
     esther->popContext();
 

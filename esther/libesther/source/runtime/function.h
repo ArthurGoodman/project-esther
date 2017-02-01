@@ -8,10 +8,12 @@
 class Esther;
 
 class Function : public Object {
-    std::string name;
+    std::string *name;
     int arity;
 
 public:
+    ~Function();
+
     std::string getName() const;
     void setName(const std::string &name);
 

@@ -12,7 +12,7 @@ class Esther;
 
 class Object : public ManagedObject {
     Pointer<Class> objectClass;
-    std::map<std::string, Pointer<Object>> attributes;
+    std::map<std::string, Pointer<Object>> *attributes;
 
 public:
     Object(Pointer<Class> objectClass);

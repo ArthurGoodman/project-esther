@@ -10,21 +10,23 @@ IntegerClass::IntegerClass(Esther *esther)
 }
 
 void IntegerClass::setupMethods(Esther *esther) {
-    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-                     if (!dynamic_cast<IntegerClass *>(*self)) {
-                         Esther::runtimeError("Integer.(): invalid self");
-                         return nullptr;
-                     }
+    Pointer<IntegerClass> _this = this;
 
-                     if (!dynamic_cast<ValueObject *>(*args[1])) {
-                         Esther::runtimeError("Integer.(): invalid argument");
-                         return nullptr;
-                     }
+    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                            if (!dynamic_cast<IntegerClass *>(*self)) {
+                                Esther::runtimeError("Integer.(): invalid self");
+                                return nullptr;
+                            }
 
-                     return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toInteger());
-                 }));
+                            if (!dynamic_cast<ValueObject *>(*args[1])) {
+                                Esther::runtimeError("Integer.(): invalid argument");
+                                return nullptr;
+                            }
 
-    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                            return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toInteger());
+                        }));
+
+    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if ((int)args.size() > 1)
             Esther::runtimeError("Integer.initialize: invalid number of arguments");
 
@@ -34,7 +36,7 @@ void IntegerClass::setupMethods(Esther *esther) {
         return self;
     });
 
-    defValueObjectFunc(esther, "=", 1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toInteger());
         return self;
     });

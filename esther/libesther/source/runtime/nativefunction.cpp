@@ -2,9 +2,13 @@
 
 #include "esther.h"
 
-NativeFunction::NativeFunction(Esther *esther, const std::string &name, int arity, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body)
+NativeFunction::NativeFunction(Esther *esther, const std::string &name, int arity, const FunctionBody &body)
     : Function(esther->getRootClass("Function"), name, arity)
-    , body(body) {
+    , body(new FunctionBody(body)) {
+}
+
+NativeFunction::~NativeFunction() {
+    delete body;
 }
 
 void NativeFunction::copy(ManagedObject *dst) {
@@ -16,5 +20,7 @@ int NativeFunction::getSize() const {
 }
 
 Pointer<Object> NativeFunction::execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) {
-    return body(esther, self, args);
+    Pointer<NativeFunction> _this = this;
+
+    return (*_this->body)(esther, self, args);
 }

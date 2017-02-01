@@ -6,10 +6,12 @@
 #include "function.h"
 
 Object::Object(Pointer<Class> objectClass)
-    : objectClass(objectClass) {
+    : objectClass(objectClass)
+    , attributes(nullptr) {
 }
 
 Object::~Object() {
+    delete attributes;
 }
 
 Pointer<Class> Object::getClass() const {
@@ -21,27 +23,36 @@ void Object::setClass(Pointer<Class> objectClass) {
 }
 
 bool Object::hasAttribute(const std::string &name) const {
-    return attributes.find(name) != attributes.end();
+    return attributes && (attributes->find(name) != attributes->end());
 }
 
 Pointer<Object> Object::getAttribute(const std::string &name) const {
-    return attributes.at(name);
+    return attributes ? attributes->at(name) : nullptr;
 }
 
 void Object::setAttribute(const std::string &name, Pointer<Object> value) {
-    attributes[name] = value;
+    if (!attributes)
+        attributes = new std::map<std::string, Pointer<Object>>;
+
+    (*attributes)[name] = value;
 }
 
 Pointer<Object> Object::get(const std::string &name) const {
-    return hasAttribute(name) ? getAttribute(name) : objectClass->lookup(name);
+    Pointer<const Object> _this = this;
+
+    return _this->hasAttribute(name) ? _this->getAttribute(name) : _this->objectClass->lookup(name);
 }
 
 bool Object::is(Pointer<Class> _class) const {
-    return objectClass->isChild(_class);
+    Pointer<const Object> _this = this;
+
+    return _this->objectClass->isChild(_class);
 }
 
 std::string Object::toString() const {
-    return "<" + getClass()->getName() + ":" + Utility::toString((void *)this) + ">";
+    Pointer<const Object> _this = this;
+
+    return "<" + _this->getClass()->getName() + ":" + Utility::toString((void *)*_this) + ">";
 }
 
 bool Object::isTrue() const {
@@ -49,28 +60,34 @@ bool Object::isTrue() const {
 }
 
 Pointer<Object> Object::call(Esther *esther, const std::string &name, const std::vector<Pointer<Object>> &args) {
-    Pointer<Object> f = get(name);
+    Pointer<Object> _this = this;
+
+    Pointer<Object> f = _this->get(name);
 
     if (!f)
         Esther::runtimeError("Object::call: undefined identifier '" + name + "'");
 
-    return call(esther, f, args);
+    return _this->call(esther, f, args);
 }
 
 Pointer<Object> Object::call(Esther *esther, Pointer<Object> f, const std::vector<Pointer<Object>> &args) {
+    Pointer<Object> _this = this;
+
     if (dynamic_cast<Function *>(*f))
-        return ((Function *)*f)->invoke(esther, this, args);
+        return ((Function *)*f)->invoke(esther, _this, args);
 
     std::vector<Pointer<Object>> actualArgs;
     actualArgs.reserve(args.size() + 1);
-    actualArgs << this;
+    actualArgs << _this;
     actualArgs.insert(actualArgs.end(), args.begin(), args.end());
 
     return f->call(esther, "()", actualArgs);
 }
 
 Pointer<Object> Object::call(Esther *esther, const std::string &name, const std::vector<Pointer<Object>> &args, Pointer<Class> expectedReturnClass) {
-    Pointer<Object> value = call(esther, name, args);
+    Pointer<Object> _this = this;
+
+    Pointer<Object> value = _this->call(esther, name, args);
 
     if (!value->is(expectedReturnClass))
         Esther::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedReturnClass->getName() + " expected)");
@@ -79,12 +96,14 @@ Pointer<Object> Object::call(Esther *esther, const std::string &name, const std:
 }
 
 Pointer<Object> Object::callIfFound(Esther *esther, const std::string &name, const std::vector<Pointer<Object>> &args) {
-    Pointer<Object> f = get(name);
+    Pointer<Object> _this = this;
+
+    Pointer<Object> f = _this->get(name);
 
     if (!f)
         return nullptr;
 
-    return call(esther, f, args);
+    return _this->call(esther, f, args);
 }
 
 void Object::copy(ManagedObject *dst) {
