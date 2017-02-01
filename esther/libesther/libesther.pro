@@ -108,7 +108,13 @@ SOURCES += \
     source/memory/memorymanager.cpp \
     source/memory/nomemorymanager.cpp \
     source/memory/pointer.cpp \
-    source/memory/semispacememorymanager.cpp
+    source/memory/semispacememorymanager.cpp \
+    source/memory/staticobject.cpp \
+    source/collections/array.cpp \
+    source/collections/hashmap.cpp \
+    source/collections/list.cpp \
+    source/collections/map.cpp \
+    source/collections/sherwoodmap.cpp
 
 HEADERS += \
     source/common/bytearray.h \
@@ -201,7 +207,13 @@ HEADERS += \
     source/memory/memorymanager.h \
     source/memory/nomemorymanager.h \
     source/memory/pointer.h \
-    source/memory/semispacememorymanager.h
+    source/memory/semispacememorymanager.h \
+    source/memory/staticobject.h \
+    source/collections/array.h \
+    source/collections/hashmap.h \
+    source/collections/list.h \
+    source/collections/map.h \
+    source/collections/sherwoodmap.h
 
 OTHER_FILES += \
     source/common/definitions/keywords.def \
