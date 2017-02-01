@@ -9,5 +9,5 @@ LiteralExpression::LiteralExpression(const Variant &value)
 }
 
 Pointer<Object> LiteralExpression::exec(Esther *esther) {
-    return *esther->createValueObject(value);
+    return new ValueObject(esther, value);
 }

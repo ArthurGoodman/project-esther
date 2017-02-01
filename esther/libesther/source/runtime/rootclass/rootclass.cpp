@@ -1,13 +1,13 @@
 #include "rootclass.h"
 
 #include "esther.h"
-#include "function.h"
+#include "nativefunction.h"
 #include "classclass.h"
 #include "valueobject.h"
 #include "utility.h"
 
 RootClass::RootClass(Esther *esther, const std::string &name, Pointer<Class> superclass)
-    : Class(*esther->getClassClass(), name, superclass) {
+    : Class(esther, name, superclass) {
     esther->registerRootClass(this);
 }
 
@@ -57,38 +57,38 @@ void RootClass::defFunc(Esther *esther, const std::string &name, int arity, cons
     std::string className = getName();
     Pointer<RootClass> _this = this;
 
-    setAttribute(name, *esther->createNativeFunction(name, arity, [name, body, className, _this](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-        if (!self->getClass()->isChild(*_this)) {
-            Esther::runtimeError(className + "." + name + ": invalid self");
-            return nullptr;
-        }
+    setAttribute(name, new NativeFunction(esther, name, arity, [name, body, className, _this](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                     if (!self->getClass()->isChild(*_this)) {
+                         Esther::runtimeError(className + "." + name + ": invalid self");
+                         return nullptr;
+                     }
 
-        return body(esther, self, args);
-    }));
+                     return body(esther, self, args);
+                 }));
 }
 
 void RootClass::defOper(Esther *esther, const std::string &name, Variant (*body)(const Variant &, const Variant &)) {
     std::string className = getName();
 
-    setAttribute(name, *esther->createNativeFunction(name, 1, [name, body, className](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-        if (!dynamic_cast<ValueObject *>(*self)) {
-            Esther::runtimeError(className + "." + name + ": invalid self");
-            return nullptr;
-        }
+    setAttribute(name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                     if (!dynamic_cast<ValueObject *>(*self)) {
+                         Esther::runtimeError(className + "." + name + ": invalid self");
+                         return nullptr;
+                     }
 
-        if (!dynamic_cast<ValueObject *>(*args[0])) {
-            Esther::runtimeError(className + "." + name + ": invalid argument");
-            return nullptr;
-        }
+                     if (!dynamic_cast<ValueObject *>(*args[0])) {
+                         Esther::runtimeError(className + "." + name + ": invalid argument");
+                         return nullptr;
+                     }
 
-        return *esther->createValueObject(body(((ValueObject *)*self)->getVariant(), ((ValueObject *)*args[0])->getVariant()));
-    }));
+                     return new ValueObject(esther, body(((ValueObject *)*self)->getVariant(), ((ValueObject *)*args[0])->getVariant()));
+                 }));
 }
 
 void RootClass::defPred(Esther *esther, const std::string &name, bool (*body)(const Variant &, const Variant &)) {
     std::string className = getName();
 
-    setAttribute(name, *esther->createNativeFunction(name, 1, [name, body, className](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    setAttribute(name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if (!dynamic_cast<ValueObject *>(*self)) {
             Esther::runtimeError(className + "." + name + ": invalid self");
             return nullptr;

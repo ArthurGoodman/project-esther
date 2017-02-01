@@ -6,14 +6,11 @@
 class Esther;
 
 class ValueObject : public Object {
-    friend class IntegerClass;
-    friend class FloatClass;
-    friend class CharacterClass;
-    friend class StringClass;
-
     Variant value;
 
 public:
+    ValueObject(Esther *esther, const Variant &value);
+
     Variant getVariant() const;
     void setVariant(const Variant &value);
 
@@ -23,5 +20,5 @@ public:
     virtual int getSize() const;
 
 private:
-    ValueObject(Pointer<Class> objectClass, const Variant &value);
+    static Pointer<Class> variantTypeToObjectClass(Esther *esther, Variant::Type type);
 };

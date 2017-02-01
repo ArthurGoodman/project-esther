@@ -3,34 +3,26 @@
 #include "valueobject.h"
 #include "esther.h"
 #include "numericclass.h"
-#include "function.h"
+#include "nativefunction.h"
 
-Pointer<ValueObject> FloatClass::createFloat(double value) {
-    return new ValueObject(this, value);
-}
-
-void FloatClass::copy(ManagedObject *dst) {
-    new (dst) FloatClass(*this);
-}
-
-Pointer<Object> FloatClass::createNewInstance(const std::vector<Pointer<Object>> &) {
-    return *createFloat(0.0);
+FloatClass::FloatClass(Esther *esther)
+    : RootClass(esther, "Float", esther->getRootClass("Numeric")) {
 }
 
 void FloatClass::setupMethods(Esther *esther) {
-    setAttribute("()", *esther->createNativeFunction("()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-        if (!dynamic_cast<FloatClass *>(*self)) {
-            Esther::runtimeError("Float.(): invalid self");
-            return nullptr;
-        }
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                     if (!dynamic_cast<FloatClass *>(*self)) {
+                         Esther::runtimeError("Float.(): invalid self");
+                         return nullptr;
+                     }
 
-        if (!dynamic_cast<ValueObject *>(*args[1])) {
-            Esther::runtimeError("Float.(): invalid argument");
-            return nullptr;
-        }
+                     if (!dynamic_cast<ValueObject *>(*args[1])) {
+                         Esther::runtimeError("Float.(): invalid argument");
+                         return nullptr;
+                     }
 
-        return *esther->createFloat(((ValueObject *)*args[1])->getVariant().toReal());
-    }));
+                     return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toReal());
+                 }));
 
     defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if ((int)args.size() > 1)
@@ -48,6 +40,10 @@ void FloatClass::setupMethods(Esther *esther) {
     });
 }
 
-FloatClass::FloatClass(Esther *esther)
-    : RootClass(esther, "Float", *esther->getNumericClass()) {
+void FloatClass::copy(ManagedObject *dst) {
+    new (dst) FloatClass(*this);
+}
+
+Pointer<Object> FloatClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
+    return new ValueObject(esther, 0.0);
 }

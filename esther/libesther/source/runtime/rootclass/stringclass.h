@@ -5,18 +5,13 @@
 class ValueObject;
 
 class StringClass : public RootClass {
-    friend class Esther;
-
 public:
-    Pointer<ValueObject> createString(const std::string &value);
+    StringClass(Esther *esther);
+
+    void setupMethods(Esther *esther);
 
     void copy(ManagedObject *dst);
 
 protected:
-    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
-
-    void setupMethods(Esther *esther);
-
-private:
-    StringClass(Esther *esther);
+    Pointer<Object> createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args);
 };

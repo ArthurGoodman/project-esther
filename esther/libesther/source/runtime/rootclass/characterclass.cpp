@@ -3,35 +3,27 @@
 #include "valueobject.h"
 #include "esther.h"
 #include "numericclass.h"
-#include "function.h"
+#include "nativefunction.h"
 #include "utility.h"
 
-Pointer<ValueObject> CharacterClass::createCharacter(char value) {
-    return new ValueObject(this, value);
-}
-
-void CharacterClass::copy(ManagedObject *dst) {
-    new (dst) CharacterClass(*this);
-}
-
-Pointer<Object> CharacterClass::createNewInstance(const std::vector<Pointer<Object>> &) {
-    return *createCharacter('\0');
+CharacterClass::CharacterClass(Esther *esther)
+    : RootClass(esther, "Character", esther->getRootClass("Numeric")) {
 }
 
 void CharacterClass::setupMethods(Esther *esther) {
-    setAttribute("()", *esther->createNativeFunction("()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-        if (!dynamic_cast<CharacterClass *>(*self)) {
-            Esther::runtimeError("Character.(): invalid self");
-            return nullptr;
-        }
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                     if (!dynamic_cast<CharacterClass *>(*self)) {
+                         Esther::runtimeError("Character.(): invalid self");
+                         return nullptr;
+                     }
 
-        if (!dynamic_cast<ValueObject *>(*args[1])) {
-            Esther::runtimeError("Character.(): invalid argument");
-            return nullptr;
-        }
+                     if (!dynamic_cast<ValueObject *>(*args[1])) {
+                         Esther::runtimeError("Character.(): invalid argument");
+                         return nullptr;
+                     }
 
-        return *esther->createCharacter(((ValueObject *)*args[1])->getVariant().toChar());
-    }));
+                     return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toChar());
+                 }));
 
     defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if ((int)args.size() > 1)
@@ -61,6 +53,10 @@ void CharacterClass::setupMethods(Esther *esther) {
     });
 }
 
-CharacterClass::CharacterClass(Esther *esther)
-    : RootClass(esther, "Character", *esther->getNumericClass()) {
+void CharacterClass::copy(ManagedObject *dst) {
+    new (dst) CharacterClass(*this);
+}
+
+Pointer<Object> CharacterClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
+    return new ValueObject(esther, '\0');
 }

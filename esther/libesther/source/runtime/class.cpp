@@ -1,5 +1,14 @@
 #include "class.h"
 
+#include "esther.h"
+#include "classclass.h"
+
+Class::Class(Esther *esther, const std::string &name, Pointer<Class> superclass)
+    : Object(*esther->getClassClass())
+    , name(name)
+    , superclass(superclass) {
+}
+
 std::string Class::getName() const {
     return name;
 }
@@ -22,7 +31,7 @@ Pointer<Object> Class::get(const std::string &name) const {
 }
 
 Pointer<Object> Class::newInstance(Esther *esther, const std::vector<Pointer<Object>> &args) {
-    Pointer<Object> instance = createNewInstance(args);
+    Pointer<Object> instance = createNewInstance(esther, args);
     instance->callIfFound(esther, "initialize", args);
     return instance;
 }
@@ -47,14 +56,8 @@ int Class::getSize() const {
     return sizeof *this;
 }
 
-Class::Class(Pointer<Class> classClass, const std::string &name, Pointer<Class> superclass)
-    : Object(classClass)
-    , name(name)
-    , superclass(superclass) {
-}
-
-Pointer<Object> Class::createNewInstance(const std::vector<Pointer<Object>> &args) {
-    Pointer<Object> instance = superclass->createNewInstance(args);
+Pointer<Object> Class::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args) {
+    Pointer<Object> instance = superclass->createNewInstance(esther, args);
     instance->setClass(this);
     return instance;
 }

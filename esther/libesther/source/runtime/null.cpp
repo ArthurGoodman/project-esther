@@ -1,5 +1,11 @@
 #include "null.h"
 
+#include "esther.h"
+
+Null::Null(Esther *esther)
+    : Object(esther->getRootClass("Null")) {
+}
+
 std::string Null::toString() const {
     return "null";
 }
@@ -10,8 +16,4 @@ bool Null::isTrue() const {
 
 void Null::copy(ManagedObject *dst) {
     new (dst) Null(*this);
-}
-
-Null::Null(Pointer<Class> objectClass)
-    : Object(objectClass) {
 }

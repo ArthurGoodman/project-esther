@@ -5,18 +5,13 @@
 class ValueObject;
 
 class FloatClass : public RootClass {
-    friend class Esther;
-
 public:
-    Pointer<ValueObject> createFloat(double value);
+    FloatClass(Esther *esther);
+
+    void setupMethods(Esther *esther);
 
     void copy(ManagedObject *dst);
 
 protected:
-    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
-
-    void setupMethods(Esther *esther);
-
-private:
-    FloatClass(Esther *esther);
+    Pointer<Object> createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args);
 };

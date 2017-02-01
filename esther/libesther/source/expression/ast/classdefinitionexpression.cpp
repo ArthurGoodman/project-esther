@@ -21,5 +21,5 @@ Pointer<Object> ClassDefinitionExpression::exec(Esther *esther) {
         Esther::runtimeError("class expected");
     }
 
-    return *esther->createClass(name, (Class *)*evaledSuperclass);
+    return new Class(esther, name, (Class *)*evaledSuperclass);
 }

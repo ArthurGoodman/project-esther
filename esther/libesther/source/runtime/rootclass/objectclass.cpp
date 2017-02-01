@@ -5,16 +5,8 @@
 #include "valueobject.h"
 #include "stringclass.h"
 
-Pointer<Object> ObjectClass::createObject(Pointer<Class> objectClass) {
-    return new Object(objectClass);
-}
-
-void ObjectClass::copy(ManagedObject *dst) {
-    new (dst) ObjectClass(*this);
-}
-
-Pointer<Object> ObjectClass::createNewInstance(const std::vector<Pointer<Object>> &) {
-    return createObject(this);
+ObjectClass::ObjectClass(Esther *esther)
+    : RootClass(esther, "Object", nullptr) {
 }
 
 void ObjectClass::setupMethods(Esther *esther) {
@@ -31,7 +23,7 @@ void ObjectClass::setupMethods(Esther *esther) {
     });
 
     defFunc(esther, "toString", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
-        return *esther->createString(self->toString());
+        return new ValueObject(esther, self->toString());
     });
 
     defFunc(esther, "equals", 1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
@@ -48,6 +40,10 @@ void ObjectClass::setupMethods(Esther *esther) {
     });
 }
 
-ObjectClass::ObjectClass(Esther *esther)
-    : RootClass(esther, "Object", nullptr) {
+void ObjectClass::copy(ManagedObject *dst) {
+    new (dst) ObjectClass(*this);
+}
+
+Pointer<Object> ObjectClass::createNewInstance(Esther *, const std::vector<Pointer<Object>> &) {
+    return new Object(this);
 }

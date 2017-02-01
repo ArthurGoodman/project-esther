@@ -2,8 +2,8 @@
 
 #include "esther.h"
 
-void NumericClass::copy(ManagedObject *dst) {
-    new (dst) NumericClass(*this);
+NumericClass::NumericClass(Esther *esther)
+    : RootClass(esther, "Numeric", esther->getObjectClass()) {
 }
 
 void NumericClass::setupMethods(Esther *esther) {
@@ -52,6 +52,6 @@ void NumericClass::setupMethods(Esther *esther) {
     });
 }
 
-NumericClass::NumericClass(Esther *esther)
-    : RootClass(esther, "Numeric", esther->getObjectClass()) {
+void NumericClass::copy(ManagedObject *dst) {
+    new (dst) NumericClass(*this);
 }

@@ -3,18 +3,13 @@
 #include "rootclass.h"
 
 class ObjectClass : public RootClass {
-    friend class Esther;
-
 public:
-    Pointer<Object> createObject(Pointer<Class> objectClass);
+    ObjectClass(Esther *esther);
+
+    void setupMethods(Esther *esther);
 
     void copy(ManagedObject *dst);
 
 protected:
-    Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
-
-    void setupMethods(Esther *esther);
-
-private:
-    ObjectClass(Esther *esther);
+    Pointer<Object> createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args);
 };

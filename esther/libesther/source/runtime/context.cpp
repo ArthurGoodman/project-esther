@@ -4,15 +4,14 @@
 #include "esther.h"
 
 Context::Context(Esther *esther)
-    : esther(esther)
-    , parent(nullptr)
+    : parent(nullptr)
     , self(esther->getMainObject())
     , here(self) {
 }
 
 Context::~Context() {
-    //    for (Context *child : children)
-    //        delete child;
+    for (Context *child : children)
+        delete child;
 }
 
 Pointer<Object> Context::getSelf() const {
@@ -43,12 +42,12 @@ void Context::setLocal(const std::string &name, Pointer<Object> value) {
     getHere()->setAttribute(name, value);
 }
 
-Pointer<Object> Context::get(const std::string &name) const {
+Pointer<Object> Context::get(Esther *esther, const std::string &name) const {
     if (hasLocal(name))
         return getLocal(name);
 
     if (parent)
-        return parent->get(name);
+        return parent->get(esther, name);
 
     if (esther->hasRootClass(name))
         return (Object *)*esther->getRootClass(name);
@@ -69,17 +68,13 @@ bool Context::set(const std::string &name, Pointer<Object> value) {
 }
 
 Pointer<Context> Context::childContext() {
-    //    children << new Context(getSelf(), getHere(), this);
-    //    return children.back();
-
-    return new Context(getSelf(), getHere(), this);
+    children << new Context(getSelf(), getHere(), this);
+    return children.back();
 }
 
 Pointer<Context> Context::childContext(Pointer<Object> self, Pointer<Object> here) {
-    //    children << new Context(self, here, this);
-    //    return children.back();
-
-    return new Context(self, here, this);
+    children << new Context(self, here, this);
+    return children.back();
 }
 
 void Context::copy(ManagedObject *dst) {
@@ -91,8 +86,7 @@ int Context::getSize() const {
 }
 
 Context::Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent)
-    : esther(parent->esther)
-    , parent(parent)
+    : parent(parent)
     , self(self)
     , here(here) {
 }

@@ -2,34 +2,26 @@
 
 #include "valueobject.h"
 #include "esther.h"
-#include "function.h"
+#include "nativefunction.h"
 
-Pointer<ValueObject> StringClass::createString(const std::string &value) {
-    return new ValueObject(this, value);
-}
-
-void StringClass::copy(ManagedObject *dst) {
-    new (dst) StringClass(*this);
-}
-
-Pointer<Object> StringClass::createNewInstance(const std::vector<Pointer<Object>> &) {
-    return *createString("");
+StringClass::StringClass(Esther *esther)
+    : RootClass(esther, "String", esther->getObjectClass()) {
 }
 
 void StringClass::setupMethods(Esther *esther) {
-    setAttribute("()", *esther->createNativeFunction("()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-        if (!dynamic_cast<StringClass *>(*self)) {
-            Esther::runtimeError("String.(): invalid self");
-            return nullptr;
-        }
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                     if (!dynamic_cast<StringClass *>(*self)) {
+                         Esther::runtimeError("String.(): invalid self");
+                         return nullptr;
+                     }
 
-        if (!dynamic_cast<ValueObject *>(*args[1])) {
-            Esther::runtimeError("String.(): invalid argument");
-            return nullptr;
-        }
+                     if (!dynamic_cast<ValueObject *>(*args[1])) {
+                         Esther::runtimeError("String.(): invalid argument");
+                         return nullptr;
+                     }
 
-        return *esther->createString(((ValueObject *)*args[1])->getVariant().toString());
-    }));
+                     return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toString());
+                 }));
 
     defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if ((int)args.size() > 1)
@@ -66,7 +58,7 @@ void StringClass::setupMethods(Esther *esther) {
     });
 
     defFunc(esther, "size", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
-        return *esther->createInteger(((ValueObject *)*self)->toString().size());
+        return new ValueObject(esther, (int)((ValueObject *)*self)->toString().size());
     });
 
     defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
@@ -83,6 +75,10 @@ void StringClass::setupMethods(Esther *esther) {
     });
 }
 
-StringClass::StringClass(Esther *esther)
-    : RootClass(esther, "String", esther->getObjectClass()) {
+void StringClass::copy(ManagedObject *dst) {
+    new (dst) StringClass(*this);
+}
+
+Pointer<Object> StringClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
+    return new ValueObject(esther, "");
 }

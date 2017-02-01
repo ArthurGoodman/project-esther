@@ -5,12 +5,12 @@
 #include "object.h"
 
 class Class : public Object {
-    friend class ClassClass;
-
     std::string name;
     Pointer<Class> superclass;
 
 public:
+    Class(Esther *esther, const std::string &name, Pointer<Class> superclass);
+
     std::string getName() const;
     void setName(const std::string &name);
 
@@ -31,7 +31,5 @@ public:
     virtual int getSize() const;
 
 protected:
-    Class(Pointer<Class> classClass, const std::string &name, Pointer<Class> superclass);
-
-    virtual Pointer<Object> createNewInstance(const std::vector<Pointer<Object>> &args);
+    virtual Pointer<Object> createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &args);
 };

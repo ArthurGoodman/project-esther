@@ -3,18 +3,16 @@
 #include <string>
 #include <list>
 
-#include "memory/managedobject.h"
 #include "memory/pointer.h"
 
 class Object;
 class Esther;
 
-class Context : public ManagedObject {
-    Esther *esther;
+class Context {
     Pointer<Context> parent;
     Pointer<Object> self, here;
 
-    //    std::list<Pointer<Context>> children;
+    std::list<Pointer<Context>> children;
 
 public:
     Context(Esther *esther);
@@ -30,7 +28,7 @@ public:
     Pointer<Object> getLocal(const std::string &name) const;
     void setLocal(const std::string &name, Pointer<Object> value);
 
-    Pointer<Object> get(const std::string &name) const;
+    Pointer<Object> get(Esther *esther, const std::string &name) const;
     bool set(const std::string &name, Pointer<Object> value);
 
     Pointer<Context> childContext();

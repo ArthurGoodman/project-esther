@@ -3,14 +3,10 @@
 #include "rootclass.h"
 
 class NumericClass : public RootClass {
-    friend class Esther;
-
 public:
-    void copy(ManagedObject *dst);
+    NumericClass(Esther *esther);
 
-protected:
     void setupMethods(Esther *esther);
 
-private:
-    NumericClass(Esther *esther);
+    void copy(ManagedObject *dst);
 };

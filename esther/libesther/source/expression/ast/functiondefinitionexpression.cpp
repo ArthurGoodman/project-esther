@@ -2,7 +2,7 @@
 
 #include "context.h"
 #include "esther.h"
-#include "function.h"
+#include "interpretedfunction.h"
 
 FunctionDefinitionExpression::FunctionDefinitionExpression(const std::string &name, const std::list<std::string> &params, Expression *body)
     : name(name)
@@ -15,5 +15,5 @@ FunctionDefinitionExpression::~FunctionDefinitionExpression() {
 }
 
 Pointer<Object> FunctionDefinitionExpression::exec(Esther *esther) {
-    return *esther->createInterpretedFunction(name, params, body, esther->context());
+    return new InterpretedFunction(esther, name, params, body, esther->context());
 }

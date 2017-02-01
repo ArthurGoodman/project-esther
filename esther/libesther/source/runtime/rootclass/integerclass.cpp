@@ -3,34 +3,26 @@
 #include "valueobject.h"
 #include "esther.h"
 #include "numericclass.h"
-#include "function.h"
+#include "nativefunction.h"
 
-Pointer<ValueObject> IntegerClass::createInteger(int value) {
-    return new ValueObject(this, value);
-}
-
-void IntegerClass::copy(ManagedObject *dst) {
-    new (dst) IntegerClass(*this);
-}
-
-Pointer<Object> IntegerClass::createNewInstance(const std::vector<Pointer<Object>> &) {
-    return *createInteger(0);
+IntegerClass::IntegerClass(Esther *esther)
+    : RootClass(esther, "Integer", esther->getRootClass("Numeric")) {
 }
 
 void IntegerClass::setupMethods(Esther *esther) {
-    setAttribute("()", *esther->createNativeFunction("()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
-        if (!dynamic_cast<IntegerClass *>(*self)) {
-            Esther::runtimeError("Integer.(): invalid self");
-            return nullptr;
-        }
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+                     if (!dynamic_cast<IntegerClass *>(*self)) {
+                         Esther::runtimeError("Integer.(): invalid self");
+                         return nullptr;
+                     }
 
-        if (!dynamic_cast<ValueObject *>(*args[1])) {
-            Esther::runtimeError("Integer.(): invalid argument");
-            return nullptr;
-        }
+                     if (!dynamic_cast<ValueObject *>(*args[1])) {
+                         Esther::runtimeError("Integer.(): invalid argument");
+                         return nullptr;
+                     }
 
-        return *esther->createInteger(((ValueObject *)*args[1])->getVariant().toInteger());
-    }));
+                     return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toInteger());
+                 }));
 
     defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
         if ((int)args.size() > 1)
@@ -48,6 +40,10 @@ void IntegerClass::setupMethods(Esther *esther) {
     });
 }
 
-IntegerClass::IntegerClass(Esther *esther)
-    : RootClass(esther, "Integer", *esther->getNumericClass()) {
+void IntegerClass::copy(ManagedObject *dst) {
+    new (dst) IntegerClass(*this);
+}
+
+Pointer<Object> IntegerClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
+    return new ValueObject(esther, 0);
 }

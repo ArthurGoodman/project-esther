@@ -2,6 +2,13 @@
 
 #include "esther.h"
 
+InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context)
+    : Function(esther->getRootClass("Function"), name, params.size())
+    , params(params)
+    , body(body)
+    , context(context) {
+}
+
 void InterpretedFunction::copy(ManagedObject *dst) {
     new (dst) InterpretedFunction(*this);
 }
@@ -22,11 +29,4 @@ Pointer<Object> InterpretedFunction::execute(Esther *esther, Pointer<Object> sel
     esther->popContext();
 
     return value;
-}
-
-InterpretedFunction::InterpretedFunction(Pointer<Class> objectClass, const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context)
-    : Function(objectClass, name, params.size())
-    , params(params)
-    , body(body)
-    , context(context) {
 }

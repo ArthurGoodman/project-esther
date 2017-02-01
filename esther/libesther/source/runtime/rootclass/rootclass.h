@@ -9,12 +9,11 @@
 class Esther;
 
 class RootClass : public Class {
-    friend class Esther;
+public:
+    virtual void setupMethods(Esther *esther) = 0;
 
 protected:
     RootClass(Esther *esther, const std::string &name, Pointer<Class> superclass);
-
-    virtual void setupMethods(Esther *esther) = 0;
 
     void defFunc(Esther *esther, const std::string &name, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body);
     void defFunc(Esther *esther, const std::string &name, const std::list<std::string> &paramsClassesNames, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body);

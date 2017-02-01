@@ -1,5 +1,12 @@
 #include "valueobject.h"
 
+#include "esther.h"
+
+ValueObject::ValueObject(Esther *esther, const Variant &value)
+    : Object(variantTypeToObjectClass(esther, value.getType()))
+    , value(value) {
+}
+
 Variant ValueObject::getVariant() const {
     return value;
 }
@@ -20,7 +27,21 @@ int ValueObject::getSize() const {
     return sizeof *this;
 }
 
-ValueObject::ValueObject(Pointer<Class> objectClass, const Variant &value)
-    : Object(objectClass)
-    , value(value) {
+Pointer<Class> ValueObject::variantTypeToObjectClass(Esther *esther, Variant::Type type) {
+    switch (type) {
+    case Variant::Char:
+        return esther->getRootClass("Character");
+
+    case Variant::Integer:
+        return esther->getRootClass("Integer");
+
+    case Variant::Real:
+        return esther->getRootClass("Float");
+
+    case Variant::String:
+        return esther->getRootClass("String");
+
+    default:
+        return nullptr;
+    }
 }

@@ -23,6 +23,7 @@
 #include "iparser.h"
 #include "ilexer.h"
 #include "expression.h"
+#include "nativefunction.h"
 
 void Esther::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
@@ -44,6 +45,10 @@ Pointer<Class> Esther::getObjectClass() const {
     return *objectClass;
 }
 
+Pointer<ClassClass> Esther::getClassClass() const {
+    return classClass;
+}
+
 Pointer<Object> Esther::getTrue() const {
     return trueObject;
 }
@@ -54,18 +59,6 @@ Pointer<Object> Esther::getFalse() const {
 
 Pointer<Object> Esther::getNull() const {
     return nullObject;
-}
-
-Pointer<ClassClass> Esther::getClassClass() const {
-    return classClass;
-}
-
-Pointer<NumericClass> Esther::getNumericClass() const {
-    return numericClass;
-}
-
-Pointer<StringClass> Esther::getStringClass() const {
-    return stringClass;
 }
 
 bool Esther::hasRootClass(const std::string &name) const {
@@ -88,53 +81,6 @@ Pointer<Object> Esther::createObject() {
     return objectClass->newInstance(this);
 }
 
-Pointer<ValueObject> Esther::createValueObject(const Variant &value) {
-    switch (value.getType()) {
-    case Variant::Integer:
-        return createInteger(value.toInteger());
-
-    case Variant::Real:
-        return createFloat(value.toReal());
-
-    case Variant::Char:
-        return createCharacter(value.toChar());
-
-    case Variant::String:
-        return createString(value.toString());
-
-    default:
-        return nullptr;
-    }
-}
-
-Pointer<ValueObject> Esther::createCharacter(char value) {
-    return characterClass->createCharacter(value);
-}
-
-Pointer<ValueObject> Esther::createFloat(double value) {
-    return floatClass->createFloat(value);
-}
-
-Pointer<ValueObject> Esther::createInteger(int value) {
-    return integerClass->createInteger(value);
-}
-
-Pointer<ValueObject> Esther::createString(const std::string &value) {
-    return stringClass->createString(value);
-}
-
-Pointer<Class> Esther::createClass(const std::string &name, Pointer<Class> superclass) {
-    return classClass->createClass(name, superclass);
-}
-
-Pointer<Function> Esther::createNativeFunction(const std::string &name, int arity, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body) {
-    return functionClass->createNativeFunction(name, arity, body);
-}
-
-Pointer<Function> Esther::createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context) {
-    return functionClass->createInterpretedFunction(name, params, body, context);
-}
-
 void Esther::initialize() {
     rootClasses.clear();
 
@@ -146,14 +92,14 @@ void Esther::initialize() {
 
     mainObject = createObject();
 
-    Pointer<BooleanClass> booleanClass = new BooleanClass(this);
+    new BooleanClass(this);
 
-    trueObject = new True(*booleanClass);
-    falseObject = new False(*booleanClass);
+    trueObject = new True(this);
+    falseObject = new False(this);
 
-    Pointer<NullClass> nullClass = new NullClass(this);
+    new NullClass(this);
 
-    nullObject = new Null(*nullClass);
+    nullObject = new Null(this);
 
     numericClass = new NumericClass(this);
 
@@ -169,22 +115,22 @@ void Esther::initialize() {
     Pointer<Object> console = createObject();
     mainObject->setAttribute("console", console);
 
-    console->setAttribute("write", *createNativeFunction("write", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    console->setAttribute("write", new NativeFunction(this, "write", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
                               if (!args.empty())
                                   for (auto &arg : args)
-                                      IO::write(arg->call(esther, "toString", {}, *esther->getStringClass())->toString());
+                                      IO::write(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
                               else
-                                  IO::write(self->call(esther, "toString", {}, *esther->getStringClass())->toString());
+                                  IO::write(self->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
 
                               return esther->getNull();
                           }));
 
-    console->setAttribute("writeLine", *createNativeFunction("writeLine", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    console->setAttribute("writeLine", new NativeFunction(this, "writeLine", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
                               if (!args.empty())
                                   for (auto &arg : args)
-                                      IO::writeLine(arg->call(esther, "toString", {}, *esther->getStringClass())->toString());
+                                      IO::writeLine(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
                               else
-                                  IO::writeLine(self->call(esther, "toString", {}, *esther->getStringClass())->toString());
+                                  IO::writeLine(self->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
 
                               return esther->getNull();
                           }));

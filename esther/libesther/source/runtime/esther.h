@@ -64,13 +64,10 @@ public:
 
     Pointer<Object> getMainObject() const;
     Pointer<Class> getObjectClass() const;
+    Pointer<ClassClass> getClassClass() const;
     Pointer<Object> getTrue() const;
     Pointer<Object> getFalse() const;
     Pointer<Object> getNull() const;
-
-    Pointer<ClassClass> getClassClass() const;
-    Pointer<NumericClass> getNumericClass() const;
-    Pointer<StringClass> getStringClass() const;
 
     bool hasRootClass(const std::string &name) const;
     Pointer<Class> getRootClass(const std::string &name) const;
@@ -79,18 +76,6 @@ public:
     Pointer<Object> toBoolean(bool value) const;
 
     Pointer<Object> createObject();
-
-    Pointer<ValueObject> createValueObject(const Variant &value);
-
-    Pointer<ValueObject> createCharacter(char value);
-    Pointer<ValueObject> createFloat(double value);
-    Pointer<ValueObject> createInteger(int value);
-    Pointer<ValueObject> createString(const std::string &value);
-
-    Pointer<Class> createClass(const std::string &name, Pointer<Class> superclass = nullptr);
-
-    Pointer<Function> createNativeFunction(const std::string &name, int arity, const std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> &body);
-    Pointer<Function> createInterpretedFunction(const std::string &name, const std::list<std::string> &params, Expression *body, Pointer<Context> context);
 
     Pointer<Object> run(const std::string &script);
     Pointer<Object> runFile(const std::string &fileName);
