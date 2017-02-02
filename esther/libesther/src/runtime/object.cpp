@@ -11,7 +11,6 @@ Object::Object(Ptr<Class> objectClass)
 }
 
 Object::~Object() {
-    delete attributes;
 }
 
 Ptr<Class> Object::getClass() const {
@@ -104,6 +103,10 @@ Ptr<Object> Object::callIfFound(Esther *esther, const std::string &name, const s
         return nullptr;
 
     return _this->call(esther, f, args);
+}
+
+void Object::finalize() {
+    delete attributes;
 }
 
 void Object::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {

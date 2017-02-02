@@ -131,6 +131,11 @@ Variant::Variant(Variant &&v)
     *this = std::move(v);
 }
 
+Variant::~Variant() {
+    if (type == String)
+        free(string);
+}
+
 Variant &Variant::operator=(const Variant &v) {
     if (type == String) {
         if (v.type == String) {

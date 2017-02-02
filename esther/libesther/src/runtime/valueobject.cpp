@@ -19,6 +19,12 @@ std::string ValueObject::toString() const {
     return value.toString();
 }
 
+void ValueObject::finalize() {
+    Object::finalize();
+
+    value.~Variant();
+}
+
 int ValueObject::getSize() const {
     return sizeof *this;
 }

@@ -9,10 +9,6 @@ Class::Class(Esther *esther, const std::string &name, Ptr<Class> superclass)
     , superclass(superclass) {
 }
 
-Class::~Class() {
-    delete name;
-}
-
 std::string Class::getName() const {
     return *name;
 }
@@ -60,6 +56,12 @@ Ptr<Object> Class::lookup(const std::string &name) const {
     Ptr<const Class> _this = this;
 
     return _this->hasAttribute(name) ? _this->getAttribute(name) : _this->superclass ? _this->superclass->lookup(name) : nullptr;
+}
+
+void Class::finalize() {
+    Object::finalize();
+
+    delete name;
 }
 
 void Class::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {

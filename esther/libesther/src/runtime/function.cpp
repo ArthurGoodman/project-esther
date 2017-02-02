@@ -4,10 +4,6 @@
 #include "runtime/esther.h"
 #include "common/utility.h"
 
-Function::~Function() {
-    delete name;
-}
-
 std::string Function::getName() const {
     return *name;
 }
@@ -29,6 +25,12 @@ std::string Function::toString() const {
     Ptr<const Function> _this = this;
 
     return _this->getName().empty() ? "<anonymous function>" : "<function " + _this->getName() + ">";
+}
+
+void Function::finalize() {
+    Object::finalize();
+
+    delete name;
 }
 
 Function::Function(Ptr<Class> objectClass, const std::string &name, int arity)

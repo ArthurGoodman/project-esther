@@ -10,7 +10,6 @@ class Class : public Object {
 
 public:
     Class(Esther *esther, const std::string &name, Ptr<Class> superclass);
-    ~Class();
 
     std::string getName() const;
     void setName(const std::string &name);
@@ -28,6 +27,7 @@ public:
 
     Ptr<Object> lookup(const std::string &name) const;
 
+    void finalize() override;
     void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
     int getSize() const override;
 

@@ -11,8 +11,8 @@ class InterpretedFunction : public Function {
 
 public:
     InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Ptr<Context> context);
-    ~InterpretedFunction();
 
+    void finalize() override;
     void mapOnReferences(const std::function<void (ManagedObject *&)> &f) override;
     int getSize() const override;
 

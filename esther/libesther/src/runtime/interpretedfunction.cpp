@@ -9,7 +9,9 @@ InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name
     , context(context) {
 }
 
-InterpretedFunction::~InterpretedFunction() {
+void InterpretedFunction::finalize() {
+    Function::finalize();
+
     delete params;
 }
 

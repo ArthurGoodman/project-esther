@@ -1,6 +1,6 @@
-#include "memory/managedobject.h"
+#include "managedobject.h"
 
-#include "memorymanager.h"
+#include "memory/memorymanager.h"
 
 void *ManagedObject::operator new(uint size) noexcept {
     return (void *)MemoryManager::instance()->allocate(size);
@@ -20,6 +20,9 @@ ManagedObject::ManagedObject()
 }
 
 ManagedObject::~ManagedObject() {
+}
+
+void ManagedObject::finalize() {
 }
 
 void ManagedObject::mapOnReferences(const std::function<void(ManagedObject *&)> &) {

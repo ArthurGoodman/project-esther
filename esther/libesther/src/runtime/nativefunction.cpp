@@ -7,7 +7,9 @@ NativeFunction::NativeFunction(Esther *esther, const std::string &name, int arit
     , body(new FunctionBody(body)) {
 }
 
-NativeFunction::~NativeFunction() {
+void NativeFunction::finalize() {
+    Function::finalize();
+
     delete body;
 }
 

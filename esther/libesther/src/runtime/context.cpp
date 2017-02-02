@@ -9,9 +9,6 @@ Context::Context(Esther *esther)
     , here(self) {
 }
 
-Context::~Context() {
-}
-
 Ptr<Object> Context::getSelf() const {
     return self;
 }

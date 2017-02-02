@@ -79,6 +79,8 @@ public:
     Variant(const Variant &v);
     Variant(Variant &&v);
 
+    ~Variant();
+
     Variant &operator=(const Variant &v);
     Variant &operator=(Variant &&v);
 

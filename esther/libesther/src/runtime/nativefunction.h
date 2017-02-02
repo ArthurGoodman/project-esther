@@ -11,8 +11,8 @@ class NativeFunction : public Function {
 
 public:
     NativeFunction(Esther *esther, const std::string &name, int arity, const FunctionBody &body);
-    ~NativeFunction();
 
+    void finalize() override;
     virtual int getSize() const override;
 
 protected:

@@ -15,7 +15,6 @@ class Context : public ManagedObject {
 
 public:
     Context(Esther *esther);
-    virtual ~Context();
 
     Ptr<Object> getSelf() const;
     void setSelf(Ptr<Object> self);

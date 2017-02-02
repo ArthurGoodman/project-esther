@@ -12,14 +12,14 @@ class Function : public Object {
     int arity;
 
 public:
-    ~Function();
-
     std::string getName() const;
     void setName(const std::string &name);
 
     Ptr<Object> invoke(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args);
 
     std::string toString() const;
+
+    void finalize() override;
 
 protected:
     virtual Ptr<Object> execute(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) = 0;

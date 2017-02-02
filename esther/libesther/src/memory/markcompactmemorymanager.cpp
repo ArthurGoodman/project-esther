@@ -68,12 +68,12 @@ void MarkCompactMemoryManager::finalize() {
     std::cout << "\nMarkCompactMemoryManager::finalize()\n" << std::flush;
 #endif
 
-    // byte *p = memory.getData();
+    byte *p = memory.getData();
 
-    // for (int i = 0, size = 0; i < objectCount; i++, p += size) {
-    //     size = ((ManagedObject *)p)->getSize();
-    //     ((ManagedObject *)p)->~ManagedObject();
-    // }
+    for (int i = 0, size = 0; i < objectCount; i++, p += size) {
+        size = reinterpret_cast<ManagedObject *>(p)->getSize();
+        reinterpret_cast<ManagedObject *>(p)->finalize();
+    }
 }
 
 void MarkCompactMemoryManager::updatePointers() {
@@ -135,7 +135,7 @@ void MarkCompactMemoryManager::compact() {
             freeSize += size;
             freeCount++;
 
-            // ((ManagedObject *)object)->~ManagedObject();
+            reinterpret_cast<ManagedObject *>(object)->finalize();
         }
     }
 
