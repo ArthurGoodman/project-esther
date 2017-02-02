@@ -102,7 +102,6 @@ SOURCES += \
     source/expression/ast/popexpression.cpp \
     source/expression/ast/pushexpression.cpp \
     source/expression/ast/stackexpression.cpp \
-    source/memory/frame.cpp \
     source/memory/managedobject.cpp \
     source/memory/markcompactmemorymanager.cpp \
     source/memory/memorymanager.cpp \
@@ -201,7 +200,6 @@ HEADERS += \
     source/expression/ast/popexpression.h \
     source/expression/ast/pushexpression.h \
     source/expression/ast/stackexpression.h \
-    source/memory/frame.h \
     source/memory/managedobject.h \
     source/memory/markcompactmemorymanager.h \
     source/memory/memorymanager.h \

@@ -1,17 +1,10 @@
 #pragma once
 
-class ManagedObject;
-
 template <class T>
 class Ptr {
 public:
-    struct Aux {
-        T *pointer;
-        Aux *prev, *next;
-    };
-
-private:
-    Aux *aux;
+    T *pointer;
+    Ptr *prev, *next;
 
 public:
     Ptr(T *p = nullptr);
@@ -26,80 +19,83 @@ public:
     T *operator->() const;
     operator T *() const;
 
-    void link(Aux *&pointers);
-    void unlink(Aux *&pointers);
+private:
+    void link();
+    void unlink();
 };
 
-extern Ptr<ManagedObject>::Aux *pointers;
+extern Ptr<void> *pointers;
 
 template <class T>
 Ptr<T>::Ptr(T *p)
-    : aux(new Aux({ p, nullptr, nullptr })) {
-    link((Ptr<T>::Aux *&)pointers);
+    : pointer(p)
+    , prev(nullptr)
+    , next(nullptr) {
+    link();
 }
 
 template <class T>
 Ptr<T>::Ptr(const Ptr<T> &p)
-    : aux(new Aux({ p.aux->pointer, nullptr, nullptr })) {
-    link((Ptr<T>::Aux *&)pointers);
+    : pointer(p)
+    , prev(nullptr)
+    , next(nullptr) {
+    link();
 }
 
 template <class T>
 Ptr<T>::~Ptr() {
-    unlink((Ptr<T>::Aux *&)pointers);
-    delete aux;
+    unlink();
+}
+
+template <class T>
+Ptr<T> &Ptr<T>::operator=(T *p) {
+    pointer = p;
+    return *this;
 }
 
 template <class T>
 Ptr<T> &Ptr<T>::operator=(const Ptr<T> &p) {
-    aux->pointer = p.aux->pointer;
+    pointer = p.pointer;
     return *this;
 }
 
 template <class T>
 T *&Ptr<T>::operator*() {
-    return aux->pointer;
+    return pointer;
 }
 
 template <class T>
 T *Ptr<T>::operator*() const {
-    return aux->pointer;
+    return pointer;
 }
 
 template <class T>
 T *Ptr<T>::operator->() const {
-    return aux->pointer;
+    return pointer;
 }
 
 template <class T>
 Ptr<T>::operator T *() const {
-    return aux->pointer;
+    return pointer;
 }
 
 template <class T>
-Ptr<T> &Ptr<T>::operator=(T *p) {
-    aux->pointer = p;
-    return *this;
+void Ptr<T>::link() {
+    next = reinterpret_cast<Ptr *>(pointers);
+
+    if (next)
+        next->prev = this;
+
+    pointers = reinterpret_cast<Ptr<void> *>(this);
 }
 
 template <class T>
-void Ptr<T>::link(Ptr<T>::Aux *&pointers) {
-    aux->next = pointers;
+void Ptr<T>::unlink() {
+    if (prev)
+        prev->next = next;
+    else
+        pointers = reinterpret_cast<Ptr<void> *>(next);
 
-    if (pointers)
-        pointers->prev = aux;
-
-    pointers = aux;
-}
-
-template <class T>
-void Ptr<T>::unlink(Ptr<T>::Aux *&pointers) {
-    if (aux->next)
-        aux->next->prev = aux->prev;
-
-    if (aux->prev)
-        aux->prev->next = aux->next;
-
-    if (pointers == aux)
-        pointers = pointers->next;
+    if (next)
+        next->prev = prev;
 }

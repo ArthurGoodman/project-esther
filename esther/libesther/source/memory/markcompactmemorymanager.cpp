@@ -24,7 +24,7 @@ ManagedObject *MarkCompactMemoryManager::allocate(uint size, int count) {
 
     byte *oldData = memory.getData();
 
-    ManagedObject *object = (ManagedObject *)memory.allocate(size);
+    ManagedObject *object = reinterpret_cast<ManagedObject *>(memory.allocate(size));
 
     if ((delta = memory.getData() - oldData) != 0)
         updatePointers();
@@ -83,71 +83,54 @@ void MarkCompactMemoryManager::updatePointers() {
 
     byte *object = memory.getData();
 
-    for (int i = 0; i < objectCount; i++, object += ((ManagedObject *)object)->getSize())
-        updatePointers((ManagedObject *)object);
+    for (int i = 0; i < objectCount; i++, object += reinterpret_cast<ManagedObject *>(object)->getSize())
+        updatePointers(reinterpret_cast<ManagedObject *>(object));
 
-    for (Ptr<ManagedObject>::Aux *p = pointers; p; p = p->next)
+    for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->pointer)
             updatePointer(p->pointer);
-
-    // for (Frame *frame = frames; frame; frame = frame->getNext())
-    //     frame->mapOnLocals([this](ManagedObject *&p) {
-    //         updatePointer(p);
-    //     });
 }
 
 void MarkCompactMemoryManager::mark() {
-    for (Ptr<ManagedObject>::Aux *p = pointers; p; p = p->next)
+    for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->pointer && !p->pointer->hasFlag(ManagedObject::FlagMark))
             mark(p->pointer);
-
-    // for (Frame *frame = frames; frame; frame = frame->getNext())
-    //     frame->mapOnLocals([this](ManagedObject *&p) {
-    //         if (!p->hasFlag(ManagedObject::FlagMark))
-    //             mark(p);
-    //     });
 }
 
 void MarkCompactMemoryManager::compact() {
     byte *object, *free;
     object = free = memory.getData();
 
-    for (int i = 0; i < objectCount; i++, object += ((ManagedObject *)object)->getSize())
-        if (((ManagedObject *)object)->hasFlag(ManagedObject::FlagMark)) {
-            ((ManagedObject *)object)->setForwardAddress((ManagedObject *)free);
-            free += ((ManagedObject *)object)->getSize();
+    for (int i = 0; i < objectCount; i++, object += reinterpret_cast<ManagedObject *>(object)->getSize())
+        if (reinterpret_cast<ManagedObject *>(object)->hasFlag(ManagedObject::FlagMark)) {
+            reinterpret_cast<ManagedObject *>(object)->setForwardAddress(reinterpret_cast<ManagedObject *>(free));
+            free += reinterpret_cast<ManagedObject *>(object)->getSize();
         }
 
     object = memory.getData();
 
-    for (int i = 0; i < objectCount; i++, object += ((ManagedObject *)object)->getSize())
-        if (((ManagedObject *)object)->hasFlag(ManagedObject::FlagMark))
-            forwardPointers((ManagedObject *)object);
+    for (int i = 0; i < objectCount; i++, object += reinterpret_cast<ManagedObject *>(object)->getSize())
+        if (reinterpret_cast<ManagedObject *>(object)->hasFlag(ManagedObject::FlagMark))
+            forwardPointers(reinterpret_cast<ManagedObject *>(object));
 
-    for (Ptr<ManagedObject>::Aux *p = pointers; p; p = p->next)
+    for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->pointer && p->pointer->hasFlag(ManagedObject::FlagMark))
             p->pointer = p->pointer->getForwardAddress();
-
-    // for (Frame *frame = frames; frame; frame = frame->getNext())
-    //     frame->mapOnLocals([this](ManagedObject *&p) {
-    //         if (p->hasFlag(ManagedObject::FlagMark))
-    //             p = p->getForwardAddress();
-    //     });
 
     object = memory.getData();
 
     int freeCount = 0, freeSize = 0;
 
     for (int i = 0, size = 0; i < objectCount; i++, object += size) {
-        size = ((ManagedObject *)object)->getSize();
+        size = reinterpret_cast<ManagedObject *>(object)->getSize();
 
-        if (((ManagedObject *)object)->hasFlag(ManagedObject::FlagMark)) {
-            byte *dst = (byte *)((ManagedObject *)object)->getForwardAddress();
+        if (reinterpret_cast<ManagedObject *>(object)->hasFlag(ManagedObject::FlagMark)) {
+            byte *dst = reinterpret_cast<byte *>(reinterpret_cast<ManagedObject *>(object)->getForwardAddress());
 
             memmove(dst, object, size);
 
-            ((ManagedObject *)dst)->removeFlag(ManagedObject::FlagMark);
-            ((ManagedObject *)dst)->setForwardAddress(0);
+            reinterpret_cast<ManagedObject *>(dst)->removeFlag(ManagedObject::FlagMark);
+            reinterpret_cast<ManagedObject *>(dst)->setForwardAddress(0);
         } else {
             freeSize += size;
             freeCount++;

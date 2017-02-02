@@ -31,7 +31,7 @@ ManagedObject *SemispaceMemoryManager::allocate(uint size, int count) {
     else
         delta = 0;
 
-    ManagedObject *object = (ManagedObject *)allocPtr;
+    ManagedObject *object = reinterpret_cast<ManagedObject *>(allocPtr);
     allocPtr += size;
 
     objectCount += count;
@@ -55,14 +55,9 @@ void SemispaceMemoryManager::collectGarbage() {
     objectCount = 0;
     memoryUsed = 0;
 
-    for (Ptr<ManagedObject>::Aux *p = pointers; p; p = p->next)
+    for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->pointer)
-            p->pointer = copy((ManagedObject *)((byte *)p->pointer + delta));
-
-// for (Frame *frame = frames(); frame; frame = frame->getNext())
-//     frame->mapOnLocals([this](ManagedObject *&p) {
-//         p = copy((ManagedObject *)((byte *)p + delta));
-//     });
+            p->pointer = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(p->pointer) + delta));
 
 #if VERBOSE_GC
     std::cout << "//freed=" << oldSize - memoryUsed << " freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
@@ -96,7 +91,7 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
         objectCount++;
         memoryUsed += object->getSize();
 
-        ManagedObject *newObject = (ManagedObject *)allocPtr;
+        ManagedObject *newObject = reinterpret_cast<ManagedObject *>(allocPtr);
         allocPtr += object->getSize();
 
         memcpy(newObject, object, object->getSize());
@@ -104,7 +99,7 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
         object->setForwardAddress(newObject);
 
         newObject->mapOnReferences([this](ManagedObject *&ref) {
-            ref = copy((ManagedObject *)((byte *)ref + delta));
+            ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(ref) + delta));
         });
     }
 

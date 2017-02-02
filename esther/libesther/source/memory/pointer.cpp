@@ -1,3 +1,3 @@
 #include "pointer.h"
 
-Ptr<ManagedObject>::Aux *pointers = nullptr;
+Ptr<void> *pointers = nullptr;
