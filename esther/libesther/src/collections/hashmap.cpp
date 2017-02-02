@@ -59,25 +59,25 @@ bool HashMap<Object *, uint>::Entry::equals(Object *const & /*key*/) const {
 template <class K, class V>
 void HashMap<K, V>::Entry::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     if (next)
-        f((ManagedObject *&)next);
+        f(reinterpret_cast<ManagedObject *&>(next));
 }
 
 template <>
 void HashMap<uint, Object *>::Entry::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     if (next)
-        f((ManagedObject *&)next);
+        f(reinterpret_cast<ManagedObject *&>(next));
 
     if (value)
-        f((ManagedObject *&)value);
+        f(reinterpret_cast<ManagedObject *&>(value));
 }
 
 template <>
 void HashMap<Object *, uint>::Entry::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     if (next)
-        f((ManagedObject *&)next);
+        f(reinterpret_cast<ManagedObject *&>(next));
 
     if (key)
-        f((ManagedObject *&)key);
+        f(reinterpret_cast<ManagedObject *&>(key));
 }
 
 template <class K, class V>
@@ -245,20 +245,20 @@ template <>
 void Array<typename HashMap<uint, Object *>::Entry *>::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
-            f((ManagedObject *&)data()[i]);
+            f(reinterpret_cast<ManagedObject *&>(data()[i]));
 }
 
 template <>
 void Array<typename HashMap<Object *, uint>::Entry *>::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
-            f((ManagedObject *&)data()[i]);
+            f(reinterpret_cast<ManagedObject *&>(data()[i]));
 }
 
 template <class K, class V>
 void HashMap<K, V>::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     if (buffer)
-        f((ManagedObject *&)buffer);
+        f(reinterpret_cast<ManagedObject *&>(buffer));
 }
 
 template <class K, class V>

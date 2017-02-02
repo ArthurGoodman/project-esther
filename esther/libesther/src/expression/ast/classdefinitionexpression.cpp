@@ -21,5 +21,5 @@ Ptr<Object> ClassDefinitionExpression::exec(Esther *esther) {
         Esther::runtimeError("class expected");
     }
 
-    return new Class(esther, name, (Class *)*evaledSuperclass);
+    return new Class(esther, name, static_cast<Class *>(*evaledSuperclass));
 }

@@ -33,7 +33,7 @@ private:
 
 template <class T>
 Array<T> *Array<T>::create(int size) {
-    Array<T> *array = (Array<T> *)MemoryManager::instance()->allocate(sizeof(Array) + size * sizeof(T));
+    Array<T> *array = static_cast<Array<T> *>(MemoryManager::instance()->allocate(sizeof(Array) + size * sizeof(T)));
     new (array) Array<T>(size);
     new (**array) T[size];
     return array;
@@ -56,7 +56,7 @@ typename Array<T>::iterator Array<T>::end() {
 
 template <class T>
 T *Array<T>::data() const {
-    return (T *)(this + 1);
+    return reinterpret_cast<T *>(const_cast<Array<T> *>(this) + 1);
 }
 
 template <class T>

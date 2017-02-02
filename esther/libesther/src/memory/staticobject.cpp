@@ -5,12 +5,12 @@
 StaticObject *StaticObject::create(int refCount) {
     ManagedObject *object = MemoryManager::instance()->allocate(sizeof(StaticObject) + refCount * sizeof(ManagedObject *));
     new (object) StaticObject(refCount);
-    new ((byte *)object + sizeof(StaticObject)) ManagedObject *[refCount] { 0 };
-    return (StaticObject *)object;
+    new (reinterpret_cast<byte *>(object) + sizeof(StaticObject)) ManagedObject *[refCount] { 0 };
+    return static_cast<StaticObject *>(object);
 }
 
 ManagedObject *&StaticObject::field(int index) {
-    return *(ManagedObject **)((byte *)this + sizeof(*this) + index * sizeof(ManagedObject *));
+    return *reinterpret_cast<ManagedObject **>(reinterpret_cast<byte *>(this) + sizeof(*this) + index * sizeof(ManagedObject *));
 }
 
 void StaticObject::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {

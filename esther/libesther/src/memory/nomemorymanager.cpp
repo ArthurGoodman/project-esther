@@ -3,7 +3,7 @@
 #include <memory>
 
 ManagedObject *NoMemoryManager::allocate(uint size, int) {
-    return (ManagedObject *)malloc(size);
+    return static_cast<ManagedObject *>(malloc(size));
 }
 
 void NoMemoryManager::free(ManagedObject *p) {

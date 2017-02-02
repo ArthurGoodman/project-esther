@@ -1,4 +1,4 @@
-#include "runtime/class.h"
+#include "class.h"
 
 #include "runtime/esther.h"
 #include "runtime/rootclass/classclass.h"
@@ -68,7 +68,7 @@ void Class::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     Object::mapOnReferences(f);
 
     if (superclass)
-        f((ManagedObject *&)superclass);
+        f(reinterpret_cast<ManagedObject *&>(superclass));
 }
 
 int Class::getSize() const {

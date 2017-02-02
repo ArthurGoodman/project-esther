@@ -1,4 +1,4 @@
-#include "variant/variant.h"
+#include "variant.h"
 
 #if HEAP_VARIANT
 
@@ -110,14 +110,14 @@ Variant::Variant(double value)
 
 Variant::Variant(const std::string &value)
     : type(String) {
-    string = (char *)malloc(value.size() + 1);
+    string = static_cast<char *>(malloc(value.size() + 1));
     memcpy(string, value.data(), value.size() + 1);
 }
 
 Variant::Variant(const char *value)
     : type(String) {
     int size = strlen(value) + 1;
-    string = (char *)malloc(size);
+    string = static_cast<char *>(malloc(size));
     memcpy(string, value, size);
 }
 
@@ -140,7 +140,7 @@ Variant &Variant::operator=(const Variant &v) {
     if (type == String) {
         if (v.type == String) {
             int size = strlen(v.string) + 1;
-            string = (char *)realloc(string, size);
+            string = static_cast<char *>(realloc(string, size));
             memcpy(string, v.string, size);
 
             return *this;
@@ -166,7 +166,7 @@ Variant &Variant::operator=(const Variant &v) {
 
     case String: {
         int size = strlen(v.string) + 1;
-        string = (char *)malloc(size);
+        string = static_cast<char *>(malloc(size));
         memcpy(string, v.string, size);
         break;
     }

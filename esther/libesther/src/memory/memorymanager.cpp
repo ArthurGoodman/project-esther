@@ -7,7 +7,7 @@
 #include "memory/semispacememorymanager.h"
 
 MemoryManager *MemoryManager::instance() {
-    static MarkCompactMemoryManager instance;
+    static SemispaceMemoryManager instance;
     return &instance;
 }
 

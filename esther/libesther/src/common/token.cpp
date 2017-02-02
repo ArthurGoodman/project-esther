@@ -1,4 +1,4 @@
-#include "common/token.h"
+#include "token.h"
 
 Token::Token()
     : id(-1)

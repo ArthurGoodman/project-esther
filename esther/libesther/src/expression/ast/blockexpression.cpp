@@ -7,8 +7,8 @@
 BlockExpression::BlockExpression(const std::list<Expression *> &nodes) {
     for (Expression *e : nodes)
         if (dynamic_cast<BlockExpression *>(e)) {
-            this->nodes.insert(this->nodes.end(), ((BlockExpression *)e)->nodes.begin(), ((BlockExpression *)e)->nodes.end());
-            ((BlockExpression *)e)->nodes.clear();
+            this->nodes.insert(this->nodes.end(), static_cast<BlockExpression *>(e)->nodes.begin(), static_cast<BlockExpression *>(e)->nodes.end());
+            static_cast<BlockExpression *>(e)->nodes.clear();
             delete e;
         } else
             this->nodes << e;

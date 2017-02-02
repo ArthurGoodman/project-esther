@@ -38,7 +38,7 @@ void ObjectClass::setupMethods(Esther *esther) {
             return nullptr;
         }
 
-        return esther->toBoolean(self->is((Class *)*args[0]));
+        return esther->toBoolean(self->is(static_cast<Class *>(*args[0])));
     });
 }
 

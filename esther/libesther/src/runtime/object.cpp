@@ -1,4 +1,4 @@
-#include "runtime/object.h"
+#include "object.h"
 
 #include "runtime/class.h"
 #include "runtime/esther.h"
@@ -73,7 +73,7 @@ Ptr<Object> Object::call(Esther *esther, Ptr<Object> f, const std::vector<Ptr<Ob
     Ptr<Object> _this = this;
 
     if (dynamic_cast<Function *>(*f))
-        return ((Function *)*f)->invoke(esther, _this, args);
+        return static_cast<Function *>(*f)->invoke(esther, _this, args);
 
     std::vector<Ptr<Object>> actualArgs;
     actualArgs.reserve(args.size() + 1);
@@ -110,11 +110,11 @@ void Object::finalize() {
 }
 
 void Object::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
-    f((ManagedObject *&)objectClass);
+    f(reinterpret_cast<ManagedObject *&>(objectClass));
 
     if (attributes)
         for (auto &attr : *attributes)
-            f((ManagedObject *&)attr.second);
+            f(reinterpret_cast<ManagedObject *&>(attr.second));
 }
 
 int Object::getSize() const {

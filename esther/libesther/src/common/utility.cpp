@@ -1,4 +1,4 @@
-#include "common/utility.h"
+#include "utility.h"
 
 char Utility::toLower(char c) {
     return c < 'A' || c > 'Z' ? c : c + 'a' - 'A';

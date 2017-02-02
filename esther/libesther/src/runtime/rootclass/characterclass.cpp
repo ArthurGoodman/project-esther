@@ -24,33 +24,33 @@ void CharacterClass::setupMethods(Esther *esther) {
                                 return nullptr;
                             }
 
-                            return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toChar());
+                            return new ValueObject(esther, (static_cast<ValueObject *>(*args[1]))->getVariant().toChar());
                         }));
 
     _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        if ((int)args.size() > 1)
+        if (static_cast<int>(args.size()) > 1)
             Esther::runtimeError("Character.initialize: invalid number of arguments");
 
         if (!args.empty())
-            ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toChar());
+            static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toChar());
 
         return self;
     });
 
     _this->defFunc(esther, "isSpace", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
-        return esther->toBoolean(Utility::isSpace(((ValueObject *)*self)->getVariant().toChar()));
+        return esther->toBoolean(Utility::isSpace(static_cast<ValueObject *>(*self)->getVariant().toChar()));
     });
 
     _this->defFunc(esther, "isDigit", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
-        return esther->toBoolean(Utility::isDigit(((ValueObject *)*self)->getVariant().toChar()));
+        return esther->toBoolean(Utility::isDigit(static_cast<ValueObject *>(*self)->getVariant().toChar()));
     });
 
     _this->defFunc(esther, "isLetter", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
-        return esther->toBoolean(Utility::isLetter(((ValueObject *)*self)->getVariant().toChar()));
+        return esther->toBoolean(Utility::isLetter(static_cast<ValueObject *>(*self)->getVariant().toChar()));
     });
 
     _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toChar());
+        static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toChar());
         return self;
     });
 }

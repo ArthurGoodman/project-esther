@@ -2,7 +2,7 @@
 
 #include "runtime/valueobject.h"
 #include "runtime/esther.h"
-#include "numericclass.h"
+#include "runtime/rootclass/numericclass.h"
 #include "runtime/nativefunction.h"
 
 FloatClass::FloatClass(Esther *esther)
@@ -23,21 +23,21 @@ void FloatClass::setupMethods(Esther *esther) {
                                 return nullptr;
                             }
 
-                            return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toReal());
+                            return new ValueObject(esther, static_cast<ValueObject *>(*args[1])->getVariant().toReal());
                         }));
 
     _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        if ((int)args.size() > 1)
+        if (static_cast<int>(args.size()) > 1)
             Esther::runtimeError("Float.initialize: invalid number of arguments");
 
         if (!args.empty())
-            ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toReal());
+            static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toReal());
 
         return self;
     });
 
     _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toReal());
+        static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toReal());
         return self;
     });
 }

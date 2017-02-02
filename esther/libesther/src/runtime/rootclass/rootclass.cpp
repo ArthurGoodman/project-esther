@@ -30,7 +30,6 @@ void RootClass::defFunc(Esther *esther, const std::string &name, const std::list
 
 void RootClass::defFunc(Esther *esther, const std::string &name, const std::list<Ptr<Class>> &paramsClasses, const std::function<Ptr<Object>(Esther *, Ptr<Object>, const std::vector<Ptr<Object>> &)> &body) {
     Ptr<RootClass> _this = this;
-
     std::string className = _this->getName();
 
     _this->defFunc(esther, name, paramsClasses.size(), [paramsClasses, name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
@@ -47,7 +46,6 @@ void RootClass::defFunc(Esther *esther, const std::string &name, const std::list
 
 void RootClass::defValueObjectFunc(Esther *esther, const std::string &name, int arity, const std::function<Ptr<Object>(Esther *, Ptr<Object>, const std::vector<Ptr<Object>> &)> &body) {
     Ptr<RootClass> _this = this;
-
     std::string className = _this->getName();
 
     _this->defFunc(esther, name, arity, [name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
@@ -63,7 +61,6 @@ void RootClass::defValueObjectFunc(Esther *esther, const std::string &name, int 
 
 void RootClass::defFunc(Esther *esther, const std::string &name, int arity, const std::function<Ptr<Object>(Esther *, Ptr<Object>, const std::vector<Ptr<Object>> &)> &body) {
     Ptr<RootClass> _this = this;
-
     std::string className = _this->getName();
 
     _this->setAttribute(name, new NativeFunction(esther, name, arity, [name, body, className, _this](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
@@ -78,7 +75,6 @@ void RootClass::defFunc(Esther *esther, const std::string &name, int arity, cons
 
 void RootClass::defOper(Esther *esther, const std::string &name, Variant (*body)(const Variant &, const Variant &)) {
     Ptr<RootClass> _this = this;
-
     std::string className = _this->getName();
 
     _this->setAttribute(name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
@@ -92,13 +88,12 @@ void RootClass::defOper(Esther *esther, const std::string &name, Variant (*body)
                                 return nullptr;
                             }
 
-                            return new ValueObject(esther, body(((ValueObject *)*self)->getVariant(), ((ValueObject *)*args[0])->getVariant()));
+                            return new ValueObject(esther, body(static_cast<ValueObject *>(*self)->getVariant(), static_cast<ValueObject *>(*args[0])->getVariant()));
                         }));
 }
 
 void RootClass::defPred(Esther *esther, const std::string &name, bool (*body)(const Variant &, const Variant &)) {
     Ptr<RootClass> _this = this;
-
     std::string className = _this->getName();
 
     _this->setAttribute(name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
@@ -112,6 +107,6 @@ void RootClass::defPred(Esther *esther, const std::string &name, bool (*body)(co
                                 return nullptr;
                             }
 
-                            return esther->toBoolean(body(((ValueObject *)*self)->getVariant(), ((ValueObject *)*args[0])->getVariant()));
+                            return esther->toBoolean(body(static_cast<ValueObject *>(*self)->getVariant(), static_cast<ValueObject *>(*args[0])->getVariant()));
                         }));
 }

@@ -1,4 +1,4 @@
-#include "runtime/function.h"
+#include "function.h"
 
 #include "runtime/context.h"
 #include "runtime/esther.h"
@@ -15,7 +15,7 @@ void Function::setName(const std::string &name) {
 Ptr<Object> Function::invoke(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) {
     Ptr<Function> _this = this;
 
-    if (_this->arity >= 0 && _this->arity != (int)args.size())
+    if (_this->arity >= 0 && _this->arity != static_cast<int>(args.size()))
         Esther::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(_this->arity) + ")");
 
     return _this->execute(esther, self, args);

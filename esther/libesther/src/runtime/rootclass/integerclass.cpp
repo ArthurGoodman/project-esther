@@ -23,21 +23,21 @@ void IntegerClass::setupMethods(Esther *esther) {
                                 return nullptr;
                             }
 
-                            return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toInteger());
+                            return new ValueObject(esther, static_cast<ValueObject *>(*args[1])->getVariant().toInteger());
                         }));
 
     _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        if ((int)args.size() > 1)
+        if (static_cast<int>(args.size()) > 1)
             Esther::runtimeError("Integer.initialize: invalid number of arguments");
 
         if (!args.empty())
-            ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toInteger());
+            static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toInteger());
 
         return self;
     });
 
     _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toInteger());
+        static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toInteger());
         return self;
     });
 }

@@ -1,4 +1,4 @@
-#include "runtime/rootclass/classclass.h"
+#include "classclass.h"
 
 #include "runtime/esther.h"
 
@@ -10,11 +10,11 @@ void ClassClass::setupMethods(Esther *esther) {
     Ptr<ClassClass> _this = this;
 
     _this->defFunc(esther, "new", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        return ((Class *)*self)->newInstance(esther, args);
+        return static_cast<Class *>(*self)->newInstance(esther, args);
     });
 
     _this->defFunc(esther, "superclass", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
-        return ((Class *)*self)->getSuperclass() ? ((Class *)*self)->getSuperclass() : esther->getNull();
+        return static_cast<Class *>(*self)->getSuperclass() ? static_cast<Class *>(*self)->getSuperclass() : esther->getNull();
     });
 }
 

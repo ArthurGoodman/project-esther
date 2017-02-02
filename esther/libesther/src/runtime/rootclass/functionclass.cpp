@@ -20,7 +20,7 @@ void FunctionClass::setupMethods(Esther *esther) {
         std::vector<Ptr<Object>> actualArgs = args;
         actualArgs.erase(actualArgs.begin());
 
-        return ((Function *)*self)->invoke(esther, actualSelf, actualArgs);
+        return static_cast<Function *>(*self)->invoke(esther, actualSelf, actualArgs);
     });
 
     _this->setAttribute("()", _this->getAttribute("call"));

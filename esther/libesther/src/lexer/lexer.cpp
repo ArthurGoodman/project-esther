@@ -123,7 +123,7 @@ void Lexer::scan() {
 
                 default:
                     token.setPosition(Position(pos, line, column));
-                    error((std::string) "invalid escape sequence '\\" + at(pos) + "'");
+                    error(static_cast<std::string>("invalid escape sequence '\\") + at(pos) + "'");
                 }
 
                 pos++;

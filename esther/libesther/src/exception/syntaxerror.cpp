@@ -1,4 +1,4 @@
-#include "exception/syntaxerror.h"
+#include "syntaxerror.h"
 
 SyntaxError::SyntaxError(const std::string &message, Position position)
     : ErrorException(message, position) {

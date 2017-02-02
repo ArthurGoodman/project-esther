@@ -1,7 +1,8 @@
-#include "runtime/context.h"
+#include "context.h"
 
 #include "runtime/object.h"
 #include "runtime/esther.h"
+#include "runtime/class.h"
 
 Context::Context(Esther *esther)
     : parent(nullptr)
@@ -45,7 +46,7 @@ Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
         return parent->get(esther, name);
 
     if (esther->hasRootClass(name))
-        return (Object *)*esther->getRootClass(name);
+        return static_cast<Object *>(*esther->getRootClass(name));
 
     return nullptr;
 }
@@ -68,10 +69,10 @@ Ptr<Context> Context::childContext(Ptr<Object> self, Ptr<Object> here) {
 
 void Context::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
     if (parent)
-        f((ManagedObject *&)parent);
+        f(reinterpret_cast<ManagedObject *&>(parent));
 
-    f((ManagedObject *&)self);
-    f((ManagedObject *&)here);
+    f(reinterpret_cast<ManagedObject *&>(self));
+    f(reinterpret_cast<ManagedObject *&>(here));
 }
 
 int Context::getSize() const {

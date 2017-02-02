@@ -22,7 +22,7 @@ void StringClass::setupMethods(Esther *esther) {
                                 return nullptr;
                             }
 
-                            return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toString());
+                            return new ValueObject(esther, static_cast<ValueObject *>(*args[1])->getVariant().toString());
                         }));
 
     _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
@@ -30,7 +30,7 @@ void StringClass::setupMethods(Esther *esther) {
             Esther::runtimeError("String.initialize: invalid number of arguments");
 
         if (!args.empty())
-            ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toString());
+            static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toString());
 
         return self;
     });
@@ -60,7 +60,7 @@ void StringClass::setupMethods(Esther *esther) {
     });
 
     _this->defFunc(esther, "size", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
-        return new ValueObject(esther, (int)((ValueObject *)*self)->toString().size());
+        return new ValueObject(esther, static_cast<int>(static_cast<ValueObject *>(*self)->toString().size()));
     });
 
     _this->defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
@@ -72,7 +72,7 @@ void StringClass::setupMethods(Esther *esther) {
     });
 
     _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toString());
+        static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toString());
         return self;
     });
 }

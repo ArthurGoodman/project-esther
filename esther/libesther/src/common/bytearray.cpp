@@ -1,4 +1,4 @@
-#include "common/bytearray.h"
+#include "bytearray.h"
 
 #include <memory>
 

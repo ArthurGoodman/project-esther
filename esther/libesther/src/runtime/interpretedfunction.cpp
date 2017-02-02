@@ -16,7 +16,7 @@ void InterpretedFunction::finalize() {
 }
 
 void InterpretedFunction::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
-    f((ManagedObject *&)context);
+    f(reinterpret_cast<ManagedObject *&>(context));
 }
 
 int InterpretedFunction::getSize() const {
