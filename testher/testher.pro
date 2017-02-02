@@ -3,49 +3,46 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-INCLUDEPATH = \
-    source \
-    source/io \
-    source/system
+INCLUDEPATH = src
 
 SOURCES += \
-    source/main.cpp \
-    source/system/application.cpp \
-    source/io/file.cpp \
-    source/io/directory.cpp \
-    source/testher.cpp
+    src/main.cpp \
+    src/system/application.cpp \
+    src/io/file.cpp \
+    src/io/directory.cpp \
+    src/testher.cpp
 
 HEADERS += \
-    source/system/application.h \
-    source/rapidjson/allocators.h \
-    source/rapidjson/document.h \
-    source/rapidjson/encodedstream.h \
-    source/rapidjson/encodings.h \
-    source/rapidjson/filereadstream.h \
-    source/rapidjson/filewritestream.h \
-    source/rapidjson/memorybuffer.h \
-    source/rapidjson/memorystream.h \
-    source/rapidjson/pointer.h \
-    source/rapidjson/prettywriter.h \
-    source/rapidjson/rapidjson.h \
-    source/rapidjson/reader.h \
-    source/rapidjson/stringbuffer.h \
-    source/rapidjson/writer.h \
-    source/rapidjson/error/en.h \
-    source/rapidjson/error/error.h \
-    source/rapidjson/internal/biginteger.h \
-    source/rapidjson/internal/diyfp.h \
-    source/rapidjson/internal/dtoa.h \
-    source/rapidjson/internal/ieee754.h \
-    source/rapidjson/internal/itoa.h \
-    source/rapidjson/internal/meta.h \
-    source/rapidjson/internal/pow10.h \
-    source/rapidjson/internal/stack.h \
-    source/rapidjson/internal/strfunc.h \
-    source/rapidjson/internal/strtod.h \
-    source/rapidjson/internal/swap.h \
-    source/rapidjson/msinttypes/inttypes.h \
-    source/rapidjson/msinttypes/stdint.h \
-    source/io/file.h \
-    source/io/directory.h \
-    source/testher.h
+    src/system/application.h \
+    src/rapidjson/allocators.h \
+    src/rapidjson/document.h \
+    src/rapidjson/encodedstream.h \
+    src/rapidjson/encodings.h \
+    src/rapidjson/filereadstream.h \
+    src/rapidjson/filewritestream.h \
+    src/rapidjson/memorybuffer.h \
+    src/rapidjson/memorystream.h \
+    src/rapidjson/pointer.h \
+    src/rapidjson/prettywriter.h \
+    src/rapidjson/rapidjson.h \
+    src/rapidjson/reader.h \
+    src/rapidjson/stringbuffer.h \
+    src/rapidjson/writer.h \
+    src/rapidjson/error/en.h \
+    src/rapidjson/error/error.h \
+    src/rapidjson/internal/biginteger.h \
+    src/rapidjson/internal/diyfp.h \
+    src/rapidjson/internal/dtoa.h \
+    src/rapidjson/internal/ieee754.h \
+    src/rapidjson/internal/itoa.h \
+    src/rapidjson/internal/meta.h \
+    src/rapidjson/internal/pow10.h \
+    src/rapidjson/internal/stack.h \
+    src/rapidjson/internal/strfunc.h \
+    src/rapidjson/internal/strtod.h \
+    src/rapidjson/internal/swap.h \
+    src/rapidjson/msinttypes/inttypes.h \
+    src/rapidjson/msinttypes/stdint.h \
+    src/io/file.h \
+    src/io/directory.h \
+    src/testher.h

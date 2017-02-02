@@ -11,11 +11,11 @@ CONFIG(debug, debug|release) {
 }
 
 DEPENDPATH += ../libesther
-INCLUDEPATH += ../libesther/source
+INCLUDEPATH += ../libesther/src
 LIBS += -lesther
 
 SOURCES += \
-    source/main.cpp
+    src/main.cpp
 
 OTHER_FILES += \
-    scripts/script.es \
+    src/script.es \
