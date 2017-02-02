@@ -9,15 +9,7 @@ void EstherStaticInterface::run(const std::string &script) {
 }
 
 void EstherStaticInterface::runFile(const std::string &fileName) {
-    Ptr<Object> value = esther()->runFile(fileName);
-
-    try {
-        if (value)
-            IO::writeLine("=> " + value->toString());
-    } catch (Exception *e) {
-        IO::writeLine(e->message());
-        delete e;
-    }
+    esther()->runFile(fileName);
 }
 
 Esther *EstherStaticInterface::esther() {

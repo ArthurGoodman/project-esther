@@ -146,16 +146,18 @@ void Esther::setupMethods() {
         rootClass.second->setupMethods(this);
 }
 
-Ptr<Object> Esther::run(const std::string &script) {
-    Ptr<Object> value = 0;
-
+void Esther::run(const std::string &script) {
     std::string src = Utility::expandTabs(script);
 
     pushSource(src);
 
     try {
         Expression *e = IParser::instance()->parse(this, ILexer::instance()->lex(src));
-        value = e ? e->eval(this) : nullptr;
+        Ptr<Object> value = e ? e->eval(this) : nullptr;
+
+        if (value)
+            IO::writeLine("=> " + value->call(this, "toString", {}, getRootClass("String"))->toString());
+
         delete e;
     } catch (ErrorException *e) {
         IO::writeLine(fileName() + ":" + (e->getPosition().isValid() ? e->getPosition().toString() + ": " : " ") + e->message());
@@ -172,18 +174,12 @@ Ptr<Object> Esther::run(const std::string &script) {
     }
 
     popSource();
-
-    return value;
 }
 
-Ptr<Object> Esther::runFile(const std::string &fileName) {
+void Esther::runFile(const std::string &fileName) {
     pushFileName(IO::fullPath(fileName));
-
-    Ptr<Object> value = run(IO::readFile(fileName));
-
+    run(IO::readFile(fileName));
     popFileName();
-
-    return value;
 }
 
 Ptr<Context> Esther::context() const {

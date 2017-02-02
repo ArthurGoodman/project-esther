@@ -77,8 +77,8 @@ public:
 
     Ptr<Object> createObject();
 
-    Ptr<Object> run(const std::string &script);
-    Ptr<Object> runFile(const std::string &fileName);
+    void run(const std::string &script);
+    void runFile(const std::string &fileName);
 
     Ptr<Context> context() const;
 
