@@ -5,7 +5,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 DEPENDPATH += ../libesther
-INCLUDEPATH += ../libesther/source
+INCLUDEPATH += ../libesther/src
 LIBS += -L../libesther/release -lesther
 
 DEPENDPATH += ../../../unit
@@ -13,15 +13,15 @@ INCLUDEPATH += ../../../unit
 LIBS += -L../../../unit/release -lunit
 
 INCLUDEPATH += \
-    source/tests
+    src/tests
 
 SOURCES += \
-    source/main.cpp \
-    source/tests/expressiontest.cpp \
-    source/tests/runtimetest.cpp \
-    source/tests/varianttest.cpp
+    src/main.cpp \
+    src/tests/expressiontest.cpp \
+    src/tests/runtimetest.cpp \
+    src/tests/varianttest.cpp
 
 HEADERS += \
-    source/tests/expressiontest.h \
-    source/tests/runtimetest.h \
-    source/tests/varianttest.h
+    src/tests/expressiontest.h \
+    src/tests/runtimetest.h \
+    src/tests/varianttest.h

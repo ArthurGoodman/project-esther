@@ -1,6 +1,0 @@
-Think about:
-    - simplifying calls 
-
-Implement:
-
-Design:
