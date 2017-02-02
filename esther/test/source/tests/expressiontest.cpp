@@ -61,7 +61,7 @@ void ExpressionTest::defineTests() {
     //        context.setSelf(esther.createInteger(3));
     //        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
-    //        Pointer<Context> childContext = context.childContext(esther.createInteger(4), esther.createObject());
+    //        Ptr<Context> childContext = context.childContext(esther.createInteger(4), esther.createObject());
 
     //        e = Expression::Call("f", {});
 
@@ -97,7 +97,7 @@ void ExpressionTest::defineTests() {
     //        context.setSelf(esther.createInteger(3));
     //        context.setLocal("f", esther.createNativeFunction("f", 0, [=](Object *self, const std::vector<Object *> &) -> Object * { return self; }));
 
-    //        Pointer<Context> childContext = context.childContext(esther.createInteger(4), esther.createObject());
+    //        Ptr<Context> childContext = context.childContext(esther.createInteger(4), esther.createObject());
 
     //        e = Expression::DynamicCall(Expression::Identifier("f"), {});
 
@@ -125,7 +125,7 @@ void ExpressionTest::defineTests() {
 
     //        e = Expression::Identifier("pi");
 
-    //        Pointer<Context> childContext = context.childContext(esther.createObject(), esther.createObject());
+    //        Ptr<Context> childContext = context.childContext(esther.createObject(), esther.createObject());
     //        Object *value = e->eval(childContext);
     //        delete childContext;
     //        return value->toString();
@@ -136,7 +136,7 @@ void ExpressionTest::defineTests() {
 
     //        e = Expression::Identifier("pi");
 
-    //        Pointer<Context> childContext = context.childContext(esther.createObject(), esther.createObject());
+    //        Ptr<Context> childContext = context.childContext(esther.createObject(), esther.createObject());
     //        Object *value = e->eval(childContext);
     //        delete childContext;
     //        return value->toString();

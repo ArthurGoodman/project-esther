@@ -9,7 +9,7 @@ void EstherStaticInterface::run(const std::string &script) {
 }
 
 void EstherStaticInterface::runFile(const std::string &fileName) {
-    Pointer<Object> value = esther()->runFile(fileName);
+    Ptr<Object> value = esther()->runFile(fileName);
 
     try {
         if (value)

@@ -10,8 +10,8 @@ IdentifierExpression::IdentifierExpression(const std::string &name)
 IdentifierExpression::~IdentifierExpression() {
 }
 
-Pointer<Object> IdentifierExpression::exec(Esther *esther) {
-    Pointer<Object> value = esther->context()->get(esther, name);
+Ptr<Object> IdentifierExpression::exec(Esther *esther) {
+    Ptr<Object> value = esther->context()->get(esther, name);
 
     if (value == nullptr)
         Esther::runtimeError("IdentifierExpression:exec: undefined identifier '" + name + "'");

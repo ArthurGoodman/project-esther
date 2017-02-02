@@ -22,7 +22,7 @@ public:
     virtual Expression *createBlock(const std::list<Expression *> &nodes) = 0;
     virtual Expression *createCall(Expression *f, Expression *self, int args) = 0;
     virtual Expression *createClassDefinition(const std::string &name, Expression *superclass) = 0;
-    virtual Expression *createConstant(Pointer<Object> value) = 0;
+    virtual Expression *createConstant(Ptr<Object> value) = 0;
     virtual Expression *createContextResolution(Expression *self, Expression *body, Expression *here) = 0;
     virtual Expression *createEmpty() = 0;
     virtual Expression *createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body) = 0;

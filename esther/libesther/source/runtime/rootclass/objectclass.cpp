@@ -10,29 +10,29 @@ ObjectClass::ObjectClass(Esther *esther)
 }
 
 void ObjectClass::setupMethods(Esther *esther) {
-    Pointer<ObjectClass> _this = this;
+    Ptr<ObjectClass> _this = this;
 
-    _this->defFunc(esther, "class", [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
+    _this->defFunc(esther, "class", [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
         return *self->getClass();
     });
 
-    _this->defFunc(esther, "==", { this }, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defFunc(esther, "==", { this }, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         return esther->toBoolean(self->call(esther, "equals", args)->isTrue());
     });
 
-    _this->defFunc(esther, "!=", { this }, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defFunc(esther, "!=", { this }, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         return esther->toBoolean(!self->call(esther, "equals", args)->isTrue());
     });
 
-    _this->defFunc(esther, "toString", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
+    _this->defFunc(esther, "toString", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
         return new ValueObject(esther, self->toString());
     });
 
-    _this->defFunc(esther, "equals", 1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defFunc(esther, "equals", 1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         return esther->toBoolean(self == args[0]);
     });
 
-    _this->defFunc(esther, "is", 1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defFunc(esther, "is", 1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         if (!dynamic_cast<Class *>(*args[0])) {
             Esther::runtimeError("Object.is: invalid argument");
             return nullptr;
@@ -42,6 +42,6 @@ void ObjectClass::setupMethods(Esther *esther) {
     });
 }
 
-Pointer<Object> ObjectClass::createNewInstance(Esther *, const std::vector<Pointer<Object>> &) {
+Ptr<Object> ObjectClass::createNewInstance(Esther *, const std::vector<Ptr<Object>> &) {
     return new Object(this);
 }

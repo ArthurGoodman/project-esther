@@ -19,7 +19,7 @@ public:
     static Expression *Block(const std::list<Expression *> &nodes);
     static Expression *Call(Expression *f, Expression *self, int args);
     static Expression *ClassDefinition(const std::string &name, Expression *superclass);
-    static Expression *Constant(Pointer<Object> value);
+    static Expression *Constant(Ptr<Object> value);
     static Expression *ContextResolution(Expression *self, Expression *body, Expression *here = nullptr);
     static Expression *Empty();
     static Expression *FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body);
@@ -38,11 +38,11 @@ public:
 
     virtual ~Expression();
 
-    Pointer<Object> eval(Esther *esther);
+    Ptr<Object> eval(Esther *esther);
 
     Position getPosition() const;
     void setPosition(Position position);
 
 protected:
-    virtual Pointer<Object> exec(Esther *esther) = 0;
+    virtual Ptr<Object> exec(Esther *esther) = 0;
 };

@@ -19,8 +19,8 @@ BlockExpression::~BlockExpression() {
         delete e;
 }
 
-Pointer<Object> BlockExpression::exec(Esther *esther) {
-    Pointer<Object> value = esther->getNull();
+Ptr<Object> BlockExpression::exec(Esther *esther) {
+    Ptr<Object> value = esther->getNull();
 
     for (Expression *e : nodes)
         value = e->eval(esther);

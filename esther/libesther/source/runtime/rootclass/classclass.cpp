@@ -7,17 +7,17 @@ ClassClass::ClassClass(Esther *esther)
 }
 
 void ClassClass::setupMethods(Esther *esther) {
-    Pointer<ClassClass> _this = this;
+    Ptr<ClassClass> _this = this;
 
-    _this->defFunc(esther, "new", -1, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defFunc(esther, "new", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         return ((Class *)*self)->newInstance(esther, args);
     });
 
-    _this->defFunc(esther, "superclass", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
+    _this->defFunc(esther, "superclass", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
         return ((Class *)*self)->getSuperclass() ? ((Class *)*self)->getSuperclass() : esther->getNull();
     });
 }
 
-Pointer<Object> ClassClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
+Ptr<Object> ClassClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new Class(esther, "", esther->getObjectClass());
 }

@@ -17,24 +17,24 @@ public:
     Context(Esther *esther);
     virtual ~Context();
 
-    Pointer<Object> getSelf() const;
-    void setSelf(Pointer<Object> self);
+    Ptr<Object> getSelf() const;
+    void setSelf(Ptr<Object> self);
 
-    Pointer<Object> getHere() const;
-    void setHere(Pointer<Object> here);
+    Ptr<Object> getHere() const;
+    void setHere(Ptr<Object> here);
 
     bool hasLocal(const std::string &name) const;
-    Pointer<Object> getLocal(const std::string &name) const;
-    void setLocal(const std::string &name, Pointer<Object> value);
+    Ptr<Object> getLocal(const std::string &name) const;
+    void setLocal(const std::string &name, Ptr<Object> value);
 
-    Pointer<Object> get(Esther *esther, const std::string &name) const;
-    bool set(const std::string &name, Pointer<Object> value);
+    Ptr<Object> get(Esther *esther, const std::string &name) const;
+    bool set(const std::string &name, Ptr<Object> value);
 
-    Pointer<Context> childContext(Pointer<Object> self, Pointer<Object> here);
+    Ptr<Context> childContext(Ptr<Object> self, Ptr<Object> here);
 
     void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
     int getSize() const override;
 
 private:
-    Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent);
+    Context(Ptr<Object> self, Ptr<Object> here, Ptr<Context> parent);
 };

@@ -13,8 +13,8 @@ ClassDefinitionExpression::~ClassDefinitionExpression() {
     delete superclass;
 }
 
-Pointer<Object> ClassDefinitionExpression::exec(Esther *esther) {
-    Pointer<Object> evaledSuperclass = superclass->eval(esther);
+Ptr<Object> ClassDefinitionExpression::exec(Esther *esther) {
+    Ptr<Object> evaledSuperclass = superclass->eval(esther);
 
     if (!dynamic_cast<Class *>(*evaledSuperclass)) {
         setPosition(superclass->getPosition());

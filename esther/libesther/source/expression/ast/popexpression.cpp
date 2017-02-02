@@ -6,7 +6,7 @@ PopExpression::PopExpression(int count)
     : count(count) {
 }
 
-Pointer<Object> PopExpression::exec(Esther *esther) {
+Ptr<Object> PopExpression::exec(Esther *esther) {
     esther->pop(count);
     return esther->getReg();
 }

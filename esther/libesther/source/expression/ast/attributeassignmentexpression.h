@@ -12,5 +12,5 @@ public:
     ~AttributeAssignmentExpression();
 
 protected:
-    Pointer<Object> exec(Esther *esther) override;
+    Ptr<Object> exec(Esther *esther) override;
 };

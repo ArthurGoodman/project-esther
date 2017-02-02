@@ -1,9 +1,9 @@
 #include "constantexpression.h"
 
-ConstantExpression::ConstantExpression(Pointer<Object> value)
+ConstantExpression::ConstantExpression(Ptr<Object> value)
     : value(value) {
 }
 
-Pointer<Object> ConstantExpression::exec(Esther *) {
+Ptr<Object> ConstantExpression::exec(Esther *) {
     return value;
 }

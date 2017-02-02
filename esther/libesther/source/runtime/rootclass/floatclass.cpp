@@ -10,9 +10,9 @@ FloatClass::FloatClass(Esther *esther)
 }
 
 void FloatClass::setupMethods(Esther *esther) {
-    Pointer<FloatClass> _this = this;
+    Ptr<FloatClass> _this = this;
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<FloatClass *>(*self)) {
                                 Esther::runtimeError("Float.(): invalid self");
                                 return nullptr;
@@ -26,7 +26,7 @@ void FloatClass::setupMethods(Esther *esther) {
                             return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toReal());
                         }));
 
-    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         if ((int)args.size() > 1)
             Esther::runtimeError("Float.initialize: invalid number of arguments");
 
@@ -36,12 +36,12 @@ void FloatClass::setupMethods(Esther *esther) {
         return self;
     });
 
-    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toReal());
         return self;
     });
 }
 
-Pointer<Object> FloatClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
+Ptr<Object> FloatClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new ValueObject(esther, 0.0);
 }

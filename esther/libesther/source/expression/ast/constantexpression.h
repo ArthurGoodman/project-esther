@@ -3,11 +3,11 @@
 #include "expression.h"
 
 class ConstantExpression : public Expression {
-    Pointer<Object> value;
+    Ptr<Object> value;
 
 public:
-    ConstantExpression(Pointer<Object> value);
+    ConstantExpression(Ptr<Object> value);
 
 protected:
-    Pointer<Object> exec(Esther *esther) override;
+    Ptr<Object> exec(Esther *esther) override;
 };

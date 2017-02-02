@@ -19,5 +19,5 @@ public:
     virtual int getSize() const override;
 
 private:
-    static Pointer<Class> variantTypeToObjectClass(Esther *esther, Variant::Type type);
+    static Ptr<Class> variantTypeToObjectClass(Esther *esther, Variant::Type type);
 };

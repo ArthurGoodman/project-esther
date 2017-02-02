@@ -4,9 +4,9 @@
 
 class ReturnException : public ValueException {
 public:
-    ReturnException(Pointer<Object> value);
+    ReturnException(Ptr<Object> value);
 
-    Pointer<Object> value();
+    Ptr<Object> value();
 
     void raise() override;
 };

@@ -145,7 +145,7 @@ V &SherwoodMap<K, V>::get(const K &key) const {
 
 template <class K, class V>
 V &SherwoodMap<K, V>::put(const K &key, const V &value) {
-    Pointer<SherwoodMap> _this = this;
+    Ptr<SherwoodMap> _this = this;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -155,8 +155,8 @@ V &SherwoodMap<K, V>::put(const K &key, const V &value) {
 
 template <>
 Object *&SherwoodMap<uint, Object *>::put(const uint &key, Object *const &value) {
-    Pointer<SherwoodMap> _this = this;
-    Pointer<Object> pValue = value;
+    Ptr<SherwoodMap> _this = this;
+    Ptr<Object> pValue = value;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -166,8 +166,8 @@ Object *&SherwoodMap<uint, Object *>::put(const uint &key, Object *const &value)
 
 template <>
 uint &SherwoodMap<Object *, uint>::put(Object *const &key, const uint &value) {
-    Pointer<SherwoodMap> _this = this;
-    Pointer<Object> pKey = key;
+    Ptr<SherwoodMap> _this = this;
+    Ptr<Object> pKey = key;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -246,8 +246,8 @@ uint SherwoodMap<K, V>::hashKey(const K &key) {
 
 template <class K, class V>
 void SherwoodMap<K, V>::allocate() {
-    Pointer<SherwoodMap> _this = this;
-    Pointer<Array<Entry>> oldEntries = buffer;
+    Ptr<SherwoodMap> _this = this;
+    Ptr<Array<Entry>> oldEntries = buffer;
 
     int oldCapacity = buffer ? capacity : 0;
 

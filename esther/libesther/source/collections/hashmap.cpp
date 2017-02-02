@@ -173,7 +173,7 @@ V &HashMap<K, V>::get(const K &key) const {
 
 template <class K, class V>
 V &HashMap<K, V>::put(const K &key, const V &value) {
-    Pointer<HashMap> _this = this;
+    Ptr<HashMap> _this = this;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -183,8 +183,8 @@ V &HashMap<K, V>::put(const K &key, const V &value) {
 
 template <>
 Object *&HashMap<uint, Object *>::put(const uint &key, Object *const &value) {
-    Pointer<HashMap> _this = this;
-    Pointer<Object> pValue = value;
+    Ptr<HashMap> _this = this;
+    Ptr<Object> pValue = value;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -194,8 +194,8 @@ Object *&HashMap<uint, Object *>::put(const uint &key, Object *const &value) {
 
 template <>
 uint &HashMap<Object *, uint>::put(Object *const &key, const uint &value) {
-    Pointer<HashMap> _this = this;
-    Pointer<Object> pKey = key;
+    Ptr<HashMap> _this = this;
+    Ptr<Object> pKey = key;
 
     if (++numEntries >= resizeThreshold)
         allocate();
@@ -279,8 +279,8 @@ ulong HashMap<Object *, uint>::hashKey(Object *const & /*key*/) {
 
 template <class K, class V>
 void HashMap<K, V>::allocate() {
-    Pointer<HashMap> _this = this;
-    Pointer<Array<Entry *>> oldEntries = buffer;
+    Ptr<HashMap> _this = this;
+    Ptr<Array<Entry *>> oldEntries = buffer;
 
     int oldCapacity = buffer ? capacity : 0;
 
@@ -313,9 +313,9 @@ template <class K, class V>
 V &HashMap<K, V>::insert(const K &key, const V &value) {
     int hashValue = hashKey(key) & mask;
 
-    Pointer<Entry> prev = 0;
-    Pointer<Entry> entry = (*buffer)[hashValue];
-    Pointer<HashMap> _this = this;
+    Ptr<Entry> prev = 0;
+    Ptr<Entry> entry = (*buffer)[hashValue];
+    Ptr<HashMap> _this = this;
 
     while (entry && !entry->equals(key)) {
         prev = entry;
@@ -358,7 +358,7 @@ typename HashMap<K, V>::Entry *HashMap<K, V>::createEntry(const K &key, const V 
 
 template <>
 typename HashMap<uint, Object *>::Entry *HashMap<uint, Object *>::createEntry(const uint &key, Object *const &value) const {
-    Pointer<Object> pValue = value;
+    Ptr<Object> pValue = value;
 
     Entry *entry = new Entry(key, 0);
     entry->setValue(pValue);
@@ -368,7 +368,7 @@ typename HashMap<uint, Object *>::Entry *HashMap<uint, Object *>::createEntry(co
 
 template <>
 typename HashMap<Object *, uint>::Entry *HashMap<Object *, uint>::createEntry(Object *const &key, const uint &value) const {
-    Pointer<Object> pKey = key;
+    Ptr<Object> pKey = key;
 
     Entry *entry = new Entry(0, value);
     entry->setKey(pKey);

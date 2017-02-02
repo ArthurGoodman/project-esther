@@ -5,7 +5,7 @@
 #include "function.h"
 
 class NativeFunction : public Function {
-    typedef std::function<Pointer<Object>(Esther *, Pointer<Object>, const std::vector<Pointer<Object>> &)> FunctionBody;
+    typedef std::function<Ptr<Object>(Esther *, Ptr<Object>, const std::vector<Ptr<Object>> &)> FunctionBody;
 
     FunctionBody *body;
 
@@ -16,5 +16,5 @@ public:
     virtual int getSize() const override;
 
 protected:
-    Pointer<Object> execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) override;
+    Ptr<Object> execute(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) override;
 };

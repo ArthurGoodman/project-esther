@@ -7,7 +7,7 @@ NumericClass::NumericClass(Esther *esther)
 }
 
 void NumericClass::setupMethods(Esther *esther) {
-    Pointer<NumericClass> _this = this;
+    Ptr<NumericClass> _this = this;
 
     _this->defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
         return a + b;

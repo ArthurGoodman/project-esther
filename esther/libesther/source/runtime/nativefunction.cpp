@@ -15,8 +15,8 @@ int NativeFunction::getSize() const {
     return sizeof *this;
 }
 
-Pointer<Object> NativeFunction::execute(Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) {
-    Pointer<NativeFunction> _this = this;
+Ptr<Object> NativeFunction::execute(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) {
+    Ptr<NativeFunction> _this = this;
 
     return (*_this->body)(esther, self, args);
 }

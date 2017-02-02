@@ -4,10 +4,10 @@
 #include "object.h"
 
 class ValueException : public Exception {
-    Pointer<Object> value;
+    Ptr<Object> value;
 
 protected:
-    ValueException(Pointer<Object> value);
+    ValueException(Ptr<Object> value);
 
-    Pointer<Object> getValue();
+    Ptr<Object> getValue();
 };

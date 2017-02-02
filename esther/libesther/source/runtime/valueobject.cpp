@@ -23,7 +23,7 @@ int ValueObject::getSize() const {
     return sizeof *this;
 }
 
-Pointer<Class> ValueObject::variantTypeToObjectClass(Esther *esther, Variant::Type type) {
+Ptr<Class> ValueObject::variantTypeToObjectClass(Esther *esther, Variant::Type type) {
     switch (type) {
     case Variant::Char:
         return esther->getRootClass("Character");

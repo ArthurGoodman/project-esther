@@ -4,7 +4,7 @@
 
 class BreakException : public ValueException {
 public:
-    BreakException(Pointer<Object> value);
+    BreakException(Ptr<Object> value);
 
     void raise() override;
 };

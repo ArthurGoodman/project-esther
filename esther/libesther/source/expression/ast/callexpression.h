@@ -10,5 +10,5 @@ public:
     CallExpression(Expression *f, Expression *self, int args);
     ~CallExpression();
 
-    Pointer<Object> exec(Esther *esther) override;
+    Ptr<Object> exec(Esther *esther) override;
 };

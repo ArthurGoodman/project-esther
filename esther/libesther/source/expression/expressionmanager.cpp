@@ -52,7 +52,7 @@ Expression *ExpressionManager::createClassDefinition(const std::string &name, Ex
     return new ClassDefinitionExpression(name, superclass);
 }
 
-Expression *ExpressionManager::createConstant(Pointer<Object> value) {
+Expression *ExpressionManager::createConstant(Ptr<Object> value) {
     return new ConstantExpression(value);
 }
 

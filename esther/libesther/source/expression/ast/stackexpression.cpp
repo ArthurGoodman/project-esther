@@ -6,6 +6,6 @@ StackExpression::StackExpression(int index)
     : index(index) {
 }
 
-Pointer<Object> StackExpression::exec(Esther *esther) {
+Ptr<Object> StackExpression::exec(Esther *esther) {
     return esther->top(index);
 }

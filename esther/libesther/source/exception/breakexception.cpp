@@ -1,6 +1,6 @@
 #include "breakexception.h"
 
-BreakException::BreakException(Pointer<Object> value)
+BreakException::BreakException(Ptr<Object> value)
     : ValueException(value) {
 }
 

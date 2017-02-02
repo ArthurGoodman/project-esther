@@ -12,19 +12,19 @@ Context::Context(Esther *esther)
 Context::~Context() {
 }
 
-Pointer<Object> Context::getSelf() const {
+Ptr<Object> Context::getSelf() const {
     return self;
 }
 
-void Context::setSelf(Pointer<Object> self) {
+void Context::setSelf(Ptr<Object> self) {
     this->self = self;
 }
 
-Pointer<Object> Context::getHere() const {
+Ptr<Object> Context::getHere() const {
     return here;
 }
 
-void Context::setHere(Pointer<Object> here) {
+void Context::setHere(Ptr<Object> here) {
     this->here = here;
 }
 
@@ -32,15 +32,15 @@ bool Context::hasLocal(const std::string &name) const {
     return getHere()->hasAttribute(name);
 }
 
-Pointer<Object> Context::getLocal(const std::string &name) const {
+Ptr<Object> Context::getLocal(const std::string &name) const {
     return getHere()->getAttribute(name);
 }
 
-void Context::setLocal(const std::string &name, Pointer<Object> value) {
+void Context::setLocal(const std::string &name, Ptr<Object> value) {
     getHere()->setAttribute(name, value);
 }
 
-Pointer<Object> Context::get(Esther *esther, const std::string &name) const {
+Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
     if (hasLocal(name))
         return getLocal(name);
 
@@ -53,7 +53,7 @@ Pointer<Object> Context::get(Esther *esther, const std::string &name) const {
     return nullptr;
 }
 
-bool Context::set(const std::string &name, Pointer<Object> value) {
+bool Context::set(const std::string &name, Ptr<Object> value) {
     if (hasLocal(name)) {
         setLocal(name, value);
         return true;
@@ -65,7 +65,7 @@ bool Context::set(const std::string &name, Pointer<Object> value) {
     return false;
 }
 
-Pointer<Context> Context::childContext(Pointer<Object> self, Pointer<Object> here) {
+Ptr<Context> Context::childContext(Ptr<Object> self, Ptr<Object> here) {
     return new Context(self, here, this);
 }
 
@@ -81,7 +81,7 @@ int Context::getSize() const {
     return sizeof *this;
 }
 
-Context::Context(Pointer<Object> self, Pointer<Object> here, Pointer<Context> parent)
+Context::Context(Ptr<Object> self, Ptr<Object> here, Ptr<Context> parent)
     : parent(parent)
     , self(self)
     , here(here) {

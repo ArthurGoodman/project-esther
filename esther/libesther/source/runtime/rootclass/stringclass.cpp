@@ -9,9 +9,9 @@ StringClass::StringClass(Esther *esther)
 }
 
 void StringClass::setupMethods(Esther *esther) {
-    Pointer<StringClass> _this = this;
+    Ptr<StringClass> _this = this;
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<StringClass *>(*self)) {
                                 Esther::runtimeError("String.(): invalid self");
                                 return nullptr;
@@ -25,7 +25,7 @@ void StringClass::setupMethods(Esther *esther) {
                             return new ValueObject(esther, ((ValueObject *)*args[1])->getVariant().toString());
                         }));
 
-    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         if ((int)args.size() > 1)
             Esther::runtimeError("String.initialize: invalid number of arguments");
 
@@ -59,7 +59,7 @@ void StringClass::setupMethods(Esther *esther) {
         return a.toString() == b.toString();
     });
 
-    _this->defFunc(esther, "size", [](Esther *esther, Pointer<Object> self, const std::vector<Pointer<Object>> &) -> Pointer<Object> {
+    _this->defFunc(esther, "size", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
         return new ValueObject(esther, (int)((ValueObject *)*self)->toString().size());
     });
 
@@ -71,12 +71,12 @@ void StringClass::setupMethods(Esther *esther) {
         return a.toString().find(b.toChar()) != std::string::npos;
     });
 
-    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Pointer<Object> self, const std::vector<Pointer<Object>> &args) -> Pointer<Object> {
+    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
         ((ValueObject *)*self)->setVariant(((ValueObject *)*args[0])->getVariant().toString());
         return self;
     });
 }
 
-Pointer<Object> StringClass::createNewInstance(Esther *esther, const std::vector<Pointer<Object>> &) {
+Ptr<Object> StringClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new ValueObject(esther, "");
 }

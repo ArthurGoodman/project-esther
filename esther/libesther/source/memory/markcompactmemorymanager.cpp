@@ -86,7 +86,7 @@ void MarkCompactMemoryManager::updatePointers() {
     for (int i = 0; i < objectCount; i++, object += ((ManagedObject *)object)->getSize())
         updatePointers((ManagedObject *)object);
 
-    for (Pointer<ManagedObject>::Aux *p = pointers; p; p = p->next)
+    for (Ptr<ManagedObject>::Aux *p = pointers; p; p = p->next)
         if (p->pointer)
             updatePointer(p->pointer);
 
@@ -97,7 +97,7 @@ void MarkCompactMemoryManager::updatePointers() {
 }
 
 void MarkCompactMemoryManager::mark() {
-    for (Pointer<ManagedObject>::Aux *p = pointers; p; p = p->next)
+    for (Ptr<ManagedObject>::Aux *p = pointers; p; p = p->next)
         if (p->pointer && !p->pointer->hasFlag(ManagedObject::FlagMark))
             mark(p->pointer);
 
@@ -124,7 +124,7 @@ void MarkCompactMemoryManager::compact() {
         if (((ManagedObject *)object)->hasFlag(ManagedObject::FlagMark))
             forwardPointers((ManagedObject *)object);
 
-    for (Pointer<ManagedObject>::Aux *p = pointers; p; p = p->next)
+    for (Ptr<ManagedObject>::Aux *p = pointers; p; p = p->next)
         if (p->pointer && p->pointer->hasFlag(ManagedObject::FlagMark))
             p->pointer = p->pointer->getForwardAddress();
 

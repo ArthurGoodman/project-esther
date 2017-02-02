@@ -32,7 +32,7 @@ Expression *Expression::ClassDefinition(const std::string &name, Expression *sup
     return IExpressionManager::instance()->createClassDefinition(name, superclass);
 }
 
-Expression *Expression::Constant(Pointer<Object> value) {
+Expression *Expression::Constant(Ptr<Object> value) {
     return IExpressionManager::instance()->createConstant(value);
 }
 
@@ -99,7 +99,7 @@ Expression *Expression::Stack(int index) {
 Expression::~Expression() {
 }
 
-Pointer<Object> Expression::eval(Esther *esther) {
+Ptr<Object> Expression::eval(Esther *esther) {
     Object *value = nullptr;
 
     try {

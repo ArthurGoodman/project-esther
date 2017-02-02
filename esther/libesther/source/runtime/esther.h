@@ -30,31 +30,31 @@ class ClassClass;
 class FunctionClass;
 
 class Esther {
-    Pointer<Object> mainObject = nullptr;
-    Pointer<RootClass> objectClass = nullptr;
+    Ptr<Object> mainObject = nullptr;
+    Ptr<RootClass> objectClass = nullptr;
 
-    Pointer<Object> trueObject = nullptr;
-    Pointer<Object> falseObject = nullptr;
-    Pointer<Object> nullObject = nullptr;
+    Ptr<Object> trueObject = nullptr;
+    Ptr<Object> falseObject = nullptr;
+    Ptr<Object> nullObject = nullptr;
 
-    Pointer<NumericClass> numericClass = nullptr;
-    Pointer<CharacterClass> characterClass = nullptr;
-    Pointer<FloatClass> floatClass = nullptr;
-    Pointer<IntegerClass> integerClass = nullptr;
-    Pointer<StringClass> stringClass = nullptr;
+    Ptr<NumericClass> numericClass = nullptr;
+    Ptr<CharacterClass> characterClass = nullptr;
+    Ptr<FloatClass> floatClass = nullptr;
+    Ptr<IntegerClass> integerClass = nullptr;
+    Ptr<StringClass> stringClass = nullptr;
 
-    Pointer<ClassClass> classClass = nullptr;
-    Pointer<FunctionClass> functionClass = nullptr;
+    Ptr<ClassClass> classClass = nullptr;
+    Ptr<FunctionClass> functionClass = nullptr;
 
-    std::map<std::string, Pointer<RootClass>> rootClasses;
+    std::map<std::string, Ptr<RootClass>> rootClasses;
 
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 
-    std::stack<Pointer<Context>> contexts;
+    std::stack<Ptr<Context>> contexts;
 
-    std::vector<Pointer<Object>> stack;
-    Pointer<Object> reg;
+    std::vector<Ptr<Object>> stack;
+    Ptr<Object> reg;
 
 public:
     static void runtimeError(const std::string &message);
@@ -62,35 +62,35 @@ public:
     Esther();
     ~Esther();
 
-    Pointer<Object> getMainObject() const;
-    Pointer<Class> getObjectClass() const;
-    Pointer<ClassClass> getClassClass() const;
-    Pointer<Object> getTrue() const;
-    Pointer<Object> getFalse() const;
-    Pointer<Object> getNull() const;
+    Ptr<Object> getMainObject() const;
+    Ptr<Class> getObjectClass() const;
+    Ptr<ClassClass> getClassClass() const;
+    Ptr<Object> getTrue() const;
+    Ptr<Object> getFalse() const;
+    Ptr<Object> getNull() const;
 
     bool hasRootClass(const std::string &name) const;
-    Pointer<Class> getRootClass(const std::string &name) const;
-    void registerRootClass(Pointer<RootClass> rootClass);
+    Ptr<Class> getRootClass(const std::string &name) const;
+    void registerRootClass(Ptr<RootClass> rootClass);
 
-    Pointer<Object> toBoolean(bool value) const;
+    Ptr<Object> toBoolean(bool value) const;
 
-    Pointer<Object> createObject();
+    Ptr<Object> createObject();
 
-    Pointer<Object> run(const std::string &script);
-    Pointer<Object> runFile(const std::string &fileName);
+    Ptr<Object> run(const std::string &script);
+    Ptr<Object> runFile(const std::string &fileName);
 
-    Pointer<Context> context() const;
+    Ptr<Context> context() const;
 
-    void pushContext(Pointer<Context> context);
+    void pushContext(Ptr<Context> context);
     void popContext();
 
-    void push(Pointer<Object> value);
+    void push(Ptr<Object> value);
     void pop(int count = 1);
-    Pointer<Object> top(int index = 0);
+    Ptr<Object> top(int index = 0);
 
-    Pointer<Object> getReg() const;
-    void setReg(Pointer<Object> value);
+    Ptr<Object> getReg() const;
+    void setReg(Ptr<Object> value);
 
 private:
     void initialize();

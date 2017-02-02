@@ -3,7 +3,7 @@
 class ManagedObject;
 
 template <class T>
-class Pointer {
+class Ptr {
 public:
     struct Aux {
         T *pointer;
@@ -14,12 +14,12 @@ private:
     Aux *aux;
 
 public:
-    Pointer(T *p = nullptr);
-    Pointer(const Pointer<T> &p);
-    ~Pointer();
+    Ptr(T *p = nullptr);
+    Ptr(const Ptr<T> &p);
+    ~Ptr();
 
-    Pointer<T> &operator=(T *p);
-    Pointer<T> &operator=(const Pointer<T> &p);
+    Ptr<T> &operator=(T *p);
+    Ptr<T> &operator=(const Ptr<T> &p);
 
     T *&operator*();
     T *operator*() const;
@@ -30,60 +30,60 @@ public:
     void unlink(Aux *&pointers);
 };
 
-extern Pointer<ManagedObject>::Aux *pointers;
+extern Ptr<ManagedObject>::Aux *pointers;
 
 template <class T>
-Pointer<T>::Pointer(T *p)
+Ptr<T>::Ptr(T *p)
     : aux(new Aux({ p, nullptr, nullptr })) {
-    link((Pointer<T>::Aux *&)pointers);
+    link((Ptr<T>::Aux *&)pointers);
 }
 
 template <class T>
-Pointer<T>::Pointer(const Pointer<T> &p)
+Ptr<T>::Ptr(const Ptr<T> &p)
     : aux(new Aux({ p.aux->pointer, nullptr, nullptr })) {
-    link((Pointer<T>::Aux *&)pointers);
+    link((Ptr<T>::Aux *&)pointers);
 }
 
 template <class T>
-Pointer<T>::~Pointer() {
-    unlink((Pointer<T>::Aux *&)pointers);
+Ptr<T>::~Ptr() {
+    unlink((Ptr<T>::Aux *&)pointers);
     delete aux;
 }
 
 template <class T>
-Pointer<T> &Pointer<T>::operator=(const Pointer<T> &p) {
+Ptr<T> &Ptr<T>::operator=(const Ptr<T> &p) {
     aux->pointer = p.aux->pointer;
     return *this;
 }
 
 template <class T>
-T *&Pointer<T>::operator*() {
+T *&Ptr<T>::operator*() {
     return aux->pointer;
 }
 
 template <class T>
-T *Pointer<T>::operator*() const {
+T *Ptr<T>::operator*() const {
     return aux->pointer;
 }
 
 template <class T>
-T *Pointer<T>::operator->() const {
+T *Ptr<T>::operator->() const {
     return aux->pointer;
 }
 
 template <class T>
-Pointer<T>::operator T *() const {
+Ptr<T>::operator T *() const {
     return aux->pointer;
 }
 
 template <class T>
-Pointer<T> &Pointer<T>::operator=(T *p) {
+Ptr<T> &Ptr<T>::operator=(T *p) {
     aux->pointer = p;
     return *this;
 }
 
 template <class T>
-void Pointer<T>::link(Pointer<T>::Aux *&pointers) {
+void Ptr<T>::link(Ptr<T>::Aux *&pointers) {
     aux->next = pointers;
 
     if (pointers)
@@ -93,7 +93,7 @@ void Pointer<T>::link(Pointer<T>::Aux *&pointers) {
 }
 
 template <class T>
-void Pointer<T>::unlink(Pointer<T>::Aux *&pointers) {
+void Ptr<T>::unlink(Ptr<T>::Aux *&pointers) {
     if (aux->next)
         aux->next->prev = aux->prev;
 

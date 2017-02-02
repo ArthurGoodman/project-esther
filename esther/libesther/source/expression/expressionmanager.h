@@ -11,7 +11,7 @@ public:
     Expression *createBlock(const std::list<Expression *> &nodes) override;
     Expression *createCall(Expression *f, Expression *self, int args) override;
     Expression *createClassDefinition(const std::string &name, Expression *superclass) override;
-    Expression *createConstant(Pointer<Object> value) override;
+    Expression *createConstant(Ptr<Object> value) override;
     Expression *createContextResolution(Expression *self, Expression *body, Expression *here) override;
     Expression *createEmpty() override;
     Expression *createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body) override;

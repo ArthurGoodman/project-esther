@@ -12,8 +12,8 @@ AttributeExpression::~AttributeExpression() {
     delete self;
 }
 
-Pointer<Object> AttributeExpression::exec(Esther *esther) {
-    Pointer<Object> value = self->eval(esther)->get(name);
+Ptr<Object> AttributeExpression::exec(Esther *esther) {
+    Ptr<Object> value = self->eval(esther)->get(name);
 
     if (value == nullptr)
         Esther::runtimeError("undefined attribute '" + name + "'");
