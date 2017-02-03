@@ -4,6 +4,9 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cstdarg>
+
+#include "common/utility.h"
 
 std::map<std::string, std::unique_ptr<std::fstream>> IO::files;
 

@@ -1,5 +1,7 @@
 #include "token.h"
 
+#include "common/utility.h"
+
 Token::Token()
     : id(-1)
     , text("") {
@@ -41,9 +43,13 @@ bool Token::operator!=(int id) const {
 }
 
 Position Token::getPosition() const {
-    return position;
+    return pos;
 }
 
-void Token::setPosition(Position position) {
-    this->position = position;
+void Token::setPosition(Position pos) {
+    this->pos = pos;
+}
+
+std::string Token::inspect() const {
+    return Utility::format("\"%s\" (%i, %i, %i)", text.c_str(), pos.getOffset(), pos.getLine(), pos.getColumn());
 }

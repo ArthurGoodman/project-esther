@@ -2,7 +2,7 @@
 
 #include "runtime/context.h"
 #include "runtime/esther.h"
-#include "common/logger.h"
+#include "common/log.h"
 
 #if DEBUG_PARSER
 
@@ -19,7 +19,7 @@ DebugExpression::~DebugExpression() {
 }
 
 Ptr<Object> DebugExpression::exec(Esther *esther) {
-    Logger::write("parser", toString() + "\n");
+    Log::write("parser", "%s\n", toString().c_str());
     return esther->getNull();
 }
 

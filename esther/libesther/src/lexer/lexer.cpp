@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "common/definitions/tokens.h"
-#include "common/logger.h"
+#include "common/log.h"
 #include "common/utility.h"
 #include "exception/lexicalerror.h"
 
@@ -41,17 +41,7 @@ Tokens &Lexer::lex(const std::string &source) {
         tokens << token;
 
 #if DEBUG_LEXER
-        Logger::setActiveLog("lexer");
-
-        Logger::write(tokenTypes[token.getId()]);
-        Logger::write(" : \"" + token.getText() + "\"");
-        Logger::write(" (");
-        Logger::write(token.getPosition().getOffset());
-        Logger::write(", ");
-        Logger::write(token.getPosition().getLine());
-        Logger::write(", ");
-        Logger::write(token.getPosition().getColumn());
-        Logger::write(")\n");
+        Log::write("lexer", "%s : %s\n", tokenTypes[token.getId()].c_str(), token.inspect().c_str());
 #endif
     } while (token != tEnd);
 

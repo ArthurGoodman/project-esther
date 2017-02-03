@@ -1,5 +1,4 @@
 Todo:
-    * Implement variadic print for Logger
     * Refactor maps
     * Implement managed list
     * Implement managed string

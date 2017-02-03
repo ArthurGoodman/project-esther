@@ -12,7 +12,6 @@ INCLUDEPATH = src
 SOURCES += \
     src/common/bytearray.cpp \
     src/common/io.cpp \
-    src/common/logger.cpp \
     src/common/position.cpp \
     src/common/source.cpp \
     src/common/token.cpp \
@@ -99,13 +98,13 @@ SOURCES += \
     src/collections/hashmap.cpp \
     src/collections/list.cpp \
     src/collections/map.cpp \
-    src/collections/sherwoodmap.cpp
+    src/collections/sherwoodmap.cpp \
+    src/common/log.cpp
 
 HEADERS += \
     src/common/bytearray.h \
     src/common/common.h \
     src/common/io.h \
-    src/common/logger.h \
     src/common/position.h \
     src/common/source.h \
     src/common/token.h \
@@ -197,7 +196,8 @@ HEADERS += \
     src/collections/list.h \
     src/collections/map.h \
     src/collections/sherwoodmap.h \
-    src/common/config.h
+    src/common/config.h \
+    src/common/log.h
 
 OTHER_FILES += \
     src/common/definitions/keywords.def \

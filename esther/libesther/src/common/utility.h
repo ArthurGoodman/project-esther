@@ -28,6 +28,9 @@ public:
     static std::string expandTabs(const std::string &str);
 
     static uint32_t ceilToPowerOf2(uint32_t n);
+
+    static std::string vformat(const char *fmt, va_list ap);
+    static std::string format(const char *fmt, ...);
 };
 
 template <class T>

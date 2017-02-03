@@ -2,8 +2,9 @@
 
 #include <string>
 #include <list>
+#include <vector>
 
-#include "common/common.h"
+#include "common/config.h"
 
 #if DEBUG_PARSER
 
