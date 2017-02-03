@@ -41,6 +41,6 @@ public:
     Ptr<Object> callIfFound(Esther *esther, const std::string &name, const std::vector<Ptr<Object>> &args);
 
     void finalize() override;
-    void mapOnReferences(const std::function<void (ManagedObject *&)> &f) override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
     int getSize() const override;
 };

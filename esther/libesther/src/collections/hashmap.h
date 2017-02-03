@@ -27,7 +27,7 @@ class HashMap : public Map<K, V> {
 
         bool equals(const K &key) const;
 
-        void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
+        void mapOnReferences(void (*f)(ManagedObject *&)) override;
         int getSize() const override;
     };
 
@@ -73,7 +73,7 @@ public:
 
     int size() const override;
 
-    void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
     int getSize() const override;
 
 private:

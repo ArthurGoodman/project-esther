@@ -1,32 +1,33 @@
-#pragma once
+//#pragma once
 
-#include "memory/memorymanager.h"
-#include "common/bytearray.h"
+//#include "common/bytearray.h"
 
-class SemispaceMemoryManager : public MemoryManager {
-    static const int InitialCapacity = 1 << 10;
+//class ManagedObject;
 
-    ByteArray memory;
-    int objectCount, memoryUsed, capacity, delta;
+//class SemispaceMemoryManager {
+//    static const int InitialCapacity = 1 << 10;
 
-    byte *toSpace, *fromSpace, *allocPtr;
+//    ByteArray memory;
+//    int objectCount, memoryUsed, capacity, delta;
 
-public:
-    SemispaceMemoryManager();
-    ~SemispaceMemoryManager();
+//    byte *toSpace, *fromSpace, *allocPtr;
 
-    ManagedObject *allocate(uint size, int count = 1) override;
-    void free(ManagedObject *p) override;
+//public:
+//    SemispaceMemoryManager();
+//    ~SemispaceMemoryManager();
 
-    void collectGarbage() override;
-    void reallocate() override;
+//    static ManagedObject *allocate(uint size, int count = 1);
+//    static void free(ManagedObject *p);
 
-private:
-    void initialize();
-    void finalize();
+//    static void collectGarbage();
+//    static void reallocate();
 
-    bool enoughSpace(int size) const;
+//private:
+//    void initialize();
+//    void finalize();
 
-    ManagedObject *copy(ManagedObject *object);
-    void expand();
-};
+//    bool enoughSpace(int size) const;
+
+//    ManagedObject *copy(ManagedObject *object);
+//    void expand();
+//};

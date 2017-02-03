@@ -15,7 +15,7 @@ void InterpretedFunction::finalize() {
     delete params;
 }
 
-void InterpretedFunction::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void InterpretedFunction::mapOnReferences(void (*f)(ManagedObject *&)) {
     f(reinterpret_cast<ManagedObject *&>(context));
 }
 

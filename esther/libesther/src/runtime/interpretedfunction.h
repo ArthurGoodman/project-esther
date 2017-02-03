@@ -13,7 +13,7 @@ public:
     InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Ptr<Context> context);
 
     void finalize() override;
-    void mapOnReferences(const std::function<void (ManagedObject *&)> &f) override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
     int getSize() const override;
 
 protected:

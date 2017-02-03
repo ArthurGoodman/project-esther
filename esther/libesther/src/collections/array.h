@@ -24,7 +24,7 @@ public:
 
     int size() const;
 
-    void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
     int getSize() const override;
 
 private:
@@ -75,7 +75,7 @@ int Array<T>::size() const {
 }
 
 template <class T>
-void Array<T>::mapOnReferences(const std::function<void(ManagedObject *&)> &) {
+void Array<T>::mapOnReferences(void (*)(ManagedObject *&)) {
 }
 
 template <class T>

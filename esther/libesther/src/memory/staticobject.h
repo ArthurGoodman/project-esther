@@ -10,7 +10,7 @@ public:
 
     ManagedObject *&field(int index);
 
-    void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
     int getSize() const override;
 
 private:

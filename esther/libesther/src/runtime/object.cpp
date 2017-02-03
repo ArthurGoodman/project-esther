@@ -109,7 +109,7 @@ void Object::finalize() {
     delete attributes;
 }
 
-void Object::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void Object::mapOnReferences(void (*f)(ManagedObject *&)) {
     f(reinterpret_cast<ManagedObject *&>(objectClass));
 
     if (attributes)

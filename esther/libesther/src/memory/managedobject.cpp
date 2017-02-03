@@ -25,5 +25,5 @@ ManagedObject::~ManagedObject() {
 void ManagedObject::finalize() {
 }
 
-void ManagedObject::mapOnReferences(const std::function<void(ManagedObject *&)> &) {
+void ManagedObject::mapOnReferences(void (*)(ManagedObject *&)) {
 }

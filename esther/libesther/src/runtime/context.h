@@ -31,7 +31,7 @@ public:
 
     Ptr<Context> childContext(Ptr<Object> self, Ptr<Object> here);
 
-    void mapOnReferences(const std::function<void(ManagedObject *&)> &f) override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
     int getSize() const override;
 
 private:

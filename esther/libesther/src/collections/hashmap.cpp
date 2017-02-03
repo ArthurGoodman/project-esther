@@ -57,13 +57,13 @@ bool HashMap<Object *, uint>::Entry::equals(Object *const & /*key*/) const {
 }
 
 template <class K, class V>
-void HashMap<K, V>::Entry::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void HashMap<K, V>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (next)
         f(reinterpret_cast<ManagedObject *&>(next));
 }
 
 template <>
-void HashMap<uint, Object *>::Entry::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void HashMap<uint, Object *>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (next)
         f(reinterpret_cast<ManagedObject *&>(next));
 
@@ -72,7 +72,7 @@ void HashMap<uint, Object *>::Entry::mapOnReferences(const std::function<void(Ma
 }
 
 template <>
-void HashMap<Object *, uint>::Entry::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void HashMap<Object *, uint>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (next)
         f(reinterpret_cast<ManagedObject *&>(next));
 
@@ -242,21 +242,21 @@ int HashMap<K, V>::size() const {
 }
 
 template <>
-void Array<typename HashMap<uint, Object *>::Entry *>::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void Array<typename HashMap<uint, Object *>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
             f(reinterpret_cast<ManagedObject *&>(data()[i]));
 }
 
 template <>
-void Array<typename HashMap<Object *, uint>::Entry *>::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void Array<typename HashMap<Object *, uint>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
             f(reinterpret_cast<ManagedObject *&>(data()[i]));
 }
 
 template <class K, class V>
-void HashMap<K, V>::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void HashMap<K, V>::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (buffer)
         f(reinterpret_cast<ManagedObject *&>(buffer));
 }

@@ -64,7 +64,7 @@ void Class::finalize() {
     delete name;
 }
 
-void Class::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void Class::mapOnReferences(void (*f)(ManagedObject *&)) {
     Object::mapOnReferences(f);
 
     if (superclass)

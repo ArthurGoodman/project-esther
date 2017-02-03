@@ -1,12 +1,14 @@
 #pragma once
 
-#include "memory/memorymanager.h"
+#include "common/common.h"
 
-class NoMemoryManager : public MemoryManager {
+class ManagedObject;
+
+class NoMemoryManager {
 public:
-    ManagedObject *allocate(uint size, int count);
-    void free(ManagedObject *p);
+    static ManagedObject *allocate(uint size, int count = 1);
+    static void free(ManagedObject *p);
 
-    void collectGarbage();
-    void reallocate();
+    static void collectGarbage();
+    static void reallocate();
 };

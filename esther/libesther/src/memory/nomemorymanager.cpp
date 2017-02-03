@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "memory/managedobject.h"
+
 ManagedObject *NoMemoryManager::allocate(uint size, int) {
     return static_cast<ManagedObject *>(malloc(size));
 }

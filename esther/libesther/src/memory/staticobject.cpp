@@ -13,7 +13,7 @@ ManagedObject *&StaticObject::field(int index) {
     return *reinterpret_cast<ManagedObject **>(reinterpret_cast<byte *>(this) + sizeof(*this) + index * sizeof(ManagedObject *));
 }
 
-void StaticObject::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void StaticObject::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < refCount; i++)
         if (field(i))
             f(field(i));

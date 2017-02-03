@@ -1,7 +1,5 @@
 #pragma once
 
-#include <functional>
-
 #include "common/common.h"
 
 class ManagedObject {
@@ -28,7 +26,7 @@ public:
     void setForwardAddress(ManagedObject *forwardAddress);
 
     virtual void finalize();
-    virtual void mapOnReferences(const std::function<void(ManagedObject *&)> &f);
+    virtual void mapOnReferences(void (*f)(ManagedObject *&));
     virtual int getSize() const = 0;
 };
 

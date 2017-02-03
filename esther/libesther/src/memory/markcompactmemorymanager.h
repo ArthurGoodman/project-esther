@@ -1,37 +1,33 @@
 #pragma once
 
-#include "memory/memorymanager.h"
 #include "common/bytearray.h"
+#include "memory/managedobject.h"
 
-class MarkCompactMemoryManager : public MemoryManager {
-    ByteArray memory;
-    int objectCount, delta;
-
+class MarkCompactMemoryManager {
 public:
     MarkCompactMemoryManager();
     ~MarkCompactMemoryManager();
 
-    ManagedObject *allocate(uint size, int count) override;
-    void free(ManagedObject *p) override;
+    static ManagedObject *allocate(uint size, int count = 1);
+    static void free(ManagedObject *p);
 
-    void collectGarbage() override;
-    void reallocate() override;
+    static void collectGarbage();
+    static void reallocate();
 
 private:
-    void initialize();
-    void finalize();
+    static void initialize();
+    static void finalize();
 
-    void updatePointers();
-    void updatePointer(ManagedObject *&pointer);
+    static void updatePointers();
+    static void updatePointer(ManagedObject *&pointer);
 
-    void mark();
-    void compact();
+    static void mark();
+    static void compact();
 
-    void updatePointers(ManagedObject *object);
-    void forwardPointers(ManagedObject *object);
-    void mark(ManagedObject *object);
+    static void updatePointers(ManagedObject *object);
+    static void forwardPointers(ManagedObject *object);
+    static void mark(ManagedObject *object);
+
+    static void markReference(ManagedObject *&ref);
+    static void forwardReference(ManagedObject *&ref);
 };
-
-inline void MarkCompactMemoryManager::updatePointer(ManagedObject *&pointer) {
-    pointer = (ManagedObject *)((byte *)pointer + delta);
-}

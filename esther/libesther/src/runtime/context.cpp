@@ -67,7 +67,7 @@ Ptr<Context> Context::childContext(Ptr<Object> self, Ptr<Object> here) {
     return new Context(self, here, this);
 }
 
-void Context::mapOnReferences(const std::function<void(ManagedObject *&)> &f) {
+void Context::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (parent)
         f(reinterpret_cast<ManagedObject *&>(parent));
 
