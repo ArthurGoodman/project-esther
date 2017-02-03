@@ -33,7 +33,7 @@ private:
 
 template <class T>
 Array<T> *Array<T>::create(int size) {
-    Array<T> *array = static_cast<Array<T> *>(MemoryManager::instance()->allocate(sizeof(Array) + size * sizeof(T)));
+    Array<T> *array = static_cast<Array<T> *>(MemoryManager::allocate(sizeof(Array) + size * sizeof(T)));
     new (array) Array<T>(size);
     new (**array) T[size];
     return array;

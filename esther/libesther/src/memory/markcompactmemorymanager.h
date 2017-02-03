@@ -4,6 +4,8 @@
 #include "memory/managedobject.h"
 
 class MarkCompactMemoryManager {
+    static const int InitialCapacity = 1 << 10;
+
 public:
     MarkCompactMemoryManager();
     ~MarkCompactMemoryManager();
@@ -19,15 +21,13 @@ private:
     static void finalize();
 
     static void updatePointers();
-    static void updatePointer(ManagedObject *&pointer);
 
     static void mark();
     static void compact();
 
-    static void updatePointers(ManagedObject *object);
-    static void forwardPointers(ManagedObject *object);
     static void mark(ManagedObject *object);
 
+    static void updateReference(ManagedObject *&ref);
     static void markReference(ManagedObject *&ref);
     static void forwardReference(ManagedObject *&ref);
 };

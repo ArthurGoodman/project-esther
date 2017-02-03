@@ -59,7 +59,7 @@ void MarkCompactMemoryManager::reallocate() {
 }
 
 void MarkCompactMemoryManager::initialize() {
-    memory = new ByteArray(1 << 10);
+    memory = new ByteArray(InitialCapacity);
     objectCount = 0;
     delta = 0;
 }
@@ -90,15 +90,11 @@ void MarkCompactMemoryManager::updatePointers() {
     byte *object = memory->getData();
 
     for (int i = 0; i < objectCount; i++, object += reinterpret_cast<ManagedObject *>(object)->getSize())
-        updatePointers(reinterpret_cast<ManagedObject *>(object));
+        reinterpret_cast<ManagedObject *>(object)->mapOnReferences(updateReference);
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->pointer)
-            updatePointer(p->pointer);
-}
-
-void MarkCompactMemoryManager::updatePointer(ManagedObject *&pointer) {
-    pointer = reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(pointer) + delta);
+            updateReference(p->pointer);
 }
 
 void MarkCompactMemoryManager::mark() {
@@ -121,11 +117,11 @@ void MarkCompactMemoryManager::compact() {
 
     for (int i = 0; i < objectCount; i++, object += reinterpret_cast<ManagedObject *>(object)->getSize())
         if (reinterpret_cast<ManagedObject *>(object)->hasFlag(ManagedObject::FlagMark))
-            forwardPointers(reinterpret_cast<ManagedObject *>(object));
+            reinterpret_cast<ManagedObject *>(object)->mapOnReferences(forwardReference);
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->pointer && p->pointer->hasFlag(ManagedObject::FlagMark))
-            p->pointer = p->pointer->getForwardAddress();
+            forwardReference(p->pointer);
 
     object = memory->getData();
 
@@ -153,18 +149,13 @@ void MarkCompactMemoryManager::compact() {
     objectCount -= freeCount;
 }
 
-void MarkCompactMemoryManager::updatePointers(ManagedObject *object) {
-    object->mapOnReferences(updatePointer);
-}
-
-void MarkCompactMemoryManager::forwardPointers(ManagedObject *object) {
-    object->mapOnReferences(forwardReference);
-}
-
 void MarkCompactMemoryManager::mark(ManagedObject *object) {
     object->setFlag(ManagedObject::FlagMark);
-
     object->mapOnReferences(markReference);
+}
+
+void MarkCompactMemoryManager::updateReference(ManagedObject *&ref) {
+    ref = reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(ref) + delta);
 }
 
 void MarkCompactMemoryManager::markReference(ManagedObject *&ref) {

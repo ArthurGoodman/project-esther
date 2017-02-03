@@ -3,7 +3,7 @@
 #include "memory/memorymanager.h"
 
 StaticObject *StaticObject::create(int refCount) {
-    ManagedObject *object = MemoryManager::instance()->allocate(sizeof(StaticObject) + refCount * sizeof(ManagedObject *));
+    ManagedObject *object = MemoryManager::allocate(sizeof(StaticObject) + refCount * sizeof(ManagedObject *));
     new (object) StaticObject(refCount);
     new (reinterpret_cast<byte *>(object) + sizeof(StaticObject)) ManagedObject *[refCount] { 0 };
     return static_cast<StaticObject *>(object);

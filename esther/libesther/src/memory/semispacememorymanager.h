@@ -1,33 +1,30 @@
-//#pragma once
+#pragma once
 
-//#include "common/bytearray.h"
+#include "common/bytearray.h"
 
-//class ManagedObject;
+class ManagedObject;
 
-//class SemispaceMemoryManager {
-//    static const int InitialCapacity = 1 << 10;
+class SemispaceMemoryManager {
+    static const int InitialCapacity = 1 << 10;
 
-//    ByteArray memory;
-//    int objectCount, memoryUsed, capacity, delta;
+public:
+    SemispaceMemoryManager();
+    ~SemispaceMemoryManager();
 
-//    byte *toSpace, *fromSpace, *allocPtr;
+    static ManagedObject *allocate(uint size, int count = 1);
+    static void free(ManagedObject *p);
 
-//public:
-//    SemispaceMemoryManager();
-//    ~SemispaceMemoryManager();
+    static void collectGarbage();
+    static void reallocate();
 
-//    static ManagedObject *allocate(uint size, int count = 1);
-//    static void free(ManagedObject *p);
+private:
+    static void initialize();
+    static void finalize();
 
-//    static void collectGarbage();
-//    static void reallocate();
+    static bool enoughSpace(int size);
 
-//private:
-//    void initialize();
-//    void finalize();
+    static ManagedObject *copy(ManagedObject *object);
+    static void expand();
 
-//    bool enoughSpace(int size) const;
-
-//    ManagedObject *copy(ManagedObject *object);
-//    void expand();
-//};
+    static void updateReference(ManagedObject *&ref);
+};

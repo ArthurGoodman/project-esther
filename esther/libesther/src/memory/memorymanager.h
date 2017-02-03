@@ -5,9 +5,9 @@
 #include "memory/semispacememorymanager.h"
 
 class MemoryManager : public MarkCompactMemoryManager {
-public:
-    static MemoryManager *instance();
+    static MemoryManager instance;
 
+public:
     template <class T>
     T *allocateArray(uint size);
 };

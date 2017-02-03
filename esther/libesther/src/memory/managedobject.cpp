@@ -3,7 +3,7 @@
 #include "memory/memorymanager.h"
 
 void *ManagedObject::operator new(uint size) noexcept {
-    return static_cast<void *>(MemoryManager::instance()->allocate(size));
+    return static_cast<void *>(MemoryManager::allocate(size));
 }
 
 void *ManagedObject::operator new(uint, void *p) noexcept {
@@ -11,12 +11,12 @@ void *ManagedObject::operator new(uint, void *p) noexcept {
 }
 
 void ManagedObject::operator delete(void *p) noexcept {
-    MemoryManager::instance()->free(static_cast<ManagedObject *>(p));
+    MemoryManager::free(static_cast<ManagedObject *>(p));
 }
 
 ManagedObject::ManagedObject()
     : flags(0)
-    , forwardAddress(0) {
+    , forwardAddress(nullptr) {
 }
 
 ManagedObject::~ManagedObject() {

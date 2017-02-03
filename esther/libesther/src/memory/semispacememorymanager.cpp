@@ -1,127 +1,139 @@
-//#include "semispacememorymanager.h"
+#include "semispacememorymanager.h"
 
-//#include "memory/pointer.h"
-//#include "memory/managedobject.h"
+#include "memory/pointer.h"
+#include "memory/managedobject.h"
 
-//#include <cstring>
-//#include <iostream>
+#include <cstring>
+#include <iostream>
 
-//SemispaceMemoryManager::SemispaceMemoryManager()
-//    : objectCount(0)
-//    , memoryUsed(0)
-//    , capacity(InitialCapacity)
-//    , delta(0) {
-//    initialize();
-//}
+static ByteArray *memory;
+static int objectCount, memoryUsed, capacity, delta;
 
-//SemispaceMemoryManager::~SemispaceMemoryManager() {
-//    finalize();
-//}
+static byte *toSpace, *fromSpace, *allocPtr;
 
-//ManagedObject *SemispaceMemoryManager::allocate(uint size, int count) {
-//#if VERBOSE_GC
-//    std::cout << "SemispaceMemoryManager::allocate(size=" << size << ")\n" << std::flush;
-//#endif
+SemispaceMemoryManager::SemispaceMemoryManager() {
+    initialize();
+}
 
-//    if (!enoughSpace(size))
-//        collectGarbage();
+SemispaceMemoryManager::~SemispaceMemoryManager() {
+    finalize();
+}
 
-//    if (!enoughSpace(size))
-//        expand();
-//    else
-//        delta = 0;
+ManagedObject *SemispaceMemoryManager::allocate(uint size, int count) {
+#if VERBOSE_GC
+    std::cout << "SemispaceMemoryManager::allocate(size=" << size << ")\n" << std::flush;
+#endif
 
-//    ManagedObject *object = reinterpret_cast<ManagedObject *>(allocPtr);
-//    allocPtr += size;
+    if (!enoughSpace(size))
+        collectGarbage();
 
-//    objectCount += count;
-//    memoryUsed += size;
+    if (!enoughSpace(size))
+        expand();
+    else
+        delta = 0;
 
-//    return object;
-//}
+    ManagedObject *object = reinterpret_cast<ManagedObject *>(allocPtr);
+    allocPtr += size;
 
-//void SemispaceMemoryManager::free(ManagedObject *) {
-//}
+    objectCount += count;
+    memoryUsed += size;
 
-//void SemispaceMemoryManager::collectGarbage() {
-//#if VERBOSE_GC
-//    std::cout << "\nSemispaceMemoryManager::collectGarbage()\n" << std::flush;
-//    int oldSize = memoryUsed, oldObjectCount = objectCount;
-//#endif
+    return object;
+}
 
-//    std::swap(fromSpace, toSpace);
-//    allocPtr = toSpace;
+void SemispaceMemoryManager::free(ManagedObject *) {
+}
 
-//    objectCount = 0;
-//    memoryUsed = 0;
+void SemispaceMemoryManager::collectGarbage() {
+#if VERBOSE_GC
+    std::cout << "\nSemispaceMemoryManager::collectGarbage()\n" << std::flush;
+    int oldSize = memoryUsed, oldObjectCount = objectCount;
+#endif
 
-//    for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
-//        if (p->pointer)
-//            p->pointer = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(p->pointer) + delta));
+    std::swap(fromSpace, toSpace);
+    allocPtr = toSpace;
 
-//#if VERBOSE_GC
-//    std::cout << "//freed=" << oldSize - memoryUsed << " freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
-//#endif
-//}
+    objectCount = 0;
+    memoryUsed = 0;
 
-//void SemispaceMemoryManager::reallocate() {
-//}
+    for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
+        if (p->pointer)
+            p->pointer = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(p->pointer) + delta));
 
-//void SemispaceMemoryManager::initialize() {
-//    toSpace = memory.allocate(capacity);
-//    fromSpace = toSpace + capacity / 2;
-//    allocPtr = toSpace;
-//}
+#if VERBOSE_GC
+    std::cout << "//freed=" << oldSize - memoryUsed << " freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
+#endif
+}
 
-//void SemispaceMemoryManager::finalize() {
-//#if VERBOSE_GC
-//    std::cout << "\nObject count: " << objectCount << "\n" << std::flush;
-//    std::cout << "Memory used: " << memoryUsed << "\n" << std::flush;
-//    std::cout << "Total memory: " << memory.getCapacity() << "\n" << std::flush;
-//    std::cout << "\nSemispaceMemoryManager::finalize()\n" << std::flush;
-//#endif
-//}
+void SemispaceMemoryManager::reallocate() {
+}
 
-//bool SemispaceMemoryManager::enoughSpace(int size) const {
-//    return allocPtr + size <= toSpace + capacity / 2;
-//}
+void SemispaceMemoryManager::initialize() {
+    memory = new ByteArray;
 
-//ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
-//    if (object->getForwardAddress() == 0) {
-//        objectCount++;
-//        memoryUsed += object->getSize();
+    objectCount = 0;
+    memoryUsed = 0;
+    capacity = InitialCapacity;
+    delta = 0;
 
-//        ManagedObject *newObject = reinterpret_cast<ManagedObject *>(allocPtr);
-//        allocPtr += object->getSize();
+    toSpace = memory->allocate(capacity);
+    fromSpace = toSpace + capacity / 2;
+    allocPtr = toSpace;
+}
 
-//        memcpy(newObject, object, object->getSize());
+void SemispaceMemoryManager::finalize() {
+#if VERBOSE_GC
+    std::cout << "\nObject count: " << objectCount << "\n" << std::flush;
+    std::cout << "Memory used: " << memoryUsed << "\n" << std::flush;
+    std::cout << "Total memory: " << memory->getCapacity() << "\n" << std::flush;
+    std::cout << "\nSemispaceMemoryManager::finalize()\n" << std::flush;
+#endif
 
-//        object->setForwardAddress(newObject);
+    delete memory;
+}
 
-//        newObject->mapOnReferences([this](ManagedObject *&ref) {
-//            ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(ref) + delta));
-//        });
-//    }
+bool SemispaceMemoryManager::enoughSpace(int size) {
+    return allocPtr + size <= toSpace + capacity / 2;
+}
 
-//    return object->getForwardAddress();
-//}
+ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
+    if (object->getForwardAddress() == nullptr) {
+        objectCount++;
+        memoryUsed += object->getSize();
 
-//void SemispaceMemoryManager::expand() {
-//#if VERBOSE_GC
-//    std::cout << "SemispaceMemoryManager::expand()" << std::flush;
-//#endif
+        ManagedObject *newObject = reinterpret_cast<ManagedObject *>(allocPtr);
+        allocPtr += object->getSize();
 
-//    byte *oldData = memory.getData();
+        memcpy(newObject, object, object->getSize());
 
-//    fromSpace = memory.allocate(capacity);
-//    toSpace = fromSpace - capacity;
-//    capacity *= 2;
+        object->setForwardAddress(newObject);
 
-//    delta = memory.getData() - oldData;
+        newObject->mapOnReferences(updateReference);
+    }
 
-//#if VERBOSE_GC
-//    std::cout << " //capacity=" << capacity << ", delta=" << delta << "\n" << std::flush;
-//#endif
+    return object->getForwardAddress();
+}
 
-//    collectGarbage();
-//}
+void SemispaceMemoryManager::expand() {
+#if VERBOSE_GC
+    std::cout << "SemispaceMemoryManager::expand()" << std::flush;
+#endif
+
+    byte *oldData = memory->getData();
+
+    fromSpace = memory->allocate(capacity);
+    toSpace = fromSpace - capacity;
+    capacity *= 2;
+
+    delta = memory->getData() - oldData;
+
+#if VERBOSE_GC
+    std::cout << " //capacity=" << capacity << ", delta=" << delta << "\n" << std::flush;
+#endif
+
+    collectGarbage();
+}
+
+void SemispaceMemoryManager::updateReference(ManagedObject *&ref) {
+    ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(ref) + delta));
+}
