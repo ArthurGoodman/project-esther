@@ -74,8 +74,22 @@ void IO::write(const std::string &data) {
     std::cout << data;
 }
 
+void IO::write(const char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+    write(Utility::vformat(fmt, ap));
+    va_end(ap);
+}
+
 void IO::writeLine(const std::string &data) {
     std::cout << data << std::endl;
+}
+
+void IO::writeLine(const char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+    writeLine(Utility::vformat(fmt, ap));
+    va_end(ap);
 }
 
 std::string IO::scan() {

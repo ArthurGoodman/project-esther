@@ -4,7 +4,8 @@
 
 #include "common/config.h"
 #include "common/bytearray.h"
-#include "memory/pointer.h"
+#include "common/io.h"
+#include "memory/ptr.h"
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
 
@@ -26,7 +27,7 @@ MarkCompactMemoryManager::~MarkCompactMemoryManager() {
 
 ManagedObject *MarkCompactMemoryManager::allocate(size_t size, size_t count) {
 #if VERBOSE_GC
-    std::cout << "MarkCompactMemoryManager::allocate(size=" << size << ")\n" << std::flush;
+    IO::writeLine("MarkCompactMemoryManager::allocate(size=%u)", size);
 #endif
 
     if (!memory->enoughSpace(size))
@@ -49,7 +50,7 @@ void MarkCompactMemoryManager::free(ManagedObject *) {
 
 void MarkCompactMemoryManager::collectGarbage() {
 #if VERBOSE_GC
-    std::cout << "\nMarkCompactMemoryManager::collectGarbage()\n" << std::flush;
+    IO::writeLine("\nMarkCompactMemoryManager::collectGarbage()");
     size_t oldSize = memory->getSize(), oldObjectCount = objectCount;
 #endif
 
@@ -57,7 +58,7 @@ void MarkCompactMemoryManager::collectGarbage() {
     compact();
 
 #if VERBOSE_GC
-    std::cout << "//freed=" << oldSize - memory->getSize() << ", freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
+    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - memory->getSize(), oldObjectCount - objectCount, objectCount);
 #endif
 }
 
@@ -74,10 +75,10 @@ void MarkCompactMemoryManager::initialize() {
 
 void MarkCompactMemoryManager::finalize() {
 #if VERBOSE_GC
-    std::cout << "\nObject count: " << objectCount << "\n" << std::flush;
-    std::cout << "Memory used: " << memory->getSize() << "\n" << std::flush;
-    std::cout << "Total memory: " << memory->getCapacity() << "\n" << std::flush;
-    std::cout << "\nMarkCompactMemoryManager::finalize()\n" << std::flush;
+    IO::writeLine("\nObject count: %u", objectCount);
+    IO::writeLine("Memory used: %u", memory->getSize());
+    IO::writeLine("Total memory: %u", memory->getCapacity());
+    IO::writeLine("\nSemispaceMemoryManager::finalize()");
 #endif
 
     uint8_t *object = memory->getData();
@@ -92,7 +93,7 @@ void MarkCompactMemoryManager::finalize() {
 
 void MarkCompactMemoryManager::updatePointers() {
 #if VERBOSE_GC
-    std::cout << "MarkCompactMemoryManager::updatePointers() //delta=" << delta << "\n\n" << std::flush;
+    IO::writeLine("MarkCompactMemoryManager::updatePointers() //delta=%i\n", delta);
 #endif
 
     uint8_t *object = memory->getData();
@@ -101,14 +102,14 @@ void MarkCompactMemoryManager::updatePointers() {
         reinterpret_cast<ManagedObject *>(object)->mapOnReferences(updateReference);
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
-        if (p->pointer)
-            updateReference(p->pointer);
+        if (p->ptr)
+            updateReference(p->ptr);
 }
 
 void MarkCompactMemoryManager::mark() {
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
-        if (p->pointer && !p->pointer->hasFlag(ManagedObject::FlagMark))
-            mark(p->pointer);
+        if (p->ptr && !p->ptr->hasFlag(ManagedObject::FlagMark))
+            mark(p->ptr);
 }
 
 void MarkCompactMemoryManager::compact() {
@@ -128,8 +129,8 @@ void MarkCompactMemoryManager::compact() {
             reinterpret_cast<ManagedObject *>(object)->mapOnReferences(forwardReference);
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
-        if (p->pointer && p->pointer->hasFlag(ManagedObject::FlagMark))
-            forwardReference(p->pointer);
+        if (p->ptr && p->ptr->hasFlag(ManagedObject::FlagMark))
+            forwardReference(p->ptr);
 
     object = memory->getData();
 

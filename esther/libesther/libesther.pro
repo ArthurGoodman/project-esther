@@ -89,16 +89,15 @@ SOURCES += \
     src/memory/markcompactmemorymanager.cpp \
     src/memory/memorymanager.cpp \
     src/memory/nomemorymanager.cpp \
-    src/memory/pointer.cpp \
     src/memory/semispacememorymanager.cpp \
     src/memory/staticobject.cpp \
     src/collections/array.cpp \
     src/collections/hashmap.cpp \
-    src/collections/list.cpp \
     src/collections/map.cpp \
     src/collections/sherwoodmap.cpp \
     src/common/log.cpp \
-    src/esther.cpp
+    src/esther.cpp \
+    src/memory/ptr.cpp
 
 HEADERS += \
     src/common/bytearray.h \
@@ -185,17 +184,16 @@ HEADERS += \
     src/memory/markcompactmemorymanager.h \
     src/memory/memorymanager.h \
     src/memory/nomemorymanager.h \
-    src/memory/pointer.h \
     src/memory/semispacememorymanager.h \
     src/memory/staticobject.h \
     src/collections/array.h \
     src/collections/hashmap.h \
-    src/collections/list.h \
     src/collections/map.h \
     src/collections/sherwoodmap.h \
     src/common/config.h \
     src/common/log.h \
-    src/esther.h
+    src/esther.h \
+    src/memory/ptr.h
 
 OTHER_FILES += \
     src/common/definitions/keywords.def \

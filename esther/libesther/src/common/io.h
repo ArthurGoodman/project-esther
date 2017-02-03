@@ -24,7 +24,10 @@ public:
     static void closeAllFiles();
 
     static void write(const std::string &data);
+    static void write(const char *fmt, ...);
+
     static void writeLine(const std::string &data);
+    static void writeLine(const char *fmt, ...);
 
     static std::string scan();
     static std::string scanLine();

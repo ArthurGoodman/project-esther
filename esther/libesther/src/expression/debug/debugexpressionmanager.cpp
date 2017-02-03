@@ -3,7 +3,7 @@
 #include "common/utility.h"
 #include "variant/variant.h"
 #include "runtime/class.h"
-#include "memory/pointer.h"
+#include "memory/ptr.h"
 #include "expression/debug/debugexpression.h"
 #include "expression/debug/literaldebugexpression.h"
 

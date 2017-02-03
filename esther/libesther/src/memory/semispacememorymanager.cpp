@@ -5,7 +5,8 @@
 
 #include "common/config.h"
 #include "common/bytearray.h"
-#include "memory/pointer.h"
+#include "common/io.h"
+#include "memory/ptr.h"
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
 
@@ -28,7 +29,7 @@ SemispaceMemoryManager::~SemispaceMemoryManager() {
 
 ManagedObject *SemispaceMemoryManager::allocate(size_t size, size_t count) {
 #if VERBOSE_GC
-    std::cout << "SemispaceMemoryManager::allocate(size=" << size << ")\n" << std::flush;
+    IO::writeLine("SemispaceMemoryManager::allocate(size=%u)", size);
 #endif
 
     if (!enoughSpace(size))
@@ -53,7 +54,7 @@ void SemispaceMemoryManager::free(ManagedObject *) {
 
 void SemispaceMemoryManager::collectGarbage() {
 #if VERBOSE_GC
-    std::cout << "\nSemispaceMemoryManager::collectGarbage()\n" << std::flush;
+    IO::writeLine("\nSemispaceMemoryManager::collectGarbage()");
     size_t oldSize = memoryUsed;
 #endif
 
@@ -66,8 +67,8 @@ void SemispaceMemoryManager::collectGarbage() {
     memoryUsed = 0;
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
-        if (p->pointer)
-            updateReference(p->pointer);
+        if (p->ptr)
+            updateReference(p->ptr);
 
     uint8_t *object = fromSpace;
 
@@ -79,7 +80,7 @@ void SemispaceMemoryManager::collectGarbage() {
     }
 
 #if VERBOSE_GC
-    std::cout << "//freed=" << oldSize - memoryUsed << " freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
+    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
 #endif
 }
 
@@ -101,10 +102,10 @@ void SemispaceMemoryManager::initialize() {
 
 void SemispaceMemoryManager::finalize() {
 #if VERBOSE_GC
-    std::cout << "\nObject count: " << objectCount << "\n" << std::flush;
-    std::cout << "Memory used: " << memoryUsed << "\n" << std::flush;
-    std::cout << "Total memory: " << memory->getCapacity() << "\n" << std::flush;
-    std::cout << "\nSemispaceMemoryManager::finalize()\n" << std::flush;
+    IO::writeLine("\nObject count: %u", objectCount);
+    IO::writeLine("Memory used: %u", memoryUsed);
+    IO::writeLine("Total memory: %u", memory->getCapacity());
+    IO::writeLine("\nSemispaceMemoryManager::finalize()");
 #endif
 
     uint8_t *object = toSpace;
@@ -141,7 +142,7 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
 
 void SemispaceMemoryManager::expand() {
 #if VERBOSE_GC
-    std::cout << "SemispaceMemoryManager::expand()" << std::flush;
+    IO::write("SemispaceMemoryManager::expand()");
 #endif
 
     uint8_t *oldData = memory->getData();
@@ -153,7 +154,7 @@ void SemispaceMemoryManager::expand() {
     delta = memory->getData() - oldData;
 
 #if VERBOSE_GC
-    std::cout << " //capacity=" << capacity << ", delta=" << delta << "\n" << std::flush;
+    IO::writeLine(" //capacity=%u, delta=%i", capacity, delta);
 #endif
 
     collectGarbage();

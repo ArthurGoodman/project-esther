@@ -1,10 +1,11 @@
-#include "esther.h"
+#include <esther.h>
 
 int main(int argc, char **argv) {
-    // if (argc < 2) return 0;
+    // if (argc < 2)
+    //     return 0;
 
-    std::string fileName = argc < 2 ? "scripts/script.es" : argv[1];
-    Esther::runFile(fileName);
+    es::Esther esther;
+    esther.runFile(argc < 2 ? "scripts/script.es" : argv[1]);
 
     return 0;
 }

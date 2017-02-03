@@ -6,7 +6,7 @@
 
 namespace es {
 
-ByteArray::ByteArray(uint32_t initialCapacity)
+ByteArray::ByteArray(size_t initialCapacity)
     : size(0)
     , capacity(0)
     , data(0) {
@@ -55,9 +55,9 @@ ByteArray &ByteArray::operator=(ByteArray &&array) {
     return *this;
 }
 
-uint8_t *ByteArray::allocate(uint32_t count) {
+uint8_t *ByteArray::allocate(size_t count) {
     if (!enoughSpace(count)) {
-        uint32_t newCapacity = Utility::ceilToPowerOf2(size + count);
+        size_t newCapacity = Utility::ceilToPowerOf2(size + count);
 
         uint8_t *newData = (uint8_t *)realloc(data, newCapacity);
 
@@ -93,7 +93,7 @@ uint8_t &ByteArray::operator[](int index) {
     return data[index];
 }
 
-bool ByteArray::free(uint32_t count) {
+bool ByteArray::free(size_t count) {
     if (size < count)
         return false;
 
@@ -109,7 +109,7 @@ void ByteArray::release() {
     data = 0;
 }
 
-bool ByteArray::enoughSpace(uint32_t count) const {
+bool ByteArray::enoughSpace(size_t count) const {
     return size + count <= capacity;
 }
 
@@ -117,11 +117,11 @@ uint8_t *ByteArray::getData() const {
     return data;
 }
 
-uint32_t ByteArray::getSize() const {
+size_t ByteArray::getSize() const {
     return size;
 }
 
-uint32_t ByteArray::getCapacity() const {
+size_t ByteArray::getCapacity() const {
     return capacity;
 }
 }

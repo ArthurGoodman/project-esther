@@ -318,7 +318,7 @@ bool Variant::isNull() const {
 }
 
 Variant Variant::operator+(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -339,7 +339,7 @@ Variant Variant::operator+(const Variant &v) const {
 }
 
 Variant Variant::operator-(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -357,7 +357,7 @@ Variant Variant::operator-(const Variant &v) const {
 }
 
 Variant Variant::operator*(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -375,7 +375,7 @@ Variant Variant::operator*(const Variant &v) const {
 }
 
 Variant Variant::operator/(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -393,7 +393,7 @@ Variant Variant::operator/(const Variant &v) const {
 }
 
 Variant Variant::operator%(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -411,7 +411,7 @@ Variant Variant::operator%(const Variant &v) const {
 }
 
 Variant Variant::pow(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -429,7 +429,7 @@ Variant Variant::pow(const Variant &v) const {
 }
 
 bool Variant::operator<(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -450,7 +450,7 @@ bool Variant::operator<(const Variant &v) const {
 }
 
 bool Variant::operator<=(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -471,7 +471,7 @@ bool Variant::operator<=(const Variant &v) const {
 }
 
 bool Variant::operator>(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -492,7 +492,7 @@ bool Variant::operator>(const Variant &v) const {
 }
 
 bool Variant::operator>=(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -513,7 +513,7 @@ bool Variant::operator>=(const Variant &v) const {
 }
 
 bool Variant::operator==(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:
@@ -534,7 +534,7 @@ bool Variant::operator==(const Variant &v) const {
 }
 
 bool Variant::operator!=(const Variant &v) const {
-    std::pair<Variant, Variant> c = coerce(*this, v);
+    const std::pair<Variant, Variant> &c = coerce(*this, v);
 
     switch (c.first.getType()) {
     case Char:

@@ -4,7 +4,7 @@
 #include <list>
 
 #include "memory/managedobject.h"
-#include "memory/pointer.h"
+#include "memory/ptr.h"
 
 namespace es {
 

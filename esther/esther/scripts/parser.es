@@ -172,8 +172,13 @@ class Parser {
         if (node == null)
             node = new ValueNode(0)
 
-        if (@debugAST)
+        if (@debugLexer)
+            console.writeLine("");
+
+        if (@debugAST) {
             node.inspect("")
+            console.writeLine("");
+        }
 
         node
     }

@@ -8,7 +8,7 @@
 
 #include "variant/variant.h"
 #include "common/source.h"
-#include "memory/pointer.h"
+#include "memory/ptr.h"
 
 namespace es {
 
@@ -31,21 +31,21 @@ class ClassClass;
 class FunctionClass;
 
 class Esther {
-    Ptr<Object> mainObject = nullptr;
-    Ptr<RootClass> objectClass = nullptr;
+    Ptr<Object> mainObject;
+    Ptr<RootClass> objectClass;
 
-    Ptr<Object> trueObject = nullptr;
-    Ptr<Object> falseObject = nullptr;
-    Ptr<Object> nullObject = nullptr;
+    Ptr<Object> trueObject;
+    Ptr<Object> falseObject;
+    Ptr<Object> nullObject;
 
-    Ptr<NumericClass> numericClass = nullptr;
-    Ptr<CharacterClass> characterClass = nullptr;
-    Ptr<FloatClass> floatClass = nullptr;
-    Ptr<IntegerClass> integerClass = nullptr;
-    Ptr<StringClass> stringClass = nullptr;
+    Ptr<NumericClass> numericClass;
+    Ptr<CharacterClass> characterClass;
+    Ptr<FloatClass> floatClass;
+    Ptr<IntegerClass> integerClass;
+    Ptr<StringClass> stringClass;
 
-    Ptr<ClassClass> classClass = nullptr;
-    Ptr<FunctionClass> functionClass = nullptr;
+    Ptr<ClassClass> classClass;
+    Ptr<FunctionClass> functionClass;
 
     std::map<std::string, Ptr<RootClass>> rootClasses;
 

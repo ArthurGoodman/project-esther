@@ -5,7 +5,7 @@ namespace es {
 template <class T>
 class Ptr {
 public:
-    T *pointer;
+    T *ptr;
     Ptr *prev, *next;
 
 public:
@@ -30,7 +30,7 @@ extern Ptr<void> *pointers;
 
 template <class T>
 Ptr<T>::Ptr(T *p)
-    : pointer(p)
+    : ptr(p)
     , prev(nullptr)
     , next(nullptr) {
     link();
@@ -38,7 +38,7 @@ Ptr<T>::Ptr(T *p)
 
 template <class T>
 Ptr<T>::Ptr(const Ptr<T> &p)
-    : pointer(p)
+    : ptr(p)
     , prev(nullptr)
     , next(nullptr) {
     link();
@@ -51,34 +51,34 @@ Ptr<T>::~Ptr() {
 
 template <class T>
 Ptr<T> &Ptr<T>::operator=(T *p) {
-    pointer = p;
+    ptr = p;
     return *this;
 }
 
 template <class T>
 Ptr<T> &Ptr<T>::operator=(const Ptr<T> &p) {
-    pointer = p.pointer;
+    ptr = p.ptr;
     return *this;
 }
 
 template <class T>
 T *&Ptr<T>::operator*() {
-    return pointer;
+    return ptr;
 }
 
 template <class T>
 T *Ptr<T>::operator*() const {
-    return pointer;
+    return ptr;
 }
 
 template <class T>
 T *Ptr<T>::operator->() const {
-    return pointer;
+    return ptr;
 }
 
 template <class T>
 Ptr<T>::operator T *() const {
-    return pointer;
+    return ptr;
 }
 
 template <class T>
