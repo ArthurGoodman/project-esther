@@ -1,10 +1,12 @@
 #pragma once
 
-#include "common/common.h"
+#include "common/config.h"
 
 #if HEAP_VARIANT
 
 #include "variant/variantprivate.h"
+
+namespace es {
 
 class FloatVariant : public VariantPrivate {
     double value;
@@ -21,5 +23,6 @@ public:
     char toChar() const;
     std::string toString() const;
 };
+}
 
 #endif

@@ -1,4 +1,6 @@
-#include "errorexception.h"
+#include "exception/errorexception.h"
+
+namespace es {
 
 ErrorException::ErrorException(const std::string &message, Position position)
     : position(position)
@@ -15,4 +17,5 @@ Position ErrorException::getPosition() {
 
 void ErrorException::setPosition(Position position) {
     this->position = position;
+}
 }

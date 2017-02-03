@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+namespace es {
+
 class ManagedObject;
 
 class SemispaceMemoryManager {
@@ -11,7 +13,7 @@ public:
     SemispaceMemoryManager();
     ~SemispaceMemoryManager();
 
-    static ManagedObject *allocate(uint32_t size, int count = 1);
+    static ManagedObject *allocate(size_t size, size_t count = 1);
     static void free(ManagedObject *p);
 
     static void collectGarbage();
@@ -28,3 +30,4 @@ private:
 
     static void updateReference(ManagedObject *&ref);
 };
+}

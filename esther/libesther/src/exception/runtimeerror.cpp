@@ -1,4 +1,6 @@
-#include "runtimeerror.h"
+#include "exception/runtimeerror.h"
+
+namespace es {
 
 RuntimeError::RuntimeError(const std::string &message)
     : ErrorException(message) {
@@ -10,4 +12,5 @@ std::string RuntimeError::message() {
 
 void RuntimeError::raise() {
     throw this;
+}
 }

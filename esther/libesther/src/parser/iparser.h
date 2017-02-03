@@ -2,6 +2,8 @@
 
 #include "common/token.h"
 
+namespace es {
+
 class Expression;
 class Esther;
 
@@ -12,3 +14,4 @@ public:
     virtual ~IParser();
     virtual Expression *parse(Esther *esther, Tokens &tokens) = 0;
 };
+}

@@ -1,4 +1,4 @@
-#include "variant.h"
+#include "variant/variant.h"
 
 #if HEAP_VARIANT
 
@@ -7,6 +7,8 @@
 #include "variant/floatvariant.h"
 #include "variant/stringvariant.h"
 #include "variant/charvariant.h"
+
+namespace es {
 
 Variant::Variant()
     : data(new NullVariant) {
@@ -82,12 +84,15 @@ std::string Variant::toString() const {
 bool Variant::isNull() const {
     return getType() == Null;
 }
+}
 
 #else
 
 #include <cstring>
 
 #include "common/utility.h"
+
+namespace es {
 
 Variant::Variant()
     : type(Null) {
@@ -552,6 +557,7 @@ bool Variant::operator!=(const Variant &v) const {
 std::pair<Variant, Variant> Variant::coerce(const Variant &a, const Variant &b) {
     Type type = std::max(a.getType(), b.getType());
     return std::make_pair(a.convertTo(type), b.convertTo(type));
+}
 }
 
 #endif

@@ -1,8 +1,10 @@
-#include "function.h"
+#include "runtime/function.h"
 
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "common/utility.h"
+
+namespace es {
 
 std::string Function::getName() const {
     return *name;
@@ -37,4 +39,5 @@ Function::Function(Ptr<Class> objectClass, const std::string &name, int arity)
     : Object(objectClass)
     , name(new std::string(name))
     , arity(arity) {
+}
 }

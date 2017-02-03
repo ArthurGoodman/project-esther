@@ -1,8 +1,10 @@
-#include "blockexpression.h"
+#include "expression/ast/blockexpression.h"
 
 #include "common/common.h"
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 BlockExpression::BlockExpression(const std::list<Expression *> &nodes) {
     for (Expression *e : nodes)
@@ -26,4 +28,5 @@ Ptr<Object> BlockExpression::exec(Esther *esther) {
         value = e->eval(esther);
 
     return value;
+}
 }

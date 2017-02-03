@@ -1,12 +1,12 @@
 #pragma once
 
-#include "runtime/esther.h"
+#include <esther.h>
 
-class EstherStaticInterface {
+class Esther {
 public:
     static void run(const std::string &script);
     static void runFile(const std::string &fileName);
 
 private:
-    static Esther *esther();
+    static es::Esther *esther();
 };

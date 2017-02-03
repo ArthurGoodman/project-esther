@@ -1,8 +1,10 @@
-#include "stringclass.h"
+#include "runtime/rootclass/stringclass.h"
 
 #include "runtime/valueobject.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/nativefunction.h"
+
+namespace es {
 
 StringClass::StringClass(Esther *esther)
     : RootClass(esther, "String", esther->getObjectClass()) {
@@ -79,4 +81,5 @@ void StringClass::setupMethods(Esther *esther) {
 
 Ptr<Object> StringClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new ValueObject(esther, "");
+}
 }

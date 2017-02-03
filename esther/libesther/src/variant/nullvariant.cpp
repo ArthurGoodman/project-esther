@@ -1,6 +1,8 @@
-#include "nullvariant.h"
+#include "variant/nullvariant.h"
 
 #if HEAP_VARIANT
+
+namespace es {
 
 VariantPrivate *NullVariant::clone() const {
     return new NullVariant;
@@ -24,6 +26,7 @@ char NullVariant::toChar() const {
 
 std::string NullVariant::toString() const {
     return "";
+}
 }
 
 #endif

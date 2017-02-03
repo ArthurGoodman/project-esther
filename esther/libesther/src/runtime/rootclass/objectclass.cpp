@@ -1,9 +1,11 @@
-#include "objectclass.h"
+#include "runtime/rootclass/objectclass.h"
 
 #include "common/io.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/valueobject.h"
 #include "runtime/rootclass/stringclass.h"
+
+namespace es {
 
 ObjectClass::ObjectClass(Esther *esther)
     : RootClass(esther, "Object", nullptr) {
@@ -44,4 +46,5 @@ void ObjectClass::setupMethods(Esther *esther) {
 
 Ptr<Object> ObjectClass::createNewInstance(Esther *, const std::vector<Ptr<Object>> &) {
     return new Object(this);
+}
 }

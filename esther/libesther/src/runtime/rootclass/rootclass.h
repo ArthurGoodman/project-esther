@@ -6,6 +6,8 @@
 #include "runtime/class.h"
 #include "variant/variant.h"
 
+namespace es {
+
 class Esther;
 
 class RootClass : public Class {
@@ -23,3 +25,4 @@ protected:
     void defOper(Esther *esther, const std::string &name, Variant (*body)(const Variant &, const Variant &));
     void defPred(Esther *esther, const std::string &name, bool (*body)(const Variant &, const Variant &));
 };
+}

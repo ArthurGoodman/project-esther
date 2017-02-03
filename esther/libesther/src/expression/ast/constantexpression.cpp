@@ -1,4 +1,6 @@
-#include "constantexpression.h"
+#include "expression/ast/constantexpression.h"
+
+namespace es {
 
 ConstantExpression::ConstantExpression(Ptr<Object> value)
     : value(value) {
@@ -6,4 +8,5 @@ ConstantExpression::ConstantExpression(Ptr<Object> value)
 
 Ptr<Object> ConstantExpression::exec(Esther *) {
     return value;
+}
 }

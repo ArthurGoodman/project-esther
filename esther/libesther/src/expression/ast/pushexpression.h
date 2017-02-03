@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class PushExpression : public Expression {
     Expression *arg;
 
@@ -11,3 +13,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

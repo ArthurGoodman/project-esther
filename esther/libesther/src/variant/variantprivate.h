@@ -1,10 +1,12 @@
 #pragma once
 
-#include "common/common.h"
+#include "common/config.h"
 
 #if HEAP_VARIANT
 
 #include "variant/variant.h"
+
+namespace es {
 
 class VariantPrivate {
     friend class Variant;
@@ -22,5 +24,6 @@ private:
     virtual char toChar() const = 0;
     virtual std::string toString() const = 0;
 };
+}
 
 #endif

@@ -1,4 +1,4 @@
-#include "debugexpressionmanager.h"
+#include "expression/debug/debugexpressionmanager.h"
 
 #include "common/utility.h"
 #include "variant/variant.h"
@@ -8,6 +8,8 @@
 #include "expression/debug/literaldebugexpression.h"
 
 #if DEBUG_PARSER
+
+namespace es {
 
 std::vector<const char *> DebugExpressionManager::typenames = { "Null", "Character", "Integer", "Float", "String" };
 
@@ -217,6 +219,7 @@ Expression *DebugExpressionManager::Stack(int index) {
 
 DebugExpression *DebugExpressionManager::literal(const std::string &type, const std::string &value) {
     return new LiteralDebugExpression("<" + type + " : \"" + value + "\">");
+}
 }
 
 #endif

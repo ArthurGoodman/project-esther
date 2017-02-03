@@ -4,6 +4,8 @@
 #include <string>
 #include <memory>
 
+namespace es {
+
 class IO {
     static std::map<std::string, std::unique_ptr<std::fstream>> files;
 
@@ -29,3 +31,4 @@ public:
 
     static std::string fullPath(const std::string &partialPath);
 };
+}

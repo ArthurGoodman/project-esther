@@ -2,6 +2,8 @@
 
 #include "exception/errorexception.h"
 
+namespace es {
+
 class SyntaxError : public ErrorException {
 public:
     SyntaxError(const std::string &message, Position position);
@@ -9,3 +11,4 @@ public:
     std::string message() override;
     void raise() override;
 };
+}

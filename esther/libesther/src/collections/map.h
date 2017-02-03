@@ -2,6 +2,8 @@
 
 #include "memory/managedobject.h"
 
+namespace es {
+
 template <class K, class V>
 class Map : public ManagedObject {
 public:
@@ -21,4 +23,5 @@ V &Map<K, V>::operator[](const K &key) {
         return put(key, V());
 
     return get(key);
+}
 }

@@ -1,8 +1,10 @@
-#include "nomemorymanager.h"
+#include "memory/nomemorymanager.h"
 
 #include <memory>
 
-ManagedObject *NoMemoryManager::allocate(uint32_t size, int) {
+namespace es {
+
+ManagedObject *NoMemoryManager::allocate(size_t size, size_t) {
     return static_cast<ManagedObject *>(malloc(size));
 }
 
@@ -14,4 +16,5 @@ void NoMemoryManager::collectGarbage() {
 }
 
 void NoMemoryManager::reallocate() {
+}
 }

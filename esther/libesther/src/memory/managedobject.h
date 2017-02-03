@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+namespace es {
+
 class ManagedObject {
     uint32_t flags;
     ManagedObject *forwardAddress;
@@ -48,4 +50,5 @@ inline ManagedObject *ManagedObject::getForwardAddress() const {
 
 inline void ManagedObject::setForwardAddress(ManagedObject *forwardAddress) {
     this->forwardAddress = forwardAddress;
+}
 }

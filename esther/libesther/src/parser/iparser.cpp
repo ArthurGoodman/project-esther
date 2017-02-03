@@ -1,6 +1,8 @@
-#include "iparser.h"
+#include "parser/iparser.h"
 
 #include "parser/parser.h"
+
+namespace es {
 
 IParser *IParser::instance() {
     static Parser parser;
@@ -8,4 +10,5 @@ IParser *IParser::instance() {
 }
 
 IParser::~IParser() {
+}
 }

@@ -1,4 +1,4 @@
-#include "io.h"
+#include "common/io.h"
 
 #include <stdlib.h>
 #include <fstream>
@@ -7,6 +7,8 @@
 #include <cstdarg>
 
 #include "common/utility.h"
+
+namespace es {
 
 std::map<std::string, std::unique_ptr<std::fstream>> IO::files;
 
@@ -95,4 +97,5 @@ std::string IO::fullPath(const std::string &partialPath) {
         return path;
 
     return "";
+}
 }

@@ -1,8 +1,10 @@
-#include "functiondefinitionexpression.h"
+#include "expression/ast/functiondefinitionexpression.h"
 
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/interpretedfunction.h"
+
+namespace es {
 
 FunctionDefinitionExpression::FunctionDefinitionExpression(const std::string &name, const std::list<std::string> &params, Expression *body)
     : name(name)
@@ -16,4 +18,5 @@ FunctionDefinitionExpression::~FunctionDefinitionExpression() {
 
 Ptr<Object> FunctionDefinitionExpression::exec(Esther *esther) {
     return new InterpretedFunction(esther, name, params, body, esther->context());
+}
 }

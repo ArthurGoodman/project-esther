@@ -1,6 +1,8 @@
-#include "orexpression.h"
+#include "expression/ast/orexpression.h"
 
 #include "runtime/object.h"
+
+namespace es {
 
 OrExpression::OrExpression(Expression *self, Expression *arg)
     : self(self)
@@ -19,4 +21,5 @@ Ptr<Object> OrExpression::exec(Esther *esther) {
         return self;
 
     return arg->eval(esther);
+}
 }

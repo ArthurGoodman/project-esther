@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class BlockExpression : public Expression {
     std::list<Expression *> nodes;
 
@@ -12,3 +14,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

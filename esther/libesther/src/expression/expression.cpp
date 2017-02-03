@@ -1,7 +1,9 @@
 #include "expression/expression.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
 #include "exception/errorexception.h"
+
+namespace es {
 
 Expression::~Expression() {
 }
@@ -29,4 +31,5 @@ Position Expression::getPosition() const {
 
 void Expression::setPosition(Position position) {
     this->position = position;
+}
 }

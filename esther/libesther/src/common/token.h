@@ -4,6 +4,8 @@
 
 #include "common/position.h"
 
+namespace es {
+
 class Token {
     int id;
     std::string text;
@@ -31,3 +33,4 @@ public:
 };
 
 typedef std::list<Token> Tokens;
+}

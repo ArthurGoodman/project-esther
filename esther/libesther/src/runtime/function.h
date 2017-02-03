@@ -5,6 +5,8 @@
 #include "common/common.h"
 #include "runtime/object.h"
 
+namespace es {
+
 class Esther;
 
 class Function : public Object {
@@ -27,3 +29,4 @@ protected:
 protected:
     Function(Ptr<Class> objectClass, const std::string &name, int arity);
 };
+}

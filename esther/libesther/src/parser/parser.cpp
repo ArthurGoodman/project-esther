@@ -1,14 +1,16 @@
-#include "parser.h"
+#include "parser/parser.h"
 
 #include "expression/expression.h"
 #include "exception/syntaxerror.h"
 #include "variant/variant.h"
 #include "common/utility.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/context.h"
 #include "runtime/class.h"
 #include "runtime/function.h"
 #include "runtime/rootclass/classclass.h"
+
+namespace es {
 
 Expression *Parser::parse(Esther *esther, Tokens &tokens) {
     this->esther = esther;
@@ -518,4 +520,5 @@ Expression *Parser::term() {
         error("unexpected token '" + token->getText() + "'");
 
     return e;
+}
 }

@@ -4,6 +4,8 @@
 
 #include "runtime/object.h"
 
+namespace es {
+
 class Class : public Object {
     std::string *name;
     Class *superclass;
@@ -34,3 +36,4 @@ public:
 protected:
     virtual Ptr<Object> createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &args);
 };
+}

@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace es {
+
 class Position;
 
 class Source {
@@ -16,3 +18,4 @@ public:
 
     std::string quote(Position pos) const;
 };
+}

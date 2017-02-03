@@ -3,6 +3,8 @@
 #include <string>
 #include <list>
 
+namespace es {
+
 class Expression;
 class Object;
 class Variant;
@@ -36,3 +38,4 @@ public:
     static Expression *Self();
     static Expression *Stack(int index);
 };
+}

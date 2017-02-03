@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class IfExpression : public Expression {
     Expression *condition, *body, *elseBody;
 
@@ -12,3 +14,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

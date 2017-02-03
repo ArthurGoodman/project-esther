@@ -82,8 +82,6 @@ SOURCES += \
     src/expression/ast/attributeexpression.cpp \
     src/expression/ast/localassignmentexpression.cpp \
     src/expression/ast/callexpression.cpp \
-    src/estherstaticinterface.cpp \
-    src/runtime/esther.cpp \
     src/expression/ast/popexpression.cpp \
     src/expression/ast/pushexpression.cpp \
     src/expression/ast/stackexpression.cpp \
@@ -99,7 +97,8 @@ SOURCES += \
     src/collections/list.cpp \
     src/collections/map.cpp \
     src/collections/sherwoodmap.cpp \
-    src/common/log.cpp
+    src/common/log.cpp \
+    src/esther.cpp
 
 HEADERS += \
     src/common/bytearray.h \
@@ -179,8 +178,6 @@ HEADERS += \
     src/expression/ast/attributeexpression.h \
     src/expression/ast/localassignmentexpression.h \
     src/expression/ast/callexpression.h \
-    src/estherstaticinterface.h \
-    src/runtime/esther.h \
     src/expression/ast/popexpression.h \
     src/expression/ast/pushexpression.h \
     src/expression/ast/stackexpression.h \
@@ -197,7 +194,8 @@ HEADERS += \
     src/collections/map.h \
     src/collections/sherwoodmap.h \
     src/common/config.h \
-    src/common/log.h
+    src/common/log.h \
+    src/esther.h
 
 OTHER_FILES += \
     src/common/definitions/keywords.def \

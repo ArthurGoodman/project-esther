@@ -5,6 +5,8 @@
 
 #if DEBUG_PARSER
 
+namespace es {
+
 class LiteralDebugExpression : public DebugExpression {
     Variant value;
 
@@ -13,5 +15,6 @@ public:
 
     std::string toString() const override;
 };
+}
 
 #endif

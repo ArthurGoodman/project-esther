@@ -1,6 +1,8 @@
-#include "managedobject.h"
+#include "memory/managedobject.h"
 
 #include "memory/memorymanager.h"
+
+namespace es {
 
 void *ManagedObject::operator new(size_t size) noexcept {
     return static_cast<void *>(MemoryManager::allocate(size));
@@ -26,4 +28,5 @@ void ManagedObject::finalize() {
 }
 
 void ManagedObject::mapOnReferences(void (*)(ManagedObject *&)) {
+}
 }

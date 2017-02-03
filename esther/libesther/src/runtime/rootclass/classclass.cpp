@@ -1,6 +1,8 @@
-#include "classclass.h"
+#include "runtime/rootclass/classclass.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 ClassClass::ClassClass(Esther *esther)
     : RootClass(esther, "Class", nullptr) {
@@ -20,4 +22,5 @@ void ClassClass::setupMethods(Esther *esther) {
 
 Ptr<Object> ClassClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new Class(esther, "", esther->getObjectClass());
+}
 }

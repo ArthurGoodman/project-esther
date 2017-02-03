@@ -2,10 +2,10 @@
 
 #include <testset.h>
 
-#include "runtime/esther.h"
+#include <esther.h>
 
 class RuntimeTest : public unit::TestSet {
-    Esther esther;
+    es::Esther esther;
 
 public:
     RuntimeTest();

@@ -4,6 +4,8 @@
 #include "runtime/context.h"
 #include "expression/expression.h"
 
+namespace es {
+
 class InterpretedFunction : public Function {
     std::list<std::string> *params;
     Expression *body;
@@ -19,3 +21,4 @@ public:
 protected:
     Ptr<Object> execute(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) override;
 };
+}

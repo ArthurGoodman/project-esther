@@ -1,8 +1,10 @@
-#include "context.h"
+#include "runtime/context.h"
 
 #include "runtime/object.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/class.h"
+
+namespace es {
 
 Context::Context(Esther *esther)
     : parent(nullptr)
@@ -83,4 +85,5 @@ Context::Context(Ptr<Object> self, Ptr<Object> here, Ptr<Context> parent)
     : parent(parent)
     , self(self)
     , here(here) {
+}
 }

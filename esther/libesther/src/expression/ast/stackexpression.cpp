@@ -1,6 +1,8 @@
-#include "stackexpression.h"
+#include "expression/ast/stackexpression.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 StackExpression::StackExpression(int index)
     : index(index) {
@@ -8,4 +10,5 @@ StackExpression::StackExpression(int index)
 
 Ptr<Object> StackExpression::exec(Esther *esther) {
     return esther->top(index);
+}
 }

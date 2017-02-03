@@ -1,9 +1,11 @@
-#include "floatclass.h"
+#include "runtime/rootclass/floatclass.h"
 
 #include "runtime/valueobject.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/rootclass/numericclass.h"
 #include "runtime/nativefunction.h"
+
+namespace es {
 
 FloatClass::FloatClass(Esther *esther)
     : RootClass(esther, "Float", esther->getRootClass("Numeric")) {
@@ -44,4 +46,5 @@ void FloatClass::setupMethods(Esther *esther) {
 
 Ptr<Object> FloatClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new ValueObject(esther, 0.0);
+}
 }

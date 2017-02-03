@@ -2,6 +2,8 @@
 
 #include "collections/map.h"
 
+namespace es {
+
 template <class>
 class Array;
 
@@ -94,4 +96,5 @@ inline bool SherwoodMap<K, V>::Entry::isDeleted() {
 template <class K, class V>
 inline int SherwoodMap<K, V>::probeDistance(uint32_t hash, uint32_t index) const {
     return (index + capacity - (hash & mask)) & mask;
+}
 }

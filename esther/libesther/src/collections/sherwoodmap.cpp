@@ -1,7 +1,9 @@
-#include "sherwoodmap.h"
+#include "collections/sherwoodmap.h"
 
 #include "runtime/object.h"
 #include "collections/array.h"
+
+namespace es {
 
 template class SherwoodMap<uint32_t, Object *>;
 template class SherwoodMap<Object *, uint32_t>;
@@ -324,4 +326,5 @@ int SherwoodMap<K, V>::lookup(const K &key) const {
         index = (index + 1) & mask;
         dist++;
     }
+}
 }

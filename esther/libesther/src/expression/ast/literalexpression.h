@@ -3,6 +3,8 @@
 #include "expression/expression.h"
 #include "variant/variant.h"
 
+namespace es {
+
 class LiteralExpression : public Expression {
     Variant value;
 
@@ -12,3 +14,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

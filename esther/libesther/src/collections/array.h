@@ -3,6 +3,8 @@
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
 
+namespace es {
+
 template <class T>
 class Array : public ManagedObject {
     int arraySize;
@@ -86,4 +88,5 @@ int Array<T>::getSize() const {
 template <class T>
 Array<T>::Array(int size)
     : arraySize(size) {
+}
 }

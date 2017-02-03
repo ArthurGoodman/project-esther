@@ -1,6 +1,8 @@
-#include "token.h"
+#include "common/token.h"
 
 #include "common/utility.h"
+
+namespace es {
 
 Token::Token()
     : id(-1)
@@ -52,4 +54,5 @@ void Token::setPosition(Position pos) {
 
 std::string Token::inspect() const {
     return Utility::format("\"%s\" (%i, %i, %i)", text.c_str(), pos.getOffset(), pos.getLine(), pos.getColumn());
+}
 }

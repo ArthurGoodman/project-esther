@@ -1,6 +1,8 @@
-#include "interpretedfunction.h"
+#include "runtime/interpretedfunction.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Ptr<Context> context)
     : Function(esther->getRootClass("Function"), name, params.size())
@@ -37,4 +39,5 @@ Ptr<Object> InterpretedFunction::execute(Esther *esther, Ptr<Object> self, const
     esther->popContext();
 
     return value;
+}
 }

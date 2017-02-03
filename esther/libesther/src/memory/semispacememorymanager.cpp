@@ -1,4 +1,4 @@
-#include "semispacememorymanager.h"
+#include "memory/semispacememorymanager.h"
 
 #include <cstring>
 #include <iostream>
@@ -9,10 +9,14 @@
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
 
-static ByteArray *memory;
-static int objectCount, memoryUsed, capacity, delta;
+namespace {
+es::ByteArray *memory;
+size_t objectCount, memoryUsed, capacity;
+int delta;
+uint8_t *toSpace, *fromSpace, *allocPtr;
+}
 
-static uint8_t *toSpace, *fromSpace, *allocPtr;
+namespace es {
 
 SemispaceMemoryManager::SemispaceMemoryManager() {
     initialize();
@@ -22,7 +26,7 @@ SemispaceMemoryManager::~SemispaceMemoryManager() {
     finalize();
 }
 
-ManagedObject *SemispaceMemoryManager::allocate(uint32_t size, int count) {
+ManagedObject *SemispaceMemoryManager::allocate(size_t size, size_t count) {
 #if VERBOSE_GC
     std::cout << "SemispaceMemoryManager::allocate(size=" << size << ")\n" << std::flush;
 #endif
@@ -50,10 +54,10 @@ void SemispaceMemoryManager::free(ManagedObject *) {
 void SemispaceMemoryManager::collectGarbage() {
 #if VERBOSE_GC
     std::cout << "\nSemispaceMemoryManager::collectGarbage()\n" << std::flush;
-    int oldSize = memoryUsed;
+    size_t oldSize = memoryUsed;
 #endif
 
-    int oldObjectCount = objectCount;
+    size_t oldObjectCount = objectCount;
 
     std::swap(fromSpace, toSpace);
     allocPtr = toSpace;
@@ -67,7 +71,7 @@ void SemispaceMemoryManager::collectGarbage() {
 
     uint8_t *object = fromSpace;
 
-    for (int i = 0, size = 0; i < oldObjectCount; i++, object += size) {
+    for (size_t i = 0, size = 0; i < oldObjectCount; i++, object += size) {
         size = reinterpret_cast<ManagedObject *>(object)->getSize();
 
         if (reinterpret_cast<ManagedObject *>(object)->getForwardAddress() == nullptr)
@@ -105,7 +109,7 @@ void SemispaceMemoryManager::finalize() {
 
     uint8_t *object = toSpace;
 
-    for (int i = 0, size = 0; i < objectCount; i++, object += size) {
+    for (size_t i = 0, size = 0; i < objectCount; i++, object += size) {
         size = reinterpret_cast<ManagedObject *>(object)->getSize();
         reinterpret_cast<ManagedObject *>(object)->finalize();
     }
@@ -157,4 +161,5 @@ void SemispaceMemoryManager::expand() {
 
 void SemispaceMemoryManager::updateReference(ManagedObject *&ref) {
     ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + delta));
+}
 }

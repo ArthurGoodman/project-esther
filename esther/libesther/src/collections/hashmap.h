@@ -2,6 +2,8 @@
 
 #include "collections/map.h"
 
+namespace es {
+
 template <class>
 class Array;
 
@@ -84,3 +86,4 @@ private:
     Entry *lookup(const K &key) const;
     Entry *createEntry(const K &key, const V &value) const;
 };
+}

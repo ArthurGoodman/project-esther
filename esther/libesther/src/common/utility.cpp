@@ -1,6 +1,10 @@
-#include "utility.h"
+#include "common/utility.h"
 
 #include <cstdarg>
+
+#include "common/common.h"
+
+namespace es {
 
 char Utility::toLower(char c) {
     return c < 'A' || c > 'Z' ? c : c + 'a' - 'A';
@@ -82,4 +86,5 @@ std::string Utility::format(const char *fmt, ...) {
     std::string buf = vformat(fmt, ap);
     va_end(ap);
     return buf;
+}
 }

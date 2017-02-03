@@ -1,8 +1,10 @@
-#include "source.h"
+#include "common/source.h"
 
 #include <algorithm>
 
 #include "common/position.h"
+
+namespace es {
 
 Source::Source(const std::string &source)
     : source(source) {
@@ -32,4 +34,5 @@ std::string Source::quote(Position position) const {
     pointer += "^";
 
     return preffix + quote + suffix + "\n" + pointer;
+}
 }

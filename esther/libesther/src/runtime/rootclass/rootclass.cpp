@@ -1,10 +1,12 @@
-#include "rootclass.h"
+#include "runtime/rootclass/rootclass.h"
 
 #include "common/utility.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/nativefunction.h"
 #include "runtime/rootclass/classclass.h"
 #include "runtime/valueobject.h"
+
+namespace es {
 
 RootClass::RootClass(Esther *esther, const std::string &name, Ptr<Class> superclass)
     : Class(esther, name, superclass) {
@@ -109,4 +111,5 @@ void RootClass::defPred(Esther *esther, const std::string &name, bool (*body)(co
 
                             return esther->toBoolean(body(static_cast<ValueObject *>(*self)->getVariant(), static_cast<ValueObject *>(*args[0])->getVariant()));
                         }));
+}
 }

@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace es {
+
 class Exception {
 public:
     virtual ~Exception();
@@ -9,3 +11,4 @@ public:
     virtual std::string message();
     virtual void raise() = 0;
 };
+}

@@ -1,8 +1,10 @@
-#include "stringvariant.h"
+#include "variant/stringvariant.h"
+
+#include "common/utility.h"
 
 #if HEAP_VARIANT
 
-#include "common/utility.h"
+namespace es {
 
 StringVariant::StringVariant(const std::string &value)
     : value(value) {
@@ -30,6 +32,7 @@ char StringVariant::toChar() const {
 
 std::string StringVariant::toString() const {
     return value;
+}
 }
 
 #endif

@@ -1,8 +1,10 @@
-#include "charvariant.h"
+#include "variant/charvariant.h"
+
+#include "common/utility.h"
 
 #if HEAP_VARIANT
 
-#include "common/utility.h"
+namespace es {
 
 CharVariant::CharVariant(char value)
     : value(value) {
@@ -30,6 +32,7 @@ char CharVariant::toChar() const {
 
 std::string CharVariant::toString() const {
     return Utility::toString(value);
+}
 }
 
 #endif

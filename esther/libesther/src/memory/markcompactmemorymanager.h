@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+namespace es {
+
 class ManagedObject;
 
 class MarkCompactMemoryManager {
@@ -11,7 +13,7 @@ public:
     MarkCompactMemoryManager();
     ~MarkCompactMemoryManager();
 
-    static ManagedObject *allocate(uint32_t size, int count = 1);
+    static ManagedObject *allocate(size_t size, size_t count = 1);
     static void free(ManagedObject *p);
 
     static void collectGarbage();
@@ -32,3 +34,4 @@ private:
     static void markReference(ManagedObject *&ref);
     static void forwardReference(ManagedObject *&ref);
 };
+}

@@ -1,6 +1,8 @@
-#include "false.h"
+#include "runtime/false.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 False::False(Esther *esther)
     : Object(esther->getRootClass("Boolean")) {
@@ -12,4 +14,5 @@ std::string False::toString() const {
 
 bool False::isTrue() const {
     return false;
+}
 }

@@ -8,6 +8,8 @@
 
 #if DEBUG_PARSER
 
+namespace es {
+
 class Expression;
 class DebugExpression;
 class Object;
@@ -47,5 +49,6 @@ public:
 private:
     static DebugExpression *literal(const std::string &type, const std::string &value);
 };
+}
 
 #endif

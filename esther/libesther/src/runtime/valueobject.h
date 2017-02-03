@@ -3,6 +3,8 @@
 #include "runtime/object.h"
 #include "variant/variant.h"
 
+namespace es {
+
 class Esther;
 
 class ValueObject : public Object {
@@ -22,3 +24,4 @@ public:
 private:
     static Ptr<Class> variantTypeToObjectClass(Esther *esther, Variant::Type type);
 };
+}

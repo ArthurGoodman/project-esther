@@ -1,8 +1,10 @@
-#include "loopexpression.h"
+#include "expression/ast/loopexpression.h"
 
 #include "runtime/object.h"
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 LoopExpression::LoopExpression(Expression *condition, Expression *body)
     : condition(condition)
@@ -21,4 +23,5 @@ Ptr<Object> LoopExpression::exec(Esther *esther) {
         value = body->eval(esther);
 
     return value;
+}
 }

@@ -1,6 +1,8 @@
-#include "null.h"
+#include "runtime/null.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 Null::Null(Esther *esther)
     : Object(esther->getRootClass("Null")) {
@@ -12,4 +14,5 @@ std::string Null::toString() const {
 
 bool Null::isTrue() const {
     return false;
+}
 }

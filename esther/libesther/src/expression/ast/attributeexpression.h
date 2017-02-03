@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class AttributeExpression : public Expression {
     Expression *self;
     std::string name;
@@ -13,3 +15,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

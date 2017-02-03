@@ -4,6 +4,8 @@
 #include "memory/markcompactmemorymanager.h"
 #include "memory/semispacememorymanager.h"
 
+namespace es {
+
 class MemoryManager : public SemispaceMemoryManager {
     static MemoryManager instance;
 
@@ -15,4 +17,5 @@ public:
 template <class T>
 T *MemoryManager::allocateArray(uint32_t size) {
     return new (allocate(size * sizeof(T), size)) T[size];
+}
 }

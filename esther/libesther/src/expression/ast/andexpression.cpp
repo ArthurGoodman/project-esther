@@ -1,6 +1,8 @@
-#include "andexpression.h"
+#include "expression/ast/andexpression.h"
 
 #include "runtime/object.h"
+
+namespace es {
 
 AndExpression::AndExpression(Expression *self, Expression *arg)
     : self(self)
@@ -19,4 +21,5 @@ Ptr<Object> AndExpression::exec(Esther *esther) {
         return arg->eval(esther);
 
     return self;
+}
 }

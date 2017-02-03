@@ -1,9 +1,11 @@
-#include "object.h"
+#include "runtime/object.h"
 
 #include "runtime/class.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "common/utility.h"
 #include "runtime/function.h"
+
+namespace es {
 
 Object::Object(Ptr<Class> objectClass)
     : objectClass(objectClass)
@@ -119,4 +121,5 @@ void Object::mapOnReferences(void (*f)(ManagedObject *&)) {
 
 int Object::getSize() const {
     return sizeof *this;
+}
 }

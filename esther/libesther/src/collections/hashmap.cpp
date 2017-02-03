@@ -1,9 +1,11 @@
-#include "hashmap.h"
+#include "collections/hashmap.h"
 
 #include <stdexcept>
 
 #include "runtime/object.h"
 #include "collections/array.h"
+
+namespace es {
 
 template class HashMap<uint32_t, Object *>;
 template class HashMap<Object *, uint32_t>;
@@ -374,4 +376,5 @@ typename HashMap<Object *, uint32_t>::Entry *HashMap<Object *, uint32_t>::create
     entry->setKey(pKey);
 
     return entry;
+}
 }

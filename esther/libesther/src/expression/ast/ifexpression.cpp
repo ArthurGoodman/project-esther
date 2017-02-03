@@ -1,8 +1,10 @@
-#include "ifexpression.h"
+#include "expression/ast/ifexpression.h"
 
 #include "runtime/object.h"
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 IfExpression::IfExpression(Expression *condition, Expression *body, Expression *elseBody)
     : condition(condition)
@@ -25,4 +27,5 @@ Ptr<Object> IfExpression::exec(Esther *esther) {
         value = elseBody->eval(esther);
 
     return value;
+}
 }

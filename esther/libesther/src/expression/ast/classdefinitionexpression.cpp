@@ -1,8 +1,10 @@
-#include "classdefinitionexpression.h"
+#include "expression/ast/classdefinitionexpression.h"
 
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/class.h"
+
+namespace es {
 
 ClassDefinitionExpression::ClassDefinitionExpression(const std::string &name, Expression *superclass)
     : name(name)
@@ -22,4 +24,5 @@ Ptr<Object> ClassDefinitionExpression::exec(Esther *esther) {
     }
 
     return new Class(esther, name, static_cast<Class *>(*evaledSuperclass));
+}
 }

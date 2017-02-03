@@ -8,8 +8,9 @@
 
 #include "variant/variant.h"
 #include "common/source.h"
-
 #include "memory/pointer.h"
+
+namespace es {
 
 class Object;
 class Class;
@@ -107,3 +108,4 @@ private:
     const Source &source();
     const std::string &fileName();
 };
+}

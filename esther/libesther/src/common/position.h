@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace es {
+
 class Position {
     int offset, line, column;
     bool valid;
@@ -22,3 +24,4 @@ public:
 
     std::string toString() const;
 };
+}

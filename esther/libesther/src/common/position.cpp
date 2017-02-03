@@ -1,6 +1,8 @@
-#include "position.h"
+#include "common/position.h"
 
 #include "common/utility.h"
+
+namespace es {
 
 Position::Position()
     : offset(0)
@@ -45,4 +47,5 @@ void Position::set(int offset, int line, int column) {
 
 std::string Position::toString() const {
     return Utility::toString(line) + ":" + Utility::toString(column);
+}
 }

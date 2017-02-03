@@ -4,6 +4,8 @@
 
 #include "runtime/function.h"
 
+namespace es {
+
 class NativeFunction : public Function {
     typedef std::function<Ptr<Object>(Esther *, Ptr<Object>, const std::vector<Ptr<Object>> &)> FunctionBody;
 
@@ -18,3 +20,4 @@ public:
 protected:
     Ptr<Object> execute(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) override;
 };
+}

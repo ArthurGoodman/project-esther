@@ -1,8 +1,10 @@
-#include "staticobject.h"
+#include "memory/staticobject.h"
 
 #include <new>
 
 #include "memory/memorymanager.h"
+
+namespace es {
 
 StaticObject *StaticObject::create(int refCount) {
     ManagedObject *object = MemoryManager::allocate(sizeof(StaticObject) + refCount * sizeof(ManagedObject *));
@@ -29,4 +31,5 @@ StaticObject::StaticObject(int refCount)
     : refCount(refCount) {
     for (int i = 0; i < refCount; i++)
         field(i) = 0;
+}
 }

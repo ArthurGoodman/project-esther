@@ -1,5 +1,7 @@
 #pragma once
 
+namespace es {
+
 enum {
     tNone = -1,
 
@@ -9,3 +11,4 @@ enum {
 #include "common/definitions/othertokens.def"
 #undef X
 };
+}

@@ -1,8 +1,10 @@
-#include "integervariant.h"
+#include "variant/integervariant.h"
+
+#include "common/utility.h"
 
 #if HEAP_VARIANT
 
-#include "common/utility.h"
+namespace es {
 
 IntegerVariant::IntegerVariant(int value)
     : value(value) {
@@ -30,6 +32,7 @@ char IntegerVariant::toChar() const {
 
 std::string IntegerVariant::toString() const {
     return Utility::toString(value);
+}
 }
 
 #endif

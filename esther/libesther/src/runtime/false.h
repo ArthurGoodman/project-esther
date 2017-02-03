@@ -2,6 +2,8 @@
 
 #include "runtime/object.h"
 
+namespace es {
+
 class False : public Object {
 public:
     False(Esther *esther);
@@ -10,3 +12,4 @@ public:
 
     bool isTrue() const override;
 };
+}

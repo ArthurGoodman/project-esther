@@ -5,6 +5,8 @@
 
 #include "runtime/rootclass/rootclass.h"
 
+namespace es {
+
 class Expression;
 class Context;
 class Function;
@@ -18,3 +20,4 @@ public:
 protected:
     Ptr<Object> createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &args) override;
 };
+}

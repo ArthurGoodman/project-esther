@@ -1,7 +1,9 @@
-#include "attributeassignmentexpression.h"
+#include "expression/ast/attributeassignmentexpression.h"
 
 #include "runtime/object.h"
 #include "runtime/context.h"
+
+namespace es {
 
 AttributeAssignmentExpression::AttributeAssignmentExpression(Expression *self, const std::string &name, Expression *value)
     : self(self)
@@ -21,4 +23,5 @@ Ptr<Object> AttributeAssignmentExpression::exec(Esther *esther) {
     evaledSelf->setAttribute(name, evaledValue);
 
     return evaledValue;
+}
 }

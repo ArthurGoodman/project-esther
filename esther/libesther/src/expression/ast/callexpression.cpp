@@ -1,8 +1,10 @@
-#include "callexpression.h"
+#include "expression/ast/callexpression.h"
 
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/function.h"
+
+namespace es {
 
 CallExpression::CallExpression(Expression *f, Expression *self, int args)
     : f(f)
@@ -25,4 +27,5 @@ Ptr<Object> CallExpression::exec(Esther *esther) {
         evaledArgs << esther->top(i);
 
     return evaledSelf->call(esther, evaledF, evaledArgs);
+}
 }

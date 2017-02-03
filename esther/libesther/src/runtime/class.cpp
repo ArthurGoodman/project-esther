@@ -1,7 +1,9 @@
-#include "class.h"
+#include "runtime/class.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/rootclass/classclass.h"
+
+namespace es {
 
 Class::Class(Esther *esther, const std::string &name, Ptr<Class> superclass)
     : Object(*esther->getClassClass())
@@ -81,4 +83,5 @@ Ptr<Object> Class::createNewInstance(Esther *esther, const std::vector<Ptr<Objec
     Ptr<Object> instance = _this->superclass->createNewInstance(esther, args);
     instance->setClass(_this);
     return instance;
+}
 }

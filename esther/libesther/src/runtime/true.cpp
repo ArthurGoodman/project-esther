@@ -1,6 +1,8 @@
-#include "true.h"
+#include "runtime/true.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 True::True(Esther *esther)
     : Object(esther->getRootClass("Boolean")) {
@@ -8,4 +10,5 @@ True::True(Esther *esther)
 
 std::string True::toString() const {
     return "true";
+}
 }

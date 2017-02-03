@@ -15,7 +15,11 @@ INCLUDEPATH += ../libesther/src
 LIBS += -lesther
 
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/esther.cpp
 
 OTHER_FILES += \
     src/script.es \
+
+HEADERS += \
+    src/esther.h

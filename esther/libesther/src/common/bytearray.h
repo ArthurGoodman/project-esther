@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+namespace es {
+
 class ByteArray {
     uint32_t size, capacity;
     uint8_t *data;
@@ -48,4 +50,5 @@ template <class T>
 T ByteArray::pop() {
     free(sizeof(T));
     return *reinterpret_cast<T *>(data + size);
+}
 }

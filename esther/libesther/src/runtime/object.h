@@ -7,6 +7,8 @@
 #include "memory/managedobject.h"
 #include "memory/pointer.h"
 
+namespace es {
+
 class Class;
 class Esther;
 
@@ -44,3 +46,4 @@ public:
     void mapOnReferences(void (*f)(ManagedObject *&)) override;
     int getSize() const override;
 };
+}

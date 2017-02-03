@@ -1,4 +1,6 @@
-#include "returnexception.h"
+#include "exception/returnexception.h"
+
+namespace es {
 
 ReturnException::ReturnException(Ptr<Object> value)
     : ValueException(value) {
@@ -10,4 +12,5 @@ Ptr<Object> ReturnException::value() {
 
 void ReturnException::raise() {
     throw this;
+}
 }

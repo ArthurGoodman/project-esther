@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class IdentifierExpression : public Expression {
     std::string name;
 
@@ -12,3 +14,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

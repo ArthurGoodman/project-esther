@@ -1,6 +1,8 @@
-#include "popexpression.h"
+#include "expression/ast/popexpression.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 PopExpression::PopExpression(int count)
     : count(count) {
@@ -9,4 +11,5 @@ PopExpression::PopExpression(int count)
 Ptr<Object> PopExpression::exec(Esther *esther) {
     esther->pop(count);
     return esther->getReg();
+}
 }

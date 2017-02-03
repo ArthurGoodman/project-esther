@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "lexer/lexer.h"
 
 #include <algorithm>
 
@@ -6,6 +6,8 @@
 #include "common/log.h"
 #include "common/utility.h"
 #include "exception/lexicalerror.h"
+
+namespace es {
 
 std::vector<std::string> Lexer::operators = {
 #define X(a, b) b,
@@ -203,4 +205,5 @@ void Lexer::skipSpaces() {
 
 const char &Lexer::at(int pos) {
     return (*source)[pos];
+}
 }

@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <cmath>
 
-#include "common/common.h"
+namespace es {
 
 class Utility {
     static const int tabSize = 4;
@@ -72,4 +72,5 @@ inline double Utility::fromString<double>(const std::string &str) {
     s >> t;
 
     return t;
+}
 }

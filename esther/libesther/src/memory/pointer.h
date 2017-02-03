@@ -1,5 +1,7 @@
 #pragma once
 
+namespace es {
+
 template <class T>
 class Ptr {
 public:
@@ -98,4 +100,5 @@ void Ptr<T>::unlink() {
 
     if (next)
         next->prev = prev;
+}
 }

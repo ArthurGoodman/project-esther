@@ -1,8 +1,10 @@
-#include "attributeexpression.h"
+#include "expression/ast/attributeexpression.h"
 
 #include "runtime/object.h"
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 AttributeExpression::AttributeExpression(Expression *self, const std::string &name)
     : self(self)
@@ -20,4 +22,5 @@ Ptr<Object> AttributeExpression::exec(Esther *esther) {
         Esther::runtimeError("undefined attribute '" + name + "'");
 
     return value;
+}
 }

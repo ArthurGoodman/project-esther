@@ -8,6 +8,8 @@
 #include "expression/expressionmanager.h"
 #include "expression/debug/debugexpressionmanager.h"
 
+namespace es {
+
 class Esther;
 
 class Expression : public
@@ -30,3 +32,4 @@ public:
 protected:
     virtual Ptr<Object> exec(Esther *esther) = 0;
 };
+}

@@ -1,6 +1,8 @@
-#include "valueobject.h"
+#include "runtime/valueobject.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 ValueObject::ValueObject(Esther *esther, const Variant &value)
     : Object(variantTypeToObjectClass(esther, value.getType()))
@@ -46,4 +48,5 @@ Ptr<Class> ValueObject::variantTypeToObjectClass(Esther *esther, Variant::Type t
     default:
         return nullptr;
     }
+}
 }

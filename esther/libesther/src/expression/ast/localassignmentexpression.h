@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class LocalAssignmentExpression : public Expression {
     std::string name;
     Expression *value;
@@ -13,3 +15,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

@@ -1,8 +1,10 @@
-#include "bytearray.h"
+#include "common/bytearray.h"
 
 #include <memory>
 
 #include "common/utility.h"
+
+namespace es {
 
 ByteArray::ByteArray(uint32_t initialCapacity)
     : size(0)
@@ -121,4 +123,5 @@ uint32_t ByteArray::getSize() const {
 
 uint32_t ByteArray::getCapacity() const {
     return capacity;
+}
 }

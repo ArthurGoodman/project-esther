@@ -25,6 +25,8 @@
 #include "expression/expression.h"
 #include "runtime/nativefunction.h"
 
+namespace es {
+
 void Esther::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
 }
@@ -236,4 +238,5 @@ const Source &Esther::source() {
 
 const std::string &Esther::fileName() {
     return fileNames.top();
+}
 }

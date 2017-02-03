@@ -1,7 +1,9 @@
-#include "assignmentexpression.h"
+#include "expression/ast/assignmentexpression.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/context.h"
+
+namespace es {
 
 AssignmentExpression::AssignmentExpression(const std::string &name, Expression *value)
     : name(name)
@@ -19,4 +21,5 @@ Ptr<Object> AssignmentExpression::exec(Esther *esther) {
         esther->context()->setLocal(name, evaledValue);
 
     return evaledValue;
+}
 }

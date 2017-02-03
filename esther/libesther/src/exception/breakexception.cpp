@@ -1,4 +1,6 @@
-#include "breakexception.h"
+#include "exception/breakexception.h"
+
+namespace es {
 
 BreakException::BreakException(Ptr<Object> value)
     : ValueException(value) {
@@ -6,4 +8,5 @@ BreakException::BreakException(Ptr<Object> value)
 
 void BreakException::raise() {
     throw this;
+}
 }

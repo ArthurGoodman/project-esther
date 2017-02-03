@@ -1,7 +1,9 @@
-#include "contextresolutionexpression.h"
+#include "expression/ast/contextresolutionexpression.h"
 
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 ContextResolutionExpression::ContextResolutionExpression(Expression *self, Expression *body, Expression *here)
     : self(self)
@@ -24,4 +26,5 @@ Ptr<Object> ContextResolutionExpression::exec(Esther *esther) {
     esther->popContext();
 
     return value;
+}
 }

@@ -3,6 +3,8 @@
 #include "exception/exception.h"
 #include "common/position.h"
 
+namespace es {
+
 class ErrorException : public Exception {
     Position position;
     std::string msg;
@@ -15,3 +17,4 @@ public:
     Position getPosition();
     void setPosition(Position position);
 };
+}

@@ -1,10 +1,12 @@
-#include "characterclass.h"
+#include "runtime/rootclass/characterclass.h"
 
 #include "runtime/valueobject.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/rootclass/numericclass.h"
 #include "runtime/nativefunction.h"
 #include "common/utility.h"
+
+namespace es {
 
 CharacterClass::CharacterClass(Esther *esther)
     : RootClass(esther, "Character", esther->getRootClass("Numeric")) {
@@ -57,4 +59,5 @@ void CharacterClass::setupMethods(Esther *esther) {
 
 Ptr<Object> CharacterClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new ValueObject(esther, '\0');
+}
 }

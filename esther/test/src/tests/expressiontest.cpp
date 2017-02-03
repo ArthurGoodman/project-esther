@@ -1,9 +1,9 @@
 #include "expressiontest.h"
 
-#include "expression/expression.h"
-#include "variant/variant.h"
-#include "runtime/valueobject.h"
-#include "runtime/function.h"
+#include <expression/expression.h>
+#include <variant/variant.h>
+#include <runtime/valueobject.h>
+#include <runtime/function.h>
 
 ExpressionTest::ExpressionTest()
     : TestSet("expressions")
@@ -20,8 +20,8 @@ void ExpressionTest::preTest() {
 }
 
 void ExpressionTest::postTest() {
-    delete e;
-    e = nullptr;
+    //    delete e;
+    //    e = nullptr;
 }
 
 void ExpressionTest::defineTests() {

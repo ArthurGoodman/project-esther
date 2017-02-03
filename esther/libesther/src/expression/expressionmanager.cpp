@@ -1,4 +1,4 @@
-#include "expressionmanager.h"
+#include "expression/expressionmanager.h"
 
 #include "expression/ast/andexpression.h"
 #include "expression/ast/attributeassignmentexpression.h"
@@ -23,6 +23,8 @@
 #include "expression/ast/pushexpression.h"
 #include "expression/ast/selfexpression.h"
 #include "expression/ast/stackexpression.h"
+
+namespace es {
 
 Expression *ExpressionManager::And(Expression *self, Expression *arg) {
     return new AndExpression(self, arg);
@@ -114,4 +116,5 @@ Expression *ExpressionManager::Self() {
 
 Expression *ExpressionManager::Stack(int index) {
     return new StackExpression(index);
+}
 }

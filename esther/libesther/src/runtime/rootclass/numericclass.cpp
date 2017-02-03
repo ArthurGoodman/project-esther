@@ -1,6 +1,8 @@
-#include "numericclass.h"
+#include "runtime/rootclass/numericclass.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 NumericClass::NumericClass(Esther *esther)
     : RootClass(esther, "Numeric", esther->getObjectClass()) {
@@ -52,4 +54,5 @@ void NumericClass::setupMethods(Esther *esther) {
     _this->defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
         return a == b;
     });
+}
 }

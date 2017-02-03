@@ -6,6 +6,8 @@
 #include "common/token.h"
 #include "common/definitions/tokens.h"
 
+namespace es {
+
 class Esther;
 class Object;
 
@@ -52,3 +54,4 @@ private:
     Expression *suffix();
     Expression *term();
 };
+}

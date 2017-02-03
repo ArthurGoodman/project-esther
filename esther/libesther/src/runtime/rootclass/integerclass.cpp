@@ -1,9 +1,11 @@
-#include "integerclass.h"
+#include "runtime/rootclass/integerclass.h"
 
 #include "runtime/valueobject.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/rootclass/numericclass.h"
 #include "runtime/nativefunction.h"
+
+namespace es {
 
 IntegerClass::IntegerClass(Esther *esther)
     : RootClass(esther, "Integer", esther->getRootClass("Numeric")) {
@@ -44,4 +46,5 @@ void IntegerClass::setupMethods(Esther *esther) {
 
 Ptr<Object> IntegerClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
     return new ValueObject(esther, 0);
+}
 }

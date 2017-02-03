@@ -1,7 +1,9 @@
-#include "identifierexpression.h"
+#include "expression/ast/identifierexpression.h"
 
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
+
+namespace es {
 
 IdentifierExpression::IdentifierExpression(const std::string &name)
     : name(name) {
@@ -17,4 +19,5 @@ Ptr<Object> IdentifierExpression::exec(Esther *esther) {
         Esther::runtimeError("IdentifierExpression:exec: undefined identifier '" + name + "'");
 
     return value;
+}
 }

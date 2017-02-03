@@ -2,6 +2,8 @@
 
 #include "memory/managedobject.h"
 
+namespace es {
+
 class StaticObject : public ManagedObject {
     int refCount;
 
@@ -16,3 +18,4 @@ public:
 private:
     StaticObject(int refCount);
 };
+}

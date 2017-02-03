@@ -9,6 +9,8 @@
 #if DEBUG_PARSER
 
 class DebugExpression : public Expression {
+    namespace es {
+
     friend class DebugExpressionManager;
 
     std::string name;
@@ -24,6 +26,7 @@ public:
     Ptr<Object> exec(Esther *esther) override;
 
     virtual std::string toString() const;
-};
+    };
+}
 
 #endif

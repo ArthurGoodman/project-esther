@@ -1,10 +1,12 @@
-#include "debugexpression.h"
+#include "expression/debug/debugexpression.h"
 
 #include "runtime/context.h"
-#include "runtime/esther.h"
+#include "esther.h"
 #include "common/log.h"
 
 #if DEBUG_PARSER
+
+namespace es {
 
 int DebugExpression::indent = 0;
 
@@ -45,6 +47,7 @@ std::string DebugExpression::toString() const {
     str += (args.empty() ? "" : "\n") + spacing;
 
     return spacing + name + (getPosition().isValid() ? " (" + getPosition().toString() + ")" : "") + " {" + str + "}";
+}
 }
 
 #endif

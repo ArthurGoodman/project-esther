@@ -5,6 +5,8 @@
 #include "lexer/ilexer.h"
 #include "common/config.h"
 
+namespace es {
+
 class Lexer : public ILexer {
     static std::vector<std::string> operators;
     static std::vector<std::string> keywords;
@@ -31,3 +33,4 @@ private:
     void skipSpaces();
     const char &at(int pos);
 };
+}

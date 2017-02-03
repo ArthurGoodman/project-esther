@@ -3,6 +3,8 @@
 #include "exception/exception.h"
 #include "runtime/object.h"
 
+namespace es {
+
 class ValueException : public Exception {
     Ptr<Object> value;
 
@@ -11,3 +13,4 @@ protected:
 
     Ptr<Object> getValue();
 };
+}

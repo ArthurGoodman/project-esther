@@ -1,8 +1,11 @@
-#include "selfexpression.h"
+#include "expression/ast/selfexpression.h"
 
-#include "runtime/esther.h"
+#include "esther.h"
 #include "runtime/context.h"
+
+namespace es {
 
 Ptr<Object> SelfExpression::exec(Esther *esther) {
     return esther->context()->getSelf();
+}
 }

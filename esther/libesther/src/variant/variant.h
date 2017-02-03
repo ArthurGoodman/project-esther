@@ -6,6 +6,8 @@
 
 #if HEAP_VARIANT
 
+namespace es {
+
 class VariantPrivate;
 
 class Variant {
@@ -45,8 +47,11 @@ public:
 
     bool isNull() const;
 };
+}
 
 #else
+
+namespace es {
 
 class Variant {
 public:
@@ -112,5 +117,6 @@ public:
 private:
     static std::pair<Variant, Variant> coerce(const Variant &a, const Variant &b);
 };
+}
 
 #endif

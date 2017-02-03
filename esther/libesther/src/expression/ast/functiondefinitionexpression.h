@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class FunctionDefinitionExpression : public Expression {
     std::string name;
     std::list<std::string> params;
@@ -14,3 +16,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

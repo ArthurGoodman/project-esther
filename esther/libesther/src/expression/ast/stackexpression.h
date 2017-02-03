@@ -2,6 +2,8 @@
 
 #include "expression/expression.h"
 
+namespace es {
+
 class StackExpression : public Expression {
     int index;
 
@@ -11,3 +13,4 @@ public:
 protected:
     Ptr<Object> exec(Esther *esther) override;
 };
+}

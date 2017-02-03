@@ -6,6 +6,8 @@
 #include "memory/managedobject.h"
 #include "memory/pointer.h"
 
+namespace es {
+
 class Object;
 class Esther;
 
@@ -37,3 +39,4 @@ public:
 private:
     Context(Ptr<Object> self, Ptr<Object> here, Ptr<Context> parent);
 };
+}

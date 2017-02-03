@@ -2,6 +2,8 @@
 
 #include "memory/managedobject.h"
 
+namespace es {
+
 template <class T>
 class List : public ManagedObject {
     class ListNode : public ManagedObject {
@@ -15,3 +17,4 @@ class List : public ManagedObject {
 public:
     List();
 };
+}

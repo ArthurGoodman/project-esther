@@ -2,6 +2,8 @@
 
 #include "runtime/object.h"
 
+namespace es {
+
 class Null : public Object {
 public:
     Null(Esther *esther);
@@ -9,3 +11,4 @@ public:
     std::string toString() const override;
     bool isTrue() const override;
 };
+}

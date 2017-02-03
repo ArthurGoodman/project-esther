@@ -1,8 +1,10 @@
-#include "floatvariant.h"
+#include "variant/floatvariant.h"
+
+#include "common/utility.h"
 
 #if HEAP_VARIANT
 
-#include "common/utility.h"
+namespace es {
 
 FloatVariant::FloatVariant(double value)
     : value(value) {
@@ -30,6 +32,7 @@ char FloatVariant::toChar() const {
 
 std::string FloatVariant::toString() const {
     return Utility::toString(value);
+}
 }
 
 #endif
