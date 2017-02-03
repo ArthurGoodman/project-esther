@@ -75,11 +75,11 @@ void MarkCompactMemoryManager::finalize() {
     std::cout << "\nMarkCompactMemoryManager::finalize()\n" << std::flush;
 #endif
 
-    uint8_t *p = memory->getData();
+    uint8_t *object = memory->getData();
 
-    for (int i = 0, size = 0; i < objectCount; i++, p += size) {
-        size = reinterpret_cast<ManagedObject *>(p)->getSize();
-        reinterpret_cast<ManagedObject *>(p)->finalize();
+    for (int i = 0, size = 0; i < objectCount; i++, object += size) {
+        size = reinterpret_cast<ManagedObject *>(object)->getSize();
+        reinterpret_cast<ManagedObject *>(object)->finalize();
     }
 
     delete memory;

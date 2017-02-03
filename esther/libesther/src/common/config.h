@@ -6,4 +6,4 @@
 
 #define HEAP_VARIANT 0
 
-#define VERBOSE_GC 1
+#define VERBOSE_GC 0

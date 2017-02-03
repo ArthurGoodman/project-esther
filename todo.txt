@@ -1,5 +1,4 @@
 Todo:
-    * Make Semispace memory manager call ManagedObject::finalize
     * Implement variadic print for Logger
     * Refactor maps
     * Implement managed list
