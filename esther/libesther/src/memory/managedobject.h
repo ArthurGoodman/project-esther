@@ -1,9 +1,9 @@
 #pragma once
 
-#include "common/common.h"
+#include <cstdint>
 
 class ManagedObject {
-    uint flags;
+    uint32_t flags;
     ManagedObject *forwardAddress;
 
 public:
@@ -11,8 +11,8 @@ public:
         FlagMark = 1 << 0
     };
 
-    static void *operator new(uint size) noexcept;
-    static void *operator new(uint size, void *p) noexcept;
+    static void *operator new(size_t size) noexcept;
+    static void *operator new(size_t size, void *p) noexcept;
     static void operator delete(void *p) noexcept;
 
     ManagedObject();

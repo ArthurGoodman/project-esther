@@ -77,7 +77,7 @@ public:
     int getSize() const override;
 
 private:
-    static ulong hashKey(const K &key);
+    static uint64_t hashKey(const K &key);
 
     void allocate();
     V &insert(const K &key, const V &value);

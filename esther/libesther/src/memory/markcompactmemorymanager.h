@@ -1,7 +1,8 @@
 #pragma once
 
-#include "common/bytearray.h"
-#include "memory/managedobject.h"
+#include <cstdint>
+
+class ManagedObject;
 
 class MarkCompactMemoryManager {
     static const int InitialCapacity = 1 << 10;
@@ -10,7 +11,7 @@ public:
     MarkCompactMemoryManager();
     ~MarkCompactMemoryManager();
 
-    static ManagedObject *allocate(uint size, int count = 1);
+    static ManagedObject *allocate(uint32_t size, int count = 1);
     static void free(ManagedObject *p);
 
     static void collectGarbage();

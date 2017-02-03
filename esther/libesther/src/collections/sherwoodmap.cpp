@@ -3,8 +3,8 @@
 #include "runtime/object.h"
 #include "collections/array.h"
 
-template class SherwoodMap<uint, Object *>;
-template class SherwoodMap<Object *, uint>;
+template class SherwoodMap<uint32_t, Object *>;
+template class SherwoodMap<Object *, uint32_t>;
 
 template <class K, class V>
 SherwoodMap<K, V>::Entry::Entry()
@@ -12,19 +12,19 @@ SherwoodMap<K, V>::Entry::Entry()
 }
 
 template <>
-SherwoodMap<uint, Object *>::Entry::Entry()
+SherwoodMap<uint32_t, Object *>::Entry::Entry()
     : hash(0)
     , value(0) {
 }
 
 template <>
-SherwoodMap<Object *, uint>::Entry::Entry()
+SherwoodMap<Object *, uint32_t>::Entry::Entry()
     : hash(0)
     , key(0) {
 }
 
 template <class K, class V>
-SherwoodMap<K, V>::Entry::Entry(uint hash, K key, V value)
+SherwoodMap<K, V>::Entry::Entry(uint32_t hash, K key, V value)
     : hash(hash)
     , key(key)
     , value(value) {
@@ -41,7 +41,7 @@ V &SherwoodMap<K, V>::Entry::getValue() {
 }
 
 template <class K, class V>
-uint &SherwoodMap<K, V>::Entry::getHash() {
+uint32_t &SherwoodMap<K, V>::Entry::getHash() {
     return hash;
 }
 
@@ -51,13 +51,13 @@ void SherwoodMap<K, V>::Entry::clear() {
 }
 
 template <>
-void SherwoodMap<uint, Object *>::Entry::clear() {
+void SherwoodMap<uint32_t, Object *>::Entry::clear() {
     hash |= deletedFlag();
     value = 0;
 }
 
 template <>
-void SherwoodMap<Object *, uint>::Entry::clear() {
+void SherwoodMap<Object *, uint32_t>::Entry::clear() {
     hash |= deletedFlag();
     key = 0;
 }
@@ -68,7 +68,7 @@ bool SherwoodMap<K, V>::Entry::equals(const K &key) {
 }
 
 template <>
-bool SherwoodMap<Object *, uint>::Entry::equals(Object *const & /*key*/) {
+bool SherwoodMap<Object *, uint32_t>::Entry::equals(Object *const & /*key*/) {
     // return this->key->equals(key);
     return false;
 }
@@ -154,7 +154,7 @@ V &SherwoodMap<K, V>::put(const K &key, const V &value) {
 }
 
 template <>
-Object *&SherwoodMap<uint, Object *>::put(const uint &key, Object *const &value) {
+Object *&SherwoodMap<uint32_t, Object *>::put(const uint32_t &key, Object *const &value) {
     Ptr<SherwoodMap> _this = this;
     Ptr<Object> pValue = value;
 
@@ -165,7 +165,7 @@ Object *&SherwoodMap<uint, Object *>::put(const uint &key, Object *const &value)
 }
 
 template <>
-uint &SherwoodMap<Object *, uint>::put(Object *const &key, const uint &value) {
+uint32_t &SherwoodMap<Object *, uint32_t>::put(Object *const &key, const uint32_t &value) {
     Ptr<SherwoodMap> _this = this;
     Ptr<Object> pKey = key;
 
@@ -199,14 +199,14 @@ int SherwoodMap<K, V>::size() const {
 }
 
 template <>
-void Array<typename SherwoodMap<uint, Object *>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
+void Array<typename SherwoodMap<uint32_t, Object *>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i].getValue())
             f(reinterpret_cast<ManagedObject *&>(data()[i].getValue()));
 }
 
 template <>
-void Array<typename SherwoodMap<Object *, uint>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
+void Array<typename SherwoodMap<Object *, uint32_t>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i].getKey())
             f(reinterpret_cast<ManagedObject *&>(data()[i].getKey()));
@@ -224,19 +224,19 @@ int SherwoodMap<K, V>::getSize() const {
 }
 
 template <class K, class V>
-uint SherwoodMap<K, V>::computeHash(const K &key) {
+uint32_t SherwoodMap<K, V>::computeHash(const K &key) {
     return std::hash<K>()(key);
 }
 
 template <>
-uint SherwoodMap<Object *, uint>::computeHash(Object *const & /*key*/) {
+uint32_t SherwoodMap<Object *, uint32_t>::computeHash(Object *const & /*key*/) {
     // return key->hash();
     return 0;
 }
 
 template <class K, class V>
-uint SherwoodMap<K, V>::hashKey(const K &key) {
-    uint hash = computeHash(key);
+uint32_t SherwoodMap<K, V>::hashKey(const K &key) {
+    uint32_t hash = computeHash(key);
 
     hash &= ~Entry::deletedFlag();
     hash |= hash == 0;
@@ -266,7 +266,7 @@ void SherwoodMap<K, V>::allocate() {
 }
 
 template <class K, class V>
-V &SherwoodMap<K, V>::insert(uint hash, K key, V value) {
+V &SherwoodMap<K, V>::insert(uint32_t hash, K key, V value) {
     int index = hash & mask;
     int dist = 0;
 
@@ -308,7 +308,7 @@ V &SherwoodMap<K, V>::insert(uint hash, K key, V value) {
 
 template <class K, class V>
 int SherwoodMap<K, V>::lookup(const K &key) const {
-    const uint hash = hashKey(key);
+    const uint32_t hash = hashKey(key);
 
     int index = hash & mask;
     int dist = 0;

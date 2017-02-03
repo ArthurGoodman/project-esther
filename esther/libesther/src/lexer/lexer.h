@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "common/common.h"
 #include "lexer/ilexer.h"
+#include "common/config.h"
 
 class Lexer : public ILexer {
     static std::vector<std::string> operators;

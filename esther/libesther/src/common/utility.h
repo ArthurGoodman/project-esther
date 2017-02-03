@@ -27,7 +27,7 @@ public:
 
     static std::string expandTabs(const std::string &str);
 
-    static uint ceilToPowerOf2(uint n);
+    static uint32_t ceilToPowerOf2(uint32_t n);
 };
 
 template <class T>

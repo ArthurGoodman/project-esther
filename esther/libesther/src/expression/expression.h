@@ -2,9 +2,11 @@
 
 #include <list>
 
+#include "common/config.h"
+#include "common/position.h"
+
 #include "expression/expressionmanager.h"
 #include "expression/debug/debugexpressionmanager.h"
-#include "common/position.h"
 
 class Esther;
 

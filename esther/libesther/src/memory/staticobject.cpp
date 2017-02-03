@@ -1,16 +1,18 @@
 #include "staticobject.h"
 
+#include <new>
+
 #include "memory/memorymanager.h"
 
 StaticObject *StaticObject::create(int refCount) {
     ManagedObject *object = MemoryManager::allocate(sizeof(StaticObject) + refCount * sizeof(ManagedObject *));
     new (object) StaticObject(refCount);
-    new (reinterpret_cast<byte *>(object) + sizeof(StaticObject)) ManagedObject *[refCount] { 0 };
+    new (reinterpret_cast<uint8_t *>(object) + sizeof(StaticObject)) ManagedObject *[refCount] { 0 };
     return static_cast<StaticObject *>(object);
 }
 
 ManagedObject *&StaticObject::field(int index) {
-    return *reinterpret_cast<ManagedObject **>(reinterpret_cast<byte *>(this) + sizeof(*this) + index * sizeof(ManagedObject *));
+    return *reinterpret_cast<ManagedObject **>(reinterpret_cast<uint8_t *>(this) + sizeof(*this) + index * sizeof(ManagedObject *));
 }
 
 void StaticObject::mapOnReferences(void (*f)(ManagedObject *&)) {

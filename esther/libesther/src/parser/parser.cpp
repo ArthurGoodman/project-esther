@@ -1,6 +1,5 @@
 #include "parser.h"
 
-#include "common/common.h"
 #include "expression/expression.h"
 #include "exception/syntaxerror.h"
 #include "variant/variant.h"

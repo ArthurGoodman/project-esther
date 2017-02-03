@@ -8,19 +8,19 @@ class Array;
 template <class K, class V>
 class SherwoodMap : public Map<K, V> {
     class Entry {
-        uint hash;
+        uint32_t hash;
         K key;
         V value;
 
     public:
-        static uint deletedFlag();
+        static uint32_t deletedFlag();
 
         Entry();
-        Entry(uint hash, K key, V value);
+        Entry(uint32_t hash, K key, V value);
 
         K &getKey();
         V &getValue();
-        uint &getHash();
+        uint32_t &getHash();
 
         void clear();
         bool isDeleted();
@@ -72,17 +72,17 @@ public:
     int getSize() const override;
 
 private:
-    static uint computeHash(const K &key);
-    static uint hashKey(const K &key);
+    static uint32_t computeHash(const K &key);
+    static uint32_t hashKey(const K &key);
 
     void allocate();
-    int probeDistance(uint hash, uint index) const;
-    V &insert(uint hash, K key, V value);
+    int probeDistance(uint32_t hash, uint32_t index) const;
+    V &insert(uint32_t hash, K key, V value);
     int lookup(const K &key) const;
 };
 
 template <class K, class V>
-inline uint SherwoodMap<K, V>::Entry::deletedFlag() {
+inline uint32_t SherwoodMap<K, V>::Entry::deletedFlag() {
     return 1 << (sizeof(hash) * 8 - 1);
 }
 
@@ -92,6 +92,6 @@ inline bool SherwoodMap<K, V>::Entry::isDeleted() {
 }
 
 template <class K, class V>
-inline int SherwoodMap<K, V>::probeDistance(uint hash, uint index) const {
+inline int SherwoodMap<K, V>::probeDistance(uint32_t hash, uint32_t index) const {
     return (index + capacity - (hash & mask)) & mask;
 }

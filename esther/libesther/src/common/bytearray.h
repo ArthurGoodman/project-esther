@@ -1,13 +1,13 @@
 #pragma once
 
-#include "common/common.h"
+#include <cstdint>
 
 class ByteArray {
-    uint size, capacity;
-    byte *data;
+    uint32_t size, capacity;
+    uint8_t *data;
 
 public:
-    ByteArray(uint initialCapacity = 0);
+    ByteArray(uint32_t initialCapacity = 0);
 
     ByteArray(const ByteArray &array);
     ByteArray(ByteArray &&array);
@@ -17,7 +17,7 @@ public:
     ByteArray &operator=(const ByteArray &array);
     ByteArray &operator=(ByteArray &&array);
 
-    byte *allocate(uint count);
+    uint8_t *allocate(uint32_t count);
     int reallocate();
 
     template <class T>
@@ -26,26 +26,26 @@ public:
     template <class T>
     T pop();
 
-    byte &operator[](int index);
+    uint8_t &operator[](int index);
 
-    bool free(uint count);
+    bool free(uint32_t count);
     void release();
 
-    bool enoughSpace(uint count) const;
+    bool enoughSpace(uint32_t count) const;
 
-    byte *getData() const;
-    uint getSize() const;
-    uint getCapacity() const;
+    uint8_t *getData() const;
+    uint32_t getSize() const;
+    uint32_t getCapacity() const;
 };
 
 template <class T>
 ByteArray &ByteArray::push(T value) {
-    *(T *)allocate(sizeof(T)) = value;
+    *reinterpret_cast<T *>(allocate(sizeof(T))) = value;
     return *this;
 }
 
 template <class T>
 T ByteArray::pop() {
     free(sizeof(T));
-    return *(T *)(data + size);
+    return *reinterpret_cast<T *>(data + size);
 }

@@ -5,8 +5,8 @@
 #include "runtime/object.h"
 #include "collections/array.h"
 
-template class HashMap<uint, Object *>;
-template class HashMap<Object *, uint>;
+template class HashMap<uint32_t, Object *>;
+template class HashMap<Object *, uint32_t>;
 
 template <class K, class V>
 HashMap<K, V>::Entry::Entry(const K &key, const V &value)
@@ -51,7 +51,7 @@ bool HashMap<K, V>::Entry::equals(const K &key) const {
 }
 
 template <>
-bool HashMap<Object *, uint>::Entry::equals(Object *const & /*key*/) const {
+bool HashMap<Object *, uint32_t>::Entry::equals(Object *const & /*key*/) const {
     // return this->key->equals(key);
     return false;
 }
@@ -63,7 +63,7 @@ void HashMap<K, V>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
 }
 
 template <>
-void HashMap<uint, Object *>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
+void HashMap<uint32_t, Object *>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (next)
         f(reinterpret_cast<ManagedObject *&>(next));
 
@@ -72,7 +72,7 @@ void HashMap<uint, Object *>::Entry::mapOnReferences(void (*f)(ManagedObject *&)
 }
 
 template <>
-void HashMap<Object *, uint>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
+void HashMap<Object *, uint32_t>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (next)
         f(reinterpret_cast<ManagedObject *&>(next));
 
@@ -182,7 +182,7 @@ V &HashMap<K, V>::put(const K &key, const V &value) {
 }
 
 template <>
-Object *&HashMap<uint, Object *>::put(const uint &key, Object *const &value) {
+Object *&HashMap<uint32_t, Object *>::put(const uint32_t &key, Object *const &value) {
     Ptr<HashMap> _this = this;
     Ptr<Object> pValue = value;
 
@@ -193,7 +193,7 @@ Object *&HashMap<uint, Object *>::put(const uint &key, Object *const &value) {
 }
 
 template <>
-uint &HashMap<Object *, uint>::put(Object *const &key, const uint &value) {
+uint32_t &HashMap<Object *, uint32_t>::put(Object *const &key, const uint32_t &value) {
     Ptr<HashMap> _this = this;
     Ptr<Object> pKey = key;
 
@@ -242,14 +242,14 @@ int HashMap<K, V>::size() const {
 }
 
 template <>
-void Array<typename HashMap<uint, Object *>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
+void Array<typename HashMap<uint32_t, Object *>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
             f(reinterpret_cast<ManagedObject *&>(data()[i]));
 }
 
 template <>
-void Array<typename HashMap<Object *, uint>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
+void Array<typename HashMap<Object *, uint32_t>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
             f(reinterpret_cast<ManagedObject *&>(data()[i]));
@@ -267,12 +267,12 @@ int HashMap<K, V>::getSize() const {
 }
 
 template <class K, class V>
-ulong HashMap<K, V>::hashKey(const K &key) {
+uint64_t HashMap<K, V>::hashKey(const K &key) {
     return std::hash<K>()(key);
 }
 
 template <>
-ulong HashMap<Object *, uint>::hashKey(Object *const & /*key*/) {
+uint64_t HashMap<Object *, uint32_t>::hashKey(Object *const & /*key*/) {
     // return key->hash();
     return 0;
 }
@@ -298,7 +298,7 @@ void HashMap<K, V>::allocate() {
         Entry *entry = (**oldEntries)[i];
 
         while (entry) {
-            uint hashValue = hashKey(entry->getKey()) & _this->mask;
+            uint32_t hashValue = hashKey(entry->getKey()) & _this->mask;
 
             prev = entry;
             entry = entry->getNext();
@@ -357,7 +357,7 @@ typename HashMap<K, V>::Entry *HashMap<K, V>::createEntry(const K &key, const V 
 }
 
 template <>
-typename HashMap<uint, Object *>::Entry *HashMap<uint, Object *>::createEntry(const uint &key, Object *const &value) const {
+typename HashMap<uint32_t, Object *>::Entry *HashMap<uint32_t, Object *>::createEntry(const uint32_t &key, Object *const &value) const {
     Ptr<Object> pValue = value;
 
     Entry *entry = new Entry(key, 0);
@@ -367,7 +367,7 @@ typename HashMap<uint, Object *>::Entry *HashMap<uint, Object *>::createEntry(co
 }
 
 template <>
-typename HashMap<Object *, uint>::Entry *HashMap<Object *, uint>::createEntry(Object *const &key, const uint &value) const {
+typename HashMap<Object *, uint32_t>::Entry *HashMap<Object *, uint32_t>::createEntry(Object *const &key, const uint32_t &value) const {
     Ptr<Object> pKey = key;
 
     Entry *entry = new Entry(0, value);

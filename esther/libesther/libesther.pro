@@ -196,7 +196,8 @@ HEADERS += \
     src/collections/hashmap.h \
     src/collections/list.h \
     src/collections/map.h \
-    src/collections/sherwoodmap.h
+    src/collections/sherwoodmap.h \
+    src/common/config.h
 
 OTHER_FILES += \
     src/common/definitions/keywords.def \

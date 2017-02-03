@@ -3,18 +3,6 @@
 #include <list>
 #include <vector>
 
-#define DEBUG 0
-#define DEBUG_LEXER 0
-#define DEBUG_PARSER 0
-
-#define HEAP_VARIANT 0
-
-#define VERBOSE_GC 0
-
-typedef unsigned char byte;
-typedef unsigned int uint;
-typedef unsigned long long ulong;
-
 template <class A, class B>
 std::list<B> &operator<<(std::list<B> &l, const A &e) {
     l.push_back(static_cast<B>(e));

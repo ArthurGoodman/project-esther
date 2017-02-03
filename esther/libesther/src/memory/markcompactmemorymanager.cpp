@@ -2,7 +2,10 @@
 
 #include <iostream>
 
+#include "common/config.h"
+#include "common/bytearray.h"
 #include "memory/pointer.h"
+#include "memory/managedobject.h"
 #include "memory/memorymanager.h"
 
 static ByteArray *memory;
@@ -16,7 +19,7 @@ MarkCompactMemoryManager::~MarkCompactMemoryManager() {
     finalize();
 }
 
-ManagedObject *MarkCompactMemoryManager::allocate(uint size, int count) {
+ManagedObject *MarkCompactMemoryManager::allocate(uint32_t size, int count) {
 #if VERBOSE_GC
     std::cout << "MarkCompactMemoryManager::allocate(size=" << size << ")\n" << std::flush;
 #endif
@@ -24,7 +27,7 @@ ManagedObject *MarkCompactMemoryManager::allocate(uint size, int count) {
     if (!memory->enoughSpace(size))
         collectGarbage();
 
-    byte *oldData = memory->getData();
+    uint8_t *oldData = memory->getData();
 
     ManagedObject *object = reinterpret_cast<ManagedObject *>(memory->allocate(size));
 
@@ -72,7 +75,7 @@ void MarkCompactMemoryManager::finalize() {
     std::cout << "\nMarkCompactMemoryManager::finalize()\n" << std::flush;
 #endif
 
-    byte *p = memory->getData();
+    uint8_t *p = memory->getData();
 
     for (int i = 0, size = 0; i < objectCount; i++, p += size) {
         size = reinterpret_cast<ManagedObject *>(p)->getSize();
@@ -87,7 +90,7 @@ void MarkCompactMemoryManager::updatePointers() {
     std::cout << "MarkCompactMemoryManager::updatePointers() //delta=" << delta << "\n\n" << std::flush;
 #endif
 
-    byte *object = memory->getData();
+    uint8_t *object = memory->getData();
 
     for (int i = 0; i < objectCount; i++, object += reinterpret_cast<ManagedObject *>(object)->getSize())
         reinterpret_cast<ManagedObject *>(object)->mapOnReferences(updateReference);
@@ -104,7 +107,7 @@ void MarkCompactMemoryManager::mark() {
 }
 
 void MarkCompactMemoryManager::compact() {
-    byte *object, *free;
+    uint8_t *object, *free;
     object = free = memory->getData();
 
     for (int i = 0; i < objectCount; i++, object += reinterpret_cast<ManagedObject *>(object)->getSize())
@@ -131,7 +134,7 @@ void MarkCompactMemoryManager::compact() {
         size = reinterpret_cast<ManagedObject *>(object)->getSize();
 
         if (reinterpret_cast<ManagedObject *>(object)->hasFlag(ManagedObject::FlagMark)) {
-            byte *dst = reinterpret_cast<byte *>(reinterpret_cast<ManagedObject *>(object)->getForwardAddress());
+            uint8_t *dst = reinterpret_cast<uint8_t *>(reinterpret_cast<ManagedObject *>(object)->getForwardAddress());
 
             memmove(dst, object, size);
 
@@ -155,7 +158,7 @@ void MarkCompactMemoryManager::mark(ManagedObject *object) {
 }
 
 void MarkCompactMemoryManager::updateReference(ManagedObject *&ref) {
-    ref = reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(ref) + delta);
+    ref = reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + delta);
 }
 
 void MarkCompactMemoryManager::markReference(ManagedObject *&ref) {

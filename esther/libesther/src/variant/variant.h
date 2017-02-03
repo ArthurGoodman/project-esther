@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "common/common.h"
+#include "common/config.h"
 
 #if HEAP_VARIANT
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/bytearray.h"
+#include <cstdint>
 
 class ManagedObject;
 
@@ -11,7 +11,7 @@ public:
     SemispaceMemoryManager();
     ~SemispaceMemoryManager();
 
-    static ManagedObject *allocate(uint size, int count = 1);
+    static ManagedObject *allocate(uint32_t size, int count = 1);
     static void free(ManagedObject *p);
 
     static void collectGarbage();

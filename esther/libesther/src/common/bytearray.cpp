@@ -4,7 +4,7 @@
 
 #include "common/utility.h"
 
-ByteArray::ByteArray(uint initialCapacity)
+ByteArray::ByteArray(uint32_t initialCapacity)
     : size(0)
     , capacity(0)
     , data(0) {
@@ -32,7 +32,7 @@ ByteArray &ByteArray::operator=(const ByteArray &array) {
 
     ::free(data);
 
-    data = (byte *)malloc(capacity);
+    data = (uint8_t *)malloc(capacity);
     memcpy(data, array.data, size);
 
     return *this;
@@ -53,11 +53,11 @@ ByteArray &ByteArray::operator=(ByteArray &&array) {
     return *this;
 }
 
-byte *ByteArray::allocate(uint count) {
+uint8_t *ByteArray::allocate(uint32_t count) {
     if (!enoughSpace(count)) {
-        uint newCapacity = Utility::ceilToPowerOf2(size + count);
+        uint32_t newCapacity = Utility::ceilToPowerOf2(size + count);
 
-        byte *newData = (byte *)realloc(data, newCapacity);
+        uint8_t *newData = (uint8_t *)realloc(data, newCapacity);
 
         if (!newData)
             return 0;
@@ -72,7 +72,7 @@ byte *ByteArray::allocate(uint count) {
 }
 
 int ByteArray::reallocate() {
-    byte *newData = (byte *)malloc(capacity);
+    uint8_t *newData = (uint8_t *)malloc(capacity);
 
     if (!newData)
         return 0;
@@ -87,11 +87,11 @@ int ByteArray::reallocate() {
     return delta;
 }
 
-byte &ByteArray::operator[](int index) {
+uint8_t &ByteArray::operator[](int index) {
     return data[index];
 }
 
-bool ByteArray::free(uint count) {
+bool ByteArray::free(uint32_t count) {
     if (size < count)
         return false;
 
@@ -107,18 +107,18 @@ void ByteArray::release() {
     data = 0;
 }
 
-bool ByteArray::enoughSpace(uint count) const {
+bool ByteArray::enoughSpace(uint32_t count) const {
     return size + count <= capacity;
 }
 
-byte *ByteArray::getData() const {
+uint8_t *ByteArray::getData() const {
     return data;
 }
 
-uint ByteArray::getSize() const {
+uint32_t ByteArray::getSize() const {
     return size;
 }
 
-uint ByteArray::getCapacity() const {
+uint32_t ByteArray::getCapacity() const {
     return capacity;
 }

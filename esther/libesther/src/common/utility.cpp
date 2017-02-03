@@ -48,6 +48,6 @@ std::string Utility::expandTabs(const std::string &str) {
     return result;
 }
 
-uint Utility::ceilToPowerOf2(uint n) {
+uint32_t Utility::ceilToPowerOf2(uint32_t n) {
     return 1 << (sizeof(n) * 8 - __builtin_clz(n - 1));
 }

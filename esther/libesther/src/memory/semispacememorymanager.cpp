@@ -1,15 +1,18 @@
 #include "semispacememorymanager.h"
 
-#include "memory/pointer.h"
-#include "memory/managedobject.h"
-
 #include <cstring>
 #include <iostream>
+
+#include "common/config.h"
+#include "common/bytearray.h"
+#include "memory/pointer.h"
+#include "memory/managedobject.h"
+#include "memory/memorymanager.h"
 
 static ByteArray *memory;
 static int objectCount, memoryUsed, capacity, delta;
 
-static byte *toSpace, *fromSpace, *allocPtr;
+static uint8_t *toSpace, *fromSpace, *allocPtr;
 
 SemispaceMemoryManager::SemispaceMemoryManager() {
     initialize();
@@ -19,7 +22,7 @@ SemispaceMemoryManager::~SemispaceMemoryManager() {
     finalize();
 }
 
-ManagedObject *SemispaceMemoryManager::allocate(uint size, int count) {
+ManagedObject *SemispaceMemoryManager::allocate(uint32_t size, int count) {
 #if VERBOSE_GC
     std::cout << "SemispaceMemoryManager::allocate(size=" << size << ")\n" << std::flush;
 #endif
@@ -58,7 +61,7 @@ void SemispaceMemoryManager::collectGarbage() {
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->pointer)
-            p->pointer = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(p->pointer) + delta));
+            p->pointer = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(p->pointer) + delta));
 
 #if VERBOSE_GC
     std::cout << "//freed=" << oldSize - memoryUsed << " freedObjects=" << oldObjectCount - objectCount << ", objectCount=" << objectCount << "\n\n" << std::flush;
@@ -119,7 +122,7 @@ void SemispaceMemoryManager::expand() {
     std::cout << "SemispaceMemoryManager::expand()" << std::flush;
 #endif
 
-    byte *oldData = memory->getData();
+    uint8_t *oldData = memory->getData();
 
     fromSpace = memory->allocate(capacity);
     toSpace = fromSpace - capacity;
@@ -135,5 +138,5 @@ void SemispaceMemoryManager::expand() {
 }
 
 void SemispaceMemoryManager::updateReference(ManagedObject *&ref) {
-    ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<byte *>(ref) + delta));
+    ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + delta));
 }

@@ -2,11 +2,11 @@
 
 #include "memory/memorymanager.h"
 
-void *ManagedObject::operator new(uint size) noexcept {
+void *ManagedObject::operator new(size_t size) noexcept {
     return static_cast<void *>(MemoryManager::allocate(size));
 }
 
-void *ManagedObject::operator new(uint, void *p) noexcept {
+void *ManagedObject::operator new(size_t, void *p) noexcept {
     return p;
 }
 

@@ -3,9 +3,9 @@
 #include <algorithm>
 
 #include "common/definitions/tokens.h"
-#include "exception/lexicalerror.h"
 #include "common/logger.h"
 #include "common/utility.h"
+#include "exception/lexicalerror.h"
 
 std::vector<std::string> Lexer::operators = {
 #define X(a, b) b,

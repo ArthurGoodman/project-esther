@@ -1,10 +1,10 @@
 #include "rootclass.h"
 
+#include "common/utility.h"
 #include "runtime/esther.h"
 #include "runtime/nativefunction.h"
 #include "runtime/rootclass/classclass.h"
 #include "runtime/valueobject.h"
-#include "common/utility.h"
 
 RootClass::RootClass(Esther *esther, const std::string &name, Ptr<Class> superclass)
     : Class(esther, name, superclass) {
