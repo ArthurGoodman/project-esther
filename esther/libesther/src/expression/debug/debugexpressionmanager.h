@@ -1,39 +1,47 @@
 #pragma once
 
+#include <string>
+#include <list>
+
 #include "common/common.h"
-#include "expression/iexpressionmanager.h"
 
 #if DEBUG_PARSER
 
+class Expression;
 class DebugExpression;
+class Object;
+class Variant;
 
-class DebugExpressionManager : public IExpressionManager {
+template <class>
+class Ptr;
+
+class DebugExpressionManager {
     static std::vector<const char *> typenames;
 
 public:
-    Expression *createAnd(Expression *self, Expression *arg);
-    Expression *createAssignment(const std::string &name, Expression *value);
-    Expression *createAttributeAssignment(Expression *self, const std::string &name, Expression *value);
-    Expression *createAttribute(Expression *self, const std::string &name);
-    Expression *createBlock(const std::list<Expression *> &nodes);
-    Expression *createCall(Expression *f, Expression *self, int args);
-    Expression *createClassDefinition(const std::string &name, Expression *superclass);
-    Expression *createConstant(Object *value);
-    Expression *createContextResolution(Expression *self, Expression *body, Expression *here);
-    Expression *createEmpty();
-    Expression *createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body);
-    Expression *createHere();
-    Expression *createIdentifier(const std::string &name);
-    Expression *createIf(Expression *condition, Expression *body, Expression *elseBody);
-    Expression *createLiteral(const Variant &value);
-    Expression *createLocalAssignment(const std::string &name, Expression *value);
-    Expression *createLoop(Expression *condition, Expression *body);
-    Expression *createNot(Expression *self);
-    Expression *createOr(Expression *self, Expression *arg);
-    Expression *createPop(int count);
-    Expression *createPush(Expression *arg);
-    Expression *createSelf();
-    Expression *createStack(int index);
+    static Expression *And(Expression *self, Expression *arg);
+    static Expression *Assignment(const std::string &name, Expression *value);
+    static Expression *AttributeAssignment(Expression *self, const std::string &name, Expression *value);
+    static Expression *Attribute(Expression *self, const std::string &name);
+    static Expression *Block(const std::list<Expression *> &nodes);
+    static Expression *Call(Expression *f, Expression *self, int args);
+    static Expression *ClassDefinition(const std::string &name, Expression *superclass);
+    static Expression *Constant(Ptr<Object> value);
+    static Expression *ContextResolution(Expression *self, Expression *body, Expression *here = nullptr);
+    static Expression *Empty();
+    static Expression *FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body);
+    static Expression *Here();
+    static Expression *Identifier(const std::string &name);
+    static Expression *If(Expression *condition, Expression *body, Expression *elseBody = nullptr);
+    static Expression *Literal(const Variant &value);
+    static Expression *LocalAssignment(const std::string &name, Expression *value);
+    static Expression *Loop(Expression *condition, Expression *body);
+    static Expression *Not(Expression *self);
+    static Expression *Or(Expression *self, Expression *arg);
+    static Expression *Pop(int count);
+    static Expression *Push(Expression *arg);
+    static Expression *Self();
+    static Expression *Stack(int index);
 
 private:
     static DebugExpression *literal(const std::string &type, const std::string &value);

@@ -34,7 +34,6 @@ SOURCES += \
     src/exception/syntaxerror.cpp \
     src/exception/valueexception.cpp \
     src/expression/expressionmanager.cpp \
-    src/expression/iexpressionmanager.cpp \
     src/expression/debug/debugexpression.cpp \
     src/expression/debug/debugexpressionmanager.cpp \
     src/expression/ast/emptyexpression.cpp \
@@ -129,7 +128,6 @@ HEADERS += \
     src/exception/syntaxerror.h \
     src/exception/valueexception.h \
     src/expression/expressionmanager.h \
-    src/expression/iexpressionmanager.h \
     src/expression/debug/debugexpression.h \
     src/expression/debug/debugexpressionmanager.h \
     src/variant/charvariant.h \

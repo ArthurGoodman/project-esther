@@ -1,30 +1,38 @@
 #pragma once
 
-#include "expression/iexpressionmanager.h"
+#include <string>
+#include <list>
 
-class ExpressionManager : public IExpressionManager {
+class Expression;
+class Object;
+class Variant;
+
+template <class>
+class Ptr;
+
+class ExpressionManager {
 public:
-    Expression *createAnd(Expression *self, Expression *arg) override;
-    Expression *createAssignment(const std::string &name, Expression *value) override;
-    Expression *createAttributeAssignment(Expression *self, const std::string &name, Expression *value) override;
-    Expression *createAttribute(Expression *self, const std::string &name) override;
-    Expression *createBlock(const std::list<Expression *> &nodes) override;
-    Expression *createCall(Expression *f, Expression *self, int args) override;
-    Expression *createClassDefinition(const std::string &name, Expression *superclass) override;
-    Expression *createConstant(Ptr<Object> value) override;
-    Expression *createContextResolution(Expression *self, Expression *body, Expression *here) override;
-    Expression *createEmpty() override;
-    Expression *createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body) override;
-    Expression *createHere() override;
-    Expression *createIdentifier(const std::string &name) override;
-    Expression *createIf(Expression *condition, Expression *body, Expression *elseBody) override;
-    Expression *createLiteral(const Variant &value) override;
-    Expression *createLocalAssignment(const std::string &name, Expression *value) override;
-    Expression *createLoop(Expression *condition, Expression *body) override;
-    Expression *createNot(Expression *self) override;
-    Expression *createOr(Expression *self, Expression *arg) override;
-    Expression *createPop(int count) override;
-    Expression *createPush(Expression *arg) override;
-    Expression *createSelf() override;
-    Expression *createStack(int index) override;
+    static Expression *And(Expression *self, Expression *arg);
+    static Expression *Assignment(const std::string &name, Expression *value);
+    static Expression *AttributeAssignment(Expression *self, const std::string &name, Expression *value);
+    static Expression *Attribute(Expression *self, const std::string &name);
+    static Expression *Block(const std::list<Expression *> &nodes);
+    static Expression *Call(Expression *f, Expression *self, int args);
+    static Expression *ClassDefinition(const std::string &name, Expression *superclass);
+    static Expression *Constant(Ptr<Object> value);
+    static Expression *ContextResolution(Expression *self, Expression *body, Expression *here = nullptr);
+    static Expression *Empty();
+    static Expression *FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body);
+    static Expression *Here();
+    static Expression *Identifier(const std::string &name);
+    static Expression *If(Expression *condition, Expression *body, Expression *elseBody = nullptr);
+    static Expression *Literal(const Variant &value);
+    static Expression *LocalAssignment(const std::string &name, Expression *value);
+    static Expression *Loop(Expression *condition, Expression *body);
+    static Expression *Not(Expression *self);
+    static Expression *Or(Expression *self, Expression *arg);
+    static Expression *Pop(int count);
+    static Expression *Push(Expression *arg);
+    static Expression *Self();
+    static Expression *Stack(int index);
 };

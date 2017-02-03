@@ -1,4 +1,5 @@
 Todo:
+    * Make Expression and MemoryManager nonpolymorphic
     * Make Semispace memory manager call ManagedObject::finalize
     * Refactor maps
     * Implement managed list

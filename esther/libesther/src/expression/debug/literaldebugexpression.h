@@ -11,7 +11,7 @@ class LiteralDebugExpression : public DebugExpression {
 public:
     LiteralDebugExpression(const Variant &value);
 
-    std::string toString() const;
+    std::string toString() const override;
 };
 
 #endif

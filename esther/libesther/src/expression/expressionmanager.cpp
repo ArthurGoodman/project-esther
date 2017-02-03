@@ -24,94 +24,94 @@
 #include "expression/ast/selfexpression.h"
 #include "expression/ast/stackexpression.h"
 
-Expression *ExpressionManager::createAnd(Expression *self, Expression *arg) {
+Expression *ExpressionManager::And(Expression *self, Expression *arg) {
     return new AndExpression(self, arg);
 }
 
-Expression *ExpressionManager::createAssignment(const std::string &name, Expression *value) {
+Expression *ExpressionManager::Assignment(const std::string &name, Expression *value) {
     return new AssignmentExpression(name, value);
 }
 
-Expression *ExpressionManager::createAttributeAssignment(Expression *self, const std::string &name, Expression *value) {
+Expression *ExpressionManager::AttributeAssignment(Expression *self, const std::string &name, Expression *value) {
     return new AttributeAssignmentExpression(self, name, value);
 }
 
-Expression *ExpressionManager::createAttribute(Expression *self, const std::string &name) {
+Expression *ExpressionManager::Attribute(Expression *self, const std::string &name) {
     return new AttributeExpression(self, name);
 }
 
-Expression *ExpressionManager::createBlock(const std::list<Expression *> &nodes) {
+Expression *ExpressionManager::Block(const std::list<Expression *> &nodes) {
     return new BlockExpression(nodes);
 }
 
-Expression *ExpressionManager::createCall(Expression *f, Expression *self, int args) {
+Expression *ExpressionManager::Call(Expression *f, Expression *self, int args) {
     return new CallExpression(f, self, args);
 }
 
-Expression *ExpressionManager::createClassDefinition(const std::string &name, Expression *superclass) {
+Expression *ExpressionManager::ClassDefinition(const std::string &name, Expression *superclass) {
     return new ClassDefinitionExpression(name, superclass);
 }
 
-Expression *ExpressionManager::createConstant(Ptr<Object> value) {
+Expression *ExpressionManager::Constant(Ptr<Object> value) {
     return new ConstantExpression(value);
 }
 
-Expression *ExpressionManager::createContextResolution(Expression *self, Expression *body, Expression *here) {
+Expression *ExpressionManager::ContextResolution(Expression *self, Expression *body, Expression *here) {
     return new ContextResolutionExpression(self, body, here);
 }
 
-Expression *ExpressionManager::createEmpty() {
+Expression *ExpressionManager::Empty() {
     return new EmptyExpression;
 }
 
-Expression *ExpressionManager::createFunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body) {
+Expression *ExpressionManager::FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body) {
     return new FunctionDefinitionExpression(name, params, body);
 }
 
-Expression *ExpressionManager::createHere() {
+Expression *ExpressionManager::Here() {
     return new HereExpression;
 }
 
-Expression *ExpressionManager::createIdentifier(const std::string &name) {
+Expression *ExpressionManager::Identifier(const std::string &name) {
     return new IdentifierExpression(name);
 }
 
-Expression *ExpressionManager::createIf(Expression *condition, Expression *body, Expression *elseBody) {
+Expression *ExpressionManager::If(Expression *condition, Expression *body, Expression *elseBody) {
     return new IfExpression(condition, body, elseBody);
 }
 
-Expression *ExpressionManager::createLiteral(const Variant &value) {
+Expression *ExpressionManager::Literal(const Variant &value) {
     return new LiteralExpression(value);
 }
 
-Expression *ExpressionManager::createLocalAssignment(const std::string &name, Expression *value) {
+Expression *ExpressionManager::LocalAssignment(const std::string &name, Expression *value) {
     return new LocalAssignmentExpression(name, value);
 }
 
-Expression *ExpressionManager::createLoop(Expression *condition, Expression *body) {
+Expression *ExpressionManager::Loop(Expression *condition, Expression *body) {
     return new LoopExpression(condition, body);
 }
 
-Expression *ExpressionManager::createNot(Expression *self) {
+Expression *ExpressionManager::Not(Expression *self) {
     return new NotExpression(self);
 }
 
-Expression *ExpressionManager::createOr(Expression *self, Expression *arg) {
+Expression *ExpressionManager::Or(Expression *self, Expression *arg) {
     return new OrExpression(self, arg);
 }
 
-Expression *ExpressionManager::createPop(int count) {
+Expression *ExpressionManager::Pop(int count) {
     return new PopExpression(count);
 }
 
-Expression *ExpressionManager::createPush(Expression *arg) {
+Expression *ExpressionManager::Push(Expression *arg) {
     return new PushExpression(arg);
 }
 
-Expression *ExpressionManager::createSelf() {
+Expression *ExpressionManager::Self() {
     return new SelfExpression;
 }
 
-Expression *ExpressionManager::createStack(int index) {
+Expression *ExpressionManager::Stack(int index) {
     return new StackExpression(index);
 }

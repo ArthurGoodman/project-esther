@@ -1,6 +1,7 @@
 #pragma once
 
 #include "expression/expression.h"
+#include "memory/pointer.h"
 
 class ConstantExpression : public Expression {
     Ptr<Object> value;

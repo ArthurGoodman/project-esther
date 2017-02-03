@@ -1,5 +1,7 @@
 #include "orexpression.h"
 
+#include "runtime/object.h"
+
 OrExpression::OrExpression(Expression *self, Expression *arg)
     : self(self)
     , arg(arg) {

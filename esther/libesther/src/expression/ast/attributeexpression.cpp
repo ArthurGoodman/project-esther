@@ -1,5 +1,6 @@
 #include "attributeexpression.h"
 
+#include "runtime/object.h"
 #include "runtime/context.h"
 #include "runtime/esther.h"
 

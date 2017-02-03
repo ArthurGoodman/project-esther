@@ -1,5 +1,6 @@
 #include "attributeassignmentexpression.h"
 
+#include "runtime/object.h"
 #include "runtime/context.h"
 
 AttributeAssignmentExpression::AttributeAssignmentExpression(Expression *self, const std::string &name, Expression *value)

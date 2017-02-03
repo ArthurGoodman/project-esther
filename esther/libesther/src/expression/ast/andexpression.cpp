@@ -1,5 +1,7 @@
 #include "andexpression.h"
 
+#include "runtime/object.h"
+
 AndExpression::AndExpression(Expression *self, Expression *arg)
     : self(self)
     , arg(arg) {
