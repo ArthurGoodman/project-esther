@@ -6,7 +6,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += $$files(src/*.cpp, true)
-HEADERS += $$files(src/*.h, true)
+
+HEADERS += \
+    $$files(src/*.h, true) \
+    $$files(src/*.inl, true)
+
 OTHER_FILES += $$files(src/*.def, true)
 
 INCLUDEPATH = src
