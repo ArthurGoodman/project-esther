@@ -1,12 +1,14 @@
 #pragma once
 
+#include "common/config.h"
+
 namespace es {
 
 template <class T>
 class Ptr {
 public:
     T *ptr;
-    Ptr *prev, *next;
+    Ptr *prev = nullptr, *next = nullptr;
 
 public:
     Ptr(T *p = nullptr);
@@ -30,23 +32,25 @@ extern Ptr<void> *pointers;
 
 template <class T>
 Ptr<T>::Ptr(T *p)
-    : ptr(p)
-    , prev(nullptr)
-    , next(nullptr) {
+    : ptr(p) {
+#ifdef GC
     link();
+#endif
 }
 
 template <class T>
 Ptr<T>::Ptr(const Ptr<T> &p)
-    : ptr(p)
-    , prev(nullptr)
-    , next(nullptr) {
+    : ptr(p) {
+#ifdef GC
     link();
+#endif
 }
 
 template <class T>
 Ptr<T>::~Ptr() {
+#ifdef GC
     unlink();
+#endif
 }
 
 template <class T>

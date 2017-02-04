@@ -11,7 +11,7 @@ class Lexer : public ILexer {
     static std::vector<std::string> operators;
     static std::vector<std::string> keywords;
 
-#if DEBUG_LEXER
+#ifdef DEBUG_LEXER
     static std::vector<std::string> tokenTypes;
 #endif
 

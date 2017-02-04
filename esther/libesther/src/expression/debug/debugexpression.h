@@ -6,11 +6,11 @@
 #include "common/common.h"
 #include "expression/expression.h"
 
-#if DEBUG_PARSER
+#ifdef DEBUG_EXPRESSION
+
+namespace es {
 
 class DebugExpression : public Expression {
-    namespace es {
-
     friend class DebugExpressionManager;
 
     std::string name;
@@ -26,7 +26,7 @@ public:
     Ptr<Object> exec(Esther *esther) override;
 
     virtual std::string toString() const;
-    };
+};
 }
 
 #endif

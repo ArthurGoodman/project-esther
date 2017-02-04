@@ -1,9 +1,10 @@
 #pragma once
 
-#define DEBUG 0
-#define DEBUG_LEXER 0
-#define DEBUG_PARSER 0
+//#define DEBUG
+//#define DEBUG_LEXER
+//#define DEBUG_EXPRESSION
 
-#define HEAP_VARIANT 0
+//#define HEAP_VARIANT
 
-#define VERBOSE_GC 0
+#define GC
+//#define VERBOSE_GC

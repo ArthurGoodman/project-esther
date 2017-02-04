@@ -53,7 +53,7 @@ bool Object::is(Ptr<Class> _class) const {
 std::string Object::toString() const {
     Ptr<const Object> _this = this;
 
-    return "<" + _this->getClass()->getName() + ":" + Utility::toString((void *)*_this) + ">";
+    return "<" + _this->getClass()->getName() + ":" + Utility::toString(_this) + ">";
 }
 
 bool Object::isTrue() const {

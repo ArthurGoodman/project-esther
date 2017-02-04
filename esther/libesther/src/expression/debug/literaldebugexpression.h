@@ -3,7 +3,7 @@
 #include "expression/debug/debugexpression.h"
 #include "variant/variant.h"
 
-#if DEBUG_PARSER
+#ifdef DEBUG_EXPRESSION
 
 namespace es {
 

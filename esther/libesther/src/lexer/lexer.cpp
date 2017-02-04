@@ -21,7 +21,7 @@ std::vector<std::string> Lexer::keywords = {
 #undef X
 };
 
-#if DEBUG_LEXER
+#ifdef DEBUG_LEXER
 std::vector<std::string> Lexer::tokenTypes = {
 #define X(a, b) #a,
 #include "common/definitions/operators.def"
@@ -42,7 +42,7 @@ Tokens &Lexer::lex(const std::string &source) {
         scan();
         tokens << token;
 
-#if DEBUG_LEXER
+#ifdef DEBUG_LEXER
         Log::write("lexer", "%s : %s\n", tokenTypes[token.getId()].c_str(), token.inspect().c_str());
 #endif
     } while (token != tEnd);

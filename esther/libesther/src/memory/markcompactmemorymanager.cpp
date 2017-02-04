@@ -2,12 +2,13 @@
 
 #include <iostream>
 
-#include "common/config.h"
 #include "common/bytearray.h"
 #include "common/io.h"
 #include "memory/ptr.h"
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
+
+#ifdef GC
 
 namespace {
 es::ByteArray *memory;
@@ -26,7 +27,7 @@ MarkCompactMemoryManager::~MarkCompactMemoryManager() {
 }
 
 ManagedObject *MarkCompactMemoryManager::allocate(size_t size, size_t count) {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("MarkCompactMemoryManager::allocate(size=%u)", size);
 #endif
 
@@ -49,7 +50,7 @@ void MarkCompactMemoryManager::free(ManagedObject *) {
 }
 
 void MarkCompactMemoryManager::collectGarbage() {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("\nMarkCompactMemoryManager::collectGarbage()");
     size_t oldSize = memory->getSize(), oldObjectCount = objectCount;
 #endif
@@ -57,7 +58,7 @@ void MarkCompactMemoryManager::collectGarbage() {
     mark();
     compact();
 
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - memory->getSize(), oldObjectCount - objectCount, objectCount);
 #endif
 }
@@ -74,7 +75,7 @@ void MarkCompactMemoryManager::initialize() {
 }
 
 void MarkCompactMemoryManager::finalize() {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("\nObject count: %u", objectCount);
     IO::writeLine("Memory used: %u", memory->getSize());
     IO::writeLine("Total memory: %u", memory->getCapacity());
@@ -92,7 +93,7 @@ void MarkCompactMemoryManager::finalize() {
 }
 
 void MarkCompactMemoryManager::updatePointers() {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("MarkCompactMemoryManager::updatePointers() //delta=%i\n", delta);
 #endif
 
@@ -176,3 +177,5 @@ void MarkCompactMemoryManager::forwardReference(ManagedObject *&ref) {
     ref = ref->getForwardAddress();
 }
 }
+
+#endif

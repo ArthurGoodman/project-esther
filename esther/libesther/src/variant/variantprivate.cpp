@@ -1,6 +1,6 @@
 #include "variant/variantprivate.h"
 
-#if HEAP_VARIANT
+#ifdef HEAP_VARIANT
 
 namespace es {
 

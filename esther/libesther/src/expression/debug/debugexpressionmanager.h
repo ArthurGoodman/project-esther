@@ -6,7 +6,7 @@
 
 #include "common/config.h"
 
-#if DEBUG_PARSER
+#ifdef DEBUG_EXPRESSION
 
 namespace es {
 

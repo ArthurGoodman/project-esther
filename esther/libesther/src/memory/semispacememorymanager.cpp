@@ -3,12 +3,13 @@
 #include <cstring>
 #include <iostream>
 
-#include "common/config.h"
 #include "common/bytearray.h"
 #include "common/io.h"
 #include "memory/ptr.h"
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
+
+#ifdef GC
 
 namespace {
 es::ByteArray *memory;
@@ -28,7 +29,7 @@ SemispaceMemoryManager::~SemispaceMemoryManager() {
 }
 
 ManagedObject *SemispaceMemoryManager::allocate(size_t size, size_t count) {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("SemispaceMemoryManager::allocate(size=%u)", size);
 #endif
 
@@ -53,7 +54,7 @@ void SemispaceMemoryManager::free(ManagedObject *) {
 }
 
 void SemispaceMemoryManager::collectGarbage() {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("\nSemispaceMemoryManager::collectGarbage()");
     size_t oldSize = memoryUsed;
 #endif
@@ -79,7 +80,7 @@ void SemispaceMemoryManager::collectGarbage() {
             reinterpret_cast<ManagedObject *>(object)->finalize();
     }
 
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
 #endif
 }
@@ -101,7 +102,7 @@ void SemispaceMemoryManager::initialize() {
 }
 
 void SemispaceMemoryManager::finalize() {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine("\nObject count: %u", objectCount);
     IO::writeLine("Memory used: %u", memoryUsed);
     IO::writeLine("Total memory: %u", memory->getCapacity());
@@ -141,7 +142,7 @@ ManagedObject *SemispaceMemoryManager::copy(ManagedObject *object) {
 }
 
 void SemispaceMemoryManager::expand() {
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::write("SemispaceMemoryManager::expand()");
 #endif
 
@@ -153,7 +154,7 @@ void SemispaceMemoryManager::expand() {
 
     delta = memory->getData() - oldData;
 
-#if VERBOSE_GC
+#ifdef VERBOSE_GC
     IO::writeLine(" //capacity=%u, delta=%i", capacity, delta);
 #endif
 
@@ -164,3 +165,5 @@ void SemispaceMemoryManager::updateReference(ManagedObject *&ref) {
     ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + delta));
 }
 }
+
+#endif

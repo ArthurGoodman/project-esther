@@ -13,7 +13,7 @@ namespace es {
 class Esther;
 
 class Expression : public
-#if DEBUG_PARSER
+#ifdef DEBUG_EXPRESSION
                    DebugExpressionManager
 #else
                    ExpressionManager

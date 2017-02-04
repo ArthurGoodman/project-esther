@@ -1,6 +1,6 @@
 #include "expression/debug/literaldebugexpression.h"
 
-#if DEBUG_PARSER
+#ifdef DEBUG_EXPRESSION
 
 namespace es {
 

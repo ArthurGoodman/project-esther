@@ -1,6 +1,6 @@
 #include "variant/variant.h"
 
-#if HEAP_VARIANT
+#ifdef HEAP_VARIANT
 
 #include "variant/nullvariant.h"
 #include "variant/integervariant.h"

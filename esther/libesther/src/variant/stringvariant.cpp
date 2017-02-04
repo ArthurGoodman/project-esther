@@ -2,7 +2,7 @@
 
 #include "common/utility.h"
 
-#if HEAP_VARIANT
+#ifdef HEAP_VARIANT
 
 namespace es {
 

@@ -4,7 +4,7 @@
 
 #include "common/config.h"
 
-#if HEAP_VARIANT
+#ifdef HEAP_VARIANT
 
 namespace es {
 

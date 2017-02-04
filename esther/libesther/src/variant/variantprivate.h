@@ -2,7 +2,7 @@
 
 #include "common/config.h"
 
-#if HEAP_VARIANT
+#ifdef HEAP_VARIANT
 
 #include "variant/variant.h"
 

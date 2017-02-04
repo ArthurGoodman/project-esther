@@ -4,7 +4,7 @@
 
 #include "common/config.h"
 
-#if DEBUG
+#ifdef DEBUG
 
 namespace es {
 

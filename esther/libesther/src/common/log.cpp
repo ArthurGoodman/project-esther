@@ -5,7 +5,7 @@
 #include "common/utility.h"
 #include "common/io.h"
 
-#if DEBUG
+#ifdef DEBUG
 
 namespace es {
 

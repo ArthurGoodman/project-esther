@@ -2,6 +2,10 @@
 
 #include <cstdint>
 
+#include "common/config.h"
+
+#ifdef GC
+
 namespace es {
 
 class ManagedObject;
@@ -31,3 +35,5 @@ private:
     static void updateReference(ManagedObject *&ref);
 };
 }
+
+#endif

@@ -4,7 +4,7 @@
 #include "esther.h"
 #include "common/log.h"
 
-#if DEBUG_PARSER
+#ifdef DEBUG_EXPRESSION
 
 namespace es {
 
