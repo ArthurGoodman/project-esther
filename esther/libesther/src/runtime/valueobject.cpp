@@ -21,6 +21,14 @@ std::string ValueObject::toString() const {
     return value.toString();
 }
 
+bool ValueObject::equals(Ptr<Object> object) const {
+    return dynamic_cast<ValueObject *>(*object) && value == static_cast<ValueObject *>(*object)->value;
+}
+
+uint32_t ValueObject::hash() const {
+    return value.hash();
+}
+
 void ValueObject::finalize() {
     Object::finalize();
 

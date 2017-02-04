@@ -30,6 +30,9 @@ class StringClass;
 class ClassClass;
 class FunctionClass;
 
+template <class, class>
+class Map;
+
 class Esther {
     Ptr<Object> mainObject;
     Ptr<RootClass> objectClass;
@@ -57,8 +60,13 @@ class Esther {
     std::vector<Ptr<Object>> stack;
     Ptr<Object> reg;
 
+    static uint32_t nextId;
+
 public:
     static void runtimeError(const std::string &message);
+
+    uint32_t id(const std::string &str);
+    Ptr<ValueObject> string(uint32_t id);
 
     Esther();
     ~Esther();
@@ -94,6 +102,9 @@ public:
     void setReg(Ptr<Object> value);
 
 private:
+    static Ptr<Map<uint32_t, Object *>> idString();
+    static Ptr<Map<Object *, uint32_t>> stringId();
+
     void initialize();
     void release();
 

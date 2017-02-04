@@ -9,7 +9,7 @@ Expression::~Expression() {
 }
 
 Ptr<Object> Expression::eval(Esther *esther) {
-    Object *value = nullptr;
+    Ptr<Object> value;
 
     try {
         value = exec(esther);

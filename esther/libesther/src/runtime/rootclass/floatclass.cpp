@@ -14,7 +14,7 @@ FloatClass::FloatClass(Esther *esther)
 void FloatClass::setupMethods(Esther *esther) {
     Ptr<FloatClass> _this = this;
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    _this->setAttribute(esther, "()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<FloatClass *>(*self)) {
                                 Esther::runtimeError("Float.(): invalid self");
                                 return nullptr;

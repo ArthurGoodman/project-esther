@@ -14,7 +14,7 @@ IntegerClass::IntegerClass(Esther *esther)
 void IntegerClass::setupMethods(Esther *esther) {
     Ptr<IntegerClass> _this = this;
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    _this->setAttribute(esther, "()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<IntegerClass *>(*self)) {
                                 Esther::runtimeError("Integer.(): invalid self");
                                 return nullptr;

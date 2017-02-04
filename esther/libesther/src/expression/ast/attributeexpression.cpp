@@ -16,7 +16,7 @@ AttributeExpression::~AttributeExpression() {
 }
 
 Ptr<Object> AttributeExpression::exec(Esther *esther) {
-    Ptr<Object> value = self->eval(esther)->get(name);
+    Ptr<Object> value = self->eval(esther)->get(esther, name);
 
     if (!value)
         Esther::runtimeError("undefined attribute '" + name + "'");

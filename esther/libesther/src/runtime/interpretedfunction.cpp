@@ -32,7 +32,7 @@ Ptr<Object> InterpretedFunction::execute(Esther *esther, Ptr<Object> self, const
 
     std::vector<Ptr<Object>>::const_iterator i = args.begin();
     for (const std::string &s : *_this->params)
-        esther->context()->setLocal(s, *i++);
+        esther->context()->setLocal(esther, s, *i++);
 
     Ptr<Object> value = _this->body->eval(esther);
 

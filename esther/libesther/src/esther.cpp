@@ -24,11 +24,39 @@
 #include "lexer/ilexer.h"
 #include "expression/expression.h"
 #include "runtime/nativefunction.h"
+#include "collections/sherwoodmap.h"
+#include "collections/hashmap.h"
 
 namespace es {
 
+uint32_t Esther::nextId = 0;
+
 void Esther::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
+}
+
+uint32_t Esther::id(const std::string &str) {
+    Ptr<Object> string;
+
+    uint8_t data[sizeof(ValueObject)];
+    ValueObject *fakeString = new (data) ValueObject(this, str);
+
+    if (stringId()->contains(fakeString))
+        return stringId()->get(fakeString);
+
+    string = new ValueObject(this, str);
+    uint32_t id = nextId++;
+
+    stringId()->put(string, id);
+    idString()->put(id, string);
+
+    fakeString->finalize();
+
+    return id;
+}
+
+Ptr<ValueObject> Esther::string(uint32_t id) {
+    return static_cast<ValueObject *>(idString()->get(id));
 }
 
 Esther::Esther() {
@@ -83,6 +111,16 @@ Ptr<Object> Esther::createObject() {
     return objectClass->newInstance(this);
 }
 
+Ptr<Map<uint32_t, Object *>> Esther::idString() {
+    static Ptr<Map<uint32_t, Object *>> idString = new SherwoodMap<uint32_t, Object *>;
+    return idString;
+}
+
+Ptr<Map<Object *, uint32_t>> Esther::stringId() {
+    static Ptr<Map<Object *, uint32_t>> stringId = new SherwoodMap<Object *, uint32_t>;
+    return stringId;
+}
+
 void Esther::initialize() {
     rootClasses.clear();
 
@@ -115,9 +153,9 @@ void Esther::initialize() {
     setupMethods();
 
     Ptr<Object> console = createObject();
-    mainObject->setAttribute("console", console);
+    mainObject->setAttribute(this, "console", console);
 
-    console->setAttribute("write", new NativeFunction(this, "write", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    console->setAttribute(this, "write", new NativeFunction(this, "write", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                               if (!args.empty())
                                   for (auto &arg : args)
                                       IO::write(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
@@ -127,7 +165,7 @@ void Esther::initialize() {
                               return esther->getNull();
                           }));
 
-    console->setAttribute("writeLine", new NativeFunction(this, "writeLine", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    console->setAttribute(this, "writeLine", new NativeFunction(this, "writeLine", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                               if (!args.empty())
                                   for (auto &arg : args)
                                       IO::writeLine(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());

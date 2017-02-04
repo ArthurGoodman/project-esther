@@ -15,7 +15,7 @@ CharacterClass::CharacterClass(Esther *esther)
 void CharacterClass::setupMethods(Esther *esther) {
     Ptr<CharacterClass> _this = this;
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    _this->setAttribute(esther, "()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<CharacterClass *>(*self)) {
                                 Esther::runtimeError("Character.(): invalid self");
                                 return nullptr;

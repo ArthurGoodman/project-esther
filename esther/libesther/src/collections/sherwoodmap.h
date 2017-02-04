@@ -98,3 +98,5 @@ inline int SherwoodMap<K, V>::probeDistance(uint32_t hash, uint32_t index) const
     return (index + capacity - (hash & mask)) & mask;
 }
 }
+
+#include "collections/sherwoodmap.inl"

@@ -114,6 +114,8 @@ public:
     bool operator==(const Variant &v) const;
     bool operator!=(const Variant &v) const;
 
+    uint32_t hash() const;
+
 private:
     static std::pair<Variant, Variant> coerce(const Variant &a, const Variant &b);
 };

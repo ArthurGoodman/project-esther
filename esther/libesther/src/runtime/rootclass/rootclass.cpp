@@ -65,7 +65,7 @@ void RootClass::defFunc(Esther *esther, const std::string &name, int arity, cons
     Ptr<RootClass> _this = this;
     std::string className = _this->getName();
 
-    _this->setAttribute(name, new NativeFunction(esther, name, arity, [name, body, className, _this](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    _this->setAttribute(esther, name, new NativeFunction(esther, name, arity, [name, body, className, _this](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!self->getClass()->isChild(*_this)) {
                                 Esther::runtimeError(className + "." + name + ": invalid self");
                                 return nullptr;
@@ -79,7 +79,7 @@ void RootClass::defOper(Esther *esther, const std::string &name, Variant (*body)
     Ptr<RootClass> _this = this;
     std::string className = _this->getName();
 
-    _this->setAttribute(name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    _this->setAttribute(esther, name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<ValueObject *>(*self)) {
                                 Esther::runtimeError(className + "." + name + ": invalid self");
                                 return nullptr;
@@ -98,7 +98,7 @@ void RootClass::defPred(Esther *esther, const std::string &name, bool (*body)(co
     Ptr<RootClass> _this = this;
     std::string className = _this->getName();
 
-    _this->setAttribute(name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    _this->setAttribute(esther, name, new NativeFunction(esther, name, 1, [name, body, className](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<ValueObject *>(*self)) {
                                 Esther::runtimeError(className + "." + name + ": invalid self");
                                 return nullptr;

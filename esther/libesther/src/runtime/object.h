@@ -12,9 +12,12 @@ namespace es {
 class Class;
 class Esther;
 
+template <class, class>
+class Map;
+
 class Object : public ManagedObject {
     Class *objectClass;
-    std::map<std::string, Object *> *attributes;
+    Map<uint32_t, Object *> *attributes;
 
 public:
     Object(Ptr<Class> objectClass);
@@ -24,11 +27,11 @@ public:
     Ptr<Class> getClass() const;
     void setClass(Ptr<Class> objectClass);
 
-    bool hasAttribute(const std::string &name) const;
-    Ptr<Object> getAttribute(const std::string &name) const;
-    void setAttribute(const std::string &name, Ptr<Object> value);
+    bool hasAttribute(Esther *esther, const std::string &name) const;
+    Ptr<Object> getAttribute(Esther *esther, const std::string &name) const;
+    void setAttribute(Esther *esther, const std::string &name, Ptr<Object> value);
 
-    virtual Ptr<Object> get(const std::string &name) const;
+    virtual Ptr<Object> get(Esther *esther, const std::string &name) const;
 
     bool is(Ptr<Class> _class) const;
 
@@ -41,6 +44,9 @@ public:
     Ptr<Object> call(Esther *esther, const std::string &name, const std::vector<Ptr<Object>> &args, Ptr<Class> expectedReturnClass);
 
     Ptr<Object> callIfFound(Esther *esther, const std::string &name, const std::vector<Ptr<Object>> &args);
+
+    virtual bool equals(Ptr<Object> object) const;
+    virtual uint32_t hash() const;
 
     void finalize() override;
     void mapOnReferences(void (*f)(ManagedObject *&)) override;

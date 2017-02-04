@@ -28,21 +28,21 @@ void Context::setHere(Ptr<Object> here) {
     this->here = here;
 }
 
-bool Context::hasLocal(const std::string &name) const {
-    return getHere()->hasAttribute(name);
+bool Context::hasLocal(Esther *esther, const std::string &name) const {
+    return getHere()->hasAttribute(esther, name);
 }
 
-Ptr<Object> Context::getLocal(const std::string &name) const {
-    return getHere()->getAttribute(name);
+Ptr<Object> Context::getLocal(Esther *esther, const std::string &name) const {
+    return getHere()->getAttribute(esther, name);
 }
 
-void Context::setLocal(const std::string &name, Ptr<Object> value) {
-    getHere()->setAttribute(name, value);
+void Context::setLocal(Esther *esther, const std::string &name, Ptr<Object> value) {
+    getHere()->setAttribute(esther, name, value);
 }
 
 Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
-    if (hasLocal(name))
-        return getLocal(name);
+    if (hasLocal(esther, name))
+        return getLocal(esther, name);
 
     if (parent)
         return parent->get(esther, name);
@@ -53,14 +53,14 @@ Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
     return nullptr;
 }
 
-bool Context::set(const std::string &name, Ptr<Object> value) {
-    if (hasLocal(name)) {
-        setLocal(name, value);
+bool Context::set(Esther *esther, const std::string &name, Ptr<Object> value) {
+    if (hasLocal(esther, name)) {
+        setLocal(esther, name, value);
         return true;
     }
 
     if (parent)
-        return parent->set(name, value);
+        return parent->set(esther, name, value);
 
     return false;
 }
@@ -74,7 +74,9 @@ void Context::mapOnReferences(void (*f)(ManagedObject *&)) {
         f(reinterpret_cast<ManagedObject *&>(parent));
 
     f(reinterpret_cast<ManagedObject *&>(self));
-    f(reinterpret_cast<ManagedObject *&>(here));
+
+    if (self != here)
+        f(reinterpret_cast<ManagedObject *&>(here));
 }
 
 int Context::getSize() const {

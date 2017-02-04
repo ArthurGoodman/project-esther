@@ -5,22 +5,19 @@
 
 namespace es {
 
-template class SherwoodMap<uint32_t, Object *>;
-template class SherwoodMap<Object *, uint32_t>;
-
 template <class K, class V>
 SherwoodMap<K, V>::Entry::Entry()
     : hash(0) {
 }
 
 template <>
-SherwoodMap<uint32_t, Object *>::Entry::Entry()
+inline SherwoodMap<uint32_t, Object *>::Entry::Entry()
     : hash(0)
     , value(0) {
 }
 
 template <>
-SherwoodMap<Object *, uint32_t>::Entry::Entry()
+inline SherwoodMap<Object *, uint32_t>::Entry::Entry()
     : hash(0)
     , key(0) {
 }
@@ -53,13 +50,13 @@ void SherwoodMap<K, V>::Entry::clear() {
 }
 
 template <>
-void SherwoodMap<uint32_t, Object *>::Entry::clear() {
+inline void SherwoodMap<uint32_t, Object *>::Entry::clear() {
     hash |= deletedFlag();
     value = 0;
 }
 
 template <>
-void SherwoodMap<Object *, uint32_t>::Entry::clear() {
+inline void SherwoodMap<Object *, uint32_t>::Entry::clear() {
     hash |= deletedFlag();
     key = 0;
 }
@@ -70,9 +67,8 @@ bool SherwoodMap<K, V>::Entry::equals(const K &key) {
 }
 
 template <>
-bool SherwoodMap<Object *, uint32_t>::Entry::equals(Object *const & /*key*/) {
-    // return this->key->equals(key);
-    return false;
+inline bool SherwoodMap<Object *, uint32_t>::Entry::equals(Object *const &key) {
+    return this->key->equals(key);
 }
 
 template <class K, class V>
@@ -156,7 +152,7 @@ V &SherwoodMap<K, V>::put(const K &key, const V &value) {
 }
 
 template <>
-Object *&SherwoodMap<uint32_t, Object *>::put(const uint32_t &key, Object *const &value) {
+inline Object *&SherwoodMap<uint32_t, Object *>::put(const uint32_t &key, Object *const &value) {
     Ptr<SherwoodMap> _this = this;
     Ptr<Object> pValue = value;
 
@@ -167,7 +163,7 @@ Object *&SherwoodMap<uint32_t, Object *>::put(const uint32_t &key, Object *const
 }
 
 template <>
-uint32_t &SherwoodMap<Object *, uint32_t>::put(Object *const &key, const uint32_t &value) {
+inline uint32_t &SherwoodMap<Object *, uint32_t>::put(Object *const &key, const uint32_t &value) {
     Ptr<SherwoodMap> _this = this;
     Ptr<Object> pKey = key;
 
@@ -201,14 +197,14 @@ int SherwoodMap<K, V>::size() const {
 }
 
 template <>
-void Array<typename SherwoodMap<uint32_t, Object *>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
+inline void Array<typename SherwoodMap<uint32_t, Object *>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i].getValue())
             f(reinterpret_cast<ManagedObject *&>(data()[i].getValue()));
 }
 
 template <>
-void Array<typename SherwoodMap<Object *, uint32_t>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
+inline void Array<typename SherwoodMap<Object *, uint32_t>::Entry>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i].getKey())
             f(reinterpret_cast<ManagedObject *&>(data()[i].getKey()));
@@ -231,9 +227,8 @@ uint32_t SherwoodMap<K, V>::computeHash(const K &key) {
 }
 
 template <>
-uint32_t SherwoodMap<Object *, uint32_t>::computeHash(Object *const & /*key*/) {
-    // return key->hash();
-    return 0;
+inline uint32_t SherwoodMap<Object *, uint32_t>::computeHash(Object *const &key) {
+    return key->hash();
 }
 
 template <class K, class V>

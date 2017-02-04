@@ -18,6 +18,9 @@ public:
 
     std::string toString() const override;
 
+    bool equals(Ptr<Object> object) const override;
+    uint32_t hash() const override;
+
     void finalize() override;
     int getSize() const override;
 

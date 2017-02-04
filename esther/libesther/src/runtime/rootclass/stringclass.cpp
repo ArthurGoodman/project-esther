@@ -13,7 +13,7 @@ StringClass::StringClass(Esther *esther)
 void StringClass::setupMethods(Esther *esther) {
     Ptr<StringClass> _this = this;
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    _this->setAttribute(esther, "()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
                             if (!dynamic_cast<StringClass *>(*self)) {
                                 Esther::runtimeError("String.(): invalid self");
                                 return nullptr;

@@ -7,9 +7,6 @@
 
 namespace es {
 
-template class HashMap<uint32_t, Object *>;
-template class HashMap<Object *, uint32_t>;
-
 template <class K, class V>
 HashMap<K, V>::Entry::Entry(const K &key, const V &value)
     : key(key)
@@ -53,9 +50,8 @@ bool HashMap<K, V>::Entry::equals(const K &key) const {
 }
 
 template <>
-bool HashMap<Object *, uint32_t>::Entry::equals(Object *const & /*key*/) const {
-    // return this->key->equals(key);
-    return false;
+inline bool HashMap<Object *, uint32_t>::Entry::equals(Object *const &key) const {
+    return this->key->equals(key);
 }
 
 template <class K, class V>
@@ -65,7 +61,7 @@ void HashMap<K, V>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
 }
 
 template <>
-void HashMap<uint32_t, Object *>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
+inline void HashMap<uint32_t, Object *>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (next)
         f(reinterpret_cast<ManagedObject *&>(next));
 
@@ -74,7 +70,7 @@ void HashMap<uint32_t, Object *>::Entry::mapOnReferences(void (*f)(ManagedObject
 }
 
 template <>
-void HashMap<Object *, uint32_t>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
+inline void HashMap<Object *, uint32_t>::Entry::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (next)
         f(reinterpret_cast<ManagedObject *&>(next));
 
@@ -184,7 +180,7 @@ V &HashMap<K, V>::put(const K &key, const V &value) {
 }
 
 template <>
-Object *&HashMap<uint32_t, Object *>::put(const uint32_t &key, Object *const &value) {
+inline Object *&HashMap<uint32_t, Object *>::put(const uint32_t &key, Object *const &value) {
     Ptr<HashMap> _this = this;
     Ptr<Object> pValue = value;
 
@@ -195,7 +191,7 @@ Object *&HashMap<uint32_t, Object *>::put(const uint32_t &key, Object *const &va
 }
 
 template <>
-uint32_t &HashMap<Object *, uint32_t>::put(Object *const &key, const uint32_t &value) {
+inline uint32_t &HashMap<Object *, uint32_t>::put(Object *const &key, const uint32_t &value) {
     Ptr<HashMap> _this = this;
     Ptr<Object> pKey = key;
 
@@ -244,14 +240,14 @@ int HashMap<K, V>::size() const {
 }
 
 template <>
-void Array<typename HashMap<uint32_t, Object *>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
+inline void Array<typename HashMap<uint32_t, Object *>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
             f(reinterpret_cast<ManagedObject *&>(data()[i]));
 }
 
 template <>
-void Array<typename HashMap<Object *, uint32_t>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
+inline void Array<typename HashMap<Object *, uint32_t>::Entry *>::mapOnReferences(void (*f)(ManagedObject *&)) {
     for (int i = 0; i < size(); i++)
         if (data()[i])
             f(reinterpret_cast<ManagedObject *&>(data()[i]));
@@ -274,9 +270,8 @@ uint64_t HashMap<K, V>::hashKey(const K &key) {
 }
 
 template <>
-uint64_t HashMap<Object *, uint32_t>::hashKey(Object *const & /*key*/) {
-    // return key->hash();
-    return 0;
+inline uint64_t HashMap<Object *, uint32_t>::hashKey(Object *const &key) {
+    return key->hash();
 }
 
 template <class K, class V>
@@ -359,7 +354,7 @@ typename HashMap<K, V>::Entry *HashMap<K, V>::createEntry(const K &key, const V 
 }
 
 template <>
-typename HashMap<uint32_t, Object *>::Entry *HashMap<uint32_t, Object *>::createEntry(const uint32_t &key, Object *const &value) const {
+inline typename HashMap<uint32_t, Object *>::Entry *HashMap<uint32_t, Object *>::createEntry(const uint32_t &key, Object *const &value) const {
     Ptr<Object> pValue = value;
 
     Entry *entry = new Entry(key, 0);
@@ -369,7 +364,7 @@ typename HashMap<uint32_t, Object *>::Entry *HashMap<uint32_t, Object *>::create
 }
 
 template <>
-typename HashMap<Object *, uint32_t>::Entry *HashMap<Object *, uint32_t>::createEntry(Object *const &key, const uint32_t &value) const {
+inline typename HashMap<Object *, uint32_t>::Entry *HashMap<Object *, uint32_t>::createEntry(Object *const &key, const uint32_t &value) const {
     Ptr<Object> pKey = key;
 
     Entry *entry = new Entry(0, value);

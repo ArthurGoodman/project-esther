@@ -24,12 +24,12 @@ public:
     Ptr<Object> getHere() const;
     void setHere(Ptr<Object> here);
 
-    bool hasLocal(const std::string &name) const;
-    Ptr<Object> getLocal(const std::string &name) const;
-    void setLocal(const std::string &name, Ptr<Object> value);
+    bool hasLocal(Esther *esther, const std::string &name) const;
+    Ptr<Object> getLocal(Esther *esther, const std::string &name) const;
+    void setLocal(Esther *esther, const std::string &name, Ptr<Object> value);
 
     Ptr<Object> get(Esther *esther, const std::string &name) const;
-    bool set(const std::string &name, Ptr<Object> value);
+    bool set(Esther *esther, const std::string &name, Ptr<Object> value);
 
     Ptr<Context> childContext(Ptr<Object> self, Ptr<Object> here);
 

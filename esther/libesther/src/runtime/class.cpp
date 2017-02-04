@@ -27,11 +27,11 @@ void Class::setSuperclass(Ptr<Class> superclass) {
     this->superclass = superclass;
 }
 
-Ptr<Object> Class::get(const std::string &name) const {
+Ptr<Object> Class::get(Esther *esther, const std::string &name) const {
     Ptr<const Class> _this = this;
 
     Ptr<Object> temp = nullptr;
-    return (temp = _this->Object::get(name)) ? temp : _this->superclass ? _this->superclass->lookup(name) : nullptr;
+    return (temp = _this->Object::get(esther, name)) ? temp : _this->superclass ? _this->superclass->lookup(esther, name) : nullptr;
 }
 
 Ptr<Object> Class::newInstance(Esther *esther, const std::vector<Ptr<Object>> &args) {
@@ -54,10 +54,10 @@ std::string Class::toString() const {
     return _this->getName().empty() ? "<anonymous class>" : "<class " + _this->getName() + ">";
 }
 
-Ptr<Object> Class::lookup(const std::string &name) const {
+Ptr<Object> Class::lookup(Esther *esther, const std::string &name) const {
     Ptr<const Class> _this = this;
 
-    return _this->hasAttribute(name) ? _this->getAttribute(name) : _this->superclass ? _this->superclass->lookup(name) : nullptr;
+    return _this->hasAttribute(esther, name) ? _this->getAttribute(esther, name) : _this->superclass ? _this->superclass->lookup(esther, name) : nullptr;
 }
 
 void Class::finalize() {

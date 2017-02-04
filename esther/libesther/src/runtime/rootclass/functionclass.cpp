@@ -25,7 +25,7 @@ void FunctionClass::setupMethods(Esther *esther) {
         return static_cast<Function *>(*self)->invoke(esther, actualSelf, actualArgs);
     });
 
-    _this->setAttribute("()", _this->getAttribute("call"));
+    _this->setAttribute(esther, "()", _this->getAttribute(esther, "call"));
 }
 
 Ptr<Object> FunctionClass::createNewInstance(Esther *, const std::vector<Ptr<Object>> &) {

@@ -7,4 +7,4 @@
 //#define HEAP_VARIANT
 
 #define GC
-//#define VERBOSE_GC
+#define VERBOSE_GC

@@ -17,8 +17,8 @@ AssignmentExpression::~AssignmentExpression() {
 Ptr<Object> AssignmentExpression::exec(Esther *esther) {
     Ptr<Object> evaledValue = value->eval(esther);
 
-    if (!esther->context()->set(name, evaledValue))
-        esther->context()->setLocal(name, evaledValue);
+    if (!esther->context()->set(esther, name, evaledValue))
+        esther->context()->setLocal(esther, name, evaledValue);
 
     return evaledValue;
 }

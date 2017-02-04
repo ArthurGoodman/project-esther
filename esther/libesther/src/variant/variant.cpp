@@ -554,6 +554,25 @@ bool Variant::operator!=(const Variant &v) const {
     }
 }
 
+uint32_t Variant::hash() const {
+    switch (type) {
+    case Char:
+        return std::hash<char>()(character);
+
+    case Integer:
+        return std::hash<int>()(integer);
+
+    case Real:
+        return std::hash<double>()(real);
+
+    case String:
+        return std::hash<std::string>()(string);
+
+    default:
+        return 0;
+    }
+}
+
 std::pair<Variant, Variant> Variant::coerce(const Variant &a, const Variant &b) {
     Type type = std::max(a.getType(), b.getType());
     return std::make_pair(a.convertTo(type), b.convertTo(type));

@@ -20,7 +20,7 @@ Ptr<Object> AttributeAssignmentExpression::exec(Esther *esther) {
     Ptr<Object> evaledSelf = self->eval(esther);
     Ptr<Object> evaledValue = value->eval(esther);
 
-    evaledSelf->setAttribute(name, evaledValue);
+    evaledSelf->setAttribute(esther, name, evaledValue);
 
     return evaledValue;
 }

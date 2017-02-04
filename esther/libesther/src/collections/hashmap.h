@@ -87,3 +87,5 @@ private:
     Entry *createEntry(const K &key, const V &value) const;
 };
 }
+
+#include "collections/hashmap.inl"
