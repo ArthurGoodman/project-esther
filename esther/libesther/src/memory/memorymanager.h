@@ -18,11 +18,11 @@ class MemoryManager : public
 
 public:
     template <class T>
-    T *allocateArray(uint32_t size);
+    T *allocateArray(size_t size);
 };
 
 template <class T>
-T *MemoryManager::allocateArray(uint32_t size) {
+T *MemoryManager::allocateArray(size_t size) {
     return new (allocate(size * sizeof(T), size)) T[size];
 }
 }
