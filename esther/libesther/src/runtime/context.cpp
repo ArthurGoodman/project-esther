@@ -1,7 +1,7 @@
 #include "runtime/context.h"
 
-#include "runtime/object.h"
 #include "esther.h"
+#include "runtime/object.h"
 #include "runtime/class.h"
 
 namespace es {
@@ -12,19 +12,19 @@ Context::Context(Esther *esther)
     , here(self) {
 }
 
-Ptr<Object> Context::getSelf() const {
+Object *Context::getSelf() const {
     return self;
 }
 
-void Context::setSelf(Ptr<Object> self) {
+void Context::setSelf(Object *self) {
     this->self = self;
 }
 
-Ptr<Object> Context::getHere() const {
+Object *Context::getHere() const {
     return here;
 }
 
-void Context::setHere(Ptr<Object> here) {
+void Context::setHere(Object *here) {
     this->here = here;
 }
 
@@ -32,15 +32,15 @@ bool Context::hasLocal(const std::string &name) const {
     return getHere()->hasAttribute(name);
 }
 
-Ptr<Object> Context::getLocal(const std::string &name) const {
+Object *Context::getLocal(const std::string &name) const {
     return getHere()->getAttribute(name);
 }
 
-void Context::setLocal(const std::string &name, Ptr<Object> value) {
+void Context::setLocal(const std::string &name, Object *value) {
     getHere()->setAttribute(name, value);
 }
 
-Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
+Object *Context::get(Esther *esther, const std::string &name) const {
     if (hasLocal(name))
         return getLocal(name);
 
@@ -48,12 +48,12 @@ Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
         return parent->get(esther, name);
 
     if (esther->hasRootClass(name))
-        return static_cast<Object *>(*esther->getRootClass(name));
+        return static_cast<Object *>(esther->getRootClass(name));
 
     return nullptr;
 }
 
-bool Context::set(const std::string &name, Ptr<Object> value) {
+bool Context::set(const std::string &name, Object *value) {
     if (hasLocal(name)) {
         setLocal(name, value);
         return true;
@@ -65,23 +65,11 @@ bool Context::set(const std::string &name, Ptr<Object> value) {
     return false;
 }
 
-Ptr<Context> Context::childContext(Ptr<Object> self, Ptr<Object> here) {
+Context *Context::childContext(Object *self, Object *here) {
     return new Context(self, here, this);
 }
 
-void Context::mapOnReferences(void (*f)(ManagedObject *&)) {
-    if (parent)
-        f(reinterpret_cast<ManagedObject *&>(parent));
-
-    f(reinterpret_cast<ManagedObject *&>(self));
-    f(reinterpret_cast<ManagedObject *&>(here));
-}
-
-int Context::getSize() const {
-    return sizeof *this;
-}
-
-Context::Context(Ptr<Object> self, Ptr<Object> here, Ptr<Context> parent)
+Context::Context(Object *self, Object *here, Context *parent)
     : parent(parent)
     , self(self)
     , here(here) {

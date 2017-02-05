@@ -11,75 +11,73 @@ StringClass::StringClass(Esther *esther)
 }
 
 void StringClass::setupMethods(Esther *esther) {
-    Ptr<StringClass> _this = this;
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+                     if (!dynamic_cast<StringClass *>(self)) {
+                         Esther::runtimeError("String.(): invalid self");
+                         return nullptr;
+                     }
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-                            if (!dynamic_cast<StringClass *>(*self)) {
-                                Esther::runtimeError("String.(): invalid self");
-                                return nullptr;
-                            }
+                     if (!dynamic_cast<ValueObject *>(args[1])) {
+                         Esther::runtimeError("String.(): invalid argument");
+                         return nullptr;
+                     }
 
-                            if (!dynamic_cast<ValueObject *>(*args[1])) {
-                                Esther::runtimeError("String.(): invalid argument");
-                                return nullptr;
-                            }
+                     return new ValueObject(esther, static_cast<ValueObject *>(args[1])->getVariant().toString());
+                 }));
 
-                            return new ValueObject(esther, static_cast<ValueObject *>(*args[1])->getVariant().toString());
-                        }));
-
-    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
             Esther::runtimeError("String.initialize: invalid number of arguments");
 
         if (!args.empty())
-            static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toString());
+            static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toString());
 
         return self;
     });
 
-    _this->defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
+    defOper(esther, "+", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString() + b.toString();
     });
 
-    _this->defPred(esther, "<", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "<", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() < b.toString();
     });
 
-    _this->defPred(esther, "<=", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "<=", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() <= b.toString();
     });
 
-    _this->defPred(esther, ">", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, ">", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() > b.toString();
     });
 
-    _this->defPred(esther, ">=", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, ">=", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() >= b.toString();
     });
 
-    _this->defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "equals", [](const Variant &a, const Variant &b) -> bool {
         return a.toString() == b.toString();
     });
 
-    _this->defFunc(esther, "size", [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &) -> Ptr<Object> {
-        return new ValueObject(esther, static_cast<int>(static_cast<ValueObject *>(*self)->toString().size()));
+    defFunc(esther, "size", [](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
+        return new ValueObject(esther, static_cast<int>(static_cast<ValueObject *>(self)->toString().size()));
     });
 
-    _this->defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
+    defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
         return a.toString()[b.toInteger()];
     });
 
-    _this->defPred(esther, "contains", [](const Variant &a, const Variant &b) -> bool {
+    defPred(esther, "contains", [](const Variant &a, const Variant &b) -> bool {
         return a.toString().find(b.toChar()) != std::string::npos;
     });
 
-    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toString());
+    defValueObjectFunc(esther, "=", 1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+        static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toString());
         return self;
     });
 }
 
-Ptr<Object> StringClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
+Object *StringClass::createNewInstance(Esther *esther, const std::vector<Object *> &) {
     return new ValueObject(esther, "");
 }
 }

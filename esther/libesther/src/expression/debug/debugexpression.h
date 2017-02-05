@@ -23,7 +23,7 @@ public:
     DebugExpression(const std::string &name, const std::list<DebugExpression *> &args = std::list<DebugExpression *>());
     ~DebugExpression();
 
-    Ptr<Object> exec(Esther *esther) override;
+    Object *exec(Esther *esther) override;
 
     virtual std::string toString() const;
 };

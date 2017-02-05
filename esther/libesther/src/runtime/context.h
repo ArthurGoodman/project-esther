@@ -3,40 +3,34 @@
 #include <string>
 #include <list>
 
-#include "memory/managedobject.h"
-#include "memory/ptr.h"
-
 namespace es {
 
 class Object;
 class Esther;
 
-class Context : public ManagedObject {
+class Context {
     Context *parent;
     Object *self, *here;
 
 public:
     Context(Esther *esther);
 
-    Ptr<Object> getSelf() const;
-    void setSelf(Ptr<Object> self);
+    Object *getSelf() const;
+    void setSelf(Object *self);
 
-    Ptr<Object> getHere() const;
-    void setHere(Ptr<Object> here);
+    Object *getHere() const;
+    void setHere(Object *here);
 
     bool hasLocal(const std::string &name) const;
-    Ptr<Object> getLocal(const std::string &name) const;
-    void setLocal(const std::string &name, Ptr<Object> value);
+    Object *getLocal(const std::string &name) const;
+    void setLocal(const std::string &name, Object *value);
 
-    Ptr<Object> get(Esther *esther, const std::string &name) const;
-    bool set(const std::string &name, Ptr<Object> value);
+    Object *get(Esther *esther, const std::string &name) const;
+    bool set(const std::string &name, Object *value);
 
-    Ptr<Context> childContext(Ptr<Object> self, Ptr<Object> here);
-
-    void mapOnReferences(void (*f)(ManagedObject *&)) override;
-    int getSize() const override;
+    Context *childContext(Object *self, Object *here);
 
 private:
-    Context(Ptr<Object> self, Ptr<Object> here, Ptr<Context> parent);
+    Context(Object *self, Object *here, Context *parent);
 };
 }

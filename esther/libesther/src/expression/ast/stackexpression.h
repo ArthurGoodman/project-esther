@@ -11,6 +11,6 @@ public:
     StackExpression(int index);
 
 protected:
-    Ptr<Object> exec(Esther *esther) override;
+    Object *exec(Esther *esther) override;
 };
 }

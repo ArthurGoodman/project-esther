@@ -1,17 +1,16 @@
 #pragma once
 
 #include "expression/expression.h"
-#include "memory/ptr.h"
 
 namespace es {
 
 class ConstantExpression : public Expression {
-    Ptr<Object> value;
+    Object *value;
 
 public:
-    ConstantExpression(Ptr<Object> value);
+    ConstantExpression(Object *value);
 
 protected:
-    Ptr<Object> exec(Esther *esther) override;
+    Object *exec(Esther *esther) override;
 };
 }

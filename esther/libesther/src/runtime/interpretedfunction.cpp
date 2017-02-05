@@ -4,37 +4,21 @@
 
 namespace es {
 
-InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Ptr<Context> context)
+InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context)
     : Function(esther->getRootClass("Function"), name, params.size())
-    , params(new std::list<std::string>(params))
+    , params(params)
     , body(body)
     , context(context) {
 }
 
-void InterpretedFunction::finalize() {
-    Function::finalize();
+Object *InterpretedFunction::execute(Esther *esther, Object *self, const std::vector<Object *> &args) {
+    esther->pushContext(context->childContext(self, esther->createObject()));
 
-    delete params;
-}
-
-void InterpretedFunction::mapOnReferences(void (*f)(ManagedObject *&)) {
-    f(reinterpret_cast<ManagedObject *&>(context));
-}
-
-int InterpretedFunction::getSize() const {
-    return sizeof *this;
-}
-
-Ptr<Object> InterpretedFunction::execute(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) {
-    Ptr<InterpretedFunction> _this = this;
-
-    esther->pushContext(_this->context->childContext(self, esther->createObject()));
-
-    std::vector<Ptr<Object>>::const_iterator i = args.begin();
-    for (const std::string &s : *_this->params)
+    std::vector<Object *>::const_iterator i = args.begin();
+    for (const std::string &s : params)
         esther->context()->setLocal(s, *i++);
 
-    Ptr<Object> value = _this->body->eval(esther);
+    Object *value = body->eval(esther);
 
     esther->popContext();
 

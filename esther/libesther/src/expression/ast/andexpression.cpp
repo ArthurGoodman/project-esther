@@ -14,8 +14,8 @@ AndExpression::~AndExpression() {
     delete arg;
 }
 
-Ptr<Object> AndExpression::exec(Esther *esther) {
-    Ptr<Object> self = this->self->eval(esther);
+Object *AndExpression::exec(Esther *esther) {
+    Object *self = this->self->eval(esther);
 
     if (self->isTrue())
         return arg->eval(esther);

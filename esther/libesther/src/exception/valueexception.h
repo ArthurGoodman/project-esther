@@ -6,11 +6,11 @@
 namespace es {
 
 class ValueException : public Exception {
-    Ptr<Object> value;
+    Object *value;
 
 protected:
-    ValueException(Ptr<Object> value);
+    ValueException(Object *value);
 
-    Ptr<Object> getValue();
+    Object *getValue();
 };
 }

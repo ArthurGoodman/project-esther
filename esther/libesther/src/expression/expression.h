@@ -24,12 +24,12 @@ class Expression : public
 public:
     virtual ~Expression();
 
-    Ptr<Object> eval(Esther *esther);
+    Object *eval(Esther *esther);
 
     Position getPosition() const;
     void setPosition(Position position);
 
 protected:
-    virtual Ptr<Object> exec(Esther *esther) = 0;
+    virtual Object *exec(Esther *esther) = 0;
 };
 }

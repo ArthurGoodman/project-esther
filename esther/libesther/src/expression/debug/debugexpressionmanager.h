@@ -15,9 +15,6 @@ class DebugExpression;
 class Object;
 class Variant;
 
-template <class>
-class Ptr;
-
 class DebugExpressionManager {
     static std::vector<const char *> typenames;
 
@@ -29,7 +26,7 @@ public:
     static Expression *Block(const std::list<Expression *> &nodes);
     static Expression *Call(Expression *f, Expression *self, int args);
     static Expression *ClassDefinition(const std::string &name, Expression *superclass);
-    static Expression *Constant(Ptr<Object> value);
+    static Expression *Constant(Object *value);
     static Expression *ContextResolution(Expression *self, Expression *body, Expression *here = nullptr);
     static Expression *Empty();
     static Expression *FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body);

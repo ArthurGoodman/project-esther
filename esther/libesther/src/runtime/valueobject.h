@@ -18,10 +18,7 @@ public:
 
     std::string toString() const override;
 
-    void finalize() override;
-    int getSize() const override;
-
 private:
-    static Ptr<Class> variantTypeToObjectClass(Esther *esther, Variant::Type type);
+    static Class *variantTypeToObjectClass(Esther *esther, Variant::Type type);
 };
 }

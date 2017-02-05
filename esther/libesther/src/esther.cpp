@@ -39,27 +39,27 @@ Esther::~Esther() {
     release();
 }
 
-Ptr<Object> Esther::getMainObject() const {
+Object *Esther::getMainObject() const {
     return mainObject;
 }
 
-Ptr<Class> Esther::getObjectClass() const {
-    return *objectClass;
+Class *Esther::getObjectClass() const {
+    return objectClass;
 }
 
-Ptr<ClassClass> Esther::getClassClass() const {
+ClassClass *Esther::getClassClass() const {
     return classClass;
 }
 
-Ptr<Object> Esther::getTrue() const {
+Object *Esther::getTrue() const {
     return trueObject;
 }
 
-Ptr<Object> Esther::getFalse() const {
+Object *Esther::getFalse() const {
     return falseObject;
 }
 
-Ptr<Object> Esther::getNull() const {
+Object *Esther::getNull() const {
     return nullObject;
 }
 
@@ -67,19 +67,19 @@ bool Esther::hasRootClass(const std::string &name) const {
     return rootClasses.find(name) != rootClasses.end();
 }
 
-Ptr<Class> Esther::getRootClass(const std::string &name) const {
-    return *rootClasses.at(name);
+Class *Esther::getRootClass(const std::string &name) const {
+    return rootClasses.at(name);
 }
 
-void Esther::registerRootClass(Ptr<RootClass> rootClass) {
+void Esther::registerRootClass(RootClass *rootClass) {
     rootClasses[rootClass->getName()] = rootClass;
 }
 
-Ptr<Object> Esther::toBoolean(bool value) const {
+Object *Esther::toBoolean(bool value) const {
     return value ? trueObject : falseObject;
 }
 
-Ptr<Object> Esther::createObject() {
+Object *Esther::createObject() {
     return objectClass->newInstance(this);
 }
 
@@ -87,10 +87,10 @@ void Esther::initialize() {
     rootClasses.clear();
 
     classClass = new ClassClass(this);
-    classClass->setClass(*classClass);
+    classClass->setClass(classClass);
 
     objectClass = new ObjectClass(this);
-    classClass->setSuperclass(*objectClass);
+    classClass->setSuperclass(objectClass);
 
     mainObject = createObject();
 
@@ -114,10 +114,10 @@ void Esther::initialize() {
 
     setupMethods();
 
-    Ptr<Object> console = createObject();
+    Object *console = createObject();
     mainObject->setAttribute("console", console);
 
-    console->setAttribute("write", new NativeFunction(this, "write", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    console->setAttribute("write", new NativeFunction(this, "write", -1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
                               if (!args.empty())
                                   for (auto &arg : args)
                                       IO::write(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
@@ -127,7 +127,7 @@ void Esther::initialize() {
                               return esther->getNull();
                           }));
 
-    console->setAttribute("writeLine", new NativeFunction(this, "writeLine", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    console->setAttribute("writeLine", new NativeFunction(this, "writeLine", -1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
                               if (!args.empty())
                                   for (auto &arg : args)
                                       IO::writeLine(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
@@ -155,7 +155,7 @@ void Esther::run(const std::string &script) {
 
     try {
         Expression *e = IParser::instance()->parse(this, ILexer::instance()->lex(src));
-        Ptr<Object> value = e ? e->eval(this) : nullptr;
+        Object *value = e ? e->eval(this) : nullptr;
         if (value)
             IO::writeLine("=> %s", value->call(this, "toString", {}, getRootClass("String"))->toString().c_str());
         delete e;
@@ -182,11 +182,11 @@ void Esther::runFile(const std::string &fileName) {
     popFileName();
 }
 
-Ptr<Context> Esther::context() const {
+Context *Esther::context() const {
     return contexts.top();
 }
 
-void Esther::pushContext(Ptr<Context> context) {
+void Esther::pushContext(Context *context) {
     contexts.push(context);
 }
 
@@ -194,7 +194,7 @@ void Esther::popContext() {
     contexts.pop();
 }
 
-void Esther::push(Ptr<Object> value) {
+void Esther::push(Object *value) {
     stack.push_back(value);
 }
 
@@ -202,15 +202,15 @@ void Esther::pop(int count) {
     stack.erase(stack.end() - count, stack.end());
 }
 
-Ptr<Object> Esther::top(int index) {
+Object *Esther::top(int index) {
     return stack[stack.size() - 1 - index];
 }
 
-Ptr<Object> Esther::getReg() const {
+Object *Esther::getReg() const {
     return reg;
 }
 
-void Esther::setReg(Ptr<Object> value) {
+void Esther::setReg(Object *value) {
     reg = value;
 }
 

@@ -6,9 +6,9 @@ namespace es {
 
 class ReturnException : public ValueException {
 public:
-    ReturnException(Ptr<Object> value);
+    ReturnException(Object *value);
 
-    Ptr<Object> value();
+    Object *value();
 
     void raise() override;
 };

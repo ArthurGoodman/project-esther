@@ -5,7 +5,7 @@
 
 namespace es {
 
-Ptr<Object> EmptyExpression::exec(Esther *esther) {
+Object *EmptyExpression::exec(Esther *esther) {
     return esther->getNull();
 }
 }

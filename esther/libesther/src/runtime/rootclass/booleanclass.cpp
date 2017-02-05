@@ -11,7 +11,7 @@ BooleanClass::BooleanClass(Esther *esther)
 void BooleanClass::setupMethods(Esther *) {
 }
 
-Ptr<Object> BooleanClass::createNewInstance(Esther *, const std::vector<Ptr<Object>> &) {
+Object *BooleanClass::createNewInstance(Esther *, const std::vector<Object *> &) {
     Esther::runtimeError("cannot create new instance of Boolean class");
     return nullptr;
 }

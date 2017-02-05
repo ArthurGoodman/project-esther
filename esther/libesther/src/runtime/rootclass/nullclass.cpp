@@ -12,7 +12,7 @@ NullClass::NullClass(Esther *esther)
 void NullClass::setupMethods(Esther *) {
 }
 
-Ptr<Object> NullClass::createNewInstance(Esther *, const std::vector<Ptr<Object>> &) {
+Object *NullClass::createNewInstance(Esther *, const std::vector<Object *> &) {
     Esther::runtimeError("cannot create new instance of Null class");
     return nullptr;
 }

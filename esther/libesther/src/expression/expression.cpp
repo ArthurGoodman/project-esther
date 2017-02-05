@@ -8,7 +8,7 @@ namespace es {
 Expression::~Expression() {
 }
 
-Ptr<Object> Expression::eval(Esther *esther) {
+Object *Expression::eval(Esther *esther) {
     Object *value = nullptr;
 
     try {

@@ -3,7 +3,6 @@
 #include "common/utility.h"
 #include "variant/variant.h"
 #include "runtime/class.h"
-#include "memory/ptr.h"
 #include "expression/debug/debugexpression.h"
 #include "expression/debug/literaldebugexpression.h"
 
@@ -83,7 +82,7 @@ Expression *DebugExpressionManager::ClassDefinition(const std::string &name, Exp
     return new DebugExpression("ClassDefinition", arguments);
 }
 
-Expression *DebugExpressionManager::Constant(Ptr<Object> value) {
+Expression *DebugExpressionManager::Constant(Object *value) {
     std::list<DebugExpression *> arguments;
 
     arguments << literal(value->getClass()->getName(), value->toString());

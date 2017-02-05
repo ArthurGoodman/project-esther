@@ -5,83 +5,54 @@
 
 namespace es {
 
-Class::Class(Esther *esther, const std::string &name, Ptr<Class> superclass)
-    : Object(*esther->getClassClass())
-    , name(new std::string(name))
+Class::Class(Esther *esther, const std::string &name, Class *superclass)
+    : Object(esther->getClassClass())
+    , name(name)
     , superclass(superclass) {
 }
 
 std::string Class::getName() const {
-    return *name;
+    return name;
 }
 
 void Class::setName(const std::string &name) {
-    *this->name = name;
+    this->name = name;
 }
 
-Ptr<Class> Class::getSuperclass() const {
+Class *Class::getSuperclass() const {
     return superclass;
 }
 
-void Class::setSuperclass(Ptr<Class> superclass) {
+void Class::setSuperclass(Class *superclass) {
     this->superclass = superclass;
 }
 
-Ptr<Object> Class::get(const std::string &name) const {
-    Ptr<const Class> _this = this;
-
-    Ptr<Object> temp = nullptr;
-    return (temp = _this->Object::get(name)) ? temp : _this->superclass ? _this->superclass->lookup(name) : nullptr;
+Object *Class::get(const std::string &name) const {
+    Object *temp = nullptr;
+    return (temp = Object::get(name)) ? temp : superclass ? superclass->lookup(name) : nullptr;
 }
 
-Ptr<Object> Class::newInstance(Esther *esther, const std::vector<Ptr<Object>> &args) {
-    Ptr<Class> _this = this;
-
-    Ptr<Object> instance = _this->createNewInstance(esther, args);
+Object *Class::newInstance(Esther *esther, const std::vector<Object *> &args) {
+    Object *instance = createNewInstance(esther, args);
     instance->callIfFound(esther, "initialize", args);
     return instance;
 }
 
-bool Class::isChild(Ptr<Class> _class) const {
-    Ptr<const Class> _this = this;
-
-    return _this == _class || (_this->superclass && _this->superclass->isChild(_class));
+bool Class::isChild(Class *_class) const {
+    return this == _class || (superclass && superclass->isChild(_class));
 }
 
 std::string Class::toString() const {
-    Ptr<const Class> _this = this;
-
-    return _this->getName().empty() ? "<anonymous class>" : "<class " + _this->getName() + ">";
+    return getName().empty() ? "<anonymous class>" : "<class " + getName() + ">";
 }
 
-Ptr<Object> Class::lookup(const std::string &name) const {
-    Ptr<const Class> _this = this;
-
-    return _this->hasAttribute(name) ? _this->getAttribute(name) : _this->superclass ? _this->superclass->lookup(name) : nullptr;
+Object *Class::lookup(const std::string &name) const {
+    return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
 }
 
-void Class::finalize() {
-    Object::finalize();
-
-    delete name;
-}
-
-void Class::mapOnReferences(void (*f)(ManagedObject *&)) {
-    Object::mapOnReferences(f);
-
-    if (superclass)
-        f(reinterpret_cast<ManagedObject *&>(superclass));
-}
-
-int Class::getSize() const {
-    return sizeof *this;
-}
-
-Ptr<Object> Class::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &args) {
-    Ptr<Class> _this = this;
-
-    Ptr<Object> instance = _this->superclass->createNewInstance(esther, args);
-    instance->setClass(_this);
+Object *Class::createNewInstance(Esther *esther, const std::vector<Object *> &args) {
+    Object *instance = superclass->createNewInstance(esther, args);
+    instance->setClass(this);
     return instance;
 }
 }

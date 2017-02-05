@@ -9,9 +9,6 @@ class Expression;
 class Object;
 class Variant;
 
-template <class>
-class Ptr;
-
 class ExpressionManager {
 public:
     static Expression *And(Expression *self, Expression *arg);
@@ -21,7 +18,7 @@ public:
     static Expression *Block(const std::list<Expression *> &nodes);
     static Expression *Call(Expression *f, Expression *self, int args);
     static Expression *ClassDefinition(const std::string &name, Expression *superclass);
-    static Expression *Constant(Ptr<Object> value);
+    static Expression *Constant(Object *value);
     static Expression *ContextResolution(Expression *self, Expression *body, Expression *here = nullptr);
     static Expression *Empty();
     static Expression *FunctionDefinition(const std::string &name, const std::list<std::string> &params, Expression *body);

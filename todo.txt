@@ -1,7 +1,4 @@
 Todo:
-    * Refactor maps
-    * Implement managed list
-    * Implement managed string
 
 Think about:
     * Refactoring Function to be a container for non-managed function type

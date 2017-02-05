@@ -1,7 +1,7 @@
 #include "expression/ast/classdefinitionexpression.h"
 
-#include "runtime/context.h"
 #include "esther.h"
+#include "runtime/context.h"
 #include "runtime/class.h"
 
 namespace es {
@@ -15,14 +15,14 @@ ClassDefinitionExpression::~ClassDefinitionExpression() {
     delete superclass;
 }
 
-Ptr<Object> ClassDefinitionExpression::exec(Esther *esther) {
-    Ptr<Object> evaledSuperclass = superclass->eval(esther);
+Object *ClassDefinitionExpression::exec(Esther *esther) {
+    Object *evaledSuperclass = superclass->eval(esther);
 
-    if (!dynamic_cast<Class *>(*evaledSuperclass)) {
+    if (!dynamic_cast<Class *>(evaledSuperclass)) {
         setPosition(superclass->getPosition());
         Esther::runtimeError("class expected");
     }
 
-    return new Class(esther, name, static_cast<Class *>(*evaledSuperclass));
+    return new Class(esther, name, static_cast<Class *>(evaledSuperclass));
 }
 }

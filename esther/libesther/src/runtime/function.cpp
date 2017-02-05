@@ -1,43 +1,33 @@
 #include "runtime/function.h"
 
-#include "runtime/context.h"
 #include "esther.h"
+#include "runtime/context.h"
 #include "common/utility.h"
 
 namespace es {
 
 std::string Function::getName() const {
-    return *name;
+    return name;
 }
 
 void Function::setName(const std::string &name) {
-    *this->name = name;
+    this->name = name;
 }
 
-Ptr<Object> Function::invoke(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) {
-    Ptr<Function> _this = this;
+Object *Function::invoke(Esther *esther, Object *self, const std::vector<Object *> &args) {
+    if (arity >= 0 && arity != static_cast<int>(args.size()))
+        Esther::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(arity) + ")");
 
-    if (_this->arity >= 0 && _this->arity != static_cast<int>(args.size()))
-        Esther::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(_this->arity) + ")");
-
-    return _this->execute(esther, self, args);
+    return execute(esther, self, args);
 }
 
 std::string Function::toString() const {
-    Ptr<const Function> _this = this;
-
-    return _this->getName().empty() ? "<anonymous function>" : "<function " + _this->getName() + ">";
+    return getName().empty() ? "<anonymous function>" : "<function " + getName() + ">";
 }
 
-void Function::finalize() {
-    Object::finalize();
-
-    delete name;
-}
-
-Function::Function(Ptr<Class> objectClass, const std::string &name, int arity)
+Function::Function(Class *objectClass, const std::string &name, int arity)
     : Object(objectClass)
-    , name(new std::string(name))
+    , name(name)
     , arity(arity) {
 }
 }

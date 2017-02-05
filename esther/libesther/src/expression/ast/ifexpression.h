@@ -12,6 +12,6 @@ public:
     ~IfExpression();
 
 protected:
-    Ptr<Object> exec(Esther *esther) override;
+    Object *exec(Esther *esther) override;
 };
 }

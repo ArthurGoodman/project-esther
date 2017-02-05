@@ -5,7 +5,7 @@
 
 namespace es {
 
-Ptr<Object> SelfExpression::exec(Esther *esther) {
+Object *SelfExpression::exec(Esther *esther) {
     return esther->context()->getSelf();
 }
 }

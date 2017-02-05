@@ -1,8 +1,8 @@
 #include "runtime/rootclass/functionclass.h"
 
+#include "esther.h"
 #include "runtime/nativefunction.h"
 #include "runtime/interpretedfunction.h"
-#include "esther.h"
 
 namespace es {
 
@@ -11,24 +11,22 @@ FunctionClass::FunctionClass(Esther *esther)
 }
 
 void FunctionClass::setupMethods(Esther *esther) {
-    Ptr<FunctionClass> _this = this;
-
-    _this->defFunc(esther, "call", -1, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    defFunc(esther, "call", -1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         if (args.empty())
             Esther::runtimeError("Function.call: invalid number of arguments");
 
-        Ptr<Object> actualSelf = args[0];
+        Object *actualSelf = args[0];
 
-        std::vector<Ptr<Object>> actualArgs = args;
+        std::vector<Object *> actualArgs = args;
         actualArgs.erase(actualArgs.begin());
 
-        return static_cast<Function *>(*self)->invoke(esther, actualSelf, actualArgs);
+        return static_cast<Function *>(self)->invoke(esther, actualSelf, actualArgs);
     });
 
-    _this->setAttribute("()", _this->getAttribute("call"));
+    setAttribute("()", getAttribute("call"));
 }
 
-Ptr<Object> FunctionClass::createNewInstance(Esther *, const std::vector<Ptr<Object>> &) {
+Object *FunctionClass::createNewInstance(Esther *, const std::vector<Object *> &) {
     Esther::runtimeError("cannot create new instance of Function class yet...");
     return nullptr;
 }

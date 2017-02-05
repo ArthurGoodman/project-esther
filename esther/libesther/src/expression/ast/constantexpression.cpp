@@ -2,11 +2,11 @@
 
 namespace es {
 
-ConstantExpression::ConstantExpression(Ptr<Object> value)
+ConstantExpression::ConstantExpression(Object *value)
     : value(value) {
 }
 
-Ptr<Object> ConstantExpression::exec(Esther *) {
+Object *ConstantExpression::exec(Esther *) {
     return value;
 }
 }

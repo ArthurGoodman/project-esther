@@ -13,6 +13,6 @@ public:
     void setupMethods(Esther *esther) override;
 
 protected:
-    Ptr<Object> createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &args) override;
+    Object *createNewInstance(Esther *esther, const std::vector<Object *> &args) override;
 };
 }

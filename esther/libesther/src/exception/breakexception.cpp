@@ -2,7 +2,7 @@
 
 namespace es {
 
-BreakException::BreakException(Ptr<Object> value)
+BreakException::BreakException(Object *value)
     : ValueException(value) {
 }
 

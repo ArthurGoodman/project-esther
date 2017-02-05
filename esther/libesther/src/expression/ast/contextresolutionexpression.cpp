@@ -17,12 +17,12 @@ ContextResolutionExpression::~ContextResolutionExpression() {
     delete here;
 }
 
-Ptr<Object> ContextResolutionExpression::exec(Esther *esther) {
-    Ptr<Object> evaledSelf = self->eval(esther);
-    Ptr<Object> evaledHere = here ? here->eval(esther) : evaledSelf;
+Object *ContextResolutionExpression::exec(Esther *esther) {
+    Object *evaledSelf = self->eval(esther);
+    Object *evaledHere = here ? here->eval(esther) : evaledSelf;
 
     esther->pushContext(esther->context()->childContext(evaledSelf, evaledHere));
-    Ptr<Object> value = body->eval(esther);
+    Object *value = body->eval(esther);
     esther->popContext();
 
     return value;

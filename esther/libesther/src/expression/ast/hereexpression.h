@@ -6,6 +6,6 @@ namespace es {
 
 class HereExpression : public Expression {
 protected:
-    Ptr<Object> exec(Esther *esther) override;
+    Object *exec(Esther *esther) override;
 };
 }

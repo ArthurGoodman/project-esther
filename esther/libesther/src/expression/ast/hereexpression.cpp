@@ -5,7 +5,7 @@
 
 namespace es {
 
-Ptr<Object> HereExpression::exec(Esther *esther) {
+Object *HereExpression::exec(Esther *esther) {
     return esther->context()->getHere();
 }
 }

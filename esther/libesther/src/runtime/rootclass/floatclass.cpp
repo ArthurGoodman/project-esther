@@ -12,39 +12,37 @@ FloatClass::FloatClass(Esther *esther)
 }
 
 void FloatClass::setupMethods(Esther *esther) {
-    Ptr<FloatClass> _this = this;
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+                     if (!dynamic_cast<FloatClass *>(self)) {
+                         Esther::runtimeError("Float.(): invalid self");
+                         return nullptr;
+                     }
 
-    _this->setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-                            if (!dynamic_cast<FloatClass *>(*self)) {
-                                Esther::runtimeError("Float.(): invalid self");
-                                return nullptr;
-                            }
+                     if (!dynamic_cast<ValueObject *>(args[1])) {
+                         Esther::runtimeError("Float.(): invalid argument");
+                         return nullptr;
+                     }
 
-                            if (!dynamic_cast<ValueObject *>(*args[1])) {
-                                Esther::runtimeError("Float.(): invalid argument");
-                                return nullptr;
-                            }
+                     return new ValueObject(esther, static_cast<ValueObject *>(args[1])->getVariant().toReal());
+                 }));
 
-                            return new ValueObject(esther, static_cast<ValueObject *>(*args[1])->getVariant().toReal());
-                        }));
-
-    _this->defValueObjectFunc(esther, "initialize", -1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
+    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
         if (static_cast<int>(args.size()) > 1)
             Esther::runtimeError("Float.initialize: invalid number of arguments");
 
         if (!args.empty())
-            static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toReal());
+            static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toReal());
 
         return self;
     });
 
-    _this->defValueObjectFunc(esther, "=", 1, [](Esther *, Ptr<Object> self, const std::vector<Ptr<Object>> &args) -> Ptr<Object> {
-        static_cast<ValueObject *>(*self)->setVariant(static_cast<ValueObject *>(*args[0])->getVariant().toReal());
+    defValueObjectFunc(esther, "=", 1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+        static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toReal());
         return self;
     });
 }
 
-Ptr<Object> FloatClass::createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &) {
+Object *FloatClass::createNewInstance(Esther *esther, const std::vector<Object *> &) {
     return new ValueObject(esther, 0.0);
 }
 }

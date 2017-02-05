@@ -6,7 +6,7 @@ namespace es {
 
 class BreakException : public ValueException {
 public:
-    BreakException(Ptr<Object> value);
+    BreakException(Object *value);
 
     void raise() override;
 };

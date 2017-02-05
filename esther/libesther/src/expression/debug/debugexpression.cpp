@@ -1,7 +1,7 @@
 #include "expression/debug/debugexpression.h"
 
-#include "runtime/context.h"
 #include "esther.h"
+#include "runtime/context.h"
 #include "common/log.h"
 
 #ifdef DEBUG_EXPRESSION
@@ -20,7 +20,7 @@ DebugExpression::~DebugExpression() {
         delete e;
 }
 
-Ptr<Object> DebugExpression::exec(Esther *esther) {
+Object *DebugExpression::exec(Esther *esther) {
     Log::write("parser", "%s\n", toString().c_str());
     return esther->getNull();
 }

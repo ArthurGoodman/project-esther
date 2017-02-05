@@ -4,46 +4,39 @@
 #include <string>
 #include <vector>
 
-#include "memory/managedobject.h"
-#include "memory/ptr.h"
-
 namespace es {
 
 class Class;
 class Esther;
 
-class Object : public ManagedObject {
+class Object {
     Class *objectClass;
     std::map<std::string, Object *> *attributes;
 
 public:
-    Object(Ptr<Class> objectClass);
+    Object(Class *objectClass);
 
     virtual ~Object();
 
-    Ptr<Class> getClass() const;
-    void setClass(Ptr<Class> objectClass);
+    Class *getClass() const;
+    void setClass(Class *objectClass);
 
     bool hasAttribute(const std::string &name) const;
-    Ptr<Object> getAttribute(const std::string &name) const;
-    void setAttribute(const std::string &name, Ptr<Object> value);
+    Object *getAttribute(const std::string &name) const;
+    void setAttribute(const std::string &name, Object *value);
 
-    virtual Ptr<Object> get(const std::string &name) const;
+    virtual Object *get(const std::string &name) const;
 
-    bool is(Ptr<Class> _class) const;
+    bool is(Class *_class) const;
 
     virtual std::string toString() const;
 
     virtual bool isTrue() const;
 
-    Ptr<Object> call(Esther *esther, const std::string &name, const std::vector<Ptr<Object>> &args);
-    Ptr<Object> call(Esther *esther, Ptr<Object> f, const std::vector<Ptr<Object>> &args);
-    Ptr<Object> call(Esther *esther, const std::string &name, const std::vector<Ptr<Object>> &args, Ptr<Class> expectedReturnClass);
+    Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args);
+    Object *call(Esther *esther, Object *f, const std::vector<Object *> &args);
+    Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
 
-    Ptr<Object> callIfFound(Esther *esther, const std::string &name, const std::vector<Ptr<Object>> &args);
-
-    void finalize() override;
-    void mapOnReferences(void (*f)(ManagedObject *&)) override;
-    int getSize() const override;
+    Object *callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args);
 };
 }

@@ -54,7 +54,7 @@ Expression *ExpressionManager::ClassDefinition(const std::string &name, Expressi
     return new ClassDefinitionExpression(name, superclass);
 }
 
-Expression *ExpressionManager::Constant(Ptr<Object> value) {
+Expression *ExpressionManager::Constant(Object *value) {
     return new ConstantExpression(value);
 }
 

@@ -14,8 +14,8 @@ OrExpression::~OrExpression() {
     delete arg;
 }
 
-Ptr<Object> OrExpression::exec(Esther *esther) {
-    Ptr<Object> self = this->self->eval(esther);
+Object *OrExpression::exec(Esther *esther) {
+    Object *self = this->self->eval(esther);
 
     if (self->isTrue())
         return self;

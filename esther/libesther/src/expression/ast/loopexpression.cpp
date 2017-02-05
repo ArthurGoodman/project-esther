@@ -16,8 +16,8 @@ LoopExpression::~LoopExpression() {
     delete body;
 }
 
-Ptr<Object> LoopExpression::exec(Esther *esther) {
-    Ptr<Object> value = esther->getNull();
+Object *LoopExpression::exec(Esther *esther) {
+    Object *value = esther->getNull();
 
     while (condition->eval(esther)->isTrue())
         value = body->eval(esther);

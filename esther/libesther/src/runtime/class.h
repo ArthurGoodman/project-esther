@@ -7,33 +7,29 @@
 namespace es {
 
 class Class : public Object {
-    std::string *name;
+    std::string name;
     Class *superclass;
 
 public:
-    Class(Esther *esther, const std::string &name, Ptr<Class> superclass);
+    Class(Esther *esther, const std::string &name, Class *superclass);
 
     std::string getName() const;
     void setName(const std::string &name);
 
-    Ptr<Class> getSuperclass() const;
-    void setSuperclass(Ptr<Class> superclass);
+    Class *getSuperclass() const;
+    void setSuperclass(Class *superclass);
 
-    Ptr<Object> get(const std::string &name) const override;
+    Object *get(const std::string &name) const override;
 
-    Ptr<Object> newInstance(Esther *esther, const std::vector<Ptr<Object>> &args = std::vector<Ptr<Object>>());
+    Object *newInstance(Esther *esther, const std::vector<Object *> &args = std::vector<Object *>());
 
-    bool isChild(Ptr<Class> _class) const;
+    bool isChild(Class *_class) const;
 
     std::string toString() const override;
 
-    Ptr<Object> lookup(const std::string &name) const;
-
-    void finalize() override;
-    void mapOnReferences(void (*f)(ManagedObject *&)) override;
-    int getSize() const override;
+    Object *lookup(const std::string &name) const;
 
 protected:
-    virtual Ptr<Object> createNewInstance(Esther *esther, const std::vector<Ptr<Object>> &args);
+    virtual Object *createNewInstance(Esther *esther, const std::vector<Object *> &args);
 };
 }

@@ -138,7 +138,7 @@ Expression *Parser::dot(Expression *e) {
             e = Expression::Attribute(e, name);
     } else {
         Expression *body = term();
-        Expression *newObject = Expression::Call(Expression::Constant(esther->getClassClass()->getAttribute("new")), Expression::Constant(*esther->getObjectClass()), 0);
+        Expression *newObject = Expression::Call(Expression::Constant(esther->getClassClass()->getAttribute("new")), Expression::Constant(esther->getObjectClass()), 0);
 
         if (accept(tLPar))
             e = call(e, Expression::ContextResolution(Expression::Stack(0), body, newObject));
@@ -402,7 +402,7 @@ Expression *Parser::term() {
             getToken();
         }
 
-        Expression *superclass = accept(tLt) ? expr() : Expression::Constant(*esther->getObjectClass());
+        Expression *superclass = accept(tLt) ? expr() : Expression::Constant(esther->getObjectClass());
 
         std::list<Expression *> nodes;
 
@@ -448,7 +448,7 @@ Expression *Parser::term() {
 
     else if (accept(tNew)) {
         if (check(tLBrace)) {
-            Expression *newObject = Expression::Call(Expression::Constant(esther->getClassClass()->getAttribute("new")), Expression::Constant(*esther->getObjectClass()), 0);
+            Expression *newObject = Expression::Call(Expression::Constant(esther->getClassClass()->getAttribute("new")), Expression::Constant(esther->getObjectClass()), 0);
 
             std::list<Expression *> nodes;
 

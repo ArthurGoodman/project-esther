@@ -10,7 +10,7 @@ LiteralExpression::LiteralExpression(const Variant &value)
     : value(value) {
 }
 
-Ptr<Object> LiteralExpression::exec(Esther *esther) {
+Object *LiteralExpression::exec(Esther *esther) {
     return new ValueObject(esther, value);
 }
 }

@@ -8,7 +8,6 @@
 
 #include "variant/variant.h"
 #include "common/source.h"
-#include "memory/ptr.h"
 
 namespace es {
 
@@ -31,31 +30,31 @@ class ClassClass;
 class FunctionClass;
 
 class Esther {
-    Ptr<Object> mainObject;
-    Ptr<RootClass> objectClass;
+    Object *mainObject;
+    RootClass *objectClass;
 
-    Ptr<Object> trueObject;
-    Ptr<Object> falseObject;
-    Ptr<Object> nullObject;
+    Object *trueObject;
+    Object *falseObject;
+    Object *nullObject;
 
-    Ptr<NumericClass> numericClass;
-    Ptr<CharacterClass> characterClass;
-    Ptr<FloatClass> floatClass;
-    Ptr<IntegerClass> integerClass;
-    Ptr<StringClass> stringClass;
+    NumericClass *numericClass;
+    CharacterClass *characterClass;
+    FloatClass *floatClass;
+    IntegerClass *integerClass;
+    StringClass *stringClass;
 
-    Ptr<ClassClass> classClass;
-    Ptr<FunctionClass> functionClass;
+    ClassClass *classClass;
+    FunctionClass *functionClass;
 
-    std::map<std::string, Ptr<RootClass>> rootClasses;
+    std::map<std::string, RootClass *> rootClasses;
 
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 
-    std::stack<Ptr<Context>> contexts;
+    std::stack<Context *> contexts;
 
-    std::vector<Ptr<Object>> stack;
-    Ptr<Object> reg;
+    std::vector<Object *> stack;
+    Object *reg;
 
 public:
     static void runtimeError(const std::string &message);
@@ -63,35 +62,35 @@ public:
     Esther();
     ~Esther();
 
-    Ptr<Object> getMainObject() const;
-    Ptr<Class> getObjectClass() const;
-    Ptr<ClassClass> getClassClass() const;
-    Ptr<Object> getTrue() const;
-    Ptr<Object> getFalse() const;
-    Ptr<Object> getNull() const;
+    Object *getMainObject() const;
+    Class *getObjectClass() const;
+    ClassClass *getClassClass() const;
+    Object *getTrue() const;
+    Object *getFalse() const;
+    Object *getNull() const;
 
     bool hasRootClass(const std::string &name) const;
-    Ptr<Class> getRootClass(const std::string &name) const;
-    void registerRootClass(Ptr<RootClass> rootClass);
+    Class *getRootClass(const std::string &name) const;
+    void registerRootClass(RootClass *rootClass);
 
-    Ptr<Object> toBoolean(bool value) const;
+    Object *toBoolean(bool value) const;
 
-    Ptr<Object> createObject();
+    Object *createObject();
 
     void run(const std::string &script);
     void runFile(const std::string &fileName);
 
-    Ptr<Context> context() const;
+    Context *context() const;
 
-    void pushContext(Ptr<Context> context);
+    void pushContext(Context *context);
     void popContext();
 
-    void push(Ptr<Object> value);
+    void push(Object *value);
     void pop(int count = 1);
-    Ptr<Object> top(int index = 0);
+    Object *top(int index = 0);
 
-    Ptr<Object> getReg() const;
-    void setReg(Ptr<Object> value);
+    Object *getReg() const;
+    void setReg(Object *value);
 
 private:
     void initialize();

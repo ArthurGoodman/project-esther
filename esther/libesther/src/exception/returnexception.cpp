@@ -2,11 +2,11 @@
 
 namespace es {
 
-ReturnException::ReturnException(Ptr<Object> value)
+ReturnException::ReturnException(Object *value)
     : ValueException(value) {
 }
 
-Ptr<Object> ReturnException::value() {
+Object *ReturnException::value() {
     return getValue();
 }
 

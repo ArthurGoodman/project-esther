@@ -18,8 +18,8 @@ IfExpression::~IfExpression() {
     delete elseBody;
 }
 
-Ptr<Object> IfExpression::exec(Esther *esther) {
-    Ptr<Object> value = esther->getNull();
+Object *IfExpression::exec(Esther *esther) {
+    Object *value = esther->getNull();
 
     if (condition->eval(esther)->isTrue())
         value = body->eval(esther);

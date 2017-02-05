@@ -16,9 +16,9 @@ AttributeAssignmentExpression::~AttributeAssignmentExpression() {
     delete value;
 }
 
-Ptr<Object> AttributeAssignmentExpression::exec(Esther *esther) {
-    Ptr<Object> evaledSelf = self->eval(esther);
-    Ptr<Object> evaledValue = value->eval(esther);
+Object *AttributeAssignmentExpression::exec(Esther *esther) {
+    Object *evaledSelf = self->eval(esther);
+    Object *evaledValue = value->eval(esther);
 
     evaledSelf->setAttribute(name, evaledValue);
 
