@@ -16,7 +16,7 @@ void Function::setName(const std::string &name) {
 
 Object *Function::invoke(Esther *esther, Object *self, const std::vector<Object *> &args) {
     if (arity >= 0 && arity != static_cast<int>(args.size()))
-        Esther::runtimeError("invalid number of arguments (" + Utility::toString(args.size()) + "/" + Utility::toString(arity) + ")");
+        Esther::runtimeError("invalid number of arguments (%i/%i)", args.size(), arity);
 
     return execute(esther, self, args);
 }

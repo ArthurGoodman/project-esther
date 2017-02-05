@@ -59,7 +59,7 @@ Object *Object::call(Esther *esther, const std::string &name, const std::vector<
     Object *f = get(name);
 
     if (!f)
-        Esther::runtimeError("Object::call: undefined identifier '" + name + "'");
+        Esther::runtimeError("Object::call: undefined identifier '%s'", name.c_str());
 
     return call(esther, f, args);
 }
@@ -80,7 +80,7 @@ Object *Object::call(Esther *esther, const std::string &name, const std::vector<
     Object *value = call(esther, name, args);
 
     if (!value->is(expectedReturnClass))
-        Esther::runtimeError(value->getClass()->toString() + " is not a valid return type for " + name + " (" + expectedReturnClass->getName() + " expected)");
+        Esther::runtimeError("%s is not a valid return type for %s (%s expected)", value->getClass()->toString().c_str(), name.c_str(), expectedReturnClass->getName().c_str());
 
     return value;
 }

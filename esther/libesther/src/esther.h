@@ -57,7 +57,7 @@ class Esther {
     Object *reg;
 
 public:
-    static void runtimeError(const std::string &message);
+    static void runtimeError(const char *fmt, ...);
 
     Esther();
     ~Esther();

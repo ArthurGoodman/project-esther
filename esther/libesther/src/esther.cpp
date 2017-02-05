@@ -1,5 +1,7 @@
 #include "esther.h"
 
+#include <cstdarg>
+
 #include "runtime/class.h"
 #include "exception/runtimeerror.h"
 #include "runtime/rootclass/booleanclass.h"
@@ -27,8 +29,11 @@
 
 namespace es {
 
-void Esther::runtimeError(const std::string &message) {
-    throw new RuntimeError(message);
+void Esther::runtimeError(const char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+    throw new RuntimeError(Utility::vformat(fmt, ap));
+    va_end(ap);
 }
 
 Esther::Esther() {

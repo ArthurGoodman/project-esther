@@ -31,7 +31,7 @@ void RootClass::defFunc(Esther *esther, const std::string &name, const std::list
         int i = 0;
         for (Class *_class : paramsClasses)
             if (!args[i++]->getClass()->isChild(_class)) {
-                Esther::runtimeError(getName() + "." + name + ": invalid argument");
+                Esther::runtimeError("%s.%s: invalid argument", getName().c_str(), name.c_str());
                 return nullptr;
             }
 
@@ -43,7 +43,7 @@ void RootClass::defValueObjectFunc(Esther *esther, const std::string &name, int 
     defFunc(esther, name, arity, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
         for (int i = 0; i < (int)args.size(); i++)
             if (!dynamic_cast<ValueObject *>(args[i])) {
-                Esther::runtimeError(getName() + "." + name + ": invalid argument #" + Utility::toString(i));
+                Esther::runtimeError("%s.%s: invalid argument #%i", getName().c_str(), name.c_str(), i);
                 return nullptr;
             }
 
@@ -54,7 +54,7 @@ void RootClass::defValueObjectFunc(Esther *esther, const std::string &name, int 
 void RootClass::defFunc(Esther *esther, const std::string &name, int arity, const std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> &body) {
     setAttribute(name, new NativeFunction(esther, name, arity, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
                      if (!self->getClass()->isChild(this)) {
-                         Esther::runtimeError(getName() + "." + name + ": invalid self");
+                         Esther::runtimeError("%s.%s: invalid self", getName().c_str(), name.c_str());
                          return nullptr;
                      }
 
@@ -65,12 +65,12 @@ void RootClass::defFunc(Esther *esther, const std::string &name, int arity, cons
 void RootClass::defOper(Esther *esther, const std::string &name, Variant (*body)(const Variant &, const Variant &)) {
     setAttribute(name, new NativeFunction(esther, name, 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
                      if (!dynamic_cast<ValueObject *>(self)) {
-                         Esther::runtimeError(getName() + "." + name + ": invalid self");
+                         Esther::runtimeError("%s.%s: invalid self", getName().c_str(), name.c_str());
                          return nullptr;
                      }
 
                      if (!dynamic_cast<ValueObject *>(args[0])) {
-                         Esther::runtimeError(getName() + "." + name + ": invalid argument");
+                         Esther::runtimeError("%s.%s: invalid argument", getName().c_str(), name.c_str());
                          return nullptr;
                      }
 
@@ -81,12 +81,12 @@ void RootClass::defOper(Esther *esther, const std::string &name, Variant (*body)
 void RootClass::defPred(Esther *esther, const std::string &name, bool (*body)(const Variant &, const Variant &)) {
     setAttribute(name, new NativeFunction(esther, name, 1, [=](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
                      if (!dynamic_cast<ValueObject *>(self)) {
-                         Esther::runtimeError(getName() + "." + name + ": invalid self");
+                         Esther::runtimeError("%s.%s: invalid self", getName().c_str(), name.c_str());
                          return nullptr;
                      }
 
                      if (!dynamic_cast<ValueObject *>(args[0])) {
-                         Esther::runtimeError(getName() + "." + name + ": invalid argument");
+                         Esther::runtimeError("%s.%s: invalid argument", getName().c_str(), name.c_str());
                          return nullptr;
                      }
 
