@@ -111,7 +111,8 @@ SherwoodMap<K, V>::SherwoodMap()
     : buffer(0)
     , numEntries(0)
     , capacity(HalfInitialCapacity)
-    , resizeThreshold(0) {
+    , resizeThreshold(0)
+    , mask(0) {
 }
 
 template <class K, class V>

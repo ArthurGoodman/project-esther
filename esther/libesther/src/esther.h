@@ -102,8 +102,8 @@ public:
     void setReg(Ptr<Object> value);
 
 private:
-    static Ptr<Map<uint32_t, Object *>> idString();
-    static Ptr<Map<Object *, uint32_t>> stringId();
+    static Ptr<Map<uint32_t, Object *>> idString;
+    static Ptr<Map<Object *, uint32_t>> stringId;
 
     void initialize();
     void release();

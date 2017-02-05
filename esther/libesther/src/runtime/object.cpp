@@ -28,15 +28,21 @@ void Object::setClass(Ptr<Class> objectClass) {
 bool Object::hasAttribute(Esther *esther, const std::string &name) const {
     Ptr<const Object> _this = this;
 
+    if (!_this->attributes)
+        return false;
+
     uint32_t id = esther->id(name);
-    return _this->attributes && (_this->attributes->contains(id));
+    return _this->attributes->contains(id);
 }
 
 Ptr<Object> Object::getAttribute(Esther *esther, const std::string &name) const {
     Ptr<const Object> _this = this;
 
+    if (!_this->attributes)
+        return nullptr;
+
     uint32_t id = esther->id(name);
-    return _this->attributes ? _this->attributes->get(id) : nullptr;
+    return _this->attributes->get(id);
 }
 
 void Object::setAttribute(Esther *esther, const std::string &name, Ptr<Object> value) {

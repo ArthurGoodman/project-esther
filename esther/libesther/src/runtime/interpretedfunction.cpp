@@ -28,7 +28,8 @@ int InterpretedFunction::getSize() const {
 Ptr<Object> InterpretedFunction::execute(Esther *esther, Ptr<Object> self, const std::vector<Ptr<Object>> &args) {
     Ptr<InterpretedFunction> _this = this;
 
-    esther->pushContext(_this->context->childContext(self, esther->createObject()));
+    Ptr<Object> newObject = esther->createObject();
+    esther->pushContext(_this->context->childContext(self, newObject));
 
     std::vector<Ptr<Object>>::const_iterator i = args.begin();
     for (const std::string &s : *_this->params)

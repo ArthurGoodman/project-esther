@@ -41,11 +41,13 @@ void Context::setLocal(Esther *esther, const std::string &name, Ptr<Object> valu
 }
 
 Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
-    if (hasLocal(esther, name))
-        return getLocal(esther, name);
+    Ptr<const Context> _this = this;
 
-    if (parent)
-        return parent->get(esther, name);
+    if (_this->hasLocal(esther, name))
+        return _this->getLocal(esther, name);
+
+    if (_this->parent)
+        return _this->parent->get(esther, name);
 
     if (esther->hasRootClass(name))
         return static_cast<Object *>(*esther->getRootClass(name));
@@ -54,13 +56,15 @@ Ptr<Object> Context::get(Esther *esther, const std::string &name) const {
 }
 
 bool Context::set(Esther *esther, const std::string &name, Ptr<Object> value) {
-    if (hasLocal(esther, name)) {
-        setLocal(esther, name, value);
+    Ptr<Context> _this = this;
+
+    if (_this->hasLocal(esther, name)) {
+        _this->setLocal(esther, name, value);
         return true;
     }
 
-    if (parent)
-        return parent->set(esther, name, value);
+    if (_this->parent)
+        return _this->parent->set(esther, name, value);
 
     return false;
 }

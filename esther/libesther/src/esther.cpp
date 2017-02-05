@@ -31,6 +31,9 @@ namespace es {
 
 uint32_t Esther::nextId = 0;
 
+Ptr<Map<uint32_t, Object *>> Esther::idString;
+Ptr<Map<Object *, uint32_t>> Esther::stringId;
+
 void Esther::runtimeError(const std::string &message) {
     throw new RuntimeError(message);
 }
@@ -41,14 +44,14 @@ uint32_t Esther::id(const std::string &str) {
     uint8_t data[sizeof(ValueObject)];
     ValueObject *fakeString = new (data) ValueObject(this, str);
 
-    if (stringId()->contains(fakeString))
-        return stringId()->get(fakeString);
+    if (stringId->contains(fakeString))
+        return stringId->get(fakeString);
 
     string = new ValueObject(this, str);
     uint32_t id = nextId++;
 
-    stringId()->put(string, id);
-    idString()->put(id, string);
+    stringId->put(string, id);
+    idString->put(id, string);
 
     fakeString->finalize();
 
@@ -56,7 +59,7 @@ uint32_t Esther::id(const std::string &str) {
 }
 
 Ptr<ValueObject> Esther::string(uint32_t id) {
-    return static_cast<ValueObject *>(idString()->get(id));
+    return static_cast<ValueObject *>(idString->get(id));
 }
 
 Esther::Esther() {
@@ -111,17 +114,10 @@ Ptr<Object> Esther::createObject() {
     return objectClass->newInstance(this);
 }
 
-Ptr<Map<uint32_t, Object *>> Esther::idString() {
-    static Ptr<Map<uint32_t, Object *>> idString = new SherwoodMap<uint32_t, Object *>;
-    return idString;
-}
-
-Ptr<Map<Object *, uint32_t>> Esther::stringId() {
-    static Ptr<Map<Object *, uint32_t>> stringId = new SherwoodMap<Object *, uint32_t>;
-    return stringId;
-}
-
 void Esther::initialize() {
+    idString = new SherwoodMap<uint32_t, Object *>;
+    stringId = new SherwoodMap<Object *, uint32_t>;
+
     rootClasses.clear();
 
     classClass = new ClassClass(this);
