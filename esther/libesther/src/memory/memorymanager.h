@@ -8,7 +8,7 @@
 namespace es {
 
 class MemoryManager : public
-#ifdef GC
+#ifdef MEM_MANAGEMENT
                       SemispaceMemoryManager
 #else
                       NoMemoryManager

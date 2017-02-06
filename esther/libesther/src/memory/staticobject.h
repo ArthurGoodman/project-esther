@@ -13,7 +13,7 @@ public:
     ManagedObject *&field(int index);
 
     void mapOnReferences(void (*f)(ManagedObject *&)) override;
-    int getSize() const override;
+    size_t getSize() const override;
 
 private:
     StaticObject(int refCount);

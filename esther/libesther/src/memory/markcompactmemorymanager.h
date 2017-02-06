@@ -4,7 +4,7 @@
 
 #include "common/config.h"
 
-#ifdef GC
+#ifdef MEM_MANAGEMENT
 
 namespace es {
 

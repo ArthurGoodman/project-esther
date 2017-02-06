@@ -4,12 +4,14 @@
 #include <string>
 #include <vector>
 
+#include "memory/managedobject.h"
+
 namespace es {
 
 class Class;
 class Esther;
 
-class Object {
+class Object : public ManagedObject {
     Class *objectClass;
     std::map<std::string, Object *> *attributes;
 

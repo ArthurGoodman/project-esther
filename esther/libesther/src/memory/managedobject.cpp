@@ -29,4 +29,8 @@ void ManagedObject::finalize() {
 
 void ManagedObject::mapOnReferences(void (*)(ManagedObject *&)) {
 }
+
+size_t ManagedObject::getSize() const {
+    return 0;
+}
 }

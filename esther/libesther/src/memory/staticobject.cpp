@@ -23,7 +23,7 @@ void StaticObject::mapOnReferences(void (*f)(ManagedObject *&)) {
             f(field(i));
 }
 
-int StaticObject::getSize() const {
+size_t StaticObject::getSize() const {
     return sizeof(*this) + refCount * sizeof(ManagedObject *);
 }
 

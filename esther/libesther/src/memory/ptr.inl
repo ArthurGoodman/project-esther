@@ -7,7 +7,7 @@ namespace es {
 template <class T>
 Ptr<T>::Ptr(T *p)
     : ptr(p) {
-#ifdef GC
+#ifdef MEM_MANAGEMENT
     link();
 #endif
 }
@@ -15,14 +15,14 @@ Ptr<T>::Ptr(T *p)
 template <class T>
 Ptr<T>::Ptr(const Ptr<T> &p)
     : ptr(p) {
-#ifdef GC
+#ifdef MEM_MANAGEMENT
     link();
 #endif
 }
 
 template <class T>
 Ptr<T>::~Ptr() {
-#ifdef GC
+#ifdef MEM_MANAGEMENT
     unlink();
 #endif
 }

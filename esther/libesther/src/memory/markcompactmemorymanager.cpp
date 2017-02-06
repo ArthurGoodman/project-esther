@@ -8,7 +8,7 @@
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
 
-#ifdef GC
+#ifdef MEM_MANAGEMENT
 
 namespace {
 es::ByteArray *memory;

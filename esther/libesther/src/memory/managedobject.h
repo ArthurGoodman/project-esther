@@ -29,7 +29,7 @@ public:
 
     virtual void finalize();
     virtual void mapOnReferences(void (*f)(ManagedObject *&));
-    virtual int getSize() const = 0;
+    virtual size_t getSize() const;
 };
 
 inline bool ManagedObject::hasFlag(int flag) const {
