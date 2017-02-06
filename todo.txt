@@ -1,8 +1,0 @@
-Todo:
-
-Think about:
-    * Refactoring Function to be a container for non-managed function type
-
-Concepts:
-    * Pattern matching as general mechanism of typechecking
-    * Automatic data conversion between native libraries and runtime
