@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 #include "common/config.h"
 
@@ -9,9 +10,15 @@
 namespace es {
 
 class ManagedObject;
+class ByteArray;
 
 class ConservativeMemoryManager {
     static const size_t HeapSize = 1 << 10;
+
+    static ConservativeMemoryManager *man;
+
+    std::vector<ByteArray> heaps;
+    size_t objectCount, memoryUsed;
 
 public:
     ConservativeMemoryManager();
@@ -24,8 +31,8 @@ public:
     static void reallocate();
 
 private:
-    static void initialize();
-    static void finalize();
+    void initialize();
+    void finalize();
 };
 }
 

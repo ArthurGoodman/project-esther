@@ -9,9 +9,16 @@
 namespace es {
 
 class ManagedObject;
+class ByteArray;
 
 class MarkCompactMemoryManager {
-    static const int InitialCapacity = 1 << 10;
+    static const size_t InitialCapacity = 1 << 10;
+
+    static MarkCompactMemoryManager *man;
+
+    ByteArray *memory;
+    size_t objectCount;
+    int delta;
 
 public:
     MarkCompactMemoryManager();
@@ -24,15 +31,15 @@ public:
     static void reallocate();
 
 private:
-    static void initialize();
-    static void finalize();
+    void initialize();
+    void finalize();
 
-    static void updatePointers();
+    void updatePointers();
 
-    static void mark();
-    static void compact();
+    void mark();
+    void compact();
 
-    static void mark(ManagedObject *object);
+    void mark(ManagedObject *object);
 
     static void updateReference(ManagedObject *&ref);
     static void markReference(ManagedObject *&ref);

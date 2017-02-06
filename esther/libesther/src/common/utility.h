@@ -8,7 +8,7 @@
 namespace es {
 
 class Utility {
-    static const int tabSize = 4;
+    static const size_t tabSize = 4;
 
 public:
     template <class T>

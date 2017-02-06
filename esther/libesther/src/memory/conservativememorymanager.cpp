@@ -1,7 +1,6 @@
 #include "conservativememorymanager.h"
 
 #include <memory>
-#include <vector>
 
 #include "common/io.h"
 #include "common/bytearray.h"
@@ -9,12 +8,9 @@
 
 #ifdef MEM_MANAGEMENT
 
-namespace {
-std::vector<es::ByteArray *> heaps;
-size_t objectCount, memoryUsed;
-}
-
 namespace es {
+
+ConservativeMemoryManager *ConservativeMemoryManager::man;
 
 ConservativeMemoryManager::ConservativeMemoryManager() {
     initialize();
@@ -31,12 +27,12 @@ ManagedObject *ConservativeMemoryManager::allocate(size_t size, size_t count) {
 
     ManagedObject *newObject = nullptr;
 
-    for (es::ByteArray *heap : heaps)
-        if (heap->enoughSpace(size)) {
+    for (ByteArray &heap : man->heaps)
+        if (heap.enoughSpace(size)) {
             ManagedObject *object;
             size_t objectSize;
 
-            for (uint8_t *p = heap->getData(); p < heap->getData() + HeapSize - sizeof(ManagedObject *); p += objectSize) {
+            for (uint8_t *p = heap.getData(); p < heap.getData() + HeapSize - sizeof(ManagedObject *); p += objectSize) {
                 object = reinterpret_cast<ManagedObject *>(p);
                 objectSize = object->getSize();
 
@@ -51,14 +47,14 @@ ManagedObject *ConservativeMemoryManager::allocate(size_t size, size_t count) {
         }
 
     if (newObject == nullptr) {
-        heaps.push_back(new ByteArray(HeapSize));
-        heaps.back()->allocate(HeapSize);
+        man->heaps.push_back(ByteArray(HeapSize));
+        man->heaps.back().allocate(HeapSize);
 
-        newObject = reinterpret_cast<ManagedObject *>(heaps.back()->allocate(size));
+        newObject = reinterpret_cast<ManagedObject *>(man->heaps.back().allocate(size));
     }
 
-    memoryUsed += size;
-    objectCount += count;
+    man->memoryUsed += size;
+    man->objectCount += count;
 
     return newObject;
 }
@@ -69,11 +65,11 @@ void ConservativeMemoryManager::free(ManagedObject *) {
 void ConservativeMemoryManager::collectGarbage() {
 #ifdef VERBOSE_GC
     IO::writeLine("\nConservativeMemoryManager::collectGarbage()");
-    size_t oldSize = memoryUsed, oldObjectCount = objectCount;
+    size_t oldSize = man->memoryUsed, oldObjectCount = man->objectCount;
 #endif
 
 #ifdef VERBOSE_GC
-    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
+    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - man->memoryUsed, oldObjectCount - man->objectCount, man->objectCount);
 #endif
 }
 
@@ -81,8 +77,10 @@ void ConservativeMemoryManager::reallocate() {
 }
 
 void ConservativeMemoryManager::initialize() {
-    heaps.push_back(new ByteArray(HeapSize));
-    heaps.back()->allocate(HeapSize);
+    man = this;
+
+    heaps.push_back(ByteArray(HeapSize));
+    heaps.back().allocate(HeapSize);
 
     objectCount = 0;
     memoryUsed = 0;
@@ -96,9 +94,6 @@ void ConservativeMemoryManager::finalize() {
     IO::writeLine("Total memory: %u", heaps.size() * HeapSize);
     IO::writeLine("\nConservativeMemoryManager::finalize()");
 #endif
-
-    for (es::ByteArray *heap : heaps)
-        delete heap;
 }
 }
 

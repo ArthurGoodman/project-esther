@@ -10,13 +10,9 @@
 
 #ifdef MEM_MANAGEMENT
 
-namespace {
-es::ByteArray *memory;
-size_t objectCount;
-int delta;
-}
-
 namespace es {
+
+MarkCompactMemoryManager *MarkCompactMemoryManager::man;
 
 MarkCompactMemoryManager::MarkCompactMemoryManager() {
     initialize();
@@ -31,17 +27,17 @@ ManagedObject *MarkCompactMemoryManager::allocate(size_t size, size_t count) {
     IO::writeLine("MarkCompactMemoryManager::allocate(size=%u)", size);
 #endif
 
-    if (!memory->enoughSpace(size))
+    if (!man->memory->enoughSpace(size))
         collectGarbage();
 
-    uint8_t *oldData = memory->getData();
+    uint8_t *oldData = man->memory->getData();
 
-    ManagedObject *object = reinterpret_cast<ManagedObject *>(memory->allocate(size));
+    ManagedObject *object = reinterpret_cast<ManagedObject *>(man->memory->allocate(size));
 
-    if ((delta = memory->getData() - oldData) != 0)
-        updatePointers();
+    if ((man->delta = man->memory->getData() - oldData) != 0)
+        man->updatePointers();
 
-    objectCount += count;
+    man->objectCount += count;
 
     return object;
 }
@@ -52,23 +48,25 @@ void MarkCompactMemoryManager::free(ManagedObject *) {
 void MarkCompactMemoryManager::collectGarbage() {
 #ifdef VERBOSE_GC
     IO::writeLine("\nMarkCompactMemoryManager::collectGarbage()");
-    size_t oldSize = memory->getSize(), oldObjectCount = objectCount;
+    size_t oldSize = man->memory->getSize(), oldObjectCount = man->objectCount;
 #endif
 
-    mark();
-    compact();
+    man->mark();
+    man->compact();
 
 #ifdef VERBOSE_GC
-    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - memory->getSize(), oldObjectCount - objectCount, objectCount);
+    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - man->memory->getSize(), oldObjectCount - man->objectCount, man->objectCount);
 #endif
 }
 
 void MarkCompactMemoryManager::reallocate() {
-    delta = memory->reallocate();
-    updatePointers();
+    man->delta = man->memory->reallocate();
+    man->updatePointers();
 }
 
 void MarkCompactMemoryManager::initialize() {
+    man = this;
+
     memory = new ByteArray(InitialCapacity);
     objectCount = 0;
     delta = 0;
@@ -165,12 +163,12 @@ void MarkCompactMemoryManager::mark(ManagedObject *object) {
 }
 
 void MarkCompactMemoryManager::updateReference(ManagedObject *&ref) {
-    ref = reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + delta);
+    ref = reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + man->delta);
 }
 
 void MarkCompactMemoryManager::markReference(ManagedObject *&ref) {
     if (!ref->hasFlag(ManagedObject::FlagMark))
-        mark(ref);
+        man->mark(ref);
 }
 
 void MarkCompactMemoryManager::forwardReference(ManagedObject *&ref) {

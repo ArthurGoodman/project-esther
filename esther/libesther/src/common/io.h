@@ -29,8 +29,8 @@ public:
     static void writeLine(const std::string &data);
     static void writeLine(const char *fmt, ...);
 
-    static std::string scan();
-    static std::string scanLine();
+    static std::string read();
+    static std::string readLine();
 
     static std::string fullPath(const std::string &partialPath);
 };
