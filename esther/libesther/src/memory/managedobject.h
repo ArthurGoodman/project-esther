@@ -6,11 +6,16 @@ namespace es {
 
 class ManagedObject {
     uint32_t flags;
-    ManagedObject *forwardAddress;
+
+    union {
+        ManagedObject *forwardAddress;
+        uint32_t size;
+    };
 
 public:
     enum {
-        FlagMark = 1 << 0
+        FlagMark = 1 << 0,
+        FlagFree = 1 << 2
     };
 
     static void *operator new(size_t size) noexcept;

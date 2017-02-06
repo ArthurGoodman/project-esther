@@ -11,7 +11,7 @@ namespace es {
 class ManagedObject;
 
 class ConservativeMemoryManager {
-    static const int InitialCapacity = 1 << 10;
+    static const size_t HeapSize = 1 << 10;
 
 public:
     ConservativeMemoryManager();
@@ -24,8 +24,8 @@ public:
     static void reallocate();
 
 private:
-    void initialize();
-    void finalize();
+    static void initialize();
+    static void finalize();
 };
 }
 
