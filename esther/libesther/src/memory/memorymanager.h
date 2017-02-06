@@ -1,15 +1,16 @@
 #pragma once
 
 #include "common/config.h"
-#include "memory/nomemorymanager.h"
+#include "memory/conservativememorymanager.h"
 #include "memory/markcompactmemorymanager.h"
 #include "memory/semispacememorymanager.h"
+#include "memory/nomemorymanager.h"
 
 namespace es {
 
 class MemoryManager : public
 #ifdef MEM_MANAGEMENT
-                      SemispaceMemoryManager
+                      ConservativeMemoryManager
 #else
                       NoMemoryManager
 #endif

@@ -6,5 +6,5 @@
 
 //#define HEAP_VARIANT
 
-//#define MEM_MANAGEMENT
-//#define VERBOSE_GC
+#define MEM_MANAGEMENT
+#define VERBOSE_GC
