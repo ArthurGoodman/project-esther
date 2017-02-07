@@ -13,11 +13,12 @@ class ManagedObject;
 class ByteArray;
 
 class ConservativeMemoryManager {
-    static const size_t HeapSize = 1 << 10;
+    static const size_t InitialHeapSize = 10000;
+    static const double HeapSizeMultiplier;
 
     static ConservativeMemoryManager *man;
 
-    std::vector<ByteArray> heaps;
+    std::vector<ByteArray *> heaps;
     size_t objectCount, memoryUsed;
 
 public:
@@ -33,6 +34,10 @@ public:
 private:
     void initialize();
     void finalize();
+
+    ManagedObject *findFreeSpace(size_t size);
+    ManagedObject *addHeap();
+    void claimFreeSpace(ManagedObject *freeSpace, size_t size);
 };
 }
 

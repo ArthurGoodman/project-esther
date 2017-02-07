@@ -8,7 +8,8 @@
 namespace es {
 
 Object::Object(Class *objectClass)
-    : objectClass(objectClass)
+    : ManagedObject(sizeof *this)
+    , objectClass(objectClass)
     , attributes(nullptr) {
 }
 

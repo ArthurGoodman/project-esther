@@ -9,6 +9,7 @@ Class::Class(Esther *esther, const std::string &name, Class *superclass)
     : Object(esther->getClassClass())
     , name(name)
     , superclass(superclass) {
+    setSize(sizeof *this);
 }
 
 std::string Class::getName() const {

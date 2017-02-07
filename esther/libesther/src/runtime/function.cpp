@@ -29,5 +29,6 @@ Function::Function(Class *objectClass, const std::string &name, int arity)
     : Object(objectClass)
     , name(name)
     , arity(arity) {
+    setSize(sizeof *this);
 }
 }

@@ -7,7 +7,8 @@
 namespace es {
 
 Context::Context(Esther *esther)
-    : parent(nullptr)
+    : ManagedObject(sizeof *this)
+    , parent(nullptr)
     , self(esther->getMainObject())
     , here(self) {
 }
@@ -70,7 +71,8 @@ Context *Context::childContext(Object *self, Object *here) {
 }
 
 Context::Context(Object *self, Object *here, Context *parent)
-    : parent(parent)
+    : ManagedObject(sizeof *this)
+    , parent(parent)
     , self(self)
     , here(here) {
 }

@@ -3,12 +3,14 @@
 #include <string>
 #include <list>
 
+#include "memory/managedobject.h"
+
 namespace es {
 
 class Object;
 class Esther;
 
-class Context {
+class Context : public ManagedObject {
     Context *parent;
     Object *self, *here;
 

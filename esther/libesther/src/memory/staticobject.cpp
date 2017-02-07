@@ -23,12 +23,9 @@ void StaticObject::mapOnReferences(void (*f)(ManagedObject *&)) {
             f(field(i));
 }
 
-size_t StaticObject::getSize() const {
-    return sizeof(*this) + refCount * sizeof(ManagedObject *);
-}
-
 StaticObject::StaticObject(int refCount)
-    : refCount(refCount) {
+    : ManagedObject(sizeof(*this) + refCount * sizeof(ManagedObject *))
+    , refCount(refCount) {
     for (int i = 0; i < refCount; i++)
         field(i) = 0;
 }

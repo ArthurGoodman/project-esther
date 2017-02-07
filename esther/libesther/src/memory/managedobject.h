@@ -6,11 +6,8 @@ namespace es {
 
 class ManagedObject {
     uint32_t flags;
-
-    union {
-        ManagedObject *forwardAddress;
-        uint32_t size;
-    };
+    ManagedObject *forwardAddress;
+    size_t size;
 
 public:
     enum {
@@ -22,7 +19,7 @@ public:
     static void *operator new(size_t size, void *p) noexcept;
     static void operator delete(void *p) noexcept;
 
-    ManagedObject();
+    ManagedObject(size_t size = 0);
     virtual ~ManagedObject();
 
     bool hasFlag(int flag) const;
@@ -32,9 +29,13 @@ public:
     ManagedObject *getForwardAddress() const;
     void setForwardAddress(ManagedObject *forwardAddress);
 
+    size_t getSize() const;
+
     virtual void finalize();
     virtual void mapOnReferences(void (*f)(ManagedObject *&));
-    virtual size_t getSize() const;
+
+protected:
+    void setSize(size_t size);
 };
 
 inline bool ManagedObject::hasFlag(int flag) const {
@@ -55,5 +56,13 @@ inline ManagedObject *ManagedObject::getForwardAddress() const {
 
 inline void ManagedObject::setForwardAddress(ManagedObject *forwardAddress) {
     this->forwardAddress = forwardAddress;
+}
+
+inline size_t ManagedObject::getSize() const {
+    return size;
+}
+
+inline void ManagedObject::setSize(size_t size) {
+    this->size = size;
 }
 }

@@ -16,9 +16,10 @@ void ManagedObject::operator delete(void *p) noexcept {
     MemoryManager::free(static_cast<ManagedObject *>(p));
 }
 
-ManagedObject::ManagedObject()
+ManagedObject::ManagedObject(size_t size)
     : flags(0)
-    , forwardAddress(nullptr) {
+    , forwardAddress(nullptr)
+    , size(size) {
 }
 
 ManagedObject::~ManagedObject() {
@@ -28,9 +29,5 @@ void ManagedObject::finalize() {
 }
 
 void ManagedObject::mapOnReferences(void (*)(ManagedObject *&)) {
-}
-
-size_t ManagedObject::getSize() const {
-    return size;
 }
 }
