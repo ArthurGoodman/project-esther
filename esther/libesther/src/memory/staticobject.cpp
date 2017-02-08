@@ -24,8 +24,7 @@ void StaticObject::mapOnReferences(void (*f)(ManagedObject *&)) {
 }
 
 StaticObject::StaticObject(int refCount)
-    : ManagedObject(sizeof(*this) + refCount * sizeof(ManagedObject *))
-    , refCount(refCount) {
+    : refCount(refCount) {
     for (int i = 0; i < refCount; i++)
         field(i) = 0;
 }

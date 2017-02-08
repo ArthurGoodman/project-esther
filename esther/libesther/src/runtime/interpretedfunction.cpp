@@ -9,7 +9,6 @@ InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name
     , params(params)
     , body(body)
     , context(context) {
-    setSize(sizeof *this);
 }
 
 Object *InterpretedFunction::execute(Esther *esther, Object *self, const std::vector<Object *> &args) {

@@ -71,7 +71,6 @@ public:
     int size() const override;
 
     void mapOnReferences(void (*f)(ManagedObject *&)) override;
-    int getSize() const override;
 
 private:
     static uint32_t computeHash(const K &key);

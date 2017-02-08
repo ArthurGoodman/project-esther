@@ -1,3 +1,6 @@
 #include "memory/ptr.h"
 
-es::Ptr<void> *es::pointers = nullptr;
+namespace es {
+
+Ptr<void> *pointers = nullptr;
+}

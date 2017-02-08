@@ -52,11 +52,6 @@ void Array<T>::mapOnReferences(void (*)(ManagedObject *&)) {
 }
 
 template <class T>
-int Array<T>::getSize() const {
-    return sizeof(*this) + arraySize * sizeof(T);
-}
-
-template <class T>
 Array<T>::Array(size_t size)
     : arraySize(size) {
 }

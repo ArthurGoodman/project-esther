@@ -80,11 +80,6 @@ inline void HashMap<Object *, uint32_t>::Entry::mapOnReferences(void (*f)(Manage
 }
 
 template <class K, class V>
-int HashMap<K, V>::Entry::getSize() const {
-    return sizeof *this;
-}
-
-template <class K, class V>
 typename HashMap<K, V>::iterator &HashMap<K, V>::iterator::operator++() {
     if (entry->getNext())
         entry = entry->getNext();
@@ -258,11 +253,6 @@ template <class K, class V>
 void HashMap<K, V>::mapOnReferences(void (*f)(ManagedObject *&)) {
     if (buffer)
         f(reinterpret_cast<ManagedObject *&>(buffer));
-}
-
-template <class K, class V>
-int HashMap<K, V>::getSize() const {
-    return sizeof *this;
 }
 
 template <class K, class V>

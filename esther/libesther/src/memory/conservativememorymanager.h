@@ -10,16 +10,18 @@
 namespace es {
 
 class ManagedObject;
+class ObjectHeader;
 class ByteArray;
 
 class ConservativeMemoryManager {
-    static const size_t InitialHeapSize = 10000;
+    static const size_t InitialHeapSize;
     static const double HeapSizeMultiplier;
 
     static ConservativeMemoryManager *man;
 
     std::vector<ByteArray *> heaps;
     size_t objectCount, memoryUsed;
+    ObjectHeader *freeSpace;
 
 public:
     ConservativeMemoryManager();
@@ -35,9 +37,9 @@ private:
     void initialize();
     void finalize();
 
-    ManagedObject *findFreeSpace(size_t size);
-    ManagedObject *addHeap();
-    void claimFreeSpace(ManagedObject *freeSpace, size_t size);
+    //    ManagedObject *findFreeSpace(size_t size);
+    void addHeap();
+    ManagedObject *claimFreeSpace(size_t size);
 };
 }
 

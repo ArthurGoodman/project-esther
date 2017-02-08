@@ -26,7 +26,6 @@ public:
     size_t size() const;
 
     void mapOnReferences(void (*f)(ManagedObject *&)) override;
-    int getSize() const override;
 
 private:
     Array(size_t arraySize);

@@ -7,7 +7,6 @@ namespace es {
 ValueObject::ValueObject(Esther *esther, const Variant &value)
     : Object(variantTypeToObjectClass(esther, value.getType()))
     , value(value) {
-    setSize(sizeof *this);
 }
 
 Variant ValueObject::getVariant() const {
