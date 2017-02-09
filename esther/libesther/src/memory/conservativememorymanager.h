@@ -55,7 +55,7 @@ private:
     void finalize();
 
     bool enoughSpace(size_t size);
-    int isPointerToHeap(void *p);
+    int findHeap(void *p);
 
     void mark();
     void markRange(uint32_t *start, size_t n);

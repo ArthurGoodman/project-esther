@@ -29,7 +29,7 @@ asm("_saveRegisters:\n"
     "xor %eax,%eax\n"
     "ret");
 
-extern "C" void saveRegisters(Registers buf);
+extern "C" void saveRegisters(Registers *buf);
 }
 
 namespace es {
@@ -71,8 +71,8 @@ ManagedObject *ConservativeMemoryManager::allocate(size_t size, size_t count) {
             man->addHeap();
     }
 
-    man->memoryUsed += size;
     man->objectCount += count;
+    man->memoryUsed += size;
 
     return man->claimFreeSpace(size);
 }
@@ -126,7 +126,7 @@ bool ConservativeMemoryManager::enoughSpace(size_t size) {
     return !freeObjects.empty() && freeObjects.top().header->getSize() >= size;
 }
 
-int ConservativeMemoryManager::isPointerToHeap(void *p) {
+int ConservativeMemoryManager::findHeap(void *p) {
     if (reinterpret_cast<uint32_t>(p) % 4 != 0)
         return -1;
 
@@ -138,12 +138,18 @@ int ConservativeMemoryManager::isPointerToHeap(void *p) {
 }
 
 void ConservativeMemoryManager::mark() {
+    IO::writeLine("Marking stack...");
+
     markRange(stackTop, stackBottom - stackTop);
 
+    IO::writeLine("Marking registers...");
+
     Registers buf;
-    saveRegisters(buf);
+    saveRegisters(&buf);
 
     markRange(reinterpret_cast<uint32_t *>(&buf), sizeof(Registers) / sizeof(uint32_t));
+
+    IO::writeLine("Marking globals...");
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->ptr)
@@ -152,7 +158,7 @@ void ConservativeMemoryManager::mark() {
 
 void ConservativeMemoryManager::markRange(uint32_t *p, size_t n) {
     for (size_t i = 0; i < n; i++, p++) {
-        int heapIndex = isPointerToHeap(reinterpret_cast<void *>(*p));
+        int heapIndex = findHeap(reinterpret_cast<void *>(*p));
 
         if (heapIndex >= 0)
             mark(reinterpret_cast<ManagedObject *>(*p), heapIndex);
@@ -161,17 +167,43 @@ void ConservativeMemoryManager::markRange(uint32_t *p, size_t n) {
 
 void ConservativeMemoryManager::mark(ManagedObject *object, int heapIndex) {
     if (heapIndex < 0)
-        heapIndex = isPointerToHeap(object);
+        heapIndex = findHeap(object);
 
     size_t headerByte = reinterpret_cast<uint8_t *>(object) - heaps[heapIndex] - sizeof(ObjectHeader);
 
     if (bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte))) {
+        IO::writeLine("0x%p", object);
+
         (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
         object->mapOnReferences(markReference);
     }
 }
 
 void ConservativeMemoryManager::sweep() {
+    ObjectHeader *header;
+
+    objectCount = 0;
+    memoryUsed = 0;
+
+    for (size_t i = 0; i < heaps.size(); i++) {
+        for (uint8_t *p = heaps[i]; p < heaps[i] + heapSizes[i]; p += header->getSize()) {
+            header = reinterpret_cast<ObjectHeader *>(p);
+
+            if (header->hasFlag(ObjectHeader::FlagMark)) {
+                header->removeFlag(ObjectHeader::FlagMark);
+
+                objectCount++;
+                memoryUsed += header->getSize();
+            } else if (!header->hasFlag(ObjectHeader::FlagFree)) {
+                header->setFlag(ObjectHeader::FlagFree);
+
+                freeObjects.push({ header, i });
+
+                ManagedObject *object = reinterpret_cast<ManagedObject *>(header + 1);
+                object->finalize();
+            }
+        }
+    }
 }
 
 void ConservativeMemoryManager::addHeap() {
@@ -198,6 +230,7 @@ ManagedObject *ConservativeMemoryManager::claimFreeSpace(size_t size) {
     if (header->getSize() >= size + sizeof(ObjectHeader))
         markFree(reinterpret_cast<uint8_t *>(header) + size, header->getSize() - size, heapIndex);
 
+    header->removeFlag(ObjectHeader::FlagFree);
     header->setSize(size);
 
     return reinterpret_cast<ManagedObject *>(header + 1);
