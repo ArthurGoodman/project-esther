@@ -11,6 +11,18 @@ InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name
     , context(context) {
 }
 
+void InterpretedFunction::finalize() {
+    Function::finalize();
+
+    params.~list();
+}
+
+void InterpretedFunction::mapOnReferences(void (*f)(ManagedObject *&)) {
+    Function::mapOnReferences(f);
+
+    f(reinterpret_cast<ManagedObject *&>(context));
+}
+
 Object *InterpretedFunction::execute(Esther *esther, Object *self, const std::vector<Object *> &args) {
     esther->pushContext(context->childContext(self, esther->createObject()));
 

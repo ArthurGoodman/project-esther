@@ -29,6 +29,9 @@ public:
 
     Object *lookup(const std::string &name) const;
 
+    void finalize() override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
+
 protected:
     virtual Object *createNewInstance(Esther *esther, const std::vector<Object *> &args);
 };

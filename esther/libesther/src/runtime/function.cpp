@@ -25,6 +25,12 @@ std::string Function::toString() const {
     return getName().empty() ? "<anonymous function>" : "<function " + getName() + ">";
 }
 
+void Function::finalize() {
+    Object::finalize();
+
+    name.~basic_string();
+}
+
 Function::Function(Class *objectClass, const std::string &name, int arity)
     : Object(objectClass)
     , name(name)

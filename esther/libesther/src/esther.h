@@ -8,6 +8,7 @@
 
 #include "variant/variant.h"
 #include "common/source.h"
+#include "memory/ptr.h"
 
 namespace es {
 
@@ -20,6 +21,8 @@ class Expression;
 
 class RootClass;
 
+class BooleanClass;
+class NullClass;
 class NumericClass;
 class CharacterClass;
 class FloatClass;
@@ -30,31 +33,33 @@ class ClassClass;
 class FunctionClass;
 
 class Esther {
-    Object *mainObject;
-    RootClass *objectClass;
+    Ptr<Object> mainObject;
+    Ptr<RootClass> objectClass;
 
-    Object *trueObject;
-    Object *falseObject;
-    Object *nullObject;
+    Ptr<Object> trueObject;
+    Ptr<Object> falseObject;
+    Ptr<Object> nullObject;
 
-    NumericClass *numericClass;
-    CharacterClass *characterClass;
-    FloatClass *floatClass;
-    IntegerClass *integerClass;
-    StringClass *stringClass;
+    Ptr<BooleanClass> booleanClass;
+    Ptr<NullClass> nullClass;
+    Ptr<NumericClass> numericClass;
+    Ptr<CharacterClass> characterClass;
+    Ptr<FloatClass> floatClass;
+    Ptr<IntegerClass> integerClass;
+    Ptr<StringClass> stringClass;
 
-    ClassClass *classClass;
-    FunctionClass *functionClass;
+    Ptr<ClassClass> classClass;
+    Ptr<FunctionClass> functionClass;
 
     std::map<std::string, RootClass *> rootClasses;
 
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 
-    std::stack<Context *> contexts;
+    std::stack<Ptr<Context>> contexts;
 
-    std::vector<Object *> stack;
-    Object *reg;
+    std::vector<Ptr<Object>> stack;
+    Ptr<Object> reg;
 
 public:
     static void runtimeError(const char *fmt, ...);

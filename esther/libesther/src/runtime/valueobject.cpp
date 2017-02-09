@@ -21,6 +21,12 @@ std::string ValueObject::toString() const {
     return value.toString();
 }
 
+void ValueObject::finalize() {
+    Object::finalize();
+
+    value.~Variant();
+}
+
 Class *ValueObject::variantTypeToObjectClass(Esther *esther, Variant::Type type) {
     switch (type) {
     case Variant::Char:

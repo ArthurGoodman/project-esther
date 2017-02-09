@@ -18,6 +18,8 @@ public:
 
     std::string toString() const override;
 
+    void finalize() override;
+
 private:
     static Class *variantTypeToObjectClass(Esther *esther, Variant::Type type);
 };

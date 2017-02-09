@@ -50,6 +50,19 @@ Object *Class::lookup(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
 }
 
+void Class::finalize() {
+    Object::finalize();
+
+    name.~basic_string();
+}
+
+void Class::mapOnReferences(void (*f)(ManagedObject *&)) {
+    Object::mapOnReferences(f);
+
+    if (superclass)
+        f(reinterpret_cast<ManagedObject *&>(superclass));
+}
+
 Object *Class::createNewInstance(Esther *esther, const std::vector<Object *> &args) {
     Object *instance = superclass->createNewInstance(esther, args);
     instance->setClass(this);

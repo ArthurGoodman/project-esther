@@ -13,7 +13,6 @@ Object::Object(Class *objectClass)
 }
 
 Object::~Object() {
-    delete attributes;
 }
 
 Class *Object::getClass() const {
@@ -92,5 +91,17 @@ Object *Object::callIfFound(Esther *esther, const std::string &name, const std::
         return nullptr;
 
     return call(esther, f, args);
+}
+
+void Object::finalize() {
+    delete attributes;
+}
+
+void Object::mapOnReferences(void (*f)(ManagedObject *&)) {
+    f(reinterpret_cast<ManagedObject *&>(objectClass));
+
+    if (attributes)
+        for (auto &attr : *attributes)
+            f(reinterpret_cast<ManagedObject *&>(attr.second));
 }
 }

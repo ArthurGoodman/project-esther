@@ -2,12 +2,19 @@
 
 #include <cstdint>
 
+#include "common/config.h"
+
+#ifdef MEM_MANAGEMENT
+
 namespace es {
 
 class ObjectHeader {
     uint32_t flags;
-    ObjectHeader *forwardAddress;
     size_t size;
+
+#ifndef CONSERVATIVE_GC
+    ObjectHeader *forwardAddress;
+#endif
 
 public:
     enum {
@@ -15,17 +22,19 @@ public:
         FlagFree = 1 << 2
     };
 
-    ObjectHeader(size_t size);
+    ObjectHeader(size_t size, uint32_t flags = 0);
 
     bool hasFlag(int flag) const;
     void setFlag(int flag);
     void removeFlag(int flag);
 
-    ObjectHeader *getForwardAddress() const;
-    void setForwardAddress(ObjectHeader *forwardAddress);
-
     size_t getSize() const;
     void setSize(size_t size);
+
+#ifndef CONSERVATIVE_GC
+    ObjectHeader *getForwardAddress() const;
+    void setForwardAddress(ObjectHeader *forwardAddress);
+#endif
 };
 
 inline bool ObjectHeader::hasFlag(int flag) const {
@@ -40,14 +49,6 @@ inline void ObjectHeader::removeFlag(int flag) {
     flags &= ~flag;
 }
 
-inline ObjectHeader *ObjectHeader::getForwardAddress() const {
-    return forwardAddress;
-}
-
-inline void ObjectHeader::setForwardAddress(ObjectHeader *forwardAddress) {
-    this->forwardAddress = forwardAddress;
-}
-
 inline size_t ObjectHeader::getSize() const {
     return size;
 }
@@ -55,4 +56,16 @@ inline size_t ObjectHeader::getSize() const {
 inline void ObjectHeader::setSize(size_t size) {
     this->size = size;
 }
+
+#ifndef CONSERVATIVE_GC
+inline ObjectHeader *ObjectHeader::getForwardAddress() const {
+    return forwardAddress;
 }
+
+inline void ObjectHeader::setForwardAddress(ObjectHeader *forwardAddress) {
+    this->forwardAddress = forwardAddress;
+}
+#endif
+}
+
+#endif

@@ -99,12 +99,12 @@ void Esther::initialize() {
 
     mainObject = createObject();
 
-    new BooleanClass(this);
+    booleanClass = new BooleanClass(this);
 
     trueObject = new True(this);
     falseObject = new False(this);
 
-    new NullClass(this);
+    nullClass = new NullClass(this);
 
     nullObject = new Null(this);
 

@@ -14,6 +14,8 @@ class NativeFunction : public Function {
 public:
     NativeFunction(Esther *esther, const std::string &name, int arity, const FunctionBody &body);
 
+    void finalize() override;
+
 protected:
     Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args) override;
 };

@@ -32,6 +32,8 @@ public:
 
     Context *childContext(Object *self, Object *here);
 
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
+
 private:
     Context(Object *self, Object *here, Context *parent);
 };

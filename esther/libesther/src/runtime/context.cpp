@@ -69,6 +69,16 @@ Context *Context::childContext(Object *self, Object *here) {
     return new Context(self, here, this);
 }
 
+void Context::mapOnReferences(void (*f)(ManagedObject *&)) {
+    if (parent)
+        f(reinterpret_cast<ManagedObject *&>(parent));
+
+    f(reinterpret_cast<ManagedObject *&>(self));
+
+    if (self != here)
+        f(reinterpret_cast<ManagedObject *&>(here));
+}
+
 Context::Context(Object *self, Object *here, Context *parent)
     : parent(parent)
     , self(self)

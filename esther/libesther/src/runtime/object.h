@@ -40,5 +40,8 @@ public:
     Object *call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass);
 
     Object *callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args);
+
+    void finalize() override;
+    void mapOnReferences(void (*f)(ManagedObject *&)) override;
 };
 }

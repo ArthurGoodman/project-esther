@@ -9,6 +9,12 @@ NativeFunction::NativeFunction(Esther *esther, const std::string &name, int arit
     , body(body) {
 }
 
+void NativeFunction::finalize() {
+    Function::finalize();
+
+    body.~FunctionBody();
+}
+
 Object *NativeFunction::execute(Esther *esther, Object *self, const std::vector<Object *> &args) {
     return body(esther, self, args);
 }

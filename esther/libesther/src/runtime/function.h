@@ -21,6 +21,8 @@ public:
 
     std::string toString() const;
 
+    void finalize() override;
+
 protected:
     virtual Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args) = 0;
 
