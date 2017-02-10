@@ -34,7 +34,7 @@ extern "C" void saveRegisters(Registers *buf);
 
 namespace es {
 
-const size_t ConservativeMemoryManager::InitialHeapSize = 1024;
+const size_t ConservativeMemoryManager::InitialHeapSize = 20000;
 const double ConservativeMemoryManager::HeapSizeMultiplier = 1.8;
 
 ConservativeMemoryManager *ConservativeMemoryManager::man;
@@ -80,9 +80,8 @@ void ConservativeMemoryManager::free(ManagedObject *) {
 }
 
 void ConservativeMemoryManager::collectGarbage() {
-    uint8_t local;
-    alloca(0);
-    man->stackTop = reinterpret_cast<uint32_t *>(&local + 1);
+    register uint32_t *esp asm("esp");
+    man->stackTop = esp;
 
 #ifdef VERBOSE_GC
     IO::writeLine("\nConservativeMemoryManager::collectGarbage()");
@@ -150,19 +149,12 @@ int ConservativeMemoryManager::findHeap(void *p) {
 }
 
 void ConservativeMemoryManager::mark() {
-    IO::writeLine("ConservativeMemoryManager::mark()");
-    IO::writeLine("Marking stack...");
-
     markRange(stackTop, stackBottom - stackTop);
-
-    IO::writeLine("Marking registers...");
 
     Registers buf;
     saveRegisters(&buf);
 
     markRange(reinterpret_cast<uint32_t *>(&buf), sizeof(Registers) / sizeof(uint32_t));
-
-    IO::writeLine("Marking globals...");
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->ptr)
@@ -184,18 +176,13 @@ void ConservativeMemoryManager::mark(ManagedObject *object, int heapIndex) {
 
     size_t headerByte = reinterpret_cast<uint8_t *>(object) - heaps[heapIndex] - sizeof(ObjectHeader);
 
-    if (bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte))) {
-        IO::writeLine("pointer: 0x%p", object);
-
+    if (bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte)) && !(reinterpret_cast<ObjectHeader *>(object) - 1)->hasFlag(ObjectHeader::FlagFree)) {
         (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
-        IO::writeLine("%u", (reinterpret_cast<ObjectHeader *>(object) - 1)->getSize());
         object->mapOnReferences(markReference);
     }
 }
 
 void ConservativeMemoryManager::sweep() {
-    IO::writeLine("ConservativeMemoryManager::sweep()");
-
     ObjectHeader *header;
 
     objectCount = 0;
