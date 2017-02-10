@@ -51,7 +51,7 @@ class Esther {
     Ptr<ClassClass> classClass;
     Ptr<FunctionClass> functionClass;
 
-    std::map<std::string, RootClass *volatile> rootClasses;
+    std::map<std::string, RootClass *> rootClasses;
 
     std::stack<Source> sources;
     std::stack<std::string> fileNames;

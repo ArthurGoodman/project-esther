@@ -34,7 +34,7 @@ extern "C" void saveRegisters(Registers *buf);
 
 namespace es {
 
-const size_t ConservativeMemoryManager::InitialHeapSize = 1024;
+const size_t ConservativeMemoryManager::InitialHeapSize = 20000;
 const double ConservativeMemoryManager::HeapSizeMultiplier = 1.8;
 
 ConservativeMemoryManager *ConservativeMemoryManager::man;
@@ -43,8 +43,7 @@ bool ConservativeMemoryManager::CompareObjects::operator()(const ConservativeMem
     return a.header->getSize() < b.header->getSize();
 }
 
-ConservativeMemoryManager::ConservativeMemoryManager()
-    : freeObjects(CompareObjects()) {
+ConservativeMemoryManager::ConservativeMemoryManager() {
     initialize();
 }
 
@@ -178,6 +177,8 @@ void ConservativeMemoryManager::sweep() {
     objectCount = 0;
     memoryUsed = 0;
 
+    freeObjects = std::priority_queue<FreeObject, std::vector<FreeObject>, CompareObjects>();
+
     for (size_t i = 0; i < heaps.size(); i++) {
         for (uint8_t *p = heaps[i]; p < heaps[i] + heapSizes[i]; p += header->getSize()) {
             header = reinterpret_cast<ObjectHeader *>(p);
@@ -187,15 +188,28 @@ void ConservativeMemoryManager::sweep() {
 
                 objectCount++;
                 memoryUsed += header->getSize();
-            } else if (!header->hasFlag(ObjectHeader::FlagFree)) {
-                header->setFlag(ObjectHeader::FlagFree);
+            } else {
+                ObjectHeader *freeHeader;
+                size_t freeSize = 0;
 
-                freeObjects.push({ header, i });
+                for (uint8_t *free = p; free < heaps[i] + heapSizes[i]; free += freeHeader->getSize()) {
+                    freeHeader = reinterpret_cast<ObjectHeader *>(free);
 
-                if (header->getSize() > sizeof(ObjectHeader)) {
-                    ManagedObject *object = reinterpret_cast<ManagedObject *>(header + 1);
-                    object->finalize();
+                    if (freeHeader->hasFlag(ObjectHeader::FlagMark))
+                        break;
+
+                    if (!freeHeader->hasFlag(ObjectHeader::FlagFree) && freeHeader->getSize() > sizeof(ObjectHeader)) {
+                        size_t headerByte = free - heaps[i];
+                        bitmaps[i][bitmapByte(headerByte)] ^= 1 << bitmapBit(headerByte);
+
+                        ManagedObject *object = reinterpret_cast<ManagedObject *>(freeHeader + 1);
+                        object->finalize();
+                    }
+
+                    freeSize += freeHeader->getSize();
                 }
+
+                markFree(p, freeSize, i);
             }
         }
     }
