@@ -81,8 +81,9 @@ void ConservativeMemoryManager::free(ManagedObject *) {
 }
 
 void ConservativeMemoryManager::collectGarbage() {
-    register uint32_t *esp asm("esp");
-    man->stackTop = esp;
+    uint8_t local;
+    alloca(0);
+    man->stackTop = reinterpret_cast<uint32_t *>(&local);
 
 #ifdef VERBOSE_GC
     IO::writeLine("\nConservativeMemoryManager::collectGarbage()");
@@ -138,18 +139,12 @@ int ConservativeMemoryManager::findHeap(void *p) {
 }
 
 void ConservativeMemoryManager::mark() {
-    IO::writeLine("Marking stack...");
-
     markRange(stackTop, stackBottom - stackTop);
-
-    IO::writeLine("Marking registers...");
 
     Registers buf;
     saveRegisters(&buf);
 
     markRange(reinterpret_cast<uint32_t *>(&buf), sizeof(Registers) / sizeof(uint32_t));
-
-    IO::writeLine("Marking globals...");
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->ptr)
@@ -172,8 +167,6 @@ void ConservativeMemoryManager::mark(ManagedObject *object, int heapIndex) {
     size_t headerByte = reinterpret_cast<uint8_t *>(object) - heaps[heapIndex] - sizeof(ObjectHeader);
 
     if (bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte))) {
-        IO::writeLine("0x%p", object);
-
         (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
         object->mapOnReferences(markReference);
     }
@@ -199,8 +192,10 @@ void ConservativeMemoryManager::sweep() {
 
                 freeObjects.push({ header, i });
 
-                ManagedObject *object = reinterpret_cast<ManagedObject *>(header + 1);
-                object->finalize();
+                if (header->getSize() > sizeof(ObjectHeader)) {
+                    ManagedObject *object = reinterpret_cast<ManagedObject *>(header + 1);
+                    object->finalize();
+                }
             }
         }
     }
@@ -227,11 +222,12 @@ ManagedObject *ConservativeMemoryManager::claimFreeSpace(size_t size) {
 
     freeObjects.pop();
 
-    if (header->getSize() >= size + sizeof(ObjectHeader))
+    if (header->getSize() >= size + sizeof(ObjectHeader)) {
         markFree(reinterpret_cast<uint8_t *>(header) + size, header->getSize() - size, heapIndex);
+        header->setSize(size);
+    }
 
     header->removeFlag(ObjectHeader::FlagFree);
-    header->setSize(size);
 
     return reinterpret_cast<ManagedObject *>(header + 1);
 }
