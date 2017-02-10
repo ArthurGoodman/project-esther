@@ -9,16 +9,11 @@
 #include "memory/managedobject.h"
 #include "memory/memorymanager.h"
 
-#ifdef MEM_MANAGEMENT
-
-namespace {
-es::ByteArray *memory;
-size_t objectCount, memoryUsed, capacity;
-int delta;
-uint8_t *toSpace, *fromSpace, *allocPtr;
-}
+#if 0
 
 namespace es {
+
+SemispaceMemoryManager *SemispaceMemoryManager::man;
 
 SemispaceMemoryManager::SemispaceMemoryManager() {
     initialize();
@@ -33,19 +28,19 @@ ManagedObject *SemispaceMemoryManager::allocate(size_t size, size_t count) {
     IO::writeLine("SemispaceMemoryManager::allocate(size=%u)", size);
 #endif
 
-    if (!enoughSpace(size))
-        collectGarbage();
+    if (!man->enoughSpace(size))
+        man->collectGarbage();
 
-    if (!enoughSpace(size))
-        expand();
+    if (!man->enoughSpace(size))
+        man->expand();
     else
-        delta = 0;
+        man->delta = 0;
 
-    ManagedObject *object = reinterpret_cast<ManagedObject *>(allocPtr);
-    allocPtr += size;
+    ManagedObject *object = reinterpret_cast<ManagedObject *>(man->allocPtr);
+    man->allocPtr += size;
 
-    objectCount += count;
-    memoryUsed += size;
+    man->objectCount += count;
+    man->memoryUsed += size;
 
     return object;
 }
@@ -56,32 +51,34 @@ void SemispaceMemoryManager::free(ManagedObject *) {
 void SemispaceMemoryManager::collectGarbage() {
 #ifdef VERBOSE_GC
     IO::writeLine("\nSemispaceMemoryManager::collectGarbage()");
-    size_t oldSize = memoryUsed;
+    size_t oldSize = man->memoryUsed;
 #endif
 
-    size_t oldObjectCount = objectCount;
+    size_t oldObjectCount = man->objectCount;
 
-    std::swap(fromSpace, toSpace);
-    allocPtr = toSpace;
+    std::swap(man->fromSpace, man->toSpace);
+    man->allocPtr = man->toSpace;
 
-    objectCount = 0;
-    memoryUsed = 0;
+    man->objectCount = 0;
+    man->memoryUsed = 0;
 
     for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
         if (p->ptr)
             updateReference(p->ptr);
 
-    uint8_t *object = fromSpace;
+    uint8_t *p = man->fromSpace;
+    ManagedObject *object;
 
-    for (size_t i = 0, size = 0; i < oldObjectCount; i++, object += size) {
-        size = reinterpret_cast<ManagedObject *>(object)->getSize();
+    for (size_t i = 0, size = 0; i < oldObjectCount; i++, p += size) {
+        object = reinterpret_cast<ManagedObject *>(p);
+        size = object->getSize();
 
-        if (reinterpret_cast<ManagedObject *>(object)->getForwardAddress() == nullptr)
-            reinterpret_cast<ManagedObject *>(object)->finalize();
+        if (object->getForwardAddress() == nullptr)
+            object->finalize();
     }
 
 #ifdef VERBOSE_GC
-    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
+    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - man->memoryUsed, oldObjectCount - man->objectCount, man->objectCount);
 #endif
 }
 
@@ -89,6 +86,8 @@ void SemispaceMemoryManager::reallocate() {
 }
 
 void SemispaceMemoryManager::initialize() {
+    man = this;
+
     memory = new ByteArray;
 
     objectCount = 0;
@@ -162,7 +161,7 @@ void SemispaceMemoryManager::expand() {
 }
 
 void SemispaceMemoryManager::updateReference(ManagedObject *&ref) {
-    ref = copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + delta));
+    ref = man->copy(reinterpret_cast<ManagedObject *>(reinterpret_cast<uint8_t *>(ref) + man->delta));
 }
 }
 

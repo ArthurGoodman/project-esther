@@ -16,7 +16,7 @@ AttributeExpression::~AttributeExpression() {
 }
 
 Object *AttributeExpression::exec(Esther *esther) {
-    Object *value = self->eval(esther)->get(name);
+    Object *volatile value = self->eval(esther)->get(name);
 
     if (!value)
         Esther::runtimeError("undefined attribute '%s'", name.c_str());

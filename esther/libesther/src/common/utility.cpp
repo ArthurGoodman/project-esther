@@ -37,9 +37,9 @@ bool Utility::isLetterOrDigit(char c) {
 std::string Utility::expandTabs(const std::string &str) {
     std::string result;
 
-    for (int i = 0, c = 0; i < (int)str.size(); i++)
+    for (size_t i = 0, c = 0; i < str.size(); i++)
         if (str[i] == '\t') {
-            int delta = c % tabSize ? c % tabSize : tabSize;
+            size_t delta = c % tabSize ? c % tabSize : tabSize;
             c += delta;
             result.insert(result.size(), delta, ' ');
         } else {
@@ -71,8 +71,8 @@ std::string Utility::vformat(const char *fmt, va_list ap) {
         int needed = vsnprintf(buf, size, fmt, ap);
         va_end(ap_copy);
 
-        if (needed <= (int)size && needed >= 0)
-            return std::string(buf, (size_t)needed);
+        if (needed <= static_cast<int>(size) && needed >= 0)
+            return std::string(buf, static_cast<size_t>(needed));
 
         size = needed > 0 ? needed + 1 : size * 2;
         dynamicbuf.resize(size);

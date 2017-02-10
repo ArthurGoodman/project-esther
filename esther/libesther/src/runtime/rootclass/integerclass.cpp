@@ -12,32 +12,32 @@ IntegerClass::IntegerClass(Esther *esther)
 }
 
 void IntegerClass::setupMethods(Esther *esther) {
-    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
-                     if (!dynamic_cast<IntegerClass *>(self)) {
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
+                     if (!dynamic_cast<IntegerClass *volatile>(self)) {
                          Esther::runtimeError("Integer.(): invalid self");
                          return nullptr;
                      }
 
-                     if (!dynamic_cast<ValueObject *>(args[1])) {
+                     if (!dynamic_cast<ValueObject *volatile>(args[1])) {
                          Esther::runtimeError("Integer.(): invalid argument");
                          return nullptr;
                      }
 
-                     return new ValueObject(esther, static_cast<ValueObject *>(args[1])->getVariant().toInteger());
+                     return new ValueObject(esther, static_cast<ValueObject *volatile>(args[1])->getVariant().toInteger());
                  }));
 
-    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Object *volatile self, const std::vector<Object *> &args) -> Object * {
         if (static_cast<int>(args.size()) > 1)
             Esther::runtimeError("Integer.initialize: invalid number of arguments");
 
         if (!args.empty())
-            static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toInteger());
+            static_cast<ValueObject *volatile>(self)->setVariant(static_cast<ValueObject *volatile>(args[0])->getVariant().toInteger());
 
         return self;
     });
 
-    defValueObjectFunc(esther, "=", 1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
-        static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toInteger());
+    defValueObjectFunc(esther, "=", 1, [](Esther *, Object *volatile self, const std::vector<Object *> &args) -> Object * {
+        static_cast<ValueObject *volatile>(self)->setVariant(static_cast<ValueObject *volatile>(args[0])->getVariant().toInteger());
         return self;
     });
 }

@@ -1,3 +1,6 @@
 #include "memory/memorymanager.h"
 
-es::MemoryManager es::MemoryManager::instance;
+namespace es {
+
+MemoryManager MemoryManager::instance;
+}

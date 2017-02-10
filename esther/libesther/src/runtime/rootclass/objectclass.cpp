@@ -12,33 +12,33 @@ ObjectClass::ObjectClass(Esther *esther)
 }
 
 void ObjectClass::setupMethods(Esther *esther) {
-    defFunc(esther, "class", [](Esther *, Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc(esther, "class", [](Esther *, Object *volatile self, const std::vector<Object *> &) -> Object * {
         return self->getClass();
     });
 
-    defFunc(esther, "==", { this }, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "==", { this }, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
         return esther->toBoolean(self->call(esther, "equals", args)->isTrue());
     });
 
-    defFunc(esther, "!=", { this }, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "!=", { this }, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
         return esther->toBoolean(!self->call(esther, "equals", args)->isTrue());
     });
 
-    defFunc(esther, "toString", [](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
+    defFunc(esther, "toString", [](Esther *esther, Object *volatile self, const std::vector<Object *> &) -> Object * {
         return new ValueObject(esther, self->toString());
     });
 
-    defFunc(esther, "equals", 1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "equals", 1, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
         return esther->toBoolean(self == args[0]);
     });
 
-    defFunc(esther, "is", 1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
-        if (!dynamic_cast<Class *>(args[0])) {
+    defFunc(esther, "is", 1, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
+        if (!dynamic_cast<Class *volatile>(args[0])) {
             Esther::runtimeError("Object.is: invalid argument");
             return nullptr;
         }
 
-        return esther->toBoolean(self->is(static_cast<Class *>(args[0])));
+        return esther->toBoolean(self->is(static_cast<Class *volatile>(args[0])));
     });
 }
 

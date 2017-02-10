@@ -16,13 +16,13 @@ ClassDefinitionExpression::~ClassDefinitionExpression() {
 }
 
 Object *ClassDefinitionExpression::exec(Esther *esther) {
-    Object *evaledSuperclass = superclass->eval(esther);
+    Object *volatile evaledSuperclass = superclass->eval(esther);
 
-    if (!dynamic_cast<Class *>(evaledSuperclass)) {
+    if (!dynamic_cast<Class *volatile>(evaledSuperclass)) {
         setPosition(superclass->getPosition());
         Esther::runtimeError("class expected");
     }
 
-    return new Class(esther, name, static_cast<Class *>(evaledSuperclass));
+    return new Class(esther, name, static_cast<Class *volatile>(evaledSuperclass));
 }
 }

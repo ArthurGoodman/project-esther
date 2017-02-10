@@ -9,7 +9,7 @@ Expression::~Expression() {
 }
 
 Object *Expression::eval(Esther *esther) {
-    Object *value = nullptr;
+    Object *volatile value = nullptr;
 
     try {
         value = exec(esther);

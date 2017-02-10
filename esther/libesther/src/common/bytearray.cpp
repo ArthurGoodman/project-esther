@@ -4,6 +4,8 @@
 
 #include "common/utility.h"
 
+#include "common/io.h"
+
 namespace es {
 
 ByteArray::ByteArray(size_t initialCapacity)

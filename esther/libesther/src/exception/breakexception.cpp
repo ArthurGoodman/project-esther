@@ -2,7 +2,7 @@
 
 namespace es {
 
-BreakException::BreakException(Object *value)
+BreakException::BreakException(Object *volatile value)
     : ValueException(value) {
 }
 

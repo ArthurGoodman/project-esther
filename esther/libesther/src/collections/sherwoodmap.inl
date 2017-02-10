@@ -218,11 +218,6 @@ void SherwoodMap<K, V>::mapOnReferences(void (*f)(ManagedObject *&)) {
 }
 
 template <class K, class V>
-int SherwoodMap<K, V>::getSize() const {
-    return sizeof *this;
-}
-
-template <class K, class V>
 uint32_t SherwoodMap<K, V>::computeHash(const K &key) {
     return std::hash<K>()(key);
 }

@@ -30,7 +30,6 @@ class HashMap : public Map<K, V> {
         bool equals(const K &key) const;
 
         void mapOnReferences(void (*f)(ManagedObject *&)) override;
-        int getSize() const override;
     };
 
     friend class Array<Entry *>;
@@ -76,7 +75,6 @@ public:
     int size() const override;
 
     void mapOnReferences(void (*f)(ManagedObject *&)) override;
-    int getSize() const override;
 
 private:
     static uint64_t hashKey(const K &key);

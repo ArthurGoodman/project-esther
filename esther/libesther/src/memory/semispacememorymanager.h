@@ -4,14 +4,24 @@
 
 #include "common/config.h"
 
-#ifdef MEM_MANAGEMENT
+#if 0
 
 namespace es {
 
 class ManagedObject;
+class ByteArray;
 
 class SemispaceMemoryManager {
-    static const int InitialCapacity = 1 << 10;
+    static const size_t InitialCapacity = 1 << 10;
+
+    static SemispaceMemoryManager *man;
+
+    ByteArray *memory;
+
+    size_t objectCount, memoryUsed, capacity;
+    int delta;
+
+    uint8_t *toSpace, *fromSpace, *allocPtr;
 
 public:
     SemispaceMemoryManager();
@@ -24,13 +34,13 @@ public:
     static void reallocate();
 
 private:
-    static void initialize();
-    static void finalize();
+    void initialize();
+    void finalize();
 
-    static bool enoughSpace(int size);
+    bool enoughSpace(int size);
 
-    static ManagedObject *copy(ManagedObject *object);
-    static void expand();
+    ManagedObject *copy(ManagedObject *object);
+    void expand();
 
     static void updateReference(ManagedObject *&ref);
 };

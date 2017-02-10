@@ -17,8 +17,8 @@ AttributeAssignmentExpression::~AttributeAssignmentExpression() {
 }
 
 Object *AttributeAssignmentExpression::exec(Esther *esther) {
-    Object *evaledSelf = self->eval(esther);
-    Object *evaledValue = value->eval(esther);
+    Object *volatile evaledSelf = self->eval(esther);
+    Object *volatile evaledValue = value->eval(esther);
 
     evaledSelf->setAttribute(name, evaledValue);
 

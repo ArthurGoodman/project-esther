@@ -2,7 +2,7 @@
 
 namespace es {
 
-ReturnException::ReturnException(Object *value)
+ReturnException::ReturnException(Object *volatile value)
     : ValueException(value) {
 }
 

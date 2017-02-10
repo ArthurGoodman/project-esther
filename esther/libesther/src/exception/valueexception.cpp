@@ -2,7 +2,7 @@
 
 namespace es {
 
-ValueException::ValueException(Object *value)
+ValueException::ValueException(Object *volatile value)
     : value(value) {
 }
 

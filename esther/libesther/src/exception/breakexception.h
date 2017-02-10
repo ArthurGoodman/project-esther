@@ -6,7 +6,7 @@ namespace es {
 
 class BreakException : public ValueException {
 public:
-    BreakException(Object *value);
+    BreakException(Object *volatile value);
 
     void raise() override;
 };

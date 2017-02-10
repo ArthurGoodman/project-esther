@@ -8,7 +8,7 @@ class ConstantExpression : public Expression {
     Object *value;
 
 public:
-    ConstantExpression(Object *value);
+    ConstantExpression(Object *volatile value);
 
 protected:
     Object *exec(Esther *esther) override;

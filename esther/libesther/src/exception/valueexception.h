@@ -6,10 +6,10 @@
 namespace es {
 
 class ValueException : public Exception {
-    Object *value;
+    Object *volatile value;
 
 protected:
-    ValueException(Object *value);
+    ValueException(Object *volatile value);
 
     Object *getValue();
 };

@@ -5,7 +5,7 @@
 
 namespace es {
 
-Class::Class(Esther *esther, const std::string &name, Class *superclass)
+Class::Class(Esther *esther, const std::string &name, Class *volatile superclass)
     : Object(esther->getClassClass())
     , name(name)
     , superclass(superclass) {
@@ -23,22 +23,22 @@ Class *Class::getSuperclass() const {
     return superclass;
 }
 
-void Class::setSuperclass(Class *superclass) {
+void Class::setSuperclass(Class *volatile superclass) {
     this->superclass = superclass;
 }
 
 Object *Class::get(const std::string &name) const {
-    Object *temp = nullptr;
+    Object *volatile temp = nullptr;
     return (temp = Object::get(name)) ? temp : superclass ? superclass->lookup(name) : nullptr;
 }
 
 Object *Class::newInstance(Esther *esther, const std::vector<Object *> &args) {
-    Object *instance = createNewInstance(esther, args);
+    Object *volatile instance = createNewInstance(esther, args);
     instance->callIfFound(esther, "initialize", args);
     return instance;
 }
 
-bool Class::isChild(Class *_class) const {
+bool Class::isChild(Class *volatile _class) const {
     return this == _class || (superclass && superclass->isChild(_class));
 }
 
@@ -50,8 +50,21 @@ Object *Class::lookup(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : superclass ? superclass->lookup(name) : nullptr;
 }
 
+void Class::finalize() {
+    Object::finalize();
+
+    name.~basic_string();
+}
+
+void Class::mapOnReferences(void (*f)(ManagedObject *&)) {
+    Object::mapOnReferences(f);
+
+    if (superclass)
+        f(reinterpret_cast<ManagedObject *&>(superclass));
+}
+
 Object *Class::createNewInstance(Esther *esther, const std::vector<Object *> &args) {
-    Object *instance = superclass->createNewInstance(esther, args);
+    Object *volatile instance = superclass->createNewInstance(esther, args);
     instance->setClass(this);
     return instance;
 }

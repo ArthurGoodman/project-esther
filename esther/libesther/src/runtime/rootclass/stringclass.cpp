@@ -11,26 +11,26 @@ StringClass::StringClass(Esther *esther)
 }
 
 void StringClass::setupMethods(Esther *esther) {
-    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
-                     if (!dynamic_cast<StringClass *>(self)) {
+    setAttribute("()", new NativeFunction(esther, "()", 2, [](Esther * esther, Object * volatile self, const std::vector<Object *> &args) -> Object * {
+                     if (!dynamic_cast<StringClass *volatile>(self)) {
                          Esther::runtimeError("String.(): invalid self");
                          return nullptr;
                      }
 
-                     if (!dynamic_cast<ValueObject *>(args[1])) {
+                     if (!dynamic_cast<ValueObject *volatile>(args[1])) {
                          Esther::runtimeError("String.(): invalid argument");
                          return nullptr;
                      }
 
-                     return new ValueObject(esther, static_cast<ValueObject *>(args[1])->getVariant().toString());
+                     return new ValueObject(esther, static_cast<ValueObject *volatile>(args[1])->getVariant().toString());
                  }));
 
-    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
+    defValueObjectFunc(esther, "initialize", -1, [](Esther *, Object * volatile self, const std::vector<Object *> &args) -> Object * {
         if ((int)args.size() > 1)
             Esther::runtimeError("String.initialize: invalid number of arguments");
 
         if (!args.empty())
-            static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toString());
+            static_cast<ValueObject *volatile>(self)->setVariant(static_cast<ValueObject *volatile>(args[0])->getVariant().toString());
 
         return self;
     });
@@ -59,8 +59,8 @@ void StringClass::setupMethods(Esther *esther) {
         return a.toString() == b.toString();
     });
 
-    defFunc(esther, "size", [](Esther *esther, Object *self, const std::vector<Object *> &) -> Object * {
-        return new ValueObject(esther, static_cast<int>(static_cast<ValueObject *>(self)->toString().size()));
+    defFunc(esther, "size", [](Esther * esther, Object * volatile self, const std::vector<Object *> &) -> Object * {
+        return new ValueObject(esther, static_cast<int>(static_cast<ValueObject *volatile>(self)->toString().size()));
     });
 
     defOper(esther, "[]", [](const Variant &a, const Variant &b) -> Variant {
@@ -71,8 +71,8 @@ void StringClass::setupMethods(Esther *esther) {
         return a.toString().find(b.toChar()) != std::string::npos;
     });
 
-    defValueObjectFunc(esther, "=", 1, [](Esther *, Object *self, const std::vector<Object *> &args) -> Object * {
-        static_cast<ValueObject *>(self)->setVariant(static_cast<ValueObject *>(args[0])->getVariant().toString());
+    defValueObjectFunc(esther, "=", 1, [](Esther *, Object * volatile self, const std::vector<Object *> &args) -> Object * {
+        static_cast<ValueObject *volatile>(self)->setVariant(static_cast<ValueObject *volatile>(args[0])->getVariant().toString());
         return self;
     });
 }

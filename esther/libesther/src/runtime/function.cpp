@@ -14,7 +14,7 @@ void Function::setName(const std::string &name) {
     this->name = name;
 }
 
-Object *Function::invoke(Esther *esther, Object *self, const std::vector<Object *> &args) {
+Object *Function::invoke(Esther *esther, Object *volatile self, const std::vector<Object *> &args) {
     if (arity >= 0 && arity != static_cast<int>(args.size()))
         Esther::runtimeError("invalid number of arguments (%i/%i)", args.size(), arity);
 
@@ -25,7 +25,13 @@ std::string Function::toString() const {
     return getName().empty() ? "<anonymous function>" : "<function " + getName() + ">";
 }
 
-Function::Function(Class *objectClass, const std::string &name, int arity)
+void Function::finalize() {
+    Object::finalize();
+
+    name.~basic_string();
+}
+
+Function::Function(Class *volatile objectClass, const std::string &name, int arity)
     : Object(objectClass)
     , name(name)
     , arity(arity) {

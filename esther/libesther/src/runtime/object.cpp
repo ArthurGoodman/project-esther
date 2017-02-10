@@ -7,20 +7,19 @@
 
 namespace es {
 
-Object::Object(Class *objectClass)
+Object::Object(Class *volatile objectClass)
     : objectClass(objectClass)
     , attributes(nullptr) {
 }
 
 Object::~Object() {
-    delete attributes;
 }
 
 Class *Object::getClass() const {
     return objectClass;
 }
 
-void Object::setClass(Class *objectClass) {
+void Object::setClass(Class *volatile objectClass) {
     this->objectClass = objectClass;
 }
 
@@ -32,7 +31,7 @@ Object *Object::getAttribute(const std::string &name) const {
     return attributes ? attributes->at(name) : nullptr;
 }
 
-void Object::setAttribute(const std::string &name, Object *value) {
+void Object::setAttribute(const std::string &name, Object *volatile value) {
     if (!attributes)
         attributes = new std::map<std::string, Object *>;
 
@@ -43,7 +42,7 @@ Object *Object::get(const std::string &name) const {
     return hasAttribute(name) ? getAttribute(name) : objectClass->lookup(name);
 }
 
-bool Object::is(Class *_class) const {
+bool Object::is(Class *volatile _class) const {
     return objectClass->isChild(_class);
 }
 
@@ -56,7 +55,7 @@ bool Object::isTrue() const {
 }
 
 Object *Object::call(Esther *esther, const std::string &name, const std::vector<Object *> &args) {
-    Object *f = get(name);
+    Object *volatile f = get(name);
 
     if (!f)
         Esther::runtimeError("Object::call: undefined identifier '%s'", name.c_str());
@@ -64,9 +63,9 @@ Object *Object::call(Esther *esther, const std::string &name, const std::vector<
     return call(esther, f, args);
 }
 
-Object *Object::call(Esther *esther, Object *f, const std::vector<Object *> &args) {
-    if (dynamic_cast<Function *>(f))
-        return static_cast<Function *>(f)->invoke(esther, this, args);
+Object *Object::call(Esther *esther, Object *volatile f, const std::vector<Object *> &args) {
+    if (dynamic_cast<Function *volatile>(f))
+        return static_cast<Function *volatile>(f)->invoke(esther, this, args);
 
     std::vector<Object *> actualArgs;
     actualArgs.reserve(args.size() + 1);
@@ -76,8 +75,8 @@ Object *Object::call(Esther *esther, Object *f, const std::vector<Object *> &arg
     return f->call(esther, "()", actualArgs);
 }
 
-Object *Object::call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *expectedReturnClass) {
-    Object *value = call(esther, name, args);
+Object *Object::call(Esther *esther, const std::string &name, const std::vector<Object *> &args, Class *volatile expectedReturnClass) {
+    Object *volatile value = call(esther, name, args);
 
     if (!value->is(expectedReturnClass))
         Esther::runtimeError("%s is not a valid return type for %s (%s expected)", value->getClass()->toString().c_str(), name.c_str(), expectedReturnClass->getName().c_str());
@@ -86,11 +85,23 @@ Object *Object::call(Esther *esther, const std::string &name, const std::vector<
 }
 
 Object *Object::callIfFound(Esther *esther, const std::string &name, const std::vector<Object *> &args) {
-    Object *f = get(name);
+    Object *volatile f = get(name);
 
     if (!f)
         return nullptr;
 
     return call(esther, f, args);
+}
+
+void Object::finalize() {
+    delete attributes;
+}
+
+void Object::mapOnReferences(void (*f)(ManagedObject *&)) {
+    f(reinterpret_cast<ManagedObject *&>(objectClass));
+
+    if (attributes)
+        for (auto &attr : *attributes)
+            f(reinterpret_cast<ManagedObject *&>(attr.second));
 }
 }

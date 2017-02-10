@@ -26,6 +26,8 @@
 #include "lexer/ilexer.h"
 #include "expression/expression.h"
 #include "runtime/nativefunction.h"
+#include "common/config.h"
+#include "memory/conservativememorymanager.h"
 
 namespace es {
 
@@ -76,7 +78,7 @@ Class *Esther::getRootClass(const std::string &name) const {
     return rootClasses.at(name);
 }
 
-void Esther::registerRootClass(RootClass *rootClass) {
+void Esther::registerRootClass(RootClass *volatile rootClass) {
     rootClasses[rootClass->getName()] = rootClass;
 }
 
@@ -99,12 +101,12 @@ void Esther::initialize() {
 
     mainObject = createObject();
 
-    new BooleanClass(this);
+    booleanClass = new BooleanClass(this);
 
     trueObject = new True(this);
     falseObject = new False(this);
 
-    new NullClass(this);
+    nullClass = new NullClass(this);
 
     nullObject = new Null(this);
 
@@ -119,10 +121,10 @@ void Esther::initialize() {
 
     setupMethods();
 
-    Object *console = createObject();
+    Object *volatile console = createObject();
     mainObject->setAttribute("console", console);
 
-    console->setAttribute("write", new NativeFunction(this, "write", -1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    console->setAttribute("write", new NativeFunction(this, "write", -1, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
                               if (!args.empty())
                                   for (auto &arg : args)
                                       IO::write(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
@@ -132,7 +134,7 @@ void Esther::initialize() {
                               return esther->getNull();
                           }));
 
-    console->setAttribute("writeLine", new NativeFunction(this, "writeLine", -1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    console->setAttribute("writeLine", new NativeFunction(this, "writeLine", -1, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
                               if (!args.empty())
                                   for (auto &arg : args)
                                       IO::writeLine(arg->call(esther, "toString", {}, esther->getRootClass("String"))->toString());
@@ -154,13 +156,18 @@ void Esther::setupMethods() {
 }
 
 void Esther::run(const std::string &script) {
+#ifdef CONSERVATIVE_GC
+    register uint32_t *ebp asm("ebp");
+    es::ConservativeMemoryManager::initStack(ebp);
+#endif
+
     std::string src = Utility::expandTabs(script);
 
     pushSource(src);
 
     try {
         Expression *e = IParser::instance()->parse(this, ILexer::instance()->lex(src));
-        Object *value = e ? e->eval(this) : nullptr;
+        Object *volatile value = e ? e->eval(this) : nullptr;
         if (value)
             IO::writeLine("=> %s", value->call(this, "toString", {}, getRootClass("String"))->toString().c_str());
         delete e;
@@ -191,7 +198,7 @@ Context *Esther::context() const {
     return contexts.top();
 }
 
-void Esther::pushContext(Context *context) {
+void Esther::pushContext(Context *volatile context) {
     contexts.push(context);
 }
 
@@ -199,7 +206,7 @@ void Esther::popContext() {
     contexts.pop();
 }
 
-void Esther::push(Object *value) {
+void Esther::push(Object *volatile value) {
     stack.push_back(value);
 }
 
@@ -215,7 +222,7 @@ Object *Esther::getReg() const {
     return reg;
 }
 
-void Esther::setReg(Object *value) {
+void Esther::setReg(Object *volatile value) {
     reg = value;
 }
 

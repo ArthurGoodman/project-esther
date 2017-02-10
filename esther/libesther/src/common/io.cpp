@@ -92,13 +92,13 @@ void IO::writeLine(const char *fmt, ...) {
     va_end(ap);
 }
 
-std::string IO::scan() {
+std::string IO::read() {
     std::string str;
     std::cin >> str;
     return str;
 }
 
-std::string IO::scanLine() {
+std::string IO::readLine() {
     std::string str;
     getline(std::cin, str);
     return str;
