@@ -120,6 +120,18 @@ void ConservativeMemoryManager::finalize() {
     IO::writeLine("Total memory: %u", totalMemory);
     IO::writeLine("\nConservativeMemoryManager::finalize()");
 #endif
+
+    ObjectHeader *header;
+
+    for (size_t i = 0; i < heaps.size(); i++)
+        for (uint8_t *p = heaps[i]; p < heaps[i] + heapSizes[i]; p += header->getSize()) {
+            header = reinterpret_cast<ObjectHeader *>(p);
+
+            if (!header->hasFlag(ObjectHeader::FlagFree) && header->getSize() > sizeof(ObjectHeader)) {
+                ManagedObject *object = reinterpret_cast<ManagedObject *>(header + 1);
+                object->finalize();
+            }
+        }
 }
 
 bool ConservativeMemoryManager::enoughSpace(size_t size) {
@@ -179,7 +191,7 @@ void ConservativeMemoryManager::sweep() {
 
     freeObjects = std::priority_queue<FreeObject, std::vector<FreeObject>, CompareObjects>();
 
-    for (size_t i = 0; i < heaps.size(); i++) {
+    for (size_t i = 0; i < heaps.size(); i++)
         for (uint8_t *p = heaps[i]; p < heaps[i] + heapSizes[i]; p += header->getSize()) {
             header = reinterpret_cast<ObjectHeader *>(p);
 
@@ -212,7 +224,6 @@ void ConservativeMemoryManager::sweep() {
                 markFree(p, freeSize, i);
             }
         }
-    }
 }
 
 void ConservativeMemoryManager::addHeap() {
