@@ -26,6 +26,8 @@
 #include "lexer/ilexer.h"
 #include "expression/expression.h"
 #include "runtime/nativefunction.h"
+#include "common/config.h"
+#include "memory/conservativememorymanager.h"
 
 namespace es {
 
@@ -154,6 +156,11 @@ void Esther::setupMethods() {
 }
 
 void Esther::run(const std::string &script) {
+#ifdef CONSERVATIVE_GC
+    register uint32_t *ebp asm("ebp");
+    es::ConservativeMemoryManager::initStack(ebp);
+#endif
+
     std::string src = Utility::expandTabs(script);
 
     pushSource(src);
