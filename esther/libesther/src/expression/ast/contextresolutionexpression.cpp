@@ -18,11 +18,11 @@ ContextResolutionExpression::~ContextResolutionExpression() {
 }
 
 Object *ContextResolutionExpression::exec(Esther *esther) {
-    Object *evaledSelf = self->eval(esther);
-    Object *evaledHere = here ? here->eval(esther) : evaledSelf;
+    Object *volatile evaledSelf = self->eval(esther);
+    Object *volatile evaledHere = here ? here->eval(esther) : evaledSelf;
 
     esther->pushContext(esther->context()->childContext(evaledSelf, evaledHere));
-    Object *value = body->eval(esther);
+    Object *volatile value = body->eval(esther);
     esther->popContext();
 
     return value;

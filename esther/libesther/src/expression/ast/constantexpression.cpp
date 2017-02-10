@@ -2,7 +2,7 @@
 
 namespace es {
 
-ConstantExpression::ConstantExpression(Object *value)
+ConstantExpression::ConstantExpression(Object *volatile value)
     : value(value) {
 }
 

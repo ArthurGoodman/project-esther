@@ -15,7 +15,7 @@ OrExpression::~OrExpression() {
 }
 
 Object *OrExpression::exec(Esther *esther) {
-    Object *self = this->self->eval(esther);
+    Object *volatile self = this->self->eval(esther);
 
     if (self->isTrue())
         return self;

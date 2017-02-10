@@ -11,16 +11,16 @@ FunctionClass::FunctionClass(Esther *esther)
 }
 
 void FunctionClass::setupMethods(Esther *esther) {
-    defFunc(esther, "call", -1, [](Esther *esther, Object *self, const std::vector<Object *> &args) -> Object * {
+    defFunc(esther, "call", -1, [](Esther *esther, Object *volatile self, const std::vector<Object *> &args) -> Object * {
         if (args.empty())
             Esther::runtimeError("Function.call: invalid number of arguments");
 
-        Object *actualSelf = args[0];
+        Object *volatile actualSelf = args[0];
 
         std::vector<Object *> actualArgs = args;
         actualArgs.erase(actualArgs.begin());
 
-        return static_cast<Function *>(self)->invoke(esther, actualSelf, actualArgs);
+        return static_cast<Function *volatile>(self)->invoke(esther, actualSelf, actualArgs);
     });
 
     setAttribute("()", getAttribute("call"));

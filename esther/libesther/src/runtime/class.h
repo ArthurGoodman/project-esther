@@ -11,19 +11,19 @@ class Class : public Object {
     Class *superclass;
 
 public:
-    Class(Esther *esther, const std::string &name, Class *superclass);
+    Class(Esther *esther, const std::string &name, Class *volatile superclass);
 
     std::string getName() const;
     void setName(const std::string &name);
 
     Class *getSuperclass() const;
-    void setSuperclass(Class *superclass);
+    void setSuperclass(Class *volatile superclass);
 
     Object *get(const std::string &name) const override;
 
     Object *newInstance(Esther *esther, const std::vector<Object *> &args = std::vector<Object *>());
 
-    bool isChild(Class *_class) const;
+    bool isChild(Class *volatile _class) const;
 
     std::string toString() const override;
 

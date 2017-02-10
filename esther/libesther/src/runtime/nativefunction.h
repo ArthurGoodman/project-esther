@@ -7,7 +7,7 @@
 namespace es {
 
 class NativeFunction : public Function {
-    typedef std::function<Object *(Esther *, Object *, const std::vector<Object *> &)> FunctionBody;
+    typedef std::function<Object *(Esther *, Object *volatile, const std::vector<Object *> &)> FunctionBody;
 
     FunctionBody body;
 
@@ -17,6 +17,6 @@ public:
     void finalize() override;
 
 protected:
-    Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args) override;
+    Object *execute(Esther *esther, Object *volatile self, const std::vector<Object *> &args) override;
 };
 }

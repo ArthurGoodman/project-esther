@@ -51,7 +51,7 @@ class Esther {
     Ptr<ClassClass> classClass;
     Ptr<FunctionClass> functionClass;
 
-    std::map<std::string, RootClass *> rootClasses;
+    std::map<std::string, RootClass *volatile> rootClasses;
 
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
@@ -87,15 +87,15 @@ public:
 
     Context *context() const;
 
-    void pushContext(Context *context);
+    void pushContext(Context *volatile context);
     void popContext();
 
-    void push(Object *value);
+    void push(Object *volatile value);
     void pop(int count = 1);
     Object *top(int index = 0);
 
     Object *getReg() const;
-    void setReg(Object *value);
+    void setReg(Object *volatile value);
 
 private:
     void initialize();

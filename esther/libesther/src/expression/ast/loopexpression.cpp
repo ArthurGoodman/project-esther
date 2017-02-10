@@ -17,7 +17,7 @@ LoopExpression::~LoopExpression() {
 }
 
 Object *LoopExpression::exec(Esther *esther) {
-    Object *value = esther->getNull();
+    Object *volatile value = esther->getNull();
 
     while (condition->eval(esther)->isTrue())
         value = body->eval(esther);

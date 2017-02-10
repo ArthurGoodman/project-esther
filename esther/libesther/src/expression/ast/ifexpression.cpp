@@ -19,7 +19,7 @@ IfExpression::~IfExpression() {
 }
 
 Object *IfExpression::exec(Esther *esther) {
-    Object *value = esther->getNull();
+    Object *volatile value = esther->getNull();
 
     if (condition->eval(esther)->isTrue())
         value = body->eval(esther);

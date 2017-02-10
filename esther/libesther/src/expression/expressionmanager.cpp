@@ -54,7 +54,7 @@ Expression *ExpressionManager::ClassDefinition(const std::string &name, Expressi
     return new ClassDefinitionExpression(name, superclass);
 }
 
-Expression *ExpressionManager::Constant(Object *value) {
+Expression *ExpressionManager::Constant(Object *volatile value) {
     return new ConstantExpression(value);
 }
 

@@ -15,7 +15,7 @@ AssignmentExpression::~AssignmentExpression() {
 }
 
 Object *AssignmentExpression::exec(Esther *esther) {
-    Object *evaledValue = value->eval(esther);
+    Object *volatile evaledValue = value->eval(esther);
 
     if (!esther->context()->set(name, evaledValue))
         esther->context()->setLocal(name, evaledValue);

@@ -17,16 +17,16 @@ public:
     std::string getName() const;
     void setName(const std::string &name);
 
-    Object *invoke(Esther *esther, Object *self, const std::vector<Object *> &args);
+    Object *invoke(Esther *esther, Object *volatile self, const std::vector<Object *> &args);
 
     std::string toString() const;
 
     void finalize() override;
 
 protected:
-    virtual Object *execute(Esther *esther, Object *self, const std::vector<Object *> &args) = 0;
+    virtual Object *execute(Esther *esther, Object *volatile self, const std::vector<Object *> &args) = 0;
 
 protected:
-    Function(Class *objectClass, const std::string &name, int arity);
+    Function(Class *volatile objectClass, const std::string &name, int arity);
 };
 }

@@ -9,7 +9,7 @@ PushExpression::PushExpression(Expression *arg)
 }
 
 Object *PushExpression::exec(Esther *esther) {
-    Object *evaledArg = arg->eval(esther);
+    Object *volatile evaledArg = arg->eval(esther);
     esther->push(evaledArg);
     return evaledArg;
 }

@@ -6,7 +6,7 @@ namespace es {
 
 class ReturnException : public ValueException {
 public:
-    ReturnException(Object *value);
+    ReturnException(Object *volatile value);
 
     Object *value();
 

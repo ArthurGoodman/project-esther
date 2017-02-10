@@ -18,8 +18,8 @@ CallExpression::~CallExpression() {
 }
 
 Object *CallExpression::exec(Esther *esther) {
-    Object *evaledF = f->eval(esther);
-    Object *evaledSelf = self->eval(esther);
+    Object *volatile evaledF = f->eval(esther);
+    Object *volatile evaledSelf = self->eval(esther);
 
     std::vector<Object *> evaledArgs;
 
