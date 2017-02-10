@@ -24,6 +24,8 @@ class ConservativeMemoryManager {
         bool operator()(const FreeObject &a, const FreeObject &b);
     };
 
+    typedef std::priority_queue<FreeObject, std::vector<FreeObject>, CompareObjects> FreeObjectQueue;
+
     static const size_t InitialHeapSize;
     static const double HeapSizeMultiplier;
 
@@ -35,7 +37,7 @@ class ConservativeMemoryManager {
     std::vector<uint32_t> heapSizes;
 
     size_t objectCount, memoryUsed;
-    std::priority_queue<FreeObject, std::vector<FreeObject>, CompareObjects> freeObjects;
+    FreeObjectQueue freeObjects;
     uint32_t *stackBottom, *stackTop;
 
 public:

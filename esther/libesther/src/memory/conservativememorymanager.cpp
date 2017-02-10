@@ -1,6 +1,7 @@
 #include "conservativememorymanager.h"
 
 #include <memory>
+#include <cstring>
 
 #include "common/io.h"
 #include "memory/objectheader.h"
@@ -188,9 +189,11 @@ void ConservativeMemoryManager::sweep() {
     objectCount = 0;
     memoryUsed = 0;
 
-    freeObjects = std::priority_queue<FreeObject, std::vector<FreeObject>, CompareObjects>();
+    freeObjects = FreeObjectQueue();
 
-    for (size_t i = 0; i < heaps.size(); i++)
+    for (size_t i = 0; i < heaps.size(); i++) {
+        memset(bitmaps[i], 0, bitmapSize(heapSizes[i]));
+
         for (uint8_t *p = heaps[i]; p < heaps[i] + heapSizes[i]; p += header->getSize()) {
             header = reinterpret_cast<ObjectHeader *>(p);
 
@@ -210,9 +213,6 @@ void ConservativeMemoryManager::sweep() {
                         break;
 
                     if (!freeHeader->hasFlag(ObjectHeader::FlagFree) && freeHeader->getSize() > sizeof(ObjectHeader)) {
-                        size_t headerByte = free - heaps[i];
-                        bitmaps[i][bitmapByte(headerByte)] ^= 1 << bitmapBit(headerByte);
-
                         ManagedObject *object = reinterpret_cast<ManagedObject *>(freeHeader + 1);
                         object->finalize();
                     }
@@ -222,7 +222,11 @@ void ConservativeMemoryManager::sweep() {
 
                 markFree(p, freeSize, i);
             }
+
+            size_t headerByte = p - heaps[i];
+            bitmaps[i][bitmapByte(headerByte)] |= 1 << bitmapBit(headerByte);
         }
+    }
 }
 
 void ConservativeMemoryManager::addHeap() {
@@ -235,7 +239,7 @@ void ConservativeMemoryManager::addHeap() {
     heaps.push_back(static_cast<uint8_t *>(malloc(heapSize)));
     heapSizes.push_back(heapSize);
 
-    bitmaps.push_back(static_cast<uint8_t *>(calloc(bitmapSize(heapSize), sizeof(uint8_t))));
+    bitmaps.push_back(static_cast<uint8_t *>(calloc(bitmapSize(heapSize), 1)));
 
     markFree(heaps.back(), heapSize, heaps.size() - 1);
 }
