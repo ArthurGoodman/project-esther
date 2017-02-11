@@ -103,6 +103,8 @@ void ConservativeMemoryManager::reallocate() {
 void ConservativeMemoryManager::initialize() {
     man = this;
 
+    heapMin = heapMax = nullptr;
+
     objectCount = 0;
     memoryUsed = 0;
 }
@@ -138,8 +140,11 @@ bool ConservativeMemoryManager::enoughSpace(size_t size) {
     return !freeObjects.empty() && freeObjects.top().header->getSize() >= size;
 }
 
-int ConservativeMemoryManager::findHeap(void *p) {
+int ConservativeMemoryManager::findHeap(uint8_t *p) {
     if (reinterpret_cast<uint32_t>(p) % 4 != 0)
+        return -1;
+
+    if (p < heapMin + sizeof(ObjectHeader) || p >= heapMax)
         return -1;
 
     for (size_t i = 0; i < heaps.size(); i++)
@@ -164,23 +169,26 @@ void ConservativeMemoryManager::mark() {
 
 void ConservativeMemoryManager::markRange(uint32_t *p, size_t n) {
     for (size_t i = 0; i < n; i++, p++) {
-        int heapIndex = findHeap(reinterpret_cast<void *>(*p));
+        int heapIndex = findHeap(reinterpret_cast<uint8_t *>(*p));
 
-        if (heapIndex >= 0)
-            mark(reinterpret_cast<ManagedObject *>(*p), heapIndex);
+        if (heapIndex < 0)
+            continue;
+
+        ObjectHeader *header = reinterpret_cast<ObjectHeader *>(*p) - 1;
+
+        if (!isAllocation(reinterpret_cast<uint8_t *>(header), heapIndex))
+            continue;
+
+        if (header->hasFlag(ObjectHeader::FlagFree))
+            continue;
+
+        mark(reinterpret_cast<ManagedObject *>(*p));
     }
 }
 
-void ConservativeMemoryManager::mark(ManagedObject *object, int heapIndex) {
-    if (heapIndex < 0)
-        heapIndex = findHeap(object);
-
-    size_t headerByte = reinterpret_cast<uint8_t *>(object) - heaps[heapIndex] - sizeof(ObjectHeader);
-
-    if (bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte)) && !(reinterpret_cast<ObjectHeader *>(object) - 1)->hasFlag(ObjectHeader::FlagFree)) {
-        (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
-        object->mapOnReferences(markReference);
-    }
+void ConservativeMemoryManager::mark(ManagedObject *object) {
+    (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
+    object->mapOnReferences(markReference);
 }
 
 void ConservativeMemoryManager::sweep() {
@@ -202,6 +210,8 @@ void ConservativeMemoryManager::sweep() {
 
                 objectCount++;
                 memoryUsed += header->getSize();
+
+                markAsAllocation(p, i);
             } else {
                 ObjectHeader *freeHeader;
                 size_t freeSize = 0;
@@ -222,9 +232,6 @@ void ConservativeMemoryManager::sweep() {
 
                 markFree(p, freeSize, i);
             }
-
-            size_t headerByte = p - heaps[i];
-            bitmaps[i][bitmapByte(headerByte)] |= 1 << bitmapBit(headerByte);
         }
     }
 }
@@ -238,8 +245,13 @@ void ConservativeMemoryManager::addHeap() {
 
     heaps.push_back(static_cast<uint8_t *>(malloc(heapSize)));
     heapSizes.push_back(heapSize);
-
     bitmaps.push_back(static_cast<uint8_t *>(calloc(bitmapSize(heapSize), 1)));
+
+    if (!heapMin || heaps.back() < heapMin)
+        heapMin = heaps.back();
+
+    if (!heapMax || heaps.back() + heapSize > heapMax)
+        heapMax = heaps.back() + heapSize;
 
     markFree(heaps.back(), heapSize, heaps.size() - 1);
 }
@@ -262,9 +274,7 @@ ManagedObject *ConservativeMemoryManager::claimFreeSpace(size_t size) {
 
 void ConservativeMemoryManager::markFree(uint8_t *p, size_t size, size_t heapIndex) {
     freeObjects.push({ new (p) ObjectHeader(size, ObjectHeader::FlagFree), heapIndex });
-
-    size_t headerByte = p - heaps[heapIndex];
-    bitmaps[heapIndex][bitmapByte(headerByte)] |= 1 << bitmapBit(headerByte);
+    markAsAllocation(p, heapIndex);
 }
 
 void ConservativeMemoryManager::markReference(ManagedObject *&ref) {

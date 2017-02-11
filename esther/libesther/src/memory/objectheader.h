@@ -19,7 +19,7 @@ class ObjectHeader {
 public:
     enum {
         FlagMark = 1 << 0,
-        FlagFree = 1 << 2
+        FlagFree = 1 << 1
     };
 
     ObjectHeader(size_t size, uint32_t flags = 0);
