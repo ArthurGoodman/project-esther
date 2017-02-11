@@ -91,6 +91,11 @@ Object *Esther::createObject() {
 }
 
 void Esther::initialize() {
+#ifdef CONSERVATIVE_GC
+    register uint32_t *ebp asm("ebp");
+    es::ConservativeMemoryManager::initStack(ebp);
+#endif
+
     rootClasses.clear();
 
     classClass = new ClassClass(this);
@@ -156,11 +161,6 @@ void Esther::setupMethods() {
 }
 
 void Esther::run(const std::string &script) {
-#ifdef CONSERVATIVE_GC
-    register uint32_t *ebp asm("ebp");
-    es::ConservativeMemoryManager::initStack(ebp);
-#endif
-
     std::string src = Utility::expandTabs(script);
 
     pushSource(src);
