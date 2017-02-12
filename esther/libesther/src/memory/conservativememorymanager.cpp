@@ -140,18 +140,31 @@ bool ConservativeMemoryManager::enoughSpace(size_t size) {
     return !freeObjects.empty() && freeObjects.top().header->getSize() >= size;
 }
 
-int ConservativeMemoryManager::findHeap(uint8_t *p) {
+bool ConservativeMemoryManager::isValidPtr(uint8_t *p) {
     if (reinterpret_cast<uint32_t>(p) % 4 != 0)
-        return -1;
+        return false;
 
     if (p < heapMin + sizeof(ObjectHeader) || p >= heapMax)
-        return -1;
+        return false;
 
-    for (size_t i = 0; i < heaps.size(); i++)
+    size_t i;
+
+    for (i = 0; i < heaps.size(); i++)
         if (p >= heaps[i] + sizeof(ObjectHeader) && p < heaps[i] + heapSizes[i])
-            return i;
+            break;
 
-    return -1;
+    if (i == heaps.size())
+        return false;
+
+    ObjectHeader *header = reinterpret_cast<ObjectHeader *>(p) - 1;
+
+    if (!isAllocation(reinterpret_cast<uint8_t *>(header), i))
+        return false;
+
+    if (header->hasFlag(ObjectHeader::FlagFree))
+        return false;
+
+    return true;
 }
 
 void ConservativeMemoryManager::mark() {
@@ -168,22 +181,9 @@ void ConservativeMemoryManager::mark() {
 }
 
 void ConservativeMemoryManager::markRange(uint32_t *p, size_t n) {
-    for (size_t i = 0; i < n; i++, p++) {
-        int heapIndex = findHeap(reinterpret_cast<uint8_t *>(*p));
-
-        if (heapIndex < 0)
-            continue;
-
-        ObjectHeader *header = reinterpret_cast<ObjectHeader *>(*p) - 1;
-
-        if (!isAllocation(reinterpret_cast<uint8_t *>(header), heapIndex))
-            continue;
-
-        if (header->hasFlag(ObjectHeader::FlagFree))
-            continue;
-
-        mark(reinterpret_cast<ManagedObject *>(*p));
-    }
+    for (size_t i = 0; i < n; i++, p++)
+        if (isValidPtr(reinterpret_cast<uint8_t *>(*p)))
+            mark(reinterpret_cast<ManagedObject *>(*p));
 }
 
 void ConservativeMemoryManager::mark(ManagedObject *object) {
@@ -192,8 +192,6 @@ void ConservativeMemoryManager::mark(ManagedObject *object) {
 }
 
 void ConservativeMemoryManager::sweep() {
-    ObjectHeader *header;
-
     objectCount = 0;
     memoryUsed = 0;
 
@@ -201,6 +199,8 @@ void ConservativeMemoryManager::sweep() {
 
     for (size_t i = 0; i < heaps.size(); i++) {
         memset(bitmaps[i], 0, bitmapSize(heapSizes[i]));
+
+        ObjectHeader *header;
 
         for (uint8_t *p = heaps[i]; p < heaps[i] + heapSizes[i]; p += header->getSize()) {
             header = reinterpret_cast<ObjectHeader *>(p);

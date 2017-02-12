@@ -38,6 +38,7 @@ class ConservativeMemoryManager {
     uint8_t *heapMin, *heapMax;
 
     size_t objectCount, memoryUsed;
+
     FreeObjectQueue freeObjects;
 
     uint32_t *stackBottom, *stackTop;
@@ -60,7 +61,7 @@ private:
 
     bool enoughSpace(size_t size);
 
-    int findHeap(uint8_t *p);
+    bool isValidPtr(uint8_t *p);
 
     void mark();
     void markRange(uint32_t *start, size_t n);
