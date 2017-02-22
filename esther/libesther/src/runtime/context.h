@@ -3,14 +3,14 @@
 #include <string>
 #include <list>
 
-#include "memory/managedobject.h"
+#include "memory/mapper.h"
 
 namespace es {
 
 class Object;
 class Esther;
 
-class Context : public ManagedObject {
+class Context : public Mapper {
     Context *parent;
     Object *self, *here;
 
@@ -35,6 +35,6 @@ public:
     void mapOnReferences(void (*f)(ManagedObject *&)) override;
 
 private:
-    Context(Object *volatile self, Object *volatile here, Context *volatile parent);
+    Context(Object *volatile self, Object *volatile here, Context *parent);
 };
 }

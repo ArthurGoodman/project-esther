@@ -4,7 +4,7 @@
 
 namespace es {
 
-InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Context *volatile context)
+InterpretedFunction::InterpretedFunction(Esther *esther, const std::string &name, const std::list<std::string> &params, Expression *body, Context *context)
     : Function(esther->getRootClass("Function"), name, params.size())
     , params(params)
     , body(body)
@@ -15,12 +15,6 @@ void InterpretedFunction::finalize() {
     Function::finalize();
 
     params.~list();
-}
-
-void InterpretedFunction::mapOnReferences(void (*f)(ManagedObject *&)) {
-    Function::mapOnReferences(f);
-
-    f(reinterpret_cast<ManagedObject *&>(context));
 }
 
 Object *InterpretedFunction::execute(Esther *esther, Object *volatile self, const std::vector<Object *> &args) {

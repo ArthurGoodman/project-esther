@@ -87,7 +87,7 @@ public:
 
     Context *context() const;
 
-    void pushContext(Context *volatile context);
+    void pushContext(Context *context);
     void popContext();
 
     void push(Object *volatile value);

@@ -125,7 +125,7 @@ void Esther::initialize() {
             f(reinterpret_cast<ManagedObject *&>(esther->functionClass));
 
             for (Context *context : esther->contexts)
-                f(reinterpret_cast<ManagedObject *&>(context));
+                context->mapOnReferences(f);
 
             for (Object *object : esther->stack)
                 f(reinterpret_cast<ManagedObject *&>(object));
@@ -238,7 +238,7 @@ Context *Esther::context() const {
     return contexts.back();
 }
 
-void Esther::pushContext(Context *volatile context) {
+void Esther::pushContext(Context *context) {
     contexts.push_back(static_cast<Context *>(context));
 }
 
