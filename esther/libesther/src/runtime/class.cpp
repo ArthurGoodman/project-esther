@@ -59,8 +59,7 @@ void Class::finalize() {
 void Class::mapOnReferences(void (*f)(ManagedObject *&)) {
     Object::mapOnReferences(f);
 
-    if (superclass)
-        f(reinterpret_cast<ManagedObject *&>(superclass));
+    f(reinterpret_cast<ManagedObject *&>(superclass));
 }
 
 Object *Class::createNewInstance(Esther *esther, const std::vector<Object *> &args) {

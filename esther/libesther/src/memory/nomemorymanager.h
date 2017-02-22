@@ -4,6 +4,7 @@
 
 namespace es {
 
+class Mapper;
 class ManagedObject;
 
 class NoMemoryManager {
@@ -12,6 +13,7 @@ public:
     static void free(ManagedObject *p);
 
     static void collectGarbage();
-    static void reallocate();
+
+    static void registerMapper(Mapper *mapper);
 };
 }

@@ -11,6 +11,7 @@
 
 namespace es {
 
+class Mapper;
 class ManagedObject;
 class ObjectHeader;
 
@@ -43,6 +44,8 @@ class ConservativeMemoryManager {
 
     uint32_t *stackBottom, *stackTop;
 
+    std::vector<Mapper *> mappers;
+
 public:
     ConservativeMemoryManager();
     ~ConservativeMemoryManager();
@@ -53,7 +56,8 @@ public:
     static void free(ManagedObject *p);
 
     static void collectGarbage();
-    static void reallocate();
+
+    static void registerMapper(Mapper *mapper);
 
 private:
     void initialize();

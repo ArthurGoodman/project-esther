@@ -15,6 +15,6 @@ void NoMemoryManager::free(ManagedObject *p) {
 void NoMemoryManager::collectGarbage() {
 }
 
-void NoMemoryManager::reallocate() {
+void NoMemoryManager::registerMapper(Mapper *) {
 }
 }

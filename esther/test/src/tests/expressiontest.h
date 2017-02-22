@@ -7,7 +7,6 @@
 
 class ExpressionTest : public unit::TestSet {
     es::Esther esther;
-    //    es::Context context;
     es::Expression *e;
 
 public:

@@ -6,7 +6,6 @@
 #include "common/io.h"
 #include "memory/objectheader.h"
 #include "memory/managedobject.h"
-#include "memory/ptr.h"
 
 #if defined(MEM_MANAGEMENT) && defined(CONSERVATIVE_GC)
 
@@ -97,7 +96,8 @@ void ConservativeMemoryManager::collectGarbage() {
 #endif
 }
 
-void ConservativeMemoryManager::reallocate() {
+void ConservativeMemoryManager::registerMapper(Mapper *mapper) {
+    man->mappers.push_back(mapper);
 }
 
 void ConservativeMemoryManager::initialize() {
@@ -134,6 +134,9 @@ void ConservativeMemoryManager::finalize() {
                 object->finalize();
             }
         }
+
+    for (Mapper *mapper : mappers)
+        delete mapper;
 }
 
 bool ConservativeMemoryManager::enoughSpace(size_t size) {
@@ -175,9 +178,8 @@ void ConservativeMemoryManager::mark() {
 
     markRange(reinterpret_cast<uint32_t *>(&buf), sizeof(Registers) / sizeof(uint32_t));
 
-    for (Ptr<ManagedObject> *p = reinterpret_cast<Ptr<ManagedObject> *>(pointers); p; p = p->next)
-        if (p->ptr)
-            mark(p->ptr);
+    for (Mapper *mapper : mappers)
+        mapper->mapOnReferences(markReference);
 }
 
 void ConservativeMemoryManager::markRange(uint32_t *p, size_t n) {
@@ -278,7 +280,7 @@ void ConservativeMemoryManager::markFree(uint8_t *p, size_t size, size_t heapInd
 }
 
 void ConservativeMemoryManager::markReference(ManagedObject *&ref) {
-    if (!(reinterpret_cast<ObjectHeader *>(ref) - 1)->hasFlag(ObjectHeader::FlagMark))
+    if (ref != nullptr && !(reinterpret_cast<ObjectHeader *>(ref) - 1)->hasFlag(ObjectHeader::FlagMark))
         man->mark(ref);
 }
 }

@@ -8,7 +8,6 @@
 
 #include "variant/variant.h"
 #include "common/source.h"
-#include "memory/ptr.h"
 
 namespace es {
 
@@ -33,33 +32,34 @@ class ClassClass;
 class FunctionClass;
 
 class Esther {
-    Ptr<Object> mainObject;
-    Ptr<RootClass> objectClass;
+    Object *mainObject = nullptr;
+    RootClass *objectClass = nullptr;
 
-    Ptr<Object> trueObject;
-    Ptr<Object> falseObject;
-    Ptr<Object> nullObject;
+    Object *trueObject = nullptr;
+    Object *falseObject = nullptr;
+    Object *nullObject = nullptr;
 
-    Ptr<BooleanClass> booleanClass;
-    Ptr<NullClass> nullClass;
-    Ptr<NumericClass> numericClass;
-    Ptr<CharacterClass> characterClass;
-    Ptr<FloatClass> floatClass;
-    Ptr<IntegerClass> integerClass;
-    Ptr<StringClass> stringClass;
+    BooleanClass *booleanClass = nullptr;
+    NullClass *nullClass = nullptr;
 
-    Ptr<ClassClass> classClass;
-    Ptr<FunctionClass> functionClass;
+    NumericClass *numericClass = nullptr;
+    CharacterClass *characterClass = nullptr;
+    FloatClass *floatClass = nullptr;
+    IntegerClass *integerClass = nullptr;
+    StringClass *stringClass = nullptr;
+
+    ClassClass *classClass = nullptr;
+    FunctionClass *functionClass = nullptr;
 
     std::map<std::string, RootClass *> rootClasses;
 
     std::stack<Source> sources;
     std::stack<std::string> fileNames;
 
-    std::stack<Ptr<Context>> contexts;
+    std::vector<Context *> contexts;
 
-    std::vector<Ptr<Object>> stack;
-    Ptr<Object> reg;
+    std::vector<Object *> stack;
+    Object *reg = nullptr;
 
 public:
     static void runtimeError(const char *fmt, ...);

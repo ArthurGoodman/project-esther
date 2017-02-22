@@ -27,7 +27,7 @@
 #include "expression/expression.h"
 #include "runtime/nativefunction.h"
 #include "common/config.h"
-#include "memory/conservativememorymanager.h"
+#include "memory/memorymanager.h"
 
 namespace es {
 
@@ -95,6 +95,46 @@ void Esther::initialize() {
     register uint32_t *ebp asm("ebp");
     es::ConservativeMemoryManager::initStack(ebp);
 #endif
+
+    class GlobalMapper : public Mapper {
+        Esther *esther;
+
+    public:
+        GlobalMapper(Esther *esther)
+            : esther(esther) {
+        }
+
+        void mapOnReferences(void (*f)(es::ManagedObject *&)) override {
+            f(reinterpret_cast<ManagedObject *&>(esther->mainObject));
+            f(reinterpret_cast<ManagedObject *&>(esther->objectClass));
+
+            f(reinterpret_cast<ManagedObject *&>(esther->trueObject));
+            f(reinterpret_cast<ManagedObject *&>(esther->falseObject));
+            f(reinterpret_cast<ManagedObject *&>(esther->nullObject));
+
+            f(reinterpret_cast<ManagedObject *&>(esther->booleanClass));
+            f(reinterpret_cast<ManagedObject *&>(esther->nullClass));
+
+            f(reinterpret_cast<ManagedObject *&>(esther->numericClass));
+            f(reinterpret_cast<ManagedObject *&>(esther->characterClass));
+            f(reinterpret_cast<ManagedObject *&>(esther->floatClass));
+            f(reinterpret_cast<ManagedObject *&>(esther->integerClass));
+            f(reinterpret_cast<ManagedObject *&>(esther->stringClass));
+
+            f(reinterpret_cast<ManagedObject *&>(esther->classClass));
+            f(reinterpret_cast<ManagedObject *&>(esther->functionClass));
+
+            for (Context *context : esther->contexts)
+                f(reinterpret_cast<ManagedObject *&>(context));
+
+            for (Object *object : esther->stack)
+                f(reinterpret_cast<ManagedObject *&>(object));
+
+            f(reinterpret_cast<ManagedObject *&>(esther->reg));
+        }
+    };
+
+    MemoryManager::registerMapper(new GlobalMapper(this));
 
     rootClasses.clear();
 
@@ -195,19 +235,19 @@ void Esther::runFile(const std::string &fileName) {
 }
 
 Context *Esther::context() const {
-    return contexts.top();
+    return contexts.back();
 }
 
 void Esther::pushContext(Context *volatile context) {
-    contexts.push(context);
+    contexts.push_back(static_cast<Context *>(context));
 }
 
 void Esther::popContext() {
-    contexts.pop();
+    contexts.pop_back();
 }
 
 void Esther::push(Object *volatile value) {
-    stack.push_back(value);
+    stack.push_back(static_cast<Object *>(value));
 }
 
 void Esther::pop(int count) {

@@ -70,9 +70,7 @@ Context *Context::childContext(Object *volatile self, Object *volatile here) {
 }
 
 void Context::mapOnReferences(void (*f)(ManagedObject *&)) {
-    if (parent)
-        f(reinterpret_cast<ManagedObject *&>(parent));
-
+    f(reinterpret_cast<ManagedObject *&>(parent));
     f(reinterpret_cast<ManagedObject *&>(self));
 
     if (self != here)

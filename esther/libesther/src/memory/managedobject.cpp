@@ -16,12 +16,6 @@ void ManagedObject::operator delete(void *p) noexcept {
     MemoryManager::free(static_cast<ManagedObject *>(p));
 }
 
-ManagedObject::~ManagedObject() {
-}
-
 void ManagedObject::finalize() {
-}
-
-void ManagedObject::mapOnReferences(void (*)(ManagedObject *&)) {
 }
 }
