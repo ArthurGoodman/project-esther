@@ -1,10 +1,11 @@
 #include "common/io.h"
 
-#include <stdlib.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include <climits>
 #include <cstdarg>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <stdlib.h>
 
 #include "common/utility.h"
 
@@ -41,7 +42,12 @@ void IO::writeFile(const std::string &fileName, const std::string &data) {
 }
 
 void IO::createDirectory(const std::string &name) {
+#ifdef __linux
+    if (system(std::string("mkdir -p " + name).data()) < 0) {
+    }
+#elif _WIN32
     system(std::string("if not exist logs md " + name).data());
+#endif
 }
 
 void IO::openFile(const std::string &fileName) {
@@ -105,10 +111,17 @@ std::string IO::readLine() {
 }
 
 std::string IO::fullPath(const std::string &partialPath) {
+#ifdef __linux
+    char path[PATH_MAX];
+
+    if (realpath(partialPath.data(), path))
+        return path;
+#elif _WIN32
     char path[_MAX_PATH];
 
     if (_fullpath(path, partialPath.data(), _MAX_PATH))
         return path;
+#endif
 
     return "";
 }

@@ -6,6 +6,6 @@
 
 //#define HEAP_VARIANT
 
-#define MEM_MANAGEMENT
-#define CONSERVATIVE_GC
-#define VERBOSE_GC
+//#define MEM_MANAGEMENT
+//#define CONSERVATIVE_GC
+//#define VERBOSE_GC

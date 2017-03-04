@@ -1,11 +1,11 @@
 #include "conservativememorymanager.h"
 
-#include <memory>
 #include <cstring>
+#include <memory>
 
 #include "common/io.h"
-#include "memory/objectheader.h"
 #include "memory/managedobject.h"
+#include "memory/objectheader.h"
 
 #if defined(MEM_MANAGEMENT) && defined(CONSERVATIVE_GC)
 

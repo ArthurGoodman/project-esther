@@ -1,5 +1,6 @@
 #include "common/bytearray.h"
 
+#include <cstring>
 #include <memory>
 
 #include "common/utility.h"

@@ -6,11 +6,19 @@ CONFIG -= qt
 
 DEPENDPATH += ../libesther
 INCLUDEPATH += ../libesther/src
-LIBS += -L../libesther/release -lesther
 
 DEPENDPATH += ../../../unit
 INCLUDEPATH += ../../../unit
+
+win32 {
+LIBS += -L../libesther/release -lesther
 LIBS += -L../../../unit/release -lunit
+}
+
+unix {
+LIBS += -L../libesther -lesther
+LIBS += -L../../../unit -lunit
+}
 
 INCLUDEPATH += \
     src/tests
