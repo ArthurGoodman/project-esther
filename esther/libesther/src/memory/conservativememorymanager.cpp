@@ -9,13 +9,13 @@
 
 #if defined(MEM_MANAGEMENT) && defined(CONSERVATIVE_GC)
 
-namespace {
+namespace es {
 
-#ifdef __x86_64
 struct Registers {
-    uint64_t reg[5];
+    ptr_t reg[5];
 };
 
+#ifdef __x86_64
 asm("saveRegisters:\n"
     "mov %rbx,0x0(%rdi)\n"
     "mov %r12,0x8(%rdi)\n"
@@ -25,29 +25,21 @@ asm("saveRegisters:\n"
     "xor %rax,%rax\n"
     "ret");
 #elif __i386
-struct Registers {
-    uint32_t reg[6];
-};
-
 asm("_saveRegisters:\n"
     "push %ebp\n"
     "mov %esp,%ebp\n"
     "mov 0x8(%ebp),%ebp\n"
-    "mov %eax,0x0(%ebp)\n"
-    "mov %ebx,0x4(%ebp)\n"
-    "mov %ecx,0x8(%ebp)\n"
-    "mov %edx,0xc(%ebp)\n"
-    "mov %edi,0x10(%ebp)\n"
-    "mov %esi,0x14(%ebp)\n"
+    "mov %ebx,0x0(%ebp)\n"
+    "mov %ecx,0x4(%ebp)\n"
+    "mov %edx,0x8(%ebp)\n"
+    "mov %edi,0xc(%ebp)\n"
+    "mov %esi,0x10(%ebp)\n"
     "pop %ebp\n"
     "xor %eax,%eax\n"
     "ret");
 #endif
 
 extern "C" void saveRegisters(Registers *buf);
-}
-
-namespace es {
 
 const size_t ConservativeMemoryManager::InitialHeapSize = 20000;
 const double ConservativeMemoryManager::HeapSizeMultiplier = 1.8;
@@ -66,11 +58,7 @@ ConservativeMemoryManager::~ConservativeMemoryManager() {
     finalize();
 }
 
-#ifdef __x86_64
-void ConservativeMemoryManager::initStack(uint64_t *stackBottom) {
-#elif __i386
-void ConservativeMemoryManager::initStack(uint32_t *stackBottom) {
-#endif
+void ConservativeMemoryManager::initStack(ptr_ptr_t stackBottom) {
     man->stackBottom = stackBottom;
 }
 
@@ -100,12 +88,12 @@ void ConservativeMemoryManager::free(ManagedObject *) {
 
 void ConservativeMemoryManager::collectGarbage() {
 #ifdef __x86_64
-    register uint64_t *rsp asm("rsp");
-    man->stackTop = rsp;
+    register ptr_ptr_t sp asm("rsp");
 #elif __i386
-    register uint32_t *esp asm("esp");
-    man->stackTop = esp;
+    register ptr_ptr_t sp asm("esp");
 #endif
+
+    man->stackTop = sp;
 
 #ifdef VERBOSE_GC
     IO::writeLine("\nConservativeMemoryManager::collectGarbage()");
@@ -168,11 +156,7 @@ bool ConservativeMemoryManager::enoughSpace(size_t size) {
 }
 
 bool ConservativeMemoryManager::isValidPtr(uint8_t *p) {
-#ifdef __x86_64
-    if (reinterpret_cast<uint64_t>(p) % 8 != 0)
-#elif __i386
-    if (reinterpret_cast<uint32_t>(p) % 4 != 0)
-#endif
+    if (reinterpret_cast<ptr_t>(p) % sizeof(void *) != 0)
         return false;
 
     if (p < heapMin + sizeof(ObjectHeader) || p >= heapMax)
@@ -199,39 +183,39 @@ bool ConservativeMemoryManager::isValidPtr(uint8_t *p) {
 }
 
 void ConservativeMemoryManager::mark() {
-    // IO::writeLine("Marking stack...");
+#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
+    IO::writeLine("Marking stack...");
+#endif
 
     markRange(stackTop, stackBottom - stackTop);
 
-    // IO::writeLine("Marking registers...");
+#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
+    IO::writeLine("Marking registers...");
+#endif
 
     Registers buf;
     saveRegisters(&buf);
 
-#ifdef __x86_64
-    markRange(reinterpret_cast<uint64_t *>(&buf), sizeof(Registers) / sizeof(uint64_t));
-#elif __i386
-    markRange(reinterpret_cast<uint32_t *>(&buf), sizeof(Registers) / sizeof(uint32_t));
-#endif
+    markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_t));
 
-    // IO::writeLine("Marking globals...");
+#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
+    IO::writeLine("Marking globals...");
+#endif
 
     for (Mapper *mapper : mappers)
         mapper->mapOnReferences(markReference);
 }
 
-#ifdef __x86_64
-void ConservativeMemoryManager::markRange(uint64_t *p, size_t n) {
-#elif __i386
-void ConservativeMemoryManager::markRange(uint32_t *p, size_t n) {
-#endif
+void ConservativeMemoryManager::markRange(ptr_ptr_t p, size_t n) {
     for (size_t i = 0; i < n; i++, p++)
         if (isValidPtr(reinterpret_cast<uint8_t *>(*p)))
             mark(reinterpret_cast<ManagedObject *>(*p));
 }
 
 void ConservativeMemoryManager::mark(ManagedObject *object) {
-    // IO::writeLine("ptr: 0x%p", object);
+#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
+    IO::writeLine("ptr: 0x%p", object);
+#endif
 
     (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
     object->mapOnReferences(markReference);

@@ -111,17 +111,14 @@ std::string IO::readLine() {
 }
 
 std::string IO::fullPath(const std::string &partialPath) {
-#ifdef __linux
     char path[PATH_MAX];
 
+#ifdef __linux
     if (realpath(partialPath.data(), path))
-        return path;
 #elif _WIN32
-    char path[_MAX_PATH];
-
-    if (_fullpath(path, partialPath.data(), _MAX_PATH))
-        return path;
+    if (_fullpath(path, partialPath.data(), PATH_MAX))
 #endif
+        return path;
 
     return "";
 }

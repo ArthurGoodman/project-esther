@@ -24,5 +24,3 @@ SOURCES += \
 
 OTHER_FILES += \
     src/script.es \
-
-HEADERS +=

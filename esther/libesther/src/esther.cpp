@@ -93,12 +93,12 @@ Object *Esther::createObject() {
 void Esther::initialize() {
 #ifdef CONSERVATIVE_GC
 #ifdef __x86_64
-    register uint64_t *rbp asm("rbp");
-    es::ConservativeMemoryManager::initStack(rbp);
+    register ptr_ptr_t bp asm("rbp");
 #elif __i386
-    register uint32_t *ebp asm("ebp");
-    es::ConservativeMemoryManager::initStack(ebp);
+    register ptr_ptr_t bp asm("ebp");
 #endif
+
+    ConservativeMemoryManager::initStack(bp);
 #endif
 
     class GlobalMapper : public Mapper {

@@ -12,6 +12,14 @@
 
 namespace es {
 
+#ifdef __x86_64
+typedef uint64_t ptr_t;
+typedef uint64_t *ptr_ptr_t;
+#elif __i386
+typedef uint32_t ptr_t;
+typedef uint32_t *ptr_ptr_t;
+#endif
+
 class Mapper;
 class ManagedObject;
 class ObjectHeader;
@@ -43,11 +51,7 @@ class ConservativeMemoryManager {
 
     FreeObjectQueue freeObjects;
 
-#ifdef __x86_64
-    uint64_t *stackBottom, *stackTop;
-#elif __i386
-    uint32_t *stackBottom, *stackTop;
-#endif
+    ptr_ptr_t stackBottom, stackTop;
 
     std::vector<Mapper *> mappers;
 
@@ -55,11 +59,7 @@ public:
     ConservativeMemoryManager();
     ~ConservativeMemoryManager();
 
-#ifdef __x86_64
-    static void initStack(uint64_t *stackBottom);
-#elif __i386
-    static void initStack(uint32_t *stackBottom);
-#endif
+    static void initStack(ptr_ptr_t stackBottom);
 
     static ManagedObject *allocate(size_t size, size_t count = 1);
     static void free(ManagedObject *p);
@@ -78,11 +78,7 @@ private:
 
     void mark();
 
-#ifdef __x86_64
-    void markRange(uint64_t *start, size_t n);
-#elif __i386
-    void markRange(uint32_t *start, size_t n);
-#endif
+    void markRange(ptr_ptr_t start, size_t n);
 
     void mark(ManagedObject *object);
 
@@ -113,31 +109,17 @@ inline bool ConservativeMemoryManager::isAllocation(uint8_t *p, size_t heapIndex
     return bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte));
 }
 
-#ifdef __x86_64
 inline size_t ConservativeMemoryManager::bitmapSize(size_t size) {
-    return size % 64 ? size / 64 + 1 : size / 64;
+    return size % sizeof(void *) / 8 ? size / sizeof(void *) / 8 + 1 : size / sizeof(void *) / 8;
 }
 
 inline size_t ConservativeMemoryManager::bitmapByte(size_t i) {
-    return i / 64;
+    return i / sizeof(void *) / 8;
 }
 
 inline size_t ConservativeMemoryManager::bitmapBit(size_t i) {
-    return (i / 8) % 8;
+    return i / sizeof(void *) % 8;
 }
-#elif __i386
-inline size_t ConservativeMemoryManager::bitmapSize(size_t size) {
-    return size % 32 ? size / 32 + 1 : size / 32;
-}
-
-inline size_t ConservativeMemoryManager::bitmapByte(size_t i) {
-    return i / 32;
-}
-
-inline size_t ConservativeMemoryManager::bitmapBit(size_t i) {
-    return (i / 4) % 8;
-}
-#endif
 }
 
 #endif

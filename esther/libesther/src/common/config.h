@@ -9,3 +9,4 @@
 #define MEM_MANAGEMENT
 #define CONSERVATIVE_GC
 //#define VERBOSE_GC
+//#define VERY_VERBOSE_GC
