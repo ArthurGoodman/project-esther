@@ -26,15 +26,12 @@ asm("saveRegisters:\n"
     "ret");
 #elif __i386
 asm("_saveRegisters:\n"
-    "push %ebp\n"
-    "mov %esp,%ebp\n"
-    "mov 0x8(%ebp),%ebp\n"
-    "mov %ebx,0x0(%ebp)\n"
-    "mov %ecx,0x4(%ebp)\n"
-    "mov %edx,0x8(%ebp)\n"
-    "mov %edi,0xc(%ebp)\n"
-    "mov %esi,0x10(%ebp)\n"
-    "pop %ebp\n"
+    "mov 0x4(%esp),%eax\n"
+    "mov %ebx,0x0(%eax)\n"
+    "mov %ecx,0x4(%eax)\n"
+    "mov %edx,0x8(%eax)\n"
+    "mov %edi,0xc(%eax)\n"
+    "mov %esi,0x10(%eax)\n"
     "xor %eax,%eax\n"
     "ret");
 #endif
