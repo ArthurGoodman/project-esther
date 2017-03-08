@@ -14,11 +14,11 @@ namespace es {
 
 #ifdef __x86_64
 typedef uint64_t ptr_t;
-typedef uint64_t *ptr_ptr_t;
 #elif __i386
 typedef uint32_t ptr_t;
-typedef uint32_t *ptr_ptr_t;
 #endif
+
+typedef ptr_t *ptr_ptr_t;
 
 class Mapper;
 class ManagedObject;
@@ -110,15 +110,15 @@ inline bool ConservativeMemoryManager::isAllocation(uint8_t *p, size_t heapIndex
 }
 
 inline size_t ConservativeMemoryManager::bitmapSize(size_t size) {
-    return size % sizeof(void *) / 8 ? size / sizeof(void *) / 8 + 1 : size / sizeof(void *) / 8;
+    return size % (sizeof(void *) * 8) ? size / (sizeof(void *) * 8) + 1 : size / (sizeof(void *) * 8);
 }
 
 inline size_t ConservativeMemoryManager::bitmapByte(size_t i) {
-    return i / sizeof(void *) / 8;
+    return i / (sizeof(void *) * 8);
 }
 
 inline size_t ConservativeMemoryManager::bitmapBit(size_t i) {
-    return i / sizeof(void *) % 8;
+    return (i / sizeof(void *)) % 8;
 }
 }
 
