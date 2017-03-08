@@ -11,6 +11,20 @@
 
 namespace {
 
+#ifdef __x86_64
+struct Registers {
+    uint64_t reg[5];
+};
+
+asm("saveRegisters:\n"
+    "mov %rbx,0x0(%rdi)\n"
+    "mov %r12,0x8(%rdi)\n"
+    "mov %r13,0x10(%rdi)\n"
+    "mov %r14,0x18(%rdi)\n"
+    "mov %r15,0x20(%rdi)\n"
+    "xor %rax,%rax\n"
+    "ret");
+#elif __i386
 struct Registers {
     uint32_t reg[6];
 };
@@ -28,6 +42,7 @@ asm("_saveRegisters:\n"
     "pop %ebp\n"
     "xor %eax,%eax\n"
     "ret");
+#endif
 
 extern "C" void saveRegisters(Registers *buf);
 }
@@ -51,7 +66,11 @@ ConservativeMemoryManager::~ConservativeMemoryManager() {
     finalize();
 }
 
+#ifdef __x86_64
+void ConservativeMemoryManager::initStack(uint64_t *stackBottom) {
+#elif __i386
 void ConservativeMemoryManager::initStack(uint32_t *stackBottom) {
+#endif
     man->stackBottom = stackBottom;
 }
 
@@ -80,8 +99,13 @@ void ConservativeMemoryManager::free(ManagedObject *) {
 }
 
 void ConservativeMemoryManager::collectGarbage() {
+#ifdef __x86_64
+    register uint64_t *rsp asm("rsp");
+    man->stackTop = rsp;
+#elif __i386
     register uint32_t *esp asm("esp");
     man->stackTop = esp;
+#endif
 
 #ifdef VERBOSE_GC
     IO::writeLine("\nConservativeMemoryManager::collectGarbage()");
@@ -144,7 +168,11 @@ bool ConservativeMemoryManager::enoughSpace(size_t size) {
 }
 
 bool ConservativeMemoryManager::isValidPtr(uint8_t *p) {
+#ifdef __x86_64
+    if (reinterpret_cast<uint64_t>(p) % 8 != 0)
+#elif __i386
     if (reinterpret_cast<uint32_t>(p) % 4 != 0)
+#endif
         return false;
 
     if (p < heapMin + sizeof(ObjectHeader) || p >= heapMax)
@@ -171,24 +199,40 @@ bool ConservativeMemoryManager::isValidPtr(uint8_t *p) {
 }
 
 void ConservativeMemoryManager::mark() {
+    // IO::writeLine("Marking stack...");
+
     markRange(stackTop, stackBottom - stackTop);
+
+    // IO::writeLine("Marking registers...");
 
     Registers buf;
     saveRegisters(&buf);
 
+#ifdef __x86_64
+    markRange(reinterpret_cast<uint64_t *>(&buf), sizeof(Registers) / sizeof(uint64_t));
+#elif __i386
     markRange(reinterpret_cast<uint32_t *>(&buf), sizeof(Registers) / sizeof(uint32_t));
+#endif
+
+    // IO::writeLine("Marking globals...");
 
     for (Mapper *mapper : mappers)
         mapper->mapOnReferences(markReference);
 }
 
+#ifdef __x86_64
+void ConservativeMemoryManager::markRange(uint64_t *p, size_t n) {
+#elif __i386
 void ConservativeMemoryManager::markRange(uint32_t *p, size_t n) {
+#endif
     for (size_t i = 0; i < n; i++, p++)
         if (isValidPtr(reinterpret_cast<uint8_t *>(*p)))
             mark(reinterpret_cast<ManagedObject *>(*p));
 }
 
 void ConservativeMemoryManager::mark(ManagedObject *object) {
+    // IO::writeLine("ptr: 0x%p", object);
+
     (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
     object->mapOnReferences(markReference);
 }

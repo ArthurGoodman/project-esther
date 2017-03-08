@@ -1,10 +1,10 @@
 #include "expressiontest.h"
 
 #include <expression/expression.h>
-#include <variant/variant.h>
-#include <runtime/valueobject.h>
 #include <runtime/function.h>
 #include <runtime/nativefunction.h>
+#include <runtime/valueobject.h>
+#include <variant/variant.h>
 
 ExpressionTest::ExpressionTest()
     : TestSet("expressions")

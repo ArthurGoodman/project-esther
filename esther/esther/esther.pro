@@ -1,8 +1,7 @@
 TEMPLATE = app
 
 CONFIG += console c++11
-CONFIG -= app_bundle
-CONFIG -= qt
+CONFIG -= app_bundle at
 
 win32 {
 CONFIG(debug, debug|release) {
@@ -13,11 +12,7 @@ CONFIG(debug, debug|release) {
 }
 
 unix {
-CONFIG(debug, debug|release) {
-    LIBS += -L../libesther
-} else {
-    LIBS += -L../libesther
-}
+LIBS += -L../libesther
 }
 
 DEPENDPATH += ../libesther
