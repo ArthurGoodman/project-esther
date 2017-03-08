@@ -180,24 +180,12 @@ bool ConservativeMemoryManager::isValidPtr(uint8_t *p) {
 }
 
 void ConservativeMemoryManager::mark() {
-#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
-    IO::writeLine("Marking stack...");
-#endif
-
     markRange(stackTop, stackBottom - stackTop);
-
-#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
-    IO::writeLine("Marking registers...");
-#endif
 
     Registers buf;
     saveRegisters(&buf);
 
     markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_t));
-
-#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
-    IO::writeLine("Marking globals...");
-#endif
 
     for (Mapper *mapper : mappers)
         mapper->mapOnReferences(markReference);
@@ -210,10 +198,6 @@ void ConservativeMemoryManager::markRange(ptr_ptr_t p, size_t n) {
 }
 
 void ConservativeMemoryManager::mark(ManagedObject *object) {
-#if defined(VERBOSE_GC) && defined(VERY_VERBOSE_GC)
-    IO::writeLine("ptr: 0x%p", object);
-#endif
-
     (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
     object->mapOnReferences(markReference);
 }
