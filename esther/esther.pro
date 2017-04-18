@@ -3,5 +3,4 @@ CONFIG += ordered
 
 SUBDIRS = \
     libesther \
-    esther \
-    test
+    esther

@@ -16,7 +16,7 @@ LIBS += -L../libesther
 }
 
 DEPENDPATH += ../libesther
-INCLUDEPATH += ../libesther/src
+INCLUDEPATH += ../libesther/include
 LIBS += -lesther
 
 SOURCES += \

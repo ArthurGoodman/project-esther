@@ -8,11 +8,11 @@ SOURCES += $$files(src/*.cpp, true)
 
 HEADERS += \
     $$files(src/*.h, true) \
-    $$files(src/*.inl, true)
+    $$files(include/*.h, true)
 
 OTHER_FILES += $$files(src/*.def, true)
 
-INCLUDEPATH = src
+INCLUDEPATH = include src
 
 for(file, HEADERS) DEPENDPATH += $$dirname(file)
 DEPENDPATH = $$unique(DEPENDPATH)
