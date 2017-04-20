@@ -1,6 +1,9 @@
 #include <esther.h>
 
 int main(int argc, char **argv) {
+    UNUSED(argc);
+    UNUSED(argv);
+
     // if (argc < 2)
     //     return 0;
 
