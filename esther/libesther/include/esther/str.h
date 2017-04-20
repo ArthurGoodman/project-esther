@@ -9,12 +9,12 @@ extern "C" {
 struct string;
 
 struct string *string_new();
-struct string *string_new_c_str(const char *str);
+struct string *string_new_init(const char *string);
 
-void string_delete(struct string *str);
+void string_delete(struct string *string);
 
-struct string *string_append(struct string *self, struct string *str);
-struct string *string_append_c_str(struct string *self, const char *str);
+struct string *string_append(struct string *self, struct string *string);
+struct string *string_append_c_str(struct string *self, const char *string);
 
 size_t string_size(struct string *self);
 

@@ -4,22 +4,20 @@
 extern "C" {
 #endif
 
-#include "esther/common.h"
-
-struct Object;
-struct Class;
+#include "esther/class.h"
 
 struct Esther {
-    struct Class *objectClass;
-    struct Class *classClass;
-    struct Class *functionClass;
+    PClass objectClass;
+    PClass classClass;
+    PClass stringClass;
+    PClass functionClass;
 
-    struct Object *mainObject;
-    struct Object *trueObject;
-    struct Object *falseObject;
+    PObject mainObject;
+    PObject trueObject;
+    PObject falseObject;
 };
 
-struct Esther *Esther_new();
+void Esther_init(struct Esther *self);
 
 #ifdef __cplusplus
 }

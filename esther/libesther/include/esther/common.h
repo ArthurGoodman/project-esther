@@ -5,6 +5,10 @@ extern "C" {
 #endif
 
 #include <stdlib.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 
 #define UNUSED(x) ((void)(x))
 

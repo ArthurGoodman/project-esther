@@ -6,7 +6,7 @@ extern "C" {
 
 #include "esther/object.h"
 
-struct str;
+struct string;
 
 struct Class {
     struct Object base;
@@ -15,8 +15,12 @@ struct Class {
     struct strmap *methods;
 };
 
-struct Class *Class_new(struct Esther *esther, const char *name, struct Class *volatile superclass);
-void Class_init(struct Esther *esther, struct Class *volatile self, const char *name, struct Class *volatile superclass);
+typedef struct Class *PClass;
+
+PClass Class_new(struct Esther *esther);
+PClass Class_new_init(struct Esther *esther, const char *name, PClass superclass);
+
+void Class_init(struct Esther *esther, PClass self, const char *name, PClass superclass);
 
 #ifdef __cplusplus
 }

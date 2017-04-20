@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
+#include "esther/common.h"
 
 struct strmap;
 
@@ -16,14 +16,17 @@ struct Object {
     struct strmap *attributes;
 };
 
-struct Object *Object_new(struct Esther *esther);
-struct Object *Object_new_class(struct Esther *esther, struct Class *objectClass);
+typedef struct Object *PObject;
+typedef struct Class *PClass;
 
-void Object_init(struct Esther *esther, struct Object *volatile self, struct Class *volatile objectClass);
+PObject Object_new(struct Esther *esther);
+PObject Object_new_init(struct Esther *esther, PClass objectClass);
 
-bool Object_hasAttribute(struct Object *volatile self, const char *name);
-struct Object *Object_getAttribute(struct Object *volatile self, const char *name);
-void Object_setAttribute(struct Object *volatile self, const char *name, struct Object *volatile value);
+void Object_init(struct Esther *esther, PObject self, PClass objectClass);
+
+bool Object_hasAttribute(PObject self, const char *name);
+PObject Object_getAttribute(PObject self, const char *name);
+void Object_setAttribute(PObject self, const char *name, PObject value);
 
 #ifdef __cplusplus
 }

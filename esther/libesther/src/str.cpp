@@ -1,4 +1,4 @@
-#include "str.h"
+#include "esther/str.h"
 
 #include <string>
 
@@ -16,7 +16,7 @@ struct string *string_new() {
     return to_c(new std::string());
 }
 
-string *string_new_c_str(const char *str) {
+struct string *string_new_init(const char *str) {
     return to_c(new std::string(str));
 }
 

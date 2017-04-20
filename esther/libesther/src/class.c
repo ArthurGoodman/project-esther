@@ -1,18 +1,21 @@
 #include "esther/class.h"
 
 #include "esther/esther.h"
-#include "str.h"
+#include "esther/str.h"
 
-struct Class *Class_new(struct Esther *esther, const char *name, struct Class *volatile superclass) {
-    struct Class *volatile self = malloc(sizeof(struct Class));
+PClass Class_new(struct Esther *esther) {
+    return Class_new_init(esther, "", NULL);
+}
+
+PClass Class_new_init(struct Esther *esther, const char *name, PClass superclass) {
+    PClass self = malloc(sizeof(struct Class));
     Class_init(esther, self, name, superclass);
     return self;
 }
 
-void Class_init(struct Esther *esther, struct Class *volatile self, const char *name, struct Class *volatile superclass) {
-    self->base.objectClass = esther->classClass;
-    self->base.attributes = NULL;
-    self->name = string_new_c_str(name);
-    self->superclass = superclass;
+void Class_init(struct Esther *esther, PClass self, const char *name, PClass superclass) {
+    Object_init(esther, &self->base, esther->classClass);
+    self->name = string_new_init(name);
+    self->superclass = superclass ? superclass : esther->objectClass;
     self->methods = NULL;
 }

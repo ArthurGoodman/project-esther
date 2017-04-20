@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = esther
 
-CONFIG += console c++11
+CONFIG += console c++11 c11
 CONFIG -= app_bundle qt
 
 SOURCES += \
@@ -14,7 +14,9 @@ HEADERS += \
 
 OTHER_FILES += $$files(src/*.def, true)
 
-INCLUDEPATH = include src
+INCLUDEPATH = \
+    include \
+    src
 
 for(file, HEADERS) DEPENDPATH += $$dirname(file)
 DEPENDPATH = $$unique(DEPENDPATH)
