@@ -17,7 +17,9 @@ struct Object {
 };
 
 struct Object *Object_new(struct Esther *esther);
-void Object_init(struct Esther *esther, struct Object *volatile self);
+struct Object *Object_new_class(struct Esther *esther, struct Class *objectClass);
+
+void Object_init(struct Esther *esther, struct Object *volatile self, struct Class *volatile objectClass);
 
 bool Object_hasAttribute(struct Object *volatile self, const char *name);
 struct Object *Object_getAttribute(struct Object *volatile self, const char *name);

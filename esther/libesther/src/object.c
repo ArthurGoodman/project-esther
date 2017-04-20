@@ -6,13 +6,17 @@
 #include "strmap.h"
 
 struct Object *Object_new(struct Esther *esther) {
+    return Object_new_class(esther, NULL);
+}
+
+struct Object *Object_new_class(struct Esther *esther, struct Class *objectClass) {
     struct Object *volatile self = malloc(sizeof(struct Object));
-    Object_init(esther, self);
+    Object_init(esther, self, objectClass);
     return self;
 }
 
-void Object_init(struct Esther *esther, struct Object *volatile self) {
-    self->objectClass = esther->objectClass;
+void Object_init(struct Esther *esther, struct Object *volatile self, struct Class *volatile objectClass) {
+    self->objectClass = objectClass == NULL ? esther->objectClass : objectClass;
     self->attributes = NULL;
 }
 

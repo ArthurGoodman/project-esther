@@ -3,8 +3,15 @@
 #include <map>
 #include <string>
 
-#define to_c(ptr) (reinterpret_cast<struct strmap *>(ptr))
-#define to_cpp(ptr) (reinterpret_cast<std::map<std::string, void *> *>(ptr))
+namespace {
+inline struct strmap *to_c(std::map<std::string, void *> *ptr) {
+    return reinterpret_cast<struct strmap *>(ptr);
+}
+
+inline std::map<std::string, void *> *to_cpp(struct strmap *ptr) {
+    return reinterpret_cast<std::map<std::string, void *> *>(ptr);
+}
+}
 
 struct strmap *strmap_new() {
     return to_c((new std::map<std::string, void *>));

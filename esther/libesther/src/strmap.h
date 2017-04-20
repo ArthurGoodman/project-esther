@@ -9,6 +9,7 @@ extern "C" {
 struct strmap;
 
 struct strmap *strmap_new();
+
 void strmap_delete(struct strmap *map);
 
 bool strmap_contains(struct strmap *map, const char *str);
