@@ -3,7 +3,7 @@
 #include "esther/class.h"
 #include "esther/object.h"
 
-void Esther_init(struct Esther *self) {
+void Esther_init(Esther *self) {
     self->classClass = Class_new_init(self, "Class", NULL);
     self->classClass->base.objectClass = self->classClass;
 

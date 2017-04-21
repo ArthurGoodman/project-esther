@@ -3,21 +3,21 @@
 #include "esther/esther.h"
 #include "esther/std_string.h"
 
-PString String_new(struct Esther *esther) {
+String *String_new(Esther *esther) {
     return String_new_init(esther, "");
 }
 
-PString String_new_init(struct Esther *esther, const char *value) {
-    PString self = malloc(sizeof(struct String));
+String *String_new_init(Esther *esther, const char *value) {
+    String *self = malloc(sizeof(String));
     String_init(esther, self, value);
     return self;
 }
 
-void String_init(struct Esther *esther, PString self, const char *value) {
+void String_init(Esther *esther, String *self, const char *value) {
     Object_init(esther, &self->base, esther->stringClass);
     self->value = std_string_new_init(value);
 }
 
-const char *String_c_str(PString self) {
+const char *String_c_str(String *self) {
     return std_string_c_str(self->value);
 }

@@ -14,21 +14,21 @@ inline std::map<std::string, void *> *to_cpp(struct std_string_map *ptr) {
 }
 
 struct std_string_map *std_string_map_new() {
-    return to_c((new std::map<std::string, void *>));
+    return to_c(new std::map<std::string, void *>);
 }
 
 void std_string_map_delete(struct std_string_map *map) {
     delete to_cpp(map);
 }
 
-bool std_string_map_contains(struct std_string_map *map, const char *str) {
-    return to_cpp(map)->find(str) != to_cpp(map)->end();
+bool std_string_map_contains(struct std_string_map *map, const char *key) {
+    return to_cpp(map)->find(key) != to_cpp(map)->end();
 }
 
-void *std_string_map_get(struct std_string_map *map, const char *str) {
-    return (*to_cpp(map))[str];
+void *std_string_map_get(struct std_string_map *map, const char *key) {
+    return (*to_cpp(map))[key];
 }
 
-void std_string_map_set(struct std_string_map *map, const char *str, void *val) {
-    (*to_cpp(map))[str] = val;
+void std_string_map_set(struct std_string_map *map, const char *key, void *val) {
+    (*to_cpp(map))[key] = val;
 }

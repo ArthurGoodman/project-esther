@@ -8,19 +8,19 @@ extern "C" {
 
 struct std_string;
 
-struct Class {
-    struct Object base;
+typedef struct Class {
+    Object base;
     struct std_string *name;
-    struct Class *superclass;
+    Class *superclass;
     struct std_string_map *methods;
-};
+} Class;
 
-typedef struct Class *PClass;
+Class *Class_new(Esther *esther);
+Class *Class_new_init(Esther *esther, const char *name, Class *superclass);
 
-PClass Class_new(struct Esther *esther);
-PClass Class_new_init(struct Esther *esther, const char *name, PClass superclass);
+void Class_init(Esther *esther, Class *self, const char *name, Class *superclass);
 
-void Class_init(struct Esther *esther, PClass self, const char *name, PClass superclass);
+void Class_add_method(Class *self, const char *name, Object *method);
 
 #ifdef __cplusplus
 }

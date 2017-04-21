@@ -8,25 +8,22 @@ extern "C" {
 
 struct std_string_map;
 
-struct Class;
-struct Esther;
+typedef struct Class Class;
+typedef struct Esther Esther;
 
-struct Object {
-    struct Class *objectClass;
+typedef struct Object {
+    Class *objectClass;
     struct std_string_map *attributes;
-};
+} Object;
 
-typedef struct Object *PObject;
-typedef struct Class *PClass;
+Object *Object_new(Esther *esther);
+Object *Object_new_init(Esther *esther, Class *objectClass);
 
-PObject Object_new(struct Esther *esther);
-PObject Object_new_init(struct Esther *esther, PClass objectClass);
+void Object_init(Esther *esther, Object *self, Class *objectClass);
 
-void Object_init(struct Esther *esther, PObject self, PClass objectClass);
-
-bool Object_hasAttribute(PObject self, const char *name);
-PObject Object_getAttribute(PObject self, const char *name);
-void Object_setAttribute(PObject self, const char *name, PObject value);
+bool Object_hasAttribute(Object *self, const char *name);
+Object *Object_getAttribute(Object *self, const char *name);
+void Object_setAttribute(Object *self, const char *name, Object *value);
 
 #ifdef __cplusplus
 }

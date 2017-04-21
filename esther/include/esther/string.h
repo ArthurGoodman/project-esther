@@ -8,19 +8,17 @@ extern "C" {
 
 struct std_string;
 
-struct String {
-    struct Object base;
+typedef struct String {
+    Object base;
     struct std_string *value;
-};
+} String;
 
-typedef struct String *PString;
+String *String_new(Esther *esther);
+String *String_new_init(Esther *esther, const char *value);
 
-PString String_new(struct Esther *esther);
-PString String_new_init(struct Esther *esther, const char *value);
+void String_init(Esther *esther, String *self, const char *value);
 
-void String_init(struct Esther *esther, PString self, const char *value);
-
-const char *String_c_str(PString self);
+const char *String_c_str(String *self);
 
 #ifdef __cplusplus
 }

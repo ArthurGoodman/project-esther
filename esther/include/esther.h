@@ -8,3 +8,4 @@
 #include "esther/std_string.h"
 #include "esther/std_string_map.h"
 #include "esther/string.h"
+#include "esther/tuple.h"

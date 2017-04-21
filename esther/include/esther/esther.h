@@ -6,18 +6,18 @@ extern "C" {
 
 #include "esther/class.h"
 
-struct Esther {
-    PClass objectClass;
-    PClass classClass;
-    PClass stringClass;
-    PClass functionClass;
+typedef struct Esther {
+    Class *objectClass;
+    Class *classClass;
+    Class *stringClass;
+    Class *functionClass;
 
-    PObject mainObject;
-    PObject trueObject;
-    PObject falseObject;
-};
+    Object *mainObject;
+    Object *trueObject;
+    Object *falseObject;
+} Esther;
 
-void Esther_init(struct Esther *self);
+void Esther_init(Esther *self);
 
 #ifdef __cplusplus
 }

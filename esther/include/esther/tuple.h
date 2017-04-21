@@ -6,9 +6,9 @@ extern "C" {
 
 #include "esther/object.h"
 
-typedef struct Function {
+typedef struct Tuple {
     Object base;
-} Function;
+} Tuple;
 
 #ifdef __cplusplus
 }
