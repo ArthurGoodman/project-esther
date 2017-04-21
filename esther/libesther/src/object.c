@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "esther/esther.h"
-#include "esther/strmap.h"
+#include "esther/std_string_map.h"
 
 PObject Object_new(struct Esther *esther) {
     return Object_new_init(esther, NULL);
@@ -21,16 +21,16 @@ void Object_init(struct Esther *esther, PObject self, PClass objectClass) {
 }
 
 bool Object_hasAttribute(PObject self, const char *name) {
-    return self->attributes && strmap_contains(self->attributes, name);
+    return self->attributes && std_string_map_contains(self->attributes, name);
 }
 
 PObject Object_getAttribute(PObject self, const char *name) {
-    return self->attributes ? strmap_get(self->attributes, name) : NULL;
+    return self->attributes ? std_string_map_get(self->attributes, name) : NULL;
 }
 
 void Object_setAttribute(PObject self, const char *name, PObject value) {
     if (!self->attributes)
-        self->attributes = strmap_new();
+        self->attributes = std_string_map_new();
 
-    strmap_set(self->attributes, name, value);
+    std_string_map_set(self->attributes, name, value);
 }

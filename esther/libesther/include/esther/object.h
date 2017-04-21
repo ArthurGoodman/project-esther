@@ -6,14 +6,14 @@ extern "C" {
 
 #include "esther/common.h"
 
-struct strmap;
+struct std_string_map;
 
 struct Class;
 struct Esther;
 
 struct Object {
     struct Class *objectClass;
-    struct strmap *attributes;
+    struct std_string_map *attributes;
 };
 
 typedef struct Object *PObject;

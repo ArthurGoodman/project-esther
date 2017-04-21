@@ -6,11 +6,11 @@ extern "C" {
 
 #include "esther/object.h"
 
-struct string;
+struct std_string;
 
 struct String {
     struct Object base;
-    struct string *value;
+    struct std_string *value;
 };
 
 typedef struct String *PString;

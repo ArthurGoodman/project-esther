@@ -6,13 +6,13 @@ extern "C" {
 
 #include "esther/object.h"
 
-struct string;
+struct std_string;
 
 struct Class {
     struct Object base;
-    struct string *name;
+    struct std_string *name;
     struct Class *superclass;
-    struct strmap *methods;
+    struct std_string_map *methods;
 };
 
 typedef struct Class *PClass;
