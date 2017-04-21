@@ -4,19 +4,20 @@ TARGET = esther
 CONFIG += console c++11 c11
 CONFIG -= app_bundle qt
 
+DESTDIR = ../../lib
+OBJECTS_DIR = ../../lib
+
 SOURCES += \
-    $$files(src/*.cpp, true) \
-    $$files(src/*.c, true)
+    $$files(*.cpp, true) \
+    $$files(*.c, true)
 
 HEADERS += \
-    $$files(src/*.h, true) \
-    $$files(include/*.h, true)
+    $$files(*.h, true) \
+    $$files(../../include/*.h, true)
 
 OTHER_FILES += $$files(src/*.def, true)
 
-INCLUDEPATH = \
-    include \
-    src
+INCLUDEPATH = ../../include
 
 for(file, HEADERS) DEPENDPATH += $$dirname(file)
 DEPENDPATH = $$unique(DEPENDPATH)

@@ -2,5 +2,5 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS = \
-    libesther \
-    esther
+    src/libesther \
+    src/esther

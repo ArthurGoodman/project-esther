@@ -9,6 +9,5 @@
 *.so*
 *.stash
 *.user
-esther/esther/esther
-esther/test/test
+esther/bin/esther
 Makefile
