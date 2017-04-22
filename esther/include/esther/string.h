@@ -23,6 +23,9 @@ void String_init_std(Esther *esther, String *self, struct std_string *value);
 
 const char *String_c_str(String *self);
 
+void String_append(String *self, String *str);
+void String_append_c_str(String *self, const char *str);
+
 String *String_virtual_toString(Esther *esther, Object *self);
 
 #ifdef __cplusplus

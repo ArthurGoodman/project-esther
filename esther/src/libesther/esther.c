@@ -3,6 +3,7 @@
 #include "esther/class.h"
 #include "esther/object.h"
 #include "esther/string.h"
+#include "esther/tuple.h"
 
 static Object *ClassClass_virtual_newInstance(Esther *esther, Class *self) {
     UNUSED(self);
@@ -12,6 +13,17 @@ static Object *ClassClass_virtual_newInstance(Esther *esther, Class *self) {
 static Object *StringClass_virtual_newInstance(Esther *esther, Class *self) {
     UNUSED(self);
     return (Object *)String_new(esther);
+}
+
+static Object *FunctionClass_virtual_newInstance(Esther *esther, Class *self) {
+    UNUSED(esther);
+    UNUSED(self);
+    return NULL;
+}
+
+static Object *TupleClass_virtual_newInstance(Esther *esther, Class *self) {
+    UNUSED(self);
+    return (Object *)Tuple_new(esther);
 }
 
 void Esther_init(Esther *self) {
@@ -27,6 +39,10 @@ void Esther_init(Esther *self) {
     self->stringClass->newInstance = StringClass_virtual_newInstance;
 
     self->functionClass = Class_new_init(self, "Function", NULL);
+    self->functionClass->newInstance = FunctionClass_virtual_newInstance;
+
+    self->tupleClass = Class_new_init(self, "Tuple", NULL);
+    self->tupleClass->newInstance = TupleClass_virtual_newInstance;
 
     self->mainObject = Object_new(self);
     self->trueObject = NULL;

@@ -52,5 +52,5 @@ String *Object_toString(Esther *esther, Object *self) {
 }
 
 String *Object_virtual_toString(Esther *esther, Object *self) {
-    return String_new_init_std(esther, std_string_format("<%s:0x%p>", std_string_c_str(self->objectClass->name), self));
+    return String_new_init_std(esther, std_string_format("<%s:0x%p>", std_string_c_str(Class_getName(self->objectClass)), self));
 }

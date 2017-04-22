@@ -26,6 +26,14 @@ void Class_init(Esther *esther, Class *self, const char *name, Class *superclass
     self->base.toString = Class_virtual_toString;
 }
 
+struct std_string *Class_getName(Class *self) {
+    return self->name;
+}
+
+Class *Class_getSuperclass(Class *self) {
+    return self->superclass;
+}
+
 bool Class_hasMethod(Class *self, const char *name) {
     return self->methods && std_string_map_contains(self->methods, name);
 }

@@ -23,6 +23,10 @@ Class *Class_new_init(Esther *esther, const char *name, Class *superclass);
 
 void Class_init(Esther *esther, Class *self, const char *name, Class *superclass);
 
+struct std_string *Class_getName(Class *self);
+
+Class *Class_getSuperclass(Class *self);
+
 bool Class_hasMethod(Class *self, const char *name);
 Object *Class_getMethod(Class *self, const char *name);
 void Class_setMethod(Class *self, const char *name, Object *method);

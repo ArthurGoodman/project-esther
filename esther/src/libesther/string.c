@@ -39,6 +39,14 @@ const char *String_c_str(String *self) {
     return std_string_c_str(self->value);
 }
 
+void String_append(String *self, String *str) {
+    std_string_append(self->value, str->value);
+}
+
+void String_append_c_str(String *self, const char *str) {
+    std_string_append_c_str(self->value, str);
+}
+
 String *String_virtual_toString(Esther *esther, Object *self) {
     UNUSED(esther);
     return (String *)self;
