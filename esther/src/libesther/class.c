@@ -66,7 +66,7 @@ Object *Class_lookup(Class *self, const char *name) {
 String *Class_virtual_toString(Esther *esther, Object *self) {
     struct std_string *name = ((Class *)self)->name;
 
-    if (std_string_empty(name))
+    if (std_string_isEmpty(name))
         return String_new_init(esther, "<anonymous class>");
 
     return String_new_init_std(esther, std_string_format("<class %s>", std_string_c_str(name)));

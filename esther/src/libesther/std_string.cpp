@@ -44,8 +44,8 @@ struct std_string *std_string_new_init(const char *str) {
     return to_c(new std::string(str));
 }
 
-void std_string_delete(struct std_string *str) {
-    delete to_cpp(str);
+void std_string_delete(struct std_string *self) {
+    delete to_cpp(self);
 }
 
 struct std_string *std_string_append(struct std_string *self, struct std_string *str) {
@@ -62,7 +62,7 @@ size_t std_string_size(struct std_string *self) {
     return to_cpp(self)->size();
 }
 
-bool std_string_empty(std_string *self) {
+bool std_string_isEmpty(std_string *self) {
     return to_cpp(self)->empty();
 }
 
