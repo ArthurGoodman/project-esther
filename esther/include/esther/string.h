@@ -10,15 +10,20 @@ struct std_string;
 
 typedef struct String {
     Object base;
+
     struct std_string *value;
 } String;
 
 String *String_new(Esther *esther);
 String *String_new_init(Esther *esther, const char *value);
+String *String_new_init_std(Esther *esther, struct std_string *value);
 
 void String_init(Esther *esther, String *self, const char *value);
+void String_init_std(Esther *esther, String *self, struct std_string *value);
 
 const char *String_c_str(String *self);
+
+String *String_virtual_toString(Esther *esther, Object *self);
 
 #ifdef __cplusplus
 }

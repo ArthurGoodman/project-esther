@@ -1,6 +1,8 @@
 #include "esther/std_string.h"
 
 #include <string>
+#include <vector>
+#include <cstdarg>
 
 namespace {
 inline struct std_string *to_c(std::string *ptr) {
@@ -9,6 +11,28 @@ inline struct std_string *to_c(std::string *ptr) {
 
 inline std::string *to_cpp(struct std_string *ptr) {
     return reinterpret_cast<std::string *>(ptr);
+}
+
+struct std_string *vformat(const char *fmt, va_list ap) {
+    size_t size = 1024;
+    char stackbuf[size];
+
+    std::vector<char> dynamicbuf;
+    char *buf = &stackbuf[0];
+    va_list ap_copy;
+
+    while (true) {
+        va_copy(ap_copy, ap);
+        int needed = vsnprintf(buf, size, fmt, ap);
+        va_end(ap_copy);
+
+        if (needed <= static_cast<int>(size) && needed >= 0)
+            return std_string_new_init(buf);
+
+        size = needed > 0 ? needed + 1 : size * 2;
+        dynamicbuf.resize(size);
+        buf = &dynamicbuf[0];
+    }
 }
 }
 
@@ -38,10 +62,22 @@ size_t std_string_size(struct std_string *self) {
     return to_cpp(self)->size();
 }
 
+bool std_string_empty(std_string *self) {
+    return to_cpp(self)->empty();
+}
+
 char std_string_at(struct std_string *self, size_t i) {
     return to_cpp(self)->at(i);
 }
 
 const char *std_string_c_str(struct std_string *self) {
     return to_cpp(self)->c_str();
+}
+
+struct std_string *std_string_format(const char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+    struct std_string *str = vformat(fmt, ap);
+    va_end(ap);
+    return str;
 }
