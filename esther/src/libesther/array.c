@@ -31,8 +31,8 @@ void Array_init_std(Esther *esther, Array *self, struct std_vector *data) {
 
     self->data = data;
 
-    self->base.toString = Array_virtual_toString;
-    self->base.inspect = Array_virtual_toString;
+    self->base.toString = Array_virtual_inspect;
+    self->base.inspect = Array_virtual_inspect;
 }
 
 size_t Array_size(Array *self) {
@@ -63,7 +63,8 @@ Object *Array_pop(Array *self) {
     return std_vector_pop(self->data);
 }
 
-String *Array_virtual_toString(Esther *esther, Object *self) {
+String *Array_virtual_inspect(Esther *esther, Object *self) {
+
     struct std_vector *data = ((Array *)self)->data;
     size_t size = std_vector_size(data);
 

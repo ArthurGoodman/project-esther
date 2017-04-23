@@ -32,7 +32,7 @@ void Array_append_std(Array *self, struct std_vector *vector);
 void Array_push(Array *self, Object *value);
 Object *Array_pop(Array *self);
 
-String *Array_virtual_toString(Esther *esther, Object *self);
+String *Array_virtual_inspect(Esther *esther, Object *self);
 
 #ifdef __cplusplus
 }

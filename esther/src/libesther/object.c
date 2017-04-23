@@ -6,7 +6,7 @@
 #include "esther/string.h"
 #include "esther/function.h"
 #include "esther/tuple.h"
-#include "esther/std_string_map.h"
+#include "esther/std_map.h"
 #include "esther/std_string.h"
 
 Object *Object_new(Esther *esther) {
@@ -28,18 +28,18 @@ void Object_init(Esther *esther, Object *self, Class *objectClass) {
 }
 
 bool Object_hasAttribute(Object *self, const char *name) {
-    return self->attributes && std_string_map_contains(self->attributes, name);
+    return self->attributes && std_map_contains(self->attributes, name);
 }
 
 Object *Object_getAttribute(Object *self, const char *name) {
-    return self->attributes ? std_string_map_get(self->attributes, name) : NULL;
+    return self->attributes ? std_map_get(self->attributes, name) : NULL;
 }
 
 void Object_setAttribute(Object *self, const char *name, Object *value) {
     if (!self->attributes)
-        self->attributes = std_string_map_new();
+        self->attributes = std_map_new(string_compare);
 
-    std_string_map_set(self->attributes, name, value);
+    std_map_set(self->attributes, name, value);
 }
 
 bool Object_is(Object *self, Class *_class) {

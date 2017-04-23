@@ -13,7 +13,7 @@ typedef struct Class {
 
     const char *name;
     Class *superclass;
-    struct std_string_map *methods;
+    struct std_map *methods;
 
     Object *(*newInstance)(Esther *esther, Class *self);
 } Class;

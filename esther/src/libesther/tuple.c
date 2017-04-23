@@ -24,8 +24,8 @@ void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size) {
 
     self->size = size;
 
-    self->base.toString = Tuple_virtual_toString;
-    self->base.inspect = Tuple_virtual_toString;
+    self->base.toString = Tuple_virtual_inspect;
+    self->base.inspect = Tuple_virtual_inspect;
 }
 
 size_t Tuple_size(Tuple *self) {
@@ -40,7 +40,7 @@ void Tuple_set(Tuple *self, size_t index, Object *value) {
     self->data[index] = value;
 }
 
-String *Tuple_virtual_toString(Esther *esther, Object *self) {
+String *Tuple_virtual_inspect(Esther *esther, Object *self) {
     Object **data = ((Tuple *)self)->data;
     size_t size = ((Tuple *)self)->size;
 

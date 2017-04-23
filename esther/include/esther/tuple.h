@@ -23,7 +23,7 @@ size_t Tuple_size(Tuple *self);
 Object *Tuple_get(Tuple *self, size_t index);
 void Tuple_set(Tuple *self, size_t index, Object *value);
 
-String *Tuple_virtual_toString(Esther *esther, Object *self);
+String *Tuple_virtual_inspect(Esther *esther, Object *self);
 
 #ifdef __cplusplus
 }

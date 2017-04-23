@@ -6,7 +6,7 @@ extern "C" {
 
 #include "esther/common.h"
 
-struct std_string_map;
+struct std_map;
 
 typedef struct Object Object;
 typedef struct Class Class;
@@ -16,7 +16,7 @@ typedef struct Tuple Tuple;
 
 typedef struct Object {
     Class *objectClass;
-    struct std_string_map *attributes;
+    struct std_map *attributes;
 
     String *(*toString)(Esther *esther, Object *self);
     String *(*inspect)(Esther *esther, Object *self);
