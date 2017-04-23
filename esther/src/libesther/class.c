@@ -80,14 +80,7 @@ Object *Class_newInstance(Esther *esther, Class *self) {
 }
 
 Object *Class_virtual_newInstance(Esther *esther, Class *self) {
-    Object *instance = NULL;
-
-    if (self->superclass)
-        instance = Class_newInstance(esther, self->superclass);
-    else
-        instance = Object_new(esther);
-
+    Object *instance = Class_newInstance(esther, self->superclass);
     instance->objectClass = self;
-
     return instance;
 }

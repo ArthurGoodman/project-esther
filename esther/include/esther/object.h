@@ -8,8 +8,8 @@ extern "C" {
 
 struct std_string_map;
 
-typedef struct Class Class;
 typedef struct Object Object;
+typedef struct Class Class;
 typedef struct Esther Esther;
 typedef struct String String;
 typedef struct Tuple Tuple;

@@ -10,12 +10,6 @@ int main(int argc, char **argv) {
     UNUSED(argc);
     UNUSED(argv);
 
-    // if (argc < 2)
-    //     return 0;
-
-    // es::Esther esther;
-    // esther.runFile(argc < 2 ? "scripts/script.es" : argv[1]);
-
     Esther e;
     Esther_init(&e);
 

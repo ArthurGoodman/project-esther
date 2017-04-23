@@ -27,7 +27,7 @@ void Array_init(Esther *esther, Array *self, Object *const *data, size_t size) {
 }
 
 void Array_init_std(Esther *esther, Array *self, struct std_vector *data) {
-    Object_init(esther, &self->base, esther->tupleClass);
+    Object_init(esther, &self->base, esther->arrayClass);
 
     self->data = data;
 
