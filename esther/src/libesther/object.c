@@ -4,6 +4,8 @@
 
 #include "esther/esther.h"
 #include "esther/string.h"
+#include "esther/function.h"
+#include "esther/tuple.h"
 #include "esther/std_string_map.h"
 #include "esther/std_string.h"
 
@@ -45,6 +47,24 @@ bool Object_is(Object *self, Class *_class) {
 
 Object *Object_resolve(Object *self, const char *name) {
     return Object_hasAttribute(self, name) ? Object_getAttribute(self, name) : Class_lookup(self->objectClass, name);
+}
+
+Object *Object_call(Esther *esther, Object *self, const char *name, Tuple *args) {
+    Object *f = Object_resolve(self, name);
+
+    if (!f)
+        return NULL;
+
+    return Object_call_function(esther, self, f, args);
+}
+
+Object *Object_call_function(Esther *esther, Object *self, Object *f, Tuple *args) {
+    if (Object_is(f, esther->functionClass))
+        return Function_invoke(esther, (Function *)f, self, args);
+
+    Object *argsData[] = { self, (Object *)args };
+
+    return Object_call(esther, f, "()", Tuple_new_init(esther, argsData, 2));
 }
 
 String *Object_toString(Esther *esther, Object *self) {

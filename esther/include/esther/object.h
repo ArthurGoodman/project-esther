@@ -34,6 +34,9 @@ bool Object_is(Object *self, Class *_class);
 
 Object *Object_resolve(Object *self, const char *name);
 
+Object *Object_call(Esther *esther, Object *self, const char *name, Tuple *args);
+Object *Object_call_function(Esther *esther, Object *self, Object *f, Tuple *args);
+
 String *Object_toString(Esther *esther, Object *self);
 String *Object_virtual_toString(Esther *esther, Object *self);
 
