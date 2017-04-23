@@ -11,7 +11,7 @@ struct std_string;
 typedef struct Class {
     Object base;
 
-    struct std_string *name;
+    const char *name;
     Class *superclass;
     struct std_string_map *methods;
 
@@ -23,7 +23,7 @@ Class *Class_new_init(Esther *esther, const char *name, Class *superclass);
 
 void Class_init(Esther *esther, Class *self, const char *name, Class *superclass);
 
-struct std_string *Class_getName(Class *self);
+const char *Class_getName(Class *self);
 
 Class *Class_getSuperclass(Class *self);
 

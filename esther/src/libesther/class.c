@@ -1,5 +1,7 @@
 #include "esther/class.h"
 
+#include <string.h>
+
 #include "esther/esther.h"
 #include "esther/string.h"
 #include "esther/std_string.h"
@@ -18,7 +20,7 @@ Class *Class_new_init(Esther *esther, const char *name, Class *superclass) {
 void Class_init(Esther *esther, Class *self, const char *name, Class *superclass) {
     Object_init(esther, &self->base, esther->classClass);
 
-    self->name = std_string_new_init(name);
+    self->name = strdup(name);
     self->superclass = superclass ? superclass : esther->objectClass;
     self->methods = NULL;
 
@@ -26,7 +28,7 @@ void Class_init(Esther *esther, Class *self, const char *name, Class *superclass
     self->base.toString = Class_virtual_toString;
 }
 
-struct std_string *Class_getName(Class *self) {
+const char *Class_getName(Class *self) {
     return self->name;
 }
 
@@ -64,12 +66,12 @@ Object *Class_lookup(Class *self, const char *name) {
 }
 
 String *Class_virtual_toString(Esther *esther, Object *self) {
-    struct std_string *name = ((Class *)self)->name;
+    const char *name = ((Class *)self)->name;
 
-    if (std_string_isEmpty(name))
+    if (strlen(name) == 0)
         return String_new_init(esther, "<anonymous class>");
 
-    return String_new_init_std(esther, std_string_format("<class %s>", std_string_c_str(name)));
+    return String_new_init_std(esther, std_string_format("<class %s>", name));
 }
 
 Object *Class_newInstance(Esther *esther, Class *self) {
