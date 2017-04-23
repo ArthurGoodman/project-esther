@@ -20,11 +20,7 @@ String *String_new_init_std(Esther *esther, struct std_string *value) {
 }
 
 void String_init(Esther *esther, String *self, const char *value) {
-    Object_init(esther, &self->base, esther->stringClass);
-
-    self->value = std_string_new_init(value);
-
-    self->base.toString = String_virtual_toString;
+    String_init_std(esther, self, std_string_new_init(value));
 }
 
 void String_init_std(Esther *esther, String *self, struct std_string *value) {

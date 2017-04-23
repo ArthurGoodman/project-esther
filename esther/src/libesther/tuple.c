@@ -19,8 +19,8 @@ Tuple *Tuple_new_init(Esther *esther, Object *const *data, size_t size) {
 void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size) {
     Object_init(esther, &self->base, esther->tupleClass);
 
-    self->data = malloc(sizeof(Object *) * size);
-    memcpy(self->data, data, sizeof(Object *) * size);
+    self->data = malloc(size * sizeof(Object *));
+    memcpy(self->data, data, size * sizeof(Object *));
 
     self->size = size;
 
