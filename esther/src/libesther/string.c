@@ -29,6 +29,7 @@ void String_init_std(Esther *esther, String *self, struct std_string *value) {
     self->value = value;
 
     self->base.toString = String_virtual_toString;
+    self->base.inspect = String_virtual_inspect;
 }
 
 const char *String_c_str(String *self) {
@@ -46,4 +47,12 @@ void String_append_c_str(String *self, const char *str) {
 String *String_virtual_toString(Esther *esther, Object *self) {
     UNUSED(esther);
     return (String *)self;
+}
+
+String *String_virtual_inspect(Esther *esther, Object *self) {
+    String *str = String_new_init(esther, "\"");
+    String_append(str, (String *)self);
+    String_append_c_str(str, "\"");
+
+    return str;
 }

@@ -19,6 +19,7 @@ typedef struct Object {
     struct std_string_map *attributes;
 
     String *(*toString)(Esther *esther, Object *self);
+    String *(*inspect)(Esther *esther, Object *self);
 } Object;
 
 Object *Object_new(Esther *esther);
@@ -39,6 +40,8 @@ Object *Object_call_function(Esther *esther, Object *self, Object *f, Tuple *arg
 
 String *Object_toString(Esther *esther, Object *self);
 String *Object_virtual_toString(Esther *esther, Object *self);
+
+String *Object_inspect(Esther *esther, Object *self);
 
 #ifdef __cplusplus
 }

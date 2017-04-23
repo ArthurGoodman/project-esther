@@ -24,6 +24,7 @@ void Object_init(Esther *esther, Object *self, Class *objectClass) {
     self->attributes = NULL;
 
     self->toString = Object_virtual_toString;
+    self->inspect = Object_virtual_toString;
 }
 
 bool Object_hasAttribute(Object *self, const char *name) {
@@ -73,4 +74,8 @@ String *Object_toString(Esther *esther, Object *self) {
 
 String *Object_virtual_toString(Esther *esther, Object *self) {
     return String_new_init_std(esther, std_string_format("<%s:0x%p>", Class_getName(self->objectClass), self));
+}
+
+String *Object_inspect(Esther *esther, Object *self) {
+    return self->inspect(esther, self);
 }

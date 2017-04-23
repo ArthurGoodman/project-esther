@@ -27,6 +27,7 @@ void String_append(String *self, String *str);
 void String_append_c_str(String *self, const char *str);
 
 String *String_virtual_toString(Esther *esther, Object *self);
+String *String_virtual_inspect(Esther *esther, Object *self);
 
 #ifdef __cplusplus
 }

@@ -21,6 +21,7 @@ void Function_init(Esther *esther, Function *self, const char *name, Object *(*b
     self->argc = argc;
 
     self->base.toString = Function_virtual_toString;
+    self->base.inspect = Function_virtual_toString;
 }
 
 const char *Function_getName(Function *self) {

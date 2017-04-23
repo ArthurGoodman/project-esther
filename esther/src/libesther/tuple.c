@@ -25,6 +25,7 @@ void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size) {
     self->size = size;
 
     self->base.toString = Tuple_virtual_toString;
+    self->base.inspect = Tuple_virtual_toString;
 }
 
 size_t Tuple_size(Tuple *self) {
@@ -46,7 +47,7 @@ String *Tuple_virtual_toString(Esther *esther, Object *self) {
     String *str = String_new_init(esther, "(");
 
     for (size_t i = 0; i < size; i++) {
-        String_append(str, Object_toString(esther, data[i]));
+        String_append(str, Object_inspect(esther, data[i]));
 
         if (i < size - 1)
             String_append_c_str(str, ", ");

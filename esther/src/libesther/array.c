@@ -32,6 +32,7 @@ void Array_init_std(Esther *esther, Array *self, struct std_vector *data) {
     self->data = data;
 
     self->base.toString = Array_virtual_toString;
+    self->base.inspect = Array_virtual_toString;
 }
 
 size_t Array_size(Array *self) {
@@ -69,7 +70,7 @@ String *Array_virtual_toString(Esther *esther, Object *self) {
     String *str = String_new_init(esther, "[");
 
     for (size_t i = 0; i < size; i++) {
-        String_append(str, Object_toString(esther, std_vector_at(data, i)));
+        String_append(str, Object_inspect(esther, std_vector_at(data, i)));
 
         if (i < size - 1)
             String_append_c_str(str, ", ");

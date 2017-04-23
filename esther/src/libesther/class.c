@@ -26,6 +26,7 @@ void Class_init(Esther *esther, Class *self, const char *name, Class *superclass
 
     self->newInstance = Class_virtual_newInstance;
     self->base.toString = Class_virtual_toString;
+    self->base.inspect = Class_virtual_toString;
 }
 
 const char *Class_getName(Class *self) {
