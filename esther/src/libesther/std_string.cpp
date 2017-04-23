@@ -66,8 +66,8 @@ bool std_string_isEmpty(std_string *self) {
     return to_cpp(self)->empty();
 }
 
-char std_string_at(struct std_string *self, size_t i) {
-    return to_cpp(self)->at(i);
+char std_string_at(struct std_string *self, size_t index) {
+    return to_cpp(self)->at(index);
 }
 
 const char *std_string_c_str(struct std_string *self) {

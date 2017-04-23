@@ -1,5 +1,6 @@
 #pragma once
 
+#include "esther/array.h"
 #include "esther/class.h"
 #include "esther/common.h"
 #include "esther/esther.h"

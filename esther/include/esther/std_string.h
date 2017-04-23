@@ -20,7 +20,7 @@ size_t std_string_size(struct std_string *self);
 
 bool std_string_isEmpty(struct std_string *self);
 
-char std_string_at(struct std_string *self, size_t i);
+char std_string_at(struct std_string *self, size_t index);
 
 const char *std_string_c_str(struct std_string *self);
 

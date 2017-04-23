@@ -3,13 +3,13 @@
 #include "esther/esther.h"
 #include "esther/tuple.h"
 
-Function *Function_new(Esther *esther, Object *(*body)(ANYARGS), int argc) {
+Function *Function_new(Esther *esther, Object *(*body)(), int argc) {
     Function *self = malloc(sizeof(Function));
     Function_init(esther, self, body, argc);
     return self;
 }
 
-void Function_init(Esther *esther, Function *self, Object *(*body)(ANYARGS), int argc) {
+void Function_init(Esther *esther, Function *self, Object *(*body)(), int argc) {
     Object_init(esther, &self->base, esther->functionClass);
 
     self->body = body;
