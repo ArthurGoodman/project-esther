@@ -3,64 +3,55 @@
 #include "esther/class.h"
 #include "esther/object.h"
 #include "esther/string.h"
+#include "esther/symbol.h"
 #include "esther/tuple.h"
 #include "esther/array.h"
 
-static Object *ObjectClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(self);
+static Object *ObjectClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
     return Object_new(esther);
 }
 
-static Object *ClassClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(self);
+static Object *ClassClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
     return (Object *)Class_new(esther);
 }
 
-static Object *StringClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(self);
+static Object *StringClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
     return (Object *)String_new(esther);
 }
 
-static Object *FunctionClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(esther);
-    UNUSED(self);
+static Object *SymbolClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
+    return (Object *)Symbol_new(esther, "");
+}
+
+static Object *FunctionClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self)) {
     return NULL;
 }
 
-static Object *TupleClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(self);
+static Object *TupleClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
     return (Object *)Tuple_new(esther);
 }
 
-static Object *ArrayClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(self);
+static Object *ArrayClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
     return (Object *)Array_new(esther);
 }
 
-static Object *BooleanClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(esther);
-    UNUSED(self);
+static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self)) {
     return NULL;
 }
 
-static Object *NullClass_virtual_newInstance(Esther *esther, Class *self) {
-    UNUSED(esther);
-    UNUSED(self);
+static Object *NullClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self)) {
     return NULL;
 }
 
-static String *True_toString(Esther *esther, Object *self) {
-    UNUSED(self);
+static String *True_toString(Esther *esther, Object *UNUSED(self)) {
     return String_new_init(esther, "true");
 }
 
-static String *False_toString(Esther *esther, Object *self) {
-    UNUSED(self);
+static String *False_toString(Esther *esther, Object *UNUSED(self)) {
     return String_new_init(esther, "false");
 }
 
-static String *Null_toString(Esther *esther, Object *self) {
-    UNUSED(self);
+static String *Null_toString(Esther *esther, Object *UNUSED(self)) {
     return String_new_init(esther, "null");
 }
 
@@ -76,6 +67,9 @@ void Esther_init(Esther *self) {
 
     self->stringClass = Class_new_init(self, "String", NULL);
     self->stringClass->newInstance = StringClass_virtual_newInstance;
+
+    self->symbolClass = Class_new_init(self, "Symbol", NULL);
+    self->symbolClass->newInstance = SymbolClass_virtual_newInstance;
 
     self->functionClass = Class_new_init(self, "Function", NULL);
     self->functionClass->newInstance = FunctionClass_virtual_newInstance;

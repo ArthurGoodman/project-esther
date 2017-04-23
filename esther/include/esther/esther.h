@@ -12,6 +12,7 @@ typedef struct Esther {
     Class *objectClass;
     Class *classClass;
     Class *stringClass;
+    Class *symbolClass;
     Class *functionClass;
     Class *tupleClass;
     Class *arrayClass;

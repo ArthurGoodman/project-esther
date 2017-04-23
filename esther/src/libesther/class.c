@@ -4,6 +4,7 @@
 #include "esther/string.h"
 #include "esther/std_string.h"
 #include "esther/std_map.h"
+#include "esther/id.h"
 
 Class *Class_new(Esther *esther) {
     return Class_new_init(esther, "", NULL);
@@ -36,18 +37,18 @@ Class *Class_getSuperclass(Class *self) {
 }
 
 bool Class_hasMethod(Class *self, const char *name) {
-    return self->methods && std_map_contains(self->methods, name);
+    return self->methods && std_map_contains(self->methods, (const void *)stringToId(name));
 }
 
 Object *Class_getMethod(Class *self, const char *name) {
-    return self->methods ? std_map_get(self->methods, name) : NULL;
+    return self->methods ? std_map_get(self->methods, (const void *)stringToId(name)) : NULL;
 }
 
 void Class_setMethod(Class *self, const char *name, Object *method) {
     if (!self->methods)
-        self->methods = std_map_new(string_compare);
+        self->methods = std_map_new(uint32_compare);
 
-    std_map_set(self->methods, name, method);
+    std_map_set(self->methods, (const void *)stringToId(name), method);
 }
 
 bool Class_isChildOf(Class *self, Class *_class) {

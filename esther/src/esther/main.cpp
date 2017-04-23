@@ -6,10 +6,7 @@ Object *print(Esther *esther, Object *self, Tuple *args) {
     return self;
 }
 
-int main(int argc, char **argv) {
-    UNUSED(argc);
-    UNUSED(argv);
-
+int main(int UNUSED(argc), char **UNUSED(argv)) {
     Esther e;
     Esther_init(&e);
 

@@ -27,6 +27,8 @@ Object *Object_new_init(Esther *esther, Class *objectClass);
 
 void Object_init(Esther *esther, Object *self, Class *objectClass);
 
+Class *Object_getClass(Object *self);
+
 bool Object_hasAttribute(Object *self, const char *name);
 Object *Object_getAttribute(Object *self, const char *name);
 void Object_setAttribute(Object *self, const char *name, Object *value);

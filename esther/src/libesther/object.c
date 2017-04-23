@@ -8,6 +8,7 @@
 #include "esther/tuple.h"
 #include "esther/std_map.h"
 #include "esther/std_string.h"
+#include "esther/id.h"
 
 Object *Object_new(Esther *esther) {
     return Object_new_init(esther, NULL);
@@ -27,19 +28,23 @@ void Object_init(Esther *esther, Object *self, Class *objectClass) {
     self->inspect = Object_virtual_toString;
 }
 
+Class *Object_getClass(Object *self) {
+    return self->objectClass;
+}
+
 bool Object_hasAttribute(Object *self, const char *name) {
-    return self->attributes && std_map_contains(self->attributes, name);
+    return self->attributes && std_map_contains(self->attributes, (const void *)stringToId(name));
 }
 
 Object *Object_getAttribute(Object *self, const char *name) {
-    return self->attributes ? std_map_get(self->attributes, name) : NULL;
+    return self->attributes ? std_map_get(self->attributes, (const void *)stringToId(name)) : NULL;
 }
 
 void Object_setAttribute(Object *self, const char *name, Object *value) {
     if (!self->attributes)
-        self->attributes = std_map_new(string_compare);
+        self->attributes = std_map_new(uint32_compare);
 
-    std_map_set(self->attributes, name, value);
+    std_map_set(self->attributes, (const void *)stringToId(name), value);
 }
 
 bool Object_is(Object *self, Class *_class) {
