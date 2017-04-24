@@ -8,6 +8,8 @@
 #include "esther/symbol.h"
 #include "esther/tuple.h"
 #include "esther/valueobject.h"
+#include "esther/std_map.h"
+#include "esther/context.h"
 
 static Object *ObjectClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
     return Object_new(esther);
@@ -273,8 +275,40 @@ void Esther_init(Esther *self) {
 
     Object_setAttribute(self->io, "write", (Object *)Function_new(self, "write", (Object * (*)())IO_write, -1));
     Object_setAttribute(self->io, "writeLine", (Object *)Function_new(self, "writeLine", (Object * (*)())IO_writeLine, -1));
+
+    self->root = Context_new(self);
+
+    self->rootObjects = std_map_new(string_compare);
+
+    Esther_setRootObject(self, "Object", (Object *)self->objectClass);
+    Esther_setRootObject(self, "Class", (Object *)self->classClass);
+    Esther_setRootObject(self, "String", (Object *)self->stringClass);
+    Esther_setRootObject(self, "Symbol", (Object *)self->symbolClass);
+    Esther_setRootObject(self, "Function", (Object *)self->functionClass);
+    Esther_setRootObject(self, "Tuple", (Object *)self->tupleClass);
+    Esther_setRootObject(self, "Array", (Object *)self->arrayClass);
+    Esther_setRootObject(self, "Boolean", (Object *)self->booleanClass);
+    Esther_setRootObject(self, "Null", (Object *)self->nullClass);
+    Esther_setRootObject(self, "Numeric", (Object *)self->numericClass);
+    Esther_setRootObject(self, "Char", (Object *)self->charClass);
+    Esther_setRootObject(self, "Int", (Object *)self->intClass);
+    Esther_setRootObject(self, "Float", (Object *)self->floatClass);
+
+    Esther_setRootObject(self, "IO", self->io);
 }
 
 Object *Esther_toBoolean(Esther *self, bool value) {
     return value ? self->trueObject : self->falseObject;
+}
+
+bool Esther_hasRootObject(Esther *self, const char *name) {
+    return std_map_contains(self->rootObjects, name);
+}
+
+Object *Esther_getRootObject(Esther *self, const char *name) {
+    return (Object *)std_map_get(self->rootObjects, name);
+}
+
+void Esther_setRootObject(Esther *self, const char *name, Object *value) {
+    std_map_set(self->rootObjects, name, value);
 }

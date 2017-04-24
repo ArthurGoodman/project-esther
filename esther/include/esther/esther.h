@@ -6,6 +6,8 @@ extern "C" {
 
 #include "esther/class.h"
 
+typedef struct Context Context;
+
 typedef struct Esther {
     Class *objectClass;
     Class *classClass;
@@ -27,11 +29,19 @@ typedef struct Esther {
 
     Object *mainObject;
     Object *io;
+
+    Context *root;
+
+    struct std_map *rootObjects;
 } Esther;
 
 void Esther_init(Esther *self);
 
 Object *Esther_toBoolean(Esther *self, bool value);
+
+bool Esther_hasRootObject(Esther *self, const char *name);
+Object *Esther_getRootObject(Esther *self, const char *name);
+void Esther_setRootObject(Esther *self, const char *name, Object *value);
 
 #ifdef __cplusplus
 }
