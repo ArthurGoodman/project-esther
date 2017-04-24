@@ -66,6 +66,10 @@ bool std_string_isEmpty(std_string *self) {
     return to_cpp(self)->empty();
 }
 
+bool std_string_equals(struct std_string *self, struct std_string *str) {
+    return *to_cpp(self) == *to_cpp(str);
+}
+
 char std_string_at(struct std_string *self, size_t index) {
     return to_cpp(self)->at(index);
 }

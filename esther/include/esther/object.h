@@ -20,6 +20,8 @@ typedef struct Object {
 
     String *(*toString)(Esther *esther, Object *self);
     String *(*inspect)(Esther *esther, Object *self);
+    bool (*equals)(Esther *esther, Object *self, Object *obj);
+    bool (*isTrue)();
 } Object;
 
 Object *Object_new(Esther *esther);
@@ -38,12 +40,19 @@ bool Object_is(Object *self, Class *_class);
 Object *Object_resolve(Object *self, const char *name);
 
 Object *Object_call(Esther *esther, Object *self, const char *name, Tuple *args);
+Object *Object_callIfFound(Esther *esther, Object *self, const char *name, Tuple *args);
 Object *Object_call_function(Esther *esther, Object *self, Object *f, Tuple *args);
 
 String *Object_toString(Esther *esther, Object *self);
 String *Object_virtual_toString(Esther *esther, Object *self);
 
 String *Object_inspect(Esther *esther, Object *self);
+
+bool Object_equals(Esther *esther, Object *self, Object *obj);
+bool Object_virtual_equals(Esther *esther, Object *self, Object *obj);
+
+bool Object_isTrue(Object *self);
+bool Object_virtual_isTrue();
 
 #ifdef __cplusplus
 }

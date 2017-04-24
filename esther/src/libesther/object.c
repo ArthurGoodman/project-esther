@@ -26,6 +26,8 @@ void Object_init(Esther *esther, Object *self, Class *objectClass) {
 
     self->toString = Object_virtual_toString;
     self->inspect = Object_virtual_toString;
+    self->equals = Object_virtual_equals;
+    self->isTrue = Object_virtual_isTrue;
 }
 
 Class *Object_getClass(Object *self) {
@@ -42,7 +44,7 @@ Object *Object_getAttribute(Object *self, const char *name) {
 
 void Object_setAttribute(Object *self, const char *name, Object *value) {
     if (!self->attributes)
-        self->attributes = std_map_new(uint32_compare);
+        self->attributes = std_map_new(ulong_compare);
 
     std_map_set(self->attributes, (const void *)stringToId(name), value);
 }
@@ -56,6 +58,15 @@ Object *Object_resolve(Object *self, const char *name) {
 }
 
 Object *Object_call(Esther *esther, Object *self, const char *name, Tuple *args) {
+    Object *f = Object_resolve(self, name);
+
+    if (!f)
+        return NULL;
+
+    return Object_call_function(esther, self, f, args);
+}
+
+Object *Object_callIfFound(Esther *esther, Object *self, const char *name, Tuple *args) {
     Object *f = Object_resolve(self, name);
 
     if (!f)
@@ -78,9 +89,25 @@ String *Object_toString(Esther *esther, Object *self) {
 }
 
 String *Object_virtual_toString(Esther *esther, Object *self) {
-    return String_new_init_std(esther, std_string_format("<%s:%p>", Class_getName(self->objectClass), self));
+    return String_new_init_std(esther, std_string_format("<%s:0x%lx>", Class_getName(self->objectClass), self));
 }
 
 String *Object_inspect(Esther *esther, Object *self) {
     return self->inspect(esther, self);
+}
+
+bool Object_equals(Esther *esther, Object *self, Object *obj) {
+    return self->equals(esther, self, obj);
+}
+
+bool Object_virtual_equals(Esther *UNUSED(esther), Object *self, Object *obj) {
+    return self == obj;
+}
+
+bool Object_isTrue(Object *self) {
+    return self->isTrue();
+}
+
+bool Object_virtual_isTrue() {
+    return true;
 }

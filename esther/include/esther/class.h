@@ -17,7 +17,7 @@ typedef struct Class {
     Class *superclass;
     struct std_map *methods;
 
-    Object *(*newInstance)(Esther *esther, Class *self);
+    Object *(*newInstance)(Esther *esther, Class *self, Tuple *args);
 } Class;
 
 Class *Class_new(Esther *esther);
@@ -32,7 +32,7 @@ Class *Class_getSuperclass(Class *self);
 bool Class_hasMethod(Class *self, const char *name);
 Object *Class_getMethod(Class *self, const char *name);
 void Class_setMethod(Class *self, const char *name, Object *method);
-void Class_setMethod_func(Class *self, Function *func);
+void Class_setMethod_func(Class *self, Function *f);
 
 bool Class_isChildOf(Class *self, Class *_class);
 
@@ -40,8 +40,8 @@ Object *Class_lookup(Class *self, const char *name);
 
 String *Class_virtual_toString(Esther *esther, Object *self);
 
-Object *Class_newInstance(Esther *esther, Class *self);
-Object *Class_virtual_newInstance(Esther *esther, Class *self);
+Object *Class_newInstance(Esther *esther, Class *self, Tuple *args);
+Object *Class_virtual_newInstance(Esther *esther, Class *self, Tuple *args);
 
 #ifdef __cplusplus
 }

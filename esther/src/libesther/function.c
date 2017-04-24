@@ -40,49 +40,49 @@ Object *Function_invoke(Esther *esther, Function *self, Object *selfObject, Tupl
         return self->body(esther, selfObject);
 
     case 1:
-        return self->body(esther, selfObject, args->data[0]);
+        return self->body(esther, selfObject, Tuple_get(args, 0));
 
     case 2:
-        return self->body(esther, selfObject, args->data[0], args->data[1]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1));
 
     case 3:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2));
 
     case 4:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3));
 
     case 5:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4));
 
     case 6:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5));
 
     case 7:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6));
 
     case 8:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7));
 
     case 9:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7), Tuple_get(args, 8));
 
     case 10:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7), Tuple_get(args, 8), Tuple_get(args, 9));
 
     case 11:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7), Tuple_get(args, 8), Tuple_get(args, 9), Tuple_get(args, 10));
 
     case 12:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7), Tuple_get(args, 8), Tuple_get(args, 9), Tuple_get(args, 10), Tuple_get(args, 11));
 
     case 13:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11], args->data[12]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7), Tuple_get(args, 8), Tuple_get(args, 9), Tuple_get(args, 10), Tuple_get(args, 11), Tuple_get(args, 12));
 
     case 14:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11], args->data[12], args->data[13]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7), Tuple_get(args, 8), Tuple_get(args, 9), Tuple_get(args, 10), Tuple_get(args, 11), Tuple_get(args, 12), Tuple_get(args, 13));
 
     case 15:
-        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11], args->data[12], args->data[13], args->data[14]);
+        return self->body(esther, selfObject, Tuple_get(args, 0), Tuple_get(args, 1), Tuple_get(args, 2), Tuple_get(args, 3), Tuple_get(args, 4), Tuple_get(args, 5), Tuple_get(args, 6), Tuple_get(args, 7), Tuple_get(args, 8), Tuple_get(args, 9), Tuple_get(args, 10), Tuple_get(args, 11), Tuple_get(args, 12), Tuple_get(args, 13), Tuple_get(args, 14));
 
     default:
         return NULL;

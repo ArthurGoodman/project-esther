@@ -20,7 +20,11 @@ ValueObject *ValueObject_new_var(Esther *esther, Variant value);
 
 void ValueObject_init(Esther *esther, ValueObject *self, Variant value);
 
-String *ValueObject_toString(Esther *esther, Object *self);
+Variant ValueObject_getValue(ValueObject *self);
+
+String *ValueObject_virtual_toString(Esther *esther, Object *self);
+
+bool ValueObject_virtual_equals(Esther *esther, Object *self, Object *obj);
 
 Class *ValueObject_variantTypeToObjectClass(Esther *esther, VariantType type);
 

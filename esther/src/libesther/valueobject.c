@@ -26,12 +26,21 @@ void ValueObject_init(Esther *esther, ValueObject *self, Variant value) {
 
     self->value = value;
 
-    self->base.toString = ValueObject_toString;
-    self->base.inspect = ValueObject_toString;
+    self->base.toString = ValueObject_virtual_toString;
+    self->base.inspect = ValueObject_virtual_toString;
+    self->base.equals = ValueObject_virtual_equals;
 }
 
-String *ValueObject_toString(Esther *esther, Object *self) {
+Variant ValueObject_getValue(ValueObject *self) {
+    return self->value;
+}
+
+String *ValueObject_virtual_toString(Esther *esther, Object *self) {
     return String_new_init_std(esther, Variant_toString(((ValueObject *)self)->value));
+}
+
+bool ValueObject_virtual_equals(Esther *esther, Object *self, Object *obj) {
+    return Object_is(obj, esther->numericClass) && Variant_eq(((ValueObject *)self)->value, ((ValueObject *)obj)->value);
 }
 
 Class *ValueObject_variantTypeToObjectClass(Esther *esther, VariantType type) {

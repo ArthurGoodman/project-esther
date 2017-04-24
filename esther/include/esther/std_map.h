@@ -8,7 +8,9 @@ extern "C" {
 
 struct std_map;
 
-struct std_map *std_map_new(bool (*compare)(void *, void *));
+typedef bool (*Compare)(void *, void *);
+
+struct std_map *std_map_new(Compare compare);
 
 void std_map_delete(struct std_map *map);
 

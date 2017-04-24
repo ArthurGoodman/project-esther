@@ -64,7 +64,6 @@ Object *Array_pop(Array *self) {
 }
 
 String *Array_virtual_inspect(Esther *esther, Object *self) {
-
     struct std_vector *data = ((Array *)self)->data;
     size_t size = std_vector_size(data);
 

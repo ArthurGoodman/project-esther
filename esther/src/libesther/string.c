@@ -30,6 +30,7 @@ void String_init_std(Esther *esther, String *self, struct std_string *value) {
 
     self->base.toString = String_virtual_toString;
     self->base.inspect = String_virtual_inspect;
+    self->base.equals = String_virtual_equals;
 }
 
 const char *String_c_str(String *self) {
@@ -54,4 +55,8 @@ String *String_virtual_inspect(Esther *esther, Object *self) {
     String_append_c_str(str, "\"");
 
     return str;
+}
+
+bool String_virtual_equals(Esther *esther, Object *self, Object *obj) {
+    return Object_is(obj, esther->stringClass) && std_string_equals(((String *)self)->value, ((String *)obj)->value);
 }

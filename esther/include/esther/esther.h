@@ -7,8 +7,6 @@ extern "C" {
 #include "esther/class.h"
 
 typedef struct Esther {
-    Object *mainObject;
-
     Class *objectClass;
     Class *classClass;
     Class *stringClass;
@@ -26,6 +24,9 @@ typedef struct Esther {
     Object *trueObject;
     Object *falseObject;
     Object *nullObject;
+
+    Object *mainObject;
+    Object *io;
 } Esther;
 
 void Esther_init(Esther *self);

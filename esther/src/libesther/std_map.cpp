@@ -4,8 +4,6 @@
 #include <string>
 
 namespace {
-typedef bool (*Compare)(void *, void *);
-
 inline struct std_map *to_c(std::map<void *, void *, Compare> *ptr) {
     return reinterpret_cast<struct std_map *>(ptr);
 }
@@ -15,7 +13,7 @@ inline std::map<void *, void *, Compare> *to_cpp(struct std_map *ptr) {
 }
 }
 
-struct std_map *std_map_new(bool (*compare)(void *, void *)) {
+struct std_map *std_map_new(Compare compare) {
     return to_c(new std::map<void *, void *, Compare>(compare));
 }
 

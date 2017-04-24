@@ -47,13 +47,13 @@ Object *Class_getMethod(Class *self, const char *name) {
 
 void Class_setMethod(Class *self, const char *name, Object *method) {
     if (!self->methods)
-        self->methods = std_map_new(uint32_compare);
+        self->methods = std_map_new(ulong_compare);
 
     std_map_set(self->methods, (const void *)stringToId(name), method);
 }
 
-void Class_setMethod_func(Class *self, Function *func) {
-    Class_setMethod(self, func->name, (Object *)func);
+void Class_setMethod_func(Class *self, Function *f) {
+    Class_setMethod(self, Function_getName(f), (Object *)f);
 }
 
 bool Class_isChildOf(Class *self, Class *_class) {
@@ -79,12 +79,14 @@ String *Class_virtual_toString(Esther *esther, Object *self) {
     return String_new_init_std(esther, std_string_format("<class %s>", name));
 }
 
-Object *Class_newInstance(Esther *esther, Class *self) {
-    return self->newInstance(esther, self);
+Object *Class_newInstance(Esther *esther, Class *self, Tuple *args) {
+    Object *instance = self->newInstance(esther, self, args);
+    Object_callIfFound(esther, instance, "initialize", args);
+    return instance;
 }
 
-Object *Class_virtual_newInstance(Esther *esther, Class *self) {
-    Object *instance = Class_newInstance(esther, self->superclass);
+Object *Class_virtual_newInstance(Esther *esther, Class *self, Tuple *args) {
+    Object *instance = Class_newInstance(esther, self->superclass, args);
     instance->objectClass = self;
     return instance;
 }

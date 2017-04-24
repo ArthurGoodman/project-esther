@@ -6,7 +6,7 @@ extern "C" {
 
 #include "esther/common.h"
 
-typedef uint32_t Id;
+typedef unsigned long int Id;
 
 const char *idToString(Id id);
 Id stringToId(const char *str);

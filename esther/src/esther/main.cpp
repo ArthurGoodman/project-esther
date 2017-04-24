@@ -15,9 +15,9 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
     Object *m = Object_new(&e);
     Object_setAttribute(m, "()", (Object *)Function_new(&e, "()", (Object * (*)())print, -1));
 
-    Class_setMethod(_class, "m", (Object *)m);
+    Class_setMethod(_class, "m", m);
 
-    Object *obj = Class_newInstance(&e, _class);
+    Object *obj = Class_newInstance(&e, _class, Tuple_new(&e));
 
     Object *argsData[] = { (Object *)String_new_init(&e, "arg1"), (Object *)String_new_init(&e, "arg2") };
     Tuple *args = Tuple_new_init(&e, argsData, 2);
