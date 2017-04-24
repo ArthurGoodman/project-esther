@@ -3,9 +3,9 @@
 #include <string.h>
 
 #include "esther/esther.h"
-#include "esther/tuple.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
+#include "esther/tuple.h"
 
 Function *Function_new(Esther *esther, const char *name, Object *(*body)(), int argc) {
     Function *self = malloc(sizeof(Function));
@@ -32,25 +32,61 @@ Object *Function_invoke(Esther *esther, Function *self, Object *selfObject, Tupl
     if (self->argc < 0)
         return self->body(esther, selfObject, args);
 
-    size_t argc = Tuple_size(args);
+    if (self->argc != Tuple_size(args))
+        return NULL;
 
-    for (int i = argc - 1; i >= 0; i--)
-        asm("push %0"
-            :
-            : "g"(args->data[i]));
+    switch (self->argc) {
+    case 0:
+        return self->body(esther, selfObject);
 
-    asm("push %0\n"
-        "push %1"
-        :
-        : "g"(selfObject), "g"(esther));
+    case 1:
+        return self->body(esther, selfObject, args->data[0]);
 
-    Object *result = self->body();
+    case 2:
+        return self->body(esther, selfObject, args->data[0], args->data[1]);
 
-    asm("add %0, %%esp"
-        :
-        : "g"((argc + 2) * sizeof(Object *)));
+    case 3:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2]);
 
-    return result;
+    case 4:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3]);
+
+    case 5:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4]);
+
+    case 6:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5]);
+
+    case 7:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6]);
+
+    case 8:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7]);
+
+    case 9:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8]);
+
+    case 10:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9]);
+
+    case 11:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10]);
+
+    case 12:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11]);
+
+    case 13:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11], args->data[12]);
+
+    case 14:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11], args->data[12], args->data[13]);
+
+    case 15:
+        return self->body(esther, selfObject, args->data[0], args->data[1], args->data[2], args->data[3], args->data[4], args->data[5], args->data[6], args->data[7], args->data[8], args->data[9], args->data[10], args->data[11], args->data[12], args->data[13], args->data[14]);
+
+    default:
+        return NULL;
+    }
 }
 
 String *Function_virtual_toString(Esther *esther, Object *self) {

@@ -3,12 +3,12 @@
 #include <stdlib.h>
 
 #include "esther/esther.h"
-#include "esther/string.h"
 #include "esther/function.h"
-#include "esther/tuple.h"
+#include "esther/id.h"
 #include "esther/std_map.h"
 #include "esther/std_string.h"
-#include "esther/id.h"
+#include "esther/string.h"
+#include "esther/tuple.h"
 
 Object *Object_new(Esther *esther) {
     return Object_new_init(esther, NULL);
@@ -78,7 +78,7 @@ String *Object_toString(Esther *esther, Object *self) {
 }
 
 String *Object_virtual_toString(Esther *esther, Object *self) {
-    return String_new_init_std(esther, std_string_format("<%s:0x%p>", Class_getName(self->objectClass), self));
+    return String_new_init_std(esther, std_string_format("<%s:%p>", Class_getName(self->objectClass), self));
 }
 
 String *Object_inspect(Esther *esther, Object *self) {

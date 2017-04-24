@@ -4,8 +4,8 @@
 extern "C" {
 #endif
 
-#include "esther/object.h"
 #include "esther/id.h"
+#include "esther/object.h"
 
 typedef struct Symbol {
     Object base;

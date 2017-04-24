@@ -1,8 +1,8 @@
 #include "esther/std_string.h"
 
+#include <cstdarg>
 #include <string>
 #include <vector>
-#include <cstdarg>
 
 namespace {
 inline struct std_string *to_c(std::string *ptr) {

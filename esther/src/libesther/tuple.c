@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include "esther/esther.h"
-#include "esther/string.h"
 #include "esther/std_string.h"
+#include "esther/string.h"
 
 Tuple *Tuple_new(Esther *esther) {
     return Tuple_new_init(esther, NULL, 0);

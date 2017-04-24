@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include "esther/esther.h"
-#include "esther/string.h"
 #include "esther/std_vector.h"
+#include "esther/string.h"
 
 Array *Array_new(Esther *esther) {
     return Array_new_init(esther, NULL, 0);

@@ -1,11 +1,11 @@
 #include "esther/esther.h"
 
+#include "esther/array.h"
 #include "esther/class.h"
 #include "esther/object.h"
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
-#include "esther/array.h"
 
 static Object *ObjectClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
     return Object_new(esther);
