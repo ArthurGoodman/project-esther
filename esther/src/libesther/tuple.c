@@ -16,6 +16,10 @@ Tuple *Tuple_new_init(Esther *esther, Object *const *data, size_t size) {
     return self;
 }
 
+Tuple *Tuple_new_init_va(Esther *esther, size_t size, ...) {
+    return Tuple_new_init(esther, (Object * const *)(&size + 1), size);
+}
+
 void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size) {
     Object_init(esther, &self->base, esther->tupleClass);
 

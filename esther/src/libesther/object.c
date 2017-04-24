@@ -79,9 +79,7 @@ Object *Object_call_function(Esther *esther, Object *self, Object *f, Tuple *arg
     if (Object_is(f, esther->functionClass))
         return Function_invoke(esther, (Function *)f, self, args);
 
-    Object *argsData[] = { self, (Object *)args };
-
-    return Object_call(esther, f, "()", Tuple_new_init(esther, argsData, 2));
+    return Object_call(esther, f, "()", Tuple_new_init_va(esther, 2, self, args));
 }
 
 String *Object_toString(Esther *esther, Object *self) {

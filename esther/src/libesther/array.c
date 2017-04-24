@@ -22,6 +22,10 @@ Array *Array_new_init_std(Esther *esther, struct std_vector *data) {
     return self;
 }
 
+Array *Array_new_init_va(Esther *esther, size_t size, ...) {
+    return Array_new_init(esther, (Object * const *)(&size + 1), size);
+}
+
 void Array_init(Esther *esther, Array *self, Object *const *data, size_t size) {
     Array_init_std(esther, self, std_vector_new_init((void **)data, size));
 }

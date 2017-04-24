@@ -19,10 +19,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
 
     Object *obj = Class_newInstance(&e, _class, Tuple_new(&e));
 
-    Object *argsData[] = { (Object *)String_new_init(&e, "arg1"), (Object *)String_new_init(&e, "arg2") };
-    Tuple *args = Tuple_new_init(&e, argsData, 2);
-
-    Object_call(&e, obj, "m", args);
+    Object_call(&e, obj, "m", Tuple_new_init_va(&e, 2, String_new_init(&e, "arg1"), String_new_init(&e, "arg2")));
 
     return 0;
 }
