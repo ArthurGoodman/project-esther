@@ -3,17 +3,13 @@
 #include "esther/esther.h"
 #include "esther/std_string.h"
 
-String *String_new(Esther *esther) {
-    return String_new_init(esther, "");
-}
-
-String *String_new_init(Esther *esther, const char *value) {
+String *String_new(Esther *esther, const char *value) {
     String *self = malloc(sizeof(String));
     String_init(esther, self, value);
     return self;
 }
 
-String *String_new_init_std(Esther *esther, struct std_string *value) {
+String *String_new_std(Esther *esther, struct std_string *value) {
     String *self = malloc(sizeof(String));
     String_init_std(esther, self, value);
     return self;
@@ -50,7 +46,7 @@ String *String_virtual_toString(Esther *UNUSED(esther), Object *self) {
 }
 
 String *String_virtual_inspect(Esther *esther, Object *self) {
-    String *str = String_new_init(esther, "\"");
+    String *str = String_new(esther, "\"");
     String_append(str, (String *)self);
     String_append_c_str(str, "\"");
 

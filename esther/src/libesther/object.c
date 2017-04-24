@@ -79,7 +79,7 @@ Object *Object_call_function(Esther *esther, Object *self, Object *f, Tuple *arg
     if (Object_is(f, esther->functionClass))
         return Function_invoke(esther, (Function *)f, self, args);
 
-    return Object_call(esther, f, "()", Tuple_new_init_va(esther, 2, self, args));
+    return Object_call(esther, f, "()", Tuple_new(esther, 2, self, args));
 }
 
 String *Object_toString(Esther *esther, Object *self) {
@@ -87,7 +87,7 @@ String *Object_toString(Esther *esther, Object *self) {
 }
 
 String *Object_virtual_toString(Esther *esther, Object *self) {
-    return String_new_init_std(esther, std_string_format("<%s:0x%lx>", Class_getName(self->objectClass), self));
+    return String_new_std(esther, std_string_format("<%s:0x%lx>", Class_getName(self->objectClass), self));
 }
 
 String *Object_inspect(Esther *esther, Object *self) {

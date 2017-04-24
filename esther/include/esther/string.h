@@ -14,9 +14,8 @@ typedef struct String {
     struct std_string *value;
 } String;
 
-String *String_new(Esther *esther);
-String *String_new_init(Esther *esther, const char *value);
-String *String_new_init_std(Esther *esther, struct std_string *value);
+String *String_new(Esther *esther, const char *value);
+String *String_new_std(Esther *esther, struct std_string *value);
 
 void String_init(Esther *esther, String *self, const char *value);
 void String_init_std(Esther *esther, String *self, struct std_string *value);

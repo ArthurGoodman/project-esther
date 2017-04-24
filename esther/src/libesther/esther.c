@@ -20,7 +20,7 @@ static Object *ClassClass_virtual_newInstance(Esther *esther, Class *UNUSED(self
 }
 
 static Object *StringClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)String_new(esther);
+    return (Object *)String_new(esther, "");
 }
 
 static Object *SymbolClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
@@ -32,11 +32,11 @@ static Object *FunctionClass_virtual_newInstance(Esther *UNUSED(esther), Class *
 }
 
 static Object *TupleClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)Tuple_new(esther);
+    return (Object *)Tuple_new(esther, 0);
 }
 
 static Object *ArrayClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)Array_new(esther);
+    return (Object *)Array_new(esther, 0);
 }
 
 static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self), Tuple *UNUSED(args)) {
@@ -94,11 +94,11 @@ static Object *FloatClass_virtual_newInstance(Esther *esther, Class *UNUSED(self
 }
 
 static String *True_virtual_toString(Esther *esther, Object *UNUSED(self)) {
-    return String_new_init(esther, "true");
+    return String_new(esther, "true");
 }
 
 static String *False_virtual_toString(Esther *esther, Object *UNUSED(self)) {
-    return String_new_init(esther, "false");
+    return String_new(esther, "false");
 }
 
 static bool False_virtual_isTrue() {
@@ -106,7 +106,7 @@ static bool False_virtual_isTrue() {
 }
 
 static String *Null_virtual_toString(Esther *esther, Object *UNUSED(self)) {
-    return String_new_init(esther, "null");
+    return String_new(esther, "null");
 }
 
 static Object *ObjectClass_class(Esther *UNUSED(esther), Object *self) {

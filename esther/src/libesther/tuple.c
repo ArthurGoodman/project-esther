@@ -6,18 +6,14 @@
 #include "esther/std_string.h"
 #include "esther/string.h"
 
-Tuple *Tuple_new(Esther *esther) {
-    return Tuple_new_init(esther, NULL, 0);
+Tuple *Tuple_new(Esther *esther, size_t size, ...) {
+    return Tuple_new_init(esther, (Object * const *)(&size + 1), size);
 }
 
 Tuple *Tuple_new_init(Esther *esther, Object *const *data, size_t size) {
     Tuple *self = malloc(sizeof(Tuple));
     Tuple_init(esther, self, data, size);
     return self;
-}
-
-Tuple *Tuple_new_init_va(Esther *esther, size_t size, ...) {
-    return Tuple_new_init(esther, (Object * const *)(&size + 1), size);
 }
 
 void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size) {
@@ -48,7 +44,7 @@ String *Tuple_virtual_inspect(Esther *esther, Object *self) {
     Object **data = ((Tuple *)self)->data;
     size_t size = ((Tuple *)self)->size;
 
-    String *str = String_new_init(esther, "(");
+    String *str = String_new(esther, "(");
 
     for (size_t i = 0; i < size; i++) {
         String_append(str, Object_inspect(esther, data[i]));

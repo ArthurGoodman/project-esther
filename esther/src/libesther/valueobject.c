@@ -36,7 +36,7 @@ Variant ValueObject_getValue(ValueObject *self) {
 }
 
 String *ValueObject_virtual_toString(Esther *esther, Object *self) {
-    return String_new_init_std(esther, Variant_toString(((ValueObject *)self)->value));
+    return String_new_std(esther, Variant_toString(((ValueObject *)self)->value));
 }
 
 bool ValueObject_virtual_equals(Esther *esther, Object *self, Object *obj) {

@@ -93,7 +93,7 @@ String *Function_virtual_toString(Esther *esther, Object *self) {
     const char *name = ((Function *)self)->name;
 
     if (strlen(name) == 0)
-        return String_new_init(esther, "<anonymous function>");
+        return String_new(esther, "<anonymous function>");
 
-    return String_new_init_std(esther, std_string_format("<function %s>", name));
+    return String_new_std(esther, std_string_format("<function %s>", name));
 }

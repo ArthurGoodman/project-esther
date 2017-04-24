@@ -6,8 +6,8 @@
 #include "esther/std_vector.h"
 #include "esther/string.h"
 
-Array *Array_new(Esther *esther) {
-    return Array_new_init(esther, NULL, 0);
+Array *Array_new(Esther *esther, size_t size, ...) {
+    return Array_new_init(esther, (Object * const *)(&size + 1), size);
 }
 
 Array *Array_new_init(Esther *esther, Object *const *data, size_t size) {
@@ -20,10 +20,6 @@ Array *Array_new_init_std(Esther *esther, struct std_vector *data) {
     Array *self = malloc(sizeof(Array));
     Array_init_std(esther, self, data);
     return self;
-}
-
-Array *Array_new_init_va(Esther *esther, size_t size, ...) {
-    return Array_new_init(esther, (Object * const *)(&size + 1), size);
 }
 
 void Array_init(Esther *esther, Array *self, Object *const *data, size_t size) {
@@ -71,7 +67,7 @@ String *Array_virtual_inspect(Esther *esther, Object *self) {
     struct std_vector *data = ((Array *)self)->data;
     size_t size = std_vector_size(data);
 
-    String *str = String_new_init(esther, "[");
+    String *str = String_new(esther, "[");
 
     for (size_t i = 0; i < size; i++) {
         String_append(str, Object_inspect(esther, std_vector_at(data, i)));

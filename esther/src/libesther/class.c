@@ -74,9 +74,9 @@ String *Class_virtual_toString(Esther *esther, Object *self) {
     const char *name = ((Class *)self)->name;
 
     if (strlen(name) == 0)
-        return String_new_init(esther, "<anonymous class>");
+        return String_new(esther, "<anonymous class>");
 
-    return String_new_init_std(esther, std_string_format("<class %s>", name));
+    return String_new_std(esther, std_string_format("<class %s>", name));
 }
 
 Object *Class_newInstance(Esther *esther, Class *self, Tuple *args) {

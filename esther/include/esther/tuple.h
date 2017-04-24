@@ -13,9 +13,8 @@ typedef struct Tuple {
     size_t size;
 } Tuple;
 
-Tuple *Tuple_new(Esther *esther);
+Tuple *Tuple_new(Esther *esther, size_t size, ...);
 Tuple *Tuple_new_init(Esther *esther, Object *const *data, size_t size);
-Tuple *Tuple_new_init_va(Esther *esther, size_t size, ...);
 
 void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size);
 
