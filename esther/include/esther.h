@@ -11,4 +11,5 @@
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
+#include "esther/valueobject.h"
 #include "esther/variant.h"

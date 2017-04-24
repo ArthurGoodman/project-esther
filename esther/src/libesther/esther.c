@@ -6,6 +6,7 @@
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
+#include "esther/valueobject.h"
 
 static Object *ObjectClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
     return Object_new(esther);
@@ -41,6 +42,22 @@ static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(esther), Class *U
 
 static Object *NullClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self)) {
     return NULL;
+}
+
+static Object *NumericClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self)) {
+    return NULL;
+}
+
+static Object *CharClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
+    return (Object *)ValueObject_new_char(esther, '\0');
+}
+
+static Object *IntClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
+    return (Object *)ValueObject_new_int(esther, 0);
+}
+
+static Object *FloatClass_virtual_newInstance(Esther *esther, Class *UNUSED(self)) {
+    return (Object *)ValueObject_new_real(esther, 0.0);
 }
 
 static String *True_toString(Esther *esther, Object *UNUSED(self)) {
@@ -85,6 +102,18 @@ void Esther_init(Esther *self) {
 
     self->nullClass = Class_new_init(self, "Null", NULL);
     self->nullClass->newInstance = NullClass_virtual_newInstance;
+
+    self->numericClass = Class_new_init(self, "Numeric", NULL);
+    self->numericClass->newInstance = NumericClass_virtual_newInstance;
+
+    self->charClass = Class_new_init(self, "Char", self->numericClass);
+    self->charClass->newInstance = CharClass_virtual_newInstance;
+
+    self->intClass = Class_new_init(self, "Int", self->numericClass);
+    self->intClass->newInstance = IntClass_virtual_newInstance;
+
+    self->floatClass = Class_new_init(self, "Float", self->numericClass);
+    self->floatClass->newInstance = FloatClass_virtual_newInstance;
 
     self->trueObject = Object_new(self);
     self->trueObject->objectClass = self->booleanClass;

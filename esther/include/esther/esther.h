@@ -18,6 +18,10 @@ typedef struct Esther {
     Class *arrayClass;
     Class *booleanClass;
     Class *nullClass;
+    Class *numericClass;
+    Class *charClass;
+    Class *intClass;
+    Class *floatClass;
 
     Object *trueObject;
     Object *falseObject;
