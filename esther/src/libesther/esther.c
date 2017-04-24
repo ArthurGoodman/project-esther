@@ -312,3 +312,69 @@ Object *Esther_getRootObject(Esther *self, const char *name) {
 void Esther_setRootObject(Esther *self, const char *name, Object *value) {
     std_map_set(self->rootObjects, name, value);
 }
+
+Object *Esther_eval(Esther *self, Object *ast, Context *context) {
+    Tuple *t = (Tuple *)ast;
+
+    if (Tuple_size(t) == 0)
+        return self->nullObject;
+
+    const char *str = idToString(Symbol_getId((Symbol *)Tuple_get(t, 0)));
+
+    if (strcmp(str, "{}") == 0) {
+        Array *nodes = (Array *)Tuple_get(t, 1);
+
+        Object *value = self->nullObject;
+
+        for (size_t i = 0; i < Array_size(nodes); i++)
+            value = Esther_eval(self, Array_get(nodes, i), context);
+
+        return value;
+    } else if (strcmp(str, "class") == 0) {
+        Class *_class = Class_new_init(self, String_c_str((String *)Tuple_get(t, 1)), NULL);
+
+        Context *child = Context_childContext(context, (Object *)_class, Object_new(self));
+        Esther_eval(self, Tuple_get(t, 2), child);
+
+        return (Object *)_class;
+    } else if (strcmp(str, "=") == 0) {
+        return self->nullObject;
+    } else if (strcmp(str, "self") == 0) {
+        return Context_getSelf(context);
+    } else if (strcmp(str, "attr") == 0) {
+        Object *evaledSelf = Esther_eval(self, Tuple_get(t, 1), context);
+        return Object_getAttribute(evaledSelf, String_c_str((String *)Tuple_get(t, 2)));
+    } else if (strcmp(str, "new") == 0) {
+        Object *evaledSelf = Esther_eval(self, Tuple_get(t, 1), context);
+        return Object_call(self, evaledSelf, "new", Tuple_new(self, 0));
+    } else if (strcmp(str, "function") == 0) {
+        Array *array = (Array *)Tuple_get(t, 2);
+        int argc = Array_size(array);
+
+        const char **params = malloc(argc * sizeof(const char *));
+
+        for (int i = 0; i < argc; i++)
+            params[i] = strdup(String_c_str((String *)Array_get(array, i)));
+
+        Function *f = InterpretedFunction_new(self, String_c_str((String *)Tuple_get(t, 1)), argc, params, context, Tuple_get(t, 3));
+
+        free(params);
+
+        return (Object *)f;
+    } else if (strcmp(str, "call") == 0) {
+        return self->nullObject;
+    } else if (strcmp(str, "id") == 0) {
+        return Context_resolve(self, context, String_c_str((String *)Tuple_get(t, 1)));
+    } else if (strcmp(str, "#") == 0) {
+        Object *value = Tuple_get(t, 1);
+
+        if (Object_is(value, self->numericClass))
+            return (Object *)ValueObject_new_var(self, ValueObject_getValue((ValueObject *)value));
+        else if (Object_is(value, self->stringClass))
+            return (Object *)String_new(self, String_c_str((String *)value));
+        else
+            return NULL;
+    }
+
+    return self->nullObject;
+}

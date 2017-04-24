@@ -17,6 +17,8 @@ Symbol *Symbol_new(Esther *esther, const char *name);
 
 void Symbol_init(Esther *esther, Symbol *symbol, const char *name);
 
+Id Symbol_getId(Symbol *self);
+
 String *Symbol_virtual_toString(Esther *esther, Object *self);
 String *Symbol_virtual_inspect(Esther *esther, Object *self);
 

@@ -104,5 +104,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
 
     printf("%s\n", String_c_str(Object_toString(&e, ast)));
 
+    Esther_eval(&e, ast, e.root);
+
     return 0;
 }

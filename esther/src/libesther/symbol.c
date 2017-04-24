@@ -18,6 +18,10 @@ void Symbol_init(Esther *esther, Symbol *self, const char *name) {
     self->base.inspect = Symbol_virtual_inspect;
 }
 
+Id Symbol_getId(Symbol *self) {
+    return self->id;
+}
+
 String *Symbol_virtual_toString(Esther *esther, Object *self) {
     return String_new(esther, idToString(((Symbol *)self)->id));
 }

@@ -6,6 +6,7 @@
 #include "esther/std_string.h"
 #include "esther/string.h"
 #include "esther/tuple.h"
+#include "esther/context.h"
 
 Function *Function_new(Esther *esther, const char *name, Object *(*body)(), int argc) {
     Function *self = malloc(sizeof(Function));
@@ -29,7 +30,10 @@ const char *Function_getName(Function *self) {
 }
 
 Object *Function_invoke(Esther *esther, Function *self, Object *selfObject, Tuple *args) {
-    if (self->argc < 0)
+    if (self->argc == -2)
+        return self->body(esther, self, selfObject, args);
+
+    if (self->argc == -1)
         return self->body(esther, selfObject, args);
 
     if (self->argc != (int)Tuple_size(args))
@@ -96,4 +100,29 @@ String *Function_virtual_toString(Esther *esther, Object *self) {
         return String_new(esther, "<anonymous function>");
 
     return String_new_std(esther, std_string_format("<function %s>", name));
+}
+
+static Object *InterpretedFunction_body(Esther *esther, InterpretedFunction *f, Object *self, Tuple *args) {
+    Context *context = Context_childContext(f->closure, self, Object_new(esther));
+
+    for (size_t i = 0; i < Tuple_size(args); i++)
+        Context_setLocal(context, f->params[i], Tuple_get(args, i));
+
+    return Esther_eval(esther, f->body, context);
+}
+
+Function *InterpretedFunction_new(Esther *esther, const char *name, int argc, const char **params, Context *closure, Object *body) {
+    InterpretedFunction *self = malloc(sizeof(InterpretedFunction));
+
+    Function_init(esther, &self->base, name, InterpretedFunction_body, -2);
+
+    self->params = malloc(argc * sizeof(const char *));
+
+    for (int i = 0; i < argc; i++)
+        self->params[i] = strdup(params[i]);
+
+    self->closure = closure;
+    self->body = body;
+
+    return (Function *)self;
 }
