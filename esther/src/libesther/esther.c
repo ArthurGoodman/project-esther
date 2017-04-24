@@ -2,6 +2,7 @@
 
 #include "esther/array.h"
 #include "esther/class.h"
+#include "esther/function.h"
 #include "esther/object.h"
 #include "esther/string.h"
 #include "esther/symbol.h"
@@ -72,6 +73,54 @@ static String *Null_toString(Esther *esther, Object *UNUSED(self)) {
     return String_new_init(esther, "null");
 }
 
+Object *Numeric_add(Esther *esther, ValueObject *a, ValueObject *b) {
+    return (Object *)ValueObject_new_var(esther, Variant_add(a->value, b->value));
+}
+
+Object *Numeric_sub(Esther *esther, ValueObject *a, ValueObject *b) {
+    return (Object *)ValueObject_new_var(esther, Variant_sub(a->value, b->value));
+}
+
+Object *Numeric_mul(Esther *esther, ValueObject *a, ValueObject *b) {
+    return (Object *)ValueObject_new_var(esther, Variant_mul(a->value, b->value));
+}
+
+Object *Numeric_div(Esther *esther, ValueObject *a, ValueObject *b) {
+    return (Object *)ValueObject_new_var(esther, Variant_div(a->value, b->value));
+}
+
+Object *Numeric_mod(Esther *esther, ValueObject *a, ValueObject *b) {
+    return (Object *)ValueObject_new_var(esther, Variant_mod(a->value, b->value));
+}
+
+Object *Numeric_pow(Esther *esther, ValueObject *a, ValueObject *b) {
+    return (Object *)ValueObject_new_var(esther, Variant_pow(a->value, b->value));
+}
+
+Object *Numeric_lt(Esther *esther, ValueObject *a, ValueObject *b) {
+    return Esther_toBoolean(esther, Variant_lt(a->value, b->value));
+}
+
+Object *Numeric_gt(Esther *esther, ValueObject *a, ValueObject *b) {
+    return Esther_toBoolean(esther, Variant_gt(a->value, b->value));
+}
+
+Object *Numeric_lte(Esther *esther, ValueObject *a, ValueObject *b) {
+    return Esther_toBoolean(esther, Variant_lte(a->value, b->value));
+}
+
+Object *Numeric_gte(Esther *esther, ValueObject *a, ValueObject *b) {
+    return Esther_toBoolean(esther, Variant_gte(a->value, b->value));
+}
+
+Object *Numeric_eq(Esther *esther, ValueObject *a, ValueObject *b) {
+    return Esther_toBoolean(esther, Variant_eq(a->value, b->value));
+}
+
+Object *Numeric_ne(Esther *esther, ValueObject *a, ValueObject *b) {
+    return Esther_toBoolean(esther, Variant_ne(a->value, b->value));
+}
+
 void Esther_init(Esther *self) {
     self->classClass = Class_new_init(self, "Class", NULL);
     self->classClass->base.objectClass = self->classClass;
@@ -106,11 +155,27 @@ void Esther_init(Esther *self) {
     self->numericClass = Class_new_init(self, "Numeric", NULL);
     self->numericClass->newInstance = NumericClass_virtual_newInstance;
 
+    Class_setMethod_func(self->numericClass, Function_new(self, "+", (Object * (*)())Numeric_add, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "-", (Object * (*)())Numeric_sub, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "*", (Object * (*)())Numeric_mul, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "/", (Object * (*)())Numeric_div, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "%", (Object * (*)())Numeric_mod, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "^", (Object * (*)())Numeric_pow, 1));
+
+    Class_setMethod_func(self->numericClass, Function_new(self, "<", (Object * (*)())Numeric_lt, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, ">", (Object * (*)())Numeric_gt, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "<=", (Object * (*)())Numeric_lte, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, ">=", (Object * (*)())Numeric_gte, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "==", (Object * (*)())Numeric_eq, 1));
+    Class_setMethod_func(self->numericClass, Function_new(self, "!=", (Object * (*)())Numeric_ne, 1));
+
     self->charClass = Class_new_init(self, "Char", self->numericClass);
     self->charClass->newInstance = CharClass_virtual_newInstance;
 
     self->intClass = Class_new_init(self, "Int", self->numericClass);
     self->intClass->newInstance = IntClass_virtual_newInstance;
+
+    Class_setMethod(self->intClass, "+", (Object *)Function_new(self, "+", (Object * (*)())Numeric_add, 1));
 
     self->floatClass = Class_new_init(self, "Float", self->numericClass);
     self->floatClass->newInstance = FloatClass_virtual_newInstance;
@@ -128,4 +193,8 @@ void Esther_init(Esther *self) {
     self->nullObject->toString = self->nullObject->inspect = Null_toString;
 
     self->mainObject = Object_new(self);
+}
+
+Object *Esther_toBoolean(Esther *self, bool value) {
+    return value ? self->trueObject : self->falseObject;
 }

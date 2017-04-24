@@ -1,6 +1,7 @@
 #include "esther/class.h"
 
 #include "esther/esther.h"
+#include "esther/function.h"
 #include "esther/id.h"
 #include "esther/std_map.h"
 #include "esther/std_string.h"
@@ -49,6 +50,10 @@ void Class_setMethod(Class *self, const char *name, Object *method) {
         self->methods = std_map_new(uint32_compare);
 
     std_map_set(self->methods, (const void *)stringToId(name), method);
+}
+
+void Class_setMethod_func(Class *self, Function *func) {
+    Class_setMethod(self, func->name, (Object *)func);
 }
 
 bool Class_isChildOf(Class *self, Class *_class) {

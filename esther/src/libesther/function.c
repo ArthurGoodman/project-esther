@@ -32,7 +32,7 @@ Object *Function_invoke(Esther *esther, Function *self, Object *selfObject, Tupl
     if (self->argc < 0)
         return self->body(esther, selfObject, args);
 
-    if (self->argc != Tuple_size(args))
+    if (self->argc != (int)Tuple_size(args))
         return NULL;
 
     switch (self->argc) {

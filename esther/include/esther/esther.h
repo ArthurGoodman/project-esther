@@ -30,6 +30,8 @@ typedef struct Esther {
 
 void Esther_init(Esther *self);
 
+Object *Esther_toBoolean(Esther *self, bool value);
+
 #ifdef __cplusplus
 }
 #endif

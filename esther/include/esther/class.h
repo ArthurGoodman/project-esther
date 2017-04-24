@@ -8,6 +8,8 @@ extern "C" {
 
 struct std_string;
 
+typedef struct Function Function;
+
 typedef struct Class {
     Object base;
 
@@ -30,6 +32,7 @@ Class *Class_getSuperclass(Class *self);
 bool Class_hasMethod(Class *self, const char *name);
 Object *Class_getMethod(Class *self, const char *name);
 void Class_setMethod(Class *self, const char *name, Object *method);
+void Class_setMethod_func(Class *self, Function *func);
 
 bool Class_isChildOf(Class *self, Class *_class);
 
