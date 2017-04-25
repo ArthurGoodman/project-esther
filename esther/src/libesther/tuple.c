@@ -16,11 +16,29 @@ Tuple *Tuple_new_init(Esther *esther, Object *const *data, size_t size) {
     return self;
 }
 
+Tuple *Tuple_new_init_null(Esther *esther, size_t size) {
+    Tuple *self = malloc(sizeof(Tuple));
+    Tuple_init_null(esther, self, size);
+    return self;
+}
+
 void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size) {
     Object_init(esther, &self->base, esther->tupleClass);
 
     self->data = malloc(size * sizeof(Object *));
     memcpy(self->data, data, size * sizeof(Object *));
+
+    self->size = size;
+
+    self->base.toString = Tuple_virtual_inspect;
+    self->base.inspect = Tuple_virtual_inspect;
+}
+
+void Tuple_init_null(Esther *esther, Tuple *self, size_t size) {
+    Object_init(esther, &self->base, esther->tupleClass);
+
+    self->data = malloc(size * sizeof(Object *));
+    memset(self->data, 0, size * sizeof(Object *));
 
     self->size = size;
 

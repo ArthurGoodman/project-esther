@@ -121,6 +121,19 @@ static Object *ClassClass_superclass(Esther *UNUSED(esther), Object *self) {
     return (Object *)Class_getSuperclass((Class *)self);
 }
 
+static Object *ClassClass_hasMethod(Esther *esther, Class *self, String *name) {
+    return Esther_toBoolean(esther, Class_hasMethod(self, String_c_str(name)));
+}
+
+static Object *ClassClass_getMethod(Esther *UNUSED(esther), Class *self, String *name) {
+    return Class_getMethod(self, String_c_str(name));
+}
+
+static Object *ClassClass_setMethod(Esther *UNUSED(esther), Class *self, String *name, Object *method) {
+    Class_setMethod(self, String_c_str(name), method);
+    return method;
+}
+
 static Object *NumericClass_add(Esther *esther, ValueObject *a, ValueObject *b) {
     return (Object *)ValueObject_new_var(esther, Variant_add(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
@@ -255,6 +268,9 @@ void Esther_init(Esther *self) {
     Class_setMethod_func(self->classClass, Function_new(self, "superclass", (Object * (*)())ClassClass_superclass, 0));
     Class_setMethod_func(self->classClass, Function_new(self, "new", (Object * (*)())Class_newInstance, -1));
     Class_setMethod(self->classClass, "()", Class_getMethod(self->classClass, "new"));
+    Class_setMethod_func(self->classClass, Function_new(self, "hasMethod", (Object * (*)())ClassClass_hasMethod, 1));
+    Class_setMethod_func(self->classClass, Function_new(self, "getMethod", (Object * (*)())ClassClass_getMethod, 1));
+    Class_setMethod_func(self->classClass, Function_new(self, "setMethod", (Object * (*)())ClassClass_setMethod, 2));
 
     Class_setMethod_func(self->numericClass, Function_new(self, "+", (Object * (*)())NumericClass_add, 1));
     Class_setMethod_func(self->numericClass, Function_new(self, "-", (Object * (*)())NumericClass_sub, 1));
@@ -331,22 +347,48 @@ Object *Esther_eval(Esther *self, Object *ast, Context *context) {
 
         return value;
     } else if (strcmp(str, "class") == 0) {
-        Class *_class = Class_new_init(self, String_c_str((String *)Tuple_get(t, 1)), NULL);
+        const char *name = String_c_str((String *)Tuple_get(t, 1));
+        Class *_class = Class_new_init(self, name, NULL);
 
         Context *child = Context_childContext(context, (Object *)_class, Object_new(self));
         Esther_eval(self, Tuple_get(t, 2), child);
 
+        if (strlen(name) > 0)
+            Context_setLocal(context, name, (Object *)_class);
+
         return (Object *)_class;
     } else if (strcmp(str, "=") == 0) {
-        return self->nullObject;
+        Tuple *f = (Tuple *)Tuple_get(t, 1);
+        const char *sym = idToString(Symbol_getId((Symbol *)Tuple_get(f, 0)));
+
+        Object *value = Esther_eval(self, Tuple_get(t, 2), context);
+
+        if (strcmp(sym, "attr") == 0) {
+            Object *evaledSelf = Esther_eval(self, Tuple_get(f, 1), context);
+            Object_setAttribute(evaledSelf, String_c_str((String *)Tuple_get(f, 2)), value);
+        } else if (strcmp(sym, "id") == 0) {
+            const char *name = String_c_str((String *)Tuple_get(f, 1));
+
+            if (!Context_assign(context, name, value))
+                Context_setLocal(context, name, value);
+        } else
+            return NULL;
+
+        return value;
     } else if (strcmp(str, "self") == 0) {
         return Context_getSelf(context);
     } else if (strcmp(str, "attr") == 0) {
         Object *evaledSelf = Esther_eval(self, Tuple_get(t, 1), context);
         return Object_getAttribute(evaledSelf, String_c_str((String *)Tuple_get(t, 2)));
     } else if (strcmp(str, "new") == 0) {
-        Object *evaledSelf = Esther_eval(self, Tuple_get(t, 1), context);
-        return Object_call(self, evaledSelf, "new", Tuple_new(self, 0));
+        if (Tuple_size(t) == 3) {
+            Object *evaledSelf = Esther_eval(self, Tuple_get(t, 1), context);
+            return Object_call(self, evaledSelf, "new", Tuple_new(self, 0));
+        } else {
+            Object *newObject = Object_new(self);
+            Esther_eval(self, Tuple_get(t, 1), Context_childContext(context, newObject, Object_new(self)));
+            return newObject;
+        }
     } else if (strcmp(str, "function") == 0) {
         Array *array = (Array *)Tuple_get(t, 2);
         int argc = Array_size(array);
@@ -362,7 +404,31 @@ Object *Esther_eval(Esther *self, Object *ast, Context *context) {
 
         return (Object *)f;
     } else if (strcmp(str, "call") == 0) {
-        return self->nullObject;
+        Object *evaledSelf = NULL;
+        Object *evaledF = NULL;
+
+        Tuple *f = (Tuple *)Tuple_get(t, 1);
+        const char *sym = idToString(Symbol_getId((Symbol *)Tuple_get(f, 0)));
+
+        if (strcmp(sym, "attr") == 0) {
+            evaledSelf = Esther_eval(self, Tuple_get(f, 1), context);
+            evaledF = Object_resolve(evaledSelf, String_c_str((String *)Tuple_get(f, 2)));
+        } else if (strcmp(sym, ".") == 0) {
+            evaledSelf = Esther_eval(self, Tuple_get(f, 1), context);
+            evaledF = Esther_eval(self, Tuple_get(f, 2), Context_childContext(context, evaledSelf, Object_new(self)));
+        } else {
+            evaledSelf = Context_getSelf(context);
+            evaledF = Esther_eval(self, (Object *)f, context);
+        }
+
+        Array *args = (Array *)Tuple_get(t, 2);
+
+        Tuple *evaledArgs = Tuple_new_init_null(self, Array_size(args));
+
+        for (size_t i = 0; i < Array_size(args); i++)
+            Tuple_set(evaledArgs, i, Esther_eval(self, Array_get(args, i), context));
+
+        return Object_call_function(self, evaledSelf, evaledF, evaledArgs);
     } else if (strcmp(str, "id") == 0) {
         return Context_resolve(self, context, String_c_str((String *)Tuple_get(t, 1)));
     } else if (strcmp(str, "#") == 0) {
