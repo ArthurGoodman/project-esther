@@ -13,6 +13,8 @@ struct std_vector *std_vector_new_init(void *const *data, size_t size);
 
 void std_vector_delete(struct std_vector *self);
 
+void std_vector_resize(struct std_vector *self, size_t size);
+
 struct std_vector *std_vector_append(struct std_vector *self, struct std_vector *vector);
 
 void std_vector_push(struct std_vector *self, void *value);

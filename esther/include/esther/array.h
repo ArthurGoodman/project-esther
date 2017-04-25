@@ -19,7 +19,8 @@ Array *Array_new_init(Esther *esther, Object *const *data, size_t size);
 Array *Array_new_init_std(Esther *esther, struct std_vector *data);
 
 void Array_init(Esther *esther, Array *self, Object *const *data, size_t size);
-void Array_init_std(Esther *esther, Array *self, struct std_vector *vector);
+void Array_init_std(Esther *esther, Array *self, struct std_vector *data);
+void Array_init_va(Esther *esther, Array *self, size_t size, va_list ap);
 
 size_t Array_size(Array *self);
 

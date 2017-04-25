@@ -24,6 +24,10 @@ void std_vector_delete(struct std_vector *self) {
     delete to_cpp(self);
 }
 
+void std_vector_resize(std_vector *self, size_t size) {
+    to_cpp(self)->resize(size);
+}
+
 struct std_vector *std_vector_append(struct std_vector *self, struct std_vector *vector) {
     to_cpp(self)->insert(to_cpp(self)->end(), to_cpp(vector)->begin(), to_cpp(vector)->end());
     return self;

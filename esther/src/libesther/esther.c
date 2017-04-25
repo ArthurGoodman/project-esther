@@ -2,14 +2,14 @@
 
 #include "esther/array.h"
 #include "esther/class.h"
+#include "esther/context.h"
 #include "esther/function.h"
 #include "esther/object.h"
+#include "esther/std_map.h"
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
 #include "esther/valueobject.h"
-#include "esther/std_map.h"
-#include "esther/context.h"
 
 static Object *ObjectClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
     return Object_new(esther);

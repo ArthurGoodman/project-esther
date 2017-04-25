@@ -19,6 +19,7 @@ Tuple *Tuple_new_init_null(Esther *esther, size_t size);
 
 void Tuple_init(Esther *esther, Tuple *self, Object *const *data, size_t size);
 void Tuple_init_null(Esther *esther, Tuple *self, size_t size);
+void Tuple_init_va(Esther *esther, Tuple *self, size_t size, va_list ap);
 
 size_t Tuple_size(Tuple *self);
 

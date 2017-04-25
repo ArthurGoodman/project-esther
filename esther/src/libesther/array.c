@@ -7,7 +7,15 @@
 #include "esther/string.h"
 
 Array *Array_new(Esther *esther, size_t size, ...) {
-    return Array_new_init(esther, (Object * const *)(&size + 1), size);
+    va_list ap;
+    va_start(ap, size);
+
+    Array *self = malloc(sizeof(Array));
+    Array_init_va(esther, self, size, ap);
+
+    va_end(ap);
+
+    return self;
 }
 
 Array *Array_new_init(Esther *esther, Object *const *data, size_t size) {
@@ -33,6 +41,17 @@ void Array_init_std(Esther *esther, Array *self, struct std_vector *data) {
 
     self->base.toString = Array_virtual_inspect;
     self->base.inspect = Array_virtual_inspect;
+}
+
+void Array_init_va(Esther *esther, Array *self, size_t size, va_list ap) {
+    struct std_vector *data = std_vector_new();
+
+    std_vector_resize(data, size);
+
+    for (size_t i = 0; i < size; i++)
+        std_vector_set(data, i, va_arg(ap, Object *));
+
+    Array_init_std(esther, self, data);
 }
 
 size_t Array_size(Array *self) {
