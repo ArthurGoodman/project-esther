@@ -27,7 +27,7 @@ static Object *SymbolClass_virtual_newInstance(Esther *es, Object *UNUSED(self),
     return Symbol_new(es, "");
 }
 
-static Object *FunctionClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *FunctionClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
@@ -39,15 +39,15 @@ static Object *ArrayClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
     return Array_new(es, 0);
 }
 
-static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
-static Object *NullClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *NullClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
-static Object *NumericClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *NumericClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
@@ -109,7 +109,7 @@ static Object *Null_virtual_toString(Esther *es, Object *UNUSED(self)) {
     return String_new(es, "null");
 }
 
-static Object *ObjectClass_class(Esther *UNUSED(esther), Object *self) {
+static Object *ObjectClass_class(Esther *UNUSED(es), Object *self) {
     return Object_getClass(self);
 }
 
@@ -117,7 +117,7 @@ static Object *ObjectClass_equals(Esther *es, Object *self, Object *obj) {
     return Esther_toBoolean(es, Object_equals(es, self, obj));
 }
 
-static Object *ClassClass_superclass(Esther *UNUSED(esther), Object *self) {
+static Object *ClassClass_superclass(Esther *UNUSED(es), Object *self) {
     return Class_getSuperclass(self);
 }
 
@@ -125,11 +125,11 @@ static Object *ClassClass_hasMethod(Esther *es, Object *self, Object *name) {
     return Esther_toBoolean(es, Class_hasMethod(self, String_c_str(name)));
 }
 
-static Object *ClassClass_getMethod(Esther *UNUSED(esther), Object *self, Object *name) {
+static Object *ClassClass_getMethod(Esther *UNUSED(es), Object *self, Object *name) {
     return Class_getMethod(self, String_c_str(name));
 }
 
-static Object *ClassClass_setMethod(Esther *UNUSED(esther), Object *self, Object *name, Object *method) {
+static Object *ClassClass_setMethod(Esther *UNUSED(es), Object *self, Object *name, Object *method) {
     Class_setMethod(self, String_c_str(name), method);
     return method;
 }
@@ -360,8 +360,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
         const char *name = String_c_str(Tuple_get(ast, 1));
         Object *_class = Class_new_init(es, name, NULL);
 
-        Context *child = Context_childContext(context, _class, Object_new(es));
-        Esther_eval(es, Tuple_get(ast, 2), child);
+        Esther_eval(es, Tuple_get(ast, 2), Context_childContext(context, _class, Object_new(es)));
 
         if (strlen(name) > 0)
             Context_setLocal(context, name, _class);
@@ -398,19 +397,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             return newObject;
         }
     } else if (id == id_function) {
-        Object *array = Tuple_get(ast, 2);
-        int argc = Array_size(array);
-
-        const char **params = malloc(argc * sizeof(const char *));
-
-        for (int i = 0; i < argc; i++)
-            params[i] = strdup(String_c_str(Array_get(array, i)));
-
-        Object *f = InterpretedFunction_new(es, String_c_str(Tuple_get(ast, 1)), argc, params, context, Tuple_get(ast, 3));
-
-        free(params);
-
-        return f;
+        return InterpretedFunction_new(es, String_c_str(Tuple_get(ast, 1)), Tuple_get(ast, 2), context, Tuple_get(ast, 3));
     } else if (id == id_call) {
         Object *evaledSelf;
         Object *evaledF;

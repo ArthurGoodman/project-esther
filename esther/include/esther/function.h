@@ -39,9 +39,9 @@ typedef struct InterpretedFunction {
 
 #define as_InterpretedFunction(obj) ((InterpretedFunction *)(obj))
 
-Object *InterpretedFunction_new(Esther *es, const char *name, int argc, const char **params, Context *closure, Object *body);
+Object *InterpretedFunction_new(Esther *es, const char *name, Object *params, Context *closure, Object *body);
 
-void InterpretedFunction_init(Esther *es, Object *self, const char *name, int argc, const char **params, Context *closure, Object *body);
+void InterpretedFunction_init(Esther *es, Object *self, const char *name, Object *params, Context *closure, Object *body);
 
 #ifdef __cplusplus
 }

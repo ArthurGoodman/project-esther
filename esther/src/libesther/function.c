@@ -2,6 +2,7 @@
 
 #include <string.h>
 
+#include "esther/array.h"
 #include "esther/esther.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
@@ -111,21 +112,23 @@ static Object *InterpretedFunction_body(Esther *es, Object *self, Object *selfOb
     return Esther_eval(es, as_InterpretedFunction(self)->body, context);
 }
 
-Object *InterpretedFunction_new(Esther *es, const char *name, int argc, const char **params, Context *closure, Object *body) {
+Object *InterpretedFunction_new(Esther *es, const char *name, Object *params, Context *closure, Object *body) {
     Object *self = malloc(sizeof(InterpretedFunction));
-    InterpretedFunction_init(es, self, name, argc, params, closure, body);
+    InterpretedFunction_init(es, self, name, params, closure, body);
     return self;
 }
 
-void InterpretedFunction_init(Esther *es, Object *self, const char *name, int argc, const char **params, Context *closure, Object *body) {
+void InterpretedFunction_init(Esther *es, Object *self, const char *name, Object *params, Context *closure, Object *body) {
     Function_init(es, self, name, InterpretedFunction_body, -2);
+
+    int argc = Array_size(params);
 
     as_InterpretedFunction(self)->argc = argc;
 
     as_InterpretedFunction(self)->params = malloc(argc * sizeof(const char *));
 
     for (int i = 0; i < argc; i++)
-        as_InterpretedFunction(self)->params[i] = strdup(params[i]);
+        as_InterpretedFunction(self)->params[i] = strdup(String_c_str(Array_get(params, i)));
 
     as_InterpretedFunction(self)->closure = closure;
     as_InterpretedFunction(self)->body = body;

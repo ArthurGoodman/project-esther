@@ -98,7 +98,7 @@ bool Object_equals(Esther *es, Object *self, Object *obj) {
     return self->equals(es, self, obj);
 }
 
-bool Object_virtual_equals(Esther *UNUSED(esther), Object *self, Object *obj) {
+bool Object_virtual_equals(Esther *UNUSED(es), Object *self, Object *obj) {
     return self == obj;
 }
 

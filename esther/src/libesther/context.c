@@ -21,15 +21,15 @@ Object *Context_getHere(Context *self) {
 }
 
 bool Context_hasLocal(Context *self, const char *name) {
-    return Object_hasAttribute(self->self, name);
+    return Object_hasAttribute(self->here, name);
 }
 
 Object *Context_getLocal(Context *self, const char *name) {
-    return Object_getAttribute(self->self, name);
+    return Object_getAttribute(self->here, name);
 }
 
 void Context_setLocal(Context *self, const char *name, Object *value) {
-    Object_setAttribute(self->self, name, value);
+    Object_setAttribute(self->here, name, value);
 }
 
 Object *Context_resolve(Esther *es, Context *self, const char *name) {

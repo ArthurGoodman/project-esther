@@ -41,7 +41,7 @@ void String_append_c_str(Object *self, const char *str) {
     std_string_append_c_str(as_String(self)->value, str);
 }
 
-Object *String_virtual_toString(Esther *UNUSED(esther), Object *self) {
+Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
     return self;
 }
 
