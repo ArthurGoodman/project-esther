@@ -18,16 +18,16 @@ typedef struct Object {
     Object *objectClass;
     struct std_map *attributes;
 
-    Object *(*toString)(Esther *esther, Object *self);
-    Object *(*inspect)(Esther *esther, Object *self);
-    bool (*equals)(Esther *esther, Object *self, Object *obj);
+    Object *(*toString)(Esther *es, Object *self);
+    Object *(*inspect)(Esther *es, Object *self);
+    bool (*equals)(Esther *es, Object *self, Object *obj);
     bool (*isTrue)();
 } Object;
 
-Object *Object_new(Esther *esther);
-Object *Object_new_init(Esther *esther, Object *objectClass);
+Object *Object_new(Esther *es);
+Object *Object_new_init(Esther *es, Object *objectClass);
 
-void Object_init(Esther *esther, Object *self, Object *objectClass);
+void Object_init(Esther *es, Object *self, Object *objectClass);
 
 Object *Object_getClass(Object *self);
 
@@ -39,17 +39,17 @@ bool Object_is(Object *self, Object *_class);
 
 Object *Object_resolve(Object *self, const char *name);
 
-Object *Object_call(Esther *esther, Object *self, const char *name, Object *args);
-Object *Object_callIfFound(Esther *esther, Object *self, const char *name, Object *args);
-Object *Object_call_function(Esther *esther, Object *self, Object *f, Object *args);
+Object *Object_call(Esther *es, Object *self, const char *name, Object *args);
+Object *Object_callIfFound(Esther *es, Object *self, const char *name, Object *args);
+Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args);
 
-Object *Object_toString(Esther *esther, Object *self);
-Object *Object_virtual_toString(Esther *esther, Object *self);
+Object *Object_toString(Esther *es, Object *self);
+Object *Object_virtual_toString(Esther *es, Object *self);
 
-Object *Object_inspect(Esther *esther, Object *self);
+Object *Object_inspect(Esther *es, Object *self);
 
-bool Object_equals(Esther *esther, Object *self, Object *obj);
-bool Object_virtual_equals(Esther *esther, Object *self, Object *obj);
+bool Object_equals(Esther *es, Object *self, Object *obj);
+bool Object_virtual_equals(Esther *es, Object *self, Object *obj);
 
 bool Object_isTrue(Object *self);
 bool Object_virtual_isTrue();

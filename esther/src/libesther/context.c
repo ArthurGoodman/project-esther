@@ -3,11 +3,11 @@
 #include "esther/common.h"
 #include "esther/esther.h"
 
-Context *Context_new(Esther *esther) {
+Context *Context_new(Esther *es) {
     Context *self = malloc(sizeof(Context));
 
     self->parent = NULL;
-    self->self = self->here = esther->mainObject;
+    self->self = self->here = es->mainObject;
 
     return self;
 }
@@ -32,15 +32,15 @@ void Context_setLocal(Context *self, const char *name, Object *value) {
     Object_setAttribute(self->self, name, value);
 }
 
-Object *Context_resolve(Esther *esther, Context *self, const char *name) {
+Object *Context_resolve(Esther *es, Context *self, const char *name) {
     if (Context_hasLocal(self, name))
         return Context_getLocal(self, name);
 
     if (self->parent)
-        return Context_resolve(esther, self->parent, name);
+        return Context_resolve(es, self->parent, name);
 
-    if (Esther_hasRootObject(esther, name))
-        return Esther_getRootObject(esther, name);
+    if (Esther_hasRootObject(es, name))
+        return Esther_getRootObject(es, name);
 
     return NULL;
 }

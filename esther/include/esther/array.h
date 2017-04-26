@@ -14,15 +14,15 @@ typedef struct Array {
     struct std_vector *data;
 } Array;
 
-#define as_array(obj) ((Array *)(obj))
+#define as_Array(obj) ((Array *)(obj))
 
-Object *Array_new(Esther *esther, size_t size, ...);
-Object *Array_new_init(Esther *esther, Object *const *data, size_t size);
-Object *Array_new_init_std(Esther *esther, struct std_vector *data);
+Object *Array_new(Esther *es, size_t size, ...);
+Object *Array_new_init(Esther *es, Object *const *data, size_t size);
+Object *Array_new_init_std(Esther *es, struct std_vector *data);
 
-void Array_init(Esther *esther, Object *self, Object *const *data, size_t size);
-void Array_init_std(Esther *esther, Object *self, struct std_vector *data);
-void Array_init_va(Esther *esther, Object *self, size_t size, va_list ap);
+void Array_init(Esther *es, Object *self, Object *const *data, size_t size);
+void Array_init_std(Esther *es, Object *self, struct std_vector *data);
+void Array_init_va(Esther *es, Object *self, size_t size, va_list ap);
 
 size_t Array_size(Object *self);
 
@@ -35,7 +35,7 @@ void Array_append_std(Object *self, struct std_vector *vector);
 void Array_push(Object *self, Object *value);
 Object *Array_pop(Object *self);
 
-Object *Array_virtual_inspect(Esther *esther, Object *self);
+Object *Array_virtual_inspect(Esther *es, Object *self);
 
 #ifdef __cplusplus
 }

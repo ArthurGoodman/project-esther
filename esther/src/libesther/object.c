@@ -10,18 +10,18 @@
 #include "esther/string.h"
 #include "esther/tuple.h"
 
-Object *Object_new(Esther *esther) {
-    return Object_new_init(esther, NULL);
+Object *Object_new(Esther *es) {
+    return Object_new_init(es, NULL);
 }
 
-Object *Object_new_init(Esther *esther, Object *objectClass) {
+Object *Object_new_init(Esther *es, Object *objectClass) {
     Object *self = malloc(sizeof(Object));
-    Object_init(esther, self, objectClass);
+    Object_init(es, self, objectClass);
     return self;
 }
 
-void Object_init(Esther *esther, Object *self, Object *objectClass) {
-    self->objectClass = objectClass == NULL ? esther->objectClass : objectClass;
+void Object_init(Esther *es, Object *self, Object *objectClass) {
+    self->objectClass = objectClass == NULL ? es->objectClass : objectClass;
     self->attributes = NULL;
 
     self->toString = Object_virtual_toString;
@@ -57,45 +57,45 @@ Object *Object_resolve(Object *self, const char *name) {
     return Object_hasAttribute(self, name) ? Object_getAttribute(self, name) : Class_lookup(self->objectClass, name);
 }
 
-Object *Object_call(Esther *esther, Object *self, const char *name, Object *args) {
+Object *Object_call(Esther *es, Object *self, const char *name, Object *args) {
     Object *f = Object_resolve(self, name);
 
     if (!f)
         return NULL;
 
-    return Object_call_function(esther, self, f, args);
+    return Object_call_function(es, self, f, args);
 }
 
-Object *Object_callIfFound(Esther *esther, Object *self, const char *name, Object *args) {
+Object *Object_callIfFound(Esther *es, Object *self, const char *name, Object *args) {
     Object *f = Object_resolve(self, name);
 
     if (!f)
         return NULL;
 
-    return Object_call_function(esther, self, f, args);
+    return Object_call_function(es, self, f, args);
 }
 
-Object *Object_call_function(Esther *esther, Object *self, Object *f, Object *args) {
-    if (Object_is(f, esther->functionClass))
-        return Function_invoke(esther, f, self, args);
+Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args) {
+    if (Object_is(f, es->functionClass))
+        return Function_invoke(es, f, self, args);
 
-    return Object_call(esther, f, "()", Tuple_new(esther, 2, self, args));
+    return Object_call(es, f, "()", Tuple_new(es, 2, self, args));
 }
 
-Object *Object_toString(Esther *esther, Object *self) {
-    return self->toString(esther, self);
+Object *Object_toString(Esther *es, Object *self) {
+    return self->toString(es, self);
 }
 
-Object *Object_virtual_toString(Esther *esther, Object *self) {
-    return String_new_std(esther, std_string_format("<%s:0x%lx>", Class_getName(self->objectClass), self));
+Object *Object_virtual_toString(Esther *es, Object *self) {
+    return String_new_std(es, std_string_format("<%s:0x%lx>", Class_getName(self->objectClass), self));
 }
 
-Object *Object_inspect(Esther *esther, Object *self) {
-    return self->inspect(esther, self);
+Object *Object_inspect(Esther *es, Object *self) {
+    return self->inspect(es, self);
 }
 
-bool Object_equals(Esther *esther, Object *self, Object *obj) {
-    return self->equals(esther, self, obj);
+bool Object_equals(Esther *es, Object *self, Object *obj) {
+    return self->equals(es, self, obj);
 }
 
 bool Object_virtual_equals(Esther *UNUSED(esther), Object *self, Object *obj) {

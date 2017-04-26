@@ -35,15 +35,15 @@ typedef struct Esther {
     struct std_map *rootObjects;
 } Esther;
 
-void Esther_init(Esther *self);
+void Esther_init(Esther *es);
 
-Object *Esther_toBoolean(Esther *self, bool value);
+Object *Esther_toBoolean(Esther *es, bool value);
 
-bool Esther_hasRootObject(Esther *self, const char *name);
-Object *Esther_getRootObject(Esther *self, const char *name);
-void Esther_setRootObject(Esther *self, const char *name, Object *value);
+bool Esther_hasRootObject(Esther *es, const char *name);
+Object *Esther_getRootObject(Esther *es, const char *name);
+void Esther_setRootObject(Esther *es, const char *name, Object *value);
 
-Object *Esther_eval(Esther *self, Object *ast, Context *context);
+Object *Esther_eval(Esther *es, Object *ast, Context *context);
 
 #ifdef __cplusplus
 }

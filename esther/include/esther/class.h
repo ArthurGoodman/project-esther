@@ -17,15 +17,15 @@ typedef struct Class {
     Object *superclass;
     struct std_map *methods;
 
-    Object *(*newInstance)(Esther *esther, Object *self, Object *args);
+    Object *(*newInstance)(Esther *es, Object *self, Object *args);
 } Class;
 
-#define as_class(obj) ((Class *)(obj))
+#define as_Class(obj) ((Class *)(obj))
 
-Object *Class_new(Esther *esther);
-Object *Class_new_init(Esther *esther, const char *name, Object *superclass);
+Object *Class_new(Esther *es);
+Object *Class_new_init(Esther *es, const char *name, Object *superclass);
 
-void Class_init(Esther *esther, Object *self, const char *name, Object *superclass);
+void Class_init(Esther *es, Object *self, const char *name, Object *superclass);
 
 const char *Class_getName(Object *self);
 
@@ -40,10 +40,10 @@ bool Class_isChildOf(Object *self, Object *_class);
 
 Object *Class_lookup(Object *self, const char *name);
 
-Object *Class_virtual_toString(Esther *esther, Object *self);
+Object *Class_virtual_toString(Esther *es, Object *self);
 
-Object *Class_newInstance(Esther *esther, Object *self, Object *args);
-Object *Class_virtual_newInstance(Esther *esther, Object *self, Object *args);
+Object *Class_newInstance(Esther *es, Object *self, Object *args);
+Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args);
 
 #ifdef __cplusplus
 }

@@ -1,114 +1,114 @@
 #include <esther.h>
 
-Object *print(Esther *esther, Object *self, Object *args) {
-    printf("%s\n", String_c_str(Object_toString(esther, self)));
-    printf("%s\n", String_c_str(Object_toString(esther, args)));
+Object *print(Esther *es, Object *self, Object *args) {
+    printf("%s\n", String_c_str(Object_toString(es, self)));
+    printf("%s\n", String_c_str(Object_toString(es, args)));
     return self;
 }
 
 int main(int UNUSED(argc), char **UNUSED(argv)) {
-    Esther e;
-    Esther_init(&e);
+    Esther es;
+    Esther_init(&es);
 
-    Object *_class = Class_new_init(&e, "A", NULL);
+    Object *_class = Class_new_init(&es, "A", NULL);
 
-    Object *m = Object_new(&e);
-    Object_setAttribute(m, "()", Function_new(&e, "()", (Object * (*)())print, -1));
+    Object *m = Object_new(&es);
+    Object_setAttribute(m, "()", Function_new(&es, "()", (Object * (*)())print, -1));
 
     Class_setMethod(_class, "m", m);
 
-    Object *obj = Class_newInstance(&e, _class, Tuple_new(&e, 0));
+    Object *obj = Class_newInstance(&es, _class, Tuple_new(&es, 0));
 
-    Object_call(&e, obj, "m", Tuple_new(&e, 2, String_new(&e, "arg1"), String_new(&e, "arg2")));
+    Object_call(&es, obj, "m", Tuple_new(&es, 2, String_new(&es, "arg1"), String_new(&es, "arg2")));
 
-    Object *symBrace = Symbol_new(&e, "{}");
-    Object *symClass = Symbol_new(&e, "class");
-    Object *symEq = Symbol_new(&e, "=");
-    Object *symSelf = Symbol_new(&e, "self");
-    Object *symAttr = Symbol_new(&e, "attr");
-    Object *symNew = Symbol_new(&e, "new");
-    Object *symFunction = Symbol_new(&e, "function");
-    Object *symCall = Symbol_new(&e, "call");
-    Object *symId = Symbol_new(&e, "id");
-    Object *symSharp = Symbol_new(&e, "#");
+    Object *symBrace = Symbol_new(&es, "{}");
+    Object *symClass = Symbol_new(&es, "class");
+    Object *symEq = Symbol_new(&es, "=");
+    Object *symSelf = Symbol_new(&es, "self");
+    Object *symAttr = Symbol_new(&es, "attr");
+    Object *symNew = Symbol_new(&es, "new");
+    Object *symFunction = Symbol_new(&es, "function");
+    Object *symCall = Symbol_new(&es, "call");
+    Object *symId = Symbol_new(&es, "id");
+    Object *symSharp = Symbol_new(&es, "#");
 
-    Object *ast = Tuple_new(&e, 2,
+    Object *ast = Tuple_new(&es, 2,
                             symBrace,
-                            Array_new(&e, 3,
-                                      Tuple_new(&e, 3,
+                            Array_new(&es, 3,
+                                      Tuple_new(&es, 3,
                                                 symClass,
-                                                String_new(&e, "A"),
-                                                Tuple_new(&e, 3,
+                                                String_new(&es, "A"),
+                                                Tuple_new(&es, 3,
                                                           symCall,
-                                                          Tuple_new(&e, 3,
+                                                          Tuple_new(&es, 3,
                                                                     symAttr,
-                                                                    Tuple_new(&e, 1,
+                                                                    Tuple_new(&es, 1,
                                                                               symSelf),
-                                                                    String_new(&e, "setMethod")),
-                                                          Array_new(&e, 2,
-                                                                    Tuple_new(&e, 2,
+                                                                    String_new(&es, "setMethod")),
+                                                          Array_new(&es, 2,
+                                                                    Tuple_new(&es, 2,
                                                                               symSharp,
-                                                                              String_new(&e, "m")),
-                                                                    Tuple_new(&e, 2,
+                                                                              String_new(&es, "m")),
+                                                                    Tuple_new(&es, 2,
                                                                               symNew,
-                                                                              Tuple_new(&e, 3,
+                                                                              Tuple_new(&es, 3,
                                                                                         symEq,
-                                                                                        Tuple_new(&e, 3,
+                                                                                        Tuple_new(&es, 3,
                                                                                                   symAttr,
-                                                                                                  Tuple_new(&e, 1,
+                                                                                                  Tuple_new(&es, 1,
                                                                                                             symSelf),
-                                                                                                  String_new(&e, "()")),
-                                                                                        Tuple_new(&e, 4,
+                                                                                                  String_new(&es, "()")),
+                                                                                        Tuple_new(&es, 4,
                                                                                                   symFunction,
-                                                                                                  String_new(&e, ""),
-                                                                                                  Array_new(&e, 2,
-                                                                                                            String_new(&e, "this"),
-                                                                                                            String_new(&e, "args")),
-                                                                                                  Tuple_new(&e, 3,
+                                                                                                  String_new(&es, ""),
+                                                                                                  Array_new(&es, 2,
+                                                                                                            String_new(&es, "this"),
+                                                                                                            String_new(&es, "args")),
+                                                                                                  Tuple_new(&es, 3,
                                                                                                             symCall,
-                                                                                                            Tuple_new(&e, 3,
+                                                                                                            Tuple_new(&es, 3,
                                                                                                                       symAttr,
-                                                                                                                      Tuple_new(&e, 2,
+                                                                                                                      Tuple_new(&es, 2,
                                                                                                                                 symId,
-                                                                                                                                String_new(&e, "IO")),
-                                                                                                                      String_new(&e, "writeLine")),
-                                                                                                            Array_new(&e, 2,
-                                                                                                                      Tuple_new(&e, 2,
+                                                                                                                                String_new(&es, "IO")),
+                                                                                                                      String_new(&es, "writeLine")),
+                                                                                                            Array_new(&es, 2,
+                                                                                                                      Tuple_new(&es, 2,
                                                                                                                                 symId,
-                                                                                                                                String_new(&e, "this")),
-                                                                                                                      Tuple_new(&e, 2,
+                                                                                                                                String_new(&es, "this")),
+                                                                                                                      Tuple_new(&es, 2,
                                                                                                                                 symId,
-                                                                                                                                String_new(&e, "args")))))))))),
-                                      Tuple_new(&e, 3,
+                                                                                                                                String_new(&es, "args")))))))))),
+                                      Tuple_new(&es, 3,
                                                 symEq,
-                                                Tuple_new(&e, 2,
+                                                Tuple_new(&es, 2,
                                                           symId,
-                                                          String_new(&e, "a")),
-                                                Tuple_new(&e, 3,
+                                                          String_new(&es, "a")),
+                                                Tuple_new(&es, 3,
                                                           symNew,
-                                                          Tuple_new(&e, 2,
+                                                          Tuple_new(&es, 2,
                                                                     symId,
-                                                                    String_new(&e, "A")),
-                                                          Array_new(&e, 0))),
-                                      Tuple_new(&e, 3,
+                                                                    String_new(&es, "A")),
+                                                          Array_new(&es, 0))),
+                                      Tuple_new(&es, 3,
                                                 symCall,
-                                                Tuple_new(&e, 3,
+                                                Tuple_new(&es, 3,
                                                           symAttr,
-                                                          Tuple_new(&e, 2,
+                                                          Tuple_new(&es, 2,
                                                                     symId,
-                                                                    String_new(&e, "a")),
-                                                          String_new(&e, "m")),
-                                                Array_new(&e, 2,
-                                                          Tuple_new(&e, 2,
+                                                                    String_new(&es, "a")),
+                                                          String_new(&es, "m")),
+                                                Array_new(&es, 2,
+                                                          Tuple_new(&es, 2,
                                                                     symSharp,
-                                                                    String_new(&e, "arg1")),
-                                                          Tuple_new(&e, 2,
+                                                                    String_new(&es, "arg1")),
+                                                          Tuple_new(&es, 2,
                                                                     symSharp,
-                                                                    String_new(&e, "arg2"))))));
+                                                                    String_new(&es, "arg2"))))));
 
-    printf("%s\n", String_c_str(Object_toString(&e, ast)));
+    printf("%s\n", String_c_str(Object_toString(&es, ast)));
 
-    Esther_eval(&e, ast, e.root);
+    Esther_eval(&es, ast, es.root);
 
     return 0;
 }
