@@ -13,20 +13,22 @@ typedef struct ValueObject {
     Variant value;
 } ValueObject;
 
-ValueObject *ValueObject_new_char(Esther *esther, char value);
-ValueObject *ValueObject_new_int(Esther *esther, int value);
-ValueObject *ValueObject_new_real(Esther *esther, double value);
-ValueObject *ValueObject_new_var(Esther *esther, Variant value);
+#define as_valueObject(obj) ((ValueObject *)obj)
 
-void ValueObject_init(Esther *esther, ValueObject *self, Variant value);
+Object *ValueObject_new_char(Esther *esther, char value);
+Object *ValueObject_new_int(Esther *esther, int value);
+Object *ValueObject_new_real(Esther *esther, double value);
+Object *ValueObject_new_var(Esther *esther, Variant value);
 
-Variant ValueObject_getValue(ValueObject *self);
+void ValueObject_init(Esther *esther, Object *self, Variant value);
 
-String *ValueObject_virtual_toString(Esther *esther, Object *self);
+Variant ValueObject_getValue(Object *self);
+
+Object *ValueObject_virtual_toString(Esther *esther, Object *self);
 
 bool ValueObject_virtual_equals(Esther *esther, Object *self, Object *obj);
 
-Class *ValueObject_variantTypeToObjectClass(Esther *esther, VariantType type);
+Object *ValueObject_variantTypeToObjectClass(Esther *esther, VariantType type);
 
 #ifdef __cplusplus
 }

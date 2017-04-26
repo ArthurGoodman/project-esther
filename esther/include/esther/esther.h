@@ -9,19 +9,19 @@ extern "C" {
 typedef struct Context Context;
 
 typedef struct Esther {
-    Class *objectClass;
-    Class *classClass;
-    Class *stringClass;
-    Class *symbolClass;
-    Class *functionClass;
-    Class *tupleClass;
-    Class *arrayClass;
-    Class *booleanClass;
-    Class *nullClass;
-    Class *numericClass;
-    Class *charClass;
-    Class *intClass;
-    Class *floatClass;
+    Object *objectClass;
+    Object *classClass;
+    Object *stringClass;
+    Object *symbolClass;
+    Object *functionClass;
+    Object *tupleClass;
+    Object *arrayClass;
+    Object *booleanClass;
+    Object *nullClass;
+    Object *numericClass;
+    Object *charClass;
+    Object *intClass;
+    Object *floatClass;
 
     Object *trueObject;
     Object *falseObject;

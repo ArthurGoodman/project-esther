@@ -16,15 +16,17 @@ typedef struct Function {
     int argc;
 } Function;
 
-Function *Function_new(Esther *esther, const char *name, Object *(*body)(), int argc);
+#define as_function(obj) ((Function *)(obj))
 
-void Function_init(Esther *esther, Function *self, const char *name, Object *(*body)(), int argc);
+Object *Function_new(Esther *esther, const char *name, Object *(*body)(), int argc);
 
-const char *Function_getName(Function *self);
+void Function_init(Esther *esther, Object *self, const char *name, Object *(*body)(), int argc);
 
-Object *Function_invoke(Esther *esther, Function *self, Object *selfObject, Tuple *args);
+const char *Function_getName(Object *self);
 
-String *Function_virtual_toString(Esther *esther, Object *self);
+Object *Function_invoke(Esther *esther, Object *self, Object *selfObject, Object *args);
+
+Object *Function_virtual_toString(Esther *esther, Object *self);
 
 typedef struct InterpretedFunction {
     Function base;
@@ -34,7 +36,9 @@ typedef struct InterpretedFunction {
     Object *body;
 } InterpretedFunction;
 
-Function *InterpretedFunction_new(Esther *esther, const char *name, int argc, const char **params, Context *closure, Object *body);
+#define as_interpretedFunction(obj) ((InterpretedFunction *)(obj))
+
+Object *InterpretedFunction_new(Esther *esther, const char *name, int argc, const char **params, Context *closure, Object *body);
 
 #ifdef __cplusplus
 }

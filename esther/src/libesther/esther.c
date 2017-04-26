@@ -11,93 +11,93 @@
 #include "esther/tuple.h"
 #include "esther/valueobject.h"
 
-static Object *ObjectClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
+static Object *ObjectClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
     return Object_new(esther);
 }
 
-static Object *ClassClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)Class_new(esther);
+static Object *ClassClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
+    return Class_new(esther);
 }
 
-static Object *StringClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)String_new(esther, "");
+static Object *StringClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
+    return String_new(esther, "");
 }
 
-static Object *SymbolClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)Symbol_new(esther, "");
+static Object *SymbolClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
+    return Symbol_new(esther, "");
 }
 
-static Object *FunctionClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self), Tuple *UNUSED(args)) {
+static Object *FunctionClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
-static Object *TupleClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)Tuple_new(esther, 0);
+static Object *TupleClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
+    return Tuple_new(esther, 0);
 }
 
-static Object *ArrayClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
-    return (Object *)Array_new(esther, 0);
+static Object *ArrayClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
+    return Array_new(esther, 0);
 }
 
-static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self), Tuple *UNUSED(args)) {
+static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
-static Object *NullClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self), Tuple *UNUSED(args)) {
+static Object *NullClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
-static Object *NumericClass_virtual_newInstance(Esther *UNUSED(esther), Class *UNUSED(self), Tuple *UNUSED(args)) {
+static Object *NumericClass_virtual_newInstance(Esther *UNUSED(esther), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
-static Object *CharClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *args) {
+static Object *CharClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *args) {
     if (Tuple_size(args) == 0)
-        return (Object *)ValueObject_new_char(esther, '\0');
+        return ValueObject_new_char(esther, '\0');
 
     if (Tuple_size(args) == 1) {
         if (!Object_is(Tuple_get(args, 0), esther->numericClass))
             return NULL;
 
-        return (Object *)ValueObject_new_char(esther, Variant_toChar(((ValueObject *)Tuple_get(args, 0))->value));
+        return ValueObject_new_char(esther, Variant_toChar(as_valueObject(Tuple_get(args, 0))->value));
     }
 
     return NULL;
 }
 
-static Object *IntClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
+static Object *IntClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
     if (Tuple_size(args) == 0)
-        return (Object *)ValueObject_new_int(esther, 0);
+        return ValueObject_new_int(esther, 0);
 
     if (Tuple_size(args) == 1) {
         if (!Object_is(Tuple_get(args, 0), esther->numericClass))
             return NULL;
 
-        return (Object *)ValueObject_new_int(esther, Variant_toInt(((ValueObject *)Tuple_get(args, 0))->value));
+        return ValueObject_new_int(esther, Variant_toInt(as_valueObject(Tuple_get(args, 0))->value));
     }
 
     return NULL;
 }
 
-static Object *FloatClass_virtual_newInstance(Esther *esther, Class *UNUSED(self), Tuple *UNUSED(args)) {
+static Object *FloatClass_virtual_newInstance(Esther *esther, Object *UNUSED(self), Object *UNUSED(args)) {
     if (Tuple_size(args) == 0)
-        return (Object *)ValueObject_new_real(esther, 0.0);
+        return ValueObject_new_real(esther, 0.0);
 
     if (Tuple_size(args) == 1) {
         if (!Object_is(Tuple_get(args, 0), esther->numericClass))
             return NULL;
 
-        return (Object *)ValueObject_new_real(esther, Variant_toReal(((ValueObject *)Tuple_get(args, 0))->value));
+        return ValueObject_new_real(esther, Variant_toReal(as_valueObject(Tuple_get(args, 0))->value));
     }
 
     return NULL;
 }
 
-static String *True_virtual_toString(Esther *esther, Object *UNUSED(self)) {
+static Object *True_virtual_toString(Esther *esther, Object *UNUSED(self)) {
     return String_new(esther, "true");
 }
 
-static String *False_virtual_toString(Esther *esther, Object *UNUSED(self)) {
+static Object *False_virtual_toString(Esther *esther, Object *UNUSED(self)) {
     return String_new(esther, "false");
 }
 
@@ -105,12 +105,12 @@ static bool False_virtual_isTrue() {
     return false;
 }
 
-static String *Null_virtual_toString(Esther *esther, Object *UNUSED(self)) {
+static Object *Null_virtual_toString(Esther *esther, Object *UNUSED(self)) {
     return String_new(esther, "null");
 }
 
 static Object *ObjectClass_class(Esther *UNUSED(esther), Object *self) {
-    return (Object *)Object_getClass(self);
+    return Object_getClass(self);
 }
 
 static Object *ObjectClass_equals(Esther *esther, Object *self, Object *obj) {
@@ -118,71 +118,71 @@ static Object *ObjectClass_equals(Esther *esther, Object *self, Object *obj) {
 }
 
 static Object *ClassClass_superclass(Esther *UNUSED(esther), Object *self) {
-    return (Object *)Class_getSuperclass((Class *)self);
+    return Class_getSuperclass(self);
 }
 
-static Object *ClassClass_hasMethod(Esther *esther, Class *self, String *name) {
+static Object *ClassClass_hasMethod(Esther *esther, Object *self, Object *name) {
     return Esther_toBoolean(esther, Class_hasMethod(self, String_c_str(name)));
 }
 
-static Object *ClassClass_getMethod(Esther *UNUSED(esther), Class *self, String *name) {
+static Object *ClassClass_getMethod(Esther *UNUSED(esther), Object *self, Object *name) {
     return Class_getMethod(self, String_c_str(name));
 }
 
-static Object *ClassClass_setMethod(Esther *UNUSED(esther), Class *self, String *name, Object *method) {
+static Object *ClassClass_setMethod(Esther *UNUSED(esther), Object *self, Object *name, Object *method) {
     Class_setMethod(self, String_c_str(name), method);
     return method;
 }
 
-static Object *NumericClass_add(Esther *esther, ValueObject *a, ValueObject *b) {
-    return (Object *)ValueObject_new_var(esther, Variant_add(ValueObject_getValue(a), ValueObject_getValue(b)));
+static Object *NumericClass_add(Esther *esther, Object *a, Object *b) {
+    return ValueObject_new_var(esther, Variant_add(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_sub(Esther *esther, ValueObject *a, ValueObject *b) {
-    return (Object *)ValueObject_new_var(esther, Variant_sub(ValueObject_getValue(a), ValueObject_getValue(b)));
+static Object *NumericClass_sub(Esther *esther, Object *a, Object *b) {
+    return ValueObject_new_var(esther, Variant_sub(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_mul(Esther *esther, ValueObject *a, ValueObject *b) {
-    return (Object *)ValueObject_new_var(esther, Variant_mul(ValueObject_getValue(a), ValueObject_getValue(b)));
+static Object *NumericClass_mul(Esther *esther, Object *a, Object *b) {
+    return ValueObject_new_var(esther, Variant_mul(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_div(Esther *esther, ValueObject *a, ValueObject *b) {
-    return (Object *)ValueObject_new_var(esther, Variant_div(ValueObject_getValue(a), ValueObject_getValue(b)));
+static Object *NumericClass_div(Esther *esther, Object *a, Object *b) {
+    return ValueObject_new_var(esther, Variant_div(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_mod(Esther *esther, ValueObject *a, ValueObject *b) {
-    return (Object *)ValueObject_new_var(esther, Variant_mod(ValueObject_getValue(a), ValueObject_getValue(b)));
+static Object *NumericClass_mod(Esther *esther, Object *a, Object *b) {
+    return ValueObject_new_var(esther, Variant_mod(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_pow(Esther *esther, ValueObject *a, ValueObject *b) {
-    return (Object *)ValueObject_new_var(esther, Variant_pow(ValueObject_getValue(a), ValueObject_getValue(b)));
+static Object *NumericClass_pow(Esther *esther, Object *a, Object *b) {
+    return ValueObject_new_var(esther, Variant_pow(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_lt(Esther *esther, ValueObject *a, ValueObject *b) {
+static Object *NumericClass_lt(Esther *esther, Object *a, Object *b) {
     return Esther_toBoolean(esther, Variant_lt(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_gt(Esther *esther, ValueObject *a, ValueObject *b) {
+static Object *NumericClass_gt(Esther *esther, Object *a, Object *b) {
     return Esther_toBoolean(esther, Variant_gt(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_lte(Esther *esther, ValueObject *a, ValueObject *b) {
+static Object *NumericClass_lte(Esther *esther, Object *a, Object *b) {
     return Esther_toBoolean(esther, Variant_lte(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_gte(Esther *esther, ValueObject *a, ValueObject *b) {
+static Object *NumericClass_gte(Esther *esther, Object *a, Object *b) {
     return Esther_toBoolean(esther, Variant_gte(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_eq(Esther *esther, ValueObject *a, ValueObject *b) {
+static Object *NumericClass_eq(Esther *esther, Object *a, Object *b) {
     return Esther_toBoolean(esther, Variant_eq(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *NumericClass_ne(Esther *esther, ValueObject *a, ValueObject *b) {
+static Object *NumericClass_ne(Esther *esther, Object *a, Object *b) {
     return Esther_toBoolean(esther, Variant_ne(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
-static Object *IO_write(Esther *esther, Object *self, Tuple *args) {
+static Object *IO_write(Esther *esther, Object *self, Object *args) {
     if (Tuple_size(args) == 0)
         printf("%s", String_c_str(Object_toString(esther, self)));
     else
@@ -192,7 +192,7 @@ static Object *IO_write(Esther *esther, Object *self, Tuple *args) {
     return esther->nullObject;
 }
 
-static Object *IO_writeLine(Esther *esther, Object *self, Tuple *args) {
+static Object *IO_writeLine(Esther *esther, Object *self, Object *args) {
     if (Tuple_size(args) == 0)
         printf("%s\n", String_c_str(Object_toString(esther, self)));
     else
@@ -204,46 +204,46 @@ static Object *IO_writeLine(Esther *esther, Object *self, Tuple *args) {
 
 void Esther_init(Esther *self) {
     self->classClass = Class_new_init(self, "Class", NULL);
-    self->classClass->base.objectClass = self->classClass;
-    self->classClass->newInstance = ClassClass_virtual_newInstance;
+    as_class(self->classClass)->base.objectClass = self->classClass;
+    as_class(self->classClass)->newInstance = ClassClass_virtual_newInstance;
 
     self->objectClass = NULL;
     self->objectClass = Class_new_init(self, "Object", NULL);
-    self->classClass->superclass = self->objectClass;
-    self->objectClass->newInstance = ObjectClass_virtual_newInstance;
+    as_class(self->classClass)->superclass = self->objectClass;
+    as_class(self->objectClass)->newInstance = ObjectClass_virtual_newInstance;
 
     self->stringClass = Class_new_init(self, "String", NULL);
-    self->stringClass->newInstance = StringClass_virtual_newInstance;
+    as_class(self->stringClass)->newInstance = StringClass_virtual_newInstance;
 
     self->symbolClass = Class_new_init(self, "Symbol", NULL);
-    self->symbolClass->newInstance = SymbolClass_virtual_newInstance;
+    as_class(self->symbolClass)->newInstance = SymbolClass_virtual_newInstance;
 
     self->functionClass = Class_new_init(self, "Function", NULL);
-    self->functionClass->newInstance = FunctionClass_virtual_newInstance;
+    as_class(self->functionClass)->newInstance = FunctionClass_virtual_newInstance;
 
     self->tupleClass = Class_new_init(self, "Tuple", NULL);
-    self->tupleClass->newInstance = TupleClass_virtual_newInstance;
+    as_class(self->tupleClass)->newInstance = TupleClass_virtual_newInstance;
 
     self->arrayClass = Class_new_init(self, "Array", NULL);
-    self->arrayClass->newInstance = ArrayClass_virtual_newInstance;
+    as_class(self->arrayClass)->newInstance = ArrayClass_virtual_newInstance;
 
     self->booleanClass = Class_new_init(self, "Boolean", NULL);
-    self->booleanClass->newInstance = BooleanClass_virtual_newInstance;
+    as_class(self->booleanClass)->newInstance = BooleanClass_virtual_newInstance;
 
     self->nullClass = Class_new_init(self, "Null", NULL);
-    self->nullClass->newInstance = NullClass_virtual_newInstance;
+    as_class(self->nullClass)->newInstance = NullClass_virtual_newInstance;
 
     self->numericClass = Class_new_init(self, "Numeric", NULL);
-    self->numericClass->newInstance = NumericClass_virtual_newInstance;
+    as_class(self->numericClass)->newInstance = NumericClass_virtual_newInstance;
 
     self->charClass = Class_new_init(self, "Char", self->numericClass);
-    self->charClass->newInstance = CharClass_virtual_newInstance;
+    as_class(self->charClass)->newInstance = CharClass_virtual_newInstance;
 
     self->intClass = Class_new_init(self, "Int", self->numericClass);
-    self->intClass->newInstance = IntClass_virtual_newInstance;
+    as_class(self->intClass)->newInstance = IntClass_virtual_newInstance;
 
     self->floatClass = Class_new_init(self, "Float", self->numericClass);
-    self->floatClass->newInstance = FloatClass_virtual_newInstance;
+    as_class(self->floatClass)->newInstance = FloatClass_virtual_newInstance;
 
     self->trueObject = Object_new(self);
     self->trueObject->objectClass = self->booleanClass;
@@ -289,26 +289,26 @@ void Esther_init(Esther *self) {
 
     self->io = Object_new(self);
 
-    Object_setAttribute(self->io, "write", (Object *)Function_new(self, "write", (Object * (*)())IO_write, -1));
-    Object_setAttribute(self->io, "writeLine", (Object *)Function_new(self, "writeLine", (Object * (*)())IO_writeLine, -1));
+    Object_setAttribute(self->io, "write", Function_new(self, "write", (Object * (*)())IO_write, -1));
+    Object_setAttribute(self->io, "writeLine", Function_new(self, "writeLine", (Object * (*)())IO_writeLine, -1));
 
     self->root = Context_new(self);
 
     self->rootObjects = std_map_new(string_compare);
 
-    Esther_setRootObject(self, "Object", (Object *)self->objectClass);
-    Esther_setRootObject(self, "Class", (Object *)self->classClass);
-    Esther_setRootObject(self, "String", (Object *)self->stringClass);
-    Esther_setRootObject(self, "Symbol", (Object *)self->symbolClass);
-    Esther_setRootObject(self, "Function", (Object *)self->functionClass);
-    Esther_setRootObject(self, "Tuple", (Object *)self->tupleClass);
-    Esther_setRootObject(self, "Array", (Object *)self->arrayClass);
-    Esther_setRootObject(self, "Boolean", (Object *)self->booleanClass);
-    Esther_setRootObject(self, "Null", (Object *)self->nullClass);
-    Esther_setRootObject(self, "Numeric", (Object *)self->numericClass);
-    Esther_setRootObject(self, "Char", (Object *)self->charClass);
-    Esther_setRootObject(self, "Int", (Object *)self->intClass);
-    Esther_setRootObject(self, "Float", (Object *)self->floatClass);
+    Esther_setRootObject(self, "Object", self->objectClass);
+    Esther_setRootObject(self, "Class", self->classClass);
+    Esther_setRootObject(self, "String", self->stringClass);
+    Esther_setRootObject(self, "Symbol", self->symbolClass);
+    Esther_setRootObject(self, "Function", self->functionClass);
+    Esther_setRootObject(self, "Tuple", self->tupleClass);
+    Esther_setRootObject(self, "Array", self->arrayClass);
+    Esther_setRootObject(self, "Boolean", self->booleanClass);
+    Esther_setRootObject(self, "Null", self->nullClass);
+    Esther_setRootObject(self, "Numeric", self->numericClass);
+    Esther_setRootObject(self, "Char", self->charClass);
+    Esther_setRootObject(self, "Int", self->intClass);
+    Esther_setRootObject(self, "Float", self->floatClass);
 
     Esther_setRootObject(self, "IO", self->io);
 }
@@ -322,7 +322,7 @@ bool Esther_hasRootObject(Esther *self, const char *name) {
 }
 
 Object *Esther_getRootObject(Esther *self, const char *name) {
-    return (Object *)std_map_get(self->rootObjects, name);
+    return std_map_get(self->rootObjects, name);
 }
 
 void Esther_setRootObject(Esther *self, const char *name, Object *value) {
@@ -330,15 +330,25 @@ void Esther_setRootObject(Esther *self, const char *name, Object *value) {
 }
 
 Object *Esther_eval(Esther *self, Object *ast, Context *context) {
-    Tuple *t = (Tuple *)ast;
+    Id id_brace = stringToId("{}");
+    Id id_class = stringToId("class");
+    Id id_eq = stringToId("=");
+    Id id_self = stringToId("self");
+    Id id_attr = stringToId("attr");
+    Id id_new = stringToId("new");
+    Id id_function = stringToId("function");
+    Id id_call = stringToId("call");
+    Id id_id = stringToId("id");
+    Id id_sharp = stringToId("#");
+    Id id_dot = stringToId(".");
 
-    if (Tuple_size(t) == 0)
+    if (Tuple_size(ast) == 0)
         return self->nullObject;
 
-    const char *str = idToString(Symbol_getId((Symbol *)Tuple_get(t, 0)));
+    Id id = Symbol_getId(Tuple_get(ast, 0));
 
-    if (strcmp(str, "{}") == 0) {
-        Array *nodes = (Array *)Tuple_get(t, 1);
+    if (id == id_brace) {
+        Object *nodes = Tuple_get(ast, 1);
 
         Object *value = self->nullObject;
 
@@ -346,100 +356,96 @@ Object *Esther_eval(Esther *self, Object *ast, Context *context) {
             value = Esther_eval(self, Array_get(nodes, i), context);
 
         return value;
-    } else if (strcmp(str, "class") == 0) {
-        const char *name = String_c_str((String *)Tuple_get(t, 1));
-        Class *_class = Class_new_init(self, name, NULL);
+    } else if (id == id_class) {
+        const char *name = String_c_str(Tuple_get(ast, 1));
+        Object *_class = Class_new_init(self, name, NULL);
 
-        Context *child = Context_childContext(context, (Object *)_class, Object_new(self));
-        Esther_eval(self, Tuple_get(t, 2), child);
+        Context *child = Context_childContext(context, _class, Object_new(self));
+        Esther_eval(self, Tuple_get(ast, 2), child);
 
         if (strlen(name) > 0)
-            Context_setLocal(context, name, (Object *)_class);
+            Context_setLocal(context, name, _class);
 
-        return (Object *)_class;
-    } else if (strcmp(str, "=") == 0) {
-        Tuple *f = (Tuple *)Tuple_get(t, 1);
-        const char *sym = idToString(Symbol_getId((Symbol *)Tuple_get(f, 0)));
+        return _class;
+    } else if (id == id_eq) {
+        Object *child = Tuple_get(ast, 1);
+        Id childId = Symbol_getId(Tuple_get(child, 0));
 
-        Object *value = Esther_eval(self, Tuple_get(t, 2), context);
+        Object *value = Esther_eval(self, Tuple_get(ast, 2), context);
 
-        if (strcmp(sym, "attr") == 0) {
-            Object *evaledSelf = Esther_eval(self, Tuple_get(f, 1), context);
-            Object_setAttribute(evaledSelf, String_c_str((String *)Tuple_get(f, 2)), value);
-        } else if (strcmp(sym, "id") == 0) {
-            const char *name = String_c_str((String *)Tuple_get(f, 1));
+        if (childId == id_attr)
+            Object_setAttribute(Esther_eval(self, Tuple_get(child, 1), context), String_c_str(Tuple_get(child, 2)), value);
+        else if (childId == id_id) {
+            const char *name = String_c_str(Tuple_get(child, 1));
 
             if (!Context_assign(context, name, value))
                 Context_setLocal(context, name, value);
-        } else
-            return NULL;
+        }
 
         return value;
-    } else if (strcmp(str, "self") == 0) {
+    } else if (id == id_self) {
         return Context_getSelf(context);
-    } else if (strcmp(str, "attr") == 0) {
-        Object *evaledSelf = Esther_eval(self, Tuple_get(t, 1), context);
-        return Object_getAttribute(evaledSelf, String_c_str((String *)Tuple_get(t, 2)));
-    } else if (strcmp(str, "new") == 0) {
-        if (Tuple_size(t) == 3) {
-            Object *evaledSelf = Esther_eval(self, Tuple_get(t, 1), context);
+    } else if (id == id_attr) {
+        Object *evaledSelf = Esther_eval(self, Tuple_get(ast, 1), context);
+        return Object_getAttribute(evaledSelf, String_c_str(Tuple_get(ast, 2)));
+    } else if (id == id_new) {
+        if (Tuple_size(ast) == 3) {
+            Object *evaledSelf = Esther_eval(self, Tuple_get(ast, 1), context);
             return Object_call(self, evaledSelf, "new", Tuple_new(self, 0));
         } else {
             Object *newObject = Object_new(self);
-            Esther_eval(self, Tuple_get(t, 1), Context_childContext(context, newObject, Object_new(self)));
+            Esther_eval(self, Tuple_get(ast, 1), Context_childContext(context, newObject, Object_new(self)));
             return newObject;
         }
-    } else if (strcmp(str, "function") == 0) {
-        Array *array = (Array *)Tuple_get(t, 2);
+    } else if (id == id_function) {
+        Object *array = Tuple_get(ast, 2);
         int argc = Array_size(array);
 
         const char **params = malloc(argc * sizeof(const char *));
 
         for (int i = 0; i < argc; i++)
-            params[i] = strdup(String_c_str((String *)Array_get(array, i)));
+            params[i] = strdup(String_c_str(Array_get(array, i)));
 
-        Function *f = InterpretedFunction_new(self, String_c_str((String *)Tuple_get(t, 1)), argc, params, context, Tuple_get(t, 3));
+        Object *f = InterpretedFunction_new(self, String_c_str(Tuple_get(ast, 1)), argc, params, context, Tuple_get(ast, 3));
 
         free(params);
 
-        return (Object *)f;
-    } else if (strcmp(str, "call") == 0) {
-        Object *evaledSelf = NULL;
-        Object *evaledF = NULL;
+        return f;
+    } else if (id == id_call) {
+        Object *evaledSelf;
+        Object *evaledF;
 
-        Tuple *f = (Tuple *)Tuple_get(t, 1);
-        const char *sym = idToString(Symbol_getId((Symbol *)Tuple_get(f, 0)));
+        Object *child = Tuple_get(ast, 1);
+        Id childId = Symbol_getId(Tuple_get(child, 0));
 
-        if (strcmp(sym, "attr") == 0) {
-            evaledSelf = Esther_eval(self, Tuple_get(f, 1), context);
-            evaledF = Object_resolve(evaledSelf, String_c_str((String *)Tuple_get(f, 2)));
-        } else if (strcmp(sym, ".") == 0) {
-            evaledSelf = Esther_eval(self, Tuple_get(f, 1), context);
-            evaledF = Esther_eval(self, Tuple_get(f, 2), Context_childContext(context, evaledSelf, Object_new(self)));
+        if (childId == id_attr) {
+            evaledSelf = Esther_eval(self, Tuple_get(child, 1), context);
+            evaledF = Object_resolve(evaledSelf, String_c_str(Tuple_get(child, 2)));
+        } else if (childId == id_dot) {
+            evaledSelf = Esther_eval(self, Tuple_get(child, 1), context);
+            evaledF = Esther_eval(self, Tuple_get(child, 2), Context_childContext(context, evaledSelf, Object_new(self)));
         } else {
             evaledSelf = Context_getSelf(context);
-            evaledF = Esther_eval(self, (Object *)f, context);
+            evaledF = Esther_eval(self, child, context);
         }
 
-        Array *args = (Array *)Tuple_get(t, 2);
+        Object *args = Tuple_get(ast, 2);
 
-        Tuple *evaledArgs = Tuple_new_init_null(self, Array_size(args));
+        Object *evaledArgs = Tuple_new_init_null(self, Array_size(args));
 
         for (size_t i = 0; i < Array_size(args); i++)
             Tuple_set(evaledArgs, i, Esther_eval(self, Array_get(args, i), context));
 
         return Object_call_function(self, evaledSelf, evaledF, evaledArgs);
-    } else if (strcmp(str, "id") == 0) {
-        return Context_resolve(self, context, String_c_str((String *)Tuple_get(t, 1)));
-    } else if (strcmp(str, "#") == 0) {
-        Object *value = Tuple_get(t, 1);
+    } else if (id == id_id) {
+        return Context_resolve(self, context, String_c_str(Tuple_get(ast, 1)));
+    } else if (id == id_sharp) {
+        Object *value = Tuple_get(ast, 1);
 
         if (Object_is(value, self->numericClass))
-            return (Object *)ValueObject_new_var(self, ValueObject_getValue((ValueObject *)value));
+            return ValueObject_new_var(self, ValueObject_getValue(value));
         else if (Object_is(value, self->stringClass))
-            return (Object *)String_new(self, String_c_str((String *)value));
-        else
-            return NULL;
+            return String_new(self, String_c_str(value));
     }
 
     return self->nullObject;

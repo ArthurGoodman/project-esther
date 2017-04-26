@@ -13,14 +13,16 @@ typedef struct Symbol {
     Id id;
 } Symbol;
 
-Symbol *Symbol_new(Esther *esther, const char *name);
+#define as_symbol(obj) ((Symbol *)(obj))
 
-void Symbol_init(Esther *esther, Symbol *symbol, const char *name);
+Object *Symbol_new(Esther *esther, const char *name);
 
-Id Symbol_getId(Symbol *self);
+void Symbol_init(Esther *esther, Object *symbol, const char *name);
 
-String *Symbol_virtual_toString(Esther *esther, Object *self);
-String *Symbol_virtual_inspect(Esther *esther, Object *self);
+Id Symbol_getId(Object *self);
+
+Object *Symbol_virtual_toString(Esther *esther, Object *self);
+Object *Symbol_virtual_inspect(Esther *esther, Object *self);
 
 #ifdef __cplusplus
 }

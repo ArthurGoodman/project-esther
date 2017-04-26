@@ -14,34 +14,36 @@ typedef struct Class {
     Object base;
 
     const char *name;
-    Class *superclass;
+    Object *superclass;
     struct std_map *methods;
 
-    Object *(*newInstance)(Esther *esther, Class *self, Tuple *args);
+    Object *(*newInstance)(Esther *esther, Object *self, Object *args);
 } Class;
 
-Class *Class_new(Esther *esther);
-Class *Class_new_init(Esther *esther, const char *name, Class *superclass);
+#define as_class(obj) ((Class *)(obj))
 
-void Class_init(Esther *esther, Class *self, const char *name, Class *superclass);
+Object *Class_new(Esther *esther);
+Object *Class_new_init(Esther *esther, const char *name, Object *superclass);
 
-const char *Class_getName(Class *self);
+void Class_init(Esther *esther, Object *self, const char *name, Object *superclass);
 
-Class *Class_getSuperclass(Class *self);
+const char *Class_getName(Object *self);
 
-bool Class_hasMethod(Class *self, const char *name);
-Object *Class_getMethod(Class *self, const char *name);
-void Class_setMethod(Class *self, const char *name, Object *method);
-void Class_setMethod_func(Class *self, Function *f);
+Object *Class_getSuperclass(Object *self);
 
-bool Class_isChildOf(Class *self, Class *_class);
+bool Class_hasMethod(Object *self, const char *name);
+Object *Class_getMethod(Object *self, const char *name);
+void Class_setMethod(Object *self, const char *name, Object *method);
+void Class_setMethod_func(Object *self, Object *f);
 
-Object *Class_lookup(Class *self, const char *name);
+bool Class_isChildOf(Object *self, Object *_class);
 
-String *Class_virtual_toString(Esther *esther, Object *self);
+Object *Class_lookup(Object *self, const char *name);
 
-Object *Class_newInstance(Esther *esther, Class *self, Tuple *args);
-Object *Class_virtual_newInstance(Esther *esther, Class *self, Tuple *args);
+Object *Class_virtual_toString(Esther *esther, Object *self);
+
+Object *Class_newInstance(Esther *esther, Object *self, Object *args);
+Object *Class_virtual_newInstance(Esther *esther, Object *self, Object *args);
 
 #ifdef __cplusplus
 }

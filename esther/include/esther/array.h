@@ -14,26 +14,28 @@ typedef struct Array {
     struct std_vector *data;
 } Array;
 
-Array *Array_new(Esther *esther, size_t size, ...);
-Array *Array_new_init(Esther *esther, Object *const *data, size_t size);
-Array *Array_new_init_std(Esther *esther, struct std_vector *data);
+#define as_array(obj) ((Array *)(obj))
 
-void Array_init(Esther *esther, Array *self, Object *const *data, size_t size);
-void Array_init_std(Esther *esther, Array *self, struct std_vector *data);
-void Array_init_va(Esther *esther, Array *self, size_t size, va_list ap);
+Object *Array_new(Esther *esther, size_t size, ...);
+Object *Array_new_init(Esther *esther, Object *const *data, size_t size);
+Object *Array_new_init_std(Esther *esther, struct std_vector *data);
 
-size_t Array_size(Array *self);
+void Array_init(Esther *esther, Object *self, Object *const *data, size_t size);
+void Array_init_std(Esther *esther, Object *self, struct std_vector *data);
+void Array_init_va(Esther *esther, Object *self, size_t size, va_list ap);
 
-Object *Array_get(Array *self, size_t index);
-void Array_set(Array *self, size_t index, Object *value);
+size_t Array_size(Object *self);
 
-void Array_append(Array *self, Array *array);
-void Array_append_std(Array *self, struct std_vector *vector);
+Object *Array_get(Object *self, size_t index);
+void Array_set(Object *self, size_t index, Object *value);
 
-void Array_push(Array *self, Object *value);
-Object *Array_pop(Array *self);
+void Array_append(Object *self, Object *array);
+void Array_append_std(Object *self, struct std_vector *vector);
 
-String *Array_virtual_inspect(Esther *esther, Object *self);
+void Array_push(Object *self, Object *value);
+Object *Array_pop(Object *self);
+
+Object *Array_virtual_inspect(Esther *esther, Object *self);
 
 #ifdef __cplusplus
 }

@@ -7,71 +7,71 @@
 #include "esther/std_string.h"
 #include "esther/string.h"
 
-Class *Class_new(Esther *esther) {
+Object *Class_new(Esther *esther) {
     return Class_new_init(esther, "", NULL);
 }
 
-Class *Class_new_init(Esther *esther, const char *name, Class *superclass) {
-    Class *self = malloc(sizeof(Class));
+Object *Class_new_init(Esther *esther, const char *name, Object *superclass) {
+    Object *self = malloc(sizeof(Class));
     Class_init(esther, self, name, superclass);
     return self;
 }
 
-void Class_init(Esther *esther, Class *self, const char *name, Class *superclass) {
-    Object_init(esther, &self->base, esther->classClass);
+void Class_init(Esther *esther, Object *self, const char *name, Object *superclass) {
+    Object_init(esther, self, esther->classClass);
 
-    self->name = strdup(name);
-    self->superclass = superclass ? superclass : esther->objectClass;
-    self->methods = NULL;
+    as_class(self)->name = strdup(name);
+    as_class(self)->superclass = superclass ? superclass : esther->objectClass;
+    as_class(self)->methods = NULL;
 
-    self->newInstance = Class_virtual_newInstance;
-    self->base.toString = Class_virtual_toString;
-    self->base.inspect = Class_virtual_toString;
+    as_class(self)->newInstance = Class_virtual_newInstance;
+    as_class(self)->base.toString = Class_virtual_toString;
+    as_class(self)->base.inspect = Class_virtual_toString;
 }
 
-const char *Class_getName(Class *self) {
-    return self->name;
+const char *Class_getName(Object *self) {
+    return as_class(self)->name;
 }
 
-Class *Class_getSuperclass(Class *self) {
-    return self->superclass;
+Object *Class_getSuperclass(Object *self) {
+    return as_class(self)->superclass;
 }
 
-bool Class_hasMethod(Class *self, const char *name) {
-    return self->methods && std_map_contains(self->methods, (const void *)stringToId(name));
+bool Class_hasMethod(Object *self, const char *name) {
+    return as_class(self)->methods && std_map_contains(as_class(self)->methods, (const void *)stringToId(name));
 }
 
-Object *Class_getMethod(Class *self, const char *name) {
-    return self->methods ? std_map_get(self->methods, (const void *)stringToId(name)) : NULL;
+Object *Class_getMethod(Object *self, const char *name) {
+    return as_class(self)->methods ? std_map_get(as_class(self)->methods, (const void *)stringToId(name)) : NULL;
 }
 
-void Class_setMethod(Class *self, const char *name, Object *method) {
-    if (!self->methods)
-        self->methods = std_map_new(ulong_compare);
+void Class_setMethod(Object *self, const char *name, Object *method) {
+    if (!as_class(self)->methods)
+        as_class(self)->methods = std_map_new(ulong_compare);
 
-    std_map_set(self->methods, (const void *)stringToId(name), method);
+    std_map_set(as_class(self)->methods, (const void *)stringToId(name), method);
 }
 
-void Class_setMethod_func(Class *self, Function *f) {
-    Class_setMethod(self, Function_getName(f), (Object *)f);
+void Class_setMethod_func(Object *self, Object *f) {
+    Class_setMethod(self, Function_getName(f), f);
 }
 
-bool Class_isChildOf(Class *self, Class *_class) {
-    return self == _class || (self->superclass && Class_isChildOf(self->superclass, _class));
+bool Class_isChildOf(Object *self, Object *_class) {
+    return self == _class || (as_class(self)->superclass && Class_isChildOf(as_class(self)->superclass, _class));
 }
 
-Object *Class_lookup(Class *self, const char *name) {
+Object *Class_lookup(Object *self, const char *name) {
     if (Class_hasMethod(self, name))
         return Class_getMethod(self, name);
 
-    if (self->superclass)
-        return Class_lookup(self->superclass, name);
+    if (as_class(self)->superclass)
+        return Class_lookup(as_class(self)->superclass, name);
 
     return NULL;
 }
 
-String *Class_virtual_toString(Esther *esther, Object *self) {
-    const char *name = ((Class *)self)->name;
+Object *Class_virtual_toString(Esther *esther, Object *self) {
+    const char *name = as_class(self)->name;
 
     if (strlen(name) == 0)
         return String_new(esther, "<anonymous class>");
@@ -79,14 +79,14 @@ String *Class_virtual_toString(Esther *esther, Object *self) {
     return String_new_std(esther, std_string_format("<class %s>", name));
 }
 
-Object *Class_newInstance(Esther *esther, Class *self, Tuple *args) {
-    Object *instance = self->newInstance(esther, self, args);
+Object *Class_newInstance(Esther *esther, Object *self, Object *args) {
+    Object *instance = as_class(self)->newInstance(esther, self, args);
     Object_callIfFound(esther, instance, "initialize", args);
     return instance;
 }
 
-Object *Class_virtual_newInstance(Esther *esther, Class *self, Tuple *args) {
-    Object *instance = Class_newInstance(esther, self->superclass, args);
+Object *Class_virtual_newInstance(Esther *esther, Object *self, Object *args) {
+    Object *instance = Class_newInstance(esther, as_class(self)->superclass, args);
     instance->objectClass = self;
     return instance;
 }
