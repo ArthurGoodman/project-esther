@@ -5,7 +5,9 @@
 #include "esther/context.h"
 #include "esther/exception.h"
 #include "esther/function.h"
+#include "esther/lexer.h"
 #include "esther/object.h"
+#include "esther/parser.h"
 #include "esther/std_map.h"
 #include "esther/string.h"
 #include "esther/symbol.h"
@@ -296,6 +298,14 @@ void Esther_init(Esther *es) {
     Class_setMethod_func(es->numericClass, Function_new(es, ">=", (Object * (*)()) NumericClass_gte, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "==", (Object * (*)()) NumericClass_eq, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "!=", (Object * (*)()) NumericClass_ne, 1));
+
+    es->lexer = Lexer_new(es);
+
+    Object_setAttribute(es->lexer, "lex", Function_new(es, "lex", (Object * (*)()) Lexer_lex, 1));
+
+    es->parser = Parser_new(es);
+
+    Object_setAttribute(es->parser, "parse", Function_new(es, "parse", (Object * (*)()) Parser_parse, 1));
 
     es->mainObject = Object_new(es);
 

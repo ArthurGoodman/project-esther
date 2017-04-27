@@ -18,6 +18,7 @@ typedef struct Context {
 
 Context *Context_new(Esther *es);
 
+Context *Context_getParent(Context *self);
 Object *Context_getSelf(Context *self);
 Object *Context_getHere(Context *self);
 

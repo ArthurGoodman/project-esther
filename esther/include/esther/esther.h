@@ -28,6 +28,9 @@ typedef struct Esther {
     Object *falseObject;
     Object *nullObject;
 
+    Object *lexer;
+    Object *parser;
+
     Object *mainObject;
     Object *io;
 

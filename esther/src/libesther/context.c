@@ -12,6 +12,10 @@ Context *Context_new(Esther *es) {
     return self;
 }
 
+Context *Context_getParent(Context *self) {
+    return self->parent;
+}
+
 Object *Context_getSelf(Context *self) {
     return self->self;
 }
