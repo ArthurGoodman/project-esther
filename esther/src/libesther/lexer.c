@@ -28,13 +28,11 @@ static char read_sym(Lexer *lexer) {
 }
 
 static Object *scan(Esther *es, Lexer *lexer) {
-    Object *token = Tuple_new_init_null(es, 2);
-
     Object *id;
     Object *text = String_new(es, "");
 
     while (isspace(sym(lexer)))
-        lexer->pos++;
+        read_sym(lexer);
 
     if (sym(lexer) == '\0')
         id = Symbol_new(es, "");
@@ -59,10 +57,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
         String_append_char(text, read_sym(lexer));
     }
 
-    Tuple_set(token, 0, id);
-    Tuple_set(token, 1, text);
-
-    return token;
+    return Tuple_new(es, 2, id, text);
 }
 
 Object *Lexer_lex(Esther *es, Object *self, Object *code) {
