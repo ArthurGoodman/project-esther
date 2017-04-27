@@ -14,7 +14,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
         Object *_class = Class_new_init(&es, "A", NULL);
 
         Object *m = Object_new(&es);
-        Object_setAttribute(m, "()", Function_new(&es, "()", (Object * (*)())print, -1));
+        Object_setAttribute(m, "()", Function_new(&es, "()", (Object * (*)()) print, -1));
 
         Class_setMethod(_class, "m", m);
 

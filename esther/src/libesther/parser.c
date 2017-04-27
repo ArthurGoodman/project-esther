@@ -4,7 +4,7 @@
 
 Object *Parser_new(Esther *es) {
     Object *self = malloc(sizeof(Parser));
-    Object_init(es, self, NULL);
+    Object_init(es, self, TObject, es->objectClass);
     return self;
 }
 

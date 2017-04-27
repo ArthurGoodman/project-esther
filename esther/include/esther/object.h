@@ -14,7 +14,20 @@ typedef struct Esther Esther;
 typedef struct String String;
 typedef struct Tuple Tuple;
 
+typedef enum ObjectType {
+    TArray,
+    TClass,
+    TException,
+    TFunction,
+    TObject,
+    TString,
+    TSymbol,
+    TTuple,
+    TValueObject
+} ObjectType;
+
 typedef struct Object {
+    ObjectType type;
     Object *objectClass;
     struct std_map *attributes;
 
@@ -25,9 +38,10 @@ typedef struct Object {
 } Object;
 
 Object *Object_new(Esther *es);
-Object *Object_new_init(Esther *es, Object *objectClass);
 
-void Object_init(Esther *es, Object *self, Object *objectClass);
+void Object_init(Esther *es, Object *self, ObjectType type, Object *objectClass);
+
+ObjectType Object_getType(Object *self);
 
 Object *Object_getClass(Object *self);
 

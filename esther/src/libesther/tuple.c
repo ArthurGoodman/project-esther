@@ -36,7 +36,7 @@ void Tuple_init(Esther *es, Object *self, Object *const *data, size_t size) {
 }
 
 void Tuple_init_null(Esther *es, Object *self, size_t size) {
-    Object_init(es, self, es->tupleClass);
+    Object_init(es, self, TTuple, es->tupleClass);
 
     as_Tuple(self)->data = malloc(size * sizeof(Object *));
     memset(as_Tuple(self)->data, 0, size * sizeof(Object *));

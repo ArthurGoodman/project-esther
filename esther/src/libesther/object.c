@@ -11,23 +11,24 @@
 #include "esther/tuple.h"
 
 Object *Object_new(Esther *es) {
-    return Object_new_init(es, NULL);
-}
-
-Object *Object_new_init(Esther *es, Object *objectClass) {
     Object *self = malloc(sizeof(Object));
-    Object_init(es, self, objectClass);
+    Object_init(es, self, TObject, es->objectClass);
     return self;
 }
 
-void Object_init(Esther *es, Object *self, Object *objectClass) {
-    self->objectClass = objectClass == NULL ? es->objectClass : objectClass;
+void Object_init(Esther *UNUSED(es), Object *self, ObjectType type, Object *objectClass) {
+    self->type = type;
+    self->objectClass = objectClass;
     self->attributes = NULL;
 
     self->toString = Object_virtual_toString;
     self->inspect = Object_virtual_toString;
     self->equals = Object_virtual_equals;
     self->isTrue = Object_virtual_isTrue;
+}
+
+ObjectType Object_getType(Object *self) {
+    return self->type;
 }
 
 Object *Object_getClass(Object *self) {
@@ -76,7 +77,7 @@ Object *Object_callIfFound(Esther *es, Object *self, const char *name, Object *a
 }
 
 Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args) {
-    if (Object_is(f, es->functionClass))
+    if (Object_getType(f) == TFunction)
         return Function_invoke(es, f, self, args);
 
     return Object_call(es, f, "()", Tuple_new(es, 2, self, args));

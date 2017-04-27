@@ -35,7 +35,7 @@ void Array_init(Esther *es, Object *self, Object *const *data, size_t size) {
 }
 
 void Array_init_std(Esther *es, Object *self, struct std_vector *data) {
-    Object_init(es, self, es->arrayClass);
+    Object_init(es, self, TArray, es->arrayClass);
 
     as_Array(self)->data = data;
 

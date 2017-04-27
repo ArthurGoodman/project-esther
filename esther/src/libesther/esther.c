@@ -63,7 +63,7 @@ static Object *CharClass_virtual_newInstance(Esther *es, Object *UNUSED(self), O
         return ValueObject_new_char(es, '\0');
 
     if (Tuple_size(args) == 1) {
-        if (!Object_is(Tuple_get(args, 0), es->numericClass))
+        if (Object_getType(Tuple_get(args, 0)) != TValueObject)
             return NULL;
 
         return ValueObject_new_char(es, Variant_toChar(as_ValueObject(Tuple_get(args, 0))->value));
@@ -77,7 +77,7 @@ static Object *IntClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Ob
         return ValueObject_new_int(es, 0);
 
     if (Tuple_size(args) == 1) {
-        if (!Object_is(Tuple_get(args, 0), es->numericClass))
+        if (Object_getType(Tuple_get(args, 0)) != TValueObject)
             return NULL;
 
         return ValueObject_new_int(es, Variant_toInt(as_ValueObject(Tuple_get(args, 0))->value));
@@ -91,7 +91,7 @@ static Object *FloatClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
         return ValueObject_new_real(es, 0.0);
 
     if (Tuple_size(args) == 1) {
-        if (!Object_is(Tuple_get(args, 0), es->numericClass))
+        if (Object_getType(Tuple_get(args, 0)) != TValueObject)
             return NULL;
 
         return ValueObject_new_real(es, Variant_toReal(as_ValueObject(Tuple_get(args, 0))->value));
@@ -457,9 +457,9 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
     } else if (id == id_sharp) {
         Object *value = Tuple_get(ast, 1);
 
-        if (Object_is(value, es->numericClass))
+        if (Object_getType(value) == TValueObject)
             return ValueObject_new_var(es, ValueObject_getValue(value));
-        else if (Object_is(value, es->stringClass))
+        else if (Object_getType(value) == TString)
             return String_new(es, String_c_str(value));
     }
 

@@ -16,7 +16,7 @@ Object *Function_new(Esther *es, const char *name, Object *(*body)(), int argc) 
 }
 
 void Function_init(Esther *es, Object *self, const char *name, Object *(*body)(), int argc) {
-    Object_init(es, self, es->functionClass);
+    Object_init(es, self, TFunction, es->functionClass);
 
     as_Function(self)->name = strdup(name);
     as_Function(self)->body = body;

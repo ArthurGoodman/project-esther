@@ -10,7 +10,7 @@ Object *Symbol_new(Esther *es, const char *name) {
 }
 
 void Symbol_init(Esther *es, Object *self, const char *name) {
-    Object_init(es, self, es->symbolClass);
+    Object_init(es, self, TSymbol, es->symbolClass);
 
     as_Symbol(self)->id = stringToId(name);
 

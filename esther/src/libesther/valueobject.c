@@ -22,7 +22,7 @@ Object *ValueObject_new_var(Esther *es, Variant value) {
 }
 
 void ValueObject_init(Esther *es, Object *self, Variant value) {
-    Object_init(es, self, ValueObject_variantTypeToObjectClass(es, value.type));
+    Object_init(es, self, TValueObject, ValueObject_variantTypeToObjectClass(es, value.type));
 
     as_ValueObject(self)->value = value;
 
@@ -39,8 +39,8 @@ Object *ValueObject_virtual_toString(Esther *es, Object *self) {
     return String_new_std(es, Variant_toString(as_ValueObject(self)->value));
 }
 
-bool ValueObject_virtual_equals(Esther *es, Object *self, Object *obj) {
-    return Object_is(obj, es->numericClass) && Variant_eq(as_ValueObject(self)->value, as_ValueObject(self)->value);
+bool ValueObject_virtual_equals(Esther *UNUSED(es), Object *self, Object *obj) {
+    return Object_getType(obj) == TValueObject && Variant_eq(as_ValueObject(self)->value, as_ValueObject(self)->value);
 }
 
 Object *ValueObject_variantTypeToObjectClass(Esther *es, VariantType type) {

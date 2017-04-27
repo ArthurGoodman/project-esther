@@ -4,7 +4,7 @@
 
 Object *Lexer_new(Esther *es) {
     Object *self = malloc(sizeof(Lexer));
-    Object_init(es, self, NULL);
+    Object_init(es, self, TObject, es->objectClass);
     return self;
 }
 

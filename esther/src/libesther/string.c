@@ -20,7 +20,7 @@ void String_init(Esther *es, Object *self, const char *value) {
 }
 
 void String_init_std(Esther *es, Object *self, struct std_string *value) {
-    Object_init(es, self, es->stringClass);
+    Object_init(es, self, TString, es->stringClass);
 
     as_String(self)->value = value;
 
@@ -53,6 +53,6 @@ Object *String_virtual_inspect(Esther *es, Object *self) {
     return str;
 }
 
-bool String_virtual_equals(Esther *es, Object *self, Object *obj) {
-    return Object_is(obj, es->stringClass) && std_string_equals(as_String(self)->value, as_String(obj)->value);
+bool String_virtual_equals(Esther *UNUSED(es), Object *self, Object *obj) {
+    return Object_getType(obj) == TString && std_string_equals(as_String(self)->value, as_String(obj)->value);
 }

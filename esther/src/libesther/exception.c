@@ -29,7 +29,7 @@ Object *Exception_new(Esther *es, const char *msg) {
 }
 
 void Exception_init(Esther *es, Object *self, const char *msg) {
-    Object_init(es, self, es->exceptionClass);
+    Object_init(es, self, TException, es->exceptionClass);
 
     as_Exception(self)->msg = strdup(msg);
 }

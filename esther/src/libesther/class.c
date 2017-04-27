@@ -18,7 +18,7 @@ Object *Class_new_init(Esther *es, const char *name, Object *superclass) {
 }
 
 void Class_init(Esther *es, Object *self, const char *name, Object *superclass) {
-    Object_init(es, self, es->classClass);
+    Object_init(es, self, TClass, es->classClass);
 
     as_Class(self)->name = strdup(name);
     as_Class(self)->superclass = superclass ? superclass : es->objectClass;
