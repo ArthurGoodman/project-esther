@@ -3,11 +3,11 @@
 #include <string.h>
 
 #include "esther/array.h"
+#include "esther/context.h"
 #include "esther/esther.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
 #include "esther/tuple.h"
-#include "esther/context.h"
 
 Object *Function_new(Esther *es, const char *name, Object *(*body)(), int argc) {
     Object *self = malloc(sizeof(Function));
