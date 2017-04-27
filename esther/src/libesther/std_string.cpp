@@ -58,6 +58,11 @@ struct std_string *std_string_append_c_str(struct std_string *self, const char *
     return self;
 }
 
+struct std_string *std_string_append_char(std_string *self, char c) {
+    to_cpp(self)->append(1, c);
+    return self;
+}
+
 size_t std_string_size(struct std_string *self) {
     return to_cpp(self)->size();
 }

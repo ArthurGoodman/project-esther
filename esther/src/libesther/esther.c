@@ -333,6 +333,19 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, "Float", es->floatClass);
 
     Esther_setRootObject(es, "IO", es->io);
+
+    id_empty = stringToId("");
+    id_brace = stringToId("{}");
+    id_class = stringToId("class");
+    id_eq = stringToId("=");
+    id_self = stringToId("self");
+    id_attr = stringToId("attr");
+    id_new = stringToId("new");
+    id_function = stringToId("function");
+    id_call = stringToId("call");
+    id_id = stringToId("id");
+    id_sharp = stringToId("#");
+    id_dot = stringToId(".");
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {
@@ -351,18 +364,16 @@ void Esther_setRootObject(Esther *es, const char *name, Object *value) {
     std_map_set(es->rootObjects, name, value);
 }
 
+static void error_invalidAST(Esther *es) {
+    Exception_throw(es, "invalid AST");
+}
+
 Object *Esther_eval(Esther *es, Object *ast, Context *context) {
-    Id id_brace = stringToId("{}");
-    Id id_class = stringToId("class");
-    Id id_eq = stringToId("=");
-    Id id_self = stringToId("self");
-    Id id_attr = stringToId("attr");
-    Id id_new = stringToId("new");
-    Id id_function = stringToId("function");
-    Id id_call = stringToId("call");
-    Id id_id = stringToId("id");
-    Id id_sharp = stringToId("#");
-    Id id_dot = stringToId(".");
+    if (Object_getType(ast) == TString)
+        return Lexer_lex(es, es->lexer, ast);
+
+    if (Object_getType(ast) != TTuple)
+        error_invalidAST(es);
 
     if (Tuple_size(ast) == 0)
         return es->nullObject;

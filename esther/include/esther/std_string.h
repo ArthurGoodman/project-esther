@@ -15,7 +15,8 @@ struct std_string *std_string_new_init(const char *str);
 void std_string_delete(struct std_string *self);
 
 struct std_string *std_string_append(struct std_string *self, struct std_string *std_string);
-struct std_string *std_string_append_c_str(struct std_string *self, const char *std_string);
+struct std_string *std_string_append_c_str(struct std_string *self, const char *str);
+struct std_string *std_string_append_char(struct std_string *self, char c);
 
 size_t std_string_size(struct std_string *self);
 

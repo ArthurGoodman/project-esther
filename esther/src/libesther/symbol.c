@@ -28,6 +28,7 @@ Object *Symbol_virtual_toString(Esther *es, Object *self) {
 
 Object *Symbol_virtual_inspect(Esther *es, Object *self) {
     Object *str = String_new(es, ":");
-    String_append_c_str(str, idToString(as_Symbol(self)->id));
+    const char *value = idToString(as_Symbol(self)->id);
+    String_append_c_str(str, strlen(value) > 0 ? value : "\"\"");
     return str;
 }

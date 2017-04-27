@@ -26,6 +26,7 @@ const char *String_c_str(Object *self);
 
 void String_append(Object *self, Object *str);
 void String_append_c_str(Object *self, const char *str);
+void String_append_char(Object *self, char c);
 
 Object *String_virtual_toString(Esther *es, Object *self);
 Object *String_virtual_inspect(Esther *es, Object *self);

@@ -2,6 +2,19 @@
 
 #include "esther/std_map.h"
 
+Id id_empty;
+Id id_brace;
+Id id_class;
+Id id_eq;
+Id id_self;
+Id id_attr;
+Id id_new;
+Id id_function;
+Id id_call;
+Id id_id;
+Id id_sharp;
+Id id_dot;
+
 static struct std_map *idString = NULL;
 static struct std_map *stringId = NULL;
 

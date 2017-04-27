@@ -4,6 +4,7 @@
 extern "C" {
 #endif
 
+#include <ctype.h>
 #include <setjmp.h>
 #include <stdarg.h>
 #include <stdbool.h>

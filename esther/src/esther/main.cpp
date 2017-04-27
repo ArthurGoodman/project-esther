@@ -1,7 +1,7 @@
 #include <esther.h>
 
-Object *print(Esther *es, Object *self, Object *args) {
-    printf("%s\n", String_c_str(Object_toString(es, self)));
+Object *print(Esther *es, Object *self, Object *_this, Object *args) {
+    printf("%s\n", String_c_str(Object_toString(es, _this)));
     printf("%s\n", String_c_str(Object_toString(es, args)));
     return self;
 }
@@ -14,7 +14,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
         Object *_class = Class_new_init(&es, "A", NULL);
 
         Object *m = Object_new(&es);
-        Object_setAttribute(m, "()", Function_new(&es, "()", (Object * (*)()) print, -1));
+        Object_setAttribute(m, "()", Function_new(&es, "()", (Object * (*)()) print, 2));
 
         Class_setMethod(_class, "m", m);
 
@@ -107,9 +107,21 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
                                                                         symSharp,
                                                                         String_new(&es, "arg2"))))));
 
-        printf("%s\n", String_c_str(Object_toString(&es, ast)));
+        printf("\n%s\n\n", String_c_str(Object_toString(&es, ast)));
 
         Esther_eval(&es, ast, es.root);
+
+        const char *code = "class A {\n"
+                           "    self.setMethod(\"m\", new {\n"
+                           "        self.() = function(this, args) {\n"
+                           "            IO.writeLine(this, args)\n"
+                           "        }\n"
+                           "    })\n"
+                           "}\n"
+                           "a = new A\n"
+                           "a.m(\"arg1\", \"arg2\")";
+
+        printf("\n%s\n\n", String_c_str(Object_toString(&es, Esther_eval(&es, String_new(&es, code), es.root))));
     }
     CATCH(e) {
         printf("error: %s\n", Exception_getMessage(e));

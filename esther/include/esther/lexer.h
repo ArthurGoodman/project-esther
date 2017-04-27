@@ -8,9 +8,12 @@ extern "C" {
 
 typedef struct Lexer {
     Object base;
-} Lexer;
 
-#define as_Lexer(obj) ((Lexer *)(obj))
+    const char *code;
+    size_t length;
+    size_t pos;
+    Object *tokens;
+} Lexer;
 
 Object *Lexer_new(Esther *es);
 
