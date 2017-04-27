@@ -4,6 +4,7 @@
 extern "C" {
 #endif
 
+#include <stdarg.h>
 #include <stddef.h>
 
 struct std_string;
@@ -27,6 +28,7 @@ bool std_string_equals(struct std_string *self, struct std_string *str);
 const char *std_string_c_str(struct std_string *self);
 
 struct std_string *std_string_format(const char *fmt, ...);
+struct std_string *std_string_format_va(const char *fmt, va_list ap);
 
 #ifdef __cplusplus
 }

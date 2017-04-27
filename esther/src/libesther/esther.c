@@ -3,6 +3,7 @@
 #include "esther/array.h"
 #include "esther/class.h"
 #include "esther/context.h"
+#include "esther/exception.h"
 #include "esther/function.h"
 #include "esther/object.h"
 #include "esther/std_map.h"
@@ -27,7 +28,8 @@ static Object *SymbolClass_virtual_newInstance(Esther *es, Object *UNUSED(self),
     return Symbol_new(es, "");
 }
 
-static Object *FunctionClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *FunctionClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
+    Exception_throw(es, "cannot create an instance of Function class yet...");
     return NULL;
 }
 
@@ -39,15 +41,18 @@ static Object *ArrayClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
     return Array_new(es, 0);
 }
 
-static Object *BooleanClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *BooleanClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
+    Exception_throw(es, "cannot create an instance of Boolean class");
     return NULL;
 }
 
-static Object *NullClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *NullClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
+    Exception_throw(es, "cannot create an instance of Null class");
     return NULL;
 }
 
-static Object *NumericClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
+static Object *NumericClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
+    Exception_throw(es, "cannot create an instance of Numeric class");
     return NULL;
 }
 
@@ -90,6 +95,10 @@ static Object *FloatClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
         return ValueObject_new_real(es, Variant_toReal(as_ValueObject(Tuple_get(args, 0))->value));
     }
 
+    return NULL;
+}
+
+static Object *ExceptionClass_virtual_newInstance(Esther *UNUSED(es), Object *UNUSED(self), Object *UNUSED(args)) {
     return NULL;
 }
 
@@ -244,6 +253,9 @@ void Esther_init(Esther *es) {
 
     es->floatClass = Class_new_init(es, "Float", es->numericClass);
     as_Class(es->floatClass)->newInstance = FloatClass_virtual_newInstance;
+
+    es->exceptionClass = Class_new_init(es, "Exception", NULL);
+    as_Class(es->exceptionClass)->newInstance = ExceptionClass_virtual_newInstance;
 
     es->trueObject = Object_new(es);
     es->trueObject->objectClass = es->booleanClass;
@@ -425,7 +437,13 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
         return Object_call_function(es, evaledSelf, evaledF, evaledArgs);
     } else if (id == id_id) {
-        return Context_resolve(es, context, String_c_str(Tuple_get(ast, 1)));
+        const char *name = String_c_str(Tuple_get(ast, 1));
+        Object *value = Context_resolve(es, context, name);
+
+        if (!value)
+            Exception_throw(es, "undefined variable '%s'", name);
+
+        return value;
     } else if (id == id_sharp) {
         Object *value = Tuple_get(ast, 1);
 

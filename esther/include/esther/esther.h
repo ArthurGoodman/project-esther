@@ -22,6 +22,7 @@ typedef struct Esther {
     Object *charClass;
     Object *intClass;
     Object *floatClass;
+    Object *exceptionClass;
 
     Object *trueObject;
     Object *falseObject;

@@ -85,3 +85,7 @@ struct std_string *std_string_format(const char *fmt, ...) {
     va_end(ap);
     return str;
 }
+
+std_string *std_string_format_va(const char *fmt, va_list ap) {
+    return vformat(fmt, ap);
+}
