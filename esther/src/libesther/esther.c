@@ -12,6 +12,7 @@
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
+#include "esther/utility.h"
 #include "esther/valueobject.h"
 #include "identifiers.h"
 #include "symbols.h"
@@ -311,6 +312,8 @@ void Esther_init(Esther *es) {
 
     es->mainObject = Object_new(es);
 
+    es->esther = Object_new(es);
+
     es->io = Object_new(es);
 
     Object_setAttribute(es->io, "write", Function_new(es, "write", (Object * (*)()) IO_write, -1));
@@ -335,6 +338,7 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, "Float", es->floatClass);
 
     Esther_setRootObject(es, "IO", es->io);
+    Esther_setRootObject(es, "esther", es->esther);
 
     init_identifiers();
     init_symbols(es);
@@ -363,12 +367,10 @@ static void error_invalidAST(Esther *es) {
 Object *Esther_eval(Esther *es, Object *ast, Context *context) {
     if (Object_getType(ast) == TString) {
         Object *tokens = Lexer_lex(es, es->lexer, ast);
-
-        printf("%s\n\n", String_c_str(Object_toString(es, tokens)));
-
         ast = Parser_parse(es, es->parser, tokens);
 
-        printf("%s\n\n", String_c_str(Object_toString(es, ast)));
+        Object_setAttribute(es->esther, "tokens", tokens);
+        Object_setAttribute(es->esther, "ast", ast);
     }
 
     if (Object_getType(ast) != TTuple)
@@ -480,4 +482,15 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
     }
 
     return es->nullObject;
+}
+
+void Esther_runFile(Esther *es, const char *fileName) {
+    TRY {
+        Object *value = Esther_eval(es, String_new_std(es, read_file(fileName)), es->root);
+        printf("=> %s\n", String_c_str(Object_inspect(es, value)));
+    }
+    CATCH(e) {
+        printf("error: %s\n", Exception_getMessage(e));
+    }
+    ENDTRY;
 }

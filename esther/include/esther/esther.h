@@ -32,6 +32,7 @@ typedef struct Esther {
     Object *parser;
 
     Object *mainObject;
+    Object *esther;
     Object *io;
 
     Context *root;
@@ -48,6 +49,8 @@ Object *Esther_getRootObject(Esther *es, const char *name);
 void Esther_setRootObject(Esther *es, const char *name, Object *value);
 
 Object *Esther_eval(Esther *es, Object *ast, Context *context);
+
+void Esther_runFile(Esther *es, const char *fileName);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,7 @@
 #include "esther/std_string.h"
 
 #include <cstdarg>
+#include <cstring>
 #include <string>
 #include <vector>
 
