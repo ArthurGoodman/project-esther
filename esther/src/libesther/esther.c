@@ -13,6 +13,8 @@
 #include "esther/symbol.h"
 #include "esther/tuple.h"
 #include "esther/valueobject.h"
+#include "identifiers.h"
+#include "symbols.h"
 
 static Object *ObjectClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
     return Object_new(es);
@@ -334,18 +336,8 @@ void Esther_init(Esther *es) {
 
     Esther_setRootObject(es, "IO", es->io);
 
-    id_empty = stringToId("");
-    id_brace = stringToId("{}");
-    id_class = stringToId("class");
-    id_eq = stringToId("=");
-    id_self = stringToId("self");
-    id_attr = stringToId("attr");
-    id_new = stringToId("new");
-    id_function = stringToId("function");
-    id_call = stringToId("call");
-    id_id = stringToId("id");
-    id_sharp = stringToId("#");
-    id_dot = stringToId(".");
+    init_identifiers();
+    init_symbols(es);
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {

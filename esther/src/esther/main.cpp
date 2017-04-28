@@ -111,7 +111,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
 
         Esther_eval(&es, ast, es.root);
 
-        const char *code = "class A {\n"
+        const char *code = "+= class A {\n"
                            "    self.setMethod(\"m\", new {\n"
                            "        self.() = function(this, args) {\n"
                            "            IO.writeLine(this, args)\n"

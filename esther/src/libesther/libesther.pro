@@ -15,7 +15,8 @@ HEADERS += \
     $$files(*.h, true) \
     $$files(../../include/*.h, true)
 
-OTHER_FILES += $$files(src/*.def, true)
+OTHER_FILES += \
+    $$files(*.def, true)
 
 INCLUDEPATH = ../../include
 

@@ -45,6 +45,10 @@ void String_append_char(Object *self, char c) {
     std_string_append_char(as_String(self)->value, c);
 }
 
+size_t String_size(Object *self) {
+    return std_string_size(as_String(self)->value);
+}
+
 Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
     return self;
 }
