@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "esther/esther.h"
+#include "esther/exception.h"
 #include "esther/function.h"
 #include "esther/id.h"
 #include "esther/std_map.h"
@@ -61,8 +62,10 @@ Object *Object_resolve(Object *self, const char *name) {
 Object *Object_call(Esther *es, Object *self, const char *name, Object *args) {
     Object *f = Object_resolve(self, name);
 
-    if (!f)
+    if (!f) {
+        Exception_throw(es, "undefined attribute '%s'", name);
         return NULL;
+    }
 
     return Object_call_function(es, self, f, args);
 }
@@ -95,11 +98,11 @@ Object *Object_inspect(Esther *es, Object *self) {
     return self->inspect(es, self);
 }
 
-bool Object_equals(Esther *es, Object *self, Object *obj) {
-    return self->equals(es, self, obj);
+bool Object_equals(Object *self, Object *obj) {
+    return self->equals(self, obj);
 }
 
-bool Object_virtual_equals(Esther *UNUSED(es), Object *self, Object *obj) {
+bool Object_virtual_equals(Object *self, Object *obj) {
     return self == obj;
 }
 

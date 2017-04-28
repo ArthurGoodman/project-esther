@@ -22,9 +22,9 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
 
         Object_call(&es, obj, "m", Tuple_new(&es, 2, String_new(&es, "arg1"), String_new(&es, "arg2")));
 
-        Object *symBrace = Symbol_new(&es, "{}");
+        Object *symBraces = Symbol_new(&es, "{}");
         Object *symClass = Symbol_new(&es, "class");
-        Object *symEq = Symbol_new(&es, "=");
+        Object *symAssign = Symbol_new(&es, "=");
         Object *symSelf = Symbol_new(&es, "self");
         Object *symAttr = Symbol_new(&es, "attr");
         Object *symNew = Symbol_new(&es, "new");
@@ -34,7 +34,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
         Object *symSharp = Symbol_new(&es, "#");
 
         Object *ast = Tuple_new(&es, 2,
-                                symBrace,
+                                symBraces,
                                 Array_new(&es, 3,
                                           Tuple_new(&es, 3,
                                                     symClass,
@@ -53,7 +53,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
                                                                         Tuple_new(&es, 2,
                                                                                   symNew,
                                                                                   Tuple_new(&es, 3,
-                                                                                            symEq,
+                                                                                            symAssign,
                                                                                             Tuple_new(&es, 3,
                                                                                                       symAttr,
                                                                                                       Tuple_new(&es, 1,
@@ -81,7 +81,7 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
                                                                                                                                     symId,
                                                                                                                                     String_new(&es, "args")))))))))),
                                           Tuple_new(&es, 3,
-                                                    symEq,
+                                                    symAssign,
                                                     Tuple_new(&es, 2,
                                                               symId,
                                                               String_new(&es, "a")),
@@ -111,7 +111,9 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
 
         Esther_eval(&es, ast, es.root);
 
-        const char *code = "+= class A {\n"
+        printf("\n");
+
+        const char *code = "class A {\n"
                            "    self.setMethod(\"m\", new {\n"
                            "        self.() = function(this, args) {\n"
                            "            IO.writeLine(this, args)\n"
@@ -121,7 +123,9 @@ int main(int UNUSED(argc), char **UNUSED(argv)) {
                            "a = new A\n"
                            "a.m(\"arg1\", \"arg2\")";
 
-        printf("\n%s\n\n", String_c_str(Object_toString(&es, Esther_eval(&es, String_new(&es, code), es.root))));
+        Esther_eval(&es, String_new(&es, code), es.root);
+
+        printf("\n");
     }
     CATCH(e) {
         printf("error: %s\n", Exception_getMessage(e));

@@ -201,13 +201,14 @@ Object *Lexer_lex(Esther *es, Object *self, Object *code) {
     lexer->code = String_c_str(code);
     lexer->length = strlen(lexer->code);
     lexer->pos = 0;
-    lexer->tokens = Array_new(es, 0);
+
+    Object *tokens = Array_new(es, 0);
 
     Object *token;
 
     do
-        Array_push(lexer->tokens, token = scan(es, lexer));
+        Array_push(tokens, token = scan(es, lexer));
     while (Symbol_getId(Tuple_get(token, 0)) != id_empty);
 
-    return lexer->tokens;
+    return tokens;
 }

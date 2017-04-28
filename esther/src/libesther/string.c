@@ -61,6 +61,6 @@ Object *String_virtual_inspect(Esther *es, Object *self) {
     return str;
 }
 
-bool String_virtual_equals(Esther *UNUSED(es), Object *self, Object *obj) {
+bool String_virtual_equals(Object *self, Object *obj) {
     return Object_getType(obj) == TString && std_string_equals(as_String(self)->value, as_String(obj)->value);
 }

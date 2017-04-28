@@ -8,6 +8,10 @@ extern "C" {
 
 typedef struct Parser {
     Object base;
+
+    int pos;
+    Object *tokens;
+    Object *token;
 } Parser;
 
 #define as_Parser(obj) ((Parser *)(obj))

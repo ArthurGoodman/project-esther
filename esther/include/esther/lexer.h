@@ -12,7 +12,6 @@ typedef struct Lexer {
     const char *code;
     size_t length;
     size_t pos;
-    Object *tokens;
 } Lexer;
 
 Object *Lexer_new(Esther *es);

@@ -7,7 +7,10 @@ extern "C" {
 #include "esther/id.h"
 
 #define X(a, b) extern Id id_##a;
-#include "identifiers.def"
+#include "keywords.def"
+#include "nodes.def"
+#include "operators.def"
+#include "othertokens.def"
 #undef X
 
 void init_identifiers();

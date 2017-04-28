@@ -33,7 +33,7 @@ typedef struct Object {
 
     Object *(*toString)(Esther *es, Object *self);
     Object *(*inspect)(Esther *es, Object *self);
-    bool (*equals)(Esther *es, Object *self, Object *obj);
+    bool (*equals)(Object *self, Object *obj);
     bool (*isTrue)();
 } Object;
 
@@ -62,8 +62,8 @@ Object *Object_virtual_toString(Esther *es, Object *self);
 
 Object *Object_inspect(Esther *es, Object *self);
 
-bool Object_equals(Esther *es, Object *self, Object *obj);
-bool Object_virtual_equals(Esther *es, Object *self, Object *obj);
+bool Object_equals(Object *self, Object *obj);
+bool Object_virtual_equals(Object *self, Object *obj);
 
 bool Object_isTrue(Object *self);
 bool Object_virtual_isTrue();

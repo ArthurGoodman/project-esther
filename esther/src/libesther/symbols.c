@@ -4,6 +4,7 @@
 
 #define X(a, b) Object *sym_##a;
 #include "keywords.def"
+#include "nodes.def"
 #include "operators.def"
 #include "othertokens.def"
 #undef X
@@ -23,6 +24,7 @@ Object *operator_symbols[] = {
 void init_symbols(Esther *es) {
 #define X(a, b) sym_##a = Symbol_new(es, b);
 #include "keywords.def"
+#include "nodes.def"
 #include "operators.def"
 #include "othertokens.def"
 #undef X

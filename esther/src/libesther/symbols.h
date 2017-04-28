@@ -8,6 +8,7 @@ extern "C" {
 
 #define X(a, b) extern Object *sym_##a;
 #include "keywords.def"
+#include "nodes.def"
 #include "operators.def"
 #include "othertokens.def"
 #undef X

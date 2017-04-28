@@ -33,7 +33,7 @@ size_t String_size(Object *self);
 Object *String_virtual_toString(Esther *es, Object *self);
 Object *String_virtual_inspect(Esther *es, Object *self);
 
-bool String_virtual_equals(Esther *es, Object *self, Object *obj);
+bool String_virtual_equals(Object *self, Object *obj);
 
 #ifdef __cplusplus
 }

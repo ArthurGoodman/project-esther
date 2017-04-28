@@ -24,6 +24,8 @@ Id Symbol_getId(Object *self);
 Object *Symbol_virtual_toString(Esther *es, Object *self);
 Object *Symbol_virtual_inspect(Esther *es, Object *self);
 
+bool Symbol_virtual_equals(Object *self, Object *obj);
+
 #ifdef __cplusplus
 }
 #endif

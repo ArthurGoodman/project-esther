@@ -127,7 +127,7 @@ static Object *ObjectClass_class(Esther *UNUSED(es), Object *self) {
 }
 
 static Object *ObjectClass_equals(Esther *es, Object *self, Object *obj) {
-    return Esther_toBoolean(es, Object_equals(es, self, obj));
+    return Esther_toBoolean(es, Object_equals(self, obj));
 }
 
 static Object *ClassClass_superclass(Esther *UNUSED(es), Object *self) {
@@ -361,8 +361,15 @@ static void error_invalidAST(Esther *es) {
 }
 
 Object *Esther_eval(Esther *es, Object *ast, Context *context) {
-    if (Object_getType(ast) == TString)
-        return Lexer_lex(es, es->lexer, ast);
+    if (Object_getType(ast) == TString) {
+        Object *tokens = Lexer_lex(es, es->lexer, ast);
+
+        printf("%s\n\n", String_c_str(Object_toString(es, tokens)));
+
+        ast = Parser_parse(es, es->parser, tokens);
+
+        printf("%s\n\n", String_c_str(Object_toString(es, ast)));
+    }
 
     if (Object_getType(ast) != TTuple)
         error_invalidAST(es);
@@ -372,7 +379,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
     Id id = Symbol_getId(Tuple_get(ast, 0));
 
-    if (id == id_brace) {
+    if (id == id_braces) {
         Object *nodes = Tuple_get(ast, 1);
 
         Object *value = es->nullObject;
@@ -391,7 +398,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             Context_setLocal(context, name, _class);
 
         return _class;
-    } else if (id == id_eq) {
+    } else if (id == id_assign) {
         Object *child = Tuple_get(ast, 1);
         Id childId = Symbol_getId(Tuple_get(child, 0));
 
@@ -422,7 +429,13 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             return newObject;
         }
     } else if (id == id_function) {
-        return InterpretedFunction_new(es, String_c_str(Tuple_get(ast, 1)), Tuple_get(ast, 2), context, Tuple_get(ast, 3));
+        const char *name = String_c_str(Tuple_get(ast, 1));
+        Object *f = InterpretedFunction_new(es, name, Tuple_get(ast, 2), context, Tuple_get(ast, 3));
+
+        if (strlen(name) > 0)
+            Context_setLocal(context, name, f);
+
+        return f;
     } else if (id == id_call) {
         Object *evaledSelf;
         Object *evaledF;

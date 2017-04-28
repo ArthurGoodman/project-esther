@@ -26,7 +26,7 @@ Variant ValueObject_getValue(Object *self);
 
 Object *ValueObject_virtual_toString(Esther *es, Object *self);
 
-bool ValueObject_virtual_equals(Esther *es, Object *self, Object *obj);
+bool ValueObject_virtual_equals(Object *self, Object *obj);
 
 Object *ValueObject_variantTypeToObjectClass(Esther *es, VariantType type);
 
