@@ -4,7 +4,7 @@
 #include "esther/std_string.h"
 
 struct std_string *read_file(const char *fileName) {
-    FILE *file = fopen(fileName, "r");
+    FILE *file = fopen(fileName, "rb");
 
     fseek(file, 0, SEEK_END);
 
