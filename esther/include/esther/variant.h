@@ -30,6 +30,8 @@ Variant Variant_create_char(char value);
 Variant Variant_create_int(int value);
 Variant Variant_create_real(double value);
 
+VariantType Variant_getType(Variant var);
+
 bool Variant_isNull(Variant var);
 
 Variant Variant_convertTo(Variant var, VariantType type);

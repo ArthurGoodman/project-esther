@@ -23,6 +23,7 @@ Object *ValueObject_new_var(Esther *es, Variant value);
 void ValueObject_init(Esther *es, Object *self, Variant value);
 
 Variant ValueObject_getValue(Object *self);
+void ValueObject_setValue(Object *self, Variant value);
 
 Object *ValueObject_virtual_toString(Esther *es, Object *self);
 

@@ -35,6 +35,10 @@ Variant ValueObject_getValue(Object *self) {
     return as_ValueObject(self)->value;
 }
 
+void ValueObject_setValue(Object *self, Variant value) {
+    as_ValueObject(self)->value = Variant_convertTo(value, Variant_getType(value));
+}
+
 Object *ValueObject_virtual_toString(Esther *es, Object *self) {
     return String_new_std(es, Variant_toString(as_ValueObject(self)->value));
 }

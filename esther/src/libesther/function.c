@@ -5,6 +5,7 @@
 #include "esther/array.h"
 #include "esther/context.h"
 #include "esther/esther.h"
+#include "esther/exception.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
 #include "esther/tuple.h"
@@ -37,8 +38,10 @@ Object *Function_invoke(Esther *es, Object *self, Object *selfObject, Object *ar
     if (as_Function(self)->argc == -1)
         return as_Function(self)->body(es, selfObject, args);
 
-    if (as_Function(self)->argc != (int)Tuple_size(args))
+    if (as_Function(self)->argc != (int)Tuple_size(args)) {
+        Exception_throw(es, "invalid number of arguments");
         return NULL;
+    }
 
     switch (as_Function(self)->argc) {
     case 0:

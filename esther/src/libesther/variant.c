@@ -32,6 +32,10 @@ Variant Variant_create_real(double value) {
     return var;
 }
 
+VariantType Variant_getType(Variant var) {
+    return var.type;
+}
+
 bool Variant_isNull(Variant var) {
     return var.type == NullVariant;
 }

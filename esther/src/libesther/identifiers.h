@@ -6,14 +6,22 @@ extern "C" {
 
 #include "esther/id.h"
 
-#define X(a, b) extern Id id_##a;
+typedef struct Object Object;
+typedef struct Esther Esther;
+
+#define X(a, b)       \
+    extern Id id_##a; \
+    extern Object *sym_##a;
 #include "keywords.def"
 #include "nodes.def"
 #include "operators.def"
 #include "othertokens.def"
 #undef X
 
-void init_identifiers();
+extern Object *keyword_symbols[];
+extern Object *operator_symbols[];
+
+void init_identifiers(Esther *es);
 
 #ifdef __cplusplus
 }

@@ -8,7 +8,6 @@
 #include "esther/symbol.h"
 #include "esther/tuple.h"
 #include "identifiers.h"
-#include "symbols.h"
 
 Object *Lexer_new(Esther *es) {
     Object *self = malloc(sizeof(Lexer));
