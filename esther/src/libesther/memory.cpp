@@ -39,7 +39,7 @@ asm("_saveRegisters:\n"
 
 extern "C" void saveRegisters(Registers *buf);
 
-const size_t InitialHeapSize = 20000;
+const size_t InitialHeapSize = 1000;
 const double HeapSizeMultiplier = 1.8;
 
 class ObjectHeader {
@@ -253,7 +253,7 @@ void addHeap() {
     size_t heapSize = heaps.empty() ? InitialHeapSize : heapSizes.back() * HeapSizeMultiplier;
 
 #ifdef VERBOSE_GC
-    IO::writeLine("ConservativeMemoryManager::addHeap() // size=%u\n", heapSize);
+    printf("addHeap() // size=%u\n\n", heapSize);
 #endif
 
     heaps.push_back(static_cast<uint8_t *>(malloc(heapSize)));
@@ -334,11 +334,11 @@ void gc_finalize() {
     for (uint32_t size : heapSizes)
         totalMemory += size + bitmapSize(size);
 
-    IO::writeLine("\nObject count: %u", objectCount);
-    IO::writeLine("Heaps used: %u", heaps.size());
-    IO::writeLine("Memory used: %u", memoryUsed);
-    IO::writeLine("Total memory: %u", totalMemory);
-    IO::writeLine("\nConservativeMemoryManager::finalize()");
+    printf("\nObject count: %u\n", objectCount);
+    printf("Heaps used: %u\n", heaps.size());
+    printf("Memory used: %u\n", memoryUsed);
+    printf("Total memory: %u\n", totalMemory);
+    printf("\ngc_finalize()\n");
 #endif
 
     ObjectHeader *header;
@@ -371,15 +371,15 @@ void gc_collect() {
     stackTop = sp;
 
 #ifdef VERBOSE_GC
-    IO::writeLine("\nConservativeMemoryManager::collectGarbage()");
-    size_t oldSize = man->memoryUsed, oldObjectCount = man->objectCount;
+    printf("\ngc_collect()\n");
+    size_t oldSize = memoryUsed, oldObjectCount = objectCount;
 #endif
 
     mark();
     sweep();
 
 #ifdef VERBOSE_GC
-    IO::writeLine("//freed=%u, freedObjects=%u, objectCount=%u\n", oldSize - man->memoryUsed, oldObjectCount - man->objectCount, man->objectCount);
+    printf("//freed=%u, freedObjects=%u, objectCount=%u\n\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
 #endif
 }
 
@@ -389,7 +389,7 @@ void *gc_alloc(size_t size) {
 #endif
 
 #ifdef VERBOSE_GC
-    IO::writeLine("ConservativeMemoryManager::allocate(size=%u)", size);
+    printf("gc_alloc(size=%u)\n", size);
 #endif
 
     size += sizeof(ObjectHeader);

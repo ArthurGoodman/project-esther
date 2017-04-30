@@ -339,6 +339,34 @@ void Esther_init(Esther *es) {
 
     gc_registerMapper(GlobalMapper_new(es));
 
+    es->objectClass = NULL;
+    es->classClass = NULL;
+    es->stringClass = NULL;
+    es->symbolClass = NULL;
+    es->functionClass = NULL;
+    es->tupleClass = NULL;
+    es->arrayClass = NULL;
+    es->booleanClass = NULL;
+    es->nullClass = NULL;
+    es->numericClass = NULL;
+    es->charClass = NULL;
+    es->intClass = NULL;
+    es->floatClass = NULL;
+    es->exceptionClass = NULL;
+
+    es->trueObject = NULL;
+    es->falseObject = NULL;
+    es->nullObject = NULL;
+
+    es->lexer = NULL;
+    es->parser = NULL;
+
+    es->mainObject = NULL;
+    es->esther = NULL;
+    es->io = NULL;
+
+    es->root = NULL;
+
     es->classClass = Class_new_init(es, "Class", NULL);
     as_Class(es->classClass)->base.objectClass = es->classClass;
     as_Class(es->classClass)->newInstance = ClassClass_virtual_newInstance;

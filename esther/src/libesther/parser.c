@@ -18,10 +18,16 @@ void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 }
 
 Object *Parser_new(Esther *es) {
-    Object *self = gc_alloc(sizeof(Parser));
-    Object_init(es, self, TObject, es->objectClass);
-    self->base.base.mapOnReferences = Parser_virtual_mapOnReferences;
-    return self;
+    Parser *self = gc_alloc(sizeof(Parser));
+
+    Object_init(es, &self->base, TObject, es->objectClass);
+
+    self->tokens = NULL;
+    self->token = NULL;
+
+    self->base.base.base.mapOnReferences = Parser_virtual_mapOnReferences;
+
+    return (Object *)self;
 }
 
 static void getToken(Parser *parser) {
