@@ -11,7 +11,7 @@
 #include "esther/tuple.h"
 
 Object *Function_new(Esther *es, const char *name, Object *(*body)(), int argc) {
-    Object *f = malloc(sizeof(Function));
+    Object *f = gc_alloc(sizeof(Function));
     Function_init(es, f, name, body, argc);
     return f;
 }
@@ -25,6 +25,8 @@ void Function_init(Esther *es, Object *f, const char *name, Object *(*body)(), i
 
     as_Function(f)->base.toString = Function_virtual_toString;
     as_Function(f)->base.inspect = Function_virtual_toString;
+
+    f->base.finalize = Function_virtual_finalize;
 }
 
 const char *Function_getName(Object *f) {
@@ -106,6 +108,12 @@ Object *Function_virtual_toString(Esther *es, Object *f) {
     return String_new_std(es, std_string_format("<function %s>", name));
 }
 
+void Function_virtual_finalize(ManagedObject *self) {
+    Object_virtual_finalize(self);
+
+    free((void *)as_Function(self)->name);
+}
+
 static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Object *args) {
     if (as_InterpretedFunction(f)->argc != (int)Tuple_size(args)) {
         Exception_throw(es, "invalid number of arguments");
@@ -121,7 +129,7 @@ static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Obj
 }
 
 Object *InterpretedFunction_new(Esther *es, const char *name, Object *params, Context *closure, Object *body) {
-    Object *f = malloc(sizeof(InterpretedFunction));
+    Object *f = gc_alloc(sizeof(InterpretedFunction));
     InterpretedFunction_init(es, f, name, params, closure, body);
     return f;
 }
@@ -140,4 +148,20 @@ void InterpretedFunction_init(Esther *es, Object *f, const char *name, Object *p
 
     as_InterpretedFunction(f)->closure = closure;
     as_InterpretedFunction(f)->body = body;
+
+    f->base.base.mapOnReferences = InterpretedFunction_virtual_mapOnReferences;
+    f->base.finalize = InterpretedFunction_virtual_finalize;
+}
+
+void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnReferences(self, f);
+
+    f((void **)&as_InterpretedFunction(self)->closure);
+    f((void **)&as_InterpretedFunction(self)->body);
+}
+
+void InterpretedFunction_virtual_finalize(ManagedObject *self) {
+    Function_virtual_finalize(self);
+
+    free(as_InterpretedFunction(self)->params);
 }

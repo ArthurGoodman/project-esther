@@ -50,6 +50,8 @@ const char *Exception_getMessage(Object *self);
 
 void Exception_throw(Esther *es, const char *fmt, ...);
 
+void Exception_virtual_finalize(ManagedObject *self);
+
 #ifdef __cplusplus
 }
 #endif

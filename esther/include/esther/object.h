@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include "esther/common.h"
+#include "esther/memory.h"
 
 struct std_map;
 
@@ -27,6 +28,8 @@ typedef enum ObjectType {
 } ObjectType;
 
 typedef struct Object {
+    ManagedObject base;
+
     ObjectType type;
     Object *objectClass;
     struct std_map *attributes;
@@ -36,6 +39,8 @@ typedef struct Object {
     bool (*equals)(Object *self, Object *obj);
     bool (*isTrue)();
 } Object;
+
+#define as_Object(obj) ((Object *)(obj))
 
 Object *Object_new(Esther *es);
 
@@ -67,6 +72,9 @@ bool Object_virtual_equals(Object *self, Object *obj);
 
 bool Object_isTrue(Object *self);
 bool Object_virtual_isTrue();
+
+void Object_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Object_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus
 }

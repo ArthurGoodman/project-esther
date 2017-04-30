@@ -13,7 +13,7 @@ typedef ptr_t *ptr_ptr_t;
 typedef struct ManagedObject ManagedObject;
 typedef struct Mapper Mapper;
 
-typedef void (*MapFunction)(ManagedObject **);
+typedef void (*MapFunction)(void **);
 
 typedef struct Mapper {
     void (*mapOnReferences)(Mapper *, MapFunction);
@@ -41,7 +41,7 @@ void gc_free(void *p);
 
 void gc_collect();
 
-void gc_regiserMapper(Mapper *mapper);
+void gc_registerMapper(Mapper *mapper);
 
 #ifdef __cplusplus
 }

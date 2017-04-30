@@ -12,7 +12,7 @@ Object *Class_new(Esther *es) {
 }
 
 Object *Class_new_init(Esther *es, const char *name, Object *superclass) {
-    Object *self = malloc(sizeof(Class));
+    Object *self = gc_alloc(sizeof(Class));
     Class_init(es, self, name, superclass);
     return self;
 }
@@ -27,6 +27,9 @@ void Class_init(Esther *es, Object *self, const char *name, Object *superclass) 
     as_Class(self)->newInstance = Class_virtual_newInstance;
     as_Class(self)->base.toString = Class_virtual_toString;
     as_Class(self)->base.inspect = Class_virtual_toString;
+
+    self->base.base.mapOnReferences = Class_virtual_mapOnReferences;
+    self->base.finalize = Class_virtual_finalize;
 }
 
 const char *Class_getName(Object *self) {
@@ -89,4 +92,30 @@ Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
     Object *instance = as_Class(as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
     instance->objectClass = self;
     return instance;
+}
+
+void Class_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnReferences(self, f);
+
+    f((void **)&as_Class(self)->superclass);
+
+    if (as_Class(self)->methods) {
+        std_map_iterator i;
+        std_map_begin(as_Class(self)->methods, &i);
+
+        while (!std_map_end(as_Class(self)->methods, &i)) {
+            void *value = std_map_iterator_value(&i);
+            f((void **)&value);
+            std_map_iterator_set_value(&i, value);
+
+            std_map_iterator_next(&i);
+        }
+    }
+}
+
+void Class_virtual_finalize(ManagedObject *self) {
+    Object_virtual_finalize(self);
+
+    free((void *)as_Class(self)->name);
+    std_map_delete(as_Class(self)->methods);
 }

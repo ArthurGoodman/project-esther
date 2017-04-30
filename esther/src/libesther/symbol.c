@@ -4,7 +4,7 @@
 #include "esther/string.h"
 
 Object *Symbol_new(Esther *es, const char *name) {
-    Object *self = malloc(sizeof(Symbol));
+    Object *self = gc_alloc(sizeof(Symbol));
     Symbol_init(es, self, name);
     return self;
 }

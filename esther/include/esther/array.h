@@ -37,6 +37,9 @@ Object *Array_pop(Object *self);
 
 Object *Array_virtual_inspect(Esther *es, Object *self);
 
+void Array_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Array_virtual_finalize(ManagedObject *self);
+
 #ifdef __cplusplus
 }
 #endif

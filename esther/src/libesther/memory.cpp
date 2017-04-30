@@ -8,8 +8,10 @@
 #include <queue>
 #include <vector>
 
-//#define VERBOSE_GC
+#include "config.h"
+#include "esther/common.h"
 
+namespace {
 struct Registers {
     ptr_t reg[5];
 };
@@ -37,8 +39,8 @@ asm("_saveRegisters:\n"
 
 extern "C" void saveRegisters(Registers *buf);
 
-static const size_t InitialHeapSize = 20000;
-static const double HeapSizeMultiplier = 1.8;
+const size_t InitialHeapSize = 20000;
+const double HeapSizeMultiplier = 1.8;
 
 class ObjectHeader {
     uint32_t flags;
@@ -60,6 +62,11 @@ public:
     void setSize(size_t size);
 };
 
+ObjectHeader::ObjectHeader(size_t size, uint32_t flags)
+    : flags(flags)
+    , size(size) {
+}
+
 inline bool ObjectHeader::hasFlag(int flag) const {
     return flags & flag;
 }
@@ -80,11 +87,6 @@ inline void ObjectHeader::setSize(size_t size) {
     this->size = size;
 }
 
-ObjectHeader::ObjectHeader(size_t size, uint32_t flags)
-    : flags(flags)
-    , size(size) {
-}
-
 struct FreeObject {
     ObjectHeader *header;
     size_t heapIndex;
@@ -98,90 +100,111 @@ bool CompareObjects::operator()(const FreeObject &a, const FreeObject &b) {
     return a.header->getSize() < b.header->getSize();
 }
 
-static void Mapper_virtual_mapOnReferences(Mapper *, MapFunction) {
-}
-
-void Mapper_init(Mapper *self) {
-    self->mapOnReferences = Mapper_virtual_mapOnReferences;
-}
-
-void Mapper_mapOnReferences(Mapper *self, MapFunction f) {
-    self->mapOnReferences(self, f);
-}
-
-static void ManagedObject_virtual_finalize(ManagedObject *) {
-}
-
-void ManagedObject_init(ManagedObject *self) {
-    Mapper_init(&self->base);
-
-    self->finalize = ManagedObject_virtual_finalize;
-}
-
-void ManagedObject_finalize(ManagedObject *self) {
-    self->finalize(self);
-}
-
 typedef std::priority_queue<FreeObject, std::vector<FreeObject>, CompareObjects> FreeObjectQueue;
 
-static std::vector<uint8_t *> heaps;
-static std::vector<uint32_t> heapSizes;
-static std::vector<uint8_t *> bitmaps;
+std::vector<uint8_t *> heaps;
+std::vector<uint32_t> heapSizes;
+std::vector<uint8_t *> bitmaps;
 
-static uint8_t *heapMin, *heapMax;
+uint8_t *heapMin, *heapMax;
 
-static size_t objectCount, memoryUsed;
+size_t objectCount, memoryUsed;
 
-static FreeObjectQueue freeObjects;
+FreeObjectQueue freeObjects;
 
-static ptr_ptr_t stackBottom, stackTop;
+ptr_ptr_t stackBottom, stackTop;
 
-static std::vector<Mapper *> mappers;
+std::vector<Mapper *> mappers;
 
-static bool enoughSpace(size_t size) {
-    return !freeObjects.empty() && freeObjects.top().header->getSize() >= size;
-}
-
-static void mark(ManagedObject *object);
-
-static void markReference(ManagedObject **ref) {
-    if (*ref != nullptr && !(reinterpret_cast<ObjectHeader *>(*ref) - 1)->hasFlag(ObjectHeader::FlagMark))
-        mark(*ref);
-}
-
-static void mark(ManagedObject *object) {
-    (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
-    Mapper_mapOnReferences((Mapper *)object, markReference);
-}
-
-static inline size_t bitmapSize(size_t size) {
+inline size_t bitmapSize(size_t size) {
     return size % (sizeof(void *) * 8) ? size / (sizeof(void *) * 8) + 1 : size / (sizeof(void *) * 8);
 }
 
-static inline size_t bitmapByte(size_t i) {
+inline size_t bitmapByte(size_t i) {
     return i / (sizeof(void *) * 8);
 }
 
-static inline size_t bitmapBit(size_t i) {
+inline size_t bitmapBit(size_t i) {
     return (i / sizeof(void *)) % 8;
 }
 
-static inline void markAsAllocation(uint8_t *p, size_t heapIndex) {
+inline void markAsAllocation(uint8_t *p, size_t heapIndex) {
     size_t headerByte = p - heaps[heapIndex];
     bitmaps[heapIndex][bitmapByte(headerByte)] |= 1 << bitmapBit(headerByte);
 }
 
-static inline bool isAllocation(uint8_t *p, size_t heapIndex) {
+bool isAllocation(uint8_t *p, size_t heapIndex) {
     size_t headerByte = p - heaps[heapIndex];
     return bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte));
 }
 
-static void markFree(uint8_t *p, size_t size, size_t heapIndex) {
+bool enoughSpace(size_t size) {
+    return !freeObjects.empty() && freeObjects.top().header->getSize() >= size;
+}
+
+void markFree(uint8_t *p, size_t size, size_t heapIndex) {
     freeObjects.push({ new (p) ObjectHeader(size, ObjectHeader::FlagFree), heapIndex });
     markAsAllocation(p, heapIndex);
 }
 
-static void sweep() {
+void mark(ManagedObject *object);
+
+void markReference(void **ref) {
+    if (*ref != nullptr && !(reinterpret_cast<ObjectHeader *>(*ref) - 1)->hasFlag(ObjectHeader::FlagMark))
+        mark((ManagedObject *)*ref);
+}
+
+void mark(ManagedObject *object) {
+    (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
+    Mapper_mapOnReferences((Mapper *)object, markReference);
+}
+
+bool isValidPtr(uint8_t *p) {
+    if (reinterpret_cast<ptr_t>(p) % sizeof(void *) != 0)
+        return false;
+
+    if (p < heapMin + sizeof(ObjectHeader) || p >= heapMax)
+        return false;
+
+    size_t i;
+
+    for (i = 0; i < heaps.size(); i++)
+        if (p >= heaps[i] + sizeof(ObjectHeader) && p < heaps[i] + heapSizes[i])
+            break;
+
+    if (i == heaps.size())
+        return false;
+
+    ObjectHeader *header = reinterpret_cast<ObjectHeader *>(p) - 1;
+
+    if (!isAllocation(reinterpret_cast<uint8_t *>(header), i))
+        return false;
+
+    if (header->hasFlag(ObjectHeader::FlagFree))
+        return false;
+
+    return true;
+}
+
+void markRange(ptr_ptr_t p, size_t n) {
+    for (size_t i = 0; i < n; i++, p++)
+        if (isValidPtr(reinterpret_cast<uint8_t *>(*p)))
+            mark(reinterpret_cast<ManagedObject *>(*p));
+}
+
+void mark() {
+    markRange(stackTop, stackBottom - stackTop);
+
+    Registers buf;
+    saveRegisters(&buf);
+
+    markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_t));
+
+    for (Mapper *mapper : mappers)
+        Mapper_mapOnReferences(mapper, markReference);
+}
+
+void sweep() {
     objectCount = 0;
     memoryUsed = 0;
 
@@ -226,52 +249,7 @@ static void sweep() {
     }
 }
 
-static bool isValidPtr(uint8_t *p) {
-    if (reinterpret_cast<ptr_t>(p) % sizeof(void *) != 0)
-        return false;
-
-    if (p < heapMin + sizeof(ObjectHeader) || p >= heapMax)
-        return false;
-
-    size_t i;
-
-    for (i = 0; i < heaps.size(); i++)
-        if (p >= heaps[i] + sizeof(ObjectHeader) && p < heaps[i] + heapSizes[i])
-            break;
-
-    if (i == heaps.size())
-        return false;
-
-    ObjectHeader *header = reinterpret_cast<ObjectHeader *>(p) - 1;
-
-    if (!isAllocation(reinterpret_cast<uint8_t *>(header), i))
-        return false;
-
-    if (header->hasFlag(ObjectHeader::FlagFree))
-        return false;
-
-    return true;
-}
-
-static void markRange(ptr_ptr_t p, size_t n) {
-    for (size_t i = 0; i < n; i++, p++)
-        if (isValidPtr(reinterpret_cast<uint8_t *>(*p)))
-            mark(reinterpret_cast<ManagedObject *>(*p));
-}
-
-static void mark() {
-    markRange(stackTop, stackBottom - stackTop);
-
-    Registers buf;
-    saveRegisters(&buf);
-
-    markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_t));
-
-    for (Mapper *mapper : mappers)
-        Mapper_mapOnReferences(mapper, markReference);
-}
-
-static void addHeap() {
+void addHeap() {
     size_t heapSize = heaps.empty() ? InitialHeapSize : heapSizes.back() * HeapSizeMultiplier;
 
 #ifdef VERBOSE_GC
@@ -291,7 +269,7 @@ static void addHeap() {
     markFree(heaps.back(), heapSize, heaps.size() - 1);
 }
 
-static ManagedObject *claimFreeSpace(size_t size) {
+ManagedObject *claimFreeSpace(size_t size) {
     ObjectHeader *header = freeObjects.top().header;
     size_t heapIndex = freeObjects.top().heapIndex;
 
@@ -306,8 +284,37 @@ static ManagedObject *claimFreeSpace(size_t size) {
 
     return reinterpret_cast<ManagedObject *>(header + 1);
 }
+}
+
+static void Mapper_virtual_mapOnReferences(Mapper *, MapFunction) {
+}
+
+void Mapper_init(Mapper *self) {
+    self->mapOnReferences = Mapper_virtual_mapOnReferences;
+}
+
+void Mapper_mapOnReferences(Mapper *self, MapFunction f) {
+    self->mapOnReferences(self, f);
+}
+
+static void ManagedObject_virtual_finalize(ManagedObject *) {
+}
+
+void ManagedObject_init(ManagedObject *self) {
+    Mapper_init(&self->base);
+
+    self->finalize = ManagedObject_virtual_finalize;
+}
+
+void ManagedObject_finalize(ManagedObject *self) {
+    self->finalize(self);
+}
 
 void gc_initialize(ptr_ptr_t bp) {
+#ifndef GC
+    return;
+#endif
+
     stackBottom = bp;
 
     heapMin = heapMax = nullptr;
@@ -317,6 +324,10 @@ void gc_initialize(ptr_ptr_t bp) {
 }
 
 void gc_finalize() {
+#ifndef GC
+    return;
+#endif
+
 #ifdef VERBOSE_GC
     size_t totalMemory = 0;
 
@@ -347,6 +358,10 @@ void gc_finalize() {
 }
 
 void gc_collect() {
+#ifndef GC
+    return;
+#endif
+
 #ifdef __x86_64
     register ptr_ptr_t sp asm("rsp");
 #elif __i386
@@ -369,6 +384,10 @@ void gc_collect() {
 }
 
 void *gc_alloc(size_t size) {
+#ifndef GC
+    return malloc(size);
+#endif
+
 #ifdef VERBOSE_GC
     IO::writeLine("ConservativeMemoryManager::allocate(size=%u)", size);
 #endif
@@ -389,9 +408,12 @@ void *gc_alloc(size_t size) {
     return claimFreeSpace(size);
 }
 
-void gc_free(void *) {
+void gc_free(void *UNUSED(p)) {
+#ifndef GC
+    return free(p);
+#endif
 }
 
-void gc_regiserMapper(Mapper *mapper) {
+void gc_registerMapper(Mapper *mapper) {
     mappers.push_back(mapper);
 }

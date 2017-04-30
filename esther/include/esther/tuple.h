@@ -30,6 +30,9 @@ void Tuple_set(Object *self, size_t index, Object *value);
 
 Object *Tuple_virtual_inspect(Esther *es, Object *self);
 
+void Tuple_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Tuple_virtual_finalize(ManagedObject *self);
+
 #ifdef __cplusplus
 }
 #endif

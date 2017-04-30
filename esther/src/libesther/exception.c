@@ -23,7 +23,7 @@ Object *get_last_exception() {
 }
 
 Object *Exception_new(Esther *es, const char *msg) {
-    Object *self = malloc(sizeof(Exception));
+    Object *self = gc_alloc(sizeof(Exception));
     Exception_init(es, self, msg);
     return self;
 }
@@ -32,6 +32,8 @@ void Exception_init(Esther *es, Object *self, const char *msg) {
     Object_init(es, self, TException, es->exceptionClass);
 
     as_Exception(self)->msg = strdup(msg);
+
+    self->base.finalize = Exception_virtual_finalize;
 }
 
 const char *Exception_getMessage(Object *self) {
@@ -49,4 +51,10 @@ void Exception_throw(Esther *es, const char *fmt, ...) {
     std_string_delete(msg);
 
     THROW;
+}
+
+void Exception_virtual_finalize(ManagedObject *self) {
+    Object_virtual_finalize(self);
+
+    free((void *)as_Exception(self)->msg);
 }

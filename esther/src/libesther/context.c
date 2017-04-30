@@ -4,7 +4,7 @@
 #include "esther/esther.h"
 
 Context *Context_new(Esther *es) {
-    Context *self = malloc(sizeof(Context));
+    Context *self = gc_alloc(sizeof(Context));
     Context_init(self, NULL, es->mainObject, es->mainObject);
     return self;
 }
@@ -16,8 +16,8 @@ void Context_init(Context *self, Context *parent, Object *selfObject, Object *he
     self->self = selfObject;
     self->here = hereObject;
 
-    self->base.base.mapOnReferences = (void (*)(Mapper *, MapFunction))Context_virtual_mapOnReferences;
-    self->base.finalize = (void (*)(ManagedObject *))Context_virtual_finalize;
+    self->base.base.mapOnReferences = Context_virtual_mapOnReferences;
+    self->base.finalize = Context_virtual_finalize;
 }
 
 Context *Context_getParent(Context *self) {
@@ -70,16 +70,18 @@ bool Context_assign(Context *self, const char *name, Object *value) {
 }
 
 Context *Context_childContext(Context *self, Object *selfObject, Object *hereObject) {
-    Context *child = malloc(sizeof(Context));
+    Context *child = gc_alloc(sizeof(Context));
     Context_init(child, self, selfObject, hereObject);
     return child;
 }
 
-void Context_virtual_mapOnReferences(Context *self, void (*f)(ManagedObject **)) {
-    f((ManagedObject **)&self->parent);
-    f((ManagedObject **)&self->self);
-    f((ManagedObject **)&self->here);
+void Context_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+    f((void **)&as_Context(self)->parent);
+    f((void **)&as_Context(self)->self);
+
+    if (as_Context(self)->self != as_Context(self)->here)
+        f((void **)&as_Context(self)->here);
 }
 
-void Context_virtual_finalize(Context *UNUSED(self)) {
+void Context_virtual_finalize(ManagedObject *UNUSED(self)) {
 }

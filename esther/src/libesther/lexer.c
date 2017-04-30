@@ -10,7 +10,7 @@
 #include "identifiers.h"
 
 Object *Lexer_new(Esther *es) {
-    Object *self = malloc(sizeof(Lexer));
+    Object *self = gc_alloc(sizeof(Lexer));
     Object_init(es, self, TObject, es->objectClass);
     return self;
 }

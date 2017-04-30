@@ -10,7 +10,7 @@ Object *Tuple_new(Esther *es, size_t size, ...) {
     va_list ap;
     va_start(ap, size);
 
-    Object *self = malloc(sizeof(Tuple));
+    Object *self = gc_alloc(sizeof(Tuple));
     Tuple_init_va(es, self, size, ap);
 
     va_end(ap);
@@ -19,13 +19,13 @@ Object *Tuple_new(Esther *es, size_t size, ...) {
 }
 
 Object *Tuple_new_init(Esther *es, Object *const *data, size_t size) {
-    Object *self = malloc(sizeof(Tuple));
+    Object *self = gc_alloc(sizeof(Tuple));
     Tuple_init(es, self, data, size);
     return self;
 }
 
 Object *Tuple_new_init_null(Esther *es, size_t size) {
-    Object *self = malloc(sizeof(Tuple));
+    Object *self = gc_alloc(sizeof(Tuple));
     Tuple_init_null(es, self, size);
     return self;
 }
@@ -45,6 +45,9 @@ void Tuple_init_null(Esther *es, Object *self, size_t size) {
 
     as_Tuple(self)->base.toString = Tuple_virtual_inspect;
     as_Tuple(self)->base.inspect = Tuple_virtual_inspect;
+
+    self->base.base.mapOnReferences = Tuple_virtual_mapOnReferences;
+    self->base.finalize = Tuple_virtual_finalize;
 }
 
 void Tuple_init_va(Esther *es, Object *self, size_t size, va_list ap) {
@@ -82,4 +85,17 @@ Object *Tuple_virtual_inspect(Esther *es, Object *self) {
     String_append_c_str(str, ")");
 
     return str;
+}
+
+void Tuple_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnReferences(self, f);
+
+    for (size_t i = 0; i < as_Tuple(self)->size; i++)
+        f((void **)&as_Tuple(self)->data[i]);
+}
+
+void Tuple_virtual_finalize(ManagedObject *self) {
+    Object_virtual_finalize(self);
+
+    free(as_Tuple(self)->data);
 }

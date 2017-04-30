@@ -12,12 +12,14 @@
 #include "esther/tuple.h"
 
 Object *Object_new(Esther *es) {
-    Object *self = malloc(sizeof(Object));
+    Object *self = gc_alloc(sizeof(Object));
     Object_init(es, self, TObject, es->objectClass);
     return self;
 }
 
 void Object_init(Esther *UNUSED(es), Object *self, ObjectType type, Object *objectClass) {
+    ManagedObject_init(&self->base);
+
     self->type = type;
     self->objectClass = objectClass;
     self->attributes = NULL;
@@ -26,6 +28,9 @@ void Object_init(Esther *UNUSED(es), Object *self, ObjectType type, Object *obje
     self->inspect = Object_virtual_toString;
     self->equals = Object_virtual_equals;
     self->isTrue = Object_virtual_isTrue;
+
+    self->base.base.mapOnReferences = Object_virtual_mapOnReferences;
+    self->base.finalize = Object_virtual_finalize;
 }
 
 ObjectType Object_getType(Object *self) {
@@ -112,4 +117,25 @@ bool Object_isTrue(Object *self) {
 
 bool Object_virtual_isTrue() {
     return true;
+}
+
+void Object_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+    f((void **)&as_Object(self)->objectClass);
+
+    if (as_Object(self)->attributes) {
+        std_map_iterator i;
+        std_map_begin(as_Object(self)->attributes, &i);
+
+        while (!std_map_end(as_Object(self)->attributes, &i)) {
+            void *value = std_map_iterator_value(&i);
+            f((void **)&value);
+            std_map_iterator_set_value(&i, value);
+
+            std_map_iterator_next(&i);
+        }
+    }
+}
+
+void Object_virtual_finalize(ManagedObject *self) {
+    std_map_delete(as_Object(self)->attributes);
 }

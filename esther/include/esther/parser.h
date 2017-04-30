@@ -14,8 +14,6 @@ typedef struct Parser {
     Object *token;
 } Parser;
 
-#define as_Parser(obj) ((Parser *)(obj))
-
 Object *Parser_new(Esther *es);
 
 Object *Parser_parse(Esther *es, Object *self, Object *tokens);

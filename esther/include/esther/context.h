@@ -20,6 +20,8 @@ typedef struct Context {
     Object *here;
 } Context;
 
+#define as_Context(obj) ((Context *)(obj))
+
 Context *Context_new(Esther *es);
 
 void Context_init(Context *self, Context *parent, Object *selfObject, Object *hereObject);
@@ -37,8 +39,8 @@ bool Context_assign(Context *self, const char *name, Object *value);
 
 Context *Context_childContext(Context *self, Object *selfObject, Object *hereObject);
 
-void Context_virtual_mapOnReferences(Context *self, void (*f)(ManagedObject **));
-void Context_virtual_finalize(Context *self);
+void Context_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Context_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus
 }

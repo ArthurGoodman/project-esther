@@ -10,9 +10,17 @@
 #include "esther/valueobject.h"
 #include "identifiers.h"
 
+void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnReferences(self, f);
+
+    f((void **)&((Parser *)self)->tokens);
+    f((void **)&((Parser *)self)->token);
+}
+
 Object *Parser_new(Esther *es) {
-    Object *self = malloc(sizeof(Parser));
+    Object *self = gc_alloc(sizeof(Parser));
     Object_init(es, self, TObject, es->objectClass);
+    self->base.base.mapOnReferences = Parser_virtual_mapOnReferences;
     return self;
 }
 

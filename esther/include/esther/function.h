@@ -28,6 +28,8 @@ Object *Function_invoke(Esther *es, Object *f, Object *self, Object *args);
 
 Object *Function_virtual_toString(Esther *es, Object *f);
 
+void Function_virtual_finalize(ManagedObject *self);
+
 typedef struct InterpretedFunction {
     Function base;
 
@@ -42,6 +44,9 @@ typedef struct InterpretedFunction {
 Object *InterpretedFunction_new(Esther *es, const char *name, Object *params, Context *closure, Object *body);
 
 void InterpretedFunction_init(Esther *es, Object *f, const char *name, Object *params, Context *closure, Object *body);
+
+void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void InterpretedFunction_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus
 }

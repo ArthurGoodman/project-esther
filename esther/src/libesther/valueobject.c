@@ -16,7 +16,7 @@ Object *ValueObject_new_real(Esther *es, double value) {
 }
 
 Object *ValueObject_new_var(Esther *es, Variant value) {
-    Object *self = malloc(sizeof(ValueObject));
+    Object *self = gc_alloc(sizeof(ValueObject));
     ValueObject_init(es, self, value);
     return self;
 }
