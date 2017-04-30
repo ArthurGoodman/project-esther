@@ -17,7 +17,6 @@ void Context_init(Context *self, Context *parent, Object *selfObject, Object *he
     self->here = hereObject;
 
     self->base.base.mapOnReferences = Context_virtual_mapOnReferences;
-    self->base.finalize = Context_virtual_finalize;
 }
 
 Context *Context_getParent(Context *self) {
@@ -81,7 +80,4 @@ void Context_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 
     if (as_Context(self)->self != as_Context(self)->here)
         f((void **)&as_Context(self)->here);
-}
-
-void Context_virtual_finalize(ManagedObject *UNUSED(self)) {
 }

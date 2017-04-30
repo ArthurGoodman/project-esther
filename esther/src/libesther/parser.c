@@ -28,15 +28,15 @@ static void getToken(Parser *parser) {
     parser->token = Array_get(parser->tokens, parser->pos++);
 }
 
-static void error_invalidToken(Esther *es) {
-    Exception_throw(es, "invalid token");
+static void error_invalidToken(Esther *es, Parser *parser) {
+    Exception_throw(es, "invalid token %s", String_c_str(Object_toString(es, parser->token)));
 }
 
 static bool check(Esther *es, Parser *parser, Id id) {
     Object *symbol = Tuple_get(parser->token, 0);
 
     if (Object_getType(symbol) != TSymbol)
-        error_invalidToken(es);
+        error_invalidToken(es, parser);
 
     return Symbol_getId(symbol) == id;
 }

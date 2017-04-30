@@ -97,7 +97,8 @@ Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
 void Class_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     Object_virtual_mapOnReferences(self, f);
 
-    f((void **)&as_Class(self)->superclass);
+    if (as_Class(self)->superclass)
+        f((void **)&as_Class(self)->superclass);
 
     if (as_Class(self)->methods) {
         std_map_iterator i;
