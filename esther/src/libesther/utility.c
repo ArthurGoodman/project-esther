@@ -12,7 +12,10 @@ struct std_string *read_file(const char *fileName) {
     fseek(file, 0, SEEK_SET);
 
     char *data = malloc(size + 1);
-    fread(data, size, 1, file);
+
+    if (fread(data, size, 1, file)) {
+    }
+
     fclose(file);
 
     data[size] = '\0';

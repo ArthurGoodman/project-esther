@@ -8,6 +8,7 @@
 #include "esther/exception.h"
 #include "esther/function.h"
 #include "esther/id.h"
+#include "esther/memory.h"
 #include "esther/object.h"
 #include "esther/std_map.h"
 #include "esther/std_string.h"

@@ -6,6 +6,7 @@
 #include "esther/exception.h"
 #include "esther/function.h"
 #include "esther/lexer.h"
+#include "esther/memory.h"
 #include "esther/object.h"
 #include "esther/parser.h"
 #include "esther/std_map.h"
@@ -284,7 +285,60 @@ static Object *Esther_evalFunction(Esther *es, Object *UNUSED(self), Object *ast
     return Esther_eval(es, ast, es->root);
 }
 
+typedef struct GlobalMapper {
+    Mapper base;
+
+    Esther *es;
+} GlobalMapper;
+
+static void GlobalMapper_mapOnReferences(GlobalMapper *self, void (*f)(ManagedObject **)) {
+    f((ManagedObject **)&self->es->objectClass);
+    f((ManagedObject **)&self->es->classClass);
+    f((ManagedObject **)&self->es->stringClass);
+    f((ManagedObject **)&self->es->symbolClass);
+    f((ManagedObject **)&self->es->functionClass);
+    f((ManagedObject **)&self->es->tupleClass);
+    f((ManagedObject **)&self->es->arrayClass);
+    f((ManagedObject **)&self->es->booleanClass);
+    f((ManagedObject **)&self->es->nullClass);
+    f((ManagedObject **)&self->es->numericClass);
+    f((ManagedObject **)&self->es->charClass);
+    f((ManagedObject **)&self->es->intClass);
+    f((ManagedObject **)&self->es->floatClass);
+    f((ManagedObject **)&self->es->exceptionClass);
+
+    f((ManagedObject **)&self->es->trueObject);
+    f((ManagedObject **)&self->es->falseObject);
+    f((ManagedObject **)&self->es->nullObject);
+
+    f((ManagedObject **)&self->es->lexer);
+    f((ManagedObject **)&self->es->parser);
+
+    f((ManagedObject **)&self->es->mainObject);
+    f((ManagedObject **)&self->es->esther);
+    f((ManagedObject **)&self->es->io);
+
+    f((ManagedObject **)&self->es->root);
+}
+
+static Mapper *GlobalMapper_new(Esther *es) {
+    GlobalMapper *self = malloc(sizeof(GlobalMapper));
+    self->base.mapOnReferences = (void (*)(Mapper *, MapFunction))GlobalMapper_mapOnReferences;
+    self->es = es;
+    return (Mapper *)self;
+}
+
 void Esther_init(Esther *es) {
+#ifdef __x86_64
+    register ptr_ptr_t bp asm("rbp");
+#elif __i386
+    register ptr_ptr_t bp asm("ebp");
+#endif
+
+    gc_initialize(bp);
+
+    gc_regiserMapper(GlobalMapper_new(es));
+
     es->classClass = Class_new_init(es, "Class", NULL);
     as_Class(es->classClass)->base.objectClass = es->classClass;
     as_Class(es->classClass)->newInstance = ClassClass_virtual_newInstance;
