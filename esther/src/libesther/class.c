@@ -86,7 +86,7 @@ Object *Class_newInstance(Esther *es, Object *self, Object *args) {
 }
 
 Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
-    Object *instance = Class_newInstance(es, as_Class(self)->superclass, args);
+    Object *instance = as_Class(as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
     instance->objectClass = self;
     return instance;
 }

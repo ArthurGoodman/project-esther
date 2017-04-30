@@ -240,8 +240,14 @@ static Object *suffix(Esther *es, Parser *parser) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
                 e = Tuple_new(es, 3, sym_attr, e, Tuple_get(parser->token, 1));
                 getToken(parser);
-            } else
+            } else {
+                bool expectRightPar = accept(es, parser, id_leftPar);
+
                 e = Tuple_new(es, 3, sym_dot, e, logicOr(es, parser));
+
+                if (expectRightPar && !accept(es, parser, id_rightPar))
+                    Exception_throw(es, "unmatched parentheses");
+            }
         } else
             break;
     }
@@ -334,7 +340,11 @@ static Object *term(Esther *es, Parser *parser) {
         } else
             name = String_new(es, "");
 
-        e = Tuple_new(es, 3, sym_class, name, expr(es, parser));
+        if (accept(es, parser, id_lt)) {
+            Object *superclass = expr(es, parser);
+            e = Tuple_new(es, 4, sym_class, name, superclass, expr(es, parser));
+        } else
+            e = Tuple_new(es, 3, sym_class, name, expr(es, parser));
     }
 
     else if (accept(es, parser, id_function)) {
@@ -365,10 +375,29 @@ static Object *term(Esther *es, Parser *parser) {
     }
 
     else if (accept(es, parser, id_new)) {
-        if (check(es, parser, id_leftBrace))
+        if (check(es, parser, id_braces) || check(es, parser, id_leftBrace))
             e = Tuple_new(es, 2, sym_new, term(es, parser));
-        else
-            e = Tuple_new(es, 3, sym_new, term(es, parser), Array_new(es, 0));
+        else {
+            if (!check(es, parser, id_id))
+                Exception_throw(es, "indentifier expected");
+
+            Object *name = Tuple_get(parser->token, 1);
+            getToken(parser);
+
+            Object *args = Array_new(es, 0);
+
+            if (!accept(es, parser, id_pars) && accept(es, parser, id_leftPar)) {
+                if (!check(es, parser, id_rightPar))
+                    do
+                        Array_push(args, expr(es, parser));
+                    while (accept(es, parser, id_comma));
+
+                if (!accept(es, parser, id_rightPar))
+                    Exception_throw(es, "unmatched parentheses");
+            }
+
+            e = Tuple_new(es, 4, sym_new, name, args, check(es, parser, id_braces) || check(es, parser, id_leftBrace) ? term(es, parser) : Tuple_new(es, 0));
+        }
     }
 
     else if (accept(es, parser, id_leftPar)) {
@@ -405,7 +434,7 @@ static Object *term(Esther *es, Parser *parser) {
         Object *nodes = Array_new(es, 0);
 
         while (!check(es, parser, id_rightBrace) && !check(es, parser, id_empty))
-            Array_push(nodes, expr(es, parser));
+            Array_push(nodes, statement(es, parser));
 
         if (!accept(es, parser, id_rightBrace))
             Exception_throw(es, "unmatched braces");

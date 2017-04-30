@@ -178,6 +178,10 @@ static Object *ClassClass_setMethod(Esther *UNUSED(es), Object *self, Object *na
     return method;
 }
 
+static Object *StringClass_size(Esther *es, Object *self) {
+    return ValueObject_new_int(es, String_size(self));
+}
+
 static Object *NumericClass_add(Esther *es, Object *a, Object *b) {
     return ValueObject_new_var(es, Variant_add(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
@@ -353,6 +357,8 @@ void Esther_init(Esther *es) {
     Class_setMethod_func(es->classClass, Function_new(es, "getMethod", (Object * (*)())ClassClass_getMethod, 1));
     Class_setMethod_func(es->classClass, Function_new(es, "setMethod", (Object * (*)())ClassClass_setMethod, 2));
 
+    Class_setMethod_func(es->stringClass, Function_new(es, "size", (Object * (*)())StringClass_size, 0));
+
     Class_setMethod_func(es->numericClass, Function_new(es, "+", (Object * (*)())NumericClass_add, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "+=", (Object * (*)())NumericClass_addAssign, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "-", (Object * (*)())NumericClass_sub, 1));
@@ -384,6 +390,8 @@ void Esther_init(Esther *es) {
 
     es->esther = Object_new(es);
 
+    Object_setAttribute(es->esther, "lexer", es->lexer);
+    Object_setAttribute(es->esther, "parser", es->parser);
     Object_setAttribute(es->esther, "eval", Function_new(es, "eval", (Object * (*)())Esther_evalFunction, 1));
 
     es->io = Object_new(es);
@@ -439,9 +447,6 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
     if (Object_getType(ast) == TString) {
         Object *tokens = Lexer_lex(es, es->lexer, ast);
         ast = Parser_parse(es, es->parser, tokens);
-
-        Object_setAttribute(es->esther, "tokens", tokens);
-        Object_setAttribute(es->esther, "ast", ast);
     }
 
     if (Object_getType(ast) != TTuple)
@@ -461,17 +466,24 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             value = Esther_eval(es, Array_get(nodes, i), context);
 
         return value;
-    } else if (id == id_class) {
-        const char *name = String_c_str(Tuple_get(ast, 1));
-        Object *_class = Class_new_init(es, name, NULL);
+    }
 
-        Esther_eval(es, Tuple_get(ast, 2), Context_childContext(context, _class, Object_new(es)));
+    else if (id == id_class) {
+        const char *name = String_c_str(Tuple_get(ast, 1));
+
+        Object *superclass = Tuple_size(ast) == 4 ? Esther_eval(es, Tuple_get(ast, 2), context) : NULL;
+
+        Object *_class = Class_new_init(es, name, superclass);
 
         if (strlen(name) > 0)
             Context_setLocal(context, name, _class);
 
+        Esther_eval(es, Tuple_get(ast, superclass ? 3 : 2), Context_childContext(context, _class, Object_new(es)));
+
         return _class;
-    } else if (id == id_assign) {
+    }
+
+    else if (id == id_assign) {
         Object *child = Tuple_get(ast, 1);
         Id childId = Symbol_getId(Tuple_get(child, 0));
 
@@ -599,24 +611,46 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             Exception_throw(es, "undefined attribute '%s'", name);
 
         return value;
-    } else if (id == id_new) {
-        if (Tuple_size(ast) == 3) {
-            Object *evaledSelf = Esther_eval(es, Tuple_get(ast, 1), context);
-            return Object_call(es, evaledSelf, "new", Tuple_new(es, 0));
-        } else {
+    }
+
+    else if (id == id_new) {
+        if (Tuple_size(ast) == 2) {
             Object *newObject = Object_new(es);
             Esther_eval(es, Tuple_get(ast, 1), Context_childContext(context, newObject, Object_new(es)));
             return newObject;
-        }
-    } else if (id == id_function) {
+        } else if (Tuple_size(ast) == 4) {
+            Object *evaledSelf = Context_resolve(es, context, String_c_str(Tuple_get(ast, 1)));
+
+            Object *args = Tuple_get(ast, 2);
+            Object *evaledArgs = Tuple_new_init_null(es, Array_size(args));
+
+            for (size_t i = 0; i < Array_size(args); i++)
+                Tuple_set(evaledArgs, i, Esther_eval(es, Array_get(args, i), context));
+
+            Object *instance = Object_call(es, evaledSelf, "new", evaledArgs);
+
+            Esther_eval(es, Tuple_get(ast, 3), Context_childContext(context, instance, Object_new(es)));
+
+            return instance;
+        } else
+            return NULL;
+    }
+
+    else if (id == id_function) {
         const char *name = String_c_str(Tuple_get(ast, 1));
         Object *f = InterpretedFunction_new(es, name, Tuple_get(ast, 2), context, Tuple_get(ast, 3));
 
-        if (strlen(name) > 0)
+        if (strlen(name) > 0) {
             Context_setLocal(context, name, f);
 
+            Object *self = Context_getSelf(context);
+            Class_setMethod(self, name, f);
+        }
+
         return f;
-    } else if (id == id_call) {
+    }
+
+    else if (id == id_call) {
         Object *evaledSelf;
         Object *evaledF;
 
@@ -624,8 +658,13 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
         Id childId = Symbol_getId(Tuple_get(child, 0));
 
         if (childId == id_attr) {
+            const char *name = String_c_str(Tuple_get(child, 2));
+
             evaledSelf = Esther_eval(es, Tuple_get(child, 1), context);
-            evaledF = Object_resolve(evaledSelf, String_c_str(Tuple_get(child, 2)));
+            evaledF = Object_resolve(evaledSelf, name);
+
+            if (!evaledF)
+                Exception_throw(es, "undefined attribute '%s'", name);
         } else if (childId == id_dot) {
             evaledSelf = Esther_eval(es, Tuple_get(child, 1), context);
             evaledF = Esther_eval(es, Tuple_get(child, 2), Context_childContext(context, evaledSelf, Object_new(es)));
@@ -642,7 +681,9 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             Tuple_set(evaledArgs, i, Esther_eval(es, Array_get(args, i), context));
 
         return Object_call_function(es, evaledSelf, evaledF, evaledArgs);
-    } else if (id == id_id) {
+    }
+
+    else if (id == id_id) {
         const char *name = String_c_str(Tuple_get(ast, 1));
         Object *value = Context_resolve(es, context, name);
 
@@ -650,6 +691,11 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             Exception_throw(es, "undefined variable '%s'", name);
 
         return value;
+    }
+
+    else if (id == id_dot) {
+        Object *evaledSelf = Esther_eval(es, Tuple_get(ast, 1), context);
+        return Esther_eval(es, Tuple_get(ast, 2), Context_childContext(context, evaledSelf, Object_new(es)));
     }
 
     else if (id == id_sharp) {
@@ -665,12 +711,21 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
         return Symbol_new(es, String_c_str(Tuple_get(ast, 1)));
     }
 
-    return es->nullObject;
+    return NULL;
 }
 
 void Esther_runFile(Esther *es, const char *fileName) {
     TRY {
-        Object *value = Esther_eval(es, String_new_std(es, read_file(fileName)), es->root);
+        Object *code = String_new_std(es, read_file(fileName));
+        Object_setAttribute(es->esther, "code", code);
+
+        Object *tokens = Lexer_lex(es, es->lexer, code);
+        Object_setAttribute(es->esther, "tokens", tokens);
+
+        Object *ast = Parser_parse(es, es->parser, tokens);
+        Object_setAttribute(es->esther, "ast", ast);
+
+        Object *value = Esther_eval(es, ast, es->root);
         printf("=> %s\n", String_c_str(Object_inspect(es, value)));
     }
     CATCH(e) {
