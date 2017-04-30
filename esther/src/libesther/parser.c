@@ -272,6 +272,11 @@ static Object *term(Esther *es, Parser *parser) {
         getToken(parser);
     }
 
+    else if (accept(es, parser, id_colon)) {
+        e = Tuple_new(es, 2, sym_colon, Tuple_get(parser->token, 1));
+        getToken(parser);
+    }
+
     else if (accept(es, parser, id_if)) {
         Object *condition;
         Object *body;
@@ -406,6 +411,8 @@ static Object *term(Esther *es, Parser *parser) {
             Exception_throw(es, "unmatched braces");
 
         e = Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : Tuple_new(es, 2, sym_braces, nodes);
+    } else if (accept(es, parser, id_braces)) {
+        e = Tuple_new(es, 0);
     }
 
     else if (check(es, parser, id_empty)) {
