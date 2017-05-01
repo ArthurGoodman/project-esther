@@ -69,15 +69,12 @@ void Tuple_set(Object *self, size_t index, Object *value) {
 }
 
 Object *Tuple_virtual_inspect(Esther *es, Object *self) {
-    Object **data = as_Tuple(self)->data;
-    size_t size = as_Tuple(self)->size;
-
     Object *str = String_new(es, "(");
 
-    for (size_t i = 0; i < size; i++) {
-        String_append(str, Object_inspect(es, data[i]));
+    for (size_t i = 0; i < as_Tuple(self)->size; i++) {
+        String_append(str, Object_inspect(es, as_Tuple(self)->data[i]));
 
-        if (i < size - 1)
+        if (i < as_Tuple(self)->size - 1)
             String_append_c_str(str, ", ");
     }
 

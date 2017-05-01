@@ -253,7 +253,7 @@ void addHeap() {
     size_t heapSize = heaps.empty() ? InitialHeapSize : heapSizes.back() * HeapSizeMultiplier;
 
 #ifdef VERBOSE_GC
-    printf("addHeap() // size=%u\n\n", heapSize);
+    printf("addHeap() // size=%lu\n\n", heapSize);
 #endif
 
     heaps.push_back(static_cast<uint8_t *>(malloc(heapSize)));
@@ -334,10 +334,10 @@ void gc_finalize() {
     for (uint32_t size : heapSizes)
         totalMemory += size + bitmapSize(size);
 
-    printf("\nObject count: %u\n", objectCount);
-    printf("Heaps used: %u\n", heaps.size());
-    printf("Memory used: %u\n", memoryUsed);
-    printf("Total memory: %u\n", totalMemory);
+    printf("\nObject count: %lu\n", objectCount);
+    printf("Heaps used: %lu\n", heaps.size());
+    printf("Memory used: %lu\n", memoryUsed);
+    printf("Total memory: %lu\n", totalMemory);
     printf("\ngc_finalize()\n");
 #endif
 
@@ -372,6 +372,8 @@ void gc_collect() {
 
 #ifdef VERBOSE_GC
     printf("\ngc_collect()\n");
+    printf("stackTop: %p\n", stackTop);
+    printf("stackBottom: %p\n", stackBottom);
     size_t oldSize = memoryUsed, oldObjectCount = objectCount;
 #endif
 
@@ -379,7 +381,7 @@ void gc_collect() {
     sweep();
 
 #ifdef VERBOSE_GC
-    printf("//freed=%u, freedObjects=%u, objectCount=%u\n\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
+    printf("//freed=%lu, freedObjects=%lu, objectCount=%lu\n\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
 #endif
 }
 
@@ -389,7 +391,7 @@ void *gc_alloc(size_t size) {
 #endif
 
 #ifdef VERBOSE_GC
-    printf("gc_alloc(size=%u)\n", size);
+    printf("gc_alloc(size=%lu)\n", size);
 #endif
 
     size += sizeof(ObjectHeader);
@@ -410,7 +412,7 @@ void *gc_alloc(size_t size) {
 
 void gc_free(void *UNUSED(p)) {
 #ifndef GC
-    return free(p);
+    free(p);
 #endif
 }
 
