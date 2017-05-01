@@ -320,7 +320,7 @@ static void GlobalMapper_mapOnReferences(GlobalMapper *self, MapFunction f) {
 
     f((void **)&self->es->root);
 
-#define X(a, b) f((void **)&sym_##a);
+#define X(a, b) f((void **) & sym_##a);
 #include "keywords.def"
 #include "nodes.def"
 #include "operators.def"
@@ -797,6 +797,15 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
         if (!value)
             Exception_throw(es, "undefined variable '%s'", name);
+
+        return value;
+    }
+
+    else if (id == id_var) {
+        const char *name = String_c_str(Tuple_get(ast, 1));
+        Object *value = Tuple_size(ast) == 3 ? Tuple_get(ast, 2) : es->nullObject;
+
+        Context_setLocal(context, name, value);
 
         return value;
     }

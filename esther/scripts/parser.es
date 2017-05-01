@@ -5,143 +5,143 @@ class Parser {
 
     class BinaryNode < Node {
         super = function initialize(left, right) {
-            @left = left
-            @right = right
+            self.left = left
+            self.right = right
         }
 
         function eval
-            @oper.call(@left.eval(), @right.eval())
+            self.oper.call(self.left.eval(), self.right.eval())
 
         function inspect(indent) {
             console.write(indent)
             console.writeLine(self)
-            @left.inspect(indent + "  ")
-            @right.inspect(indent + "  ")
+            self.left.inspect(indent + "  ")
+            self.right.inspect(indent + "  ")
         }
     }
 
     class PlusNode < BinaryNode
         function initialize(left, right) {
-            @super(left, right)
-            @oper = Float.+
+            self.super(left, right)
+            self.oper = Float.+
         }
 
     class MinusNode < BinaryNode
         function initialize(left, right) {
-            @super(left, right)
-            @oper = Float.-
+            self.super(left, right)
+            self.oper = Float.-
         }
 
     class MultiplyNode < BinaryNode
         function initialize(left, right) {
-            @super(left, right)
-            @oper = Float.*
+            self.super(left, right)
+            self.oper = Float.*
         }
 
     class DivideNode < BinaryNode
         function initialize(left, right) {
-            @super(left, right)
-            @oper = Float./
+            self.super(left, right)
+            self.oper = Float./
         }
 
     class PowerNode < BinaryNode
         function initialize(left, right) {
-            @super(left, right)
-            @oper = Float.**
+            self.super(left, right)
+            self.oper = Float.**
         }
 
     class ValueNode < Node {
         function initialize(value)
-            @value = value
+            self.value = value
 
         function eval
-            @value
+            self.value
 
         function inspect(indent) {
             console.write(indent)
-            console.writeLine(@value)
+            console.writeLine(self.value)
         }
     }
 
     class Token {
         function initialize(id) {
-            @text = String(id)
-            @id = id
+            self.text = String(id)
+            self.id = id
         }
 
         function inspect
-            console.writeLine("<" + @text + ", " + @id + ">")
+            console.writeLine("<" + self.text + ", " + self.id + ">")
     }
 
     function initialize {
-        @operators = "+-/*^()[]"
+        self.operators = "+-/*^()[]"
 
-        @debugLexer = false
-        @debugAST = false
+        self.debugLexer = false
+        self.debugAST = false
     }
 
     function symbol
-        if (@pos >= @code.size())
+        if (self.pos >= self.code.size())
             '\0'
         else
-            @code[@pos]
+            self.code[self.pos]
 
     function getToken {
         var parser = self
 
         while (symbol().isSpace())
-            @pos += 1
+            self.pos += 1
 
         if (symbol() == '\0')
-            @token = new Token('e')
+            self.token = new Token('e')
         else if (symbol().isDigit())
-            @token = new Token('e') {
-                @id = 'n'
-                @text = ""
+            self.token = new Token('e') {
+                self.id = 'n'
+                self.text = ""
 
                 while (parser.symbol().isDigit()) {
-                    @text += parser.symbol()
+                    self.text += parser.symbol()
                     parser.pos += 1
                 }
                 
                 if (parser.symbol() == '.') {
-                    @text += parser.symbol()
+                    self.text += parser.symbol()
                     parser.pos += 1
 
                     while (parser.symbol().isDigit()) {
-                        @text += parser.symbol()
+                        self.text += parser.symbol()
                         parser.pos += 1
                     }
                 }
             }
-        else if (@operators.contains(symbol())) {
-            @token = new Token(symbol())
-            @pos += 1
+        else if (self.operators.contains(symbol())) {
+            self.token = new Token(symbol())
+            self.pos += 1
         } else if (symbol().isLetter() || symbol() == '_')
-            @token = new Token('e') {
-                @id = 'u'
-                @text = ""
+            self.token = new Token('e') {
+                self.id = 'u'
+                self.text = ""
 
                 while (parser.symbol().isLetter() || parser.symbol() == '_') {
-                    @text += parser.symbol()
+                    self.text += parser.symbol()
                     parser.pos += 1
                 }
             }
         else
-            @token = new Token('e') {
-                @id = 'u'
-                @text = parser.symbol()
+            self.token = new Token('e') {
+                self.id = 'u'
+                self.text = parser.symbol()
                 parser.pos += 1
             }
 
-        if (@debugLexer)
-            @token.inspect()
+        if (self.debugLexer)
+            self.token.inspect()
     }
 
     function accept(id) {
         var value = false
 
-        if (@token.id == id) {
+        if (self.token.id == id) {
             getToken()
             value = true
         }
@@ -150,17 +150,17 @@ class Parser {
     }
 
     function check(id)
-        @token.id == id
+        self.token.id == id
 
     function error(message)
-        if (!@error)
-            @error = message
+        if (!self.error)
+            self.error = message
 
     function parse(code) {
-        @code = code
-        @pos = 0
-        @token = null
-        @error = null
+        self.code = code
+        self.pos = 0
+        self.token = null
+        self.error = null
 
         getToken()
 
@@ -172,10 +172,10 @@ class Parser {
         if (node == null)
             node = new ValueNode(0)
 
-        if (@debugLexer)
+        if (self.debugLexer)
             console.writeLine("");
 
-        if (@debugAST) {
+        if (self.debugAST) {
             node.inspect("")
             console.writeLine("");
         }
@@ -235,7 +235,7 @@ class Parser {
         var node
 
         if (check('n')) {
-            node = new ValueNode(Float(@token.text))
+            node = new ValueNode(Float(self.token.text))
             getToken()
         } else if (accept('(')) {
             node = addSub()
@@ -250,9 +250,9 @@ class Parser {
         } else if(check('e'))
             error("unexpected end of expression")
         else if(check('u'))
-            error("unknown token '" + @token.text + "'")
+            error("unknown token '" + self.token.text + "'")
         else
-            error("unexpected token '" + @token.text + "'")
+            error("unexpected token '" + self.token.text + "'")
 
         node
     }

@@ -39,7 +39,7 @@ asm("_saveRegisters:\n"
 
 extern "C" void saveRegisters(Registers *buf);
 
-const size_t InitialHeapSize = 1000;
+const size_t InitialHeapSize = 20000;
 const double HeapSizeMultiplier = 1.8;
 
 class ObjectHeader {
@@ -372,8 +372,6 @@ void gc_collect() {
 
 #ifdef VERBOSE_GC
     printf("\ngc_collect()\n");
-    printf("stackTop: %p\n", stackTop);
-    printf("stackBottom: %p\n", stackBottom);
     size_t oldSize = memoryUsed, oldObjectCount = objectCount;
 #endif
 

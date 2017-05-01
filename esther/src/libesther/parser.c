@@ -277,6 +277,16 @@ static Object *term(Esther *es, Parser *parser) {
         getToken(parser);
     }
 
+    else if (accept(es, parser, id_var)) {
+        if (!check(es, parser, id_id))
+            Exception_throw(es, "unmatched parentheses");
+
+        if (accept(es, parser, id_assign))
+            e = Tuple_new(es, 3, sym_var, Tuple_get(parser->token, 1), logicOr(es, parser));
+        else
+            e = Tuple_new(es, 2, sym_var, Tuple_get(parser->token, 1));
+    }
+
     else if (check(es, parser, id_int)) {
         e = Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, atoi(String_c_str(Tuple_get(parser->token, 1)))));
         getToken(parser);
