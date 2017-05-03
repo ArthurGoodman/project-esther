@@ -13,10 +13,25 @@
 
 namespace {
 struct Registers {
+#ifdef __WIN64
+    ptr_t reg[7];
+#else
     ptr_t reg[5];
+#endif
 };
 
 #ifdef __x86_64
+#ifdef __WIN64
+asm("saveRegisters:\n"
+    "mov %rdi,0x0(%rcx)\n"
+    "mov %rsi,0x8(%rcx)\n"
+    "mov %rbx,0x10(%rcx)\n"
+    "mov %r12,0x18(%rcx)\n"
+    "mov %r13,0x20(%rcx)\n"
+    "mov %r14,0x28(%rcx)\n"
+    "mov %r15,0x30(%rcx)\n"
+    "ret");
+#else
 asm("saveRegisters:\n"
     "mov %rbx,0x0(%rdi)\n"
     "mov %r12,0x8(%rdi)\n"
@@ -24,6 +39,7 @@ asm("saveRegisters:\n"
     "mov %r14,0x18(%rdi)\n"
     "mov %r15,0x20(%rdi)\n"
     "ret");
+#endif
 #elif __i386
 asm("_saveRegisters:\n"
     "mov 0x4(%esp),%eax\n"
