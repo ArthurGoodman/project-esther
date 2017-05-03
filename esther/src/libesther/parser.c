@@ -10,7 +10,7 @@
 #include "esther/valueobject.h"
 #include "identifiers.h"
 
-void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+static void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     Object_virtual_mapOnReferences(self, f);
 
     f((void **)&((Parser *)self)->tokens);

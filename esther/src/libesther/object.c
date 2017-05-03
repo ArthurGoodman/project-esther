@@ -51,7 +51,7 @@ Object *Object_getAttribute(Object *self, const char *name) {
 
 void Object_setAttribute(Object *self, const char *name, Object *value) {
     if (!self->attributes)
-        self->attributes = std_map_new(ulong_compare);
+        self->attributes = std_map_new(id_compare);
 
     std_map_set(self->attributes, (const void *)stringToId(name), value);
 }

@@ -20,7 +20,7 @@ extern "C" {
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 bool string_compare(void *a, void *b);
-bool ulong_compare(void *a, void *b);
+bool id_compare(void *a, void *b);
 
 #ifdef __cplusplus
 }

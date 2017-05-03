@@ -50,7 +50,7 @@ Object *Class_getMethod(Object *self, const char *name) {
 
 void Class_setMethod(Object *self, const char *name, Object *method) {
     if (!as_Class(self)->methods)
-        as_Class(self)->methods = std_map_new(ulong_compare);
+        as_Class(self)->methods = std_map_new(id_compare);
 
     std_map_set(as_Class(self)->methods, (const void *)stringToId(name), method);
 }

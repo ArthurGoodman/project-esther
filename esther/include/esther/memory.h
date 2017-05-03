@@ -7,7 +7,12 @@ extern "C" {
 #include <stddef.h>
 #include <stdint.h>
 
-typedef unsigned long int ptr_t;
+#ifdef __x86_64
+typedef uint64_t ptr_t;
+#else
+typedef uint32_t ptr_t;
+#endif
+
 typedef ptr_t *ptr_ptr_t;
 
 typedef struct ManagedObject ManagedObject;

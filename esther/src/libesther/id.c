@@ -14,7 +14,7 @@ const char *idToString(Id id) {
 Id stringToId(const char *str) {
     if (!idString || !std_map_contains(stringId, str)) {
         if (!idString) {
-            idString = std_map_new(ulong_compare);
+            idString = std_map_new(id_compare);
             stringId = std_map_new(string_compare);
         }
 

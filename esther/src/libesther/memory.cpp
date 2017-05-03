@@ -23,7 +23,6 @@ asm("saveRegisters:\n"
     "mov %r13,0x10(%rdi)\n"
     "mov %r14,0x18(%rdi)\n"
     "mov %r15,0x20(%rdi)\n"
-    "xor %rax,%rax\n"
     "ret");
 #elif __i386
 asm("_saveRegisters:\n"
@@ -33,11 +32,10 @@ asm("_saveRegisters:\n"
     "mov %edx,0x8(%eax)\n"
     "mov %edi,0xc(%eax)\n"
     "mov %esi,0x10(%eax)\n"
-    "xor %eax,%eax\n"
     "ret");
 #endif
 
-extern "C" void saveRegisters(Registers *buf);
+extern "C" void saveRegisters(Registers *);
 
 const size_t InitialHeapSize = 20000;
 const double HeapSizeMultiplier = 1.8;
@@ -198,7 +196,7 @@ void mark() {
     Registers buf;
     saveRegisters(&buf);
 
-    markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_t));
+    markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_ptr_t));
 
     for (Mapper *mapper : mappers)
         Mapper_mapOnReferences(mapper, markReference);
@@ -253,7 +251,7 @@ void addHeap() {
     size_t heapSize = heaps.empty() ? InitialHeapSize : heapSizes.back() * HeapSizeMultiplier;
 
 #ifdef VERBOSE_GC
-    printf("addHeap() // size=%lu\n\n", heapSize);
+    printf("addHeap() // size=%zu\n\n", heapSize);
 #endif
 
     heaps.push_back(static_cast<uint8_t *>(malloc(heapSize)));
@@ -334,10 +332,10 @@ void gc_finalize() {
     for (uint32_t size : heapSizes)
         totalMemory += size + bitmapSize(size);
 
-    printf("\nObject count: %lu\n", objectCount);
-    printf("Heaps used: %lu\n", heaps.size());
-    printf("Memory used: %lu\n", memoryUsed);
-    printf("Total memory: %lu\n", totalMemory);
+    printf("\nObject count: %zu\n", objectCount);
+    printf("Heaps used: %zu\n", heaps.size());
+    printf("Memory used: %zu\n", memoryUsed);
+    printf("Total memory: %zu\n", totalMemory);
     printf("\ngc_finalize()\n");
 #endif
 
@@ -379,7 +377,7 @@ void gc_collect() {
     sweep();
 
 #ifdef VERBOSE_GC
-    printf("//freed=%lu, freedObjects=%lu, objectCount=%lu\n\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
+    printf("//freed=%zu, freedObjects=%zu, objectCount=%zu\n\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
 #endif
 }
 
@@ -389,7 +387,7 @@ void *gc_alloc(size_t size) {
 #endif
 
 #ifdef VERBOSE_GC
-    printf("gc_alloc(size=%lu)\n", size);
+    printf("gc_alloc(size=%zu)\n", size);
 #endif
 
     size += sizeof(ObjectHeader);
