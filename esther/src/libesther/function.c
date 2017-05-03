@@ -163,5 +163,8 @@ void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 void InterpretedFunction_virtual_finalize(ManagedObject *self) {
     Function_virtual_finalize(self);
 
+    for (size_t i = 0; i < as_InterpretedFunction(self)->argc; i++)
+        free((void *)as_InterpretedFunction(self)->params[i]);
+
     free(as_InterpretedFunction(self)->params);
 }

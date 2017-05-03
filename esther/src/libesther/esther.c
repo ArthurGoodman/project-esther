@@ -746,7 +746,9 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             Context_setLocal(context, name, f);
 
             Object *self = Context_getSelf(context);
-            Class_setMethod(self, name, f);
+
+            if (Object_getType(self) == TClass)
+                Class_setMethod(self, name, f);
         }
 
         return f;
