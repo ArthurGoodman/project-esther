@@ -57,6 +57,7 @@ bool Variant_ne(Variant a, Variant b);
 void Variant_coerce(Variant *a, Variant *b);
 
 struct std_string *Variant_toString(Variant var);
+struct std_string *Variant_inspect(Variant var);
 
 #ifdef __cplusplus
 }

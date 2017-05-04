@@ -27,7 +27,7 @@ void ValueObject_init(Esther *es, Object *self, Variant value) {
     as_ValueObject(self)->value = value;
 
     as_ValueObject(self)->base.toString = ValueObject_virtual_toString;
-    as_ValueObject(self)->base.inspect = ValueObject_virtual_toString;
+    as_ValueObject(self)->base.inspect = ValueObject_virtual_inspect;
     as_ValueObject(self)->base.equals = ValueObject_virtual_equals;
 }
 
@@ -41,6 +41,10 @@ void ValueObject_setValue(Object *self, Variant value) {
 
 Object *ValueObject_virtual_toString(Esther *es, Object *self) {
     return String_new_std(es, Variant_toString(as_ValueObject(self)->value));
+}
+
+Object *ValueObject_virtual_inspect(Esther *es, Object *self) {
+    return String_new_std(es, Variant_inspect(as_ValueObject(self)->value));
 }
 
 bool ValueObject_virtual_equals(Object *self, Object *obj) {

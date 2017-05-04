@@ -342,3 +342,19 @@ struct std_string *Variant_toString(Variant var) {
         return std_string_new();
     }
 }
+
+struct std_string *Variant_inspect(Variant var) {
+    switch (var.type) {
+    case CharVariant:
+        return var.character == '\0' ? std_string_format("'\\0'") : std_string_format("'%c'", var.character);
+
+    case IntVariant:
+        return std_string_format("%i", var.integer);
+
+    case RealVariant:
+        return std_string_format("%g", var.real);
+
+    default:
+        return std_string_new();
+    }
+}

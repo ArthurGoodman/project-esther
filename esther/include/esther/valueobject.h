@@ -26,6 +26,7 @@ Variant ValueObject_getValue(Object *self);
 void ValueObject_setValue(Object *self, Variant value);
 
 Object *ValueObject_virtual_toString(Esther *es, Object *self);
+Object *ValueObject_virtual_inspect(Esther *es, Object *self);
 
 bool ValueObject_virtual_equals(Object *self, Object *obj);
 
