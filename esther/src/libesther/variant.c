@@ -336,7 +336,7 @@ struct std_string *Variant_toString(Variant var) {
         return std_string_format("%i", var.integer);
 
     case RealVariant:
-        return std_string_format("%f", var.real);
+        return std_string_format("%g", var.real);
 
     default:
         return std_string_new();

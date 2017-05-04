@@ -4,17 +4,17 @@ class Parser {
             null
 
     class BinaryNode < Node {
-        super = function initialize(left, right) {
+        self.setMethod("super", function initialize(left, right) {
             self.left = left
             self.right = right
-        }
+        })
 
         function eval
-            self.oper.call(self.left.eval(), self.right.eval())
+            self.oper.call(self.left.eval(), (self.right.eval()))
 
         function inspect(indent) {
-            console.write(indent)
-            console.writeLine(self)
+            IO.write(indent)
+            IO.writeLine(self)
             self.left.inspect(indent + "  ")
             self.right.inspect(indent + "  ")
         }
@@ -23,31 +23,31 @@ class Parser {
     class PlusNode < BinaryNode
         function initialize(left, right) {
             self.super(left, right)
-            self.oper = Float.+
+            self.oper = Numeric.getMethod("+")
         }
 
     class MinusNode < BinaryNode
         function initialize(left, right) {
             self.super(left, right)
-            self.oper = Float.-
+            self.oper = Numeric.getMethod("-")
         }
 
     class MultiplyNode < BinaryNode
         function initialize(left, right) {
             self.super(left, right)
-            self.oper = Float.*
+            self.oper = Numeric.getMethod("*")
         }
 
     class DivideNode < BinaryNode
         function initialize(left, right) {
             self.super(left, right)
-            self.oper = Float./
+            self.oper = Numeric.getMethod("/")
         }
 
     class PowerNode < BinaryNode
         function initialize(left, right) {
             self.super(left, right)
-            self.oper = Float.**
+            self.oper = Numeric.getMethod("**")
         }
 
     class ValueNode < Node {
@@ -58,8 +58,8 @@ class Parser {
             self.value
 
         function inspect(indent) {
-            console.write(indent)
-            console.writeLine(self.value)
+            IO.write(indent)
+            IO.writeLine(self.value)
         }
     }
 
@@ -70,7 +70,7 @@ class Parser {
         }
 
         function inspect
-            console.writeLine("<" + self.text + ", " + self.id + ">")
+            IO.writeLine("<" + self.text + ", " + self.id + ">")
     }
 
     function initialize {
@@ -84,7 +84,7 @@ class Parser {
         if (self.pos >= self.code.size())
             '\0'
         else
-            self.code[self.pos]
+            self.code.at(self.pos)
 
     function getToken {
         var parser = self
@@ -173,11 +173,11 @@ class Parser {
             node = new ValueNode(0)
 
         if (self.debugLexer)
-            console.writeLine("");
+            IO.writeLine("");
 
         if (self.debugAST) {
             node.inspect("")
-            console.writeLine("");
+            IO.writeLine("");
         }
 
         node
@@ -265,6 +265,6 @@ parser = new Parser
 node = parser.parse("2 * (3 + 2^-1) - 6")
 
 if (parser.error)
-    console.writeLine("error: " + parser.error)
+    IO.writeLine("error: " + parser.error)
 else
     node.eval()

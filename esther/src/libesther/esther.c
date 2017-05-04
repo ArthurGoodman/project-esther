@@ -183,6 +183,22 @@ static Object *StringClass_size(Esther *es, Object *self) {
     return ValueObject_new_int(es, String_size(self));
 }
 
+static Object *StringClass_at(Esther *es, Object *self, Object *pos) {
+    return ValueObject_new_char(es, String_c_str(self)[Variant_toInt(ValueObject_getValue(pos))]);
+}
+
+static Object *StringClass_plus(Esther *es, Object *self, Object *str) {
+    return String_append(String_new(es, String_c_str(self)), Object_toString(es, str));
+}
+
+static Object *StringClass_append(Esther *es, Object *self, Object *str) {
+    return String_append(self, Object_toString(es, str));
+}
+
+static Object *StringClass_contains(Esther *es, Object *self, Object *c) {
+    return Esther_toBoolean(es, String_contains(self, Variant_toChar(ValueObject_getValue(c))));
+}
+
 static Object *NumericClass_add(Esther *es, Object *a, Object *b) {
     return ValueObject_new_var(es, Variant_add(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
@@ -259,6 +275,22 @@ static Object *NumericClass_eq(Esther *es, Object *a, Object *b) {
 
 static Object *NumericClass_ne(Esther *es, Object *a, Object *b) {
     return Esther_toBoolean(es, Variant_ne(ValueObject_getValue(a), ValueObject_getValue(b)));
+}
+
+static Object *CharClass_isSpace(Esther *es, Object *self) {
+    return Esther_toBoolean(es, isspace(Variant_toChar(ValueObject_getValue(self))));
+}
+
+static Object *CharClass_isDigit(Esther *es, Object *self) {
+    return Esther_toBoolean(es, isdigit(Variant_toChar(ValueObject_getValue(self))));
+}
+
+static Object *CharClass_isLetter(Esther *es, Object *self) {
+    return Esther_toBoolean(es, isalpha(Variant_toChar(ValueObject_getValue(self))));
+}
+
+static Object *CharClass_isLetterOrDigit(Esther *es, Object *self) {
+    return Esther_toBoolean(es, isalnum(Variant_toChar(ValueObject_getValue(self))));
 }
 
 static Object *IO_write(Esther *es, Object *self, Object *args) {
@@ -442,6 +474,14 @@ void Esther_init(Esther *es) {
     Class_setMethod_func(es->classClass, Function_new(es, "setMethod", (Object * (*)()) ClassClass_setMethod, 2));
 
     Class_setMethod_func(es->stringClass, Function_new(es, "size", (Object * (*)()) StringClass_size, 0));
+    Class_setMethod_func(es->stringClass, Function_new(es, "at", (Object * (*)()) StringClass_at, 1));
+    Class_setMethod_func(es->stringClass, Function_new(es, "+", (Object * (*)()) StringClass_plus, 1));
+    Class_setMethod_func(es->stringClass, Function_new(es, "append", (Object * (*)()) StringClass_append, 1));
+    Class_setMethod(es->stringClass, "+=", Class_getMethod(es->stringClass, "append"));
+    Class_setMethod_func(es->stringClass, Function_new(es, "contains", (Object * (*)()) StringClass_contains, 1));
+
+    Class_setMethod_func(es->functionClass, Function_new(es, "call", (Object * (*)()) Function_invoke, 2));
+    Class_setMethod(es->functionClass, "()", Class_getMethod(es->functionClass, "call"));
 
     Class_setMethod_func(es->numericClass, Function_new(es, "+", (Object * (*)()) NumericClass_add, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "+=", (Object * (*)()) NumericClass_addAssign, 1));
@@ -461,6 +501,11 @@ void Esther_init(Esther *es) {
     Class_setMethod_func(es->numericClass, Function_new(es, ">=", (Object * (*)()) NumericClass_gte, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "==", (Object * (*)()) NumericClass_eq, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "!=", (Object * (*)()) NumericClass_ne, 1));
+
+    Class_setMethod_func(es->charClass, Function_new(es, "isSpace", (Object * (*)()) CharClass_isSpace, 0));
+    Class_setMethod_func(es->charClass, Function_new(es, "isDigit", (Object * (*)()) CharClass_isDigit, 0));
+    Class_setMethod_func(es->charClass, Function_new(es, "isLetter", (Object * (*)()) CharClass_isLetter, 0));
+    Class_setMethod_func(es->charClass, Function_new(es, "isLetterOrDigit", (Object * (*)()) CharClass_isLetterOrDigit, 0));
 
     es->lexer = Lexer_new(es);
 
@@ -822,6 +867,10 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
     else if (id == id_colon) {
         return Symbol_new(es, String_c_str(Tuple_get(ast, 1)));
+    }
+
+    else if (id == id_not) {
+        return Esther_toBoolean(es, !Object_isTrue(Esther_eval(es, Tuple_get(ast, 1), context)));
     }
 
     return NULL;

@@ -35,20 +35,27 @@ const char *String_c_str(Object *self) {
     return std_string_c_str(as_String(self)->value);
 }
 
-void String_append(Object *self, Object *str) {
+Object *String_append(Object *self, Object *str) {
     std_string_append(as_String(self)->value, as_String(str)->value);
+    return self;
 }
 
-void String_append_c_str(Object *self, const char *str) {
+Object *String_append_c_str(Object *self, const char *str) {
     std_string_append_c_str(as_String(self)->value, str);
+    return self;
 }
 
-void String_append_char(Object *self, char c) {
+Object *String_append_char(Object *self, char c) {
     std_string_append_char(as_String(self)->value, c);
+    return self;
 }
 
 size_t String_size(Object *self) {
     return std_string_size(as_String(self)->value);
+}
+
+bool String_contains(Object *self, char c) {
+    return std_string_contains(as_String(self)->value, c);
 }
 
 Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {

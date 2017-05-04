@@ -212,7 +212,7 @@ static Object *negate(Esther *es, Parser *parser) {
     Object *e = NULL;
 
     if (accept(es, parser, id_not))
-        e = Tuple_new(es, 2, sym_not, e);
+        e = Tuple_new(es, 2, sym_not, preffix(es, parser));
     else
         e = preffix(es, parser);
 
@@ -223,9 +223,9 @@ static Object *preffix(Esther *es, Parser *parser) {
     Object *e = NULL;
 
     if (accept(es, parser, id_plus))
-        e = Tuple_new(es, 3, sym_plus, Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, 0)), e);
+        e = Tuple_new(es, 3, sym_plus, Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, 0)), suffix(es, parser));
     else if (accept(es, parser, id_minus))
-        e = Tuple_new(es, 3, sym_minus, Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, 0)), e);
+        e = Tuple_new(es, 3, sym_minus, Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, 0)), suffix(es, parser));
     else
         e = suffix(es, parser);
 

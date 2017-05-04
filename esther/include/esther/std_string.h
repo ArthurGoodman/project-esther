@@ -26,6 +26,8 @@ char std_string_at(struct std_string *self, size_t index);
 
 bool std_string_equals(struct std_string *self, struct std_string *str);
 
+bool std_string_contains(struct std_string *self, char c);
+
 const char *std_string_c_str(struct std_string *self);
 
 struct std_string *std_string_format(const char *fmt, ...);
