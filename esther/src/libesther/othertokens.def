@@ -1,0 +1,7 @@
+X(id, "id")
+X(int, "int")
+X(float, "float")
+X(singleQuote, "'")
+X(doubleQuote, "\"")
+X(unknown, "?")
+X(empty, "")
