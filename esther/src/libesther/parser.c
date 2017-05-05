@@ -250,6 +250,20 @@ static Object *suffix(Esther *es, Parser *parser) {
             e = Tuple_new(es, 3, sym_call, e, args);
         } else if (accept(es, parser, id_pars)) {
             e = Tuple_new(es, 3, sym_call, e, Array_new(es, 0));
+        } else if (accept(es, parser, id_leftBracket)) {
+            Object *args = Array_new(es, 0);
+
+            if (!check(es, parser, id_rightBracket))
+                do
+                    Array_push(args, expr(es, parser));
+                while (accept(es, parser, id_comma));
+
+            if (!accept(es, parser, id_rightBracket))
+                Exception_throw(es, "unmatched brackets");
+
+            e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new(es, "[]")), args);
+        } else if (accept(es, parser, id_brackets)) {
+            e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new(es, "[]")), Array_new(es, 0));
         } else if (accept(es, parser, id_dot)) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
                 e = Tuple_new(es, 3, sym_attr, e, Tuple_get(parser->token, 1));

@@ -199,6 +199,32 @@ static Object *StringClass_contains(Esther *es, Object *self, Object *c) {
     return Esther_toBoolean(es, String_contains(self, Variant_toChar(ValueObject_getValue(c))));
 }
 
+static Object *TupleClass_size(Esther *es, Object *self) {
+    return ValueObject_new_int(es, Tuple_size(self));
+}
+
+static Object *TupleClass_at(Esther *es, Object *self, Object *index) {
+    return Tuple_get(self, Variant_toInt(ValueObject_getValue(index)));
+}
+
+static Object *TupleClass_set(Esther *es, Object *self, Object *index, Object *value) {
+    Tuple_set(self, Variant_toInt(ValueObject_getValue(index)), value);
+    return value;
+}
+
+static Object *ArrayClass_size(Esther *es, Object *self) {
+    return ValueObject_new_int(es, Array_size(self));
+}
+
+static Object *ArrayClass_at(Esther *es, Object *self, Object *index) {
+    return Array_get(self, Variant_toInt(ValueObject_getValue(index)));
+}
+
+static Object *ArrayClass_set(Esther *es, Object *self, Object *index, Object *value) {
+    Array_set(self, Variant_toInt(ValueObject_getValue(index)), value);
+    return value;
+}
+
 static Object *NumericClass_add(Esther *es, Object *a, Object *b) {
     return ValueObject_new_var(es, Variant_add(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
@@ -475,6 +501,7 @@ void Esther_init(Esther *es) {
 
     Class_setMethod_func(es->stringClass, Function_new(es, "size", (Object * (*)()) StringClass_size, 0));
     Class_setMethod_func(es->stringClass, Function_new(es, "at", (Object * (*)()) StringClass_at, 1));
+    Class_setMethod(es->stringClass, "[]", Class_getMethod(es->stringClass, "at"));
     Class_setMethod_func(es->stringClass, Function_new(es, "+", (Object * (*)()) StringClass_plus, 1));
     Class_setMethod_func(es->stringClass, Function_new(es, "append", (Object * (*)()) StringClass_append, 1));
     Class_setMethod(es->stringClass, "+=", Class_getMethod(es->stringClass, "append"));
@@ -482,6 +509,16 @@ void Esther_init(Esther *es) {
 
     Class_setMethod_func(es->functionClass, Function_new(es, "call", (Object * (*)()) Function_invoke, 2));
     Class_setMethod(es->functionClass, "()", Class_getMethod(es->functionClass, "call"));
+
+    Class_setMethod_func(es->tupleClass, Function_new(es, "size", (Object * (*)()) TupleClass_size, 0));
+    Class_setMethod_func(es->tupleClass, Function_new(es, "at", (Object * (*)()) TupleClass_at, 1));
+    Class_setMethod(es->tupleClass, "[]", Class_getMethod(es->tupleClass, "at"));
+    Class_setMethod_func(es->tupleClass, Function_new(es, "set", (Object * (*)()) TupleClass_set, 2));
+
+    Class_setMethod_func(es->arrayClass, Function_new(es, "size", (Object * (*)()) ArrayClass_size, 0));
+    Class_setMethod_func(es->arrayClass, Function_new(es, "at", (Object * (*)()) ArrayClass_at, 1));
+    Class_setMethod(es->arrayClass, "[]", Class_getMethod(es->arrayClass, "at"));
+    Class_setMethod_func(es->arrayClass, Function_new(es, "set", (Object * (*)()) ArrayClass_set, 2));
 
     Class_setMethod_func(es->numericClass, Function_new(es, "+", (Object * (*)()) NumericClass_add, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, "+=", (Object * (*)()) NumericClass_addAssign, 1));
