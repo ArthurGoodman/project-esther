@@ -8,7 +8,7 @@ extern "C" {
 
 #ifdef __x86_64
 typedef uint64_t Id;
-#else
+#elif __i386
 typedef uint32_t Id;
 #endif
 

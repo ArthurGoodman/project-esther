@@ -485,71 +485,71 @@ void Esther_init(Esther *es) {
     es->nullObject->toString = es->nullObject->inspect = Null_virtual_toString;
     es->nullObject->isTrue = False_virtual_isTrue;
 
-    Class_setMethod_func(es->objectClass, Function_new(es, "class", (Object * (*)())ObjectClass_class, 0));
-    Class_setMethod_func(es->objectClass, Function_new(es, "toString", (Object * (*)())Object_toString, 0));
-    Class_setMethod_func(es->objectClass, Function_new(es, "inspect", (Object * (*)())Object_inspect, 0));
-    Class_setMethod_func(es->objectClass, Function_new(es, "equals", (Object * (*)())ObjectClass_equals, 1));
+    Class_setMethod_func(es->objectClass, Function_new(es, "class", (Object * (*)()) ObjectClass_class, 0));
+    Class_setMethod_func(es->objectClass, Function_new(es, "toString", (Object * (*)()) Object_toString, 0));
+    Class_setMethod_func(es->objectClass, Function_new(es, "inspect", (Object * (*)()) Object_inspect, 0));
+    Class_setMethod_func(es->objectClass, Function_new(es, "equals", (Object * (*)()) ObjectClass_equals, 1));
     Class_setMethod(es->objectClass, "==", Class_getMethod(es->objectClass, "equals"));
 
-    Class_setMethod_func(es->classClass, Function_new(es, "superclass", (Object * (*)())ClassClass_superclass, 0));
-    Class_setMethod_func(es->classClass, Function_new(es, "new", (Object * (*)())Class_newInstance, -1));
-    Class_setMethod_func(es->classClass, Function_new(es, "()", (Object * (*)())ClassClass_pars, -1));
-    Class_setMethod_func(es->classClass, Function_new(es, "hasMethod", (Object * (*)())ClassClass_hasMethod, 1));
-    Class_setMethod_func(es->classClass, Function_new(es, "getMethod", (Object * (*)())ClassClass_getMethod, 1));
-    Class_setMethod_func(es->classClass, Function_new(es, "setMethod", (Object * (*)())ClassClass_setMethod, 2));
+    Class_setMethod_func(es->classClass, Function_new(es, "superclass", (Object * (*)()) ClassClass_superclass, 0));
+    Class_setMethod_func(es->classClass, Function_new(es, "new", (Object * (*)()) Class_newInstance, -1));
+    Class_setMethod_func(es->classClass, Function_new(es, "()", (Object * (*)()) ClassClass_pars, -1));
+    Class_setMethod_func(es->classClass, Function_new(es, "hasMethod", (Object * (*)()) ClassClass_hasMethod, 1));
+    Class_setMethod_func(es->classClass, Function_new(es, "getMethod", (Object * (*)()) ClassClass_getMethod, 1));
+    Class_setMethod_func(es->classClass, Function_new(es, "setMethod", (Object * (*)()) ClassClass_setMethod, 2));
 
-    Class_setMethod_func(es->stringClass, Function_new(es, "size", (Object * (*)())StringClass_size, 0));
-    Class_setMethod_func(es->stringClass, Function_new(es, "at", (Object * (*)())StringClass_at, 1));
+    Class_setMethod_func(es->stringClass, Function_new(es, "size", (Object * (*)()) StringClass_size, 0));
+    Class_setMethod_func(es->stringClass, Function_new(es, "at", (Object * (*)()) StringClass_at, 1));
     Class_setMethod(es->stringClass, "[]", Class_getMethod(es->stringClass, "at"));
-    Class_setMethod_func(es->stringClass, Function_new(es, "+", (Object * (*)())StringClass_plus, 1));
-    Class_setMethod_func(es->stringClass, Function_new(es, "append", (Object * (*)())StringClass_append, 1));
+    Class_setMethod_func(es->stringClass, Function_new(es, "+", (Object * (*)()) StringClass_plus, 1));
+    Class_setMethod_func(es->stringClass, Function_new(es, "append", (Object * (*)()) StringClass_append, 1));
     Class_setMethod(es->stringClass, "+=", Class_getMethod(es->stringClass, "append"));
-    Class_setMethod_func(es->stringClass, Function_new(es, "contains", (Object * (*)())StringClass_contains, 1));
+    Class_setMethod_func(es->stringClass, Function_new(es, "contains", (Object * (*)()) StringClass_contains, 1));
 
-    Class_setMethod_func(es->functionClass, Function_new(es, "call", (Object * (*)())Function_invoke, 2));
+    Class_setMethod_func(es->functionClass, Function_new(es, "call", (Object * (*)()) Function_invoke, 2));
     Class_setMethod(es->functionClass, "()", Class_getMethod(es->functionClass, "call"));
 
-    Class_setMethod_func(es->tupleClass, Function_new(es, "size", (Object * (*)())TupleClass_size, 0));
-    Class_setMethod_func(es->tupleClass, Function_new(es, "at", (Object * (*)())TupleClass_at, 1));
+    Class_setMethod_func(es->tupleClass, Function_new(es, "size", (Object * (*)()) TupleClass_size, 0));
+    Class_setMethod_func(es->tupleClass, Function_new(es, "at", (Object * (*)()) TupleClass_at, 1));
     Class_setMethod(es->tupleClass, "[]", Class_getMethod(es->tupleClass, "at"));
-    Class_setMethod_func(es->tupleClass, Function_new(es, "set", (Object * (*)())TupleClass_set, 2));
+    Class_setMethod_func(es->tupleClass, Function_new(es, "set", (Object * (*)()) TupleClass_set, 2));
 
-    Class_setMethod_func(es->arrayClass, Function_new(es, "size", (Object * (*)())ArrayClass_size, 0));
-    Class_setMethod_func(es->arrayClass, Function_new(es, "at", (Object * (*)())ArrayClass_at, 1));
+    Class_setMethod_func(es->arrayClass, Function_new(es, "size", (Object * (*)()) ArrayClass_size, 0));
+    Class_setMethod_func(es->arrayClass, Function_new(es, "at", (Object * (*)()) ArrayClass_at, 1));
     Class_setMethod(es->arrayClass, "[]", Class_getMethod(es->arrayClass, "at"));
-    Class_setMethod_func(es->arrayClass, Function_new(es, "set", (Object * (*)())ArrayClass_set, 2));
+    Class_setMethod_func(es->arrayClass, Function_new(es, "set", (Object * (*)()) ArrayClass_set, 2));
 
-    Class_setMethod_func(es->numericClass, Function_new(es, "+", (Object * (*)())NumericClass_add, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "+=", (Object * (*)())NumericClass_addAssign, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "-", (Object * (*)())NumericClass_sub, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "-=", (Object * (*)())NumericClass_subAssign, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "*", (Object * (*)())NumericClass_mul, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "*=", (Object * (*)())NumericClass_mulAssign, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "/", (Object * (*)())NumericClass_div, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "/=", (Object * (*)())NumericClass_divAssign, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "%", (Object * (*)())NumericClass_mod, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "%=", (Object * (*)())NumericClass_modAssign, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "**", (Object * (*)())NumericClass_pow, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "**=", (Object * (*)())NumericClass_powAssign, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "<", (Object * (*)())NumericClass_lt, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, ">", (Object * (*)())NumericClass_gt, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "<=", (Object * (*)())NumericClass_lte, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, ">=", (Object * (*)())NumericClass_gte, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "==", (Object * (*)())NumericClass_eq, 1));
-    Class_setMethod_func(es->numericClass, Function_new(es, "!=", (Object * (*)())NumericClass_ne, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "+", (Object * (*)()) NumericClass_add, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "+=", (Object * (*)()) NumericClass_addAssign, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "-", (Object * (*)()) NumericClass_sub, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "-=", (Object * (*)()) NumericClass_subAssign, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "*", (Object * (*)()) NumericClass_mul, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "*=", (Object * (*)()) NumericClass_mulAssign, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "/", (Object * (*)()) NumericClass_div, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "/=", (Object * (*)()) NumericClass_divAssign, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "%", (Object * (*)()) NumericClass_mod, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "%=", (Object * (*)()) NumericClass_modAssign, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "**", (Object * (*)()) NumericClass_pow, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "**=", (Object * (*)()) NumericClass_powAssign, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "<", (Object * (*)()) NumericClass_lt, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, ">", (Object * (*)()) NumericClass_gt, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "<=", (Object * (*)()) NumericClass_lte, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, ">=", (Object * (*)()) NumericClass_gte, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "==", (Object * (*)()) NumericClass_eq, 1));
+    Class_setMethod_func(es->numericClass, Function_new(es, "!=", (Object * (*)()) NumericClass_ne, 1));
 
-    Class_setMethod_func(es->charClass, Function_new(es, "isSpace", (Object * (*)())CharClass_isSpace, 0));
-    Class_setMethod_func(es->charClass, Function_new(es, "isDigit", (Object * (*)())CharClass_isDigit, 0));
-    Class_setMethod_func(es->charClass, Function_new(es, "isLetter", (Object * (*)())CharClass_isLetter, 0));
-    Class_setMethod_func(es->charClass, Function_new(es, "isLetterOrDigit", (Object * (*)())CharClass_isLetterOrDigit, 0));
+    Class_setMethod_func(es->charClass, Function_new(es, "isSpace", (Object * (*)()) CharClass_isSpace, 0));
+    Class_setMethod_func(es->charClass, Function_new(es, "isDigit", (Object * (*)()) CharClass_isDigit, 0));
+    Class_setMethod_func(es->charClass, Function_new(es, "isLetter", (Object * (*)()) CharClass_isLetter, 0));
+    Class_setMethod_func(es->charClass, Function_new(es, "isLetterOrDigit", (Object * (*)()) CharClass_isLetterOrDigit, 0));
 
     es->lexer = Lexer_new(es);
 
-    Object_setAttribute(es->lexer, "lex", Function_new(es, "lex", (Object * (*)())Lexer_lex, 1));
+    Object_setAttribute(es->lexer, "lex", Function_new(es, "lex", (Object * (*)()) Lexer_lex, 1));
 
     es->parser = Parser_new(es);
 
-    Object_setAttribute(es->parser, "parse", Function_new(es, "parse", (Object * (*)())Parser_parse, 1));
+    Object_setAttribute(es->parser, "parse", Function_new(es, "parse", (Object * (*)()) Parser_parse, 1));
 
     es->mainObject = Object_new(es);
 
@@ -557,12 +557,12 @@ void Esther_init(Esther *es) {
 
     Object_setAttribute(es->esther, "lexer", es->lexer);
     Object_setAttribute(es->esther, "parser", es->parser);
-    Object_setAttribute(es->esther, "eval", Function_new(es, "eval", (Object * (*)())Esther_evalFunction, 1));
+    Object_setAttribute(es->esther, "eval", Function_new(es, "eval", (Object * (*)()) Esther_evalFunction, 1));
 
     es->io = Object_new(es);
 
-    Object_setAttribute(es->io, "write", Function_new(es, "write", (Object * (*)())IO_write, -1));
-    Object_setAttribute(es->io, "writeLine", Function_new(es, "writeLine", (Object * (*)())IO_writeLine, -1));
+    Object_setAttribute(es->io, "write", Function_new(es, "write", (Object * (*)()) IO_write, -1));
+    Object_setAttribute(es->io, "writeLine", Function_new(es, "writeLine", (Object * (*)()) IO_writeLine, -1));
 
     es->root = Context_new(es);
 
@@ -920,8 +920,12 @@ void Esther_runFile(Esther *es, const char *fileName) {
         Object *tokens = Lexer_lex(es, es->lexer, code);
         Object_setAttribute(es->esther, "tokens", tokens);
 
+        IO_writeLine(es, tokens, Tuple_new(es, 0));
+
         Object *ast = Parser_parse(es, es->parser, tokens);
         Object_setAttribute(es->esther, "ast", ast);
+
+        IO_writeLine(es, ast, Tuple_new(es, 0));
 
         Object *value = Esther_eval(es, ast, es->root);
         printf("=> %s\n", String_c_str(Object_inspect(es, value)));

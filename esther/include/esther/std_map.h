@@ -5,9 +5,15 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include <stdint.h>
 
 struct std_map;
-typedef unsigned long std_map_iterator;
+
+#ifdef __x86_64
+typedef uint64_t std_map_iterator;
+#elif __i386
+typedef uint32_t std_map_iterator;
+#endif
 
 typedef bool (*Compare)(void *, void *);
 

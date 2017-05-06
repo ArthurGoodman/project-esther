@@ -62,6 +62,7 @@ Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
     return self;
 }
 
+// @TODO: Impelement escaping
 Object *String_virtual_inspect(Esther *es, Object *self) {
     Object *str = String_new(es, "\"");
     String_append(str, self);

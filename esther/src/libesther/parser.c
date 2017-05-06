@@ -34,17 +34,48 @@ static void getToken(Parser *parser) {
     parser->token = Array_get(parser->tokens, parser->pos++);
 }
 
-static void error_invalidToken(Esther *es, Parser *parser) {
-    Exception_throw(es, "invalid token %s", String_c_str(Object_toString(es, parser->token)));
+static void ungetToken(Parser *parser) {
+    parser->token = Array_get(parser->tokens, --parser->pos);
 }
 
-static bool check(Esther *es, Parser *parser, Id id) {
+static void error_invalidToken(Esther *es, Parser *parser) {
+    Exception_throw(es, "invalid token %s", String_c_str(Object_inspect(es, parser->token)));
+}
+
+static bool checkOnTheSameLine(Esther *es, Parser *parser, Id id) {
     Object *symbol = Tuple_get(parser->token, 0);
 
     if (Object_getType(symbol) != TSymbol)
         error_invalidToken(es, parser);
 
     return Symbol_getId(symbol) == id;
+}
+
+static bool check(Esther *es, Parser *parser, Id id) {
+    bool newLinesSkipped = false;
+
+    while (checkOnTheSameLine(es, parser, id_newLine)) {
+        newLinesSkipped = true;
+        getToken(parser);
+    }
+
+    if (!checkOnTheSameLine(es, parser, id)) {
+        if (newLinesSkipped)
+            ungetToken(parser);
+
+        return false;
+    }
+
+    return true;
+}
+
+static bool acceptOnTheSameLine(Esther *es, Parser *parser, Id id) {
+    if (checkOnTheSameLine(es, parser, id)) {
+        getToken(parser);
+        return true;
+    }
+
+    return false;
 }
 
 static bool accept(Esther *es, Parser *parser, Id id) {
@@ -236,7 +267,7 @@ static Object *suffix(Esther *es, Parser *parser) {
     Object *e = term(es, parser);
 
     while (true) {
-        if (accept(es, parser, id_leftPar)) {
+        if (acceptOnTheSameLine(es, parser, id_leftPar)) {
             Object *args = Array_new(es, 0);
 
             if (!check(es, parser, id_rightPar))
@@ -248,9 +279,9 @@ static Object *suffix(Esther *es, Parser *parser) {
                 Exception_throw(es, "unmatched parentheses");
 
             e = Tuple_new(es, 3, sym_call, e, args);
-        } else if (accept(es, parser, id_pars)) {
+        } else if (acceptOnTheSameLine(es, parser, id_pars)) {
             e = Tuple_new(es, 3, sym_call, e, Array_new(es, 0));
-        } else if (accept(es, parser, id_leftBracket)) {
+        } else if (acceptOnTheSameLine(es, parser, id_leftBracket)) {
             Object *args = Array_new(es, 0);
 
             if (!check(es, parser, id_rightBracket))
@@ -262,7 +293,7 @@ static Object *suffix(Esther *es, Parser *parser) {
                 Exception_throw(es, "unmatched brackets");
 
             e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new(es, "[]")), args);
-        } else if (accept(es, parser, id_brackets)) {
+        } else if (acceptOnTheSameLine(es, parser, id_brackets)) {
             e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new(es, "[]")), Array_new(es, 0));
         } else if (accept(es, parser, id_dot)) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
@@ -471,8 +502,21 @@ static Object *term(Esther *es, Parser *parser) {
     else if (accept(es, parser, id_leftBrace)) {
         Object *nodes = Array_new(es, 0);
 
-        while (!check(es, parser, id_rightBrace) && !check(es, parser, id_empty))
-            Array_push(nodes, statement(es, parser));
+        while (!check(es, parser, id_rightBrace) && !check(es, parser, id_empty)) {
+            Object *node = statement(es, parser);
+
+            if (Tuple_size(node) > 0) {
+                Id id = Symbol_getId(Tuple_get(node, 0));
+
+                if (id == id_braces) {
+                    Object *array = Tuple_get(node, 1);
+
+                    for (size_t i = 0; i < Array_size(array); i++)
+                        Array_push(nodes, Array_get(array, i));
+                } else
+                    Array_push(nodes, node);
+            }
+        }
 
         if (!accept(es, parser, id_rightBrace))
             Exception_throw(es, "unmatched braces");
@@ -485,14 +529,15 @@ static Object *term(Esther *es, Parser *parser) {
     else if (check(es, parser, id_empty)) {
         Exception_throw(es, "unexpected end of program");
     } else if (check(es, parser, id_unknown)) {
-        Exception_throw(es, "unknown token '%s'", String_c_str(Tuple_get(parser->token, 1)));
+        Exception_throw(es, "unknown token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
     } else {
-        Exception_throw(es, "unexpected token '%s'", String_c_str(Tuple_get(parser->token, 1)));
+        Exception_throw(es, "unexpected token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
     }
 
     return e;
 }
 
+// @Cleanup: Get rid of boilerplate code in parser
 Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
     Parser *parser = (Parser *)self;
 
@@ -503,8 +548,21 @@ Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
 
     Object *nodes = Array_new(es, 0);
 
-    while (!check(es, parser, id_empty))
-        Array_push(nodes, statement(es, parser));
+    while (!check(es, parser, id_empty)) {
+        Object *node = statement(es, parser);
+
+        if (Tuple_size(node) > 0) {
+            Id id = Symbol_getId(Tuple_get(node, 0));
+
+            if (id == id_braces) {
+                Object *array = Tuple_get(node, 1);
+
+                for (size_t i = 0; i < Array_size(array); i++)
+                    Array_push(nodes, Array_get(array, i));
+            } else
+                Array_push(nodes, node);
+        }
+    }
 
     return Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : Tuple_new(es, 2, sym_braces, nodes);
 }

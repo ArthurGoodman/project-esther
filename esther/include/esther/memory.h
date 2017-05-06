@@ -9,7 +9,7 @@ extern "C" {
 
 #ifdef __x86_64
 typedef uint64_t ptr_t;
-#else
+#elif __i386
 typedef uint32_t ptr_t;
 #endif
 

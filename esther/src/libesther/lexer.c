@@ -52,7 +52,7 @@ static char read_sym(Lexer *lexer) {
 }
 
 static void skip_spaces(Lexer *lexer) {
-    while (isspace(sym(lexer)))
+    while (isspace(sym(lexer)) && sym(lexer) != '\n')
         read_sym(lexer);
 }
 
@@ -89,7 +89,15 @@ static Object *scan(Esther *es, Lexer *lexer) {
         }
 
     if (!sym(lexer)) {
-    } else if (sym(lexer) == '\'' || sym(lexer) == '"') {
+    } else if (sym(lexer) == '\n') {
+        while (isspace(sym(lexer)))
+            read_sym(lexer);
+
+        id = sym_newLine;
+        text = String_new(es, "\n");
+    }
+    // @Refactor: Think about refactoring escape sequences
+    else if (sym(lexer) == '\'' || sym(lexer) == '"') {
         char type = read_sym(lexer);
 
         id = type == '\'' ? sym_singleQuote : sym_doubleQuote;
@@ -175,7 +183,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
             for (i = 0; strcmp(operators[i], "") != 0; i++) {
                 size_t size = String_size(text);
 
-                if (strncmp(operators[i], String_c_str(text), size) == 0 && operators[i][size] == sym(lexer)) {
+                if (sym(lexer) && strncmp(operators[i], String_c_str(text), size) == 0 && operators[i][size] == sym(lexer)) {
                     String_append_char(text, read_sym(lexer));
                     break;
                 }
