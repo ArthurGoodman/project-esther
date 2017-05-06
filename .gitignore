@@ -10,3 +10,4 @@ CMakeCache.txt
 CMakeFiles/
 esther/bin/esther
 Makefile
+testher/src/rapidjson/
