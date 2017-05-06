@@ -1,0 +1,13 @@
+*.a
+*.autosave
+*.cbp
+*.cmake
+*.dll
+*.exe
+*.so
+*.user
+CMakeCache.txt
+CMakeFiles/
+esther/bin/esther
+Makefile
+testher/src/rapidjson/
