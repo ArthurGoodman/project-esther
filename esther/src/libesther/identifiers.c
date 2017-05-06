@@ -5,10 +5,9 @@
 #define X(a, b) \
     Id id_##a;  \
     Object *sym_##a;
+#include "identifiers.def"
 #include "keywords.def"
-#include "nodes.def"
 #include "operators.def"
-#include "othertokens.def"
 #undef X
 
 Object *keyword_symbols[] = {
@@ -27,10 +26,9 @@ void init_identifiers(Esther *es) {
 #define X(a, b)             \
     id_##a = stringToId(b); \
     sym_##a = Symbol_new(es, b);
+#include "identifiers.def"
 #include "keywords.def"
-#include "nodes.def"
 #include "operators.def"
-#include "othertokens.def"
 #undef X
 
     int i = 0;

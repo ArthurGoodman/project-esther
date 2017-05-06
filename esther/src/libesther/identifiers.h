@@ -12,10 +12,9 @@ typedef struct Esther Esther;
 #define X(a, b)       \
     extern Id id_##a; \
     extern Object *sym_##a;
+#include "identifiers.def"
 #include "keywords.def"
-#include "nodes.def"
 #include "operators.def"
-#include "othertokens.def"
 #undef X
 
 extern Object *keyword_symbols[];
