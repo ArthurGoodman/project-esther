@@ -29,10 +29,12 @@ Object *Symbol_virtual_toString(Esther *es, Object *self) {
     return String_new(es, idToString(as_Symbol(self)->id));
 }
 
+// @TODO: Implement escaping for \0 or restrict symbol contents
 Object *Symbol_virtual_inspect(Esther *es, Object *self) {
     const char *value = idToString(as_Symbol(self)->id);
+    size_t size = strlen(value);
 
-    if (strlen(value) == 0)
+    if (size == 0)
         return String_new(es, ":\"\"");
 
     Object *str = String_new(es, ":");
@@ -42,7 +44,7 @@ Object *Symbol_virtual_inspect(Esther *es, Object *self) {
     else {
         String_append_char(str, '\"');
 
-        struct std_string *escaped = std_string_escape(value);
+        struct std_string *escaped = std_string_escape(value, size);
         String_append_c_str(str, std_string_c_str(escaped));
         std_string_delete(escaped);
 

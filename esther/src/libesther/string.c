@@ -5,7 +5,13 @@
 
 Object *String_new(Esther *es, const char *value) {
     Object *self = gc_alloc(sizeof(String));
-    String_init(es, self, value);
+    String_init(es, self, value, strlen(value));
+    return self;
+}
+
+Object *String_new_len(Esther *es, const char *value, size_t length) {
+    Object *self = gc_alloc(sizeof(String));
+    String_init(es, self, value, length);
     return self;
 }
 
@@ -15,8 +21,8 @@ Object *String_new_std(Esther *es, struct std_string *value) {
     return self;
 }
 
-void String_init(Esther *es, Object *self, const char *value) {
-    String_init_std(es, self, std_string_new_init(value));
+void String_init(Esther *es, Object *self, const char *value, size_t length) {
+    String_init_std(es, self, std_string_new_init(value, length));
 }
 
 void String_init_std(Esther *es, Object *self, struct std_string *value) {
@@ -65,7 +71,7 @@ Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
 Object *String_virtual_inspect(Esther *es, Object *self) {
     Object *str = String_new(es, "\"");
 
-    struct std_string *escaped = std_string_escape(String_c_str(self));
+    struct std_string *escaped = std_string_escape(String_c_str(self), String_size(self));
     String_append_c_str(str, std_string_c_str(escaped));
     std_string_delete(escaped);
 

@@ -10,7 +10,7 @@ extern "C" {
 struct std_string;
 
 struct std_string *std_string_new();
-struct std_string *std_string_new_init(const char *str);
+struct std_string *std_string_new_init(const char *str, size_t length);
 
 void std_string_delete(struct std_string *self);
 
@@ -33,7 +33,7 @@ const char *std_string_c_str(struct std_string *self);
 struct std_string *std_string_format(const char *fmt, ...);
 struct std_string *std_string_format_va(const char *fmt, va_list ap);
 
-struct std_string *std_string_escape(const char *str);
+struct std_string *std_string_escape(const char *str, size_t length);
 
 #ifdef __cplusplus
 }

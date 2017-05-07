@@ -17,9 +17,10 @@ typedef struct String {
 #define as_String(obj) ((String *)(obj))
 
 Object *String_new(Esther *es, const char *value);
+Object *String_new_len(Esther *es, const char *value, size_t length);
 Object *String_new_std(Esther *es, struct std_string *value);
 
-void String_init(Esther *es, Object *self, const char *value);
+void String_init(Esther *es, Object *self, const char *value, size_t length);
 void String_init_std(Esther *es, Object *self, struct std_string *value);
 
 const char *String_c_str(Object *self);

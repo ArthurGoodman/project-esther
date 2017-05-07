@@ -20,7 +20,7 @@ struct std_string *read_file(const char *fileName) {
 
     data[size] = '\0';
 
-    struct std_string *str = std_string_new_init(data);
+    struct std_string *str = std_string_new_init(data, size);
 
     free(data);
 
