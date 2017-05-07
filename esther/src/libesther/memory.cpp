@@ -20,6 +20,17 @@ struct Registers {
 #endif
 };
 
+#if defined(__WIN64) && !defined(NDEBUG)
+void saveRegisters(Registers *) {
+    asm("mov %rdi,0x0(%rcx)\n"
+        "mov %rsi,0x8(%rcx)\n"
+        "mov %rbx,0x10(%rcx)\n"
+        "mov %r12,0x18(%rcx)\n"
+        "mov %r13,0x20(%rcx)\n"
+        "mov %r14,0x28(%rcx)\n"
+        "mov %r15,0x30(%rcx)");
+}
+#else
 #ifdef __x86_64
 #ifdef __WIN64
 asm("saveRegisters:\n"
@@ -52,6 +63,7 @@ asm("_saveRegisters:\n"
 #endif
 
 extern "C" void saveRegisters(Registers *);
+#endif
 
 const size_t InitialHeapSize = 20000;
 const double HeapSizeMultiplier = 1.8;
@@ -212,7 +224,7 @@ void mark() {
     Registers buf;
     saveRegisters(&buf);
 
-    markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_ptr_t));
+    markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_t));
 
     for (Mapper *mapper : mappers)
         Mapper_mapOnReferences(mapper, markReference);
