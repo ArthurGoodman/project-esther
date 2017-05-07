@@ -75,9 +75,9 @@ Context *Context_childContext(Context *self, Object *selfObject, Object *hereObj
 }
 
 void Context_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    f((void **)&as_Context(self)->parent);
-    f((void **)&as_Context(self)->self);
+    f(as_Context(self)->parent);
+    f(as_Context(self)->self);
 
     if (as_Context(self)->self != as_Context(self)->here)
-        f((void **)&as_Context(self)->here);
+        f(as_Context(self)->here);
 }

@@ -97,17 +97,14 @@ Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
 void Class_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     Object_virtual_mapOnReferences(self, f);
 
-    f((void **)&as_Class(self)->superclass);
+    f(as_Class(self)->superclass);
 
     if (as_Class(self)->methods) {
         std_map_iterator i;
         std_map_begin(as_Class(self)->methods, &i);
 
         while (!std_map_end(as_Class(self)->methods, &i)) {
-            void *value = std_map_iterator_value(&i);
-            f((void **)&value);
-            std_map_iterator_set_value(&i, value);
-
+            f(std_map_iterator_value(&i));
             std_map_iterator_next(&i);
         }
     }

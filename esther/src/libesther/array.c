@@ -106,11 +106,8 @@ Object *Array_virtual_inspect(Esther *es, Object *self) {
 void Array_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     Object_virtual_mapOnReferences(self, f);
 
-    for (size_t i = 0; i < std_vector_size(as_Array(self)->data); i++) {
-        void *value = std_vector_at(as_Array(self)->data, i);
-        f((void **)&value);
-        std_vector_set(as_Array(self)->data, i, value);
-    }
+    for (size_t i = 0; i < std_vector_size(as_Array(self)->data); i++)
+        f(std_vector_at(as_Array(self)->data, i));
 }
 
 void Array_virtual_finalize(ManagedObject *self) {

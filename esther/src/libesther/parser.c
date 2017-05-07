@@ -13,8 +13,8 @@
 static void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     Object_virtual_mapOnReferences(self, f);
 
-    f((void **)&((Parser *)self)->tokens);
-    f((void **)&((Parser *)self)->token);
+    f(((Parser *)self)->tokens);
+    f(((Parser *)self)->token);
 }
 
 Object *Parser_new(Esther *es) {

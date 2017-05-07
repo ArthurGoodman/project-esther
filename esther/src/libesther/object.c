@@ -120,17 +120,14 @@ bool Object_virtual_isTrue() {
 }
 
 void Object_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    f((void **)&as_Object(self)->objectClass);
+    f(as_Object(self)->objectClass);
 
     if (as_Object(self)->attributes) {
         std_map_iterator i;
         std_map_begin(as_Object(self)->attributes, &i);
 
         while (!std_map_end(as_Object(self)->attributes, &i)) {
-            void *value = std_map_iterator_value(&i);
-            f((void **)&value);
-            std_map_iterator_set_value(&i, value);
-
+            f(std_map_iterator_value(&i));
             std_map_iterator_next(&i);
         }
     }

@@ -18,7 +18,7 @@ typedef ptr_t *ptr_ptr_t;
 typedef struct ManagedObject ManagedObject;
 typedef struct Mapper Mapper;
 
-typedef void (*MapFunction)(void **);
+typedef void (*MapFunction)(void *);
 
 typedef struct Mapper {
     void (*mapOnReferences)(Mapper *, MapFunction);

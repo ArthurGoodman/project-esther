@@ -163,9 +163,9 @@ void markFree(uint8_t *p, size_t size, size_t heapIndex) {
 
 void mark(ManagedObject *object);
 
-void markReference(void **ref) {
-    if (*ref != nullptr && !(reinterpret_cast<ObjectHeader *>(*ref) - 1)->hasFlag(ObjectHeader::FlagMark))
-        mark((ManagedObject *)*ref);
+void markReference(void *ref) {
+    if (ref != nullptr && !(reinterpret_cast<ObjectHeader *>(ref) - 1)->hasFlag(ObjectHeader::FlagMark))
+        mark((ManagedObject *)ref);
 }
 
 void mark(ManagedObject *object) {

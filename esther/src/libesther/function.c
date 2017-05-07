@@ -156,8 +156,8 @@ void InterpretedFunction_init(Esther *es, Object *f, const char *name, Object *p
 void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     Object_virtual_mapOnReferences(self, f);
 
-    f((void **)&as_InterpretedFunction(self)->closure);
-    f((void **)&as_InterpretedFunction(self)->body);
+    f(as_InterpretedFunction(self)->closure);
+    f(as_InterpretedFunction(self)->body);
 }
 
 void InterpretedFunction_virtual_finalize(ManagedObject *self) {

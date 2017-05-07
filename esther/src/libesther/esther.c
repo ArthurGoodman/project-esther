@@ -350,35 +350,35 @@ typedef struct GlobalMapper {
 } GlobalMapper;
 
 static void GlobalMapper_mapOnReferences(GlobalMapper *self, MapFunction f) {
-    f((void **)&self->es->objectClass);
-    f((void **)&self->es->classClass);
-    f((void **)&self->es->stringClass);
-    f((void **)&self->es->symbolClass);
-    f((void **)&self->es->functionClass);
-    f((void **)&self->es->tupleClass);
-    f((void **)&self->es->arrayClass);
-    f((void **)&self->es->booleanClass);
-    f((void **)&self->es->nullClass);
-    f((void **)&self->es->numericClass);
-    f((void **)&self->es->charClass);
-    f((void **)&self->es->intClass);
-    f((void **)&self->es->floatClass);
-    f((void **)&self->es->exceptionClass);
+    f(self->es->objectClass);
+    f(self->es->classClass);
+    f(self->es->stringClass);
+    f(self->es->symbolClass);
+    f(self->es->functionClass);
+    f(self->es->tupleClass);
+    f(self->es->arrayClass);
+    f(self->es->booleanClass);
+    f(self->es->nullClass);
+    f(self->es->numericClass);
+    f(self->es->charClass);
+    f(self->es->intClass);
+    f(self->es->floatClass);
+    f(self->es->exceptionClass);
 
-    f((void **)&self->es->trueObject);
-    f((void **)&self->es->falseObject);
-    f((void **)&self->es->nullObject);
+    f(self->es->trueObject);
+    f(self->es->falseObject);
+    f(self->es->nullObject);
 
-    f((void **)&self->es->lexer);
-    f((void **)&self->es->parser);
+    f(self->es->lexer);
+    f(self->es->parser);
 
-    f((void **)&self->es->mainObject);
-    f((void **)&self->es->esther);
-    f((void **)&self->es->io);
+    f(self->es->mainObject);
+    f(self->es->esther);
+    f(self->es->io);
 
-    f((void **)&self->es->root);
+    f(self->es->root);
 
-#define X(a, b) f((void **)&sym_##a);
+#define X(a, b) f(sym_##a);
 #include "identifiers.def"
 #include "keywords.def"
 #include "operators.def"

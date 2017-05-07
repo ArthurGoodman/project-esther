@@ -87,7 +87,7 @@ void Tuple_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     Object_virtual_mapOnReferences(self, f);
 
     for (size_t i = 0; i < as_Tuple(self)->size; i++)
-        f((void **)&as_Tuple(self)->data[i]);
+        f(as_Tuple(self)->data[i]);
 }
 
 void Tuple_virtual_finalize(ManagedObject *self) {
