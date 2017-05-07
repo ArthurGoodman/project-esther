@@ -29,7 +29,7 @@ std_string *vformat(const char *fmt, va_list ap) {
         va_end(ap_copy);
 
         if (needed <= static_cast<int>(size) && needed >= 0)
-            return std_string_new_init(buf, needed);
+            return std_string_new_init_len(buf, needed);
 
         size = needed > 0 ? needed + 1 : size * 2;
         dynamicbuf.resize(size);
@@ -85,7 +85,11 @@ std_string *std_string_new() {
     return to_c(new std::string());
 }
 
-std_string *std_string_new_init(const char *str, size_t length) {
+std_string *std_string_new_init(const char *str) {
+    return to_c(new std::string(str));
+}
+
+std_string *std_string_new_init_len(const char *str, size_t length) {
     return to_c(new std::string(str, length));
 }
 
@@ -147,5 +151,6 @@ std_string *std_string_format_va(const char *fmt, va_list ap) {
 std_string *std_string_escape(const char *str, size_t length) {
     std::ostringstream stream;
     write_escaped(std::string(str, length), std::ostreambuf_iterator<char>(stream));
-    return std_string_new_init(stream.str().c_str(), stream.str().size());
+    const std::string &escaped = stream.str();
+    return std_string_new_init_len(escaped.c_str(), escaped.size());
 }

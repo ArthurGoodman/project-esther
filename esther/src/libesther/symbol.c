@@ -29,7 +29,7 @@ Object *Symbol_virtual_toString(Esther *es, Object *self) {
     return String_new(es, idToString(as_Symbol(self)->id));
 }
 
-// @TODO: Implement escaping for \0 or restrict symbol contents
+// @TODO: Implement escaping for \0
 Object *Symbol_virtual_inspect(Esther *es, Object *self) {
     const char *value = idToString(as_Symbol(self)->id);
     size_t size = strlen(value);

@@ -22,7 +22,7 @@ Object *String_new_std(Esther *es, struct std_string *value) {
 }
 
 void String_init(Esther *es, Object *self, const char *value, size_t length) {
-    String_init_std(es, self, std_string_new_init(value, length));
+    String_init_std(es, self, std_string_new_init_len(value, length));
 }
 
 void String_init_std(Esther *es, Object *self, struct std_string *value) {

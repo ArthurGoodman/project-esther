@@ -10,7 +10,8 @@ extern "C" {
 struct std_string;
 
 struct std_string *std_string_new();
-struct std_string *std_string_new_init(const char *str, size_t length);
+struct std_string *std_string_new_init(const char *str);
+struct std_string *std_string_new_init_len(const char *str, size_t length);
 
 void std_string_delete(struct std_string *self);
 
