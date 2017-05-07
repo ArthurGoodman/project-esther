@@ -33,6 +33,8 @@ const char *std_string_c_str(struct std_string *self);
 struct std_string *std_string_format(const char *fmt, ...);
 struct std_string *std_string_format_va(const char *fmt, va_list ap);
 
+struct std_string *std_string_escape(const char *str);
+
 #ifdef __cplusplus
 }
 #endif

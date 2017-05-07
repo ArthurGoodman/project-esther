@@ -42,7 +42,7 @@ asm("saveRegisters:\n"
     "mov %r14,0x28(%rcx)\n"
     "mov %r15,0x30(%rcx)\n"
     "ret");
-#else
+#elif __linux
 asm("saveRegisters:\n"
     "mov %rbx,0x0(%rdi)\n"
     "mov %r12,0x8(%rdi)\n"

@@ -62,10 +62,13 @@ Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
     return self;
 }
 
-// @TODO: Impelement escaping
 Object *String_virtual_inspect(Esther *es, Object *self) {
     Object *str = String_new(es, "\"");
-    String_append(str, self);
+
+    struct std_string *escaped = std_string_escape(String_c_str(self));
+    String_append_c_str(str, std_string_c_str(escaped));
+    std_string_delete(escaped);
+
     String_append_c_str(str, "\"");
 
     return str;

@@ -345,8 +345,21 @@ struct std_string *Variant_toString(Variant var) {
 
 struct std_string *Variant_inspect(Variant var) {
     switch (var.type) {
-    case CharVariant:
-        return var.character == '\0' ? std_string_format("'\\0'") : std_string_format("'%c'", var.character);
+    case CharVariant: {
+        if (var.character == '\0')
+            return std_string_new_init("'\\0'");
+
+        char str[2];
+
+        str[0] = var.character;
+        str[1] = '\0';
+
+        struct std_string *escaped = std_string_escape(str);
+        struct std_string *result = std_string_format("'%s'", std_string_c_str(escaped));
+        std_string_delete(escaped);
+
+        return result;
+    }
 
     case IntVariant:
         return std_string_format("%i", var.integer);

@@ -1,6 +1,8 @@
 #include "esther/symbol.h"
 
 #include "esther/esther.h"
+#include "esther/lexer.h"
+#include "esther/std_string.h"
 #include "esther/string.h"
 
 Object *Symbol_new(Esther *es, const char *name) {
@@ -27,7 +29,6 @@ Object *Symbol_virtual_toString(Esther *es, Object *self) {
     return String_new(es, idToString(as_Symbol(self)->id));
 }
 
-// @TODO: Implement proper inspection with escaping
 Object *Symbol_virtual_inspect(Esther *es, Object *self) {
     const char *value = idToString(as_Symbol(self)->id);
 
@@ -36,12 +37,16 @@ Object *Symbol_virtual_inspect(Esther *es, Object *self) {
 
     Object *str = String_new(es, ":");
 
-    if (isalpha(value[0]))
+    if (Lexer_isOneToken(es, es->lexer, value))
         String_append_c_str(str, value);
     else {
-        String_append_c_str(str, "\"");
-        String_append_c_str(str, value);
-        String_append_c_str(str, "\"");
+        String_append_char(str, '\"');
+
+        struct std_string *escaped = std_string_escape(value);
+        String_append_c_str(str, std_string_c_str(escaped));
+        std_string_delete(escaped);
+
+        String_append_char(str, '\"');
     }
 
     return str;

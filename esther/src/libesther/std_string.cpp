@@ -2,6 +2,7 @@
 
 #include <cstdarg>
 #include <cstring>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -34,6 +35,49 @@ std_string *vformat(const char *fmt, va_list ap) {
         dynamicbuf.resize(size);
         buf = &dynamicbuf[0];
     }
+}
+
+template <class OutIter>
+OutIter write_escaped(const std::string &s, OutIter out) {
+    for (std::string::const_iterator i = s.begin(), end = s.end(); i != end; ++i) {
+        unsigned char c = *i;
+
+        if (' ' <= c && c <= '~' && c != '\\' && c != '"')
+            *out++ = c;
+        else {
+            *out++ = '\\';
+
+            switch (c) {
+            case '"':
+                *out++ = '"';
+                break;
+            case '\\':
+                *out++ = '\\';
+                break;
+            case '\t':
+                *out++ = 't';
+                break;
+            case '\r':
+                *out++ = 'r';
+                break;
+            case '\n':
+                *out++ = 'n';
+                break;
+            case '\0':
+                *out++ = '0';
+                break;
+
+            default:
+                const char *hex = "0123456789abcdef";
+
+                *out++ = 'x';
+                *out++ = hex[c >> 4];
+                *out++ = hex[c & 0xf];
+            }
+        }
+    }
+
+    return out;
 }
 }
 
@@ -98,4 +142,10 @@ std_string *std_string_format(const char *fmt, ...) {
 
 std_string *std_string_format_va(const char *fmt, va_list ap) {
     return vformat(fmt, ap);
+}
+
+std_string *std_string_escape(const char *str) {
+    std::ostringstream stream;
+    write_escaped(str, std::ostreambuf_iterator<char>(stream));
+    return std_string_new_init(stream.str().c_str());
 }

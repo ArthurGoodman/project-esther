@@ -132,7 +132,10 @@ static Object *scan(Esther *es, Lexer *lexer) {
                     break;
 
                 default:
-                    Exception_throw(es, "invalid escape sequence '\\%c'", sym(lexer));
+                    if (lexer->alert)
+                        Exception_throw(es, "invalid escape sequence '\\%c'", sym(lexer));
+
+                    return NULL;
                 }
 
                 read_sym(lexer);
@@ -140,8 +143,12 @@ static Object *scan(Esther *es, Lexer *lexer) {
                 String_append_char(text, read_sym(lexer));
         }
 
-        if (sym(lexer) != type)
-            Exception_throw(es, "invalid string constant");
+        if (sym(lexer) != type) {
+            if (lexer->alert)
+                Exception_throw(es, "invalid string constant");
+
+            return NULL;
+        }
 
         read_sym(lexer);
     } else if (isdigit(sym(lexer))) {
@@ -208,6 +215,7 @@ Object *Lexer_lex(Esther *es, Object *self, Object *code) {
     lexer->code = String_c_str(code);
     lexer->length = strlen(lexer->code);
     lexer->pos = 0;
+    lexer->alert = true;
 
     Object *tokens = Array_new(es, 0);
 
@@ -218,4 +226,24 @@ Object *Lexer_lex(Esther *es, Object *self, Object *code) {
     while (Symbol_getId(Tuple_get(token, 0)) != id_empty);
 
     return tokens;
+}
+
+bool Lexer_isOneToken(Esther *es, Object *self, const char *code) {
+    Lexer *lexer = (Lexer *)self;
+
+    lexer->code = code;
+    lexer->length = strlen(lexer->code);
+    lexer->pos = 0;
+    lexer->alert = false;
+
+    Object *first = scan(es, lexer);
+    Object *second = scan(es, lexer);
+
+    if (!first || !second)
+        return false;
+
+    Id firstId = Symbol_getId(Tuple_get(first, 0));
+    Id secondId = Symbol_getId(Tuple_get(second, 0));
+
+    return firstId != id_newLine && firstId != id_empty && secondId == id_empty;
 }
