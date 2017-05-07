@@ -920,12 +920,12 @@ void Esther_runFile(Esther *es, const char *fileName) {
         Object *tokens = Lexer_lex(es, es->lexer, code);
         Object_setAttribute(es->esther, "tokens", tokens);
 
-        IO_writeLine(es, tokens, Tuple_new(es, 0));
+        // IO_writeLine(es, tokens, Tuple_new(es, 0));
 
         Object *ast = Parser_parse(es, es->parser, tokens);
         Object_setAttribute(es->esther, "ast", ast);
 
-        IO_writeLine(es, ast, Tuple_new(es, 0));
+        // IO_writeLine(es, ast, Tuple_new(es, 0));
 
         Object *value = Esther_eval(es, ast, es->root);
         printf("=> %s\n", String_c_str(Object_inspect(es, value)));

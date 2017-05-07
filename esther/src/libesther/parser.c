@@ -35,14 +35,14 @@ static void getToken(Parser *parser) {
 }
 
 static void ungetToken(Parser *parser) {
-    parser->token = Array_get(parser->tokens, --parser->pos);
+    parser->token = Array_get(parser->tokens, --parser->pos - 1);
 }
 
 static void error_invalidToken(Esther *es, Parser *parser) {
     Exception_throw(es, "invalid token %s", String_c_str(Object_inspect(es, parser->token)));
 }
 
-static bool checkOnTheSameLine(Esther *es, Parser *parser, Id id) {
+static bool immediateCheck(Esther *es, Parser *parser, Id id) {
     Object *symbol = Tuple_get(parser->token, 0);
 
     if (Object_getType(symbol) != TSymbol)
@@ -54,12 +54,12 @@ static bool checkOnTheSameLine(Esther *es, Parser *parser, Id id) {
 static bool check(Esther *es, Parser *parser, Id id) {
     bool newLinesSkipped = false;
 
-    while (checkOnTheSameLine(es, parser, id_newLine)) {
+    while (immediateCheck(es, parser, id_newLine)) {
         newLinesSkipped = true;
         getToken(parser);
     }
 
-    if (!checkOnTheSameLine(es, parser, id)) {
+    if (!immediateCheck(es, parser, id)) {
         if (newLinesSkipped)
             ungetToken(parser);
 
@@ -69,8 +69,8 @@ static bool check(Esther *es, Parser *parser, Id id) {
     return true;
 }
 
-static bool acceptOnTheSameLine(Esther *es, Parser *parser, Id id) {
-    if (checkOnTheSameLine(es, parser, id)) {
+static bool immediateAccept(Esther *es, Parser *parser, Id id) {
+    if (immediateCheck(es, parser, id)) {
         getToken(parser);
         return true;
     }
@@ -267,7 +267,7 @@ static Object *suffix(Esther *es, Parser *parser) {
     Object *e = term(es, parser);
 
     while (true) {
-        if (acceptOnTheSameLine(es, parser, id_leftPar)) {
+        if (immediateAccept(es, parser, id_leftPar)) {
             Object *args = Array_new(es, 0);
 
             if (!check(es, parser, id_rightPar))
@@ -279,9 +279,9 @@ static Object *suffix(Esther *es, Parser *parser) {
                 Exception_throw(es, "unmatched parentheses");
 
             e = Tuple_new(es, 3, sym_call, e, args);
-        } else if (acceptOnTheSameLine(es, parser, id_pars)) {
+        } else if (immediateAccept(es, parser, id_pars)) {
             e = Tuple_new(es, 3, sym_call, e, Array_new(es, 0));
-        } else if (acceptOnTheSameLine(es, parser, id_leftBracket)) {
+        } else if (immediateAccept(es, parser, id_leftBracket)) {
             Object *args = Array_new(es, 0);
 
             if (!check(es, parser, id_rightBracket))
@@ -293,7 +293,7 @@ static Object *suffix(Esther *es, Parser *parser) {
                 Exception_throw(es, "unmatched brackets");
 
             e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new(es, "[]")), args);
-        } else if (acceptOnTheSameLine(es, parser, id_brackets)) {
+        } else if (immediateAccept(es, parser, id_brackets)) {
             e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new(es, "[]")), Array_new(es, 0));
         } else if (accept(es, parser, id_dot)) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
