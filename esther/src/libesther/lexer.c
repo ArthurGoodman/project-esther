@@ -236,14 +236,5 @@ bool Lexer_isOneToken(Esther *es, Object *self, const char *code) {
     lexer->pos = 0;
     lexer->alert = false;
 
-    Object *first = scan(es, lexer);
-    Object *second = scan(es, lexer);
-
-    if (!first || !second)
-        return false;
-
-    Id firstId = Symbol_getId(Tuple_get(first, 0));
-    Id secondId = Symbol_getId(Tuple_get(second, 0));
-
-    return firstId != id_newLine && firstId != id_empty && secondId == id_empty;
+    return !isspace(code[0]) && scan(es, lexer) && !sym(lexer);
 }
