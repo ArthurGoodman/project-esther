@@ -7,6 +7,7 @@
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
+#include "esther/valueobject.h"
 #include "identifiers.h"
 
 Object *Lexer_new(Esther *es) {
@@ -47,7 +48,15 @@ static char after_next_sym(Lexer *lexer) {
 
 static char read_sym(Lexer *lexer) {
     char c = sym(lexer);
+
+    if (c == '\n') {
+        lexer->line++;
+        lexer->column = 0;
+    } else
+        lexer->column++;
+
     lexer->pos++;
+
     return c;
 }
 
@@ -79,6 +88,10 @@ static Object *scan(Esther *es, Lexer *lexer) {
     Object *text = String_new(es, "");
 
     skip_spaces(lexer);
+
+    size_t pos = lexer->pos;
+    size_t line = lexer->line + 1;
+    size_t column = lexer->column + 1;
 
     if (sym(lexer) == '/' && next_sym(lexer) == '/')
         while (sym(lexer) == '/' && next_sym(lexer) == '/') {
@@ -206,7 +219,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
         }
     }
 
-    return Tuple_new(es, 2, id, text);
+    return Tuple_new(es, 3, id, text, Tuple_new(es, 3, ValueObject_new_int(es, pos), ValueObject_new_int(es, line), ValueObject_new_int(es, column)));
 }
 
 Object *Lexer_lex(Esther *es, Object *self, Object *code) {
@@ -215,6 +228,8 @@ Object *Lexer_lex(Esther *es, Object *self, Object *code) {
     lexer->code = String_c_str(code);
     lexer->length = strlen(lexer->code);
     lexer->pos = 0;
+    lexer->line = 0;
+    lexer->column = 0;
     lexer->alert = true;
 
     Object *tokens = Array_new(es, 0);
@@ -234,6 +249,8 @@ bool Lexer_isOneToken(Esther *es, Object *self, const char *code) {
     lexer->code = code;
     lexer->length = strlen(lexer->code);
     lexer->pos = 0;
+    lexer->line = 0;
+    lexer->column = 0;
     lexer->alert = false;
 
     return !isspace(code[0]) && scan(es, lexer) && !sym(lexer);

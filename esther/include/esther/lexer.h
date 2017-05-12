@@ -11,7 +11,7 @@ typedef struct Lexer {
 
     const char *code;
     size_t length;
-    size_t pos;
+    size_t pos, line, column;
     bool alert;
 } Lexer;
 
