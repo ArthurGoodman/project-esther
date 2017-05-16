@@ -10,6 +10,7 @@
 #include "esther/object.h"
 #include "esther/parser.h"
 #include "esther/std_map.h"
+#include "esther/std_string.h"
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
@@ -426,6 +427,8 @@ void Esther_init(Esther *es) {
 
     es->root = NULL;
 
+    es->file = NULL;
+
     es->classClass = Class_new_init(es, "Class", NULL);
     as_Class(es->classClass)->base.objectClass = es->classClass;
     as_Class(es->classClass)->newInstance = ClassClass_virtual_newInstance;
@@ -586,6 +589,9 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, "esther", es->esther);
 
     init_identifiers(es);
+}
+
+void Esther_finalize(Esther *UNUSED(es)) {
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {
@@ -912,9 +918,22 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 }
 
 void Esther_runFile(Esther *es, const char *fileName) {
+    struct FileRecord *next = es->file;
+
+    es->file = malloc(sizeof(struct FileRecord));
+    es->file->fileName = full_path(fileName);
+    es->file->source = NULL;
+    es->file->next = next;
+
     TRY {
-        Object *code = String_new_std(es, read_file(fileName));
+        struct std_string *rawCode = read_file(fileName);
+
+        Object *code = String_new_std(es, expand_tabs(std_string_c_str(rawCode), std_string_size(rawCode)));
         Object_setAttribute(es->esther, "code", code);
+
+        es->file->source = code;
+
+        std_string_delete(rawCode);
 
         Object *tokens = Lexer_lex(es, es->lexer, code);
         Object_setAttribute(es->esther, "tokens", tokens);
@@ -933,13 +952,27 @@ void Esther_runFile(Esther *es, const char *fileName) {
         Object *pos = Exception_getPos(e);
 
         if (pos != NULL) {
+            int offset = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 0)));
             int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
             int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
 
-            printf("<file_name>:%i:%i: error: %s\n", line, column, Exception_getMessage(e));
-            printf("<quote>\n");
+            if (es->file && es->file->source) {
+                struct std_string *q = std_string_quote(String_value(es->file->source), offset, column);
+
+                printf("%s:%i:%i: error: %s\n", es->file->fileName, line, column, Exception_getMessage(e));
+                printf("%s\n", std_string_c_str(q));
+
+                std_string_delete(q);
+            }
         } else
             printf("error: %s\n", Exception_getMessage(e));
     }
     ENDTRY;
+
+    next = es->file->next;
+
+    free((void *) es->file->fileName);
+    free(es->file);
+
+    es->file = next;
 }

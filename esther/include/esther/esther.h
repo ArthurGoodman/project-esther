@@ -38,9 +38,16 @@ typedef struct Esther {
     Context *root;
 
     struct std_map *rootObjects;
+
+    struct FileRecord {
+        const char *fileName;
+        Object *source;
+        struct FileRecord *next;
+    } * file;
 } Esther;
 
 void Esther_init(Esther *es);
+void Esther_finalize(Esther *es);
 
 Object *Esther_toBoolean(Esther *es, bool value);
 

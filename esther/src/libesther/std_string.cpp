@@ -112,6 +112,11 @@ std_string *std_string_append_char(std_string *self, char c) {
     return self;
 }
 
+std_string *std_string_insert_char(std_string *self, size_t pos, size_t count, char c) {
+    to_cpp(self)->insert(pos, count, c);
+    return self;
+}
+
 size_t std_string_size(std_string *self) {
     return to_cpp(self)->size();
 }
@@ -153,4 +158,30 @@ std_string *std_string_escape(const char *str, size_t length) {
     write_escaped(std::string(str, length), std::ostreambuf_iterator<char>(stream));
     const std::string &escaped = stream.str();
     return std_string_new_init_len(escaped.c_str(), escaped.size());
+}
+
+struct std_string *std_string_quote(struct std_string *self, int offset, int column) {
+    static const int max_quote_length = 150;
+
+    int start = to_cpp(self)->find_last_of('\n', offset) + 1;
+    int end = to_cpp(self)->find_first_of('\n', offset);
+
+    std::string quote = to_cpp(self)->substr(start, end - start);
+
+    int size = quote.size();
+
+    quote = quote.substr(std::max(0, column - max_quote_length / 2), max_quote_length);
+
+    std::string preffix = column > max_quote_length / 2 ? "... " : "";
+    std::string suffix = size - column > max_quote_length / 2 ? " ..." : "";
+
+    int pos = column > max_quote_length / 2 ? max_quote_length / 2 : column;
+
+    std::string pointer = "";
+    pointer.insert(0, pos + preffix.size() - 1, ' ');
+    pointer += "^";
+
+    quote = preffix + quote + suffix + "\n" + pointer;
+
+    return std_string_new_init(quote.c_str());
 }

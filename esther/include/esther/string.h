@@ -24,6 +24,7 @@ void String_init(Esther *es, Object *self, const char *value, size_t length);
 void String_init_std(Esther *es, Object *self, struct std_string *value);
 
 const char *String_c_str(Object *self);
+struct std_string *String_value(Object *self);
 
 Object *String_append(Object *self, Object *str);
 Object *String_append_c_str(Object *self, const char *str);

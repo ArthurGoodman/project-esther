@@ -41,6 +41,10 @@ const char *String_c_str(Object *self) {
     return std_string_c_str(as_String(self)->value);
 }
 
+struct std_string *String_value(Object *self) {
+    return as_String(self)->value;
+}
+
 Object *String_append(Object *self, Object *str) {
     std_string_append(as_String(self)->value, as_String(str)->value);
     return self;

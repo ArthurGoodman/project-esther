@@ -177,12 +177,12 @@ void mark(ManagedObject *object);
 
 void markReference(void *ref) {
     if (ref != nullptr && !(reinterpret_cast<ObjectHeader *>(ref) - 1)->hasFlag(ObjectHeader::FlagMark))
-        mark((ManagedObject *)ref);
+        mark((ManagedObject *) ref);
 }
 
 void mark(ManagedObject *object) {
     (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
-    Mapper_mapOnReferences((Mapper *)object, markReference);
+    Mapper_mapOnReferences((Mapper *) object, markReference);
 }
 
 bool isValidPtr(uint8_t *p) {
