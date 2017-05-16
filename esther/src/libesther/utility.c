@@ -35,7 +35,8 @@ const char *full_path(const char *path) {
     char buffer[PATH_MAX];
 
 #ifdef __linux
-    realpath(path, buffer);
+    if (realpath(path, buffer)) {
+    }
 #else
     GetFullPathNameA(path, PATH_MAX, buffer, NULL);
 #endif

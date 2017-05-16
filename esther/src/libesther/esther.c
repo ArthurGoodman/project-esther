@@ -918,12 +918,13 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 }
 
 void Esther_runFile(Esther *es, const char *fileName) {
-    struct FileRecord *next = es->file;
+    struct FileRecord rec;
 
-    es->file = malloc(sizeof(struct FileRecord));
-    es->file->fileName = full_path(fileName);
-    es->file->source = NULL;
-    es->file->next = next;
+    rec.fileName = full_path(fileName);
+    rec.source = NULL;
+    rec.next = es->file;
+
+    es->file = &rec;
 
     TRY {
         struct std_string *rawCode = read_file(fileName);
@@ -951,25 +952,20 @@ void Esther_runFile(Esther *es, const char *fileName) {
     CATCH(e) {
         Object *pos = Exception_getPos(e);
 
-        if (pos != NULL) {
+        if (pos != NULL && es->file && es->file->source) {
             int offset = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 0)));
             int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
             int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
 
-            if (es->file && es->file->source) {
-                struct std_string *q = std_string_quote(String_value(es->file->source), offset, column);
-                printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e), std_string_c_str(q));
-                std_string_delete(q);
-            }
+            struct std_string *q = std_string_quote(String_value(es->file->source), offset, column);
+            printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e), std_string_c_str(q));
+            std_string_delete(q);
         } else
             printf("error: %s\n", Exception_getMessage(e));
     }
     ENDTRY;
 
-    next = es->file->next;
-
     free((void *) es->file->fileName);
-    free(es->file);
 
-    es->file = next;
+    es->file = es->file->next;
 }
