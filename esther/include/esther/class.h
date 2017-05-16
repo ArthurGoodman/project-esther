@@ -20,7 +20,7 @@ typedef struct Class {
     Object *(*newInstance)(Esther *es, Object *self, Object *args);
 } Class;
 
-#define as_Class(obj) ((Class *)(obj))
+#define as_Class(obj) ((Class *) (obj))
 
 Object *Class_new(Esther *es);
 Object *Class_new_init(Esther *es, const char *name, Object *superclass);

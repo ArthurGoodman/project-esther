@@ -68,7 +68,7 @@ Object *Object_call(Esther *es, Object *self, const char *name, Object *args) {
     Object *f = Object_resolve(self, name);
 
     if (!f) {
-        Exception_throw(es, "undefined attribute '%s'", name);
+        Exception_throw_new(es, "undefined attribute '%s'", name);
         return NULL;
     }
 

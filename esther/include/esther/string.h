@@ -14,7 +14,7 @@ typedef struct String {
     struct std_string *value;
 } String;
 
-#define as_String(obj) ((String *)(obj))
+#define as_String(obj) ((String *) (obj))
 
 Object *String_new(Esther *es, const char *value);
 Object *String_new_len(Esther *es, const char *value, size_t length);

@@ -39,7 +39,7 @@ static void ungetToken(Parser *parser) {
 }
 
 static void error_invalidToken(Esther *es, Parser *parser) {
-    Exception_throw(es, "invalid token %s", String_c_str(Object_inspect(es, parser->token)));
+    Exception_throw_new(es, "invalid token %s", String_c_str(Object_inspect(es, parser->token)));
 }
 
 static bool immediateCheck(Esther *es, Parser *parser, Id id) {
@@ -317,7 +317,7 @@ static Object *suffix(Esther *es, Parser *parser) {
                 while (accept(es, parser, id_comma));
 
             if (!accept(es, parser, id_rightPar))
-                Exception_throw(es, "unmatched parentheses");
+                Exception_throw_new(es, "unmatched parentheses");
 
             e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), e, args);
         } else if (immediateAccept(es, parser, id_pars)) {
@@ -331,7 +331,7 @@ static Object *suffix(Esther *es, Parser *parser) {
                 while (accept(es, parser, id_comma));
 
             if (!accept(es, parser, id_rightBracket))
-                Exception_throw(es, "unmatched brackets");
+                Exception_throw_new(es, "unmatched brackets");
 
             e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, String_new(es, "[]")), args);
         } else if (immediateAccept(es, parser, id_brackets)) {
@@ -346,7 +346,7 @@ static Object *suffix(Esther *es, Parser *parser) {
                 e = Tuple_new(es, 4, sym_dot, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
 
                 if (expectRightPar && !accept(es, parser, id_rightPar))
-                    Exception_throw(es, "unmatched parentheses");
+                    Exception_throw_new(es, "unmatched parentheses");
             }
         } else
             break;
@@ -369,7 +369,7 @@ static Object *term(Esther *es, Parser *parser) {
 
     else if (accept(es, parser, id_var)) {
         if (!check(es, parser, id_id))
-            Exception_throw(es, "unmatched parentheses");
+            Exception_throw_new(es, "unmatched parentheses");
 
         if (accept(es, parser, id_assign))
             e = Tuple_new(es, 4, sym_var, Tuple_new(es, 1, parser->npos), Tuple_get(parser->token, 1), logicOr(es, parser));
@@ -406,7 +406,7 @@ static Object *term(Esther *es, Parser *parser) {
         condition = expr(es, parser);
 
         if (expectRightPar && !accept(es, parser, id_rightPar))
-            Exception_throw(es, "unmatched parentheses");
+            Exception_throw_new(es, "unmatched parentheses");
 
         body = expr(es, parser);
 
@@ -425,7 +425,7 @@ static Object *term(Esther *es, Parser *parser) {
         condition = expr(es, parser);
 
         if (expectRightPar && !accept(es, parser, id_rightPar))
-            Exception_throw(es, "unmatched parentheses");
+            Exception_throw_new(es, "unmatched parentheses");
 
         body = expr(es, parser);
 
@@ -475,14 +475,14 @@ static Object *term(Esther *es, Parser *parser) {
         if (!accept(es, parser, id_pars) && accept(es, parser, id_leftPar) && !accept(es, parser, id_rightPar)) {
             do {
                 if (!check(es, parser, id_id))
-                    Exception_throw(es, "identifier expected");
+                    Exception_throw_new(es, "identifier expected");
 
                 Array_push(params, Tuple_get(parser->token, 1));
                 getToken(parser);
             } while (accept(es, parser, id_comma));
 
             if (!accept(es, parser, id_rightPar))
-                Exception_throw(es, "unmatched parentheses");
+                Exception_throw_new(es, "unmatched parentheses");
         }
 
         e = Tuple_new(es, 5, sym_function, Tuple_new(es, 1, parser->npos), name, params, expr(es, parser));
@@ -493,7 +493,7 @@ static Object *term(Esther *es, Parser *parser) {
             e = Tuple_new(es, 3, sym_new, Tuple_new(es, 1, parser->npos), term(es, parser));
         else {
             if (!check(es, parser, id_id))
-                Exception_throw(es, "indentifier expected");
+                Exception_throw_new(es, "indentifier expected");
 
             Object *name = Tuple_get(parser->token, 1);
             getToken(parser);
@@ -507,7 +507,7 @@ static Object *term(Esther *es, Parser *parser) {
                     while (accept(es, parser, id_comma));
 
                 if (!accept(es, parser, id_rightPar))
-                    Exception_throw(es, "unmatched parentheses");
+                    Exception_throw_new(es, "unmatched parentheses");
             }
 
             e = Tuple_new(es, 5, sym_new, Tuple_new(es, 1, parser->npos), name, args, check(es, parser, id_braces) || check(es, parser, id_leftBrace) ? term(es, parser) : Tuple_new(es, 0));
@@ -522,7 +522,7 @@ static Object *term(Esther *es, Parser *parser) {
         while (accept(es, parser, id_comma));
 
         if (!accept(es, parser, id_rightPar))
-            Exception_throw(es, "unmatched parentheses");
+            Exception_throw_new(es, "unmatched parentheses");
 
         e = Tuple_new(es, 3, sym_pars, Tuple_new(es, 1, parser->npos), args);
     } else if (accept(es, parser, id_pars)) {
@@ -537,7 +537,7 @@ static Object *term(Esther *es, Parser *parser) {
         while (accept(es, parser, id_comma));
 
         if (!accept(es, parser, id_rightBracket))
-            Exception_throw(es, "unmatched brackets");
+            Exception_throw_new(es, "unmatched brackets");
 
         e = Tuple_new(es, 3, sym_brackets, Tuple_new(es, 1, parser->npos), args);
     } else if (accept(es, parser, id_brackets)) {
@@ -564,7 +564,7 @@ static Object *term(Esther *es, Parser *parser) {
         }
 
         if (!accept(es, parser, id_rightBrace))
-            Exception_throw(es, "unmatched braces");
+            Exception_throw_new(es, "unmatched braces");
 
         e = Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : Tuple_new(es, 3, sym_braces, Tuple_new(es, 1, parser->npos), nodes);
     } else if (accept(es, parser, id_braces)) {
@@ -572,11 +572,11 @@ static Object *term(Esther *es, Parser *parser) {
     }
 
     else if (check(es, parser, id_empty)) {
-        Exception_throw(es, "unexpected end of program");
+        Exception_throw_new(es, "unexpected end of program");
     } else if (check(es, parser, id_unknown)) {
-        Exception_throw(es, "unknown token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
+        Exception_throw_new(es, "unknown token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
     } else {
-        Exception_throw(es, "unexpected token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
+        Exception_throw_new(es, "unexpected token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
     }
 
     if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)

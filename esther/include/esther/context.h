@@ -20,7 +20,7 @@ typedef struct Context {
     Object *here;
 } Context;
 
-#define as_Context(obj) ((Context *)(obj))
+#define as_Context(obj) ((Context *) (obj))
 
 Context *Context_new(Esther *es);
 

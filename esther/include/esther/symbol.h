@@ -13,7 +13,7 @@ typedef struct Symbol {
     Id id;
 } Symbol;
 
-#define as_Symbol(obj) ((Symbol *)(obj))
+#define as_Symbol(obj) ((Symbol *) (obj))
 
 Object *Symbol_new(Esther *es, const char *name);
 

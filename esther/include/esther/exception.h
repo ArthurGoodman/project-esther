@@ -18,6 +18,7 @@ struct jump_buffer {
         if (!setjmp(__buf__.buf)) {
 
 #define CATCH(exception) \
+    pop_jump_buffer();   \
     }                    \
     else {               \
         Object *exception = get_last_exception();
@@ -38,9 +39,10 @@ typedef struct Exception {
     Object base;
 
     const char *msg;
+    Object *pos;
 } Exception;
 
-#define as_Exception(obj) ((Exception *)(obj))
+#define as_Exception(obj) ((Exception *) (obj))
 
 Object *Exception_new(Esther *es, const char *msg);
 
@@ -48,8 +50,13 @@ void Exception_init(Esther *es, Object *self, const char *msg);
 
 const char *Exception_getMessage(Object *self);
 
-void Exception_throw(Esther *es, const char *fmt, ...);
+Object *Exception_getPos(Object *self);
+void Exception_setPos(Object *self, Object *pos);
 
+void Exception_throw_new(Esther *es, const char *fmt, ...);
+void Exception_throw(Object *self);
+
+void Exception_virtual_mapOnReferences(Mapper *self, MapFunction f);
 void Exception_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus

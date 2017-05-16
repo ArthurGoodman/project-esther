@@ -14,7 +14,7 @@ typedef struct Array {
     struct std_vector *data;
 } Array;
 
-#define as_Array(obj) ((Array *)(obj))
+#define as_Array(obj) ((Array *) (obj))
 
 Object *Array_new(Esther *es, size_t size, ...);
 Object *Array_new_init(Esther *es, Object *const *data, size_t size);

@@ -32,7 +32,9 @@ void Exception_init(Esther *es, Object *self, const char *msg) {
     Object_init(es, self, TException, es->exceptionClass);
 
     as_Exception(self)->msg = strdup(msg);
+    as_Exception(self)->pos = NULL;
 
+    self->base.base.mapOnReferences = Exception_virtual_mapOnReferences;
     self->base.finalize = Exception_virtual_finalize;
 }
 
@@ -40,7 +42,15 @@ const char *Exception_getMessage(Object *self) {
     return as_Exception(self)->msg;
 }
 
-void Exception_throw(Esther *es, const char *fmt, ...) {
+Object *Exception_getPos(Object *self) {
+    return as_Exception(self)->pos;
+}
+
+void Exception_setPos(Object *self, Object *pos) {
+    as_Exception(self)->pos = pos;
+}
+
+void Exception_throw_new(Esther *es, const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
     struct std_string *msg = std_string_format_va(fmt, ap);
@@ -53,8 +63,20 @@ void Exception_throw(Esther *es, const char *fmt, ...) {
     THROW;
 }
 
+void Exception_throw(Object *self) {
+    last_exception = self;
+
+    THROW;
+}
+
+void Exception_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnReferences(self, f);
+
+    f(as_Exception(self)->pos);
+}
+
 void Exception_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    free((void *)as_Exception(self)->msg);
+    free((void *) as_Exception(self)->msg);
 }

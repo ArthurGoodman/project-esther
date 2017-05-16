@@ -40,7 +40,7 @@ typedef struct Object {
     bool (*isTrue)();
 } Object;
 
-#define as_Object(obj) ((Object *)(obj))
+#define as_Object(obj) ((Object *) (obj))
 
 Object *Object_new(Esther *es);
 

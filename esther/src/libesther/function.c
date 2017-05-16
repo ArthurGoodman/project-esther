@@ -40,8 +40,8 @@ Object *Function_invoke(Esther *es, Object *f, Object *self, Object *args) {
     if (as_Function(f)->argc == -1)
         return as_Function(f)->body(es, self, args);
 
-    if (as_Function(f)->argc != (int)Tuple_size(args)) {
-        Exception_throw(es, "invalid number of arguments");
+    if (as_Function(f)->argc != (int) Tuple_size(args)) {
+        Exception_throw_new(es, "invalid number of arguments");
         return NULL;
     }
 
@@ -111,12 +111,12 @@ Object *Function_virtual_toString(Esther *es, Object *f) {
 void Function_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    free((void *)as_Function(self)->name);
+    free((void *) as_Function(self)->name);
 }
 
 static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Object *args) {
-    if (as_InterpretedFunction(f)->argc != (int)Tuple_size(args)) {
-        Exception_throw(es, "invalid number of arguments");
+    if (as_InterpretedFunction(f)->argc != (int) Tuple_size(args)) {
+        Exception_throw_new(es, "invalid number of arguments");
         return NULL;
     }
 
@@ -164,7 +164,7 @@ void InterpretedFunction_virtual_finalize(ManagedObject *self) {
     Function_virtual_finalize(self);
 
     for (size_t i = 0; i < as_InterpretedFunction(self)->argc; i++)
-        free((void *)as_InterpretedFunction(self)->params[i]);
+        free((void *) as_InterpretedFunction(self)->params[i]);
 
     free(as_InterpretedFunction(self)->params);
 }

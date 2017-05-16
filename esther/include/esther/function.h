@@ -16,7 +16,7 @@ typedef struct Function {
     int argc;
 } Function;
 
-#define as_Function(obj) ((Function *)(obj))
+#define as_Function(obj) ((Function *) (obj))
 
 Object *Function_new(Esther *es, const char *name, Object *(*body)(), int argc);
 
@@ -39,7 +39,7 @@ typedef struct InterpretedFunction {
     Object *body;
 } InterpretedFunction;
 
-#define as_InterpretedFunction(obj) ((InterpretedFunction *)(obj))
+#define as_InterpretedFunction(obj) ((InterpretedFunction *) (obj))
 
 Object *InterpretedFunction_new(Esther *es, const char *name, Object *params, Context *closure, Object *body);
 

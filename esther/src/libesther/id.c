@@ -8,7 +8,7 @@ static struct std_map *stringId = NULL;
 static Id nextId = 0;
 
 const char *idToString(Id id) {
-    return idString && std_map_contains(idString, (const void *)id) ? std_map_get(idString, (const void *)id) : "";
+    return idString && std_map_contains(idString, (const void *) id) ? std_map_get(idString, (const void *) id) : "";
 }
 
 Id stringToId(const char *str) {
@@ -20,11 +20,11 @@ Id stringToId(const char *str) {
 
         const char *newStr = strdup(str);
 
-        std_map_set(idString, (const void *)nextId, (void *)newStr);
-        std_map_set(stringId, newStr, (void *)nextId);
+        std_map_set(idString, (const void *) nextId, (void *) newStr);
+        std_map_set(stringId, newStr, (void *) nextId);
 
         return nextId++;
     }
 
-    return (Id)std_map_get(stringId, str);
+    return (Id) std_map_get(stringId, str);
 }

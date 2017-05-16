@@ -13,7 +13,7 @@ typedef struct ValueObject {
     Variant value;
 } ValueObject;
 
-#define as_ValueObject(obj) ((ValueObject *)obj)
+#define as_ValueObject(obj) ((ValueObject *) obj)
 
 Object *ValueObject_new_char(Esther *es, char value);
 Object *ValueObject_new_int(Esther *es, int value);

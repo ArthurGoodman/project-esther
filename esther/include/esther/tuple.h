@@ -13,7 +13,7 @@ typedef struct Tuple {
     size_t size;
 } Tuple;
 
-#define as_Tuple(obj) ((Tuple *)(obj))
+#define as_Tuple(obj) ((Tuple *) (obj))
 
 Object *Tuple_new(Esther *es, size_t size, ...);
 Object *Tuple_new_init(Esther *es, Object *const *data, size_t size);

@@ -146,7 +146,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
 
                 default:
                     if (lexer->alert)
-                        Exception_throw(es, "invalid escape sequence '\\%c'", sym(lexer));
+                        Exception_throw_new(es, "invalid escape sequence '\\%c'", sym(lexer));
 
                     return NULL;
                 }
@@ -158,7 +158,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
 
         if (sym(lexer) != type) {
             if (lexer->alert)
-                Exception_throw(es, "invalid string constant");
+                Exception_throw_new(es, "invalid string constant");
 
             return NULL;
         }
