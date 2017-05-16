@@ -8,7 +8,7 @@
 #endif
 
 struct std_string *read_file(const char *fileName) {
-    FILE *file = fopen(fileName, "rb");
+    FILE *file = fopen(fileName, "rt");
 
     fseek(file, 0, SEEK_END);
 
@@ -54,8 +54,7 @@ struct std_string *expand_tabs(const char *str, size_t length) {
             c += delta;
             std_string_insert_char(result, std_string_size(result), delta, ' ');
         } else {
-            if (i >= length || str[i + 1] != '\n' || str[i] != '\r')
-                std_string_append_char(result, str[i]);
+            std_string_append_char(result, str[i]);
 
             if (str[i] == '\n')
                 c = 0;

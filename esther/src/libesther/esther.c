@@ -958,10 +958,7 @@ void Esther_runFile(Esther *es, const char *fileName) {
 
             if (es->file && es->file->source) {
                 struct std_string *q = std_string_quote(String_value(es->file->source), offset, column);
-
-                printf("%s:%i:%i: error: %s\n", es->file->fileName, line, column, Exception_getMessage(e));
-                printf("%s\n", std_string_c_str(q));
-
+                printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e), std_string_c_str(q));
                 std_string_delete(q);
             }
         } else
