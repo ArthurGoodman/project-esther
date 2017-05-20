@@ -384,6 +384,9 @@ static void GlobalMapper_mapOnReferences(GlobalMapper *self, MapFunction f) {
 #include "keywords.def"
 #include "operators.def"
 #undef X
+
+    for (struct FileRecord *rec = self->es->file; rec; rec = rec->next)
+        f(rec->source);
 }
 
 static Mapper *GlobalMapper_new(Esther *es) {

@@ -15,6 +15,8 @@ static void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 
     f(((Parser *) self)->tokens);
     f(((Parser *) self)->token);
+
+    f(((Parser *) self)->npos);
 }
 
 Object *Parser_new(Esther *es) {
