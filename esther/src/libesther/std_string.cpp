@@ -129,6 +129,10 @@ bool std_string_equals(std_string *self, std_string *str) {
     return *to_cpp(self) == *to_cpp(str);
 }
 
+bool std_string_compare(std_string *self, std_string *str) {
+    return *to_cpp(self) < *to_cpp(str);
+}
+
 bool std_string_contains(std_string *self, char c) {
     return to_cpp(self)->find(c) != std::string::npos;
 }
