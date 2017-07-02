@@ -17,9 +17,9 @@ include_directories("include")
 set(EXECUTABLE_OUTPUT_PATH "bin")
 set(LIBRARY_OUTPUT_PATH "lib")
 
-add_library(esther SHARED ${lib_sources} ${headers})
+add_library(libesther SHARED ${lib_sources} ${headers})
+set_target_properties(libesther PROPERTIES OUTPUT_NAME esther)
 
-add_executable(esther-exe ${exe_sources} ${headers})
-set_target_properties(esther-exe PROPERTIES OUTPUT_NAME esther)
+add_executable(esther ${exe_sources} ${headers})
 
-target_link_libraries(esther-exe esther)
+target_link_libraries(esther libesther)
