@@ -14,6 +14,7 @@ int main(int argc, const char **argv) {
     string str2 = string_new_c_str("Hello, World!");
     string str3 = string_copy(str2);
     string str4 = string_new_empty();
+    string str5;
 
     dump_string(str1);
     dump_string(str2);
@@ -21,15 +22,21 @@ int main(int argc, const char **argv) {
     dump_string(str4);
 
     string_append_c_str(&str1, ", World!");
-    string_append_str(&str4, str1);
+    string_append(&str4, str1);
 
     dump_string(str1);
     dump_string(str4);
+
+    str5 = string_substr(&str4, 7, 5);
+    dump_string(str5);
+
+    printf("%zi\n", string_find_c_str(&str5, "rld"));
 
     string_free(&str1);
     string_free(&str2);
     string_free(&str3);
     string_free(&str4);
+    string_free(&str5);
 
     Esther es;
     Esther_init(&es);

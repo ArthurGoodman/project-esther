@@ -22,6 +22,18 @@ static void extend(struct string *self, size_t size) {
     HEADER(self)->capacity = newCapacity;
 }
 
+struct string string_new_empty() {
+    return string_new("", 0);
+}
+
+struct string string_new_c_str(const char *data) {
+    return string_new(data, strlen(data));
+}
+
+struct string string_copy(struct string str) {
+    return string_new(str.data, string_size(&str));
+}
+
 struct string string_new(const char *data, size_t size) {
     struct string_header header = { size, ceilToPowerOf2(size) };
     struct string str = { malloc(TOTAL_SIZE(header.capacity)) + sizeof(struct string_header) };
@@ -34,18 +46,6 @@ struct string string_new(const char *data, size_t size) {
     return str;
 }
 
-struct string string_new_c_str(const char *data) {
-    return string_new(data, strlen(data));
-}
-
-struct string string_copy(struct string str) {
-    return string_new(str.data, string_size(&str));
-}
-
-struct string string_new_empty() {
-    return string_new("", 0);
-}
-
 size_t string_size(struct string *self) {
     return HEADER(self)->size;
 }
@@ -54,11 +54,15 @@ size_t string_capacity(struct string *self) {
     return HEADER(self)->capacity;
 }
 
-char string_at(struct string *self, size_t i) {
-    return self->data[i];
+void string_append(struct string *self, struct string str) {
+    string_append_data(self, str.data, string_size(&str));
 }
 
-void string_append(struct string *self, const char *data, size_t size) {
+void string_append_c_str(struct string *self, const char *data) {
+    string_append_data(self, data, strlen(data));
+}
+
+void string_append_data(struct string *self, const char *data, size_t size) {
     if (!ENOUGH_SPACE(self, size))
         extend(self, size);
 
@@ -66,12 +70,37 @@ void string_append(struct string *self, const char *data, size_t size) {
     HEADER(self)->size += size;
 }
 
-void string_append_c_str(struct string *self, const char *data) {
-    string_append(self, data, strlen(data));
+size_t string_find(struct string *self, struct string str) {
+    return string_find_data(self, str.data, string_size(&str));
 }
 
-void string_append_str(struct string *self, struct string str) {
-    string_append(self, str.data, string_size(&str));
+size_t string_find_char(struct string *self, char c) {
+    return string_find_data(self, &c, 1);
+}
+
+size_t string_find_c_str(struct string *self, const char *str) {
+    return string_find_data(self, str, strlen(str));
+}
+
+size_t string_find_data(struct string *self, const char *data, size_t size) {
+    if (size == 0)
+        return 0;
+
+    for (size_t i = 0; i < string_size(self) - (size - 1); i++) {
+        size_t j = 0;
+        for (; j < size; j++)
+            if (self->data[i + j] != data[j])
+                break;
+
+        if (j == size)
+            return i;
+    }
+
+    return -1;
+}
+
+struct string string_substr(struct string *self, size_t i, size_t n) {
+    return string_new(self->data + i, min(n, string_size(self) - i));
 }
 
 void string_free(struct string *self) {
