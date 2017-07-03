@@ -13,14 +13,8 @@ struct string_header {
 
 #define HEADER(str) ((struct string_header *) (str)->data - 1)
 #define TOTAL_SIZE(capacity) (sizeof(struct string_header) + (capacity) + 1)
-
-static bool enoughSpace(struct string *self, size_t size) {
-    return string_size(self) + size <= string_capacity(self);
-}
-
-static char *freeSpace(struct string *self) {
-    return self->data + string_size(self);
-}
+#define ENOUGH_SPACE(str, size) (HEADER(str)->size + (size) <= HEADER(str)->capacity)
+#define FREE_SPACE(str) ((str)->data + HEADER(str)->size)
 
 static void extend(struct string *self, size_t size) {
     size_t newCapacity = ceilToPowerOf2(string_size(self) + size);
@@ -65,10 +59,10 @@ char string_at(struct string *self, size_t i) {
 }
 
 void string_append(struct string *self, const char *data, size_t size) {
-    if (!enoughSpace(self, size))
+    if (!ENOUGH_SPACE(self, size))
         extend(self, size);
 
-    memcpy(freeSpace(self), data, size + 1);
+    memcpy(FREE_SPACE(self), data, size + 1);
     HEADER(self)->size += size;
 }
 

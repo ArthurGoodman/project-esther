@@ -3,11 +3,7 @@
 #include <cstdio>
 
 void dump_string(string str) {
-    printf("data = \"%s\"\n", str.data);
-    printf("size = %zi\n", string_size(&str));
-    printf("capacity = %zi\n\n", string_capacity(&str));
-
-    string_free(&str);
+    printf("data = \"%s\"; size = %zi; capacity = %zi\n", str.data, string_size(&str), string_capacity(&str));
 }
 
 int main(int argc, const char **argv) {
@@ -23,6 +19,17 @@ int main(int argc, const char **argv) {
     dump_string(str2);
     dump_string(str3);
     dump_string(str4);
+
+    string_append_c_str(&str1, ", World!");
+    string_append_str(&str4, str1);
+
+    dump_string(str1);
+    dump_string(str4);
+
+    string_free(&str1);
+    string_free(&str2);
+    string_free(&str3);
+    string_free(&str4);
 
     Esther es;
     Esther_init(&es);
