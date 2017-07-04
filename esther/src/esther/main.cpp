@@ -10,10 +10,9 @@ int main(int argc, const char **argv) {
     // if (argc < 2)
     //     return 0;
 
-    const char *str = "Hello, World!";
-
-    string str1 = string_new(str, 5);
-    string str2 = string_new_c_str(str);
+    string str0 = string_format("%s, %s!", "Hello", "World");
+    string str1 = string_new(str0.data, 5);
+    string str2 = string_new_c_str(str0.data);
     string str3 = string_copy(str2);
     string str4 = string_substr(&str3, 5, -1);
     string str5 = string_new_empty();
@@ -32,6 +31,7 @@ int main(int argc, const char **argv) {
 
     printf("%zi\n", string_find(&str1, str4));
 
+    string_free(&str0);
     string_free(&str1);
     string_free(&str2);
     string_free(&str3);

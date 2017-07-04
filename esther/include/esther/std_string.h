@@ -1,10 +1,17 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef char *string_iterator;
+
+void string_iterator_next(string_iterator *self);
+void string_iterator_rnext(string_iterator *self);
+size_t string_iterator_distance(string_iterator start, string_iterator end);
 
 struct string {
     char *data;
@@ -15,21 +22,55 @@ struct string string_new_c_str(const char *data);
 struct string string_copy(struct string str);
 struct string string_new(const char *data, size_t size);
 
-size_t string_size(struct string *_this);
-size_t string_capacity(struct string *_this);
+string_iterator string_begin(struct string *self);
+string_iterator string_end(struct string *self);
 
-void string_append(struct string *_this, struct string str);
-void string_append_c_str(struct string *_this, const char *data);
-void string_append_data(struct string *_this, const char *data, size_t size);
+string_iterator string_rbegin(struct string *self);
+string_iterator string_rend(struct string *self);
 
-size_t string_find(struct string *_this, struct string str);
-size_t string_find_char(struct string *_this, char c);
-size_t string_find_c_str(struct string *_this, const char *str);
-size_t string_find_data(struct string *_this, const char *data, size_t size);
+size_t string_size(struct string *self);
+size_t string_capacity(struct string *self);
 
-struct string string_substr(struct string *_this, size_t i, size_t n);
+void string_append(struct string *self, struct string str);
+void string_append_char(struct string *self, char c);
+void string_append_c_str(struct string *self, const char *data);
+void string_append_data(struct string *self, const char *data, size_t size);
 
-void string_free(struct string *_this);
+void string_insert(struct string *self, size_t pos, struct string str);
+void string_insert_char(struct string *self, size_t pos, char c, size_t n);
+void string_insert_c_str(struct string *self, size_t pos, const char *str);
+void string_insert_data(struct string *self, size_t pos, const char *data, size_t size);
+
+void string_replace(struct string *self, size_t pos, size_t len, struct string str);
+void string_replace_char(struct string *self, size_t pos, size_t len, char c, size_t n);
+void string_replace_c_str(struct string *self, size_t pos, size_t len, const char *str);
+void string_replace_data(struct string *self, size_t pos, size_t len, const char *data, size_t size);
+
+bool string_isEmpty(struct string *self);
+
+size_t string_find(struct string *self, struct string str);
+size_t string_find_char(struct string *self, char c);
+size_t string_find_c_str(struct string *self, const char *str);
+size_t string_find_data(struct string *self, const char *data, size_t size);
+
+size_t string_rfind(struct string *self, struct string str);
+size_t string_rfind_char(struct string *self, char c);
+size_t string_rfind_c_str(struct string *self, const char *str);
+size_t string_rfind_data(struct string *self, const char *data, size_t size);
+
+bool string_equals(struct string *self, struct string str);
+int string_compare(struct string *self, struct string str);
+
+void string_erase(struct string *self, size_t pos, size_t len);
+
+struct string string_substr(struct string *self, size_t pos, size_t len);
+
+void string_clear(struct string *self);
+
+struct string string_format(const char *fmt, ...);
+struct string string_format_va(const char *fmt, va_list ap);
+
+void string_free(struct string *self);
 
 #ifdef __cplusplus
 }
