@@ -1,7 +1,6 @@
 #include "esther/std_string.h"
 
 #include <memory.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,10 +15,10 @@ struct string_header {
 #define ENOUGH_SPACE(str, size) (HEADER(str)->size + (size) <= HEADER(str)->capacity)
 #define FREE_SPACE(str) ((str)->data + HEADER(str)->size)
 
-static void extend(struct string *self, size_t size) {
-    size_t newCapacity = ceilToPowerOf2(string_size(self) + size);
-    self->data = realloc(HEADER(self), TOTAL_SIZE(newCapacity)) + sizeof(struct string_header);
-    HEADER(self)->capacity = newCapacity;
+static void extend(struct string *this, size_t size) {
+    size_t newCapacity = ceilToPowerOf2(string_size(this) + size);
+    this->data = (char *) realloc(HEADER(this), TOTAL_SIZE(newCapacity)) + sizeof(struct string_header);
+    HEADER(this)->capacity = newCapacity;
 }
 
 struct string string_new_empty() {
@@ -36,60 +35,61 @@ struct string string_copy(struct string str) {
 
 struct string string_new(const char *data, size_t size) {
     struct string_header header = { size, ceilToPowerOf2(size) };
-    struct string str = { malloc(TOTAL_SIZE(header.capacity)) + sizeof(struct string_header) };
+    struct string str = { (char *) malloc(TOTAL_SIZE(header.capacity)) + sizeof(struct string_header) };
 
     *HEADER(&str) = header;
 
     memcpy(str.data, data, size);
-    str.data[size] = '\0';
+    *FREE_SPACE(&str) = '\0';
 
     return str;
 }
 
-size_t string_size(struct string *self) {
-    return HEADER(self)->size;
+size_t string_size(struct string *this) {
+    return HEADER(this)->size;
 }
 
-size_t string_capacity(struct string *self) {
-    return HEADER(self)->capacity;
+size_t string_capacity(struct string *this) {
+    return HEADER(this)->capacity;
 }
 
-void string_append(struct string *self, struct string str) {
-    string_append_data(self, str.data, string_size(&str));
+void string_append(struct string *this, struct string str) {
+    string_append_data(this, str.data, string_size(&str));
 }
 
-void string_append_c_str(struct string *self, const char *data) {
-    string_append_data(self, data, strlen(data));
+void string_append_c_str(struct string *this, const char *data) {
+    string_append_data(this, data, strlen(data));
 }
 
-void string_append_data(struct string *self, const char *data, size_t size) {
-    if (!ENOUGH_SPACE(self, size))
-        extend(self, size);
+void string_append_data(struct string *this, const char *data, size_t size) {
+    if (!ENOUGH_SPACE(this, size))
+        extend(this, size);
 
-    memcpy(FREE_SPACE(self), data, size + 1);
-    HEADER(self)->size += size;
+    memcpy(FREE_SPACE(this), data, size);
+    HEADER(this)->size += size;
+    *FREE_SPACE(this) = '\0';
 }
 
-size_t string_find(struct string *self, struct string str) {
-    return string_find_data(self, str.data, string_size(&str));
+size_t string_find(struct string *this, struct string str) {
+    return string_find_data(this, str.data, string_size(&str));
 }
 
-size_t string_find_char(struct string *self, char c) {
-    return string_find_data(self, &c, 1);
+size_t string_find_char(struct string *this, char c) {
+    return string_find_data(this, &c, 1);
 }
 
-size_t string_find_c_str(struct string *self, const char *str) {
-    return string_find_data(self, str, strlen(str));
+size_t string_find_c_str(struct string *this, const char *str) {
+    return string_find_data(this, str, strlen(str));
 }
 
-size_t string_find_data(struct string *self, const char *data, size_t size) {
+size_t string_find_data(struct string *this, const char *data, size_t size) {
     if (size == 0)
         return 0;
 
-    for (size_t i = 0; i < string_size(self) - (size - 1); i++) {
+    for (size_t i = 0; i < string_size(this) - (size - 1); i++) {
         size_t j = 0;
         for (; j < size; j++)
-            if (self->data[i + j] != data[j])
+            if (this->data[i + j] != data[j])
                 break;
 
         if (j == size)
@@ -99,10 +99,10 @@ size_t string_find_data(struct string *self, const char *data, size_t size) {
     return -1;
 }
 
-struct string string_substr(struct string *self, size_t i, size_t n) {
-    return string_new(self->data + i, min(n, string_size(self) - i));
+struct string string_substr(struct string *this, size_t i, size_t n) {
+    return string_new(this->data + i, MIN(n, string_size(this) - i));
 }
 
-void string_free(struct string *self) {
-    free(HEADER(self));
+void string_free(struct string *this) {
+    free(HEADER(this));
 }

@@ -10,27 +10,27 @@ int main(int argc, const char **argv) {
     // if (argc < 2)
     //     return 0;
 
-    string str1 = string_new("Hello, World!", 5);
-    string str2 = string_new_c_str("Hello, World!");
+    const char *str = "Hello, World!";
+
+    string str1 = string_new(str, 5);
+    string str2 = string_new_c_str(str);
     string str3 = string_copy(str2);
-    string str4 = string_new_empty();
-    string str5;
+    string str4 = string_substr(&str3, 5, -1);
+    string str5 = string_new_empty();
 
     dump_string(str1);
     dump_string(str2);
     dump_string(str3);
     dump_string(str4);
-
-    string_append_c_str(&str1, ", World!");
-    string_append(&str4, str1);
-
-    dump_string(str1);
-    dump_string(str4);
-
-    str5 = string_substr(&str4, 7, 5);
     dump_string(str5);
 
-    printf("%zi\n", string_find_c_str(&str5, "rld"));
+    string_append(&str1, str4);
+    string_append(&str5, str1);
+
+    dump_string(str1);
+    dump_string(str5);
+
+    printf("%zi\n", string_find(&str1, str4));
 
     string_free(&str1);
     string_free(&str2);
