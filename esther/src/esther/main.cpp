@@ -2,6 +2,8 @@
 
 #include <cstdio>
 
+#include <string>
+
 void dump_string(string str) {
     printf("data = \"%s\"; size = %zi; capacity = %zi\n", str.data, string_size(&str), string_capacity(&str));
 }
@@ -27,6 +29,15 @@ int main(int argc, const char **argv) {
     string_append(&str5, str1);
 
     dump_string(str1);
+    dump_string(str5);
+
+    string_erase(&str5, 5, 7);
+    dump_string(str5);
+
+    string_insert(&str5, 5, str4);
+    dump_string(str5);
+
+    string_replace_c_str(&str5, 7, 5, "Arthur");
     dump_string(str5);
 
     printf("%zi\n", string_find(&str1, str4));

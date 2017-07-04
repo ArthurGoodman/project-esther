@@ -7,12 +7,6 @@
 extern "C" {
 #endif
 
-typedef char *string_iterator;
-
-void string_iterator_next(string_iterator *self);
-void string_iterator_rnext(string_iterator *self);
-size_t string_iterator_distance(string_iterator start, string_iterator end);
-
 struct string {
     char *data;
 };
@@ -21,12 +15,6 @@ struct string string_new_empty();
 struct string string_new_c_str(const char *data);
 struct string string_copy(struct string str);
 struct string string_new(const char *data, size_t size);
-
-string_iterator string_begin(struct string *self);
-string_iterator string_end(struct string *self);
-
-string_iterator string_rbegin(struct string *self);
-string_iterator string_rend(struct string *self);
 
 size_t string_size(struct string *self);
 size_t string_capacity(struct string *self);
