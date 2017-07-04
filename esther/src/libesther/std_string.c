@@ -22,6 +22,14 @@ static void extend(struct string *self, size_t size) {
     HEADER(self)->capacity = newCapacity;
 }
 
+static bool match(const char *a, const char *b, size_t n) {
+    for (size_t i = 0; i < n; i++)
+        if (a[i] != b[i])
+            return false;
+
+    return true;
+}
+
 struct string string_new_empty() {
     return string_new("", 0);
 }
@@ -46,6 +54,10 @@ struct string string_new(const char *data, size_t size) {
     return str;
 }
 
+void string_free(struct string *self) {
+    free(HEADER(self));
+}
+
 size_t string_size(struct string *self) {
     return HEADER(self)->size;
 }
@@ -54,24 +66,28 @@ size_t string_capacity(struct string *self) {
     return HEADER(self)->capacity;
 }
 
+bool string_isEmpty(struct string *self) {
+    return HEADER(self)->size == 0;
+}
+
 void string_append(struct string *self, struct string str) {
-    string_insert_data(self, HEADER(self)->size, str.data, HEADER(&str)->size);
+    string_insert_buffer(self, HEADER(self)->size, str.data, HEADER(&str)->size);
 }
 
 void string_append_char(struct string *self, char c) {
-    string_insert_data(self, HEADER(self)->size, &c, 1);
+    string_insert_buffer(self, HEADER(self)->size, &c, 1);
 }
 
 void string_append_c_str(struct string *self, const char *data) {
-    string_insert_data(self, HEADER(self)->size, data, strlen(data));
+    string_insert_buffer(self, HEADER(self)->size, data, strlen(data));
 }
 
-void string_append_data(struct string *self, const char *data, size_t size) {
-    string_insert_data(self, HEADER(self)->size, data, size);
+void string_append_buffer(struct string *self, const char *data, size_t size) {
+    string_insert_buffer(self, HEADER(self)->size, data, size);
 }
 
 void string_insert(struct string *self, size_t pos, struct string str) {
-    string_insert_data(self, pos, str.data, HEADER(&str)->size);
+    string_insert_buffer(self, pos, str.data, HEADER(&str)->size);
 }
 
 void string_insert_char(struct string *self, size_t pos, char c, size_t n) {
@@ -80,14 +96,14 @@ void string_insert_char(struct string *self, size_t pos, char c, size_t n) {
     for (size_t i = 0; i < n; i++)
         buf[i] = c;
 
-    string_insert_data(self, pos, buf, n);
+    string_insert_buffer(self, pos, buf, n);
 }
 
 void string_insert_c_str(struct string *self, size_t pos, const char *str) {
-    string_insert_data(self, pos, str, strlen(str));
+    string_insert_buffer(self, pos, str, strlen(str));
 }
 
-void string_insert_data(struct string *self, size_t pos, const char *data, size_t size) {
+void string_insert_buffer(struct string *self, size_t pos, const char *data, size_t size) {
     if (!ENOUGH_SPACE(self, size))
         extend(self, size);
 
@@ -97,7 +113,7 @@ void string_insert_data(struct string *self, size_t pos, const char *data, size_
 }
 
 void string_replace(struct string *self, size_t pos, size_t len, struct string str) {
-    string_replace_data(self, pos, len, str.data, HEADER(&str)->size);
+    string_replace_buffer(self, pos, len, str.data, HEADER(&str)->size);
 }
 
 void string_replace_char(struct string *self, size_t pos, size_t len, char c, size_t n) {
@@ -106,14 +122,14 @@ void string_replace_char(struct string *self, size_t pos, size_t len, char c, si
     for (size_t i = 0; i < n; i++)
         buf[i] = c;
 
-    string_replace_data(self, pos, len, buf, n);
+    string_replace_buffer(self, pos, len, buf, n);
 }
 
 void string_replace_c_str(struct string *self, size_t pos, size_t len, const char *str) {
-    string_replace_data(self, pos, len, str, strlen(str));
+    string_replace_buffer(self, pos, len, str, strlen(str));
 }
 
-void string_replace_data(struct string *self, size_t pos, size_t len, const char *data, size_t size) {
+void string_replace_buffer(struct string *self, size_t pos, size_t len, const char *data, size_t size) {
     len = MIN(len, HEADER(self)->size - pos);
 
     if (size > len && !ENOUGH_SPACE(self, size - len))
@@ -124,66 +140,61 @@ void string_replace_data(struct string *self, size_t pos, size_t len, const char
     HEADER(self)->size += size - len;
 }
 
-bool string_isEmpty(struct string *self) {
-    return HEADER(self)->size == 0;
-}
-
 size_t string_find(struct string *self, struct string str) {
-    return string_find_data(self, str.data, HEADER(&str)->size);
+    return string_find_buffer(self, str.data, HEADER(&str)->size);
 }
 
 size_t string_find_char(struct string *self, char c) {
-    return string_find_data(self, &c, 1);
+    return string_find_buffer(self, &c, 1);
 }
 
 size_t string_find_c_str(struct string *self, const char *str) {
-    return string_find_data(self, str, strlen(str));
+    return string_find_buffer(self, str, strlen(str));
 }
 
-size_t string_find_data(struct string *self, const char *data, size_t size) {
+size_t string_find_buffer(struct string *self, const char *data, size_t size) {
     if (size == 0)
         return 0;
 
-    for (size_t i = 0; i < HEADER(self)->size - (size - 1); i++) {
-        size_t j = 0;
-        for (; j < size; j++)
-            if (self->data[i + j] != data[j])
-                break;
-
-        if (j == size)
+    for (size_t i = 0; i < HEADER(self)->size - size + 1; i++)
+        if (match(self->data + i, data, size))
             return i;
-    }
 
     return -1;
 }
 
 size_t string_rfind(struct string *self, struct string str) {
-    return string_rfind_data(self, str.data, HEADER(&str)->size);
+    return string_rfind_buffer(self, str.data, HEADER(&str)->size);
 }
 
 size_t string_rfind_char(struct string *self, char c) {
-    return string_rfind_data(self, &c, 1);
+    return string_rfind_buffer(self, &c, 1);
 }
 
 size_t string_rfind_c_str(struct string *self, const char *str) {
-    return string_rfind_data(self, str, strlen(str));
+    return string_rfind_buffer(self, str, strlen(str));
 }
 
-size_t string_rfind_data(struct string *self, const char *data, size_t size) {
+size_t string_rfind_buffer(struct string *self, const char *data, size_t size) {
     if (size == 0)
         return 0;
 
-    for (int i = HEADER(self)->size - (size - 1) - 1; i >= 0; i--) {
-        size_t j = 0;
-        for (; j < size; j++)
-            if (self->data[i + j] != data[j])
-                break;
-
-        if (j == size)
+    for (int i = HEADER(self)->size - size; i >= 0; i--)
+        if (match(self->data + i, data, size))
             return i;
-    }
 
     return -1;
+}
+
+void string_erase(struct string *self, size_t pos, size_t len) {
+    len = MIN(len, HEADER(self)->size - pos);
+
+    memmove(self->data + pos, self->data + pos + len, HEADER(self)->size - pos - len + 1);
+    HEADER(self)->size -= len;
+}
+
+struct string string_substr(struct string *self, size_t pos, size_t len) {
+    return string_new(self->data + pos, MIN(len, HEADER(self)->size - pos));
 }
 
 bool string_equals(struct string *self, struct string str) {
@@ -206,17 +217,6 @@ int string_compare(struct string *self, struct string str) {
     return 0;
 }
 
-void string_erase(struct string *self, size_t pos, size_t len) {
-    len = MIN(len, HEADER(self)->size - pos);
-
-    memmove(self->data + pos, self->data + pos + len, HEADER(self)->size - pos - len + 1);
-    HEADER(self)->size -= len;
-}
-
-struct string string_substr(struct string *self, size_t pos, size_t len) {
-    return string_new(self->data + pos, MIN(len, HEADER(self)->size - pos));
-}
-
 void string_clear(struct string *self) {
     HEADER(self)->size = 0;
     *FREE_SPACE(self) = '\0';
@@ -232,8 +232,4 @@ struct string string_format(const char *fmt, ...) {
 
 struct string string_format_va(const char *fmt, va_list ap) {
     return vformat(fmt, ap);
-}
-
-void string_free(struct string *self) {
-    free(HEADER(self));
 }
