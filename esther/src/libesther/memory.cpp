@@ -164,7 +164,7 @@ bool isAllocation(uint8_t *p, size_t heapIndex) {
     return bitmaps[heapIndex][bitmapByte(headerByte)] & (1 << bitmapBit(headerByte));
 }
 
-bool enoughSpace(size_t size) {
+inline bool enoughSpace(size_t size) {
     return !freeObjects.empty() && freeObjects.top().header->getSize() >= size;
 }
 

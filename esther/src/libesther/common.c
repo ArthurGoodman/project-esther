@@ -4,7 +4,7 @@
 #include "esther/std_string.h"
 
 bool compare_str(void *a, void *b) {
-    return string_compare((struct string *) &a, *((struct string *) &b)) < 0;
+    return string_compare(a, b) < 0;
 }
 
 bool compare_id(void *a, void *b) {

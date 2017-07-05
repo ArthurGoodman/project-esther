@@ -6,6 +6,11 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
 set(CMAKE_C_FLAGS "${CMAKE_X_FLAGS} -Wall -Wextra -pedantic")
 
+if(WIN32)
+add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+else()
+endif()
+
 project(esther)
 
 file(GLOB_RECURSE exe_sources "src/esther/*.cpp")

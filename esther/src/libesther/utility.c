@@ -87,7 +87,7 @@ struct string expand_tabs(const char *str, size_t length) {
         if (str[i] == '\t') {
             size_t delta = c % tab_size ? c % tab_size : tab_size;
             c += delta;
-            string_insert_char(&result, string_size(&result), ' ', delta);
+            string_insert_char(&result, result.size, ' ', delta);
         } else {
             string_append_char(&result, str[i]);
 
