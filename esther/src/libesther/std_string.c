@@ -24,6 +24,11 @@ static bool match(const char *a, const char *b, size_t n) {
     return true;
 }
 
+struct string string_null() {
+    struct string str = {.size = 0, .capacity = 0, .data = NULL };
+    return str;
+}
+
 struct string string_new_empty() {
     return string_new("", 0);
 }
@@ -32,8 +37,8 @@ struct string string_new_c_str(const char *data) {
     return string_new(data, strlen(data));
 }
 
-struct string string_copy(const struct string *str) {
-    return string_new(str->data, str->size);
+struct string string_copy(const struct string str) {
+    return string_new(str.data, str.size);
 }
 
 struct string string_new(const char *data, size_t size) {
@@ -46,12 +51,19 @@ struct string string_new(const char *data, size_t size) {
     return str;
 }
 
+struct string string_new_const(const char *data) {
+    struct string str;
+    str.size = str.capacity = strlen(data);
+    str.data = (char *) data;
+    return str;
+}
+
 void string_free(struct string *self) {
     free(self->data);
 }
 
-void string_append(struct string *self, const struct string *str) {
-    string_insert_buffer(self, self->size, str->data, str->size);
+void string_append(struct string *self, const struct string str) {
+    string_insert_buffer(self, self->size, str.data, str.size);
 }
 
 void string_append_char(struct string *self, char c) {
@@ -66,8 +78,8 @@ void string_append_buffer(struct string *self, const char *data, size_t size) {
     string_insert_buffer(self, self->size, data, size);
 }
 
-void string_insert(struct string *self, size_t pos, const struct string *str) {
-    string_insert_buffer(self, pos, str->data, str->size);
+void string_insert(struct string *self, size_t pos, const struct string str) {
+    string_insert_buffer(self, pos, str.data, str.size);
 }
 
 void string_insert_char(struct string *self, size_t pos, char c, size_t n) {
@@ -92,8 +104,8 @@ void string_insert_buffer(struct string *self, size_t pos, const char *data, siz
     self->size += size;
 }
 
-void string_replace(struct string *self, size_t pos, size_t len, const struct string *str) {
-    string_replace_buffer(self, pos, len, str->data, str->size);
+void string_replace(struct string *self, size_t pos, size_t len, const struct string str) {
+    string_replace_buffer(self, pos, len, str.data, str.size);
 }
 
 void string_replace_char(struct string *self, size_t pos, size_t len, char c, size_t n) {
@@ -120,47 +132,47 @@ void string_replace_buffer(struct string *self, size_t pos, size_t len, const ch
     self->size += size - len;
 }
 
-size_t string_find(const struct string *self, const struct string *str) {
-    return string_find_buffer(self, str->data, str->size);
+size_t string_find(const struct string self, const struct string str) {
+    return string_find_buffer(self, str.data, str.size);
 }
 
-size_t string_find_char(const struct string *self, char c) {
+size_t string_find_char(const struct string self, char c) {
     return string_find_buffer(self, &c, 1);
 }
 
-size_t string_find_c_str(const struct string *self, const char *str) {
+size_t string_find_c_str(const struct string self, const char *str) {
     return string_find_buffer(self, str, strlen(str));
 }
 
-size_t string_find_buffer(const struct string *self, const char *data, size_t size) {
+size_t string_find_buffer(const struct string self, const char *data, size_t size) {
     if (size == 0)
         return 0;
 
-    for (size_t i = 0; i < self->size - size + 1; i++)
-        if (match(self->data + i, data, size))
+    for (size_t i = 0; i < self.size - size + 1; i++)
+        if (match(self.data + i, data, size))
             return i;
 
     return -1;
 }
 
-size_t string_rfind(const struct string *self, const struct string *str) {
-    return string_rfind_buffer(self, str->data, str->size);
+size_t string_rfind(const struct string self, const struct string str) {
+    return string_rfind_buffer(self, str.data, str.size);
 }
 
-size_t string_rfind_char(const struct string *self, char c) {
+size_t string_rfind_char(const struct string self, char c) {
     return string_rfind_buffer(self, &c, 1);
 }
 
-size_t string_rfind_c_str(const struct string *self, const char *str) {
+size_t string_rfind_c_str(const struct string self, const char *str) {
     return string_rfind_buffer(self, str, strlen(str));
 }
 
-size_t string_rfind_buffer(const struct string *self, const char *data, size_t size) {
+size_t string_rfind_buffer(const struct string self, const char *data, size_t size) {
     if (size == 0)
         return 0;
 
-    for (int i = self->size - size; i >= 0; i--)
-        if (match(self->data + i, data, size))
+    for (int i = self.size - size; i >= 0; i--)
+        if (match(self.data + i, data, size))
             return i;
 
     return -1;
@@ -173,25 +185,25 @@ void string_erase(struct string *self, size_t pos, size_t len) {
     self->size -= len;
 }
 
-struct string string_substr(const struct string *self, size_t pos, size_t len) {
-    return string_new(self->data + pos, MIN(len, self->size - pos));
+struct string string_substr(const struct string self, size_t pos, size_t len) {
+    return string_new(self.data + pos, MIN(len, self.size - pos));
 }
 
-bool string_equals(const struct string *self, const struct string *str) {
+bool string_equals(const struct string self, const struct string str) {
     return string_compare(self, str) == 0;
 }
 
-int string_compare(const struct string *self, const struct string *str) {
-    if (self->size < str->size)
+int string_compare(const struct string self, const struct string str) {
+    if (self.size < str.size)
         return -1;
 
-    if (self->size > str->size)
+    if (self.size > str.size)
         return 1;
 
-    for (size_t i = 0; i < self->size; i++)
-        if (self->data[i] < str->data[i])
+    for (size_t i = 0; i < self.size; i++)
+        if (self.data[i] < str.data[i])
             return -1;
-        else if (self->data[i] > str->data[i])
+        else if (self.data[i] > str.data[i])
             return 1;
 
     return 0;

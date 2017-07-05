@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <ctype.h>
 #include <limits.h>
 #include <setjmp.h>
@@ -10,10 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #define UNUSED(var) var __attribute__((unused))
 

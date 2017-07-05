@@ -312,28 +312,37 @@ ManagedObject *claimFreeSpace(size_t size) {
 }
 }
 
-static void Mapper_virtual_mapOnReferences(Mapper *, MapFunction) {
+void Mapper_virtual_mapOnReferences(Mapper *, MapFunction) {
 }
 
+static VTableForMapper Mapper_vtable = {
+    Mapper_virtual_mapOnReferences
+};
+
 void Mapper_init(Mapper *self) {
-    self->mapOnReferences = Mapper_virtual_mapOnReferences;
+    *reinterpret_cast<void **>(self) = &Mapper_vtable;
 }
 
 void Mapper_mapOnReferences(Mapper *self, MapFunction f) {
-    self->mapOnReferences(self, f);
+    (*reinterpret_cast<VTableForMapper **>(self))->mapOnReferences(self, f);
 }
 
-static void ManagedObject_virtual_finalize(ManagedObject *) {
+void ManagedObject_virtual_finalize(ManagedObject *) {
 }
+
+static VTableForManagedObject ManagedObject_vtable = {
+    Mapper_vtable,
+    ManagedObject_virtual_finalize
+};
 
 void ManagedObject_init(ManagedObject *self) {
     Mapper_init(&self->base);
 
-    self->finalize = ManagedObject_virtual_finalize;
+    *reinterpret_cast<void **>(self) = &ManagedObject_vtable;
 }
 
 void ManagedObject_finalize(ManagedObject *self) {
-    self->finalize(self);
+    (*reinterpret_cast<VTableForManagedObject **>(self))->finalize(self);
 }
 
 void gc_initialize(ptr_ptr_t bp) {

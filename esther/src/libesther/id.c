@@ -12,8 +12,8 @@ struct string *id_to_str(Id id) {
     return idString && std_map_contains(idString, (void *) id) ? std_map_get(idString, (void *) id) : NULL;
 }
 
-Id str_to_id(const struct string *str) {
-    if (!idString || !std_map_contains(stringId, str)) {
+Id str_to_id(const struct string str) {
+    if (!idString || !std_map_contains(stringId, &str)) {
         if (!idString) {
             idString = std_map_new(compare_id);
             stringId = std_map_new(compare_str);
@@ -28,12 +28,9 @@ Id str_to_id(const struct string *str) {
         return nextId++;
     }
 
-    return (Id) std_map_get(stringId, str);
+    return (Id) std_map_get(stringId, &str);
 }
 
 Id c_str_to_id(const char *str) {
-    struct string fakeString;
-    fakeString.size = fakeString.capacity = strlen(str);
-    fakeString.data = (char *) str;
-    return str_to_id(&fakeString);
+    return str_to_id(string_new_const(str));
 }
