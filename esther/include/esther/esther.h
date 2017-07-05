@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 typedef struct Esther {
+    char _;
 } Esther;
 
 void Esther_init(Esther *es);
