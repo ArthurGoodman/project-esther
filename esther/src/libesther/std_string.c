@@ -30,6 +30,11 @@ static bool match(const char *a, const char *b, size_t n) {
     return true;
 }
 
+struct string string_null() {
+    struct string str = { NULL };
+    return str;
+}
+
 struct string string_new_empty() {
     return string_new("", 0);
 }

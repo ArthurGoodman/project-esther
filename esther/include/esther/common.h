@@ -20,8 +20,8 @@ extern "C" {
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-bool compare_strings(void *a, void *b);
-bool compare_ids(void *a, void *b);
+bool compare_str(void *a, void *b);
+bool compare_id(void *a, void *b);
 
 #ifdef __cplusplus
 }

@@ -12,6 +12,7 @@ struct string {
     char *data;
 };
 
+struct string string_null();
 struct string string_new_empty();
 struct string string_new_c_str(const char *data);
 struct string string_copy(struct string str);
