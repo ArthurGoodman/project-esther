@@ -8,7 +8,7 @@
 #include "esther/string.h"
 
 Object *Class_new(Esther *es) {
-    return Class_new_init(es, string_new_const(""), NULL);
+    return Class_new_init(es, string_const(""), NULL);
 }
 
 Object *Class_new_init(Esther *es, struct string name, Object *superclass) {
@@ -93,7 +93,7 @@ Object *Class_virtual_toString(Esther *es, Object *self) {
 
 Object *Class_newInstance(Esther *es, Object *self, Object *args) {
     Object *instance = (*(VTableForClass **) self)->newInstance(es, self, args);
-    Object_callIfFound(es, instance, string_new_const("initialize"), args);
+    Object_callIfFound(es, instance, string_const("initialize"), args);
     return instance;
 }
 

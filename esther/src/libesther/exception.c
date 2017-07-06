@@ -63,7 +63,7 @@ void Exception_setPos(Object *self, Object *pos) {
 void Exception_throw_new(Esther *es, const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
-    struct string msg = string_format_va(fmt, ap);
+    struct string msg = string_vformat(fmt, ap);
     va_end(ap);
 
     last_exception = Exception_new(es, msg);

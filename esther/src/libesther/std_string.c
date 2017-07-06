@@ -1,18 +1,15 @@
 #include "esther/std_string.h"
 
-#include <memory.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "esther/common.h"
 #include "esther/utility.h"
 
-#define ENOUGH_SPACE(str, size) ((str)->size + (size) <= (str)->capacity)
+#define ENOUGH_SPACE(str, n) ((str)->size + (n) <= (str)->capacity)
 #define FREE_SPACE(str) ((str)->data + (str)->size)
 
 static void extend(struct string *self, size_t size) {
-    size_t newCapacity = ceilToPowerOf2(self->size + size);
+    size_t newCapacity = ceil_to_power_of_2(self->size + size);
     self->data = realloc(self->data, newCapacity + 1);
+    memset(self->data + self->capacity, 0, newCapacity - self->capacity);
     self->capacity = newCapacity;
 }
 
@@ -52,7 +49,7 @@ struct string string_new(const char *data, size_t size) {
 }
 
 struct string string_new_prealloc(size_t size) {
-    size_t capacity = ceilToPowerOf2(size);
+    size_t capacity = ceil_to_power_of_2(size);
     struct string str = { 0, capacity, calloc(capacity + 1, 1) };
 
     *FREE_SPACE(&str) = '\0';
@@ -60,7 +57,7 @@ struct string string_new_prealloc(size_t size) {
     return str;
 }
 
-struct string string_new_const(const char *data) {
+struct string string_const(const char *data) {
     struct string str;
     str.size = str.capacity = strlen(data);
     str.data = (char *) data;
@@ -75,6 +72,14 @@ struct string string_assign(struct string *self, const struct string str) {
     string_free(self);
     *self = str;
     return *self;
+}
+
+void string_resize(struct string *self, size_t size) {
+    if (size > self->size && !ENOUGH_SPACE(self, size - self->size))
+        extend(self, size - self->size);
+
+    self->size = size;
+    *FREE_SPACE(self) = '\0';
 }
 
 void string_append(struct string *self, const struct string str) {
@@ -232,13 +237,27 @@ void string_clear(struct string *self) {
 struct string string_format(const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
-    struct string str = vformat(fmt, ap);
+    struct string str = string_vformat(fmt, ap);
     va_end(ap);
     return str;
 }
 
-struct string string_format_va(const char *fmt, va_list ap) {
-    return vformat(fmt, ap);
+struct string string_vformat(const char *fmt, va_list ap) {
+    struct string str = string_new_prealloc(strlen(fmt));
+
+    while (true) {
+        va_list ap_copy;
+        va_copy(ap_copy, ap);
+        int needed = vsnprintf(str.data, str.capacity + 1, fmt, ap_copy);
+        va_end(ap_copy);
+
+        if (needed <= (int) str.capacity && needed >= 0) {
+            str.size = needed;
+            return str;
+        }
+
+        string_resize(&str, needed > 0 ? needed : (int) str.capacity * 2);
+    }
 }
 
 struct string string_escape(const struct string self) {
@@ -339,4 +358,30 @@ struct string string_quote(const struct string self, int offset, int column) {
     string_free(&pointer);
 
     return quote;
+}
+
+struct string string_expand_tabs(const struct string self) {
+    return string_expand_tabs_buffer(self.data, self.size);
+}
+
+struct string string_expand_tabs_buffer(const char *buffer, size_t size) {
+    static const size_t tab_size = 4;
+
+    struct string str = string_new_empty();
+
+    for (size_t i = 0, c = 0; i < size; i++)
+        if (buffer[i] == '\t') {
+            size_t delta = c % tab_size ? c % tab_size : tab_size;
+            c += delta;
+            string_insert_char(&str, str.size, ' ', delta);
+        } else {
+            string_append_char(&str, buffer[i]);
+
+            if (buffer[i] == '\n')
+                c = 0;
+            else
+                c++;
+        }
+
+    return str;
 }

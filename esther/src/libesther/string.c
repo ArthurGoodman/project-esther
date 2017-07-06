@@ -21,6 +21,10 @@ Object *String_new_c_str(Esther *es, const char *value) {
     return self;
 }
 
+void String_init(Esther *es, Object *self, struct string value) {
+    String_init_move(es, self, string_copy(value));
+}
+
 static VTableForObject String_vtable = {
     .base = {
         .base = {
@@ -31,10 +35,6 @@ static VTableForObject String_vtable = {
     .equals = String_virtual_equals,
     .isTrue = Object_virtual_isTrue
 };
-
-void String_init(Esther *es, Object *self, struct string value) {
-    String_init_move(es, self, string_copy(value));
-}
 
 void String_init_move(Esther *es, Object *self, struct string value) {
     Object_init(es, self, TString, es->stringClass);

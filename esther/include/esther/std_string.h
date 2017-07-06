@@ -19,11 +19,13 @@ struct string string_new_c_str(const char *str);
 struct string string_copy(const struct string str);
 struct string string_new(const char *data, size_t size);
 struct string string_new_prealloc(size_t size);
-struct string string_new_const(const char *data);
+struct string string_const(const char *data);
 
 void string_free(struct string *self);
 
 struct string string_assign(struct string *self, const struct string str);
+
+void string_resize(struct string *self, size_t size);
 
 void string_append(struct string *self, const struct string str);
 void string_append_char(struct string *self, char c);
@@ -60,12 +62,15 @@ int string_compare(const struct string self, const struct string str);
 void string_clear(struct string *self);
 
 struct string string_format(const char *fmt, ...);
-struct string string_format_va(const char *fmt, va_list ap);
+struct string string_vformat(const char *fmt, va_list ap);
 
 struct string string_escape(const struct string self);
 struct string string_escape_buffer(const char *buffer, size_t size);
 
 struct string string_quote(const struct string self, int offset, int column);
+
+struct string string_expand_tabs(const struct string self);
+struct string string_expand_tabs_buffer(const char *buffer, size_t size);
 
 #ifdef __cplusplus
 }

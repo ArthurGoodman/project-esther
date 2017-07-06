@@ -2,6 +2,7 @@
 
 #include "esther/common.h"
 #include "esther/memory.h"
+#include "esther/utility.h"
 
 void Esther_init(Esther *es) {
     uint8_t local;

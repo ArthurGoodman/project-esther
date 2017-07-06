@@ -94,7 +94,7 @@ Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args) 
     if (Object_getType(f) == TFunction)
         return Function_invoke(es, f, self, args);
 
-    return Object_call(es, f, string_new_const("()"), Tuple_new(es, 2, self, args));
+    return Object_call(es, f, string_const("()"), Tuple_new(es, 2, self, args));
 }
 
 Object *Object_toString(Esther *es, Object *self) {

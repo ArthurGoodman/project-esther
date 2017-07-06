@@ -32,5 +32,5 @@ Id str_to_id(const struct string str) {
 }
 
 Id c_str_to_id(const char *str) {
-    return str_to_id(string_new_const(str));
+    return str_to_id(string_const(str));
 }
