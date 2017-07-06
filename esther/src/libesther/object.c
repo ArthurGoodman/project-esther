@@ -73,7 +73,7 @@ Object *Object_call(Esther *es, Object *self, struct string name, Object *args) 
     Object *f = Object_resolve(self, name);
 
     if (!f) {
-        // @Temporary: C-string
+        // @Temp: C-string
         Exception_throw_new(es, "undefined attribute '%s'", name.data);
         return NULL;
     }
@@ -102,7 +102,7 @@ Object *Object_toString(Esther *es, Object *self) {
 }
 
 Object *Object_virtual_toString(Esther *es, Object *self) {
-    return String_new_move(es, string_format("<%s:0x%lx>", Class_getName(self->objectClass), self));
+    return String_new_move(es, string_format("<%s:0x%lx>", Class_getName(self->objectClass).data, self));
 }
 
 Object *Object_inspect(Esther *es, Object *self) {

@@ -16,8 +16,10 @@ typedef struct Symbol {
 #define as_Symbol(obj) ((Symbol *) (obj))
 
 Object *Symbol_new(Esther *es, struct string name);
+Object *Symbol_new_c_str(Esther *es, const char *name);
 
-void Symbol_init(Esther *es, Object *symbol, struct string name);
+void Symbol_init(Esther *es, Object *self, struct string name);
+void Symbol_init_c_str(Esther *es, Object *self, const char *name);
 
 Id Symbol_getId(Object *self);
 

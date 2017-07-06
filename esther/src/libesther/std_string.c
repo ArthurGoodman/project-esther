@@ -64,12 +64,12 @@ struct string string_const(const char *data) {
     return str;
 }
 
-void string_free(struct string *self) {
-    free(self->data);
+void string_free(const struct string self) {
+    free(self.data);
 }
 
 struct string string_assign(struct string *self, const struct string str) {
-    string_free(self);
+    string_free(*self);
     *self = str;
     return *self;
 }
@@ -354,8 +354,8 @@ struct string string_quote(const struct string self, int offset, int column) {
     string_append_char(&quote, '\n');
     string_append(&quote, pointer);
 
-    string_free(&suffix);
-    string_free(&pointer);
+    string_free(suffix);
+    string_free(pointer);
 
     return quote;
 }

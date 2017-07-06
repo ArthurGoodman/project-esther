@@ -110,14 +110,14 @@ Object *Function_virtual_toString(Esther *es, Object *f) {
     if (name.size == 0)
         return String_new_c_str(es, "<anonymous function>");
 
-    // @Temporary: C-string
+    // @Temp: C-string
     return String_new_move(es, string_format("<function %s>", name.data));
 }
 
 void Function_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    string_free(&as_Function(self)->name);
+    string_free(as_Function(self)->name);
 }
 
 static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Object *args) {
@@ -180,7 +180,7 @@ void InterpretedFunction_virtual_finalize(ManagedObject *self) {
     Function_virtual_finalize(self);
 
     for (int i = 0; i < as_InterpretedFunction(self)->argc; i++)
-        string_free(&as_InterpretedFunction(self)->params[i]);
+        string_free(as_InterpretedFunction(self)->params[i]);
 
     free(as_InterpretedFunction(self)->params);
 }

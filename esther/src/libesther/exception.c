@@ -68,7 +68,7 @@ void Exception_throw_new(Esther *es, const char *fmt, ...) {
 
     last_exception = Exception_new(es, msg);
 
-    string_free(&msg);
+    string_free(msg);
 
     THROW;
 }
@@ -88,5 +88,5 @@ void Exception_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 void Exception_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    string_free(&as_Exception(self)->msg);
+    string_free(as_Exception(self)->msg);
 }

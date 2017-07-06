@@ -21,7 +21,7 @@ struct string string_new(const char *data, size_t size);
 struct string string_new_prealloc(size_t size);
 struct string string_const(const char *data);
 
-void string_free(struct string *self);
+void string_free(const struct string self);
 
 struct string string_assign(struct string *self, const struct string str);
 

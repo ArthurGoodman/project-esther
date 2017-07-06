@@ -87,7 +87,7 @@ Object *Class_virtual_toString(Esther *es, Object *self) {
     if (name.size == 0)
         return String_new_c_str(es, "<anonymous class>");
 
-    // @Temporary: C-string
+    // @Temp: C-string
     return String_new_move(es, string_format("<class %s>", name.data));
 }
 
@@ -122,6 +122,6 @@ void Class_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 void Class_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    string_free(&as_Class(self)->name);
+    string_free(as_Class(self)->name);
     std_map_delete(as_Class(self)->methods);
 }

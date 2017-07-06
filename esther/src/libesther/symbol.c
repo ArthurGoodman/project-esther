@@ -1,13 +1,19 @@
 #include "esther/symbol.h"
 
 #include "esther/esther.h"
-//#include "esther/lexer.h"
+#include "esther/lexer.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
 
 Object *Symbol_new(Esther *es, struct string name) {
     Object *self = gc_alloc(sizeof(Symbol));
     Symbol_init(es, self, name);
+    return self;
+}
+
+Object *Symbol_new_c_str(Esther *es, const char *name) {
+    Object *self = gc_alloc(sizeof(Symbol));
+    Symbol_init_c_str(es, self, name);
     return self;
 }
 
@@ -30,6 +36,10 @@ void Symbol_init(Esther *es, Object *self, struct string name) {
     *(void **) self = &Symbol_vtable;
 }
 
+void Symbol_init_c_str(Esther *es, Object *self, const char *name) {
+    Symbol_init(es, self, string_const(name));
+}
+
 Id Symbol_getId(Object *self) {
     return as_Symbol(self)->id;
 }
@@ -46,19 +56,17 @@ Object *Symbol_virtual_inspect(Esther *es, Object *self) {
 
     Object *str = String_new_c_str(es, ":");
 
-    // @Temporary solution: no one-token check
+    if (Lexer_isOneToken(es, es->lexer, value.data))
+        String_append_std(str, value);
+    else {
+        String_append_char(str, '\"');
 
-    // if (Lexer_isOneToken(es, es->lexer, value))
-    //     String_append_c_str(str, value);
-    // else {
-    String_append_char(str, '\"');
+        struct string escaped = string_escape(as_String(self)->value);
+        String_append_std(str, escaped);
+        string_free(escaped);
 
-    struct string escaped = string_escape(as_String(self)->value);
-    String_append_std(str, escaped);
-    string_free(&escaped);
-
-    String_append_char(str, '\"');
-    // }
+        String_append_char(str, '\"');
+    }
 
     return str;
 }

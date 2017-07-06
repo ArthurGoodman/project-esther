@@ -29,24 +29,36 @@ typedef struct Esther {
     Object *falseObject;
     Object *nullObject;
 
+    Object *lexer;
+    Object *parser;
+
     Object *mainObject;
     Object *esther;
+    Object *io;
 
     Context *root;
 
     struct std_map *rootObjects;
+
+    struct FileRecord {
+        const char *fileName;
+        Object *source;
+        struct FileRecord *next;
+    } * file;
 } Esther;
 
 void Esther_init(Esther *es);
 void Esther_finalize(Esther *es);
 
-bool Esther_hasRootObject(Esther *es, struct string name);
-Object *Esther_getRootObject(Esther *es, struct string name);
-void Esther_setRootObject(Esther *es, struct string name, Object *value);
+Object *Esther_toBoolean(Esther *es, bool value);
 
-void Esther_runFile(Esther *es, const char *fileName);
+bool Esther_hasRootObject(Esther *es, const struct string name);
+Object *Esther_getRootObject(Esther *es, const struct string name);
+void Esther_setRootObject(Esther *es, const struct string name, Object *value);
 
 Object *Esther_eval(Esther *es, Object *ast, Context *context);
+
+void Esther_runFile(Esther *es, const char *fileName);
 
 #ifdef __cplusplus
 }

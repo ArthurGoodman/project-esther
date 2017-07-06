@@ -93,7 +93,7 @@ Object *String_virtual_inspect(Esther *es, Object *self) {
 
     struct string escaped = string_escape(as_String(self)->value);
     String_append_std(str, escaped);
-    string_free(&escaped);
+    string_free(escaped);
 
     String_append_c_str(str, "\"");
 
@@ -107,5 +107,5 @@ bool String_virtual_equals(Object *self, Object *obj) {
 void String_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    string_free(&as_String(self)->value);
+    string_free(as_String(self)->value);
 }
