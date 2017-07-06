@@ -985,6 +985,12 @@ void Esther_runFile(Esther *es, const char *fileName) {
     TRY {
         struct string rawCode = read_file(fileName);
 
+        if (!rawCode.data) {
+            printf("error: unable to read file\n");
+            pop_jump_buffer();
+            return;
+        }
+
         Object *code = String_new_move(es, string_expand_tabs(rawCode));
         Object_setAttribute(es->esther, string_const("code"), code);
 

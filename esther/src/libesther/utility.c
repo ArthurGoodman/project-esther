@@ -22,14 +22,15 @@ struct string read_file(const char *fileName) {
     if (!file)
         return string_null();
 
+    // @Refactor: get rid of fseek/ftell
     fseek(file, 0, SEEK_END);
     size_t size = ftell(file);
     fseek(file, 0, SEEK_SET);
 
     struct string str = string_new_prealloc(size);
 
-    if (fread(str.data, 1, size, file) != size)
-        return string_null();
+    if (fread(str.data, 1, size, file)) {
+    }
 
     str.data[size] = '\0';
     str.size = size;
