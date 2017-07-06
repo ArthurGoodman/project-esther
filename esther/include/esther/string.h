@@ -29,6 +29,7 @@ struct string String_value(Object *self);
 Object *String_append(Object *self, Object *str);
 Object *String_append_c_str(Object *self, const char *str);
 Object *String_append_char(Object *self, char c);
+Object *String_append_std(Object *self, const struct string str);
 
 size_t String_size(Object *self);
 

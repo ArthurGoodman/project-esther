@@ -71,12 +71,17 @@ Object *String_append_char(Object *self, char c) {
     return self;
 }
 
+Object *String_append_std(Object *self, const struct string str) {
+    string_append(&as_String(self)->value, str);
+    return self;
+}
+
 size_t String_size(Object *self) {
     return as_String(self)->value.size;
 }
 
 bool String_contains(Object *self, char c) {
-    return string_find_char(as_String(self)->value, c) != (size_t) -1;
+    return string_find_char(as_String(self)->value, c, 0) != (size_t) -1;
 }
 
 Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
@@ -86,12 +91,9 @@ Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
 Object *String_virtual_inspect(Esther *es, Object *self) {
     Object *str = String_new_c_str(es, "\"");
 
-    // struct string escaped = string_escape(&as_String(self)->value);
-    // String_append_c_str(str, escaped.data);
-    // string_free(&escaped);
-
-    // @Temporary solution
-    String_append_c_str(str, as_String(self)->value.data);
+    struct string escaped = string_escape(as_String(self)->value);
+    String_append_std(str, escaped);
+    string_free(&escaped);
 
     String_append_c_str(str, "\"");
 

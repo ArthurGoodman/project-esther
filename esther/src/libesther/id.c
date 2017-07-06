@@ -8,8 +8,8 @@ static struct std_map *stringId = NULL;
 
 static Id nextId = 0;
 
-struct string *id_to_str(Id id) {
-    return idString && std_map_contains(idString, (void *) id) ? std_map_get(idString, (void *) id) : NULL;
+struct string id_to_str(Id id) {
+    return idString && std_map_contains(idString, (void *) id) ? *(struct string *) std_map_get(idString, (void *) id) : string_null();
 }
 
 Id str_to_id(const struct string str) {

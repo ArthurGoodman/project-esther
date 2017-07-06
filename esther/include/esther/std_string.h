@@ -15,37 +15,40 @@ struct string {
 
 struct string string_null();
 struct string string_new_empty();
-struct string string_new_c_str(const char *data);
+struct string string_new_c_str(const char *str);
 struct string string_copy(const struct string str);
 struct string string_new(const char *data, size_t size);
+struct string string_new_prealloc(size_t size);
 struct string string_new_const(const char *data);
 
 void string_free(struct string *self);
 
+struct string string_assign(struct string *self, const struct string str);
+
 void string_append(struct string *self, const struct string str);
 void string_append_char(struct string *self, char c);
-void string_append_c_str(struct string *self, const char *data);
-void string_append_buffer(struct string *self, const char *data, size_t size);
+void string_append_c_str(struct string *self, const char *str);
+void string_append_buffer(struct string *self, const char *buffer, size_t size);
 
 void string_insert(struct string *self, size_t pos, const struct string str);
 void string_insert_char(struct string *self, size_t pos, char c, size_t n);
 void string_insert_c_str(struct string *self, size_t pos, const char *str);
-void string_insert_buffer(struct string *self, size_t pos, const char *data, size_t size);
+void string_insert_buffer(struct string *self, size_t pos, const char *buffer, size_t size);
 
 void string_replace(struct string *self, size_t pos, size_t len, const struct string str);
 void string_replace_char(struct string *self, size_t pos, size_t len, char c, size_t n);
 void string_replace_c_str(struct string *self, size_t pos, size_t len, const char *str);
-void string_replace_buffer(struct string *self, size_t pos, size_t len, const char *data, size_t size);
+void string_replace_buffer(struct string *self, size_t pos, size_t len, const char *buffer, size_t size);
 
-size_t string_find(const struct string self, const struct string str);
-size_t string_find_char(const struct string self, char c);
-size_t string_find_c_str(const struct string self, const char *str);
-size_t string_find_buffer(const struct string self, const char *data, size_t size);
+size_t string_find(const struct string self, const struct string str, size_t pos);
+size_t string_find_char(const struct string self, char c, size_t pos);
+size_t string_find_c_str(const struct string self, const char *str, size_t pos);
+size_t string_find_buffer(const struct string self, const char *buffer, size_t size, size_t pos);
 
-size_t string_rfind(const struct string self, const struct string str);
-size_t string_rfind_char(const struct string self, char c);
-size_t string_rfind_c_str(const struct string self, const char *str);
-size_t string_rfind_buffer(const struct string self, const char *data, size_t size);
+size_t string_rfind(const struct string self, const struct string str, size_t pos);
+size_t string_rfind_char(const struct string self, char c, size_t pos);
+size_t string_rfind_c_str(const struct string self, const char *str, size_t pos);
+size_t string_rfind_buffer(const struct string self, const char *buffer, size_t size, size_t pos);
 
 void string_erase(struct string *self, size_t pos, size_t len);
 
@@ -58,6 +61,11 @@ void string_clear(struct string *self);
 
 struct string string_format(const char *fmt, ...);
 struct string string_format_va(const char *fmt, va_list ap);
+
+struct string string_escape(const struct string self);
+struct string string_escape_buffer(const char *buffer, size_t size);
+
+struct string string_quote(const struct string self, int offset, int column);
 
 #ifdef __cplusplus
 }

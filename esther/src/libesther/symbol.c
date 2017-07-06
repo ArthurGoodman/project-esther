@@ -35,28 +35,27 @@ Id Symbol_getId(Object *self) {
 }
 
 Object *Symbol_virtual_toString(Esther *es, Object *self) {
-    return String_new(es, *id_to_str(as_Symbol(self)->id));
+    return String_new(es, id_to_str(as_Symbol(self)->id));
 }
 
 Object *Symbol_virtual_inspect(Esther *es, Object *self) {
-    struct string value = *id_to_str(as_Symbol(self)->id);
+    struct string value = id_to_str(as_Symbol(self)->id);
 
     if (value.size == 0)
         return String_new_c_str(es, ":\"\"");
 
     Object *str = String_new_c_str(es, ":");
 
+    // @Temporary solution: no one-token check
+
     // if (Lexer_isOneToken(es, es->lexer, value))
     //     String_append_c_str(str, value);
     // else {
     String_append_char(str, '\"');
 
-    // struct std_string *escaped = std_string_escape(value, size);
-    // String_append_c_str(str, std_string_c_str(escaped));
-    // std_string_delete(escaped);
-
-    // @Temporary solution
-    String_append_c_str(str, as_String(self)->value.data);
+    struct string escaped = string_escape(as_String(self)->value);
+    String_append_std(str, escaped);
+    string_free(&escaped);
 
     String_append_char(str, '\"');
     // }

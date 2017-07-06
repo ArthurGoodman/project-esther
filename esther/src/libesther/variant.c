@@ -346,9 +346,11 @@ struct string Variant_toString(Variant var) {
 
 struct string Variant_inspect(Variant var) {
     switch (var.type) {
-    case CharVariant:
-        // @Temporary solution
-        return string_format(isControlCharacter(var.character) ? "'\\x%02x'" : "'%c'", var.character);
+    case CharVariant: {
+        struct string str = string_escape_buffer(&var.character, 1);
+        string_assign(&str, string_format("'%s'", str.data));
+        return str;
+    }
 
     case IntVariant:
         return string_format("%i", var.integer);
