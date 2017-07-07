@@ -19,6 +19,17 @@ static void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
     f(((Parser *) self)->npos);
 }
 
+static VTableForObject Parser_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Parser_virtual_mapOnReferences },
+        .finalize = Object_virtual_finalize },
+    .toString = Object_virtual_toString,
+    .inspect = Object_virtual_toString,
+    .equals = Object_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
 Object *Parser_new(Esther *es) {
     Parser *self = gc_alloc(sizeof(Parser));
 
@@ -27,7 +38,9 @@ Object *Parser_new(Esther *es) {
     self->tokens = NULL;
     self->token = NULL;
 
-    self->base.base.base.mapOnReferences = Parser_virtual_mapOnReferences;
+    // @Maybe self->npos = NULL; ? I don't remember.
+
+    *(void **) self = &Parser_vtable;
 
     return (Object *) self;
 }
@@ -335,9 +348,9 @@ static Object *suffix(Esther *es, Parser *parser) {
             if (!accept(es, parser, id_rightBracket))
                 Exception_throw_new(es, "unmatched brackets");
 
-            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, String_new(es, "[]")), args);
+            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, String_new_c_str(es, "[]")), args);
         } else if (immediateAccept(es, parser, id_brackets)) {
-            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, String_new(es, "[]")), Array_new(es, 0));
+            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, String_new_c_str(es, "[]")), Array_new(es, 0));
         } else if (accept(es, parser, id_dot)) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
                 e = Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, Tuple_get(parser->token, 1));
@@ -454,7 +467,7 @@ static Object *term(Esther *es, Parser *parser) {
             name = Tuple_get(parser->token, 1);
             getToken(parser);
         } else
-            name = String_new(es, "");
+            name = String_new_c_str(es, "");
 
         if (accept(es, parser, id_lt)) {
             Object *superclass = expr(es, parser);
@@ -470,7 +483,7 @@ static Object *term(Esther *es, Parser *parser) {
             name = Tuple_get(parser->token, 1);
             getToken(parser);
         } else
-            name = String_new(es, "");
+            name = String_new_c_str(es, "");
 
         Object *params = Array_new(es, 0);
 

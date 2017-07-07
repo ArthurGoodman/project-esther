@@ -3,69 +3,85 @@
 #include "esther/esther.h"
 #include "esther/std_string.h"
 
-Object *String_new(Esther *es, const char *value) {
+Object *String_new(Esther *es, struct string value) {
     Object *self = gc_alloc(sizeof(String));
-    String_init(es, self, value, strlen(value));
+    String_init(es, self, value);
     return self;
 }
 
-Object *String_new_len(Esther *es, const char *value, size_t length) {
+Object *String_new_move(Esther *es, struct string value) {
     Object *self = gc_alloc(sizeof(String));
-    String_init(es, self, value, length);
+    String_init_move(es, self, value);
     return self;
 }
 
-Object *String_new_std(Esther *es, struct std_string *value) {
+Object *String_new_c_str(Esther *es, const char *value) {
     Object *self = gc_alloc(sizeof(String));
-    String_init_std(es, self, value);
+    String_init_c_str(es, self, value);
     return self;
 }
 
-void String_init(Esther *es, Object *self, const char *value, size_t length) {
-    String_init_std(es, self, std_string_new_init_len(value, length));
+void String_init(Esther *es, Object *self, struct string value) {
+    String_init_move(es, self, string_copy(value));
 }
 
-void String_init_std(Esther *es, Object *self, struct std_string *value) {
+static VTableForObject String_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Object_virtual_mapOnReferences },
+        .finalize = String_virtual_finalize },
+    .toString = String_virtual_toString,
+    .inspect = String_virtual_inspect,
+    .equals = String_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
+void String_init_move(Esther *es, Object *self, struct string value) {
     Object_init(es, self, TString, es->stringClass);
 
     as_String(self)->value = value;
 
-    as_String(self)->base.toString = String_virtual_toString;
-    as_String(self)->base.inspect = String_virtual_inspect;
-    as_String(self)->base.equals = String_virtual_equals;
+    *(void **) self = &String_vtable;
+}
 
-    self->base.finalize = String_virtual_finalize;
+void String_init_c_str(Esther *es, Object *self, const char *value) {
+    String_init_move(es, self, string_new_c_str(value));
 }
 
 const char *String_c_str(Object *self) {
-    return std_string_c_str(as_String(self)->value);
+    return as_String(self)->value.data;
 }
 
-struct std_string *String_value(Object *self) {
+struct string String_value(Object *self) {
     return as_String(self)->value;
 }
 
 Object *String_append(Object *self, Object *str) {
-    std_string_append(as_String(self)->value, as_String(str)->value);
+    string_append(&as_String(self)->value, as_String(str)->value);
     return self;
 }
 
 Object *String_append_c_str(Object *self, const char *str) {
-    std_string_append_c_str(as_String(self)->value, str);
+    string_append_c_str(&as_String(self)->value, str);
     return self;
 }
 
 Object *String_append_char(Object *self, char c) {
-    std_string_append_char(as_String(self)->value, c);
+    string_append_char(&as_String(self)->value, c);
+    return self;
+}
+
+Object *String_append_std(Object *self, const struct string str) {
+    string_append(&as_String(self)->value, str);
     return self;
 }
 
 size_t String_size(Object *self) {
-    return std_string_size(as_String(self)->value);
+    return as_String(self)->value.size;
 }
 
 bool String_contains(Object *self, char c) {
-    return std_string_contains(as_String(self)->value, c);
+    return string_find_char(as_String(self)->value, c, 0) != (size_t) -1;
 }
 
 Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
@@ -73,11 +89,11 @@ Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
 }
 
 Object *String_virtual_inspect(Esther *es, Object *self) {
-    Object *str = String_new(es, "\"");
+    Object *str = String_new_c_str(es, "\"");
 
-    struct std_string *escaped = std_string_escape(String_c_str(self), String_size(self));
-    String_append_c_str(str, std_string_c_str(escaped));
-    std_string_delete(escaped);
+    struct string escaped = string_escape(as_String(self)->value);
+    String_append_std(str, escaped);
+    string_free(escaped);
 
     String_append_c_str(str, "\"");
 
@@ -85,11 +101,11 @@ Object *String_virtual_inspect(Esther *es, Object *self) {
 }
 
 bool String_virtual_equals(Object *self, Object *obj) {
-    return Object_getType(obj) == TString && std_string_equals(as_String(self)->value, as_String(obj)->value);
+    return Object_getType(obj) == TString && string_equals(as_String(self)->value, as_String(obj)->value);
 }
 
 void String_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    std_string_delete(as_String(self)->value);
+    string_free(as_String(self)->value);
 }

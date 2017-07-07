@@ -1,30 +1,36 @@
 #include "esther/id.h"
 
 #include "esther/std_map.h"
+#include "esther/std_string.h"
 
 static struct std_map *idString = NULL;
 static struct std_map *stringId = NULL;
 
 static Id nextId = 0;
 
-const char *idToString(Id id) {
-    return idString && std_map_contains(idString, (const void *) id) ? std_map_get(idString, (const void *) id) : "";
+struct string id_to_str(Id id) {
+    return idString && std_map_contains(idString, (void *) id) ? *(struct string *) std_map_get(idString, (void *) id) : string_null();
 }
 
-Id stringToId(const char *str) {
-    if (!idString || !std_map_contains(stringId, str)) {
+Id str_to_id(const struct string str) {
+    if (!idString || !std_map_contains(stringId, &str)) {
         if (!idString) {
-            idString = std_map_new(id_compare);
-            stringId = std_map_new(string_compare);
+            idString = std_map_new(compare_id);
+            stringId = std_map_new(compare_str);
         }
 
-        const char *newStr = strdup(str);
+        struct string *newStr = malloc(sizeof *newStr);
+        *newStr = string_copy(str);
 
-        std_map_set(idString, (const void *) nextId, (void *) newStr);
+        std_map_set(idString, (void *) nextId, newStr);
         std_map_set(stringId, newStr, (void *) nextId);
 
         return nextId++;
     }
 
-    return (Id) std_map_get(stringId, str);
+    return (Id) std_map_get(stringId, &str);
+}
+
+Id c_str_to_id(const char *str) {
+    return str_to_id(string_const(str));
 }

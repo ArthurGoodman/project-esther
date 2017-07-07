@@ -31,19 +31,26 @@ Object *Array_new_init_std(Esther *es, struct std_vector *data) {
 }
 
 void Array_init(Esther *es, Object *self, Object *const *data, size_t size) {
-    Array_init_std(es, self, std_vector_new_init((void **)data, size));
+    Array_init_std(es, self, std_vector_new_init((void **) data, size));
 }
+
+static VTableForObject Array_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Array_virtual_mapOnReferences },
+        .finalize = Array_virtual_finalize },
+    .toString = Array_virtual_inspect,
+    .inspect = Array_virtual_inspect,
+    .equals = Object_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
 
 void Array_init_std(Esther *es, Object *self, struct std_vector *data) {
     Object_init(es, self, TArray, es->arrayClass);
 
     as_Array(self)->data = data;
 
-    as_Array(self)->base.toString = Array_virtual_inspect;
-    as_Array(self)->base.inspect = Array_virtual_inspect;
-
-    self->base.base.mapOnReferences = Array_virtual_mapOnReferences;
-    self->base.finalize = Array_virtual_finalize;
+    *(void **) self = &Array_vtable;
 }
 
 void Array_init_va(Esther *es, Object *self, size_t size, va_list ap) {
@@ -89,7 +96,7 @@ Object *Array_virtual_inspect(Esther *es, Object *self) {
     struct std_vector *data = as_Array(self)->data;
     size_t size = std_vector_size(data);
 
-    Object *str = String_new(es, "[");
+    Object *str = String_new_c_str(es, "[");
 
     for (size_t i = 0; i < size; i++) {
         String_append(str, Object_inspect(es, std_vector_at(data, i)));

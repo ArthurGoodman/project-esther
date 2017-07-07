@@ -1,7 +1,5 @@
 #include "esther/tuple.h"
 
-#include <string.h>
-
 #include "esther/esther.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
@@ -35,6 +33,17 @@ void Tuple_init(Esther *es, Object *self, Object *const *data, size_t size) {
     memcpy(as_Tuple(self)->data, data, size * sizeof(Object *));
 }
 
+static VTableForObject Tuple_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Tuple_virtual_mapOnReferences },
+        .finalize = Tuple_virtual_finalize },
+    .toString = Tuple_virtual_inspect,
+    .inspect = Tuple_virtual_inspect,
+    .equals = Object_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
 void Tuple_init_null(Esther *es, Object *self, size_t size) {
     Object_init(es, self, TTuple, es->tupleClass);
 
@@ -42,11 +51,7 @@ void Tuple_init_null(Esther *es, Object *self, size_t size) {
 
     as_Tuple(self)->size = size;
 
-    as_Tuple(self)->base.toString = Tuple_virtual_inspect;
-    as_Tuple(self)->base.inspect = Tuple_virtual_inspect;
-
-    self->base.base.mapOnReferences = Tuple_virtual_mapOnReferences;
-    self->base.finalize = Tuple_virtual_finalize;
+    *(void **) self = &Tuple_vtable;
 }
 
 void Tuple_init_va(Esther *es, Object *self, size_t size, va_list ap) {
@@ -69,7 +74,7 @@ void Tuple_set(Object *self, size_t index, Object *value) {
 }
 
 Object *Tuple_virtual_inspect(Esther *es, Object *self) {
-    Object *str = String_new(es, "(");
+    Object *str = String_new_c_str(es, "(");
 
     for (size_t i = 0; i < as_Tuple(self)->size; i++) {
         String_append(str, Object_inspect(es, as_Tuple(self)->data[i]));

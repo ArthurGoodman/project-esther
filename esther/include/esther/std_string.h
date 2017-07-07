@@ -5,41 +5,72 @@ extern "C" {
 #endif
 
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 
-struct std_string;
+struct string {
+    size_t size, capacity;
+    char *data;
+};
 
-struct std_string *std_string_new();
-struct std_string *std_string_new_init(const char *str);
-struct std_string *std_string_new_init_len(const char *str, size_t length);
+struct string string_null();
+struct string string_new_empty();
+struct string string_new_c_str(const char *str);
+struct string string_copy(const struct string str);
+struct string string_new(const char *data, size_t size);
+struct string string_new_prealloc(size_t size);
+struct string string_const(const char *data);
 
-void std_string_delete(struct std_string *self);
+void string_free(const struct string self);
 
-struct std_string *std_string_append(struct std_string *self, struct std_string *std_string);
-struct std_string *std_string_append_c_str(struct std_string *self, const char *str);
-struct std_string *std_string_append_char(struct std_string *self, char c);
+struct string string_assign(struct string *self, const struct string str);
 
-struct std_string *std_string_insert_char(struct std_string *self, size_t pos, size_t count, char c);
+void string_resize(struct string *self, size_t size);
 
-size_t std_string_size(struct std_string *self);
+void string_append(struct string *self, const struct string str);
+void string_append_char(struct string *self, char c);
+void string_append_c_str(struct string *self, const char *str);
+void string_append_buffer(struct string *self, const char *buffer, size_t size);
 
-bool std_string_isEmpty(struct std_string *self);
+void string_insert(struct string *self, size_t pos, const struct string str);
+void string_insert_char(struct string *self, size_t pos, char c, size_t n);
+void string_insert_c_str(struct string *self, size_t pos, const char *str);
+void string_insert_buffer(struct string *self, size_t pos, const char *buffer, size_t size);
 
-char std_string_at(struct std_string *self, size_t index);
+void string_replace(struct string *self, size_t pos, size_t len, const struct string str);
+void string_replace_char(struct string *self, size_t pos, size_t len, char c, size_t n);
+void string_replace_c_str(struct string *self, size_t pos, size_t len, const char *str);
+void string_replace_buffer(struct string *self, size_t pos, size_t len, const char *buffer, size_t size);
 
-bool std_string_equals(struct std_string *self, struct std_string *str);
-bool std_string_compare(struct std_string *self, struct std_string *str);
+size_t string_find(const struct string self, const struct string str, size_t pos);
+size_t string_find_char(const struct string self, char c, size_t pos);
+size_t string_find_c_str(const struct string self, const char *str, size_t pos);
+size_t string_find_buffer(const struct string self, const char *buffer, size_t size, size_t pos);
 
-bool std_string_contains(struct std_string *self, char c);
+size_t string_rfind(const struct string self, const struct string str, size_t pos);
+size_t string_rfind_char(const struct string self, char c, size_t pos);
+size_t string_rfind_c_str(const struct string self, const char *str, size_t pos);
+size_t string_rfind_buffer(const struct string self, const char *buffer, size_t size, size_t pos);
 
-const char *std_string_c_str(struct std_string *self);
+void string_erase(struct string *self, size_t pos, size_t len);
 
-struct std_string *std_string_format(const char *fmt, ...);
-struct std_string *std_string_format_va(const char *fmt, va_list ap);
+struct string string_substr(const struct string self, size_t pos, size_t len);
 
-struct std_string *std_string_escape(const char *str, size_t length);
+bool string_equals(const struct string self, const struct string str);
+int string_compare(const struct string self, const struct string str);
 
-struct std_string *std_string_quote(struct std_string *self, int offset, int column);
+void string_clear(struct string *self);
+
+struct string string_format(const char *fmt, ...);
+struct string string_vformat(const char *fmt, va_list ap);
+
+struct string string_escape(const struct string self);
+struct string string_escape_buffer(const char *buffer, size_t size);
+
+struct string string_quote(const struct string self, int offset, int column);
+
+struct string string_expand_tabs(const struct string self);
+struct string string_expand_tabs_buffer(const char *buffer, size_t size);
 
 #ifdef __cplusplus
 }

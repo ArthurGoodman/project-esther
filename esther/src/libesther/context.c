@@ -9,6 +9,12 @@ Context *Context_new(Esther *es) {
     return self;
 }
 
+static VTableForManagedObject Context_vtable = {
+    .base = {
+        .mapOnReferences = Context_virtual_mapOnReferences },
+    .finalize = ManagedObject_virtual_finalize
+};
+
 void Context_init(Context *self, Context *parent, Object *selfObject, Object *hereObject) {
     ManagedObject_init(&self->base);
 
@@ -16,7 +22,7 @@ void Context_init(Context *self, Context *parent, Object *selfObject, Object *he
     self->self = selfObject;
     self->here = hereObject;
 
-    self->base.base.mapOnReferences = Context_virtual_mapOnReferences;
+    *(void **) self = &Context_vtable;
 }
 
 Context *Context_getParent(Context *self) {
@@ -31,19 +37,19 @@ Object *Context_getHere(Context *self) {
     return self->here;
 }
 
-bool Context_hasLocal(Context *self, const char *name) {
+bool Context_hasLocal(Context *self, struct string name) {
     return Object_hasAttribute(self->here, name);
 }
 
-Object *Context_getLocal(Context *self, const char *name) {
+Object *Context_getLocal(Context *self, struct string name) {
     return Object_getAttribute(self->here, name);
 }
 
-void Context_setLocal(Context *self, const char *name, Object *value) {
+void Context_setLocal(Context *self, struct string name, Object *value) {
     Object_setAttribute(self->here, name, value);
 }
 
-Object *Context_resolve(Esther *es, Context *self, const char *name) {
+Object *Context_resolve(Esther *es, Context *self, struct string name) {
     if (Context_hasLocal(self, name))
         return Context_getLocal(self, name);
 
@@ -56,7 +62,7 @@ Object *Context_resolve(Esther *es, Context *self, const char *name) {
     return NULL;
 }
 
-bool Context_assign(Context *self, const char *name, Object *value) {
+bool Context_assign(Context *self, struct string name, Object *value) {
     if (Context_hasLocal(self, name)) {
         Context_setLocal(self, name, value);
         return true;

@@ -7,6 +7,7 @@ extern "C" {
 #include <stdbool.h>
 
 #include "esther/memory.h"
+#include "esther/std_string.h"
 
 typedef struct Object Object;
 typedef struct Context Context;
@@ -30,12 +31,12 @@ Context *Context_getParent(Context *self);
 Object *Context_getSelf(Context *self);
 Object *Context_getHere(Context *self);
 
-bool Context_hasLocal(Context *self, const char *name);
-Object *Context_getLocal(Context *self, const char *name);
-void Context_setLocal(Context *self, const char *name, Object *value);
+bool Context_hasLocal(Context *self, struct string name);
+Object *Context_getLocal(Context *self, struct string name);
+void Context_setLocal(Context *self, struct string name, Object *value);
 
-Object *Context_resolve(Esther *es, Context *self, const char *name);
-bool Context_assign(Context *self, const char *name, Object *value);
+Object *Context_resolve(Esther *es, Context *self, struct string name);
+bool Context_assign(Context *self, struct string name, Object *value);
 
 Context *Context_childContext(Context *self, Object *selfObject, Object *hereObject);
 

@@ -85,7 +85,7 @@ static int find_str(const char *array[], const char *str) {
 
 static Object *scan(Esther *es, Lexer *lexer) {
     Object *id = sym_empty;
-    Object *text = String_new(es, "");
+    Object *text = String_new_c_str(es, "");
 
     skip_spaces(lexer);
 
@@ -107,7 +107,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
             read_sym(lexer);
 
         id = sym_newLine;
-        text = String_new(es, "\n");
+        text = String_new_c_str(es, "\n");
     }
     // @Refactor: Think about refactoring escape sequences
     else if (sym(lexer) == '\'' || sym(lexer) == '"') {
@@ -223,7 +223,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
 }
 
 Object *Lexer_lex(Esther *es, Object *self, Object *code) {
-    Lexer *lexer = (Lexer *)self;
+    Lexer *lexer = (Lexer *) self;
 
     lexer->code = String_c_str(code);
     lexer->length = strlen(lexer->code);
@@ -244,7 +244,7 @@ Object *Lexer_lex(Esther *es, Object *self, Object *code) {
 }
 
 bool Lexer_isOneToken(Esther *es, Object *self, const char *code) {
-    Lexer *lexer = (Lexer *)self;
+    Lexer *lexer = (Lexer *) self;
 
     lexer->code = code;
     lexer->length = strlen(lexer->code);

@@ -22,23 +22,33 @@ Object *get_last_exception() {
     return last_exception;
 }
 
-Object *Exception_new(Esther *es, const char *msg) {
+Object *Exception_new(Esther *es, struct string msg) {
     Object *self = gc_alloc(sizeof(Exception));
     Exception_init(es, self, msg);
     return self;
 }
 
-void Exception_init(Esther *es, Object *self, const char *msg) {
+static VTableForObject Exception_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Exception_virtual_mapOnReferences },
+        .finalize = Exception_virtual_finalize },
+    .toString = Object_virtual_toString,
+    .inspect = Object_virtual_toString,
+    .equals = Object_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
+void Exception_init(Esther *es, Object *self, struct string msg) {
     Object_init(es, self, TException, es->exceptionClass);
 
-    as_Exception(self)->msg = strdup(msg);
+    as_Exception(self)->msg = string_copy(msg);
     as_Exception(self)->pos = NULL;
 
-    self->base.base.mapOnReferences = Exception_virtual_mapOnReferences;
-    self->base.finalize = Exception_virtual_finalize;
+    *(void **) self = &Exception_vtable;
 }
 
-const char *Exception_getMessage(Object *self) {
+struct string Exception_getMessage(Object *self) {
     return as_Exception(self)->msg;
 }
 
@@ -53,12 +63,12 @@ void Exception_setPos(Object *self, Object *pos) {
 void Exception_throw_new(Esther *es, const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
-    struct std_string *msg = std_string_format_va(fmt, ap);
+    struct string msg = string_vformat(fmt, ap);
     va_end(ap);
 
-    last_exception = Exception_new(es, std_string_c_str(msg));
+    last_exception = Exception_new(es, msg);
 
-    std_string_delete(msg);
+    string_free(msg);
 
     THROW;
 }
@@ -78,5 +88,5 @@ void Exception_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 void Exception_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    free((void *) as_Exception(self)->msg);
+    string_free(as_Exception(self)->msg);
 }

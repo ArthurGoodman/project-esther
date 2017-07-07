@@ -1,35 +1,40 @@
 #include "esther/function.h"
 
-#include <string.h>
-
 #include "esther/array.h"
 #include "esther/context.h"
 #include "esther/esther.h"
 #include "esther/exception.h"
-#include "esther/std_string.h"
 #include "esther/string.h"
 #include "esther/tuple.h"
 
-Object *Function_new(Esther *es, const char *name, Object *(*body)(), int argc) {
+Object *Function_new(Esther *es, struct string name, Object *(*body)(), int argc) {
     Object *f = gc_alloc(sizeof(Function));
     Function_init(es, f, name, body, argc);
     return f;
 }
 
-void Function_init(Esther *es, Object *f, const char *name, Object *(*body)(), int argc) {
+static VTableForObject Function_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Object_virtual_mapOnReferences },
+        .finalize = Function_virtual_finalize },
+    .toString = Function_virtual_toString,
+    .inspect = Function_virtual_toString,
+    .equals = Object_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
+void Function_init(Esther *es, Object *f, struct string name, Object *(*body)(), int argc) {
     Object_init(es, f, TFunction, es->functionClass);
 
-    as_Function(f)->name = strdup(name);
+    as_Function(f)->name = string_copy(name);
     as_Function(f)->body = body;
     as_Function(f)->argc = argc;
 
-    as_Function(f)->base.toString = Function_virtual_toString;
-    as_Function(f)->base.inspect = Function_virtual_toString;
-
-    f->base.finalize = Function_virtual_finalize;
+    *(void **) f = &Function_vtable;
 }
 
-const char *Function_getName(Object *f) {
+struct string Function_getName(Object *f) {
     return as_Function(f)->name;
 }
 
@@ -100,18 +105,19 @@ Object *Function_invoke(Esther *es, Object *f, Object *self, Object *args) {
 }
 
 Object *Function_virtual_toString(Esther *es, Object *f) {
-    const char *name = as_Function(f)->name;
+    struct string name = as_Function(f)->name;
 
-    if (strlen(name) == 0)
-        return String_new(es, "<anonymous function>");
+    if (name.size == 0)
+        return String_new_c_str(es, "<anonymous function>");
 
-    return String_new_std(es, std_string_format("<function %s>", name));
+    // @Temp: C-string
+    return String_new_move(es, string_format("<function %s>", name.data));
 }
 
 void Function_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    free((void *) as_Function(self)->name);
+    string_free(as_Function(self)->name);
 }
 
 static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Object *args) {
@@ -128,29 +134,39 @@ static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Obj
     return Esther_eval(es, as_InterpretedFunction(f)->body, context);
 }
 
-Object *InterpretedFunction_new(Esther *es, const char *name, Object *params, Context *closure, Object *body) {
+Object *InterpretedFunction_new(Esther *es, struct string name, Object *params, Context *closure, Object *body) {
     Object *f = gc_alloc(sizeof(InterpretedFunction));
     InterpretedFunction_init(es, f, name, params, closure, body);
     return f;
 }
 
-void InterpretedFunction_init(Esther *es, Object *f, const char *name, Object *params, Context *closure, Object *body) {
+static VTableForObject InterpretedFunction_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = InterpretedFunction_virtual_mapOnReferences },
+        .finalize = InterpretedFunction_virtual_finalize },
+    .toString = Function_virtual_toString,
+    .inspect = Function_virtual_toString,
+    .equals = Object_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
+void InterpretedFunction_init(Esther *es, Object *f, struct string name, Object *params, Context *closure, Object *body) {
     Function_init(es, f, name, InterpretedFunction_body, -2);
 
     int argc = Array_size(params);
 
     as_InterpretedFunction(f)->argc = argc;
 
-    as_InterpretedFunction(f)->params = malloc(argc * sizeof(const char *));
+    as_InterpretedFunction(f)->params = malloc(argc * sizeof(struct string));
 
     for (int i = 0; i < argc; i++)
-        as_InterpretedFunction(f)->params[i] = strdup(String_c_str(Array_get(params, i)));
+        as_InterpretedFunction(f)->params[i] = string_copy(String_value(Array_get(params, i)));
 
     as_InterpretedFunction(f)->closure = closure;
     as_InterpretedFunction(f)->body = body;
 
-    f->base.base.mapOnReferences = InterpretedFunction_virtual_mapOnReferences;
-    f->base.finalize = InterpretedFunction_virtual_finalize;
+    *(void **) f = &InterpretedFunction_vtable;
 }
 
 void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f) {
@@ -163,8 +179,8 @@ void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 void InterpretedFunction_virtual_finalize(ManagedObject *self) {
     Function_virtual_finalize(self);
 
-    for (size_t i = 0; i < as_InterpretedFunction(self)->argc; i++)
-        free((void *) as_InterpretedFunction(self)->params[i]);
+    for (int i = 0; i < as_InterpretedFunction(self)->argc; i++)
+        string_free(as_InterpretedFunction(self)->params[i]);
 
     free(as_InterpretedFunction(self)->params);
 }

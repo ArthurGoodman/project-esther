@@ -5,40 +5,43 @@ extern "C" {
 #endif
 
 #include "esther/object.h"
-
-struct std_string;
+#include "esther/std_string.h"
 
 typedef struct Function Function;
+
+typedef struct VTableForClass {
+    VTableForObject base;
+
+    Object *(*newInstance)(Esther *es, Object *self, Object *args);
+} VTableForClass;
 
 typedef struct Class {
     Object base;
 
-    const char *name;
+    struct string name;
     Object *superclass;
     struct std_map *methods;
-
-    Object *(*newInstance)(Esther *es, Object *self, Object *args);
 } Class;
 
 #define as_Class(obj) ((Class *) (obj))
 
 Object *Class_new(Esther *es);
-Object *Class_new_init(Esther *es, const char *name, Object *superclass);
+Object *Class_new_init(Esther *es, struct string name, Object *superclass);
 
-void Class_init(Esther *es, Object *self, const char *name, Object *superclass);
+void Class_init(Esther *es, Object *self, struct string name, Object *superclass);
 
-const char *Class_getName(Object *self);
+struct string Class_getName(Object *self);
 
 Object *Class_getSuperclass(Object *self);
 
-bool Class_hasMethod(Object *self, const char *name);
-Object *Class_getMethod(Object *self, const char *name);
-void Class_setMethod(Object *self, const char *name, Object *method);
+bool Class_hasMethod(Object *self, struct string name);
+Object *Class_getMethod(Object *self, struct string name);
+void Class_setMethod(Object *self, struct string name, Object *method);
 void Class_setMethod_func(Object *self, Object *f);
 
 bool Class_isChildOf(Object *self, Object *_class);
 
-Object *Class_lookup(Object *self, const char *name);
+Object *Class_lookup(Object *self, struct string name);
 
 Object *Class_virtual_toString(Esther *es, Object *self);
 

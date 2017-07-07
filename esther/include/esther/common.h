@@ -17,11 +17,11 @@ extern "C" {
 
 #define UNUSED(var) var __attribute__((unused))
 
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-bool string_compare(void *a, void *b);
-bool id_compare(void *a, void *b);
+bool compare_str(void *a, void *b);
+bool compare_id(void *a, void *b);
 
 #ifdef __cplusplus
 }

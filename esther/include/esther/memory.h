@@ -20,23 +20,35 @@ typedef struct Mapper Mapper;
 
 typedef void (*MapFunction)(void *);
 
-typedef struct Mapper {
+typedef struct VTableForMapper {
     void (*mapOnReferences)(Mapper *, MapFunction);
+} VTableForMapper;
+
+typedef struct Mapper {
+    const void *vtable;
 } Mapper;
 
 void Mapper_init(Mapper *self);
 
 void Mapper_mapOnReferences(Mapper *self, MapFunction f);
 
-typedef struct ManagedObject {
-    Mapper base;
+void Mapper_virtual_mapOnReferences(Mapper *, MapFunction);
+
+typedef struct VTableForManagedObject {
+    VTableForMapper base;
 
     void (*finalize)(ManagedObject *self);
+} VTableForManagedObject;
+
+typedef struct ManagedObject {
+    Mapper base;
 } ManagedObject;
 
 void ManagedObject_init(ManagedObject *self);
 
 void ManagedObject_finalize(ManagedObject *self);
+
+void ManagedObject_virtual_finalize(ManagedObject *);
 
 void gc_initialize(ptr_ptr_t bp);
 void gc_finalize();

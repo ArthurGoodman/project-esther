@@ -14,7 +14,6 @@
 #include "esther/std_string.h"
 #include "esther/std_vector.h"
 #include "esther/string.h"
-#include "esther/symbol.h"
 #include "esther/tuple.h"
 #include "esther/utility.h"
 #include "esther/valueobject.h"

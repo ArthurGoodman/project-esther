@@ -5,20 +5,39 @@
 #include "esther/std_string.h"
 #include "esther/string.h"
 
-Object *Symbol_new(Esther *es, const char *name) {
+Object *Symbol_new(Esther *es, struct string name) {
     Object *self = gc_alloc(sizeof(Symbol));
     Symbol_init(es, self, name);
     return self;
 }
 
-void Symbol_init(Esther *es, Object *self, const char *name) {
+Object *Symbol_new_c_str(Esther *es, const char *name) {
+    Object *self = gc_alloc(sizeof(Symbol));
+    Symbol_init_c_str(es, self, name);
+    return self;
+}
+
+static VTableForObject Symbol_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Object_virtual_mapOnReferences },
+        .finalize = Object_virtual_finalize },
+    .toString = Symbol_virtual_toString,
+    .inspect = Symbol_virtual_inspect,
+    .equals = Symbol_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
+void Symbol_init(Esther *es, Object *self, struct string name) {
     Object_init(es, self, TSymbol, es->symbolClass);
 
-    as_Symbol(self)->id = stringToId(name);
+    as_Symbol(self)->id = str_to_id(name);
 
-    as_Symbol(self)->base.toString = Symbol_virtual_toString;
-    as_Symbol(self)->base.inspect = Symbol_virtual_inspect;
-    as_Symbol(self)->base.equals = Symbol_virtual_equals;
+    *(void **) self = &Symbol_vtable;
+}
+
+void Symbol_init_c_str(Esther *es, Object *self, const char *name) {
+    Symbol_init(es, self, string_const(name));
 }
 
 Id Symbol_getId(Object *self) {
@@ -26,27 +45,25 @@ Id Symbol_getId(Object *self) {
 }
 
 Object *Symbol_virtual_toString(Esther *es, Object *self) {
-    return String_new(es, idToString(as_Symbol(self)->id));
+    return String_new(es, id_to_str(as_Symbol(self)->id));
 }
 
-// @TODO: Implement escaping for \0
 Object *Symbol_virtual_inspect(Esther *es, Object *self) {
-    const char *value = idToString(as_Symbol(self)->id);
-    size_t size = strlen(value);
+    struct string value = id_to_str(as_Symbol(self)->id);
 
-    if (size == 0)
-        return String_new(es, ":\"\"");
+    if (value.size == 0)
+        return String_new_c_str(es, ":\"\"");
 
-    Object *str = String_new(es, ":");
+    Object *str = String_new_c_str(es, ":");
 
-    if (Lexer_isOneToken(es, es->lexer, value))
-        String_append_c_str(str, value);
+    if (Lexer_isOneToken(es, es->lexer, value.data))
+        String_append_std(str, value);
     else {
         String_append_char(str, '\"');
 
-        struct std_string *escaped = std_string_escape(value, size);
-        String_append_c_str(str, std_string_c_str(escaped));
-        std_string_delete(escaped);
+        struct string escaped = string_escape(as_String(self)->value);
+        String_append_std(str, escaped);
+        string_free(escaped);
 
         String_append_char(str, '\"');
     }

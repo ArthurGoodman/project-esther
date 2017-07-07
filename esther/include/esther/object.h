@@ -8,6 +8,7 @@ extern "C" {
 #include "esther/memory.h"
 
 struct std_map;
+struct string;
 
 typedef struct Esther Esther;
 typedef struct Object Object;
@@ -27,17 +28,21 @@ typedef enum ObjectType {
     TValueObject
 } ObjectType;
 
+typedef struct VTableForObject {
+    VTableForManagedObject base;
+
+    Object *(*toString)(Esther *es, Object *self);
+    Object *(*inspect)(Esther *es, Object *self);
+    bool (*equals)(Object *self, Object *obj);
+    bool (*isTrue)();
+} VTableForObject;
+
 typedef struct Object {
     ManagedObject base;
 
     ObjectType type;
     Object *objectClass;
     struct std_map *attributes;
-
-    Object *(*toString)(Esther *es, Object *self);
-    Object *(*inspect)(Esther *es, Object *self);
-    bool (*equals)(Object *self, Object *obj);
-    bool (*isTrue)();
 } Object;
 
 #define as_Object(obj) ((Object *) (obj))
@@ -50,16 +55,16 @@ ObjectType Object_getType(Object *self);
 
 Object *Object_getClass(Object *self);
 
-bool Object_hasAttribute(Object *self, const char *name);
-Object *Object_getAttribute(Object *self, const char *name);
-void Object_setAttribute(Object *self, const char *name, Object *value);
+bool Object_hasAttribute(Object *self, struct string name);
+Object *Object_getAttribute(Object *self, struct string name);
+void Object_setAttribute(Object *self, struct string name, Object *value);
 
 bool Object_is(Object *self, Object *_class);
 
-Object *Object_resolve(Object *self, const char *name);
+Object *Object_resolve(Object *self, struct string name);
 
-Object *Object_call(Esther *es, Object *self, const char *name, Object *args);
-Object *Object_callIfFound(Esther *es, Object *self, const char *name, Object *args);
+Object *Object_call(Esther *es, Object *self, struct string name, Object *args);
+Object *Object_callIfFound(Esther *es, Object *self, struct string name, Object *args);
 Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args);
 
 Object *Object_toString(Esther *es, Object *self);

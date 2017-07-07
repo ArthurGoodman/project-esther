@@ -4,15 +4,15 @@
 extern "C" {
 #endif
 
+#include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 
-struct std_string;
+size_t ceil_to_power_of_2(size_t n);
 
-struct std_string *read_file(const char *fileName);
+struct string read_file(const char *fileName);
 
 const char *full_path(const char *path);
-
-struct std_string *expand_tabs(const char *str, size_t length);
 
 #ifdef __cplusplus
 }

@@ -5,30 +5,31 @@ extern "C" {
 #endif
 
 #include "esther/object.h"
-
-struct std_string;
+#include "esther/std_string.h"
 
 typedef struct String {
     Object base;
 
-    struct std_string *value;
+    struct string value;
 } String;
 
 #define as_String(obj) ((String *) (obj))
 
-Object *String_new(Esther *es, const char *value);
-Object *String_new_len(Esther *es, const char *value, size_t length);
-Object *String_new_std(Esther *es, struct std_string *value);
+Object *String_new(Esther *es, struct string value);
+Object *String_new_move(Esther *es, struct string value);
+Object *String_new_c_str(Esther *es, const char *value);
 
-void String_init(Esther *es, Object *self, const char *value, size_t length);
-void String_init_std(Esther *es, Object *self, struct std_string *value);
+void String_init(Esther *es, Object *self, struct string value);
+void String_init_move(Esther *es, Object *self, struct string value);
+void String_init_c_str(Esther *es, Object *self, const char *value);
 
 const char *String_c_str(Object *self);
-struct std_string *String_value(Object *self);
+struct string String_value(Object *self);
 
 Object *String_append(Object *self, Object *str);
 Object *String_append_c_str(Object *self, const char *str);
 Object *String_append_char(Object *self, char c);
+Object *String_append_std(Object *self, const struct string str);
 
 size_t String_size(Object *self);
 

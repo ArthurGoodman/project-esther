@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include "esther/object.h"
+#include "esther/std_string.h"
 
 struct jump_buffer {
     jmp_buf buf;
@@ -38,17 +39,17 @@ Object *get_last_exception();
 typedef struct Exception {
     Object base;
 
-    const char *msg;
+    struct string msg;
     Object *pos;
 } Exception;
 
 #define as_Exception(obj) ((Exception *) (obj))
 
-Object *Exception_new(Esther *es, const char *msg);
+Object *Exception_new(Esther *es, struct string msg);
 
-void Exception_init(Esther *es, Object *self, const char *msg);
+void Exception_init(Esther *es, Object *self, struct string msg);
 
-const char *Exception_getMessage(Object *self);
+struct string Exception_getMessage(Object *self);
 
 Object *Exception_getPos(Object *self);
 void Exception_setPos(Object *self, Object *pos);

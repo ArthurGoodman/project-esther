@@ -21,14 +21,23 @@ Object *ValueObject_new_var(Esther *es, Variant value) {
     return self;
 }
 
+static VTableForObject ValueObject_vtable = {
+    .base = {
+        .base = {
+            .mapOnReferences = Object_virtual_mapOnReferences },
+        .finalize = Object_virtual_finalize },
+    .toString = ValueObject_virtual_toString,
+    .inspect = ValueObject_virtual_inspect,
+    .equals = ValueObject_virtual_equals,
+    .isTrue = Object_virtual_isTrue
+};
+
 void ValueObject_init(Esther *es, Object *self, Variant value) {
     Object_init(es, self, TValueObject, ValueObject_variantTypeToObjectClass(es, value.type));
 
     as_ValueObject(self)->value = value;
 
-    as_ValueObject(self)->base.toString = ValueObject_virtual_toString;
-    as_ValueObject(self)->base.inspect = ValueObject_virtual_inspect;
-    as_ValueObject(self)->base.equals = ValueObject_virtual_equals;
+    *(void **) self = &ValueObject_vtable;
 }
 
 Variant ValueObject_getValue(Object *self) {
@@ -40,11 +49,11 @@ void ValueObject_setValue(Object *self, Variant value) {
 }
 
 Object *ValueObject_virtual_toString(Esther *es, Object *self) {
-    return String_new_std(es, Variant_toString(as_ValueObject(self)->value));
+    return String_new_move(es, Variant_toString(as_ValueObject(self)->value));
 }
 
 Object *ValueObject_virtual_inspect(Esther *es, Object *self) {
-    return String_new_std(es, Variant_inspect(as_ValueObject(self)->value));
+    return String_new_move(es, Variant_inspect(as_ValueObject(self)->value));
 }
 
 bool ValueObject_virtual_equals(Object *self, Object *obj) {

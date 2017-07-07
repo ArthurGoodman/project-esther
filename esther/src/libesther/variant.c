@@ -4,6 +4,7 @@
 
 #include "esther/common.h"
 #include "esther/std_string.h"
+#include "esther/utility.h"
 
 Variant Variant_create() {
     Variant var;
@@ -327,39 +328,37 @@ void Variant_coerce(Variant *a, Variant *b) {
     *b = Variant_convertTo(*b, type);
 }
 
-struct std_string *Variant_toString(Variant var) {
+struct string Variant_toString(Variant var) {
     switch (var.type) {
     case CharVariant:
-        return std_string_format("%c", var.character);
+        return string_format("%c", var.character);
 
     case IntVariant:
-        return std_string_format("%i", var.integer);
+        return string_format("%i", var.integer);
 
     case RealVariant:
-        return std_string_format("%g", var.real);
+        return string_format("%g", var.real);
 
     default:
-        return std_string_new();
+        return string_new_empty();
     }
 }
 
-struct std_string *Variant_inspect(Variant var) {
+struct string Variant_inspect(Variant var) {
     switch (var.type) {
     case CharVariant: {
-        struct std_string *escaped = std_string_escape(&var.character, 1);
-        struct std_string *result = std_string_format("'%s'", std_string_c_str(escaped));
-        std_string_delete(escaped);
-
-        return result;
+        struct string str = string_escape_buffer(&var.character, 1);
+        string_assign(&str, string_format("'%s'", str.data));
+        return str;
     }
 
     case IntVariant:
-        return std_string_format("%i", var.integer);
+        return string_format("%i", var.integer);
 
     case RealVariant:
-        return std_string_format("%g", var.real);
+        return string_format("%g", var.real);
 
     default:
-        return std_string_new();
+        return string_new_empty();
     }
 }

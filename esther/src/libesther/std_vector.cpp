@@ -3,21 +3,23 @@
 #include <vector>
 
 namespace {
-inline std_vector *to_c(std::vector<void *> *ptr) {
+typedef std::vector<void *> cpp_vector;
+
+inline std_vector *to_c(cpp_vector *ptr) {
     return reinterpret_cast<std_vector *>(ptr);
 }
 
-inline std::vector<void *> *to_cpp(std_vector *ptr) {
-    return reinterpret_cast<std::vector<void *> *>(ptr);
+inline cpp_vector *to_cpp(std_vector *ptr) {
+    return reinterpret_cast<cpp_vector *>(ptr);
 }
 }
 
 std_vector *std_vector_new() {
-    return to_c(new std::vector<void *>);
+    return to_c(new cpp_vector);
 }
 
 std_vector *std_vector_new_init(void *const *data, size_t size) {
-    return to_c(new std::vector<void *>(data, data + size));
+    return to_c(new cpp_vector(data, data + size));
 }
 
 void std_vector_delete(std_vector *self) {

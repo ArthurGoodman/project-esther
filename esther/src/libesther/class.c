@@ -8,31 +8,39 @@
 #include "esther/string.h"
 
 Object *Class_new(Esther *es) {
-    return Class_new_init(es, "", NULL);
+    return Class_new_init(es, string_const(""), NULL);
 }
 
-Object *Class_new_init(Esther *es, const char *name, Object *superclass) {
+Object *Class_new_init(Esther *es, struct string name, Object *superclass) {
     Object *self = gc_alloc(sizeof(Class));
     Class_init(es, self, name, superclass);
     return self;
 }
 
-void Class_init(Esther *es, Object *self, const char *name, Object *superclass) {
+static VTableForClass Class_vtable = {
+    .base = {
+        .base = {
+            .base = {
+                .mapOnReferences = Class_virtual_mapOnReferences },
+            .finalize = Class_virtual_finalize },
+        .toString = Class_virtual_toString,
+        .inspect = Class_virtual_toString,
+        .equals = Object_virtual_equals,
+        .isTrue = Object_virtual_isTrue },
+    .newInstance = Class_virtual_newInstance
+};
+
+void Class_init(Esther *es, Object *self, struct string name, Object *superclass) {
     Object_init(es, self, TClass, es->classClass);
 
-    as_Class(self)->name = strdup(name);
+    as_Class(self)->name = string_copy(name);
     as_Class(self)->superclass = superclass ? superclass : es->objectClass;
     as_Class(self)->methods = NULL;
 
-    as_Class(self)->newInstance = Class_virtual_newInstance;
-    as_Class(self)->base.toString = Class_virtual_toString;
-    as_Class(self)->base.inspect = Class_virtual_toString;
-
-    self->base.base.mapOnReferences = Class_virtual_mapOnReferences;
-    self->base.finalize = Class_virtual_finalize;
+    *(void **) self = &Class_vtable;
 }
 
-const char *Class_getName(Object *self) {
+struct string Class_getName(Object *self) {
     return as_Class(self)->name;
 }
 
@@ -40,19 +48,19 @@ Object *Class_getSuperclass(Object *self) {
     return as_Class(self)->superclass;
 }
 
-bool Class_hasMethod(Object *self, const char *name) {
-    return as_Class(self)->methods && std_map_contains(as_Class(self)->methods, (const void *)stringToId(name));
+bool Class_hasMethod(Object *self, struct string name) {
+    return as_Class(self)->methods && std_map_contains(as_Class(self)->methods, (const void *) str_to_id(name));
 }
 
-Object *Class_getMethod(Object *self, const char *name) {
-    return as_Class(self)->methods ? std_map_get(as_Class(self)->methods, (const void *)stringToId(name)) : NULL;
+Object *Class_getMethod(Object *self, struct string name) {
+    return as_Class(self)->methods ? std_map_get(as_Class(self)->methods, (const void *) str_to_id(name)) : NULL;
 }
 
-void Class_setMethod(Object *self, const char *name, Object *method) {
+void Class_setMethod(Object *self, struct string name, Object *method) {
     if (!as_Class(self)->methods)
-        as_Class(self)->methods = std_map_new(id_compare);
+        as_Class(self)->methods = std_map_new(compare_id);
 
-    std_map_set(as_Class(self)->methods, (const void *)stringToId(name), method);
+    std_map_set(as_Class(self)->methods, (const void *) str_to_id(name), method);
 }
 
 void Class_setMethod_func(Object *self, Object *f) {
@@ -63,7 +71,7 @@ bool Class_isChildOf(Object *self, Object *_class) {
     return self == _class || (as_Class(self)->superclass && Class_isChildOf(as_Class(self)->superclass, _class));
 }
 
-Object *Class_lookup(Object *self, const char *name) {
+Object *Class_lookup(Object *self, struct string name) {
     if (Class_hasMethod(self, name))
         return Class_getMethod(self, name);
 
@@ -74,22 +82,23 @@ Object *Class_lookup(Object *self, const char *name) {
 }
 
 Object *Class_virtual_toString(Esther *es, Object *self) {
-    const char *name = as_Class(self)->name;
+    struct string name = as_Class(self)->name;
 
-    if (strlen(name) == 0)
-        return String_new(es, "<anonymous class>");
+    if (name.size == 0)
+        return String_new_c_str(es, "<anonymous class>");
 
-    return String_new_std(es, std_string_format("<class %s>", name));
+    // @Temp: C-string
+    return String_new_move(es, string_format("<class %s>", name.data));
 }
 
 Object *Class_newInstance(Esther *es, Object *self, Object *args) {
-    Object *instance = as_Class(self)->newInstance(es, self, args);
-    Object_callIfFound(es, instance, "initialize", args);
+    Object *instance = (*(VTableForClass **) self)->newInstance(es, self, args);
+    Object_callIfFound(es, instance, string_const("initialize"), args);
     return instance;
 }
 
 Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
-    Object *instance = as_Class(as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
+    Object *instance = (*(VTableForClass **) as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
     instance->objectClass = self;
     return instance;
 }
@@ -113,6 +122,6 @@ void Class_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 void Class_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
 
-    free((void *)as_Class(self)->name);
+    string_free(as_Class(self)->name);
     std_map_delete(as_Class(self)->methods);
 }

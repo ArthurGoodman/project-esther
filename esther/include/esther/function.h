@@ -5,24 +5,25 @@ extern "C" {
 #endif
 
 #include "esther/object.h"
+#include "esther/std_string.h"
 
 typedef struct Context Context;
 
 typedef struct Function {
     Object base;
 
-    const char *name;
+    struct string name;
     Object *(*body)();
     int argc;
 } Function;
 
 #define as_Function(obj) ((Function *) (obj))
 
-Object *Function_new(Esther *es, const char *name, Object *(*body)(), int argc);
+Object *Function_new(Esther *es, struct string name, Object *(*body)(), int argc);
 
-void Function_init(Esther *es, Object *f, const char *name, Object *(*body)(), int argc);
+void Function_init(Esther *es, Object *f, struct string name, Object *(*body)(), int argc);
 
-const char *Function_getName(Object *f);
+struct string Function_getName(Object *f);
 
 Object *Function_invoke(Esther *es, Object *f, Object *self, Object *args);
 
@@ -34,16 +35,16 @@ typedef struct InterpretedFunction {
     Function base;
 
     int argc;
-    const char **params;
+    struct string *params;
     Context *closure;
     Object *body;
 } InterpretedFunction;
 
 #define as_InterpretedFunction(obj) ((InterpretedFunction *) (obj))
 
-Object *InterpretedFunction_new(Esther *es, const char *name, Object *params, Context *closure, Object *body);
+Object *InterpretedFunction_new(Esther *es, struct string name, Object *params, Context *closure, Object *body);
 
-void InterpretedFunction_init(Esther *es, Object *f, const char *name, Object *params, Context *closure, Object *body);
+void InterpretedFunction_init(Esther *es, Object *f, struct string name, Object *params, Context *closure, Object *body);
 
 void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f);
 void InterpretedFunction_virtual_finalize(ManagedObject *self);
