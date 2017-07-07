@@ -4,6 +4,9 @@ int main(int argc, const char **argv) {
     // if (argc < 2)
     //     return 0;
 
+    uint8_t local;
+    gc_initialize((ptr_ptr_t) &local);
+
     Esther es;
     Esther_init(&es);
 

@@ -400,18 +400,18 @@ static Mapper *GlobalMapper_new(Esther *es) {
     return (Mapper *) self;
 }
 
-#define CLASS_VTABLE(name)                                               \
-    static VTableForClass name##Class_vtable = {                         \
-        .base = {                                                        \
-            .base = {                                                    \
-                .base = {                                                \
-                    .mapOnReferences = Object_virtual_mapOnReferences }, \
-                .finalize = Object_virtual_finalize },                   \
-            .toString = Object_virtual_toString,                         \
-            .inspect = Object_virtual_toString,                          \
-            .equals = Object_virtual_equals,                             \
-            .isTrue = Object_virtual_isTrue },                           \
-        .newInstance = name##Class_virtual_newInstance                   \
+#define CLASS_VTABLE(name)                                              \
+    static VTableForClass name##Class_vtable = {                        \
+        .base = {                                                       \
+            .base = {                                                   \
+                .base = {                                               \
+                    .mapOnReferences = Class_virtual_mapOnReferences }, \
+                .finalize = Class_virtual_finalize },                   \
+            .toString = Class_virtual_toString,                         \
+            .inspect = Class_virtual_toString,                          \
+            .equals = Object_virtual_equals,                            \
+            .isTrue = Object_virtual_isTrue },                          \
+        .newInstance = name##Class_virtual_newInstance                  \
     };
 
 CLASS_VTABLE(Class)
@@ -446,9 +446,6 @@ CONST_VTABLE(False, False)
 CONST_VTABLE(Null, False)
 
 void Esther_init(Esther *es) {
-    uint8_t local;
-    gc_initialize((ptr_ptr_t) &local);
-
     gc_registerMapper(GlobalMapper_new(es));
 
     es->objectClass = NULL;
