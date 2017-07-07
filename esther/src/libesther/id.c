@@ -12,7 +12,7 @@ struct string id_to_str(Id id) {
     return idString && std_map_contains(idString, (void *) id) ? *(struct string *) std_map_get(idString, (void *) id) : string_null();
 }
 
-Id str_to_id(const struct string str) {
+Id str_to_id(struct string str) {
     if (!idString || !std_map_contains(stringId, &str)) {
         if (!idString) {
             idString = std_map_new(compare_id);

@@ -73,7 +73,7 @@ Object *Object_call(Esther *es, Object *self, struct string name, Object *args) 
     Object *f = Object_resolve(self, name);
 
     if (!f) {
-        // @Temp: C-string
+        //@Temp: C-string
         Exception_throw_new(es, "undefined attribute '%s'", name.data);
         return NULL;
     }

@@ -71,7 +71,7 @@ Object *String_append_char(Object *self, char c) {
     return self;
 }
 
-Object *String_append_std(Object *self, const struct string str) {
+Object *String_append_std(Object *self, struct string str) {
     string_append(&as_String(self)->value, str);
     return self;
 }

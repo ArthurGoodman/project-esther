@@ -230,6 +230,7 @@ void mark() {
         Mapper_mapOnRefs(mapper, markReference);
 }
 
+//@ Fix: when no objects are freed, memoryUsed > oldSize
 void sweep() {
     objectCount = 0;
     memoryUsed = 0;
@@ -279,7 +280,7 @@ void addHeap() {
     size_t heapSize = heaps.empty() ? InitialHeapSize : heapSizes.back() * HeapSizeMultiplier;
 
 #ifdef VERBOSE_GC
-    printf("addHeap() // size=%zu\n\n", heapSize);
+    printf("addHeap() // size=%zi\n\n", heapSize);
 #endif
 
     heaps.push_back(static_cast<uint8_t *>(malloc(heapSize)));
@@ -369,10 +370,10 @@ void gc_finalize() {
     for (uint32_t size : heapSizes)
         totalMemory += size + bitmapSize(size);
 
-    printf("\nObject count: %zu\n", objectCount);
-    printf("Heaps used: %zu\n", heaps.size());
-    printf("Memory used: %zu\n", memoryUsed);
-    printf("Total memory: %zu\n", totalMemory);
+    printf("\nObject count: %zi\n", objectCount);
+    printf("Heaps used: %zi\n", heaps.size());
+    printf("Memory used: %zi\n", memoryUsed);
+    printf("Total memory: %zi\n", totalMemory);
     printf("\ngc_finalize()\n");
 #endif
 
@@ -414,7 +415,7 @@ void gc_collect() {
     sweep();
 
 #ifdef VERBOSE_GC
-    printf("//freed=%zu, freedObjects=%zu, objectCount=%zu\n\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
+    printf("//freed=%zi, freedObjects=%zi, objectCount=%zi\n\n", oldSize - memoryUsed, oldObjectCount - objectCount, objectCount);
 #endif
 }
 
@@ -424,7 +425,7 @@ void *gc_alloc(size_t size) {
 #endif
 
 #ifdef VERBOSE_GC
-    printf("gc_alloc(size=%zu)\n", size);
+    printf("gc_alloc(size=%zi)\n", size);
 #endif
 
     size += sizeof(ObjectHeader);

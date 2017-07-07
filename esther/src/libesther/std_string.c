@@ -34,7 +34,7 @@ struct string string_new_c_str(const char *str) {
     return string_new(str, strlen(str));
 }
 
-struct string string_copy(const struct string str) {
+struct string string_copy(struct string str) {
     return string_new(str.data, str.size);
 }
 
@@ -64,11 +64,11 @@ struct string string_const(const char *data) {
     return str;
 }
 
-void string_free(const struct string self) {
+void string_free(struct string self) {
     free(self.data);
 }
 
-struct string string_assign(struct string *self, const struct string str) {
+struct string string_assign(struct string *self, struct string str) {
     string_free(*self);
     *self = str;
     return *self;
@@ -82,7 +82,7 @@ void string_resize(struct string *self, size_t size) {
     *FREE_SPACE(self) = '\0';
 }
 
-void string_append(struct string *self, const struct string str) {
+void string_append(struct string *self, struct string str) {
     string_insert_buffer(self, self->size, str.data, str.size);
 }
 
@@ -98,7 +98,7 @@ void string_append_buffer(struct string *self, const char *buffer, size_t size) 
     string_insert_buffer(self, self->size, buffer, size);
 }
 
-void string_insert(struct string *self, size_t pos, const struct string str) {
+void string_insert(struct string *self, size_t pos, struct string str) {
     string_insert_buffer(self, pos, str.data, str.size);
 }
 
@@ -124,7 +124,7 @@ void string_insert_buffer(struct string *self, size_t pos, const char *buffer, s
     self->size += size;
 }
 
-void string_replace(struct string *self, size_t pos, size_t len, const struct string str) {
+void string_replace(struct string *self, size_t pos, size_t len, struct string str) {
     string_replace_buffer(self, pos, len, str.data, str.size);
 }
 
@@ -152,19 +152,19 @@ void string_replace_buffer(struct string *self, size_t pos, size_t len, const ch
     self->size += size - len;
 }
 
-size_t string_find(const struct string self, const struct string str, size_t pos) {
+size_t string_find(struct string self, struct string str, size_t pos) {
     return string_find_buffer(self, str.data, str.size, pos);
 }
 
-size_t string_find_char(const struct string self, char c, size_t pos) {
+size_t string_find_char(struct string self, char c, size_t pos) {
     return string_find_buffer(self, &c, 1, pos);
 }
 
-size_t string_find_c_str(const struct string self, const char *str, size_t pos) {
+size_t string_find_c_str(struct string self, const char *str, size_t pos) {
     return string_find_buffer(self, str, strlen(str), pos);
 }
 
-size_t string_find_buffer(const struct string self, const char *buffer, size_t size, size_t pos) {
+size_t string_find_buffer(struct string self, const char *buffer, size_t size, size_t pos) {
     if (size == 0)
         return 0;
 
@@ -175,19 +175,19 @@ size_t string_find_buffer(const struct string self, const char *buffer, size_t s
     return -1;
 }
 
-size_t string_rfind(const struct string self, const struct string str, size_t pos) {
+size_t string_rfind(struct string self, struct string str, size_t pos) {
     return string_rfind_buffer(self, str.data, str.size, pos);
 }
 
-size_t string_rfind_char(const struct string self, char c, size_t pos) {
+size_t string_rfind_char(struct string self, char c, size_t pos) {
     return string_rfind_buffer(self, &c, 1, pos);
 }
 
-size_t string_rfind_c_str(const struct string self, const char *str, size_t pos) {
+size_t string_rfind_c_str(struct string self, const char *str, size_t pos) {
     return string_rfind_buffer(self, str, strlen(str), pos);
 }
 
-size_t string_rfind_buffer(const struct string self, const char *buffer, size_t size, size_t pos) {
+size_t string_rfind_buffer(struct string self, const char *buffer, size_t size, size_t pos) {
     if (size == 0)
         return 0;
 
@@ -205,15 +205,15 @@ void string_erase(struct string *self, size_t pos, size_t len) {
     self->size -= len;
 }
 
-struct string string_substr(const struct string self, size_t pos, size_t len) {
+struct string string_substr(struct string self, size_t pos, size_t len) {
     return string_new(self.data + pos, MIN(len, self.size - pos));
 }
 
-bool string_equals(const struct string self, const struct string str) {
+bool string_equals(struct string self, struct string str) {
     return string_compare(self, str) == 0;
 }
 
-int string_compare(const struct string self, const struct string str) {
+int string_compare(struct string self, struct string str) {
     if (self.size < str.size)
         return -1;
 
@@ -260,7 +260,7 @@ struct string string_vformat(const char *fmt, va_list ap) {
     }
 }
 
-struct string string_escape(const struct string self) {
+struct string string_escape(struct string self) {
     return string_escape_buffer(self.data, self.size);
 }
 
@@ -325,9 +325,9 @@ struct string string_escape_buffer(const char *buffer, size_t size) {
     return str;
 }
 
-// @Optimize: string manipulation
-// @Fix: quote cutting under small constraints
-struct string string_quote(const struct string self, int offset, int column) {
+//@Optimize: string manipulation
+//@Fix: quote cutting under small constraints
+struct string string_quote(struct string self, int offset, int column) {
     static const int max_quote_length = 150;
 
     int start = string_rfind_char(self, '\n', offset) + 1;
@@ -360,7 +360,7 @@ struct string string_quote(const struct string self, int offset, int column) {
     return quote;
 }
 
-struct string string_expand_tabs(const struct string self) {
+struct string string_expand_tabs(struct string self) {
     return string_expand_tabs_buffer(self.data, self.size);
 }
 

@@ -38,7 +38,7 @@ Object *Parser_new(Esther *es) {
     self->tokens = NULL;
     self->token = NULL;
 
-    // @Maybe self->npos = NULL; ? I don't remember.
+    self->npos = NULL;
 
     *(void **) self = &Parser_vtable;
 
@@ -600,7 +600,7 @@ static Object *term(Esther *es, Parser *parser) {
     return e;
 }
 
-// @Cleanup: Get rid of boilerplate code in parser
+//@Cleanup: Get rid of boilerplate code in parser
 Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
     Parser *parser = (Parser *) self;
 

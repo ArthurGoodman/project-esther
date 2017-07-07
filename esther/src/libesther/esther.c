@@ -638,23 +638,33 @@ void Esther_init(Esther *es) {
     init_identifiers(es);
 }
 
-void Esther_finalize(Esther *UNUSED(es)) {
+void Esther_finalize(Esther *es) {
+    std_map_iterator i;
+    std_map_begin(es->rootObjects, &i);
+
+    while (!std_map_end(es->rootObjects, &i)) {
+        struct string *str = std_map_iterator_key(&i);
+
+        string_free(*str);
+        free(str);
+
+        std_map_iterator_next(&i);
+    }
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {
     return value ? es->trueObject : es->falseObject;
 }
 
-bool Esther_hasRootObject(Esther *es, const struct string name) {
+bool Esther_hasRootObject(Esther *es, struct string name) {
     return std_map_contains(es->rootObjects, &name);
 }
 
-Object *Esther_getRootObject(Esther *es, const struct string name) {
+Object *Esther_getRootObject(Esther *es, struct string name) {
     return std_map_get(es->rootObjects, &name);
 }
 
-void Esther_setRootObject(Esther *es, const struct string name, Object *value) {
-    // @THIS
+void Esther_setRootObject(Esther *es, struct string name, Object *value) {
     struct string *str = malloc(sizeof(struct string));
     *str = string_copy(name);
     std_map_set(es->rootObjects, str, value);
@@ -840,7 +850,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             value = Object_resolve(evaledSelf, name);
 
             if (!value)
-                // @Temp: C-string
+                //@Temp: C-string
                 Exception_throw_new(es, "undefined attribute '%s'", name.data);
         }
 
@@ -897,7 +907,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
                 evaledF = Object_resolve(evaledSelf, name);
 
                 if (!evaledF)
-                    // @Temp: C-string
+                    //@Temp: C-string
                     Exception_throw_new(es, "undefined attribute '%s'", name.data);
             } else if (childId == id_dot) {
                 evaledSelf = Esther_eval(es, Tuple_get(child, 2), context);
@@ -922,7 +932,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             value = Context_resolve(es, context, name);
 
             if (!value)
-                // @Temp: C-string
+                //@Temp: C-string
                 Exception_throw_new(es, "undefined variable '%s'", name.data);
         }
 
@@ -1017,12 +1027,12 @@ void Esther_runFile(Esther *es, const char *fileName) {
             int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
             int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
 
-            // @Temp: C-string
+            //@Temp: C-string
             struct string q = string_quote(String_value(es->file->source), offset, column);
             printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e).data, q.data);
             string_free(q);
         } else
-            // @Temp: C-string
+            //@Temp: C-string
             printf("error: %s\n", Exception_getMessage(e).data);
     }
     ENDTRY;

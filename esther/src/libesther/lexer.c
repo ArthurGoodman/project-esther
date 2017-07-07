@@ -109,7 +109,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
         id = sym_newLine;
         text = String_new_c_str(es, "\n");
     }
-    // @Refactor: Think about refactoring escape sequences
+    //@Refactor: Think about refactoring escape sequences
     else if (sym(lexer) == '\'' || sym(lexer) == '"') {
         char type = read_sym(lexer);
 
