@@ -31,7 +31,7 @@ Object *Exception_new(Esther *es, struct string msg) {
 static VTableForObject Exception_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Exception_virtual_mapOnReferences },
+            .mapOnRefs = Exception_virtual_mapOnRefs },
         .finalize = Exception_virtual_finalize },
     .toString = Object_virtual_toString,
     .inspect = Object_virtual_toString,
@@ -79,8 +79,8 @@ void Exception_throw(Object *self) {
     THROW;
 }
 
-void Exception_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    Object_virtual_mapOnReferences(self, f);
+void Exception_virtual_mapOnRefs(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnRefs(self, f);
 
     f(as_Exception(self)->pos);
 }

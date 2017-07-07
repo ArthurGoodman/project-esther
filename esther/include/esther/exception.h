@@ -57,7 +57,7 @@ void Exception_setPos(Object *self, Object *pos);
 void Exception_throw_new(Esther *es, const char *fmt, ...);
 void Exception_throw(Object *self);
 
-void Exception_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Exception_virtual_mapOnRefs(Mapper *self, MapFunction f);
 void Exception_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus

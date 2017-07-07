@@ -37,7 +37,7 @@ void Array_init(Esther *es, Object *self, Object *const *data, size_t size) {
 static VTableForObject Array_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Array_virtual_mapOnReferences },
+            .mapOnRefs = Array_virtual_mapOnRefs },
         .finalize = Array_virtual_finalize },
     .toString = Array_virtual_inspect,
     .inspect = Array_virtual_inspect,
@@ -110,8 +110,8 @@ Object *Array_virtual_inspect(Esther *es, Object *self) {
     return str;
 }
 
-void Array_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    Object_virtual_mapOnReferences(self, f);
+void Array_virtual_mapOnRefs(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnRefs(self, f);
 
     for (size_t i = 0; i < std_vector_size(as_Array(self)->data); i++)
         f(std_vector_at(as_Array(self)->data, i));

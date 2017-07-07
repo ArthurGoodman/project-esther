@@ -21,7 +21,7 @@ static VTableForClass Class_vtable = {
     .base = {
         .base = {
             .base = {
-                .mapOnReferences = Class_virtual_mapOnReferences },
+                .mapOnRefs = Class_virtual_mapOnRefs },
             .finalize = Class_virtual_finalize },
         .toString = Class_virtual_toString,
         .inspect = Class_virtual_toString,
@@ -103,8 +103,8 @@ Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
     return instance;
 }
 
-void Class_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    Object_virtual_mapOnReferences(self, f);
+void Class_virtual_mapOnRefs(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnRefs(self, f);
 
     f(as_Class(self)->superclass);
 

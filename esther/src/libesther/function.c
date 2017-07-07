@@ -16,7 +16,7 @@ Object *Function_new(Esther *es, struct string name, Object *(*body)(), int argc
 static VTableForObject Function_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Object_virtual_mapOnReferences },
+            .mapOnRefs = Object_virtual_mapOnRefs },
         .finalize = Function_virtual_finalize },
     .toString = Function_virtual_toString,
     .inspect = Function_virtual_toString,
@@ -143,7 +143,7 @@ Object *InterpretedFunction_new(Esther *es, struct string name, Object *params, 
 static VTableForObject InterpretedFunction_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = InterpretedFunction_virtual_mapOnReferences },
+            .mapOnRefs = InterpretedFunction_virtual_mapOnRefs },
         .finalize = InterpretedFunction_virtual_finalize },
     .toString = Function_virtual_toString,
     .inspect = Function_virtual_toString,
@@ -169,8 +169,8 @@ void InterpretedFunction_init(Esther *es, Object *f, struct string name, Object 
     *(void **) f = &InterpretedFunction_vtable;
 }
 
-void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    Object_virtual_mapOnReferences(self, f);
+void InterpretedFunction_virtual_mapOnRefs(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnRefs(self, f);
 
     f(as_InterpretedFunction(self)->closure);
     f(as_InterpretedFunction(self)->body);

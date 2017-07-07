@@ -28,7 +28,7 @@ void String_init(Esther *es, Object *self, struct string value) {
 static VTableForObject String_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Object_virtual_mapOnReferences },
+            .mapOnRefs = Object_virtual_mapOnRefs },
         .finalize = String_virtual_finalize },
     .toString = String_virtual_toString,
     .inspect = String_virtual_inspect,

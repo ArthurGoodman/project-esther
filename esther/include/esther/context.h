@@ -40,7 +40,7 @@ bool Context_assign(Context *self, struct string name, Object *value);
 
 Context *Context_childContext(Context *self, Object *selfObject, Object *hereObject);
 
-void Context_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Context_virtual_mapOnRefs(Mapper *self, MapFunction f);
 
 #ifdef __cplusplus
 }

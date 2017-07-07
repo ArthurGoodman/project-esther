@@ -21,7 +21,7 @@ typedef struct Mapper Mapper;
 typedef void (*MapFunction)(void *);
 
 typedef struct VTableForMapper {
-    void (*mapOnReferences)(Mapper *, MapFunction);
+    void (*mapOnRefs)(Mapper *, MapFunction);
 } VTableForMapper;
 
 typedef struct Mapper {
@@ -30,9 +30,9 @@ typedef struct Mapper {
 
 void Mapper_init(Mapper *self);
 
-void Mapper_mapOnReferences(Mapper *self, MapFunction f);
+void Mapper_mapOnRefs(Mapper *self, MapFunction f);
 
-void Mapper_virtual_mapOnReferences(Mapper *, MapFunction);
+void Mapper_virtual_mapOnRefs(Mapper *, MapFunction);
 
 typedef struct VTableForManagedObject {
     VTableForMapper base;

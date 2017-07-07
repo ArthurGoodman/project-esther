@@ -123,23 +123,38 @@ static Object *scan(Esther *es, Lexer *lexer) {
                 read_sym(lexer);
 
                 switch (sym(lexer)) {
-                case 'n':
-                    String_append_char(text, '\n');
-                    break;
-                case 't':
-                    String_append_char(text, '\t');
-                    break;
-                case '0':
-                    String_append_char(text, '\0');
-                    break;
-                case '\\':
-                    String_append_char(text, '\\');
-                    break;
                 case '\'':
                     String_append_char(text, '\'');
                     break;
                 case '"':
                     String_append_char(text, '"');
+                    break;
+                case '\\':
+                    String_append_char(text, '\\');
+                    break;
+                case 'a':
+                    String_append_char(text, '\a');
+                    break;
+                case 'b':
+                    String_append_char(text, '\b');
+                    break;
+                case 'f':
+                    String_append_char(text, '\f');
+                    break;
+                case 'n':
+                    String_append_char(text, '\n');
+                    break;
+                case 'r':
+                    String_append_char(text, '\r');
+                    break;
+                case 't':
+                    String_append_char(text, '\t');
+                    break;
+                case 'v':
+                    String_append_char(text, '\v');
+                    break;
+                case '0':
+                    String_append_char(text, '\0');
                     break;
                 case '\n':
                     break;

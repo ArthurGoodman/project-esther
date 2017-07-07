@@ -20,7 +20,7 @@ Object *Object_new(Esther *es) {
 static VTableForObject Object_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Object_virtual_mapOnReferences },
+            .mapOnRefs = Object_virtual_mapOnRefs },
         .finalize = Object_virtual_finalize },
     .toString = Object_virtual_toString,
     .inspect = Object_virtual_toString,
@@ -125,7 +125,7 @@ bool Object_virtual_isTrue() {
     return true;
 }
 
-void Object_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+void Object_virtual_mapOnRefs(Mapper *self, MapFunction f) {
     f(as_Object(self)->objectClass);
 
     if (as_Object(self)->attributes) {

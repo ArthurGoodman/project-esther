@@ -46,7 +46,7 @@ Object *InterpretedFunction_new(Esther *es, struct string name, Object *params, 
 
 void InterpretedFunction_init(Esther *es, Object *f, struct string name, Object *params, Context *closure, Object *body);
 
-void InterpretedFunction_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void InterpretedFunction_virtual_mapOnRefs(Mapper *self, MapFunction f);
 void InterpretedFunction_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus

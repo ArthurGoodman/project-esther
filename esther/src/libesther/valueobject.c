@@ -24,7 +24,7 @@ Object *ValueObject_new_var(Esther *es, Variant value) {
 static VTableForObject ValueObject_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Object_virtual_mapOnReferences },
+            .mapOnRefs = Object_virtual_mapOnRefs },
         .finalize = Object_virtual_finalize },
     .toString = ValueObject_virtual_toString,
     .inspect = ValueObject_virtual_inspect,

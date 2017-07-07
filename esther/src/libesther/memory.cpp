@@ -182,7 +182,7 @@ void markReference(void *ref) {
 
 void mark(ManagedObject *object) {
     (reinterpret_cast<ObjectHeader *>(object) - 1)->setFlag(ObjectHeader::FlagMark);
-    Mapper_mapOnReferences((Mapper *) object, markReference);
+    Mapper_mapOnRefs((Mapper *) object, markReference);
 }
 
 bool isValidPtr(uint8_t *p) {
@@ -227,7 +227,7 @@ void mark() {
     markRange(reinterpret_cast<ptr_ptr_t>(&buf), sizeof(Registers) / sizeof(ptr_t));
 
     for (Mapper *mapper : mappers)
-        Mapper_mapOnReferences(mapper, markReference);
+        Mapper_mapOnRefs(mapper, markReference);
 }
 
 void sweep() {
@@ -312,19 +312,19 @@ ManagedObject *claimFreeSpace(size_t size) {
 }
 }
 
-void Mapper_virtual_mapOnReferences(Mapper *, MapFunction) {
+void Mapper_virtual_mapOnRefs(Mapper *, MapFunction) {
 }
 
 static VTableForMapper Mapper_vtable = {
-    Mapper_virtual_mapOnReferences
+    Mapper_virtual_mapOnRefs
 };
 
 void Mapper_init(Mapper *self) {
     *reinterpret_cast<void **>(self) = &Mapper_vtable;
 }
 
-void Mapper_mapOnReferences(Mapper *self, MapFunction f) {
-    (*reinterpret_cast<VTableForMapper **>(self))->mapOnReferences(self, f);
+void Mapper_mapOnRefs(Mapper *self, MapFunction f) {
+    (*reinterpret_cast<VTableForMapper **>(self))->mapOnRefs(self, f);
 }
 
 void ManagedObject_virtual_finalize(ManagedObject *) {

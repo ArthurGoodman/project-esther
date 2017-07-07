@@ -78,7 +78,7 @@ bool Object_virtual_equals(Object *self, Object *obj);
 bool Object_isTrue(Object *self);
 bool Object_virtual_isTrue();
 
-void Object_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Object_virtual_mapOnRefs(Mapper *self, MapFunction f);
 void Object_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus

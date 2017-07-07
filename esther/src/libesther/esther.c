@@ -350,7 +350,7 @@ typedef struct GlobalMapper {
     Esther *es;
 } GlobalMapper;
 
-static void GlobalMapper_mapOnReferences(GlobalMapper *self, MapFunction f) {
+static void GlobalMapper_mapOnRefs(GlobalMapper *self, MapFunction f) {
     f(self->es->objectClass);
     f(self->es->classClass);
     f(self->es->stringClass);
@@ -390,7 +390,7 @@ static void GlobalMapper_mapOnReferences(GlobalMapper *self, MapFunction f) {
 }
 
 static VTableForMapper GlobalMapper_vtable = {
-    .mapOnReferences = (void (*)(Mapper *, MapFunction)) GlobalMapper_mapOnReferences
+    .mapOnRefs = (void (*)(Mapper *, MapFunction)) GlobalMapper_mapOnRefs
 };
 
 static Mapper *GlobalMapper_new(Esther *es) {
@@ -400,18 +400,18 @@ static Mapper *GlobalMapper_new(Esther *es) {
     return (Mapper *) self;
 }
 
-#define CLASS_VTABLE(name)                                              \
-    static VTableForClass name##Class_vtable = {                        \
-        .base = {                                                       \
-            .base = {                                                   \
-                .base = {                                               \
-                    .mapOnReferences = Class_virtual_mapOnReferences }, \
-                .finalize = Class_virtual_finalize },                   \
-            .toString = Class_virtual_toString,                         \
-            .inspect = Class_virtual_toString,                          \
-            .equals = Object_virtual_equals,                            \
-            .isTrue = Object_virtual_isTrue },                          \
-        .newInstance = name##Class_virtual_newInstance                  \
+#define CLASS_VTABLE(name)                                  \
+    static VTableForClass name##Class_vtable = {            \
+        .base = {                                           \
+            .base = {                                       \
+                .base = {                                   \
+                    .mapOnRefs = Class_virtual_mapOnRefs }, \
+                .finalize = Class_virtual_finalize },       \
+            .toString = Class_virtual_toString,             \
+            .inspect = Class_virtual_toString,              \
+            .equals = Object_virtual_equals,                \
+            .isTrue = Object_virtual_isTrue },              \
+        .newInstance = name##Class_virtual_newInstance      \
     };
 
 CLASS_VTABLE(Class)
@@ -429,16 +429,16 @@ CLASS_VTABLE(Int)
 CLASS_VTABLE(Float)
 CLASS_VTABLE(Exception)
 
-#define CONST_VTABLE(name, is_true)                                  \
-    static VTableForObject name##_vtable = {                         \
-        .base = {                                                    \
-            .base = {                                                \
-                .mapOnReferences = Object_virtual_mapOnReferences }, \
-            .finalize = Object_virtual_finalize },                   \
-        .toString = name##_virtual_toString,                         \
-        .inspect = name##_virtual_toString,                          \
-        .equals = Object_virtual_equals,                             \
-        .isTrue = is_true##_virtual_isTrue                           \
+#define CONST_VTABLE(name, is_true)                      \
+    static VTableForObject name##_vtable = {             \
+        .base = {                                        \
+            .base = {                                    \
+                .mapOnRefs = Object_virtual_mapOnRefs }, \
+            .finalize = Object_virtual_finalize },       \
+        .toString = name##_virtual_toString,             \
+        .inspect = name##_virtual_toString,              \
+        .equals = Object_virtual_equals,                 \
+        .isTrue = is_true##_virtual_isTrue               \
     };
 
 CONST_VTABLE(True, Object)
@@ -985,7 +985,7 @@ void Esther_runFile(Esther *es, const char *fileName) {
         if (!rawCode.data) {
             printf("error: unable to read file\n");
             pop_jump_buffer();
-            return;
+            break;
         }
 
         Object *code = String_new_move(es, string_expand_tabs(rawCode));

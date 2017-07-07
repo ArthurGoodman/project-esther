@@ -48,7 +48,7 @@ Object *Class_virtual_toString(Esther *es, Object *self);
 Object *Class_newInstance(Esther *es, Object *self, Object *args);
 Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args);
 
-void Class_virtual_mapOnReferences(Mapper *self, MapFunction f);
+void Class_virtual_mapOnRefs(Mapper *self, MapFunction f);
 void Class_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus

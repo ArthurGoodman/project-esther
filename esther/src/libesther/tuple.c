@@ -36,7 +36,7 @@ void Tuple_init(Esther *es, Object *self, Object *const *data, size_t size) {
 static VTableForObject Tuple_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Tuple_virtual_mapOnReferences },
+            .mapOnRefs = Tuple_virtual_mapOnRefs },
         .finalize = Tuple_virtual_finalize },
     .toString = Tuple_virtual_inspect,
     .inspect = Tuple_virtual_inspect,
@@ -88,8 +88,8 @@ Object *Tuple_virtual_inspect(Esther *es, Object *self) {
     return str;
 }
 
-void Tuple_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    Object_virtual_mapOnReferences(self, f);
+void Tuple_virtual_mapOnRefs(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnRefs(self, f);
 
     for (size_t i = 0; i < as_Tuple(self)->size; i++)
         f(as_Tuple(self)->data[i]);

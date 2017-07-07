@@ -11,7 +11,7 @@ Context *Context_new(Esther *es) {
 
 static VTableForManagedObject Context_vtable = {
     .base = {
-        .mapOnReferences = Context_virtual_mapOnReferences },
+        .mapOnRefs = Context_virtual_mapOnRefs },
     .finalize = ManagedObject_virtual_finalize
 };
 
@@ -80,7 +80,7 @@ Context *Context_childContext(Context *self, Object *selfObject, Object *hereObj
     return child;
 }
 
-void Context_virtual_mapOnReferences(Mapper *self, MapFunction f) {
+void Context_virtual_mapOnRefs(Mapper *self, MapFunction f) {
     f(as_Context(self)->parent);
     f(as_Context(self)->self);
 

@@ -20,7 +20,7 @@ Object *Symbol_new_c_str(Esther *es, const char *name) {
 static VTableForObject Symbol_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Object_virtual_mapOnReferences },
+            .mapOnRefs = Object_virtual_mapOnRefs },
         .finalize = Object_virtual_finalize },
     .toString = Symbol_virtual_toString,
     .inspect = Symbol_virtual_inspect,
@@ -61,7 +61,7 @@ Object *Symbol_virtual_inspect(Esther *es, Object *self) {
     else {
         String_append_char(str, '\"');
 
-        struct string escaped = string_escape(as_String(self)->value);
+        struct string escaped = string_escape(value);
         String_append_std(str, escaped);
         string_free(escaped);
 

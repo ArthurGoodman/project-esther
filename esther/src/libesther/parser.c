@@ -10,8 +10,8 @@
 #include "esther/valueobject.h"
 #include "identifiers.h"
 
-static void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
-    Object_virtual_mapOnReferences(self, f);
+static void Parser_virtual_mapOnRefs(Mapper *self, MapFunction f) {
+    Object_virtual_mapOnRefs(self, f);
 
     f(((Parser *) self)->tokens);
     f(((Parser *) self)->token);
@@ -22,7 +22,7 @@ static void Parser_virtual_mapOnReferences(Mapper *self, MapFunction f) {
 static VTableForObject Parser_vtable = {
     .base = {
         .base = {
-            .mapOnReferences = Parser_virtual_mapOnReferences },
+            .mapOnRefs = Parser_virtual_mapOnRefs },
         .finalize = Object_virtual_finalize },
     .toString = Object_virtual_toString,
     .inspect = Object_virtual_toString,
@@ -619,7 +619,7 @@ Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
             Id id = Symbol_getId(Tuple_get(node, 0));
 
             if (id == id_braces) {
-                Object *array = Tuple_get(node, 1);
+                Object *array = Tuple_get(node, 2);
 
                 for (size_t i = 0; i < Array_size(array); i++)
                     Array_push(nodes, Array_get(array, i));
