@@ -6,27 +6,27 @@
 #include "esther/std_string.h"
 #include "esther/utility.h"
 
-Variant Variant_create() {
+Variant Variant_null() {
     Variant var;
     var.type = NullVariant;
     return var;
 }
 
-Variant Variant_create_char(char value) {
+Variant Variant_char(char value) {
     Variant var;
     var.type = CharVariant;
     var.character = value;
     return var;
 }
 
-Variant Variant_create_int(int value) {
+Variant Variant_int(int value) {
     Variant var;
     var.type = IntVariant;
     var.integer = value;
     return var;
 }
 
-Variant Variant_create_real(double value) {
+Variant Variant_real(double value) {
     Variant var;
     var.type = RealVariant;
     var.real = value;
@@ -44,16 +44,16 @@ bool Variant_isNull(Variant var) {
 Variant Variant_convertTo(Variant var, VariantType type) {
     switch (type) {
     case CharVariant:
-        return Variant_create_char(Variant_toChar(var));
+        return Variant_char(Variant_toChar(var));
 
     case IntVariant:
-        return Variant_create_int(Variant_toInt(var));
+        return Variant_int(Variant_toInt(var));
 
     case RealVariant:
-        return Variant_create_real(Variant_toReal(var));
+        return Variant_real(Variant_toReal(var));
 
     default:
-        return Variant_create();
+        return Variant_null();
     }
 }
 
@@ -110,16 +110,16 @@ Variant Variant_add(Variant a, Variant b) {
 
     switch (a.type) {
     case CharVariant:
-        return Variant_create_char(Variant_toChar(a) + Variant_toChar(b));
+        return Variant_char(Variant_toChar(a) + Variant_toChar(b));
 
     case IntVariant:
-        return Variant_create_int(Variant_toInt(a) + Variant_toInt(b));
+        return Variant_int(Variant_toInt(a) + Variant_toInt(b));
 
     case RealVariant:
-        return Variant_create_real(Variant_toReal(a) + Variant_toReal(b));
+        return Variant_real(Variant_toReal(a) + Variant_toReal(b));
 
     default:
-        return Variant_create();
+        return Variant_null();
     }
 }
 
@@ -128,16 +128,16 @@ Variant Variant_sub(Variant a, Variant b) {
 
     switch (a.type) {
     case CharVariant:
-        return Variant_create_char(Variant_toChar(a) - Variant_toChar(b));
+        return Variant_char(Variant_toChar(a) - Variant_toChar(b));
 
     case IntVariant:
-        return Variant_create_int(Variant_toInt(a) - Variant_toInt(b));
+        return Variant_int(Variant_toInt(a) - Variant_toInt(b));
 
     case RealVariant:
-        return Variant_create_real(Variant_toReal(a) - Variant_toReal(b));
+        return Variant_real(Variant_toReal(a) - Variant_toReal(b));
 
     default:
-        return Variant_create();
+        return Variant_null();
     }
 }
 
@@ -146,16 +146,16 @@ Variant Variant_mul(Variant a, Variant b) {
 
     switch (a.type) {
     case CharVariant:
-        return Variant_create_char(Variant_toChar(a) * Variant_toChar(b));
+        return Variant_char(Variant_toChar(a) * Variant_toChar(b));
 
     case IntVariant:
-        return Variant_create_int(Variant_toInt(a) * Variant_toInt(b));
+        return Variant_int(Variant_toInt(a) * Variant_toInt(b));
 
     case RealVariant:
-        return Variant_create_real(Variant_toReal(a) * Variant_toReal(b));
+        return Variant_real(Variant_toReal(a) * Variant_toReal(b));
 
     default:
-        return Variant_create();
+        return Variant_null();
     }
 }
 
@@ -164,16 +164,16 @@ Variant Variant_div(Variant a, Variant b) {
 
     switch (a.type) {
     case CharVariant:
-        return Variant_create_char(Variant_toChar(a) / Variant_toChar(b));
+        return Variant_char(Variant_toChar(a) / Variant_toChar(b));
 
     case IntVariant:
-        return Variant_create_int(Variant_toInt(a) / Variant_toInt(b));
+        return Variant_int(Variant_toInt(a) / Variant_toInt(b));
 
     case RealVariant:
-        return Variant_create_real(Variant_toReal(a) / Variant_toReal(b));
+        return Variant_real(Variant_toReal(a) / Variant_toReal(b));
 
     default:
-        return Variant_create();
+        return Variant_null();
     }
 }
 
@@ -182,16 +182,16 @@ Variant Variant_mod(Variant a, Variant b) {
 
     switch (a.type) {
     case CharVariant:
-        return Variant_create_char(Variant_toChar(a) % Variant_toChar(b));
+        return Variant_char(Variant_toChar(a) % Variant_toChar(b));
 
     case IntVariant:
-        return Variant_create_int(Variant_toInt(a) % Variant_toInt(b));
+        return Variant_int(Variant_toInt(a) % Variant_toInt(b));
 
     case RealVariant:
-        return Variant_create_real(fmod(Variant_toReal(a), Variant_toReal(b)));
+        return Variant_real(fmod(Variant_toReal(a), Variant_toReal(b)));
 
     default:
-        return Variant_create();
+        return Variant_null();
     }
 }
 
@@ -200,16 +200,16 @@ Variant Variant_pow(Variant a, Variant b) {
 
     switch (a.type) {
     case CharVariant:
-        return Variant_create_char(pow(Variant_toChar(a), Variant_toChar(b)));
+        return Variant_char(pow(Variant_toChar(a), Variant_toChar(b)));
 
     case IntVariant:
-        return Variant_create_int(pow(Variant_toInt(a), Variant_toInt(b)));
+        return Variant_int(pow(Variant_toInt(a), Variant_toInt(b)));
 
     case RealVariant:
-        return Variant_create_real(pow(Variant_toReal(a), Variant_toReal(b)));
+        return Variant_real(pow(Variant_toReal(a), Variant_toReal(b)));
 
     default:
-        return Variant_create();
+        return Variant_null();
     }
 }
 

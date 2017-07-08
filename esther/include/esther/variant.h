@@ -25,10 +25,10 @@ typedef struct Variant {
     };
 } Variant;
 
-Variant Variant_create();
-Variant Variant_create_char(char value);
-Variant Variant_create_int(int value);
-Variant Variant_create_real(double value);
+Variant Variant_null();
+Variant Variant_char(char value);
+Variant Variant_int(int value);
+Variant Variant_real(double value);
 
 VariantType Variant_getType(Variant var);
 
