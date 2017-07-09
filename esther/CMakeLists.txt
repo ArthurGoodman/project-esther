@@ -15,6 +15,7 @@ project(esther)
 
 file(GLOB_RECURSE exe_sources "src/esther/*.cpp")
 file(GLOB_RECURSE lib_sources "src/libesther/*.cpp" "src/libesther/*.c")
+file(GLOB_RECURSE io_sources "src/io/*.cpp" "src/io/*.c")
 file(GLOB_RECURSE headers "include/*.h")
 
 include_directories("include")
@@ -23,8 +24,12 @@ set(EXECUTABLE_OUTPUT_PATH "bin")
 set(LIBRARY_OUTPUT_PATH "lib")
 
 add_library(libesther SHARED ${lib_sources} ${headers})
+target_link_libraries(libesther dl)
 set_target_properties(libesther PROPERTIES OUTPUT_NAME esther)
 
-add_executable(esther ${exe_sources} ${headers})
+add_library(libio SHARED ${io_sources} ${headers})
+target_link_libraries(libio libesther)
+set_target_properties(libio PROPERTIES OUTPUT_NAME io)
 
+add_executable(esther ${exe_sources} ${headers})
 target_link_libraries(esther libesther)

@@ -1,5 +1,9 @@
 #include "esther/esther.h"
 
+#ifdef __linux
+#include <dlfcn.h>
+#endif
+
 #include "esther/array.h"
 #include "esther/class.h"
 #include "esther/context.h"
@@ -636,6 +640,29 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, c_str_to_id("esther"), es->esther);
 
     init_identifiers(es);
+
+#ifdef __linux
+    void *io = dlopen("../lib/libio.so", RTLD_LAZY);
+    char *error;
+
+    if (!io) {
+        printf("%s\n", dlerror());
+        return;
+    }
+
+    dlerror();
+
+    void (*IO_initialize)(Esther *) = dlsym(io, "IO_initialize");
+
+    if ((error = dlerror())) {
+        printf("%s\n", error);
+        return;
+    }
+
+    IO_initialize(es);
+
+    dlclose(io);
+#endif
 }
 
 void Esther_finalize(Esther *UNUSED(es)) {
