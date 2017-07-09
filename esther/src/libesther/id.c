@@ -6,13 +6,13 @@
 static struct std_map *idString = NULL;
 static struct std_map *stringId = NULL;
 
-static Id nextId = 0;
+static ID nextId = 0;
 
-struct string id_to_str(Id id) {
+struct string id_to_str(ID id) {
     return idString && std_map_contains(idString, (void *) id) ? *(struct string *) std_map_get(idString, (void *) id) : string_null();
 }
 
-Id str_to_id(struct string str) {
+ID str_to_id(struct string str) {
     if (!idString || !std_map_contains(stringId, &str)) {
         if (!idString) {
             idString = std_map_new(compare_id);
@@ -28,9 +28,9 @@ Id str_to_id(struct string str) {
         return nextId++;
     }
 
-    return (Id) std_map_get(stringId, &str);
+    return (ID) std_map_get(stringId, &str);
 }
 
-Id c_str_to_id(const char *str) {
+ID c_str_to_id(const char *str) {
     return str_to_id(string_const(str));
 }

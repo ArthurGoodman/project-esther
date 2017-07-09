@@ -47,18 +47,18 @@ Object *Object_getClass(Object *self) {
 }
 
 bool Object_hasAttribute(Object *self, struct string name) {
-    return self->attributes && std_map_contains(self->attributes, (const void *) str_to_id(name));
+    return self->attributes && std_map_contains(self->attributes, (void *) str_to_id(name));
 }
 
 Object *Object_getAttribute(Object *self, struct string name) {
-    return self->attributes ? std_map_get(self->attributes, (const void *) str_to_id(name)) : NULL;
+    return self->attributes ? std_map_get(self->attributes, (void *) str_to_id(name)) : NULL;
 }
 
 void Object_setAttribute(Object *self, struct string name, Object *value) {
     if (!self->attributes)
         self->attributes = std_map_new(compare_id);
 
-    std_map_set(self->attributes, (const void *) str_to_id(name), value);
+    std_map_set(self->attributes, (void *) str_to_id(name), value);
 }
 
 bool Object_is(Object *self, Object *_class) {

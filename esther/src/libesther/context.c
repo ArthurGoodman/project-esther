@@ -56,8 +56,8 @@ Object *Context_resolve(Esther *es, Context *self, struct string name) {
     if (self->parent)
         return Context_resolve(es, self->parent, name);
 
-    if (Esther_hasRootObject(es, name))
-        return Esther_getRootObject(es, name);
+    if (Esther_hasRootObject(es, str_to_id(name)))
+        return Esther_getRootObject(es, str_to_id(name));
 
     return NULL;
 }

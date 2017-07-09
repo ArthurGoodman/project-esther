@@ -40,7 +40,7 @@ void Symbol_init_c_str(Esther *es, Object *self, const char *name) {
     Symbol_init(es, self, string_const(name));
 }
 
-Id Symbol_getId(Object *self) {
+ID Symbol_getId(Object *self) {
     return as_Symbol(self)->id;
 }
 

@@ -10,7 +10,7 @@ typedef struct Object Object;
 typedef struct Esther Esther;
 
 #define X(a, b)       \
-    extern Id id_##a; \
+    extern ID id_##a; \
     extern Object *sym_##a;
 #include "identifiers.def"
 #include "keywords.def"

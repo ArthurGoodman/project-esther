@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include "esther/class.h"
+#include "esther/id.h"
 #include "esther/std_string.h"
 
 typedef struct Context Context;
@@ -52,9 +53,9 @@ void Esther_finalize(Esther *es);
 
 Object *Esther_toBoolean(Esther *es, bool value);
 
-bool Esther_hasRootObject(Esther *es, struct string name);
-Object *Esther_getRootObject(Esther *es, struct string name);
-void Esther_setRootObject(Esther *es, struct string name, Object *value);
+bool Esther_hasRootObject(Esther *es, ID name);
+Object *Esther_getRootObject(Esther *es, ID name);
+void Esther_setRootObject(Esther *es, ID name, Object *value);
 
 Object *Esther_eval(Esther *es, Object *ast, Context *context);
 

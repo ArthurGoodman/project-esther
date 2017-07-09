@@ -55,6 +55,7 @@ ObjectType Object_getType(Object *self);
 
 Object *Object_getClass(Object *self);
 
+//@Refactor: Convert all methods like this to accept ID instead of struct string
 bool Object_hasAttribute(Object *self, struct string name);
 Object *Object_getAttribute(Object *self, struct string name);
 void Object_setAttribute(Object *self, struct string name, Object *value);

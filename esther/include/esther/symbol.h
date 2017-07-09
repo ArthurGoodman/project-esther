@@ -10,7 +10,7 @@ extern "C" {
 typedef struct Symbol {
     Object base;
 
-    Id id;
+    ID id;
 } Symbol;
 
 #define as_Symbol(obj) ((Symbol *) (obj))
@@ -21,7 +21,7 @@ Object *Symbol_new_c_str(Esther *es, const char *name);
 void Symbol_init(Esther *es, Object *self, struct string name);
 void Symbol_init_c_str(Esther *es, Object *self, const char *name);
 
-Id Symbol_getId(Object *self);
+ID Symbol_getId(Object *self);
 
 Object *Symbol_virtual_toString(Esther *es, Object *self);
 Object *Symbol_virtual_inspect(Esther *es, Object *self);

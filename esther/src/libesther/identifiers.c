@@ -3,7 +3,7 @@
 #include "esther/symbol.h"
 
 #define X(a, b) \
-    Id id_##a;  \
+    ID id_##a;  \
     Object *sym_##a;
 #include "identifiers.def"
 #include "keywords.def"

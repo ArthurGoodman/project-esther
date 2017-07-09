@@ -616,58 +616,45 @@ void Esther_init(Esther *es) {
 
     es->root = Context_new(es);
 
-    es->rootObjects = std_map_new(compare_str);
+    es->rootObjects = std_map_new(compare_id);
 
-    Esther_setRootObject(es, string_const("Object"), es->objectClass);
-    Esther_setRootObject(es, string_const("Class"), es->classClass);
-    Esther_setRootObject(es, string_const("String"), es->stringClass);
-    Esther_setRootObject(es, string_const("Symbol"), es->symbolClass);
-    Esther_setRootObject(es, string_const("Function"), es->functionClass);
-    Esther_setRootObject(es, string_const("Tuple"), es->tupleClass);
-    Esther_setRootObject(es, string_const("Array"), es->arrayClass);
-    Esther_setRootObject(es, string_const("Boolean"), es->booleanClass);
-    Esther_setRootObject(es, string_const("Null"), es->nullClass);
-    Esther_setRootObject(es, string_const("Numeric"), es->numericClass);
-    Esther_setRootObject(es, string_const("Char"), es->charClass);
-    Esther_setRootObject(es, string_const("Int"), es->intClass);
-    Esther_setRootObject(es, string_const("Float"), es->floatClass);
+    Esther_setRootObject(es, c_str_to_id("Object"), es->objectClass);
+    Esther_setRootObject(es, c_str_to_id("Class"), es->classClass);
+    Esther_setRootObject(es, c_str_to_id("String"), es->stringClass);
+    Esther_setRootObject(es, c_str_to_id("Symbol"), es->symbolClass);
+    Esther_setRootObject(es, c_str_to_id("Function"), es->functionClass);
+    Esther_setRootObject(es, c_str_to_id("Tuple"), es->tupleClass);
+    Esther_setRootObject(es, c_str_to_id("Array"), es->arrayClass);
+    Esther_setRootObject(es, c_str_to_id("Boolean"), es->booleanClass);
+    Esther_setRootObject(es, c_str_to_id("Null"), es->nullClass);
+    Esther_setRootObject(es, c_str_to_id("Numeric"), es->numericClass);
+    Esther_setRootObject(es, c_str_to_id("Char"), es->charClass);
+    Esther_setRootObject(es, c_str_to_id("Int"), es->intClass);
+    Esther_setRootObject(es, c_str_to_id("Float"), es->floatClass);
 
-    Esther_setRootObject(es, string_const("IO"), es->io);
-    Esther_setRootObject(es, string_const("esther"), es->esther);
+    Esther_setRootObject(es, c_str_to_id("IO"), es->io);
+    Esther_setRootObject(es, c_str_to_id("esther"), es->esther);
 
     init_identifiers(es);
 }
 
-void Esther_finalize(Esther *es) {
-    std_map_iterator i;
-    std_map_begin(es->rootObjects, &i);
-
-    while (!std_map_end(es->rootObjects, &i)) {
-        struct string *str = std_map_iterator_key(&i);
-
-        string_free(*str);
-        free(str);
-
-        std_map_iterator_next(&i);
-    }
+void Esther_finalize(Esther *UNUSED(es)) {
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {
     return value ? es->trueObject : es->falseObject;
 }
 
-bool Esther_hasRootObject(Esther *es, struct string name) {
-    return std_map_contains(es->rootObjects, &name);
+bool Esther_hasRootObject(Esther *es, ID name) {
+    return std_map_contains(es->rootObjects, (void *) name);
 }
 
-Object *Esther_getRootObject(Esther *es, struct string name) {
-    return std_map_get(es->rootObjects, &name);
+Object *Esther_getRootObject(Esther *es, ID name) {
+    return std_map_get(es->rootObjects, (void *) name);
 }
 
-void Esther_setRootObject(Esther *es, struct string name, Object *value) {
-    struct string *str = malloc(sizeof(struct string));
-    *str = string_copy(name);
-    std_map_set(es->rootObjects, str, value);
+void Esther_setRootObject(Esther *es, ID name, Object *value) {
+    std_map_set(es->rootObjects, (void *) name, value);
 }
 
 static void error_invalidAST(Esther *es) {
@@ -686,7 +673,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
     if (Tuple_size(ast) == 0)
         return es->nullObject;
 
-    Id id = Symbol_getId(Tuple_get(ast, 0));
+    ID id = Symbol_getId(Tuple_get(ast, 0));
 
     Object *value = es->nullObject;
 
@@ -715,7 +702,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
         else if (id == id_assign) {
             Object *child = Tuple_get(ast, 2);
-            Id childId = Symbol_getId(Tuple_get(child, 0));
+            ID childId = Symbol_getId(Tuple_get(child, 0));
 
             value = Esther_eval(es, Tuple_get(ast, 3), context);
 
@@ -898,7 +885,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             Object *evaledF;
 
             Object *child = Tuple_get(ast, 2);
-            Id childId = Symbol_getId(Tuple_get(child, 0));
+            ID childId = Symbol_getId(Tuple_get(child, 0));
 
             if (childId == id_attr) {
                 struct string name = String_value(Tuple_get(child, 3));

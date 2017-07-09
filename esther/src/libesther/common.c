@@ -8,5 +8,5 @@ bool compare_str(void *a, void *b) {
 }
 
 bool compare_id(void *a, void *b) {
-    return (Id) a < (Id) b;
+    return (ID) a < (ID) b;
 }

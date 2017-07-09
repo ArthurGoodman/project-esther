@@ -57,7 +57,7 @@ static void error_invalidToken(Esther *es, Parser *parser) {
     Exception_throw_new(es, "invalid token %s", String_c_str(Object_inspect(es, parser->token)));
 }
 
-static bool immediateCheck(Esther *es, Parser *parser, Id id) {
+static bool immediateCheck(Esther *es, Parser *parser, ID id) {
     Object *symbol = Tuple_get(parser->token, 0);
 
     if (Object_getType(symbol) != TSymbol)
@@ -66,7 +66,7 @@ static bool immediateCheck(Esther *es, Parser *parser, Id id) {
     return Symbol_getId(symbol) == id;
 }
 
-static bool check(Esther *es, Parser *parser, Id id) {
+static bool check(Esther *es, Parser *parser, ID id) {
     bool newLinesSkipped = false;
 
     while (immediateCheck(es, parser, id_newLine)) {
@@ -84,7 +84,7 @@ static bool check(Esther *es, Parser *parser, Id id) {
     return true;
 }
 
-static bool immediateAccept(Esther *es, Parser *parser, Id id) {
+static bool immediateAccept(Esther *es, Parser *parser, ID id) {
     if (immediateCheck(es, parser, id)) {
         getToken(parser);
         return true;
@@ -93,7 +93,7 @@ static bool immediateAccept(Esther *es, Parser *parser, Id id) {
     return false;
 }
 
-static bool accept(Esther *es, Parser *parser, Id id) {
+static bool accept(Esther *es, Parser *parser, ID id) {
     if (check(es, parser, id)) {
         getToken(parser);
         return true;
@@ -566,7 +566,7 @@ static Object *term(Esther *es, Parser *parser) {
             Object *node = statement(es, parser);
 
             if (Tuple_size(node) > 0) {
-                Id id = Symbol_getId(Tuple_get(node, 0));
+                ID id = Symbol_getId(Tuple_get(node, 0));
 
                 if (id == id_braces) {
                     Object *array = Tuple_get(node, 1);
@@ -616,7 +616,7 @@ Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
         Object *node = statement(es, parser);
 
         if (Tuple_size(node) > 0) {
-            Id id = Symbol_getId(Tuple_get(node, 0));
+            ID id = Symbol_getId(Tuple_get(node, 0));
 
             if (id == id_braces) {
                 Object *array = Tuple_get(node, 2);
