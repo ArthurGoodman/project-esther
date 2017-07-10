@@ -855,22 +855,26 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
         else if (id == id_pars) {
             Object *nodes = Tuple_get(ast, 2);
-            Object *tuple = Tuple_new_init_null(es, Array_size(nodes));
+            value = Tuple_new_init_null(es, Array_size(nodes));
 
             for (size_t i = 0; i < Array_size(nodes); i++)
-                Tuple_set(tuple, i, Esther_eval(es, Array_get(nodes, i), context));
-
-            value = tuple;
+                Tuple_set(value, i, Esther_eval(es, Array_get(nodes, i), context));
         }
 
         else if (id == id_brackets) {
             Object *nodes = Tuple_get(ast, 2);
-            Object *array = Array_new(es, 0);
+            value = Array_new(es, 0);
 
             for (size_t i = 0; i < Array_size(nodes); i++)
-                Array_push(array, Esther_eval(es, Array_get(nodes, i), context));
+                Array_push(value, Esther_eval(es, Array_get(nodes, i), context));
+        }
 
-            value = array;
+        else if (id == id_doubleArrow) {
+            Object *nodes = Tuple_get(ast, 2);
+            value = Map_new(es);
+
+            for (size_t i = 0; i < Array_size(nodes); i++)
+                Map_set(value, Esther_eval(es, Tuple_get(Array_get(nodes, i), 0), context), Esther_eval(es, Tuple_get(Array_get(nodes, i), 1), context));
         }
 
         else if (id == id_attr) {
@@ -1060,12 +1064,10 @@ void Esther_runFile(Esther *es, const char *fileName) {
             int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
             int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
 
-            //@Temp: C-string
             struct string q = string_quote(String_value(es->file->source), offset, column);
             printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e).data, q.data);
             string_free(q);
         } else
-            //@Temp: C-string
             printf("error: %s\n", Exception_getMessage(e).data);
     }
     ENDTRY;

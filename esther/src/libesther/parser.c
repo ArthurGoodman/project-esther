@@ -558,14 +558,28 @@ static Object *term(Esther *es, Parser *parser) {
     else if (accept(es, parser, id_leftBracket)) {
         Object *args = Array_new(es, 0);
 
-        do
-            Array_push(args, expr(es, parser));
-        while (accept(es, parser, id_comma));
+        bool map = false;
+
+        do {
+            Object *arg = expr(es, parser);
+
+            if (!map && check(es, parser, id_doubleArrow))
+                map = true;
+
+            if (map) {
+                if (!accept(es, parser, id_doubleArrow))
+                    Exception_throw_new(es, "double arrow expected");
+
+                arg = Tuple_new(es, 2, arg, expr(es, parser));
+            }
+
+            Array_push(args, arg);
+        } while (accept(es, parser, id_comma));
 
         if (!accept(es, parser, id_rightBracket))
             Exception_throw_new(es, "unmatched brackets");
 
-        e = Tuple_new(es, 3, sym_brackets, Tuple_new(es, 1, parser->npos), args);
+        e = Tuple_new(es, 3, map ? sym_doubleArrow : sym_brackets, Tuple_new(es, 1, parser->npos), args);
     } else if (accept(es, parser, id_brackets)) {
         e = Tuple_new(es, 3, sym_brackets, Tuple_new(es, 1, parser->npos), Array_new(es, 0));
     }
