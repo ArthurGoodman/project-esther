@@ -27,6 +27,7 @@ static VTableForObject Parser_vtable = {
     .toString = Object_virtual_toString,
     .inspect = Object_virtual_toString,
     .equals = Object_virtual_equals,
+    .less = Object_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 
@@ -508,7 +509,7 @@ static Object *term(Esther *es, Parser *parser) {
             e = Tuple_new(es, 3, sym_new, Tuple_new(es, 1, parser->npos), term(es, parser));
         else {
             if (!check(es, parser, id_id))
-                Exception_throw_new(es, "indentifier expected");
+                Exception_throw_new(es, "identifier expected");
 
             Object *name = Tuple_get(parser->token, 1);
             getToken(parser);
@@ -527,6 +528,16 @@ static Object *term(Esther *es, Parser *parser) {
 
             e = Tuple_new(es, 5, sym_new, Tuple_new(es, 1, parser->npos), name, args, check(es, parser, id_braces) || check(es, parser, id_leftBrace) ? term(es, parser) : Tuple_new(es, 0));
         }
+    }
+
+    else if (accept(es, parser, id_import)) {
+        if (!check(es, parser, id_id))
+            Exception_throw_new(es, "identifier expected");
+
+        Object *name = Tuple_get(parser->token, 1);
+        getToken(parser);
+
+        e = Tuple_new(es, 3, sym_import, Tuple_new(es, 1, parser->npos), name);
     }
 
     else if (accept(es, parser, id_leftPar)) {

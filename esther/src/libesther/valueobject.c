@@ -29,6 +29,7 @@ static VTableForObject ValueObject_vtable = {
     .toString = ValueObject_virtual_toString,
     .inspect = ValueObject_virtual_inspect,
     .equals = ValueObject_virtual_equals,
+    .less = ValueObject_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 
@@ -57,7 +58,11 @@ Object *ValueObject_virtual_inspect(Esther *es, Object *self) {
 }
 
 bool ValueObject_virtual_equals(Object *self, Object *obj) {
-    return Object_getType(obj) == TValueObject && Variant_eq(as_ValueObject(self)->value, as_ValueObject(self)->value);
+    return Object_getType(obj) == TValueObject ? Variant_eq(as_ValueObject(self)->value, as_ValueObject(obj)->value) : Object_virtual_equals(self, obj);
+}
+
+bool ValueObject_virtual_less(Object *self, Object *obj) {
+    return Object_getType(obj) == TValueObject ? Variant_lt(as_ValueObject(self)->value, as_ValueObject(obj)->value) : Object_virtual_less(self, obj);
 }
 
 Object *ValueObject_variantTypeToObjectClass(Esther *es, VariantType type) {

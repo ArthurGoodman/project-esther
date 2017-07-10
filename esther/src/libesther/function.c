@@ -21,6 +21,7 @@ static VTableForObject Function_vtable = {
     .toString = Function_virtual_toString,
     .inspect = Function_virtual_toString,
     .equals = Object_virtual_equals,
+    .less = Object_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 
@@ -148,6 +149,7 @@ static VTableForObject InterpretedFunction_vtable = {
     .toString = Function_virtual_toString,
     .inspect = Function_virtual_toString,
     .equals = Object_virtual_equals,
+    .less = Object_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 

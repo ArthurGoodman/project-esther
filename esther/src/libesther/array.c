@@ -42,6 +42,7 @@ static VTableForObject Array_vtable = {
     .toString = Array_virtual_inspect,
     .inspect = Array_virtual_inspect,
     .equals = Object_virtual_equals,
+    .less = Object_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 

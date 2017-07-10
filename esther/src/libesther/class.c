@@ -26,6 +26,7 @@ static VTableForClass Class_vtable = {
         .toString = Class_virtual_toString,
         .inspect = Class_virtual_toString,
         .equals = Object_virtual_equals,
+        .less = Object_virtual_less,
         .isTrue = Object_virtual_isTrue },
     .newInstance = Class_virtual_newInstance
 };

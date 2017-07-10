@@ -22,6 +22,7 @@ extern "C" {
 
 bool compare_str(void *a, void *b);
 bool compare_id(void *a, void *b);
+bool compare_obj(void *a, void *b);
 
 #ifdef __cplusplus
 }

@@ -36,6 +36,7 @@ static VTableForObject Exception_vtable = {
     .toString = Object_virtual_toString,
     .inspect = Object_virtual_toString,
     .equals = Object_virtual_equals,
+    .less = Object_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 

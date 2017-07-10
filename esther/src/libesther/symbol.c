@@ -25,6 +25,7 @@ static VTableForObject Symbol_vtable = {
     .toString = Symbol_virtual_toString,
     .inspect = Symbol_virtual_inspect,
     .equals = Symbol_virtual_equals,
+    .less = Symbol_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 
@@ -72,5 +73,9 @@ Object *Symbol_virtual_inspect(Esther *es, Object *self) {
 }
 
 bool Symbol_virtual_equals(Object *self, Object *obj) {
-    return Object_getType(obj) == TSymbol && as_Symbol(self)->id == as_Symbol(obj)->id;
+    return Object_getType(obj) == TSymbol ? as_Symbol(self)->id == as_Symbol(obj)->id : Object_virtual_equals(self, obj);
+}
+
+bool Symbol_virtual_less(Object *self, Object *obj) {
+    return Object_getType(obj) == TSymbol ? as_Symbol(self)->id < as_Symbol(obj)->id : Object_virtual_less(self, obj);
 }

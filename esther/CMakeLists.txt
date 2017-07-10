@@ -13,23 +13,23 @@ endif()
 
 project(esther)
 
-file(GLOB_RECURSE exe_sources "src/esther/*.cpp")
-file(GLOB_RECURSE lib_sources "src/libesther/*.cpp" "src/libesther/*.c")
-file(GLOB_RECURSE io_sources "src/io/*.cpp" "src/io/*.c")
-file(GLOB_RECURSE headers "include/*.h")
+file(GLOB_RECURSE esther_sources "src/esther/*.cpp")
+file(GLOB_RECURSE libesther_sources "src/libesther/*.cpp" "src/libesther/*.c")
+file(GLOB_RECURSE libesther_headers "include/*.h" "src/libesther/*.h")
+file(GLOB_RECURSE libio_sources "src/io/*.cpp" "src/io/*.c")
 
 include_directories("include")
 
 set(EXECUTABLE_OUTPUT_PATH "bin")
 set(LIBRARY_OUTPUT_PATH "lib")
 
-add_library(libesther SHARED ${lib_sources} ${headers})
+add_library(libesther SHARED ${libesther_sources} ${libesther_headers})
 target_link_libraries(libesther dl)
 set_target_properties(libesther PROPERTIES OUTPUT_NAME esther)
 
-add_library(libio SHARED ${io_sources} ${headers})
+add_library(libio SHARED ${libio_sources})
 target_link_libraries(libio libesther)
 set_target_properties(libio PROPERTIES OUTPUT_NAME io)
 
-add_executable(esther ${exe_sources} ${headers})
+add_executable(esther ${esther_sources})
 target_link_libraries(esther libesther)

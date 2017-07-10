@@ -33,6 +33,7 @@ static VTableForObject String_vtable = {
     .toString = String_virtual_toString,
     .inspect = String_virtual_inspect,
     .equals = String_virtual_equals,
+    .less = String_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 
@@ -101,7 +102,11 @@ Object *String_virtual_inspect(Esther *es, Object *self) {
 }
 
 bool String_virtual_equals(Object *self, Object *obj) {
-    return Object_getType(obj) == TString && string_equals(as_String(self)->value, as_String(obj)->value);
+    return Object_getType(obj) == TString ? string_equals(as_String(self)->value, as_String(obj)->value) : Object_virtual_equals(self, obj);
+}
+
+bool String_virtual_less(Object *self, Object *obj) {
+    return Object_getType(obj) == TString ? string_compare(as_String(self)->value, as_String(obj)->value) < 0 : Object_virtual_less(self, obj);
 }
 
 void String_virtual_finalize(ManagedObject *self) {

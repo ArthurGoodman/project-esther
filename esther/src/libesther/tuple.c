@@ -41,6 +41,7 @@ static VTableForObject Tuple_vtable = {
     .toString = Tuple_virtual_inspect,
     .inspect = Tuple_virtual_inspect,
     .equals = Object_virtual_equals,
+    .less = Object_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 

@@ -21,6 +21,7 @@ typedef enum ObjectType {
     TClass,
     TException,
     TFunction,
+    TMap,
     TObject,
     TString,
     TSymbol,
@@ -34,6 +35,7 @@ typedef struct VTableForObject {
     Object *(*toString)(Esther *es, Object *self);
     Object *(*inspect)(Esther *es, Object *self);
     bool (*equals)(Object *self, Object *obj);
+    bool (*less)(Object *self, Object *obj);
     bool (*isTrue)();
 } VTableForObject;
 
@@ -75,6 +77,9 @@ Object *Object_inspect(Esther *es, Object *self);
 
 bool Object_equals(Object *self, Object *obj);
 bool Object_virtual_equals(Object *self, Object *obj);
+
+bool Object_less(Object *self, Object *obj);
+bool Object_virtual_less(Object *self, Object *obj);
 
 bool Object_isTrue(Object *self);
 bool Object_virtual_isTrue();

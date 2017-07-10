@@ -23,16 +23,20 @@ void std_map_delete(std_map *map) {
     delete to_cpp(map);
 }
 
+size_t std_map_size(std_map *map) {
+    return to_cpp(map)->size();
+}
+
 bool std_map_contains(std_map *map, const void *key) {
-    return to_cpp(map)->find((void *)key) != to_cpp(map)->end();
+    return to_cpp(map)->find((void *) key) != to_cpp(map)->end();
 }
 
 void *std_map_get(std_map *map, const void *key) {
-    return (*to_cpp(map))[(void *)key];
+    return (*to_cpp(map))[(void *) key];
 }
 
 void std_map_set(std_map *map, const void *key, void *value) {
-    (*to_cpp(map))[(void *)key] = value;
+    (*to_cpp(map))[(void *) key] = value;
 }
 
 void std_map_begin(std_map *map, std_map_iterator *i) {

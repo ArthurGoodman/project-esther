@@ -28,6 +28,8 @@ Object *Symbol_virtual_inspect(Esther *es, Object *self);
 
 bool Symbol_virtual_equals(Object *self, Object *obj);
 
+bool Symbol_virtual_less(Object *self, Object *obj);
+
 #ifdef __cplusplus
 }
 #endif

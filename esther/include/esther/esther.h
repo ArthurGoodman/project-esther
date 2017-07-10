@@ -18,6 +18,7 @@ typedef struct Esther {
     Object *functionClass;
     Object *tupleClass;
     Object *arrayClass;
+    Object *mapClass;
     Object *booleanClass;
     Object *nullClass;
     Object *numericClass;
@@ -60,6 +61,8 @@ void Esther_setRootObject(Esther *es, ID name, Object *value);
 Object *Esther_eval(Esther *es, Object *ast, Context *context);
 
 void Esther_runFile(Esther *es, const char *fileName);
+
+Object *Esther_import(Esther *es, Context *context, const char *moduleName);
 
 #ifdef __cplusplus
 }

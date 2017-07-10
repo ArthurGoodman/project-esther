@@ -10,6 +10,7 @@
 #include "esther/exception.h"
 #include "esther/function.h"
 #include "esther/lexer.h"
+#include "esther/map.h"
 #include "esther/memory.h"
 #include "esther/object.h"
 #include "esther/parser.h"
@@ -49,6 +50,10 @@ static Object *TupleClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
 
 static Object *ArrayClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
     return Array_new(es, 0);
+}
+
+static Object *MapClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
+    return Map_new(es);
 }
 
 static Object *BooleanClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
@@ -230,6 +235,23 @@ static Object *ArrayClass_set(Esther *UNUSED(es), Object *self, Object *index, O
     return value;
 }
 
+static Object *MapClass_size(Esther *es, Object *self) {
+    return ValueObject_new_int(es, Map_size(self));
+}
+
+static Object *MapClass_contains(Esther *es, Object *self, Object *key) {
+    return Esther_toBoolean(es, Map_contains(self, key));
+}
+
+static Object *MapClass_get(Esther *UNUSED(es), Object *self, Object *key) {
+    return Map_get(self, key);
+}
+
+static Object *MapClass_set(Esther *UNUSED(es), Object *self, Object *key, Object *value) {
+    Map_set(self, key, value);
+    return value;
+}
+
 static Object *NumericClass_add(Esther *es, Object *a, Object *b) {
     return ValueObject_new_var(es, Variant_add(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
@@ -362,6 +384,7 @@ static void GlobalMapper_mapOnRefs(GlobalMapper *self, MapFunction f) {
     f(self->es->functionClass);
     f(self->es->tupleClass);
     f(self->es->arrayClass);
+    f(self->es->mapClass);
     f(self->es->booleanClass);
     f(self->es->nullClass);
     f(self->es->numericClass);
@@ -414,6 +437,7 @@ static Mapper *GlobalMapper_new(Esther *es) {
             .toString = Class_virtual_toString,             \
             .inspect = Class_virtual_toString,              \
             .equals = Object_virtual_equals,                \
+            .less = Object_virtual_less,                    \
             .isTrue = Object_virtual_isTrue },              \
         .newInstance = name##Class_virtual_newInstance      \
     };
@@ -425,6 +449,7 @@ CLASS_VTABLE(Symbol)
 CLASS_VTABLE(Function)
 CLASS_VTABLE(Tuple)
 CLASS_VTABLE(Array)
+CLASS_VTABLE(Map)
 CLASS_VTABLE(Boolean)
 CLASS_VTABLE(Null)
 CLASS_VTABLE(Numeric)
@@ -442,6 +467,7 @@ CLASS_VTABLE(Exception)
         .toString = name##_virtual_toString,             \
         .inspect = name##_virtual_toString,              \
         .equals = Object_virtual_equals,                 \
+        .less = Object_virtual_less,                     \
         .isTrue = is_true##_virtual_isTrue               \
     };
 
@@ -459,6 +485,7 @@ void Esther_init(Esther *es) {
     es->functionClass = NULL;
     es->tupleClass = NULL;
     es->arrayClass = NULL;
+    es->mapClass = NULL;
     es->booleanClass = NULL;
     es->nullClass = NULL;
     es->numericClass = NULL;
@@ -505,6 +532,9 @@ void Esther_init(Esther *es) {
 
     es->arrayClass = Class_new_init(es, string_const("Array"), NULL);
     *(void **) es->arrayClass = &ArrayClass_vtable;
+
+    es->mapClass = Class_new_init(es, string_const("Map"), NULL);
+    *(void **) es->mapClass = &MapClass_vtable;
 
     es->booleanClass = Class_new_init(es, string_const("Boolean"), NULL);
     *(void **) es->booleanClass = &BooleanClass_vtable;
@@ -573,6 +603,12 @@ void Esther_init(Esther *es) {
     Class_setMethod(es->arrayClass, string_const("[]"), Class_getMethod(es->arrayClass, string_const("at")));
     Class_setMethod_func(es->arrayClass, Function_new(es, string_const("set"), (Object * (*) ()) ArrayClass_set, 2));
 
+    Class_setMethod_func(es->mapClass, Function_new(es, string_const("size"), (Object * (*) ()) MapClass_size, 0));
+    Class_setMethod_func(es->mapClass, Function_new(es, string_const("contains"), (Object * (*) ()) MapClass_contains, 1));
+    Class_setMethod_func(es->mapClass, Function_new(es, string_const("get"), (Object * (*) ()) MapClass_get, 1));
+    Class_setMethod(es->mapClass, string_const("[]"), Class_getMethod(es->mapClass, string_const("get")));
+    Class_setMethod_func(es->mapClass, Function_new(es, string_const("set"), (Object * (*) ()) MapClass_set, 2));
+
     Class_setMethod_func(es->numericClass, Function_new(es, string_const("+"), (Object * (*) ()) NumericClass_add, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, string_const("+="), (Object * (*) ()) NumericClass_addAssign, 1));
     Class_setMethod_func(es->numericClass, Function_new(es, string_const("-"), (Object * (*) ()) NumericClass_sub, 1));
@@ -629,6 +665,7 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, c_str_to_id("Function"), es->functionClass);
     Esther_setRootObject(es, c_str_to_id("Tuple"), es->tupleClass);
     Esther_setRootObject(es, c_str_to_id("Array"), es->arrayClass);
+    Esther_setRootObject(es, c_str_to_id("Map"), es->mapClass);
     Esther_setRootObject(es, c_str_to_id("Boolean"), es->booleanClass);
     Esther_setRootObject(es, c_str_to_id("Null"), es->nullClass);
     Esther_setRootObject(es, c_str_to_id("Numeric"), es->numericClass);
@@ -640,29 +677,6 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, c_str_to_id("esther"), es->esther);
 
     init_identifiers(es);
-
-#ifdef __linux
-    void *io = dlopen("../lib/libio.so", RTLD_LAZY);
-    char *error;
-
-    if (!io) {
-        printf("%s\n", dlerror());
-        return;
-    }
-
-    dlerror();
-
-    void (*IO_initialize)(Esther *) = dlsym(io, "IO_initialize");
-
-    if ((error = dlerror())) {
-        printf("%s\n", error);
-        return;
-    }
-
-    IO_initialize(es);
-
-    dlclose(io);
-#endif
 }
 
 void Esther_finalize(Esther *UNUSED(es)) {
@@ -740,7 +754,8 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
                 if (!Context_assign(context, name, value))
                     Context_setLocal(context, name, value);
-            }
+            } else
+                Exception_throw_new(es, "invalid assignment");
         }
 
         else if (id == id_plus) {
@@ -978,6 +993,10 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
         else if (id == id_not) {
             value = Esther_toBoolean(es, !Object_isTrue(Esther_eval(es, Tuple_get(ast, 2), context)));
         }
+
+        else if (id == id_import) {
+            value = Esther_import(es, context, String_value(Tuple_get(ast, 2)).data);
+        }
     }
     CATCH(e) {
         if (Tuple_size(ast) > 0) {
@@ -1054,4 +1073,29 @@ void Esther_runFile(Esther *es, const char *fileName) {
     free((void *) es->file->fileName);
 
     es->file = es->file->next;
+}
+
+Object *Esther_import(Esther *es, Context *context, const char *moduleName) {
+#ifdef __linux
+    void *io = dlopen("../lib/libio.so", RTLD_LAZY);
+    char *error;
+
+    if (!io) {
+        printf("%s\n", dlerror());
+        return es->nullObject;
+    }
+
+    dlerror();
+
+    void (*IO_initialize)(Esther *) = dlsym(io, "IO_initialize");
+
+    if ((error = dlerror())) {
+        printf("%s\n", error);
+        return es->nullObject;
+    }
+
+    IO_initialize(es);
+
+    dlclose(io);
+#endif
 }

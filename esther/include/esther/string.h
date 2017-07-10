@@ -40,6 +40,8 @@ Object *String_virtual_inspect(Esther *es, Object *self);
 
 bool String_virtual_equals(Object *self, Object *obj);
 
+bool String_virtual_less(Object *self, Object *obj);
+
 void String_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus

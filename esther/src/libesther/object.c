@@ -25,6 +25,7 @@ static VTableForObject Object_vtable = {
     .toString = Object_virtual_toString,
     .inspect = Object_virtual_toString,
     .equals = Object_virtual_equals,
+    .less = Object_virtual_less,
     .isTrue = Object_virtual_isTrue
 };
 
@@ -115,6 +116,14 @@ bool Object_equals(Object *self, Object *obj) {
 
 bool Object_virtual_equals(Object *self, Object *obj) {
     return self == obj;
+}
+
+bool Object_less(Object *self, Object *obj) {
+    return (*(VTableForObject **) self)->less(self, obj);
+}
+
+bool Object_virtual_less(Object *self, Object *obj) {
+    return self < obj;
 }
 
 bool Object_isTrue(Object *self) {
