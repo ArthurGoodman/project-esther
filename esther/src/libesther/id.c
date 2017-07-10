@@ -3,6 +3,8 @@
 #include "esther/std_map.h"
 #include "esther/std_string.h"
 
+//@TODO: Make id -> sym map
+
 static struct std_map *idString = NULL;
 static struct std_map *stringId = NULL;
 

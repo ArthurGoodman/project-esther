@@ -1,4 +1,4 @@
 #pragma once
 
-#define GC
+//#define GC
 //#define VERBOSE_GC

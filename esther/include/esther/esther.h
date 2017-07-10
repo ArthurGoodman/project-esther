@@ -40,6 +40,8 @@ typedef struct Esther {
 
     Context *root;
 
+    Object *modules;
+
     struct std_map *rootObjects;
 
     struct FileRecord {
@@ -60,9 +62,10 @@ void Esther_setRootObject(Esther *es, ID name, Object *value);
 
 Object *Esther_eval(Esther *es, Object *ast, Context *context);
 
-void Esther_runFile(Esther *es, const char *fileName);
+void Esther_runScript(Esther *es, const char *fileName);
+Object *Esther_runFile(Esther *es, const char *fileName);
 
-Object *Esther_import(Esther *es, Context *context, const char *moduleName);
+Object *Esther_import(Esther *es, Context *context, const char *name);
 
 #ifdef __cplusplus
 }

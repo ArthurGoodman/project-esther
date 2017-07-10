@@ -1,14 +1,16 @@
 #include "esther/utility.h"
 
+#ifdef __linux
+#include <unistd.h>
+#else
+#include <windows.h>
+#endif
+
 #include <ctype.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifndef __linux
-#include <windows.h>
-#endif
 
 #include "esther/std_string.h"
 
@@ -51,4 +53,26 @@ const char *full_path(const char *path) {
 #endif
 
     return strdup(buffer);
+}
+
+//@Refactor
+struct string executable_dir() {
+#ifdef __linux
+    struct string str = string_new_prealloc(PATH_MAX);
+    size_t len = readlink("/proc/self/exe", str.data, str.capacity);
+
+    if (len == (size_t) -1) {
+        printf("error: unable to read executable location\n");
+        return string_null();
+    }
+
+    str.size = len;
+
+    string_erase(&str, string_rfind_char(str, '/', -1) + 1, -1);
+
+    return str;
+#else
+    //@Unimplemented
+    return string_null();
+#endif
 }

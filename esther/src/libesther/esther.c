@@ -2,6 +2,7 @@
 
 #ifdef __linux
 #include <dlfcn.h>
+#include <unistd.h>
 #endif
 
 #include "esther/array.h"
@@ -406,6 +407,8 @@ static void GlobalMapper_mapOnRefs(GlobalMapper *self, MapFunction f) {
 
     f(self->es->root);
 
+    f(self->es->modules);
+
 #define X(a, b) f(sym_##a);
 #include "identifiers.def"
 #include "keywords.def"
@@ -475,6 +478,13 @@ CONST_VTABLE(True, Object)
 CONST_VTABLE(False, False)
 CONST_VTABLE(Null, False)
 
+static void Esther_loadModules(Esther *es) {
+    struct string str = executable_dir();
+    string_append_c_str(&str, "modules.es");
+    es->modules = Esther_runFile(es, str.data);
+    string_free(str);
+}
+
 void Esther_init(Esther *es) {
     gc_registerMapper(GlobalMapper_new(es));
 
@@ -506,6 +516,8 @@ void Esther_init(Esther *es) {
     es->io = NULL;
 
     es->root = NULL;
+
+    es->modules = NULL;
 
     es->file = NULL;
 
@@ -677,6 +689,8 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, c_str_to_id("esther"), es->esther);
 
     init_identifiers(es);
+
+    Esther_loadModules(es);
 }
 
 void Esther_finalize(Esther *UNUSED(es)) {
@@ -1017,7 +1031,8 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
     return value;
 }
 
-void Esther_runFile(Esther *es, const char *fileName) {
+//@Refactor: boilerplate
+void Esther_runScript(Esther *es, const char *fileName) {
     struct FileRecord rec;
 
     rec.fileName = full_path(fileName);
@@ -1052,9 +1067,7 @@ void Esther_runFile(Esther *es, const char *fileName) {
 
         // IO_writeLine(es, ast, Tuple_new(es, 0));
 
-        Object *value = Esther_eval(es, ast, es->root);
-
-        printf("=> %s\n", String_c_str(Object_inspect(es, value)));
+        printf("=> %s\n", String_c_str(Object_inspect(es, Esther_eval(es, ast, es->root))));
     }
     CATCH(e) {
         Object *pos = Exception_getPos(e);
@@ -1077,9 +1090,67 @@ void Esther_runFile(Esther *es, const char *fileName) {
     es->file = es->file->next;
 }
 
-Object *Esther_import(Esther *es, Context *context, const char *moduleName) {
+Object *Esther_runFile(Esther *es, const char *fileName) {
+    struct FileRecord rec;
+
+    rec.fileName = full_path(fileName);
+    rec.source = NULL;
+    rec.next = es->file;
+
+    es->file = &rec;
+
+    Object *value = es->nullObject;
+
+    TRY {
+        struct string rawCode = read_file(fileName);
+
+        if (!rawCode.data) {
+            printf("error: unable to read file\n");
+            pop_jump_buffer();
+            break;
+        }
+
+        Object *code = String_new_move(es, string_expand_tabs(rawCode));
+
+        es->file->source = code;
+
+        string_free(rawCode);
+
+        value = Esther_eval(es, Parser_parse(es, es->parser, Lexer_lex(es, es->lexer, code)), es->root);
+    }
+    CATCH(e) {
+        Object *pos = Exception_getPos(e);
+
+        if (pos != NULL && es->file && es->file->source) {
+            int offset = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 0)));
+            int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
+            int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
+
+            struct string q = string_quote(String_value(es->file->source), offset, column);
+            printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e).data, q.data);
+            string_free(q);
+        } else
+            printf("error: %s\n", Exception_getMessage(e).data);
+    }
+    ENDTRY;
+
+    free((void *) es->file->fileName);
+
+    es->file = es->file->next;
+
+    return value;
+}
+
+//@Refactor
+Object *Esther_import(Esther *es, Context *context, const char *name) {
 #ifdef __linux
-    void *io = dlopen("../lib/libio.so", RTLD_LAZY);
+    struct string path = executable_dir();
+    string_append(&path, String_value(Map_get(Map_get(es->modules, String_new_c_str(es, name)), Symbol_new_c_str(es, "path"))));
+    string_append_c_str(&path, ".so");
+
+    printf("%s\n", full_path(path.data));
+
+    void *io = dlopen(path.data, RTLD_LAZY);
     char *error;
 
     if (!io) {
@@ -1098,6 +1169,10 @@ Object *Esther_import(Esther *es, Context *context, const char *moduleName) {
 
     IO_initialize(es);
 
+    string_free(path);
+
     dlclose(io);
+#else
+//@unimplemented
 #endif
 }
