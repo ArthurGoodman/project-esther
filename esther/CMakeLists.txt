@@ -8,7 +8,6 @@ set(CMAKE_C_FLAGS "${CMAKE_X_FLAGS} -Wall -Wextra -pedantic")
 
 if(WIN32)
 add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
-else()
 endif()
 
 project(esther)
@@ -24,12 +23,15 @@ set(EXECUTABLE_OUTPUT_PATH "bin")
 set(LIBRARY_OUTPUT_PATH "lib")
 
 add_library(libesther SHARED ${libesther_sources} ${libesther_headers})
-target_link_libraries(libesther dl)
 set_target_properties(libesther PROPERTIES OUTPUT_NAME esther)
 
+if(UNIX)
+target_link_libraries(libesther dl)
+endif()
+
 add_library(libio SHARED ${libio_sources})
-target_link_libraries(libio libesther)
 set_target_properties(libio PROPERTIES OUTPUT_NAME io)
+target_link_libraries(libio libesther)
 
 add_executable(esther ${esther_sources})
 target_link_libraries(esther libesther)
