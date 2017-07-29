@@ -1144,34 +1144,45 @@ Object *Esther_runFile(Esther *es, const char *fileName) {
 //@Refactor
 Object *Esther_import(Esther *es, Context *context, const char *name) {
 #ifdef __linux
+    Object *strName = String_new_c_str(es, name);
+
+    if (!Map_contains(es->modules, strName))
+        Exception_throw_new(es, "cannot find module named '%s'", name);
+
     struct string path = executable_dir();
-    string_append(&path, String_value(Map_get(Map_get(es->modules, String_new_c_str(es, name)), Symbol_new_c_str(es, "path"))));
+    string_append(&path, String_value(Map_get(Map_get(es->modules, strName), Symbol_new_c_str(es, "path"))));
     string_append_c_str(&path, ".so");
 
-    printf("%s\n", full_path(path.data));
+    const char *real_path = full_path(path.data);
 
-    void *io = dlopen(path.data, RTLD_LAZY);
+    void *library = dlopen(real_path, RTLD_LAZY);
+
+    string_free(path);
+    free((void *) real_path);
+
     char *error;
 
-    if (!io) {
-        printf("%s\n", dlerror());
-        return es->nullObject;
-    }
+    if (!library)
+        Exception_throw_new(es, dlerror());
 
     dlerror();
 
-    void (*IO_initialize)(Esther *) = dlsym(io, "IO_initialize");
+    struct string initFunctionName = string_new_c_str(name);
+    string_append_c_str(&initFunctionName, "_initialize");
 
-    if ((error = dlerror())) {
-        printf("%s\n", error);
-        return es->nullObject;
-    }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+    void (*initialize)(Esther *, Context *) = dlsym(library, initFunctionName.data);
+#pragma GCC diagnostic pop
 
-    IO_initialize(es);
+    string_free(initFunctionName);
 
-    string_free(path);
+    if ((error = dlerror()))
+        Exception_throw_new(es, error);
 
-    dlclose(io);
+    initialize(es, context);
+
+    return es->nullObject;
 #else
 //@unimplemented
 #endif

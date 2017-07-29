@@ -1,5 +1,5 @@
 [
     "IO" => [
-        :path => "../libs/libio"
+        :path => "../lib/libio"
     ]
 ]
