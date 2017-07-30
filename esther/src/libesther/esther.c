@@ -1111,6 +1111,7 @@ Object *Esther_runFile(Esther *es, const char *fileName) {
 }
 
 //@Refactor
+//@TODO: make modules to be singletons
 Object *Esther_import(Esther *es, Context *context, const char *name) {
     Object *strName = String_new_c_str(es, name);
 
