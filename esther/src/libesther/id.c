@@ -3,15 +3,17 @@
 #include "esther/std_map.h"
 #include "esther/std_string.h"
 
-//@TODO: Make id -> sym map
-
 static struct std_map *idString = NULL;
 static struct std_map *stringId = NULL;
 
 static ID nextId = 0;
 
+bool is_valid_id(ID id) {
+    return id < nextId;
+}
+
 struct string id_to_str(ID id) {
-    return idString && std_map_contains(idString, (void *) id) ? *(struct string *) std_map_get(idString, (void *) id) : string_null();
+    return is_valid_id(id) ? *(struct string *) std_map_get(idString, (void *) id) : string_null();
 }
 
 ID str_to_id(struct string str) {

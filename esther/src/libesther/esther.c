@@ -37,7 +37,7 @@ static Object *StringClass_virtual_newInstance(Esther *es, Object *UNUSED(self),
 }
 
 static Object *SymbolClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    return Symbol_new_c_str(es, "");
+    return c_str_to_sym(es, "");
 }
 
 static Object *FunctionClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
@@ -1005,7 +1005,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
         }
 
         else if (id == id_colon) {
-            value = Symbol_new(es, String_value(Tuple_get(ast, 2)));
+            value = str_to_sym(es, String_value(Tuple_get(ast, 2)));
         }
 
         else if (id == id_not) {
@@ -1150,7 +1150,7 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
         Exception_throw_new(es, "cannot find module named '%s'", name);
 
     struct string path = executable_dir();
-    string_append(&path, String_value(Map_get(Map_get(es->modules, strName), Symbol_new_c_str(es, "path"))));
+    string_append(&path, String_value(Map_get(Map_get(es->modules, strName), c_str_to_sym(es, "path"))));
     string_append_c_str(&path, ".so");
 
     const char *real_path = full_path(path.data);

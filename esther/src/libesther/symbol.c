@@ -2,8 +2,35 @@
 
 #include "esther/esther.h"
 #include "esther/lexer.h"
+#include "esther/std_map.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
+
+static struct std_map *idSymbol = NULL;
+
+Object *id_to_sym(Esther *es, ID id) {
+    if (!is_valid_id(id))
+        return NULL;
+
+    if (!idSymbol || !std_map_contains(idSymbol, (void *) id)) {
+        if (!idSymbol)
+            idSymbol = std_map_new(compare_id);
+
+        Object *symbol = Symbol_new(es, id_to_str(id));
+        std_map_set(idSymbol, (void *) id, symbol);
+        return symbol;
+    }
+
+    return std_map_get(idSymbol, (void *) id);
+}
+
+Object *str_to_sym(Esther *es, struct string str) {
+    return id_to_sym(es, str_to_id(str));
+}
+
+Object *c_str_to_sym(Esther *es, const char *str) {
+    return id_to_sym(es, c_str_to_id(str));
+}
 
 Object *Symbol_new(Esther *es, struct string name) {
     Object *self = gc_alloc(sizeof(Symbol));
@@ -29,16 +56,29 @@ static VTableForObject Symbol_vtable = {
     .isTrue = Object_virtual_isTrue
 };
 
-void Symbol_init(Esther *es, Object *self, struct string name) {
+static void Symbol_init_id(Esther *es, Object *self, ID id) {
     Object_init(es, self, TSymbol, es->symbolClass);
 
-    as_Symbol(self)->id = str_to_id(name);
+    as_Symbol(self)->id = id;
 
     *(void **) self = &Symbol_vtable;
 }
 
+Object *Symbol_new_id(Esther *es, ID id) {
+    if (!is_valid_id(id))
+        return NULL;
+
+    Object *self = gc_alloc(sizeof(Symbol));
+    Symbol_init_id(es, self, id);
+    return self;
+}
+
+void Symbol_init(Esther *es, Object *self, struct string name) {
+    Symbol_init_id(es, self, str_to_id(name));
+}
+
 void Symbol_init_c_str(Esther *es, Object *self, const char *name) {
-    Symbol_init(es, self, string_const(name));
+    Symbol_init_id(es, self, c_str_to_id(name));
 }
 
 ID Symbol_getId(Object *self) {

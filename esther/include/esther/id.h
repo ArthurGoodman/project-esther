@@ -12,6 +12,7 @@ typedef uint64_t ID;
 typedef uint32_t ID;
 #endif
 
+bool is_valid_id(ID id);
 struct string id_to_str(ID id);
 ID str_to_id(struct string str);
 ID c_str_to_id(const char *str);

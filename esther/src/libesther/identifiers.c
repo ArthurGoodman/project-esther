@@ -25,7 +25,7 @@ Object *operator_symbols[] = {
 void init_identifiers(Esther *es) {
 #define X(a, b)              \
     id_##a = c_str_to_id(b); \
-    sym_##a = Symbol_new_c_str(es, b);
+    sym_##a = id_to_sym(es, id_##a);
 #include "identifiers.def"
 #include "keywords.def"
 #include "operators.def"
