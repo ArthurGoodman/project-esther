@@ -9,7 +9,7 @@ Context *Context_new(Esther *es) {
     return self;
 }
 
-static VTableForManagedObject Context_vtable = {
+static ManagedObjectVTable vtable_for_Context = {
     .base = {
         .mapOnRefs = Context_virtual_mapOnRefs },
     .finalize = ManagedObject_virtual_finalize
@@ -22,7 +22,7 @@ void Context_init(Context *self, Context *parent, Object *selfObject, Object *he
     self->self = selfObject;
     self->here = hereObject;
 
-    *(void **) self = &Context_vtable;
+    *(void **) self = &vtable_for_Context;
 }
 
 Context *Context_getParent(Context *self) {

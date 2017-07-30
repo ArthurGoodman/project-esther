@@ -33,7 +33,7 @@ void Tuple_init(Esther *es, Object *self, Object *const *data, size_t size) {
     memcpy(as_Tuple(self)->data, data, size * sizeof(Object *));
 }
 
-static VTableForObject Tuple_vtable = {
+static ObjectVTable vtable_for_Tuple = {
     .base = {
         .base = {
             .mapOnRefs = Tuple_virtual_mapOnRefs },
@@ -52,7 +52,7 @@ void Tuple_init_null(Esther *es, Object *self, size_t size) {
 
     as_Tuple(self)->size = size;
 
-    *(void **) self = &Tuple_vtable;
+    *(void **) self = &vtable_for_Tuple;
 }
 
 void Tuple_init_va(Esther *es, Object *self, size_t size, va_list ap) {

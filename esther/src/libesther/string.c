@@ -25,7 +25,7 @@ void String_init(Esther *es, Object *self, struct string value) {
     String_init_move(es, self, string_copy(value));
 }
 
-static VTableForObject String_vtable = {
+static ObjectVTable vtable_for_String = {
     .base = {
         .base = {
             .mapOnRefs = Object_virtual_mapOnRefs },
@@ -42,7 +42,7 @@ void String_init_move(Esther *es, Object *self, struct string value) {
 
     as_String(self)->value = value;
 
-    *(void **) self = &String_vtable;
+    *(void **) self = &vtable_for_String;
 }
 
 void String_init_c_str(Esther *es, Object *self, const char *value) {

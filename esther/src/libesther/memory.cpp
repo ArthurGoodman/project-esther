@@ -13,7 +13,7 @@
 
 namespace {
 struct Registers {
-#ifdef __WIN64
+#if defined(__WIN64)
     ptr_t reg[7];
 #else
     ptr_t reg[5];
@@ -31,8 +31,8 @@ void saveRegisters(Registers *) {
         "mov %r15,0x30(%rcx)");
 }
 #else
-#ifdef __x86_64
-#ifdef __WIN64
+#if __x86_64
+#if __WIN64
 asm("saveRegisters:\n"
     "mov %rdi,0x0(%rcx)\n"
     "mov %rsi,0x8(%rcx)\n"
@@ -316,34 +316,34 @@ ManagedObject *claimFreeSpace(size_t size) {
 void Mapper_virtual_mapOnRefs(Mapper *, MapFunction) {
 }
 
-static VTableForMapper Mapper_vtable = {
+static MapperVTable vtable_for_Mapper = {
     Mapper_virtual_mapOnRefs
 };
 
 void Mapper_init(Mapper *self) {
-    *reinterpret_cast<void **>(self) = &Mapper_vtable;
+    *reinterpret_cast<void **>(self) = &vtable_for_Mapper;
 }
 
 void Mapper_mapOnRefs(Mapper *self, MapFunction f) {
-    (*reinterpret_cast<VTableForMapper **>(self))->mapOnRefs(self, f);
+    (*reinterpret_cast<MapperVTable **>(self))->mapOnRefs(self, f);
 }
 
 void ManagedObject_virtual_finalize(ManagedObject *) {
 }
 
-static VTableForManagedObject ManagedObject_vtable = {
-    Mapper_vtable,
+static ManagedObjectVTable vtable_for_ManagedObject = {
+    vtable_for_Mapper,
     ManagedObject_virtual_finalize
 };
 
 void ManagedObject_init(ManagedObject *self) {
     Mapper_init(&self->base);
 
-    *reinterpret_cast<void **>(self) = &ManagedObject_vtable;
+    *reinterpret_cast<void **>(self) = &vtable_for_ManagedObject;
 }
 
 void ManagedObject_finalize(ManagedObject *self) {
-    (*reinterpret_cast<VTableForManagedObject **>(self))->finalize(self);
+    (*reinterpret_cast<ManagedObjectVTable **>(self))->finalize(self);
 }
 
 void gc_initialize(ptr_ptr_t bp) {
@@ -398,9 +398,9 @@ void gc_collect() {
     return;
 #endif
 
-#ifdef __x86_64
+#if defined(__x86_64)
     register ptr_ptr_t sp asm("rsp");
-#elif __i386
+#elif defined(__i386)
     register ptr_ptr_t sp asm("esp");
 #endif
 

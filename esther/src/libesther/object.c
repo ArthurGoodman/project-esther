@@ -17,7 +17,7 @@ Object *Object_new(Esther *es) {
     return self;
 }
 
-static VTableForObject Object_vtable = {
+static ObjectVTable vtable_for_Object = {
     .base = {
         .base = {
             .mapOnRefs = Object_virtual_mapOnRefs },
@@ -36,7 +36,7 @@ void Object_init(Esther *UNUSED(es), Object *self, ObjectType type, Object *obje
     self->objectClass = objectClass;
     self->attributes = NULL;
 
-    *(void **) self = &Object_vtable;
+    *(void **) self = &vtable_for_Object;
 }
 
 ObjectType Object_getType(Object *self) {
@@ -99,7 +99,7 @@ Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args) 
 }
 
 Object *Object_toString(Esther *es, Object *self) {
-    return (*(VTableForObject **) self)->toString(es, self);
+    return (*(ObjectVTable **) self)->toString(es, self);
 }
 
 Object *Object_virtual_toString(Esther *es, Object *self) {
@@ -107,11 +107,11 @@ Object *Object_virtual_toString(Esther *es, Object *self) {
 }
 
 Object *Object_inspect(Esther *es, Object *self) {
-    return (*(VTableForObject **) self)->inspect(es, self);
+    return (*(ObjectVTable **) self)->inspect(es, self);
 }
 
 bool Object_equals(Object *self, Object *obj) {
-    return (*(VTableForObject **) self)->equals(self, obj);
+    return (*(ObjectVTable **) self)->equals(self, obj);
 }
 
 bool Object_virtual_equals(Object *self, Object *obj) {
@@ -119,7 +119,7 @@ bool Object_virtual_equals(Object *self, Object *obj) {
 }
 
 bool Object_less(Object *self, Object *obj) {
-    return (*(VTableForObject **) self)->less(self, obj);
+    return (*(ObjectVTable **) self)->less(self, obj);
 }
 
 bool Object_virtual_less(Object *self, Object *obj) {
@@ -127,7 +127,7 @@ bool Object_virtual_less(Object *self, Object *obj) {
 }
 
 bool Object_isTrue(Object *self) {
-    return (*(VTableForObject **) self)->isTrue();
+    return (*(ObjectVTable **) self)->isTrue();
 }
 
 bool Object_virtual_isTrue() {

@@ -19,7 +19,7 @@ static void Parser_virtual_mapOnRefs(Mapper *self, MapFunction f) {
     f(((Parser *) self)->npos);
 }
 
-static VTableForObject Parser_vtable = {
+static ObjectVTable vtable_for_Parser = {
     .base = {
         .base = {
             .mapOnRefs = Parser_virtual_mapOnRefs },
@@ -41,7 +41,7 @@ Object *Parser_new(Esther *es) {
 
     self->npos = NULL;
 
-    *(void **) self = &Parser_vtable;
+    *(void **) self = &vtable_for_Parser;
 
     return (Object *) self;
 }

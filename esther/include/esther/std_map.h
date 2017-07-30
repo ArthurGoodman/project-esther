@@ -10,9 +10,9 @@ extern "C" {
 
 struct std_map;
 
-#ifdef __x86_64
+#if defined(__x86_64)
 typedef uint64_t std_map_iterator;
-#elif __i386
+#elif defined(__i386)
 typedef uint32_t std_map_iterator;
 #endif
 

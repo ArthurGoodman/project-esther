@@ -1,11 +1,9 @@
 #include "esther/esther.h"
 
-#ifdef __linux
+#if defined(__linux)
 #include <dlfcn.h>
 #include <unistd.h>
-#endif
-
-#ifdef WIN32
+#elif defined(__WIN32)
 #include <windows.h>
 #endif
 
@@ -423,19 +421,19 @@ static void GlobalMapper_mapOnRefs(GlobalMapper *self, MapFunction f) {
         f(rec->source);
 }
 
-static VTableForMapper GlobalMapper_vtable = {
+static MapperVTable vtable_for_GlobalMapper = {
     .mapOnRefs = (void (*)(Mapper *, MapFunction)) GlobalMapper_mapOnRefs
 };
 
 static Mapper *GlobalMapper_new(Esther *es) {
     GlobalMapper *self = malloc(sizeof(GlobalMapper));
     self->es = es;
-    *(void **) self = &GlobalMapper_vtable;
+    *(void **) self = &vtable_for_GlobalMapper;
     return (Mapper *) self;
 }
 
 #define CLASS_VTABLE(name)                                  \
-    static VTableForClass name##Class_vtable = {            \
+    static ClassVTable vtable_for_##name##Class = {         \
         .base = {                                           \
             .base = {                                       \
                 .base = {                                   \
@@ -466,7 +464,7 @@ CLASS_VTABLE(Float)
 CLASS_VTABLE(Exception)
 
 #define CONST_VTABLE(name, is_true)                      \
-    static VTableForObject name##_vtable = {             \
+    static ObjectVTable vtable_for_##name = {            \
         .base = {                                        \
             .base = {                                    \
                 .mapOnRefs = Object_virtual_mapOnRefs }, \
@@ -527,63 +525,63 @@ void Esther_init(Esther *es) {
 
     es->classClass = Class_new_init(es, string_const("Class"), NULL);
     as_Class(es->classClass)->base.objectClass = es->classClass;
-    *(void **) es->classClass = &ClassClass_vtable;
+    *(void **) es->classClass = &vtable_for_ClassClass;
 
     es->objectClass = NULL;
     es->objectClass = Class_new_init(es, string_const("Object"), NULL);
     as_Class(es->classClass)->superclass = es->objectClass;
-    *(void **) es->objectClass = &ObjectClass_vtable;
+    *(void **) es->objectClass = &vtable_for_ObjectClass;
 
     es->stringClass = Class_new_init(es, string_const("String"), NULL);
-    *(void **) es->stringClass = &StringClass_vtable;
+    *(void **) es->stringClass = &vtable_for_StringClass;
 
     es->symbolClass = Class_new_init(es, string_const("Symbol"), NULL);
-    *(void **) es->symbolClass = &SymbolClass_vtable;
+    *(void **) es->symbolClass = &vtable_for_SymbolClass;
 
     es->functionClass = Class_new_init(es, string_const("Function"), NULL);
-    *(void **) es->functionClass = &FunctionClass_vtable;
+    *(void **) es->functionClass = &vtable_for_FunctionClass;
 
     es->tupleClass = Class_new_init(es, string_const("Tuple"), NULL);
-    *(void **) es->tupleClass = &TupleClass_vtable;
+    *(void **) es->tupleClass = &vtable_for_TupleClass;
 
     es->arrayClass = Class_new_init(es, string_const("Array"), NULL);
-    *(void **) es->arrayClass = &ArrayClass_vtable;
+    *(void **) es->arrayClass = &vtable_for_ArrayClass;
 
     es->mapClass = Class_new_init(es, string_const("Map"), NULL);
-    *(void **) es->mapClass = &MapClass_vtable;
+    *(void **) es->mapClass = &vtable_for_MapClass;
 
     es->booleanClass = Class_new_init(es, string_const("Boolean"), NULL);
-    *(void **) es->booleanClass = &BooleanClass_vtable;
+    *(void **) es->booleanClass = &vtable_for_BooleanClass;
 
     es->nullClass = Class_new_init(es, string_const("Null"), NULL);
-    *(void **) es->nullClass = &NullClass_vtable;
+    *(void **) es->nullClass = &vtable_for_NullClass;
 
     es->numericClass = Class_new_init(es, string_const("Numeric"), NULL);
-    *(void **) es->numericClass = &NumericClass_vtable;
+    *(void **) es->numericClass = &vtable_for_NumericClass;
 
     es->charClass = Class_new_init(es, string_const("Char"), es->numericClass);
-    *(void **) es->charClass = &CharClass_vtable;
+    *(void **) es->charClass = &vtable_for_CharClass;
 
     es->intClass = Class_new_init(es, string_const("Int"), es->numericClass);
-    *(void **) es->intClass = &IntClass_vtable;
+    *(void **) es->intClass = &vtable_for_IntClass;
 
     es->floatClass = Class_new_init(es, string_const("Float"), es->numericClass);
-    *(void **) es->floatClass = &FloatClass_vtable;
+    *(void **) es->floatClass = &vtable_for_FloatClass;
 
     es->exceptionClass = Class_new_init(es, string_const("Exception"), NULL);
-    *(void **) es->exceptionClass = &ExceptionClass_vtable;
+    *(void **) es->exceptionClass = &vtable_for_ExceptionClass;
 
     es->trueObject = Object_new(es);
     es->trueObject->objectClass = es->booleanClass;
-    *(void **) es->trueObject = &True_vtable;
+    *(void **) es->trueObject = &vtable_for_True;
 
     es->falseObject = Object_new(es);
     es->falseObject->objectClass = es->booleanClass;
-    *(void **) es->falseObject = &False_vtable;
+    *(void **) es->falseObject = &vtable_for_False;
 
     es->nullObject = Object_new(es);
     es->nullObject->objectClass = es->nullClass;
-    *(void **) es->nullObject = &Null_vtable;
+    *(void **) es->nullObject = &vtable_for_Null;
 
     Class_setMethod_func(es->objectClass, Function_new(es, string_const("class"), (Object * (*) ()) ObjectClass_class, 0));
     Class_setMethod_func(es->objectClass, Function_new(es, string_const("toString"), (Object * (*) ()) Object_toString, 0));
@@ -1155,18 +1153,18 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
     struct string path = executable_dir();
     string_append(&path, String_value(Map_get(Map_get(es->modules, strName), c_str_to_sym(es, "path"))));
 
-#ifdef __linux
+#if defined(__linux)
     string_append_c_str(&path, ".so");
-#else
+#elif defined(__WIN32)
     string_append_c_str(&path, ".dll");
 #endif
 
     const char *real_path = full_path(path.data);
 
 //@TODO: need to store library handle somewhere to unload it later
-#ifdef __linux
+#if defined(__linux)
     void *library = dlopen(real_path, RTLD_LAZY);
-#else
+#elif defined(__WIN32)
     HINSTANCE library = LoadLibraryA(real_path);
 #endif
 
@@ -1174,35 +1172,35 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
     free((void *) real_path);
 
     if (!library)
-#ifdef __linux
+#if defined(__linux)
         Exception_throw_new(es, dlerror());
-#else
+#elif defined(__WIN32)
         Exception_throw_new(es, "unable to load library, error code: %i", GetLastError());
 #endif
 
-#ifdef __linux
+#if defined(__linux)
     dlerror();
 #endif
 
     struct string initFunctionName = string_new_c_str(name);
     string_append_c_str(&initFunctionName, "_initialize");
 
+#if defined(__linux)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-#ifdef __linux
     void (*initialize)(Esther *, Context *) = dlsym(library, initFunctionName.data);
-#else
+#pragma GCC diagnostic pop
+#elif defined(__WIN32)
     void (*initialize)(Esther *, Context *) = (void (*)(Esther *, Context *)) GetProcAddress(library, initFunctionName.data);
 #endif
-#pragma GCC diagnostic pop
 
     string_free(initFunctionName);
 
-#ifdef __linux
+#if defined(__linux)
     char *error;
     if ((error = dlerror()))
         Exception_throw_new(es, error);
-#else
+#elif defined(__WIN32)
     if (!initialize)
         Exception_throw_new(es, "unable to load initialize function");
 #endif

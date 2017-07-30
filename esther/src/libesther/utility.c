@@ -1,8 +1,8 @@
 #include "esther/utility.h"
 
-#ifdef __linux
+#if defined(__linux)
 #include <unistd.h>
-#else
+#elif defined(__WIN32)
 #include <windows.h>
 #endif
 
@@ -45,10 +45,10 @@ struct string read_file(const char *fileName) {
 const char *full_path(const char *path) {
     char buffer[PATH_MAX];
 
-#ifdef __linux
+#if defined(__linux)
     if (realpath(path, buffer)) {
     }
-#else
+#elif defined(__WIN32)
     GetFullPathNameA(path, PATH_MAX, buffer, NULL);
 #endif
 
@@ -58,10 +58,10 @@ const char *full_path(const char *path) {
 struct string executable_dir() {
     struct string str = string_new_prealloc(PATH_MAX);
 
-#ifdef __linux
+#if defined(__linux)
     char pathSeparator = '/';
     size_t len = readlink("/proc/self/exe", str.data, str.capacity);
-#else
+#elif defined(__WIN32)
     char pathSeparator = '\\';
     size_t len = GetModuleFileNameA(GetModuleHandleW(NULL), str.data, str.capacity);
 #endif

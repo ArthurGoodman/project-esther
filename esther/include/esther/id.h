@@ -6,9 +6,9 @@ extern "C" {
 
 #include "esther/common.h"
 
-#ifdef __x86_64
+#if defined(__x86_64)
 typedef uint64_t ID;
-#elif __i386
+#elif defined(__i386)
 typedef uint32_t ID;
 #endif
 

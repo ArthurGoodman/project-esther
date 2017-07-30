@@ -12,7 +12,7 @@ Object *Map_new(Esther *es) {
     return self;
 }
 
-static VTableForObject Map_vtable = {
+static ObjectVTable vtable_for_Map = {
     .base = {
         .base = {
             .mapOnRefs = Map_virtual_mapOnRefs },
@@ -29,7 +29,7 @@ void Map_init(Esther *es, Object *self) {
 
     as_Map(self)->data = std_map_new(compare_obj);
 
-    *(void **) self = &Map_vtable;
+    *(void **) self = &vtable_for_Map;
 }
 
 size_t Map_size(Object *self) {

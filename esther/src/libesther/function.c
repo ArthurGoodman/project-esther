@@ -13,7 +13,7 @@ Object *Function_new(Esther *es, struct string name, Object *(*body)(), int argc
     return f;
 }
 
-static VTableForObject Function_vtable = {
+static ObjectVTable vtable_for_Function = {
     .base = {
         .base = {
             .mapOnRefs = Object_virtual_mapOnRefs },
@@ -32,7 +32,7 @@ void Function_init(Esther *es, Object *f, struct string name, Object *(*body)(),
     as_Function(f)->body = body;
     as_Function(f)->argc = argc;
 
-    *(void **) f = &Function_vtable;
+    *(void **) f = &vtable_for_Function;
 }
 
 struct string Function_getName(Object *f) {
@@ -141,7 +141,7 @@ Object *InterpretedFunction_new(Esther *es, struct string name, Object *params, 
     return f;
 }
 
-static VTableForObject InterpretedFunction_vtable = {
+static ObjectVTable vtable_for_InterpretedFunction = {
     .base = {
         .base = {
             .mapOnRefs = InterpretedFunction_virtual_mapOnRefs },
@@ -168,7 +168,7 @@ void InterpretedFunction_init(Esther *es, Object *f, struct string name, Object 
     as_InterpretedFunction(f)->closure = closure;
     as_InterpretedFunction(f)->body = body;
 
-    *(void **) f = &InterpretedFunction_vtable;
+    *(void **) f = &vtable_for_InterpretedFunction;
 }
 
 void InterpretedFunction_virtual_mapOnRefs(Mapper *self, MapFunction f) {

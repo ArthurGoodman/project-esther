@@ -9,11 +9,11 @@ extern "C" {
 
 typedef struct Function Function;
 
-typedef struct VTableForClass {
-    VTableForObject base;
+typedef struct ClassVTable {
+    ObjectVTable base;
 
     Object *(*newInstance)(Esther *es, Object *self, Object *args);
-} VTableForClass;
+} ClassVTable;
 
 typedef struct Class {
     Object base;

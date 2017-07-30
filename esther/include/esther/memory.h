@@ -7,9 +7,9 @@ extern "C" {
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef __x86_64
+#if defined(__x86_64)
 typedef uint64_t ptr_t;
-#elif __i386
+#elif defined(__i386)
 typedef uint32_t ptr_t;
 #endif
 
@@ -20,9 +20,9 @@ typedef struct Mapper Mapper;
 
 typedef void (*MapFunction)(void *);
 
-typedef struct VTableForMapper {
+typedef struct MapperVTable {
     void (*mapOnRefs)(Mapper *, MapFunction);
-} VTableForMapper;
+} MapperVTable;
 
 typedef struct Mapper {
     const void *vtable;
@@ -34,11 +34,11 @@ void Mapper_mapOnRefs(Mapper *self, MapFunction f);
 
 void Mapper_virtual_mapOnRefs(Mapper *, MapFunction);
 
-typedef struct VTableForManagedObject {
-    VTableForMapper base;
+typedef struct ManagedObjectVTable {
+    MapperVTable base;
 
     void (*finalize)(ManagedObject *self);
-} VTableForManagedObject;
+} ManagedObjectVTable;
 
 typedef struct ManagedObject {
     Mapper base;

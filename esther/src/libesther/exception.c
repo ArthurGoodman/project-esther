@@ -28,7 +28,7 @@ Object *Exception_new(Esther *es, struct string msg) {
     return self;
 }
 
-static VTableForObject Exception_vtable = {
+static ObjectVTable vtable_for_Exception = {
     .base = {
         .base = {
             .mapOnRefs = Exception_virtual_mapOnRefs },
@@ -46,7 +46,7 @@ void Exception_init(Esther *es, Object *self, struct string msg) {
     as_Exception(self)->msg = string_copy(msg);
     as_Exception(self)->pos = NULL;
 
-    *(void **) self = &Exception_vtable;
+    *(void **) self = &vtable_for_Exception;
 }
 
 struct string Exception_getMessage(Object *self) {

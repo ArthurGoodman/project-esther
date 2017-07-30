@@ -29,15 +29,15 @@ typedef enum ObjectType {
     TValueObject
 } ObjectType;
 
-typedef struct VTableForObject {
-    VTableForManagedObject base;
+typedef struct ObjectVTable {
+    ManagedObjectVTable base;
 
     Object *(*toString)(Esther *es, Object *self);
     Object *(*inspect)(Esther *es, Object *self);
     bool (*equals)(Object *self, Object *obj);
     bool (*less)(Object *self, Object *obj);
     bool (*isTrue)();
-} VTableForObject;
+} ObjectVTable;
 
 typedef struct Object {
     ManagedObject base;

@@ -34,7 +34,7 @@ void Array_init(Esther *es, Object *self, Object *const *data, size_t size) {
     Array_init_std(es, self, std_vector_new_init((void **) data, size));
 }
 
-static VTableForObject Array_vtable = {
+static ObjectVTable vtable_for_Array = {
     .base = {
         .base = {
             .mapOnRefs = Array_virtual_mapOnRefs },
@@ -51,7 +51,7 @@ void Array_init_std(Esther *es, Object *self, struct std_vector *data) {
 
     as_Array(self)->data = data;
 
-    *(void **) self = &Array_vtable;
+    *(void **) self = &vtable_for_Array;
 }
 
 void Array_init_va(Esther *es, Object *self, size_t size, va_list ap) {

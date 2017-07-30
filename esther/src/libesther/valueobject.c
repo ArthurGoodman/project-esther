@@ -21,7 +21,7 @@ Object *ValueObject_new_var(Esther *es, Variant value) {
     return self;
 }
 
-static VTableForObject ValueObject_vtable = {
+static ObjectVTable vtable_for_ValueObject = {
     .base = {
         .base = {
             .mapOnRefs = Object_virtual_mapOnRefs },
@@ -38,7 +38,7 @@ void ValueObject_init(Esther *es, Object *self, Variant value) {
 
     as_ValueObject(self)->value = value;
 
-    *(void **) self = &ValueObject_vtable;
+    *(void **) self = &vtable_for_ValueObject;
 }
 
 Variant ValueObject_getValue(Object *self) {

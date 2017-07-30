@@ -44,7 +44,7 @@ Object *Symbol_new_c_str(Esther *es, const char *name) {
     return self;
 }
 
-static VTableForObject Symbol_vtable = {
+static ObjectVTable vtable_for_Symbol = {
     .base = {
         .base = {
             .mapOnRefs = Object_virtual_mapOnRefs },
@@ -61,7 +61,7 @@ static void Symbol_init_id(Esther *es, Object *self, ID id) {
 
     as_Symbol(self)->id = id;
 
-    *(void **) self = &Symbol_vtable;
+    *(void **) self = &vtable_for_Symbol;
 }
 
 Object *Symbol_new_id(Esther *es, ID id) {

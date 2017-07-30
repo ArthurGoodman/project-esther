@@ -17,7 +17,7 @@ Object *Class_new_init(Esther *es, struct string name, Object *superclass) {
     return self;
 }
 
-static VTableForClass Class_vtable = {
+static ClassVTable vtable_for_Class = {
     .base = {
         .base = {
             .base = {
@@ -38,7 +38,7 @@ void Class_init(Esther *es, Object *self, struct string name, Object *superclass
     as_Class(self)->superclass = superclass ? superclass : es->objectClass;
     as_Class(self)->methods = NULL;
 
-    *(void **) self = &Class_vtable;
+    *(void **) self = &vtable_for_Class;
 }
 
 struct string Class_getName(Object *self) {
@@ -93,13 +93,13 @@ Object *Class_virtual_toString(Esther *es, Object *self) {
 }
 
 Object *Class_newInstance(Esther *es, Object *self, Object *args) {
-    Object *instance = (*(VTableForClass **) self)->newInstance(es, self, args);
+    Object *instance = (*(ClassVTable **) self)->newInstance(es, self, args);
     Object_callIfFound(es, instance, string_const("initialize"), args);
     return instance;
 }
 
 Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
-    Object *instance = (*(VTableForClass **) as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
+    Object *instance = (*(ClassVTable **) as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
     instance->objectClass = self;
     return instance;
 }
