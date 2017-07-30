@@ -5,6 +5,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #include "esther/array.h"
 #include "esther/class.h"
 #include "esther/context.h"
@@ -1143,7 +1147,6 @@ Object *Esther_runFile(Esther *es, const char *fileName) {
 
 //@Refactor
 Object *Esther_import(Esther *es, Context *context, const char *name) {
-#ifdef __linux
     Object *strName = String_new_c_str(es, name);
 
     if (!Map_contains(es->modules, strName))
@@ -1151,39 +1154,60 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
 
     struct string path = executable_dir();
     string_append(&path, String_value(Map_get(Map_get(es->modules, strName), c_str_to_sym(es, "path"))));
+
+#ifdef __linux
     string_append_c_str(&path, ".so");
+#else
+    string_append_c_str(&path, ".dll");
+#endif
 
     const char *real_path = full_path(path.data);
 
+//@TODO: need to store library handle somewhere to unload it later
+#ifdef __linux
     void *library = dlopen(real_path, RTLD_LAZY);
+#else
+    HINSTANCE library = LoadLibraryA(real_path);
+#endif
 
     string_free(path);
     free((void *) real_path);
 
-    char *error;
-
     if (!library)
+#ifdef __linux
         Exception_throw_new(es, dlerror());
+#else
+        Exception_throw_new(es, "unable to load library, error code: %i", GetLastError());
+#endif
 
+#ifdef __linux
     dlerror();
+#endif
 
     struct string initFunctionName = string_new_c_str(name);
     string_append_c_str(&initFunctionName, "_initialize");
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
+#ifdef __linux
     void (*initialize)(Esther *, Context *) = dlsym(library, initFunctionName.data);
+#else
+    void (*initialize)(Esther *, Context *) = (void (*)(Esther *, Context *)) GetProcAddress(library, initFunctionName.data);
+#endif
 #pragma GCC diagnostic pop
 
     string_free(initFunctionName);
 
+#ifdef __linux
+    char *error;
     if ((error = dlerror()))
         Exception_throw_new(es, error);
+#else
+    if (!initialize)
+        Exception_throw_new(es, "unable to load initialize function");
+#endif
 
     initialize(es, context);
 
     return es->nullObject;
-#else
-//@unimplemented
-#endif
 }

@@ -55,11 +55,16 @@ const char *full_path(const char *path) {
     return strdup(buffer);
 }
 
-//@Refactor
 struct string executable_dir() {
-#ifdef __linux
     struct string str = string_new_prealloc(PATH_MAX);
+
+#ifdef __linux
+    char pathSeparator = '/';
     size_t len = readlink("/proc/self/exe", str.data, str.capacity);
+#else
+    char pathSeparator = '\\';
+    size_t len = GetModuleFileNameA(GetModuleHandleW(NULL), str.data, str.capacity);
+#endif
 
     if (len == (size_t) -1) {
         printf("error: unable to read executable location\n");
@@ -68,11 +73,7 @@ struct string executable_dir() {
 
     str.size = len;
 
-    string_erase(&str, string_rfind_char(str, '/', -1) + 1, -1);
+    string_erase(&str, string_rfind_char(str, pathSeparator, -1) + 1, -1);
 
     return str;
-#else
-    //@Unimplemented
-    return string_null();
-#endif
 }
