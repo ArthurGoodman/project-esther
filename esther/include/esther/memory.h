@@ -21,7 +21,7 @@ typedef struct Mapper Mapper;
 typedef void (*MapFunction)(void *);
 
 typedef struct MapperVTable {
-    void (*mapOnRefs)(Mapper *, MapFunction);
+    void (*mapOnRefs)(Mapper *self, MapFunction f);
 } MapperVTable;
 
 typedef struct Mapper {

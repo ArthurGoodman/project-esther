@@ -1,20 +1,26 @@
 #include "esther/class.h"
 
 #include "esther/esther.h"
+#include "esther/exception.h"
 #include "esther/function.h"
 #include "esther/id.h"
 #include "esther/std_map.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
 
-Object *Class_new(Esther *es) {
-    return Class_new_init(es, string_const(""), NULL);
+Object *Class_virtual_unimplemented_newInstance(Esther *es, Object *self, Object *UNUSED(args)) {
+    Exception_throw_new(es, "cannot create an instance of %s class", Class_getName(self).data);
+    return NULL;
 }
 
-Object *Class_new_init(Esther *es, struct string name, Object *superclass) {
+Object *Class_new(Esther *es, struct string name, Object *superclass) {
     Object *self = gc_alloc(sizeof(Class));
     Class_init(es, self, name, superclass);
     return self;
+}
+
+Object *Class_new_anonymous(Esther *es) {
+    return Class_new(es, string_const(""), NULL);
 }
 
 static ClassVTable vtable_for_Class = {

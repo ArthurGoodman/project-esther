@@ -19,17 +19,9 @@ static void Parser_virtual_mapOnRefs(Mapper *self, MapFunction f) {
     f(((Parser *) self)->npos);
 }
 
-static ObjectVTable vtable_for_Parser = {
-    .base = {
-        .base = {
-            .mapOnRefs = Parser_virtual_mapOnRefs },
-        .finalize = Object_virtual_finalize },
-    .toString = Object_virtual_toString,
-    .inspect = Object_virtual_toString,
-    .equals = Object_virtual_equals,
-    .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue
-};
+#define Parser_virtual_finalize Object_virtual_finalize
+
+OBJECT_VTABLE(Parser)
 
 Object *Parser_new(Esther *es) {
     Parser *self = gc_alloc(sizeof(Parser));
@@ -540,6 +532,7 @@ static Object *term(Esther *es, Parser *parser) {
         e = Tuple_new(es, 3, sym_import, Tuple_new(es, 1, parser->npos), name);
     }
 
+    //@TODO: change unary tuple syntax to Python-like
     else if (accept(es, parser, id_leftPar)) {
         Object *args = Array_new(es, 0);
 

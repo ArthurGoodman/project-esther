@@ -31,7 +31,7 @@ static Object *ObjectClass_virtual_newInstance(Esther *es, Object *UNUSED(self),
 }
 
 static Object *ClassClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    return Class_new(es);
+    return Class_new_anonymous(es);
 }
 
 static Object *StringClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
@@ -42,10 +42,7 @@ static Object *SymbolClass_virtual_newInstance(Esther *es, Object *UNUSED(self),
     return c_str_to_sym(es, "");
 }
 
-static Object *FunctionClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    Exception_throw_new(es, "cannot create an instance of Function class yet...");
-    return NULL;
-}
+#define FunctionClass_virtual_newInstance Class_virtual_unimplemented_newInstance
 
 static Object *TupleClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
     return Tuple_new(es, 0);
@@ -59,20 +56,9 @@ static Object *MapClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Ob
     return Map_new(es);
 }
 
-static Object *BooleanClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    Exception_throw_new(es, "cannot create an instance of Boolean class");
-    return NULL;
-}
-
-static Object *NullClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    Exception_throw_new(es, "cannot create an instance of Null class");
-    return NULL;
-}
-
-static Object *NumericClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    Exception_throw_new(es, "cannot create an instance of Numeric class");
-    return NULL;
-}
+#define BooleanClass_virtual_newInstance Class_virtual_unimplemented_newInstance
+#define NullClass_virtual_newInstance Class_virtual_unimplemented_newInstance
+#define NumericClass_virtual_newInstance Class_virtual_unimplemented_newInstance
 
 static Object *CharClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
     if (Tuple_size(args) == 0)
@@ -349,7 +335,7 @@ static Object *CharClass_isLetterOrDigit(Esther *es, Object *self) {
     return Esther_toBoolean(es, isalnum(Variant_toChar(ValueObject_getValue(self))));
 }
 
-static Object *IO_write(Esther *es, Object *self, Object *args) {
+static Object *Esther_print(Esther *es, Object *self, Object *args) {
     if (Tuple_size(args) == 0)
         printf("%s", String_c_str(Object_toString(es, self)));
     else
@@ -359,7 +345,7 @@ static Object *IO_write(Esther *es, Object *self, Object *args) {
     return es->nullObject;
 }
 
-static Object *IO_writeLine(Esther *es, Object *self, Object *args) {
+static Object *Esther_println(Esther *es, Object *self, Object *args) {
     if (Tuple_size(args) == 0)
         printf("%s\n", String_c_str(Object_toString(es, self)));
     else
@@ -405,7 +391,6 @@ static void GlobalMapper_mapOnRefs(GlobalMapper *self, MapFunction f) {
 
     f(self->es->mainObject);
     f(self->es->esther);
-    f(self->es->io);
 
     f(self->es->root);
 
@@ -432,20 +417,12 @@ static Mapper *GlobalMapper_new(Esther *es) {
     return (Mapper *) self;
 }
 
-#define CLASS_VTABLE(name)                                  \
-    static ClassVTable vtable_for_##name##Class = {         \
-        .base = {                                           \
-            .base = {                                       \
-                .base = {                                   \
-                    .mapOnRefs = Class_virtual_mapOnRefs }, \
-                .finalize = Class_virtual_finalize },       \
-            .toString = Class_virtual_toString,             \
-            .inspect = Class_virtual_toString,              \
-            .equals = Object_virtual_equals,                \
-            .less = Object_virtual_less,                    \
-            .isTrue = Object_virtual_isTrue },              \
-        .newInstance = name##Class_virtual_newInstance      \
-    };
+static void Esther_loadModules(Esther *es) {
+    struct string str = executable_dir();
+    string_append_c_str(&str, "modules.es");
+    es->modules = Esther_runFile(es, str.data);
+    string_free(str);
+}
 
 CLASS_VTABLE(Class)
 CLASS_VTABLE(Object)
@@ -480,13 +457,6 @@ CONST_VTABLE(True, Object)
 CONST_VTABLE(False, False)
 CONST_VTABLE(Null, False)
 
-static void Esther_loadModules(Esther *es) {
-    struct string str = executable_dir();
-    string_append_c_str(&str, "modules.es");
-    es->modules = Esther_runFile(es, str.data);
-    string_free(str);
-}
-
 void Esther_init(Esther *es) {
     gc_registerMapper(GlobalMapper_new(es));
 
@@ -515,7 +485,6 @@ void Esther_init(Esther *es) {
 
     es->mainObject = NULL;
     es->esther = NULL;
-    es->io = NULL;
 
     es->root = NULL;
 
@@ -523,52 +492,52 @@ void Esther_init(Esther *es) {
 
     es->file = NULL;
 
-    es->classClass = Class_new_init(es, string_const("Class"), NULL);
+    es->classClass = Class_new(es, string_const("Class"), NULL);
     as_Class(es->classClass)->base.objectClass = es->classClass;
     *(void **) es->classClass = &vtable_for_ClassClass;
 
     es->objectClass = NULL;
-    es->objectClass = Class_new_init(es, string_const("Object"), NULL);
+    es->objectClass = Class_new(es, string_const("Object"), NULL);
     as_Class(es->classClass)->superclass = es->objectClass;
     *(void **) es->objectClass = &vtable_for_ObjectClass;
 
-    es->stringClass = Class_new_init(es, string_const("String"), NULL);
+    es->stringClass = Class_new(es, string_const("String"), NULL);
     *(void **) es->stringClass = &vtable_for_StringClass;
 
-    es->symbolClass = Class_new_init(es, string_const("Symbol"), NULL);
+    es->symbolClass = Class_new(es, string_const("Symbol"), NULL);
     *(void **) es->symbolClass = &vtable_for_SymbolClass;
 
-    es->functionClass = Class_new_init(es, string_const("Function"), NULL);
+    es->functionClass = Class_new(es, string_const("Function"), NULL);
     *(void **) es->functionClass = &vtable_for_FunctionClass;
 
-    es->tupleClass = Class_new_init(es, string_const("Tuple"), NULL);
+    es->tupleClass = Class_new(es, string_const("Tuple"), NULL);
     *(void **) es->tupleClass = &vtable_for_TupleClass;
 
-    es->arrayClass = Class_new_init(es, string_const("Array"), NULL);
+    es->arrayClass = Class_new(es, string_const("Array"), NULL);
     *(void **) es->arrayClass = &vtable_for_ArrayClass;
 
-    es->mapClass = Class_new_init(es, string_const("Map"), NULL);
+    es->mapClass = Class_new(es, string_const("Map"), NULL);
     *(void **) es->mapClass = &vtable_for_MapClass;
 
-    es->booleanClass = Class_new_init(es, string_const("Boolean"), NULL);
+    es->booleanClass = Class_new(es, string_const("Boolean"), NULL);
     *(void **) es->booleanClass = &vtable_for_BooleanClass;
 
-    es->nullClass = Class_new_init(es, string_const("Null"), NULL);
+    es->nullClass = Class_new(es, string_const("Null"), NULL);
     *(void **) es->nullClass = &vtable_for_NullClass;
 
-    es->numericClass = Class_new_init(es, string_const("Numeric"), NULL);
+    es->numericClass = Class_new(es, string_const("Numeric"), NULL);
     *(void **) es->numericClass = &vtable_for_NumericClass;
 
-    es->charClass = Class_new_init(es, string_const("Char"), es->numericClass);
+    es->charClass = Class_new(es, string_const("Char"), es->numericClass);
     *(void **) es->charClass = &vtable_for_CharClass;
 
-    es->intClass = Class_new_init(es, string_const("Int"), es->numericClass);
+    es->intClass = Class_new(es, string_const("Int"), es->numericClass);
     *(void **) es->intClass = &vtable_for_IntClass;
 
-    es->floatClass = Class_new_init(es, string_const("Float"), es->numericClass);
+    es->floatClass = Class_new(es, string_const("Float"), es->numericClass);
     *(void **) es->floatClass = &vtable_for_FloatClass;
 
-    es->exceptionClass = Class_new_init(es, string_const("Exception"), NULL);
+    es->exceptionClass = Class_new(es, string_const("Exception"), NULL);
     *(void **) es->exceptionClass = &vtable_for_ExceptionClass;
 
     es->trueObject = Object_new(es);
@@ -663,12 +632,10 @@ void Esther_init(Esther *es) {
     Object_setAttribute(es->esther, string_const("parser"), es->parser);
     Object_setAttribute(es->esther, string_const("eval"), Function_new(es, string_const("eval"), (Object * (*) ()) Esther_evalFunction, 1));
 
-    es->io = Object_new(es);
-
-    Object_setAttribute(es->io, string_const("write"), Function_new(es, string_const("write"), (Object * (*) ()) IO_write, -1));
-    Object_setAttribute(es->io, string_const("writeLine"), Function_new(es, string_const("writeLine"), (Object * (*) ()) IO_writeLine, -1));
-
     es->root = Context_new(es);
+
+    Context_setLocal(es->root, string_const("print"), Function_new(es, string_const("print"), (Object * (*) ()) Esther_print, -1));
+    Context_setLocal(es->root, string_const("println"), Function_new(es, string_const("println"), (Object * (*) ()) Esther_println, -1));
 
     es->rootObjects = std_map_new(compare_id);
 
@@ -687,7 +654,6 @@ void Esther_init(Esther *es) {
     Esther_setRootObject(es, c_str_to_id("Int"), es->intClass);
     Esther_setRootObject(es, c_str_to_id("Float"), es->floatClass);
 
-    Esther_setRootObject(es, c_str_to_id("IO"), es->io);
     Esther_setRootObject(es, c_str_to_id("esther"), es->esther);
 
     init_identifiers(es);
@@ -696,6 +662,7 @@ void Esther_init(Esther *es) {
 }
 
 void Esther_finalize(Esther *UNUSED(es)) {
+    gc_finalize();
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {
@@ -747,7 +714,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
             Object *superclass = Tuple_size(ast) == 5 ? Esther_eval(es, Tuple_get(ast, 3), context) : NULL;
 
-            Object *_class = Class_new_init(es, name, superclass);
+            Object *_class = Class_new(es, name, superclass);
 
             if (name.size > 0)
                 Context_setLocal(context, name, _class);

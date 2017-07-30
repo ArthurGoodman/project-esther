@@ -13,8 +13,8 @@ class Parser {
             self.oper.call(self.left.eval(), (self.right.eval()))
 
         function inspect(indent) {
-            IO.write(indent)
-            IO.writeLine(self)
+            print(indent)
+            println(self)
             self.left.inspect(indent + "  ")
             self.right.inspect(indent + "  ")
         }
@@ -58,8 +58,8 @@ class Parser {
             self.value
 
         function inspect(indent) {
-            IO.write(indent)
-            IO.writeLine(self.value)
+            print(indent)
+            println(self.value)
         }
     }
 
@@ -70,7 +70,7 @@ class Parser {
         }
 
         function inspect
-            IO.writeLine("<" + self.text + ", " + self.id + ">")
+            println("<" + self.text + ", " + self.id + ">")
     }
 
     function initialize {
@@ -173,11 +173,11 @@ class Parser {
             node = new ValueNode(0)
 
         if (self.debugLexer)
-            IO.writeLine("");
+            println("");
 
         if (self.debugAST) {
             node.inspect("")
-            IO.writeLine("");
+            println("");
         }
 
         node
@@ -265,6 +265,6 @@ parser = new Parser
 node = parser.parse("2 * (3 + 2^-1) - 6")
 
 if (parser.error)
-    IO.writeLine("error: " + parser.error)
+    println("error: " + parser.error)
 else
     node.eval()

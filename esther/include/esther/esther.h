@@ -36,7 +36,6 @@ typedef struct Esther {
 
     Object *mainObject;
     Object *esther;
-    Object *io;
 
     Context *root;
 

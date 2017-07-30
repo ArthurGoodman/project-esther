@@ -15,6 +15,23 @@ typedef struct ClassVTable {
     Object *(*newInstance)(Esther *es, Object *self, Object *args);
 } ClassVTable;
 
+#define CLASS_VTABLE(name)                                  \
+    static ClassVTable vtable_for_##name##Class = {         \
+        .base = {                                           \
+            .base = {                                       \
+                .base = {                                   \
+                    .mapOnRefs = Class_virtual_mapOnRefs }, \
+                .finalize = Class_virtual_finalize },       \
+            .toString = Class_virtual_toString,             \
+            .inspect = Class_virtual_toString,              \
+            .equals = Object_virtual_equals,                \
+            .less = Object_virtual_less,                    \
+            .isTrue = Object_virtual_isTrue },              \
+        .newInstance = name##Class_virtual_newInstance      \
+    };
+
+Object *Class_virtual_unimplemented_newInstance(Esther *es, Object *self, Object *args);
+
 typedef struct Class {
     Object base;
 
@@ -25,8 +42,8 @@ typedef struct Class {
 
 #define as_Class(obj) ((Class *) (obj))
 
-Object *Class_new(Esther *es);
-Object *Class_new_init(Esther *es, struct string name, Object *superclass);
+Object *Class_new(Esther *es, struct string name, Object *superclass);
+Object *Class_new_anonymous(Esther *es);
 
 void Class_init(Esther *es, Object *self, struct string name, Object *superclass);
 

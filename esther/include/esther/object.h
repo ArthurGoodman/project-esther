@@ -39,6 +39,19 @@ typedef struct ObjectVTable {
     bool (*isTrue)();
 } ObjectVTable;
 
+#define OBJECT_VTABLE(name)                              \
+    static ObjectVTable vtable_for_##name = {            \
+        .base = {                                        \
+            .base = {                                    \
+                .mapOnRefs = name##_virtual_mapOnRefs }, \
+            .finalize = name##_virtual_finalize },       \
+        .toString = Object_virtual_toString,             \
+        .inspect = Object_virtual_toString,              \
+        .equals = Object_virtual_equals,                 \
+        .less = Object_virtual_less,                     \
+        .isTrue = Object_virtual_isTrue                  \
+    };
+
 typedef struct Object {
     ManagedObject base;
 
