@@ -31,8 +31,8 @@ void saveRegisters(Registers *) {
         "mov %r15,0x30(%rcx)");
 }
 #else
-#if __x86_64
-#if __WIN64
+#if defined(__x86_64)
+#if defined(__WIN64)
 asm("saveRegisters:\n"
     "mov %rdi,0x0(%rcx)\n"
     "mov %rsi,0x8(%rcx)\n"
@@ -42,7 +42,7 @@ asm("saveRegisters:\n"
     "mov %r14,0x28(%rcx)\n"
     "mov %r15,0x30(%rcx)\n"
     "ret");
-#elif __linux
+#elif defined(__linux)
 asm("saveRegisters:\n"
     "mov %rbx,0x0(%rdi)\n"
     "mov %r12,0x8(%rdi)\n"
@@ -51,7 +51,7 @@ asm("saveRegisters:\n"
     "mov %r15,0x20(%rdi)\n"
     "ret");
 #endif
-#elif __i386
+#elif defined(__i386)
 asm("_saveRegisters:\n"
     "mov 0x4(%esp),%eax\n"
     "mov %ebx,0x0(%eax)\n"
