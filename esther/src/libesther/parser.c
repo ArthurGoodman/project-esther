@@ -558,13 +558,19 @@ static Object *term(Esther *es, Parser *parser) {
     else if (accept(es, parser, id_leftBracket)) {
         Object *args = Array_new(es, 0);
 
-        bool map = false;
+        bool map = false, firstPass = true;
 
         do {
             Object *arg = expr(es, parser);
 
-            if (!map && check(es, parser, id_doubleArrow))
+            if (!map && check(es, parser, id_doubleArrow)) {
+                if (!firstPass)
+                    Exception_throw_new(es, "unexpected => in array literal");
+
                 map = true;
+            }
+
+            firstPass = false;
 
             if (map) {
                 if (!accept(es, parser, id_doubleArrow))
