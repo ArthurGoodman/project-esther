@@ -81,6 +81,10 @@ size_t String_size(Object *self) {
     return as_String(self)->value.size;
 }
 
+size_t String_capacity(Object *self) {
+    return as_String(self)->value.capacity;
+}
+
 bool String_contains(Object *self, char c) {
     return string_find_char(as_String(self)->value, c, 0) != (size_t) -1;
 }

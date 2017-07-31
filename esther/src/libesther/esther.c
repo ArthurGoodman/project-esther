@@ -182,6 +182,10 @@ static Object *StringClass_size(Esther *es, Object *self) {
     return ValueObject_new_int(es, String_size(self));
 }
 
+static Object *StringClass_capacity(Esther *es, Object *self) {
+    return ValueObject_new_int(es, String_capacity(self));
+}
+
 static Object *StringClass_at(Esther *es, Object *self, Object *pos) {
     return ValueObject_new_char(es, String_c_str(self)[Variant_toInt(ValueObject_getValue(pos))]);
 }
@@ -566,6 +570,7 @@ void Esther_init(Esther *es) {
     Class_setMethod_func(es->classClass, Function_new(es, string_const("setMethod"), (Object * (*) ()) ClassClass_setMethod, 2));
 
     Class_setMethod_func(es->stringClass, Function_new(es, string_const("size"), (Object * (*) ()) StringClass_size, 0));
+    Class_setMethod_func(es->stringClass, Function_new(es, string_const("capacity"), (Object * (*) ()) StringClass_capacity, 0));
     Class_setMethod_func(es->stringClass, Function_new(es, string_const("at"), (Object * (*) ()) StringClass_at, 1));
     Class_setMethod(es->stringClass, string_const("[]"), Class_getMethod(es->stringClass, string_const("at")));
     Class_setMethod_func(es->stringClass, Function_new(es, string_const("+"), (Object * (*) ()) StringClass_plus, 1));

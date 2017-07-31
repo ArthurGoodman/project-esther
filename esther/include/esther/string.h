@@ -32,6 +32,7 @@ Object *String_append_char(Object *self, char c);
 Object *String_append_std(Object *self, struct string str);
 
 size_t String_size(Object *self);
+size_t String_capacity(Object *self);
 
 bool String_contains(Object *self, char c);
 
