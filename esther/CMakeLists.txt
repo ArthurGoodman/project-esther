@@ -1,15 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_C_STANDARD 11)
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
-set(CMAKE_C_FLAGS "${CMAKE_X_FLAGS} -Wall -Wextra -pedantic")
-
-if(WIN32)
-add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
-endif()
-
 project(esther)
 
 file(GLOB_RECURSE esther_sources "src/esther/*.cpp")
@@ -22,11 +12,27 @@ include_directories("include")
 set(EXECUTABLE_OUTPUT_PATH "bin")
 set(LIBRARY_OUTPUT_PATH "lib")
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD 11)
+
+set(FLAGS "-Wall -Wextra -pedantic")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
+set(CMAKE_C_FLAGS "${CMAKE_X_FLAGS} ${FLAGS}")
+
 add_library(libesther SHARED ${libesther_sources} ${libesther_headers})
 set_target_properties(libesther PROPERTIES OUTPUT_NAME esther)
 
 if(UNIX)
 target_link_libraries(libesther dl)
+endif()
+
+if(WIN32)
+add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+
+add_custom_command(
+    TARGET libesther
+    COMMAND dlltool -l lib/libesther.lib --export-all-symbol lib/libesther.dll)
 endif()
 
 add_library(libio SHARED ${libio_sources})
