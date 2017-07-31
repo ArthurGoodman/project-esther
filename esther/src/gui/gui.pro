@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG += c++11
-CONFIG -= app_bundle
-CONFIG -= qt
+
+QT += core gui widgets
 
 DESTDIR = ../../lib
 
@@ -17,4 +17,5 @@ TARGET = libgui
 LIBS += -L../../lib -llibesther
 }
 
-SOURCES += gui.c
+SOURCES += \
+    gui.cpp

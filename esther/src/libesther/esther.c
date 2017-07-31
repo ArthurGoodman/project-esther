@@ -156,8 +156,6 @@ static Object *ClassClass_superclass(Esther *UNUSED(es), Object *self) {
 }
 
 static Object *ClassClass_pars(Esther *es, Object *self, Object *args) {
-    printf("%s\n", String_c_str(Object_inspect(es, args)));
-
     if (Tuple_size(args) != 2)
         Exception_throw_new(es, "invalid arguments");
 
