@@ -156,6 +156,8 @@ static Object *ClassClass_superclass(Esther *UNUSED(es), Object *self) {
 }
 
 static Object *ClassClass_pars(Esther *es, Object *self, Object *args) {
+    printf("%s\n", String_c_str(Object_inspect(es, args)));
+
     if (Tuple_size(args) != 2)
         Exception_throw_new(es, "invalid arguments");
 
@@ -226,6 +228,15 @@ static Object *ArrayClass_at(Esther *UNUSED(es), Object *self, Object *index) {
 static Object *ArrayClass_set(Esther *UNUSED(es), Object *self, Object *index, Object *value) {
     Array_set(self, Variant_toInt(ValueObject_getValue(index)), value);
     return value;
+}
+
+static Object *ArrayClass_push(Esther *UNUSED(es), Object *self, Object *value) {
+    Array_push(self, value);
+    return self;
+}
+
+static Object *ArrayClass_pop(Esther *UNUSED(es), Object *self) {
+    return Array_pop(self);
 }
 
 static Object *MapClass_size(Esther *es, Object *self) {
@@ -590,6 +601,8 @@ void Esther_init(Esther *es) {
     Class_setMethod_func(es->arrayClass, Function_new(es, string_const("at"), (Object * (*) ()) ArrayClass_at, 1));
     Class_setMethod(es->arrayClass, string_const("[]"), Class_getMethod(es->arrayClass, string_const("at")));
     Class_setMethod_func(es->arrayClass, Function_new(es, string_const("set"), (Object * (*) ()) ArrayClass_set, 2));
+    Class_setMethod_func(es->arrayClass, Function_new(es, string_const("push"), (Object * (*) ()) ArrayClass_push, 1));
+    Class_setMethod_func(es->arrayClass, Function_new(es, string_const("pop"), (Object * (*) ()) ArrayClass_pop, 0));
 
     Class_setMethod_func(es->mapClass, Function_new(es, string_const("size"), (Object * (*) ()) MapClass_size, 0));
     Class_setMethod_func(es->mapClass, Function_new(es, string_const("contains"), (Object * (*) ()) MapClass_contains, 1));

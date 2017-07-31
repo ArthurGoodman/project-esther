@@ -6,8 +6,9 @@
 *.exe
 *.exp
 *.lib
+*.o
 *.obj
-*.so
+*.so*
 *.stash
 *.user
 CMakeCache.txt

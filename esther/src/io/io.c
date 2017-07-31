@@ -74,7 +74,8 @@ static Object *IO_readLine(Esther *es, Object *self) {
     memset(buffer, '\n', size);
 
     while (true) {
-        fgets(buffer, size, as_IO(self)->file);
+        if (fgets(buffer, size, as_IO(self)->file)) {
+        }
 
         char *c = memchr(buffer, '\n', size);
 
@@ -87,16 +88,16 @@ static Object *IO_readLine(Esther *es, Object *self) {
 
             memset(buffer, '\n', size);
         } else {
-            if (c == buffer + size || *(c + 1) == '\n') {
-                str.size = c - str.data;
+            str.size = c - str.data;
 
+            if (c == buffer + size || *(c + 1) == '\n') {
                 if (str.size > 0)
                     str.size--;
                 else {
                     str.data[0] = '\0';
                 }
             } else
-                str.size = c - str.data + 1;
+                str.size++;
 
             return String_new_move(es, str);
         }
@@ -120,19 +121,22 @@ static Object *IO_readLines(Esther *es, Object *self) {
 
 static Object *IO_readChar(Esther *es, Object *self) {
     char value;
-    fscanf(as_IO(self)->file, "%c", &value);
+    if (fscanf(as_IO(self)->file, "%c", &value)) {
+    }
     return ValueObject_new_char(es, value);
 }
 
 static Object *IO_readInt(Esther *es, Object *self) {
     int value;
-    fscanf(as_IO(self)->file, "%i", &value);
+    if (fscanf(as_IO(self)->file, "%i", &value)) {
+    }
     return ValueObject_new_int(es, value);
 }
 
 static Object *IO_readFloat(Esther *es, Object *self) {
     double value;
-    fscanf(as_IO(self)->file, "%lf", &value);
+    if (fscanf(as_IO(self)->file, "%lf", &value)) {
+    }
     return ValueObject_new_real(es, value);
 }
 

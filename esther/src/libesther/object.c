@@ -1,7 +1,5 @@
 #include "esther/object.h"
 
-#include <stdlib.h>
-
 #include "esther/esther.h"
 #include "esther/exception.h"
 #include "esther/function.h"
