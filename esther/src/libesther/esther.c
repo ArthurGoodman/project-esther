@@ -1184,7 +1184,7 @@ Object *Esther_importModule(Esther *es, Context *context, const char *name) {
 #if defined(__linux)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-    void (*initialize)(Esther *, Context *) = dlsym(library, initFunctionName.data);
+    void (*initialize)(Esther *, Context *) = dlsym(library, initializeFunctionName.data);
 #pragma GCC diagnostic pop
 #elif defined(__WIN32)
     void (*initialize)(Esther *, Context *) = (void (*)(Esther *, Context *)) GetProcAddress(library, initializeFunctionName.data);
@@ -1206,6 +1206,7 @@ Object *Esther_importModule(Esther *es, Context *context, const char *name) {
     return es->nullObject;
 }
 
+//@Fix: Exceptions here are not caught
 void Esther_unloadModule(Esther *es, const char *name, void *library) {
     struct string finalizeFunctionName = string_new_c_str(name);
     string_append_c_str(&finalizeFunctionName, "_finalize");
@@ -1232,11 +1233,10 @@ void Esther_unloadModule(Esther *es, const char *name, void *library) {
 
     finalize(es);
 
+//@Fix: for some reason this crashes on both platforms
 #if defined(__linux)
-    //@Unimplemented
-    Exception_throw_new(es, "UNIMPLEMENTED");
+// dlclose(library);
 #elif defined(__WIN32)
-//@Fix: for some reason this crashes
 // FreeLibrary(library);
 #endif
 }
