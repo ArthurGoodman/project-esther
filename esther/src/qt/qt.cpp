@@ -115,7 +115,7 @@ static Object *MessageBox_setText(Esther *es, Object *self, Object *str) {
     return es->nullObject;
 }
 
-EXPORT void GUI_initialize(Esther *es, Context *context) {
+EXPORT void Qt_initialize(Esther *es, Context *context) {
     applicationClass = Class_new(es, string_const("QApplication"), NULL);
     *(void **) applicationClass = &vtable_for_ApplicationClass;
 
@@ -133,5 +133,5 @@ EXPORT void GUI_initialize(Esther *es, Context *context) {
     Context_setLocal(context, Class_getName(messageBoxClass), messageBoxClass);
 }
 
-EXPORT void GUI_finalize(Esther *) {
+EXPORT void Qt_finalize(Esther *) {
 }

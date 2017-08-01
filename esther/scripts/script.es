@@ -1,4 +1,4 @@
-import GUI
+import Qt
 
 app = new QApplication
 

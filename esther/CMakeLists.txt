@@ -26,16 +26,17 @@ endif()
 
 add_library(libesther SHARED ${libesther_sources} ${libesther_headers})
 set_target_properties(libesther PROPERTIES OUTPUT_NAME esther)
-set_target_properties(libesther PROPERTIES LINK_FLAGS "-Wl,--output-def,lib/libesther.def")
-
-if(UNIX)
-target_link_libraries(libesther dl)
-endif()
 
 if(WIN32)
+set_target_properties(libesther PROPERTIES LINK_FLAGS "-Wl,--output-def,lib/libesther.def")
+
 add_custom_command(
     TARGET libesther
     COMMAND lib /machine:x64 /def:lib/libesther.def /out:lib/libesther.lib)
+endif()
+
+if(UNIX)
+target_link_libraries(libesther dl)
 endif()
 
 add_library(libio SHARED ${libio_sources})

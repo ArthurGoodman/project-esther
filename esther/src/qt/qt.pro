@@ -8,14 +8,14 @@ DESTDIR = ../../lib
 INCLUDEPATH += ../../include
 
 unix {
-TARGET = gui
+TARGET = qt
 LIBS += -L../../lib -lesther
 }
 
 win32 {
-TARGET = libgui
+TARGET = libqt
 LIBS += -L../../lib -llibesther
 }
 
 SOURCES += \
-    gui.cpp
+    qt.cpp

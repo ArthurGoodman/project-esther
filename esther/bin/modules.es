@@ -2,7 +2,7 @@
     "IO" => [
         :path => "../lib/libio"
     ],
-    "GUI" => [
-        :path => "../lib/libgui"
+    "Qt" => [
+        :path => "../lib/libqt"
     ]
 ]
