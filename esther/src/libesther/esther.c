@@ -472,7 +472,7 @@ CONST_VTABLE(False, False)
 CONST_VTABLE(Null, False)
 
 void Esther_init(Esther *es) {
-    gc_registerMapper(GlobalMapper_new(es));
+    gc_registerMapper(es->globalMapper = GlobalMapper_new(es));
 
     es->objectClass = NULL;
     es->classClass = NULL;
@@ -675,10 +675,22 @@ void Esther_init(Esther *es) {
 
     init_identifiers(es);
 
+    es->moduleHandles = std_map_new(compare_id);
     Esther_loadModules(es);
 }
 
-void Esther_finalize(Esther *UNUSED(es)) {
+//@TODO: Think about what actually needs to be done during finalization
+void Esther_finalize(Esther *es) {
+    std_map_iterator i;
+    std_map_begin(es->moduleHandles, &i);
+
+    while (!std_map_end(es->moduleHandles, &i)) {
+        Esther_unloadModule(es, id_to_str((ID) std_map_iterator_key(&i)).data, std_map_iterator_value(&i));
+        std_map_iterator_next(&i);
+    }
+
+    free(es->globalMapper);
+
     gc_finalize();
 }
 
@@ -1000,7 +1012,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
         }
 
         else if (id == id_import) {
-            value = Esther_import(es, context, String_value(ImportExpression_name(ast)).data);
+            value = Esther_importModule(es, context, String_value(ImportExpression_name(ast)).data);
         }
     }
     CATCH(e) {
@@ -1126,7 +1138,7 @@ Object *Esther_runFile(Esther *es, const char *fileName) {
 
 //@Refactor
 //@TODO: make modules to be singletons
-Object *Esther_import(Esther *es, Context *context, const char *name) {
+Object *Esther_importModule(Esther *es, Context *context, const char *name) {
     Object *strName = String_new_c_str(es, name);
 
     if (!Map_contains(es->modules, strName))
@@ -1150,6 +1162,8 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
     HINSTANCE library = LoadLibraryA(real_path);
 #endif
 
+    std_map_set(es->moduleHandles, (void *) c_str_to_id(name), library);
+
     string_free(path);
     free((void *) real_path);
 
@@ -1164,8 +1178,8 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
     dlerror();
 #endif
 
-    struct string initFunctionName = string_new_c_str(name);
-    string_append_c_str(&initFunctionName, "_initialize");
+    struct string initializeFunctionName = string_new_c_str(name);
+    string_append_c_str(&initializeFunctionName, "_initialize");
 
 #if defined(__linux)
 #pragma GCC diagnostic push
@@ -1173,10 +1187,10 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
     void (*initialize)(Esther *, Context *) = dlsym(library, initFunctionName.data);
 #pragma GCC diagnostic pop
 #elif defined(__WIN32)
-    void (*initialize)(Esther *, Context *) = (void (*)(Esther *, Context *)) GetProcAddress(library, initFunctionName.data);
+    void (*initialize)(Esther *, Context *) = (void (*)(Esther *, Context *)) GetProcAddress(library, initializeFunctionName.data);
 #endif
 
-    string_free(initFunctionName);
+    string_free(initializeFunctionName);
 
 #if defined(__linux)
     char *error;
@@ -1190,4 +1204,39 @@ Object *Esther_import(Esther *es, Context *context, const char *name) {
     initialize(es, context);
 
     return es->nullObject;
+}
+
+void Esther_unloadModule(Esther *es, const char *name, void *library) {
+    struct string finalizeFunctionName = string_new_c_str(name);
+    string_append_c_str(&finalizeFunctionName, "_finalize");
+
+#if defined(__linux)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+    void (*finalize)(Esther *) = dlsym(library, finalizeFunctionName.data);
+#pragma GCC diagnostic pop
+#elif defined(__WIN32)
+    void (*finalize)(Esther *) = (void (*)(Esther *)) GetProcAddress(library, finalizeFunctionName.data);
+#endif
+
+    string_free(finalizeFunctionName);
+
+#if defined(__linux)
+    char *error;
+    if ((error = dlerror()))
+        Exception_throw_new(es, error);
+#elif defined(__WIN32)
+    if (!finalize)
+        Exception_throw_new(es, "unable to load finalize function");
+#endif
+
+    finalize(es);
+
+#if defined(__linux)
+    //@Unimplemented
+    Exception_throw_new(es, "UNIMPLEMENTED");
+#elif defined(__WIN32)
+//@Fix: for some reason this crashes
+// FreeLibrary(library);
+#endif
 }

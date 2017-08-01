@@ -11,6 +11,8 @@ extern "C" {
 typedef struct Context Context;
 
 typedef struct Esther {
+    Mapper *globalMapper;
+
     Object *objectClass;
     Object *classClass;
     Object *stringClass;
@@ -48,6 +50,8 @@ typedef struct Esther {
         Object *source;
         struct FileRecord *next;
     } * file;
+
+    struct std_map *moduleHandles;
 } Esther;
 
 void Esther_init(Esther *es);
@@ -64,7 +68,8 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context);
 void Esther_runScript(Esther *es, const char *fileName);
 Object *Esther_runFile(Esther *es, const char *fileName);
 
-Object *Esther_import(Esther *es, Context *context, const char *name);
+Object *Esther_importModule(Esther *es, Context *context, const char *name);
+void Esther_unloadModule(Esther *es, const char *name, void *library);
 
 #ifdef __cplusplus
 }

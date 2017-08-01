@@ -42,6 +42,8 @@
 #include <QApplication>
 #include <QMessageBox>
 
+static Mapper *globalMapper;
+
 static Object *applicationClass;
 static Object *messageBoxClass;
 
@@ -115,7 +117,18 @@ static Object *MessageBox_setText(Esther *es, Object *self, Object *str) {
     return es->nullObject;
 }
 
+static void GlobalMapper_mapOnRefs(Mapper *UNUSED(self), MapFunction f) {
+    f(applicationClass);
+    f(messageBoxClass);
+}
+
+static MapperVTable vtable_for_GlobalMapper = {
+    GlobalMapper_mapOnRefs
+};
+
 EXPORT void Qt_initialize(Esther *es, Context *context) {
+    gc_registerMapper(globalMapper = new Mapper{ &vtable_for_GlobalMapper });
+
     applicationClass = Class_new(es, string_const("QApplication"), NULL);
     *(void **) applicationClass = &vtable_for_ApplicationClass;
 
@@ -134,4 +147,5 @@ EXPORT void Qt_initialize(Esther *es, Context *context) {
 }
 
 EXPORT void Qt_finalize(Esther *UNUSED(es)) {
+    delete globalMapper;
 }

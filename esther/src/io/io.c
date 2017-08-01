@@ -18,6 +18,8 @@ static void IO_virtual_finalize(ManagedObject *self) {
 CLASS_VTABLE(IO)
 OBJECT_VTABLE(IO)
 
+Mapper *globalMapper;
+
 static Object *ioClass;
 static Object *fileClass;
 
@@ -154,7 +156,24 @@ static Object *FileClass_open(Esther *es, Object *UNUSED(self), Object *fileName
     return IO_new(es, fopen(String_c_str(fileName), String_c_str(mode)), fileClass);
 }
 
+static void GlobalMapper_mapOnRefs(Mapper *UNUSED(self), MapFunction f) {
+    f(ioClass);
+    f(fileClass);
+}
+
+static MapperVTable vtable_for_GlobalMapper = {
+    GlobalMapper_mapOnRefs
+};
+
+static Mapper *GlobalMapper_new() {
+    Mapper *self = malloc(sizeof(Mapper));
+    *(void **) self = &vtable_for_GlobalMapper;
+    return self;
+}
+
 void IO_initialize(Esther *es, Context *context) {
+    gc_registerMapper(globalMapper = GlobalMapper_new());
+
     ioClass = Class_new(es, string_const("IO"), NULL);
     *(void **) ioClass = &vtable_for_IOClass;
 
@@ -184,4 +203,5 @@ void IO_initialize(Esther *es, Context *context) {
 }
 
 void IO_finalize(Esther *UNUSED(es)) {
+    free(globalMapper);
 }

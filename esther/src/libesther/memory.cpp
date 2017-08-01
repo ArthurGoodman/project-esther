@@ -388,9 +388,6 @@ void gc_finalize() {
                 ManagedObject_finalize(object);
             }
         }
-
-    for (Mapper *mapper : mappers)
-        free(mapper);
 }
 
 void gc_collect() {
