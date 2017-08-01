@@ -234,7 +234,12 @@ static Object *scan(Esther *es, Lexer *lexer) {
         }
     }
 
-    return Tuple_new(es, 3, id, text, Tuple_new(es, 3, ValueObject_new_int(es, pos), ValueObject_new_int(es, line), ValueObject_new_int(es, column)));
+    Object *token = Tuple_new(es, 2, id, text);
+    Object *position = Tuple_new(es, 3, ValueObject_new_int(es, pos), ValueObject_new_int(es, line), ValueObject_new_int(es, column));
+
+    Object_setAttribute(token, string_const("pos"), position);
+
+    return token;
 }
 
 Object *Lexer_lex(Esther *es, Object *self, Object *code) {

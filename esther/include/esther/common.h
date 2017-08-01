@@ -15,7 +15,14 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 
-#define UNUSED(var) var __attribute__((unused))
+#ifdef UNUSED
+#elif defined(__GNUC__)
+#define UNUSED(x) UNUSED_##x __attribute__((unused))
+#elif defined(__cplusplus)
+#define UNUSED(x)
+#else
+#define UNUSED(x) x
+#endif
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))

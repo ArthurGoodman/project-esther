@@ -111,7 +111,6 @@ Object *Function_virtual_toString(Esther *es, Object *f) {
     if (name.size == 0)
         return String_new_c_str(es, "<anonymous function>");
 
-    //@Temp: C-string
     return String_new_move(es, string_format("<function %s>", name.data));
 }
 

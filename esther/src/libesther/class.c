@@ -94,7 +94,6 @@ Object *Class_virtual_toString(Esther *es, Object *self) {
     if (name.size == 0)
         return String_new_c_str(es, "<anonymous class>");
 
-    //@Temp: C-string
     return String_new_move(es, string_format("<class %s>", name.data));
 }
 

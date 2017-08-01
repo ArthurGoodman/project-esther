@@ -15,8 +15,6 @@ static void Parser_virtual_mapOnRefs(Mapper *self, MapFunction f) {
 
     f(((Parser *) self)->tokens);
     f(((Parser *) self)->token);
-
-    f(((Parser *) self)->npos);
 }
 
 #define Parser_virtual_finalize Object_virtual_finalize
@@ -30,8 +28,6 @@ Object *Parser_new(Esther *es) {
 
     self->tokens = NULL;
     self->token = NULL;
-
-    self->npos = NULL;
 
     *(void **) self = &vtable_for_Parser;
 
@@ -120,200 +116,200 @@ static Object *statement(Esther *es, Parser *parser) {
 
 static Object *expr(Esther *es, Parser *parser) {
     Object *e = logicOr(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_assign))
-            e = Tuple_new(es, 4, sym_assign, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_assign, e, logicOr(es, parser));
         else if (accept(es, parser, id_plusAssign))
-            e = Tuple_new(es, 4, sym_plusAssign, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_plusAssign, e, logicOr(es, parser));
         else if (accept(es, parser, id_minusAssign))
-            e = Tuple_new(es, 4, sym_minusAssign, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_minusAssign, e, logicOr(es, parser));
         else if (accept(es, parser, id_multiplyAssign))
-            e = Tuple_new(es, 4, sym_multiplyAssign, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_multiplyAssign, e, logicOr(es, parser));
         else if (accept(es, parser, id_divideAssign))
-            e = Tuple_new(es, 4, sym_divideAssign, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_divideAssign, e, logicOr(es, parser));
         else if (accept(es, parser, id_modAssign))
-            e = Tuple_new(es, 4, sym_modAssign, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_modAssign, e, logicOr(es, parser));
         else if (accept(es, parser, id_powerAssign))
-            e = Tuple_new(es, 4, sym_powerAssign, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_powerAssign, e, logicOr(es, parser));
         break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *logicOr(Esther *es, Parser *parser) {
     Object *e = logicAnd(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_or))
-            e = Tuple_new(es, 4, sym_or, Tuple_new(es, 1, parser->npos), e, logicAnd(es, parser));
+            e = Tuple_new(es, 3, sym_or, e, logicAnd(es, parser));
         else
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *logicAnd(Esther *es, Parser *parser) {
     Object *e = equality(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_and))
-            e = Tuple_new(es, 4, sym_and, Tuple_new(es, 1, parser->npos), e, equality(es, parser));
+            e = Tuple_new(es, 3, sym_and, e, equality(es, parser));
         else
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *equality(Esther *es, Parser *parser) {
     Object *e = relation(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_eq))
-            e = Tuple_new(es, 4, sym_eq, Tuple_new(es, 1, parser->npos), e, relation(es, parser));
+            e = Tuple_new(es, 3, sym_eq, e, relation(es, parser));
         else if (accept(es, parser, id_ne))
-            e = Tuple_new(es, 4, sym_ne, Tuple_new(es, 1, parser->npos), e, relation(es, parser));
+            e = Tuple_new(es, 3, sym_ne, e, relation(es, parser));
         else
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *relation(Esther *es, Parser *parser) {
     Object *e = addSub(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_lt))
-            e = Tuple_new(es, 4, sym_lt, Tuple_new(es, 1, parser->npos), e, addSub(es, parser));
+            e = Tuple_new(es, 3, sym_lt, e, addSub(es, parser));
         else if (accept(es, parser, id_gt))
-            e = Tuple_new(es, 4, sym_gt, Tuple_new(es, 1, parser->npos), e, addSub(es, parser));
+            e = Tuple_new(es, 3, sym_gt, e, addSub(es, parser));
         else if (accept(es, parser, id_ge))
-            e = Tuple_new(es, 4, sym_ge, Tuple_new(es, 1, parser->npos), e, addSub(es, parser));
+            e = Tuple_new(es, 3, sym_ge, e, addSub(es, parser));
         else if (accept(es, parser, id_le))
-            e = Tuple_new(es, 4, sym_le, Tuple_new(es, 1, parser->npos), e, addSub(es, parser));
+            e = Tuple_new(es, 3, sym_le, e, addSub(es, parser));
         else
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *addSub(Esther *es, Parser *parser) {
     Object *e = mulDiv(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_plus))
-            e = Tuple_new(es, 4, sym_plus, Tuple_new(es, 1, parser->npos), e, mulDiv(es, parser));
+            e = Tuple_new(es, 3, sym_plus, e, mulDiv(es, parser));
         else if (accept(es, parser, id_minus))
-            e = Tuple_new(es, 4, sym_minus, Tuple_new(es, 1, parser->npos), e, mulDiv(es, parser));
+            e = Tuple_new(es, 3, sym_minus, e, mulDiv(es, parser));
         else
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *mulDiv(Esther *es, Parser *parser) {
     Object *e = power(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_multiply))
-            e = Tuple_new(es, 4, sym_multiply, Tuple_new(es, 1, parser->npos), e, power(es, parser));
+            e = Tuple_new(es, 3, sym_multiply, e, power(es, parser));
         else if (accept(es, parser, id_divide))
-            e = Tuple_new(es, 4, sym_divide, Tuple_new(es, 1, parser->npos), e, power(es, parser));
+            e = Tuple_new(es, 3, sym_divide, e, power(es, parser));
         else if (accept(es, parser, id_mod))
-            e = Tuple_new(es, 4, sym_mod, Tuple_new(es, 1, parser->npos), e, power(es, parser));
+            e = Tuple_new(es, 3, sym_mod, e, power(es, parser));
         else
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *power(Esther *es, Parser *parser) {
     Object *e = negate(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (accept(es, parser, id_power))
-            e = Tuple_new(es, 4, sym_power, Tuple_new(es, 1, parser->npos), e, negate(es, parser));
+            e = Tuple_new(es, 3, sym_power, e, negate(es, parser));
         else
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *negate(Esther *es, Parser *parser) {
     Object *e = NULL;
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     if (accept(es, parser, id_not))
-        e = Tuple_new(es, 3, sym_not, Tuple_new(es, 1, parser->npos), preffix(es, parser));
+        e = Tuple_new(es, 2, sym_not, preffix(es, parser));
     else
         e = preffix(es, parser);
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *preffix(Esther *es, Parser *parser) {
     Object *e = NULL;
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     if (accept(es, parser, id_plus))
-        e = Tuple_new(es, 4, sym_plus, Tuple_new(es, 1, parser->npos), Tuple_new(es, 3, sym_sharp, Tuple_new(es, 1, parser->npos), ValueObject_new_int(es, 0)), suffix(es, parser));
+        e = Tuple_new(es, 3, sym_plus, Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, 0)), suffix(es, parser));
     else if (accept(es, parser, id_minus))
-        e = Tuple_new(es, 4, sym_minus, Tuple_new(es, 1, parser->npos), Tuple_new(es, 3, sym_sharp, Tuple_new(es, 1, parser->npos), ValueObject_new_int(es, 0)), suffix(es, parser));
+        e = Tuple_new(es, 3, sym_minus, Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, 0)), suffix(es, parser));
     else
         e = suffix(es, parser);
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *suffix(Esther *es, Parser *parser) {
     Object *e = term(es, parser);
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     while (true) {
         if (immediateAccept(es, parser, id_leftPar)) {
@@ -327,9 +323,9 @@ static Object *suffix(Esther *es, Parser *parser) {
             if (!accept(es, parser, id_rightPar))
                 Exception_throw_new(es, "unmatched parentheses");
 
-            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), e, args);
+            e = Tuple_new(es, 3, sym_call, e, args);
         } else if (immediateAccept(es, parser, id_pars)) {
-            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), e, Array_new(es, 0));
+            e = Tuple_new(es, 3, sym_call, e, Array_new(es, 0));
         } else if (immediateAccept(es, parser, id_leftBracket)) {
             Object *args = Array_new(es, 0);
 
@@ -341,17 +337,17 @@ static Object *suffix(Esther *es, Parser *parser) {
             if (!accept(es, parser, id_rightBracket))
                 Exception_throw_new(es, "unmatched brackets");
 
-            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, String_new_c_str(es, "[]")), args);
+            e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new_c_str(es, "[]")), args);
         } else if (immediateAccept(es, parser, id_brackets)) {
-            e = Tuple_new(es, 4, sym_call, Tuple_new(es, 1, parser->npos), Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, String_new_c_str(es, "[]")), Array_new(es, 0));
+            e = Tuple_new(es, 3, sym_call, Tuple_new(es, 3, sym_attr, e, String_new_c_str(es, "[]")), Array_new(es, 0));
         } else if (accept(es, parser, id_dot)) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
-                e = Tuple_new(es, 4, sym_attr, Tuple_new(es, 1, parser->npos), e, Tuple_get(parser->token, 1));
+                e = Tuple_new(es, 3, sym_attr, e, Tuple_get(parser->token, 1));
                 getToken(parser);
             } else {
                 bool expectRightPar = accept(es, parser, id_leftPar);
 
-                e = Tuple_new(es, 4, sym_dot, Tuple_new(es, 1, parser->npos), e, logicOr(es, parser));
+                e = Tuple_new(es, 3, sym_dot, e, logicOr(es, parser));
 
                 if (expectRightPar && !accept(es, parser, id_rightPar))
                     Exception_throw_new(es, "unmatched parentheses");
@@ -360,18 +356,18 @@ static Object *suffix(Esther *es, Parser *parser) {
             break;
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
 
 static Object *term(Esther *es, Parser *parser) {
     Object *e = NULL;
-    Object *p = Tuple_get(parser->token, 2);
+    Object *p = Object_getAttribute(parser->token, string_const("pos"));
 
     if (check(es, parser, id_id)) {
-        e = Tuple_new(es, 3, sym_id, Tuple_new(es, 1, parser->npos), Tuple_get(parser->token, 1));
+        e = Tuple_new(es, 2, sym_id, Tuple_get(parser->token, 1));
         getToken(parser);
     }
 
@@ -380,28 +376,28 @@ static Object *term(Esther *es, Parser *parser) {
             Exception_throw_new(es, "unmatched parentheses");
 
         if (accept(es, parser, id_assign))
-            e = Tuple_new(es, 4, sym_var, Tuple_new(es, 1, parser->npos), Tuple_get(parser->token, 1), logicOr(es, parser));
+            e = Tuple_new(es, 3, sym_var, Tuple_get(parser->token, 1), logicOr(es, parser));
         else
-            e = Tuple_new(es, 3, sym_var, Tuple_new(es, 1, parser->npos), Tuple_get(parser->token, 1));
+            e = Tuple_new(es, 2, sym_var, Tuple_get(parser->token, 1));
     }
 
     else if (check(es, parser, id_int)) {
-        e = Tuple_new(es, 3, sym_sharp, Tuple_new(es, 1, parser->npos), ValueObject_new_int(es, atoi(String_c_str(Tuple_get(parser->token, 1)))));
+        e = Tuple_new(es, 2, sym_sharp, ValueObject_new_int(es, atoi(String_c_str(Tuple_get(parser->token, 1)))));
         getToken(parser);
     } else if (check(es, parser, id_float)) {
-        e = Tuple_new(es, 3, sym_sharp, Tuple_new(es, 1, parser->npos), ValueObject_new_real(es, atof(String_c_str(Tuple_get(parser->token, 1)))));
+        e = Tuple_new(es, 2, sym_sharp, ValueObject_new_real(es, atof(String_c_str(Tuple_get(parser->token, 1)))));
         getToken(parser);
     } else if (check(es, parser, id_singleQuote)) {
         Object *value = Tuple_get(parser->token, 1);
-        e = Tuple_new(es, 3, sym_sharp, Tuple_new(es, 1, parser->npos), String_size(value) == 1 ? ValueObject_new_char(es, String_c_str(value)[0]) : value);
+        e = Tuple_new(es, 2, sym_sharp, String_size(value) == 1 ? ValueObject_new_char(es, String_c_str(value)[0]) : value);
         getToken(parser);
     } else if (check(es, parser, id_doubleQuote)) {
-        e = Tuple_new(es, 3, sym_sharp, Tuple_new(es, 1, parser->npos), Tuple_get(parser->token, 1));
+        e = Tuple_new(es, 2, sym_sharp, Tuple_get(parser->token, 1));
         getToken(parser);
     }
 
     else if (accept(es, parser, id_colon)) {
-        e = Tuple_new(es, 3, sym_colon, Tuple_new(es, 1, parser->npos), Tuple_get(parser->token, 1));
+        e = Tuple_new(es, 2, sym_colon, Tuple_get(parser->token, 1));
         getToken(parser);
     }
 
@@ -419,9 +415,9 @@ static Object *term(Esther *es, Parser *parser) {
         body = expr(es, parser);
 
         if (accept(es, parser, id_else))
-            e = Tuple_new(es, 5, sym_if, Tuple_new(es, 1, parser->npos), condition, body, expr(es, parser));
+            e = Tuple_new(es, 4, sym_if, condition, body, expr(es, parser));
         else
-            e = Tuple_new(es, 4, sym_if, Tuple_new(es, 1, parser->npos), condition, body);
+            e = Tuple_new(es, 3, sym_if, condition, body);
     }
 
     else if (accept(es, parser, id_while)) {
@@ -437,20 +433,20 @@ static Object *term(Esther *es, Parser *parser) {
 
         body = expr(es, parser);
 
-        e = Tuple_new(es, 4, sym_while, Tuple_new(es, 1, parser->npos), condition, body);
+        e = Tuple_new(es, 3, sym_while, condition, body);
     }
 
     else if (accept(es, parser, id_true)) {
-        e = Tuple_new(es, 2, sym_true, Tuple_new(es, 1, parser->npos));
+        e = Tuple_new(es, 1, sym_true);
     } else if (accept(es, parser, id_false)) {
-        e = Tuple_new(es, 2, sym_false, Tuple_new(es, 1, parser->npos));
+        e = Tuple_new(es, 1, sym_false);
     } else if (accept(es, parser, id_null)) {
-        e = Tuple_new(es, 2, sym_null, Tuple_new(es, 1, parser->npos));
+        e = Tuple_new(es, 1, sym_null);
 
     } else if (accept(es, parser, id_self)) {
-        e = Tuple_new(es, 2, sym_self, Tuple_new(es, 1, parser->npos));
+        e = Tuple_new(es, 1, sym_self);
     } else if (accept(es, parser, id_here)) {
-        e = Tuple_new(es, 2, sym_here, Tuple_new(es, 1, parser->npos));
+        e = Tuple_new(es, 1, sym_here);
     }
 
     else if (accept(es, parser, id_class)) {
@@ -464,9 +460,9 @@ static Object *term(Esther *es, Parser *parser) {
 
         if (accept(es, parser, id_lt)) {
             Object *superclass = expr(es, parser);
-            e = Tuple_new(es, 5, sym_class, Tuple_new(es, 1, parser->npos), name, superclass, expr(es, parser));
+            e = Tuple_new(es, 4, sym_class, name, superclass, expr(es, parser));
         } else
-            e = Tuple_new(es, 4, sym_class, Tuple_new(es, 1, parser->npos), name, expr(es, parser));
+            e = Tuple_new(es, 3, sym_class, name, expr(es, parser));
     }
 
     else if (accept(es, parser, id_function)) {
@@ -493,12 +489,12 @@ static Object *term(Esther *es, Parser *parser) {
                 Exception_throw_new(es, "unmatched parentheses");
         }
 
-        e = Tuple_new(es, 5, sym_function, Tuple_new(es, 1, parser->npos), name, params, expr(es, parser));
+        e = Tuple_new(es, 4, sym_function, name, params, expr(es, parser));
     }
 
     else if (accept(es, parser, id_new)) {
         if (check(es, parser, id_braces) || check(es, parser, id_leftBrace))
-            e = Tuple_new(es, 3, sym_new, Tuple_new(es, 1, parser->npos), term(es, parser));
+            e = Tuple_new(es, 2, sym_new, term(es, parser));
         else {
             if (!check(es, parser, id_id))
                 Exception_throw_new(es, "identifier expected");
@@ -518,7 +514,7 @@ static Object *term(Esther *es, Parser *parser) {
                     Exception_throw_new(es, "unmatched parentheses");
             }
 
-            e = Tuple_new(es, 5, sym_new, Tuple_new(es, 1, parser->npos), name, args, check(es, parser, id_braces) || check(es, parser, id_leftBrace) ? term(es, parser) : Tuple_new(es, 0));
+            e = Tuple_new(es, 4, sym_new, name, args, check(es, parser, id_braces) || check(es, parser, id_leftBrace) ? term(es, parser) : Tuple_new(es, 0));
         }
     }
 
@@ -529,7 +525,7 @@ static Object *term(Esther *es, Parser *parser) {
         Object *name = Tuple_get(parser->token, 1);
         getToken(parser);
 
-        e = Tuple_new(es, 3, sym_import, Tuple_new(es, 1, parser->npos), name);
+        e = Tuple_new(es, 2, sym_import, name);
     }
 
     //@TODO: change unary tuple syntax to Python-like
@@ -543,9 +539,9 @@ static Object *term(Esther *es, Parser *parser) {
         if (!accept(es, parser, id_rightPar))
             Exception_throw_new(es, "unmatched parentheses");
 
-        e = Tuple_new(es, 3, sym_pars, Tuple_new(es, 1, parser->npos), args);
+        e = Tuple_new(es, 2, sym_pars, args);
     } else if (accept(es, parser, id_pars)) {
-        e = Tuple_new(es, 3, sym_pars, Tuple_new(es, 1, parser->npos), Array_new(es, 0));
+        e = Tuple_new(es, 2, sym_pars, Array_new(es, 0));
     }
 
     else if (accept(es, parser, id_leftBracket)) {
@@ -578,9 +574,9 @@ static Object *term(Esther *es, Parser *parser) {
         if (!accept(es, parser, id_rightBracket))
             Exception_throw_new(es, "unmatched brackets");
 
-        e = Tuple_new(es, 3, map ? sym_doubleArrow : sym_brackets, Tuple_new(es, 1, parser->npos), args);
+        e = Tuple_new(es, 2, map ? sym_doubleArrow : sym_brackets, args);
     } else if (accept(es, parser, id_brackets)) {
-        e = Tuple_new(es, 3, sym_brackets, Tuple_new(es, 1, parser->npos), Array_new(es, 0));
+        e = Tuple_new(es, 2, sym_brackets, Array_new(es, 0));
     }
 
     else if (accept(es, parser, id_leftBrace)) {
@@ -605,7 +601,7 @@ static Object *term(Esther *es, Parser *parser) {
         if (!accept(es, parser, id_rightBrace))
             Exception_throw_new(es, "unmatched braces");
 
-        e = Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : Tuple_new(es, 3, sym_braces, Tuple_new(es, 1, parser->npos), nodes);
+        e = Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : Tuple_new(es, 2, sym_braces, nodes);
     } else if (accept(es, parser, id_braces)) {
         e = Tuple_new(es, 0);
     }
@@ -618,8 +614,8 @@ static Object *term(Esther *es, Parser *parser) {
         Exception_throw_new(es, "unexpected token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
     }
 
-    if (Tuple_size(e) > 0 && Tuple_size(Tuple_get(Tuple_get(e, 1), 0)) == 0)
-        Tuple_set(Tuple_get(e, 1), 0, p);
+    if (p && !Object_hasAttribute(e, string_const("pos")))
+        Object_setAttribute(e, string_const("pos"), p);
 
     return e;
 }
@@ -630,7 +626,6 @@ Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
 
     parser->pos = 0;
     parser->tokens = tokens;
-    parser->npos = Tuple_new(es, 0);
 
     getToken(parser);
 
@@ -643,7 +638,7 @@ Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
             ID id = Symbol_getId(Tuple_get(node, 0));
 
             if (id == id_braces) {
-                Object *array = Tuple_get(node, 2);
+                Object *array = Tuple_get(node, 1);
 
                 for (size_t i = 0; i < Array_size(array); i++)
                     Array_push(nodes, Array_get(array, i));
@@ -652,5 +647,5 @@ Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
         }
     }
 
-    return Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : Tuple_new(es, 3, sym_braces, Tuple_new(es, 1, parser->npos), nodes);
+    return Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : Tuple_new(es, 2, sym_braces, nodes);
 }

@@ -12,8 +12,6 @@ typedef struct Parser {
     int pos;
     Object *tokens;
     Object *token;
-
-    Object *npos;
 } Parser;
 
 Object *Parser_new(Esther *es);

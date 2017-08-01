@@ -133,5 +133,5 @@ EXPORT void Qt_initialize(Esther *es, Context *context) {
     Context_setLocal(context, Class_getName(messageBoxClass), messageBoxClass);
 }
 
-EXPORT void Qt_finalize(Esther *) {
+EXPORT void Qt_finalize(Esther *UNUSED(es)) {
 }
