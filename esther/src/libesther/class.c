@@ -55,35 +55,35 @@ Object *Class_getSuperclass(Object *self) {
     return as_Class(self)->superclass;
 }
 
-bool Class_hasMethod(Object *self, struct string name) {
-    return as_Class(self)->methods && std_map_contains(as_Class(self)->methods, (const void *) str_to_id(name));
+bool Class_hasMethod(Object *self, ID id) {
+    return as_Class(self)->methods && std_map_contains(as_Class(self)->methods, (const void *) id);
 }
 
-Object *Class_getMethod(Object *self, struct string name) {
-    return as_Class(self)->methods ? std_map_get(as_Class(self)->methods, (const void *) str_to_id(name)) : NULL;
+Object *Class_getMethod(Object *self, ID id) {
+    return as_Class(self)->methods ? std_map_get(as_Class(self)->methods, (const void *) id) : NULL;
 }
 
-void Class_setMethod(Object *self, struct string name, Object *method) {
+void Class_setMethod(Object *self, ID id, Object *method) {
     if (!as_Class(self)->methods)
         as_Class(self)->methods = std_map_new(compare_id);
 
-    std_map_set(as_Class(self)->methods, (const void *) str_to_id(name), method);
+    std_map_set(as_Class(self)->methods, (const void *) id, method);
 }
 
 void Class_setMethod_func(Object *self, Object *f) {
-    Class_setMethod(self, Function_getName(f), f);
+    Class_setMethod(self, str_to_id(Function_getName(f)), f);
 }
 
 bool Class_isChildOf(Object *self, Object *_class) {
     return self == _class || (as_Class(self)->superclass && Class_isChildOf(as_Class(self)->superclass, _class));
 }
 
-Object *Class_lookup(Object *self, struct string name) {
-    if (Class_hasMethod(self, name))
-        return Class_getMethod(self, name);
+Object *Class_lookup(Object *self, ID id) {
+    if (Class_hasMethod(self, id))
+        return Class_getMethod(self, id);
 
     if (as_Class(self)->superclass)
-        return Class_lookup(as_Class(self)->superclass, name);
+        return Class_lookup(as_Class(self)->superclass, id);
 
     return NULL;
 }
@@ -99,7 +99,7 @@ Object *Class_virtual_toString(Esther *es, Object *self) {
 
 Object *Class_newInstance(Esther *es, Object *self, Object *args) {
     Object *instance = (*(ClassVTable **) self)->newInstance(es, self, args);
-    Object_callIfFound(es, instance, string_const("initialize"), args);
+    Object_callIfFound(es, instance, c_str_to_id("initialize"), args);
     return instance;
 }
 

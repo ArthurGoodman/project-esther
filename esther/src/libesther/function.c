@@ -129,7 +129,7 @@ static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Obj
     Context *context = Context_childContext(as_InterpretedFunction(f)->closure, self, Object_new(es));
 
     for (size_t i = 0; i < Tuple_size(args); i++)
-        Context_setLocal(context, as_InterpretedFunction(f)->params[i], Tuple_get(args, i));
+        Context_setLocal(context, str_to_id(as_InterpretedFunction(f)->params[i]), Tuple_get(args, i));
 
     return Esther_eval(es, as_InterpretedFunction(f)->body, context);
 }

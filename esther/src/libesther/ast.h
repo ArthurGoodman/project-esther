@@ -15,9 +15,9 @@
 
 #define Expression_id(e) (Tuple_get((e), 0))
 
-#define Expression_hasPosition(e) (Object_hasAttribute((e), string_const("pos")))
-#define Expression_getPosition(e) (Object_getAttribute((e), string_const("pos")))
-#define Expression_setPosition(e, position) (Object_setAttribute((e), string_const("pos"), (position)))
+#define Expression_hasPosition(e) (Object_hasAttribute((e), c_str_to_id("pos")))
+#define Expression_getPosition(e) (Object_getAttribute((e), c_str_to_id("pos")))
+#define Expression_setPosition(e, position) (Object_setAttribute((e), c_str_to_id("pos"), (position)))
 
 #define UnaryExpression_arg EXPR_ARG1
 

@@ -12,33 +12,6 @@
 #define EXPORT extern "C"
 #endif
 
-#if defined(_MSC_VER)
-#undef CLASS_VTABLE
-#define CLASS_VTABLE(name)                          \
-    static ClassVTable vtable_for_##name##Class = { \
-        { { { Class_virtual_mapOnRefs },            \
-            Class_virtual_finalize },               \
-          Class_virtual_toString,                   \
-          Class_virtual_toString,                   \
-          Object_virtual_equals,                    \
-          Object_virtual_less,                      \
-          Object_virtual_isTrue },                  \
-        name##Class_virtual_newInstance             \
-    };
-
-#undef OBJECT_VTABLE
-#define OBJECT_VTABLE(name)                   \
-    static ObjectVTable vtable_for_##name = { \
-        { { name##_virtual_mapOnRefs },       \
-          name##_virtual_finalize },          \
-        Object_virtual_toString,              \
-        Object_virtual_toString,              \
-        Object_virtual_equals,                \
-        Object_virtual_less,                  \
-        Object_virtual_isTrue                 \
-    };
-#endif
-
 #include <QApplication>
 #include <QMessageBox>
 
@@ -58,13 +31,14 @@ struct Application {
 #define Application_virtual_mapOnRefs Object_virtual_mapOnRefs
 
 static void Application_virtual_finalize(ManagedObject *self) {
+    Object_virtual_finalize(self);
     delete as_Application(self)->ptr;
 }
 
 OBJECT_VTABLE(Application)
 
 static Object *ApplicationClass_virtual_newInstance(Esther *es, Object *, Object *) {
-    Application *instance = new Application;
+    Application *instance = reinterpret_cast<Application *>(gc_alloc(sizeof(Application)));
     Object_init(es, &instance->base, TObject, applicationClass);
     instance->ptr = new QApplication(instance->argc, 0);
     *reinterpret_cast<void **>(instance) = &vtable_for_Application;
@@ -83,13 +57,14 @@ struct MessageBox {
 #define MessageBox_virtual_mapOnRefs Object_virtual_mapOnRefs
 
 static void MessageBox_virtual_finalize(ManagedObject *self) {
+    Object_virtual_finalize(self);
     delete as_MessageBox(self)->ptr;
 }
 
 OBJECT_VTABLE(MessageBox)
 
 static Object *MessageBoxClass_virtual_newInstance(Esther *es, Object *, Object *) {
-    MessageBox *instance = new MessageBox;
+    MessageBox *instance = reinterpret_cast<MessageBox *>(gc_alloc(sizeof(MessageBox)));
     Object_init(es, &instance->base, TObject, messageBoxClass);
     instance->ptr = new QMessageBox;
     *reinterpret_cast<void **>(instance) = &vtable_for_MessageBox;
@@ -134,7 +109,7 @@ EXPORT void Qt_initialize(Esther *es, Context *context) {
 
     Class_setMethod_func(applicationClass, Function_new(es, string_const("exec"), (Object * (*) ()) Application_exec, 0));
 
-    Context_setLocal(context, Class_getName(applicationClass), applicationClass);
+    Context_setLocal(context, str_to_id(Class_getName(applicationClass)), applicationClass);
 
     messageBoxClass = Class_new(es, string_const("QMessageBox"), NULL);
     *(void **) messageBoxClass = &vtable_for_MessageBoxClass;
@@ -143,7 +118,7 @@ EXPORT void Qt_initialize(Esther *es, Context *context) {
     Class_setMethod_func(messageBoxClass, Function_new(es, string_const("setTitle"), (Object * (*) ()) MessageBox_setTitle, 1));
     Class_setMethod_func(messageBoxClass, Function_new(es, string_const("setText"), (Object * (*) ()) MessageBox_setText, 1));
 
-    Context_setLocal(context, Class_getName(messageBoxClass), messageBoxClass);
+    Context_setLocal(context, str_to_id(Class_getName(messageBoxClass)), messageBoxClass);
 }
 
 EXPORT void Qt_finalize(Esther *UNUSED(es)) {

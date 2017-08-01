@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include "esther/common.h"
+#include "esther/std_string.h"
 
 #if defined(__x86_64)
 typedef uint64_t ID;

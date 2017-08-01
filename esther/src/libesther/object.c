@@ -3,7 +3,6 @@
 #include "esther/esther.h"
 #include "esther/exception.h"
 #include "esther/function.h"
-#include "esther/id.h"
 #include "esther/std_map.h"
 #include "esther/std_string.h"
 #include "esther/string.h"
@@ -45,42 +44,42 @@ Object *Object_getClass(Object *self) {
     return self->objectClass;
 }
 
-bool Object_hasAttribute(Object *self, struct string name) {
-    return self->attributes && std_map_contains(self->attributes, (void *) str_to_id(name));
+bool Object_hasAttribute(Object *self, ID id) {
+    return self->attributes && std_map_contains(self->attributes, (void *) id);
 }
 
-Object *Object_getAttribute(Object *self, struct string name) {
-    return self->attributes ? std_map_get(self->attributes, (void *) str_to_id(name)) : NULL;
+Object *Object_getAttribute(Object *self, ID id) {
+    return self->attributes ? std_map_get(self->attributes, (void *) id) : NULL;
 }
 
-void Object_setAttribute(Object *self, struct string name, Object *value) {
+void Object_setAttribute(Object *self, ID id, Object *value) {
     if (!self->attributes)
         self->attributes = std_map_new(compare_id);
 
-    std_map_set(self->attributes, (void *) str_to_id(name), value);
+    std_map_set(self->attributes, (void *) id, value);
 }
 
 bool Object_is(Object *self, Object *_class) {
     return Class_isChildOf(self->objectClass, _class);
 }
 
-Object *Object_resolve(Object *self, struct string name) {
-    return Object_hasAttribute(self, name) ? Object_getAttribute(self, name) : Class_lookup(self->objectClass, name);
+Object *Object_resolve(Object *self, ID id) {
+    return Object_hasAttribute(self, id) ? Object_getAttribute(self, id) : Class_lookup(self->objectClass, id);
 }
 
-Object *Object_call(Esther *es, Object *self, struct string name, Object *args) {
-    Object *f = Object_resolve(self, name);
+Object *Object_call(Esther *es, Object *self, ID id, Object *args) {
+    Object *f = Object_resolve(self, id);
 
     if (!f) {
-        Exception_throw_new(es, "undefined attribute '%s'", name.data);
+        Exception_throw_new(es, "undefined attribute '%s'", id_to_str(id).data);
         return NULL;
     }
 
     return Object_call_function(es, self, f, args);
 }
 
-Object *Object_callIfFound(Esther *es, Object *self, struct string name, Object *args) {
-    Object *f = Object_resolve(self, name);
+Object *Object_callIfFound(Esther *es, Object *self, ID id, Object *args) {
+    Object *f = Object_resolve(self, id);
 
     if (!f)
         return NULL;
@@ -92,7 +91,7 @@ Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args) 
     if (Object_getType(f) == TFunction)
         return Function_invoke(es, f, self, args);
 
-    return Object_call(es, f, string_const("()"), Tuple_new(es, 2, self, args));
+    return Object_call(es, f, c_str_to_id("()"), Tuple_new(es, 2, self, args));
 }
 
 Object *Object_toString(Esther *es, Object *self) {

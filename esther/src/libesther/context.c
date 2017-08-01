@@ -37,39 +37,39 @@ Object *Context_getHere(Context *self) {
     return self->here;
 }
 
-bool Context_hasLocal(Context *self, struct string name) {
-    return Object_hasAttribute(self->here, name);
+bool Context_hasLocal(Context *self, ID id) {
+    return Object_hasAttribute(self->here, id);
 }
 
-Object *Context_getLocal(Context *self, struct string name) {
-    return Object_getAttribute(self->here, name);
+Object *Context_getLocal(Context *self, ID id) {
+    return Object_getAttribute(self->here, id);
 }
 
-void Context_setLocal(Context *self, struct string name, Object *value) {
-    Object_setAttribute(self->here, name, value);
+void Context_setLocal(Context *self, ID id, Object *value) {
+    Object_setAttribute(self->here, id, value);
 }
 
-Object *Context_resolve(Esther *es, Context *self, struct string name) {
-    if (Context_hasLocal(self, name))
-        return Context_getLocal(self, name);
+Object *Context_resolve(Esther *es, Context *self, ID id) {
+    if (Context_hasLocal(self, id))
+        return Context_getLocal(self, id);
 
     if (self->parent)
-        return Context_resolve(es, self->parent, name);
+        return Context_resolve(es, self->parent, id);
 
-    if (Esther_hasRootObject(es, str_to_id(name)))
-        return Esther_getRootObject(es, str_to_id(name));
+    if (Esther_hasRootObject(es, id))
+        return Esther_getRootObject(es, id);
 
     return NULL;
 }
 
-bool Context_assign(Context *self, struct string name, Object *value) {
-    if (Context_hasLocal(self, name)) {
-        Context_setLocal(self, name, value);
+bool Context_assign(Context *self, ID id, Object *value) {
+    if (Context_hasLocal(self, id)) {
+        Context_setLocal(self, id, value);
         return true;
     }
 
     if (self->parent)
-        return Context_assign(self->parent, name, value);
+        return Context_assign(self->parent, id, value);
 
     return false;
 }

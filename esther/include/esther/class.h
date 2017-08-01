@@ -15,19 +15,16 @@ typedef struct ClassVTable {
     Object *(*newInstance)(Esther *es, Object *self, Object *args);
 } ClassVTable;
 
-#define CLASS_VTABLE(name)                                  \
-    static ClassVTable vtable_for_##name##Class = {         \
-        .base = {                                           \
-            .base = {                                       \
-                .base = {                                   \
-                    .mapOnRefs = Class_virtual_mapOnRefs }, \
-                .finalize = Class_virtual_finalize },       \
-            .toString = Class_virtual_toString,             \
-            .inspect = Class_virtual_toString,              \
-            .equals = Object_virtual_equals,                \
-            .less = Object_virtual_less,                    \
-            .isTrue = Object_virtual_isTrue },              \
-        .newInstance = name##Class_virtual_newInstance      \
+#define CLASS_VTABLE(name)                          \
+    static ClassVTable vtable_for_##name##Class = { \
+        { { { Class_virtual_mapOnRefs },            \
+            Class_virtual_finalize },               \
+          Class_virtual_toString,                   \
+          Class_virtual_toString,                   \
+          Object_virtual_equals,                    \
+          Object_virtual_less,                      \
+          Object_virtual_isTrue },                  \
+        name##Class_virtual_newInstance             \
     };
 
 Object *Class_virtual_unimplemented_newInstance(Esther *es, Object *self, Object *args);
@@ -51,14 +48,14 @@ struct string Class_getName(Object *self);
 
 Object *Class_getSuperclass(Object *self);
 
-bool Class_hasMethod(Object *self, struct string name);
-Object *Class_getMethod(Object *self, struct string name);
-void Class_setMethod(Object *self, struct string name, Object *method);
+bool Class_hasMethod(Object *self, ID id);
+Object *Class_getMethod(Object *self, ID id);
+void Class_setMethod(Object *self, ID id, Object *method);
 void Class_setMethod_func(Object *self, Object *f);
 
 bool Class_isChildOf(Object *self, Object *_class);
 
-Object *Class_lookup(Object *self, struct string name);
+Object *Class_lookup(Object *self, ID id);
 
 Object *Class_virtual_toString(Esther *es, Object *self);
 

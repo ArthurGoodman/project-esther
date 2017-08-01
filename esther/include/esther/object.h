@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include "esther/common.h"
+#include "esther/id.h"
 #include "esther/memory.h"
 
 struct std_map;
@@ -39,17 +40,15 @@ typedef struct ObjectVTable {
     bool (*isTrue)();
 } ObjectVTable;
 
-#define OBJECT_VTABLE(name)                              \
-    static ObjectVTable vtable_for_##name = {            \
-        .base = {                                        \
-            .base = {                                    \
-                .mapOnRefs = name##_virtual_mapOnRefs }, \
-            .finalize = name##_virtual_finalize },       \
-        .toString = Object_virtual_toString,             \
-        .inspect = Object_virtual_toString,              \
-        .equals = Object_virtual_equals,                 \
-        .less = Object_virtual_less,                     \
-        .isTrue = Object_virtual_isTrue                  \
+#define OBJECT_VTABLE(name)                   \
+    static ObjectVTable vtable_for_##name = { \
+        { { name##_virtual_mapOnRefs },       \
+          name##_virtual_finalize },          \
+        Object_virtual_toString,              \
+        Object_virtual_toString,              \
+        Object_virtual_equals,                \
+        Object_virtual_less,                  \
+        Object_virtual_isTrue                 \
     };
 
 typedef struct Object {
@@ -70,18 +69,17 @@ ObjectType Object_getType(Object *self);
 
 Object *Object_getClass(Object *self);
 
-//@Refactor: Convert all methods like this to accept ID instead of struct string
-bool Object_hasAttribute(Object *self, struct string name);
-Object *Object_getAttribute(Object *self, struct string name);
-void Object_setAttribute(Object *self, struct string name, Object *value);
+bool Object_hasAttribute(Object *self, ID id);
+Object *Object_getAttribute(Object *self, ID id);
+void Object_setAttribute(Object *self, ID id, Object *value);
 
 bool Object_is(Object *self, Object *_class);
 
-Object *Object_resolve(Object *self, struct string name);
+Object *Object_resolve(Object *self, ID id);
 
-//@TODO: Make variadic version of call
-Object *Object_call(Esther *es, Object *self, struct string name, Object *args);
-Object *Object_callIfFound(Esther *es, Object *self, struct string name, Object *args);
+//@Refactor: Make variadic version of call
+Object *Object_call(Esther *es, Object *self, ID id, Object *args);
+Object *Object_callIfFound(Esther *es, Object *self, ID id, Object *args);
 Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args);
 
 Object *Object_toString(Esther *es, Object *self);

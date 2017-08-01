@@ -12,6 +12,7 @@ struct IO {
 #define IO_virtual_mapOnRefs Object_virtual_mapOnRefs
 
 static void IO_virtual_finalize(ManagedObject *self) {
+    Object_virtual_finalize(self);
     fclose(as_IO(self)->file);
 }
 
@@ -177,9 +178,9 @@ void IO_initialize(Esther *es, Context *context) {
     ioClass = Class_new(es, string_const("IO"), NULL);
     *(void **) ioClass = &vtable_for_IOClass;
 
-    Object_setAttribute(ioClass, string_const("stdout"), IO_new(es, stdout, ioClass));
-    Object_setAttribute(ioClass, string_const("stdin"), IO_new(es, stdin, ioClass));
-    Object_setAttribute(ioClass, string_const("stderr"), IO_new(es, stderr, ioClass));
+    Object_setAttribute(ioClass, c_str_to_id("stdout"), IO_new(es, stdout, ioClass));
+    Object_setAttribute(ioClass, c_str_to_id("stdin"), IO_new(es, stdin, ioClass));
+    Object_setAttribute(ioClass, c_str_to_id("stderr"), IO_new(es, stderr, ioClass));
 
     Class_setMethod_func(ioClass, Function_new(es, string_const("write"), (Object * (*) ()) IO_write, 1));
     Class_setMethod_func(ioClass, Function_new(es, string_const("writeLine"), (Object * (*) ()) IO_writeLine, 1));
@@ -192,14 +193,14 @@ void IO_initialize(Esther *es, Context *context) {
     Class_setMethod_func(ioClass, Function_new(es, string_const("flush"), (Object * (*) ()) IO_flush, 0));
     Class_setMethod_func(ioClass, Function_new(es, string_const("close"), (Object * (*) ()) IO_close, 0));
 
-    Context_setLocal(context, Class_getName(ioClass), ioClass);
+    Context_setLocal(context, str_to_id(Class_getName(ioClass)), ioClass);
 
     fileClass = Class_new(es, string_const("File"), ioClass);
     *(void **) fileClass = &vtable_for_IOClass;
 
-    Object_setAttribute(fileClass, string_const("open"), Function_new(es, string_const("open"), (Object * (*) ()) FileClass_open, 2));
+    Object_setAttribute(fileClass, c_str_to_id("open"), Function_new(es, string_const("open"), (Object * (*) ()) FileClass_open, 2));
 
-    Context_setLocal(context, Class_getName(fileClass), fileClass);
+    Context_setLocal(context, str_to_id(Class_getName(fileClass)), fileClass);
 }
 
 void IO_finalize(Esther *UNUSED(es)) {

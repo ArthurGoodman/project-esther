@@ -20,7 +20,10 @@ struct Registers {
 #endif
 };
 
+extern "C" void saveRegisters(Registers *);
+
 #if defined(__WIN64) && !defined(NDEBUG)
+#undef saveRegisters
 void saveRegisters(Registers *) {
     asm("mov %rdi,0x0(%rcx)\n"
         "mov %rsi,0x8(%rcx)\n"
@@ -30,9 +33,7 @@ void saveRegisters(Registers *) {
         "mov %r14,0x28(%rcx)\n"
         "mov %r15,0x30(%rcx)");
 }
-#else
-#if defined(__x86_64)
-#if defined(__WIN64)
+#elif defined(__WIN64)
 asm("saveRegisters:\n"
     "mov %rdi,0x0(%rcx)\n"
     "mov %rsi,0x8(%rcx)\n"
@@ -42,7 +43,7 @@ asm("saveRegisters:\n"
     "mov %r14,0x28(%rcx)\n"
     "mov %r15,0x30(%rcx)\n"
     "ret");
-#elif defined(__linux)
+#elif defined(__x86_64) && defined(__linux)
 asm("saveRegisters:\n"
     "mov %rbx,0x0(%rdi)\n"
     "mov %r12,0x8(%rdi)\n"
@@ -50,7 +51,6 @@ asm("saveRegisters:\n"
     "mov %r14,0x18(%rdi)\n"
     "mov %r15,0x20(%rdi)\n"
     "ret");
-#endif
 #elif defined(__i386)
 asm("_saveRegisters:\n"
     "mov 0x4(%esp),%eax\n"
@@ -60,9 +60,6 @@ asm("_saveRegisters:\n"
     "mov %edi,0xc(%eax)\n"
     "mov %esi,0x10(%eax)\n"
     "ret");
-#endif
-
-extern "C" void saveRegisters(Registers *);
 #endif
 
 const size_t InitialHeapSize = 20000;
@@ -441,9 +438,11 @@ void *gc_alloc(size_t size) {
     return claimFreeSpace(size);
 }
 
-void gc_free(void *UNUSED(p)) {
 #ifndef GC
+void gc_free(void *p) {
     free(p);
+#else
+void gc_free(void *UNUSED(p)) {
 #endif
 }
 
