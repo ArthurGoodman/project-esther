@@ -20,19 +20,22 @@ set(FLAGS "-Wall -Wextra -pedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
 set(CMAKE_C_FLAGS "${CMAKE_X_FLAGS} ${FLAGS}")
 
+if(WIN32)
+add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+endif()
+
 add_library(libesther SHARED ${libesther_sources} ${libesther_headers})
 set_target_properties(libesther PROPERTIES OUTPUT_NAME esther)
+set_target_properties(libesther PROPERTIES LINK_FLAGS "-Wl,--output-def,lib/libesther.def")
 
 if(UNIX)
 target_link_libraries(libesther dl)
 endif()
 
 if(WIN32)
-add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
-
 add_custom_command(
     TARGET libesther
-    COMMAND dlltool -l lib/libesther.lib --export-all-symbol lib/libesther.dll)
+    COMMAND lib /machine:x64 /def:lib/libesther.def /out:lib/libesther.lib)
 endif()
 
 add_library(libio SHARED ${libio_sources})

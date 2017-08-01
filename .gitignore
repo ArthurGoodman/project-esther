@@ -2,6 +2,7 @@
 *.autosave
 *.cbp
 *.cmake
+*.def
 *.dll
 *.exe
 *.exp

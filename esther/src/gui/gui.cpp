@@ -1,4 +1,4 @@
-#if defined(_WIN64)
+#if defined(_MSC_VER)
 #define __x86_64
 #endif
 
@@ -12,7 +12,7 @@
 #define EXPORT extern "C"
 #endif
 
-#if defined(_WIN64)
+#if defined(_MSC_VER)
 #undef CLASS_VTABLE
 #define CLASS_VTABLE(name)                          \
     static ClassVTable vtable_for_##name##Class = { \
@@ -63,9 +63,9 @@ OBJECT_VTABLE(Application)
 
 static Object *ApplicationClass_virtual_newInstance(Esther *es, Object *, Object *) {
     Application *instance = new Application;
-    Object_init(es, &instance->base, TObject, messageBoxClass);
+    Object_init(es, &instance->base, TObject, applicationClass);
     instance->ptr = new QApplication(instance->argc, 0);
-    //*reinterpret_cast<void **>(instance) = &vtable_for_Application;
+    *reinterpret_cast<void **>(instance) = &vtable_for_Application;
     return reinterpret_cast<Object *>(instance);
 }
 
@@ -90,25 +90,48 @@ static Object *MessageBoxClass_virtual_newInstance(Esther *es, Object *, Object 
     MessageBox *instance = new MessageBox;
     Object_init(es, &instance->base, TObject, messageBoxClass);
     instance->ptr = new QMessageBox;
-    //*reinterpret_cast<void **>(instance) = &vtable_for_MessageBox;
+    *reinterpret_cast<void **>(instance) = &vtable_for_MessageBox;
     return reinterpret_cast<Object *>(instance);
 }
 
 CLASS_VTABLE(MessageBox)
 
-EXPORT void GUI_initialize(Esther *es, Context *context) {
-    int argc = 0;
-    char **argv = 0;
-
-    QApplication app(argc, argv);
-
-    QMessageBox msgBox;
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.setText("GUI_initialize");
-    msgBox.show();
-
-    app.exec();
+static Object *Application_exec(Esther *es, Object *self) {
+    return ValueObject_new_int(es, as_Application(self)->ptr->exec());
 }
 
-EXPORT void GUI_finalize(Esther *es) {
+static Object *MessageBox_show(Esther *es, Object *self) {
+    as_MessageBox(self)->ptr->show();
+    return es->nullObject;
+}
+
+static Object *MessageBox_setTitle(Esther *es, Object *self, Object *str) {
+    as_MessageBox(self)->ptr->setWindowTitle(String_c_str(str));
+    return es->nullObject;
+}
+
+static Object *MessageBox_setText(Esther *es, Object *self, Object *str) {
+    as_MessageBox(self)->ptr->setText(String_c_str(str));
+    return es->nullObject;
+}
+
+EXPORT void GUI_initialize(Esther *es, Context *context) {
+    applicationClass = Class_new(es, string_const("QApplication"), NULL);
+    *(void **) applicationClass = &vtable_for_ApplicationClass;
+
+    Class_setMethod_func(applicationClass, Function_new(es, string_const("exec"), (Object * (*) ()) Application_exec, 0));
+
+    Context_setLocal(context, Class_getName(applicationClass), applicationClass);
+
+    messageBoxClass = Class_new(es, string_const("QMessageBox"), NULL);
+    *(void **) messageBoxClass = &vtable_for_MessageBoxClass;
+
+    Class_setMethod_func(messageBoxClass, Function_new(es, string_const("show"), (Object * (*) ()) MessageBox_show, 0));
+    Class_setMethod_func(messageBoxClass, Function_new(es, string_const("setTitle"), (Object * (*) ()) MessageBox_setTitle, 1));
+    Class_setMethod_func(messageBoxClass, Function_new(es, string_const("setText"), (Object * (*) ()) MessageBox_setText, 1));
+
+    Context_setLocal(context, Class_getName(messageBoxClass), messageBoxClass);
+}
+
+EXPORT void GUI_finalize(Esther *) {
 }
