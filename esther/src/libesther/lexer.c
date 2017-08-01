@@ -234,10 +234,10 @@ static Object *scan(Esther *es, Lexer *lexer) {
         }
     }
 
-    Object *token = Tuple_new(es, 2, id, text);
+    Object *token = Token(id, text);
     Object *position = Tuple_new(es, 3, ValueObject_new_int(es, pos), ValueObject_new_int(es, line), ValueObject_new_int(es, column));
 
-    Object_setAttribute(token, string_const("pos"), position);
+    Token_setPosition(token, position);
 
     return token;
 }

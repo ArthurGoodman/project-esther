@@ -6,6 +6,13 @@ extern "C" {
 
 #include "esther/object.h"
 
+#define Token(id, text) (Tuple_new(es, 2, (id), (text)))
+#define Token_id(t) (Tuple_get((t), 0))
+#define Token_text(t) (Tuple_get((t), 1))
+
+#define Token_setPosition(t, position) (Object_setAttribute((t), string_const("pos"), (position)))
+#define Token_getPosition(t) (Object_getAttribute((t), string_const("pos")))
+
 typedef struct Lexer {
     Object base;
 

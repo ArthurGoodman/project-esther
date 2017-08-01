@@ -79,6 +79,7 @@ bool Object_is(Object *self, Object *_class);
 
 Object *Object_resolve(Object *self, struct string name);
 
+//@TODO: Make variadic version of call
 Object *Object_call(Esther *es, Object *self, struct string name, Object *args);
 Object *Object_callIfFound(Esther *es, Object *self, struct string name, Object *args);
 Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args);
