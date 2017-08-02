@@ -325,8 +325,14 @@ struct string string_escape_buffer(const char *buffer, size_t size) {
     return str;
 }
 
-//@Investigate: quote cutting under small constraints
+//@Investigate: quote cutting under small constraints and at the end of file
 struct string string_quote(struct string self, int offset, int column) {
+    //@Temp fix
+    if (self.data[offset] == '\n') {
+        offset--;
+        column--;
+    }
+
     static const int max_quote_length = 150;
 
     int start = string_rfind_char(self, '\n', offset) + 1;

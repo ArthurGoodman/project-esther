@@ -90,7 +90,7 @@ class Parser {
         var parser = self
 
         while (symbol().isSpace())
-            self.pos += 1
+            self.pos++
 
         if (symbol() == '\0')
             self.token = new Token('e')
@@ -101,22 +101,22 @@ class Parser {
 
                 while (parser.symbol().isDigit()) {
                     self.text += parser.symbol()
-                    parser.pos += 1
+                    parser.pos++
                 }
                 
                 if (parser.symbol() == '.') {
                     self.text += parser.symbol()
-                    parser.pos += 1
+                    parser.pos++
 
                     while (parser.symbol().isDigit()) {
                         self.text += parser.symbol()
-                        parser.pos += 1
+                        parser.pos++
                     }
                 }
             }
         else if (self.operators.contains(symbol())) {
             self.token = new Token(symbol())
-            self.pos += 1
+            self.pos++
         } else if (symbol().isLetter() || symbol() == '_')
             self.token = new Token('e') {
                 self.id = 'u'
@@ -124,14 +124,14 @@ class Parser {
 
                 while (parser.symbol().isLetter() || parser.symbol() == '_') {
                     self.text += parser.symbol()
-                    parser.pos += 1
+                    parser.pos++
                 }
             }
         else
             self.token = new Token('e') {
                 self.id = 'u'
                 self.text = parser.symbol()
-                parser.pos += 1
+                parser.pos++
             }
 
         if (self.debugLexer)

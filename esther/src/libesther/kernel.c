@@ -10,8 +10,18 @@ static Object *ClassClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
     return Class_new_anonymous(es);
 }
 
-static Object *StringClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    return String_new_c_str(es, "");
+static Object *StringClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
+    switch (Tuple_size(args)) {
+    case 0:
+        return String_new_c_str(es, "");
+
+    case 1:
+        return String_new(es, String_value(Object_toString(es, Tuple_get(args, 0))));
+
+    default:
+        Exception_throw_new(es, "invalid number of arguments");
+        return NULL;
+    }
 }
 
 static Object *SymbolClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
@@ -37,10 +47,11 @@ static Object *MapClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Ob
 #define NumericClass_virtual_newInstance Class_virtual_unimplemented_newInstance
 
 static Object *CharClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
-    if (Tuple_size(args) == 0)
+    switch (Tuple_size(args)) {
+    case 0:
         return ValueObject_new_char(es, '\0');
 
-    if (Tuple_size(args) == 1) {
+    case 1: {
         Object *value = Tuple_get(args, 0);
 
         if (Object_getType(value) == TValueObject)
@@ -53,15 +64,18 @@ static Object *CharClass_virtual_newInstance(Esther *es, Object *UNUSED(self), O
         }
     }
 
-    Exception_throw_new(es, "invalid number of arguments");
-    return NULL;
+    default:
+        Exception_throw_new(es, "invalid number of arguments");
+        return NULL;
+    }
 }
 
 static Object *IntClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
-    if (Tuple_size(args) == 0)
+    switch (Tuple_size(args)) {
+    case 0:
         return ValueObject_new_int(es, 0);
 
-    if (Tuple_size(args) == 1) {
+    case 1: {
         Object *value = Tuple_get(args, 0);
 
         if (Object_getType(value) == TValueObject)
@@ -74,15 +88,18 @@ static Object *IntClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Ob
         }
     }
 
-    Exception_throw_new(es, "invalid number of arguments");
-    return NULL;
+    default:
+        Exception_throw_new(es, "invalid number of arguments");
+        return NULL;
+    }
 }
 
 static Object *FloatClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
-    if (Tuple_size(args) == 0)
+    switch (Tuple_size(args)) {
+    case 0:
         return ValueObject_new_real(es, 0.0);
 
-    if (Tuple_size(args) == 1) {
+    case 1: {
         Object *value = Tuple_get(args, 0);
 
         if (Object_getType(value) == TValueObject)
@@ -95,8 +112,10 @@ static Object *FloatClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
         }
     }
 
-    Exception_throw_new(es, "invalid number of arguments");
-    return NULL;
+    default:
+        Exception_throw_new(es, "invalid number of arguments");
+        return NULL;
+    }
 }
 
 static Object *ExceptionClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {

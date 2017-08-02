@@ -346,56 +346,56 @@ static Object *suffix(Esther *es, Parser *parser) {
     Object *e = term(es, parser);
     Object *p = Token_getPosition(parser->token);
 
+    while (true) {
+        if (immediateAccept(es, parser, id_leftPar)) {
+            Object *args = Array_new(es, 0);
+
+            if (!check(es, parser, id_rightPar))
+                do
+                    Array_push(args, expr(es, parser));
+                while (accept(es, parser, id_comma));
+
+            if (!accept(es, parser, id_rightPar))
+                syntax_error(es, p, "unmatched parentheses");
+
+            e = CallExpression(e, args);
+        } else if (immediateAccept(es, parser, id_pars)) {
+            e = CallExpression(e, Array_new(es, 0));
+        } else if (immediateAccept(es, parser, id_leftBracket)) {
+            Object *args = Array_new(es, 0);
+
+            if (!check(es, parser, id_rightBracket))
+                do
+                    Array_push(args, expr(es, parser));
+                while (accept(es, parser, id_comma));
+
+            if (!accept(es, parser, id_rightBracket))
+                syntax_error(es, p, "unmatched brackets");
+
+            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), args);
+        } else if (immediateAccept(es, parser, id_brackets)) {
+            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), Array_new(es, 0));
+        } else if (accept_pos(es, parser, id_dot, &p)) {
+            if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
+                immediateAccept(es, parser, id_newLine);
+                e = AttributeExpression(e, Token_text(parser->token));
+                getToken(parser);
+            } else {
+                bool expectRightPar = accept(es, parser, id_leftPar);
+
+                e = DotExpression(e, logicOr(es, parser));
+
+                if (expectRightPar && !accept(es, parser, id_rightPar))
+                    syntax_error(es, p, "unmatched parentheses");
+            }
+        } else
+            break;
+    }
+
     if (accept_pos(es, parser, id_dec, &p))
         e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_--")), Array_new(es, 0));
     else if (accept_pos(es, parser, id_inc, &p))
         e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_++")), Array_new(es, 0));
-    else
-        while (true) {
-            if (immediateAccept(es, parser, id_leftPar)) {
-                Object *args = Array_new(es, 0);
-
-                if (!check(es, parser, id_rightPar))
-                    do
-                        Array_push(args, expr(es, parser));
-                    while (accept(es, parser, id_comma));
-
-                if (!accept(es, parser, id_rightPar))
-                    syntax_error(es, p, "unmatched parentheses");
-
-                e = CallExpression(e, args);
-            } else if (immediateAccept(es, parser, id_pars)) {
-                e = CallExpression(e, Array_new(es, 0));
-            } else if (immediateAccept(es, parser, id_leftBracket)) {
-                Object *args = Array_new(es, 0);
-
-                if (!check(es, parser, id_rightBracket))
-                    do
-                        Array_push(args, expr(es, parser));
-                    while (accept(es, parser, id_comma));
-
-                if (!accept(es, parser, id_rightBracket))
-                    syntax_error(es, p, "unmatched brackets");
-
-                e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), args);
-            } else if (immediateAccept(es, parser, id_brackets)) {
-                e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), Array_new(es, 0));
-            } else if (accept_pos(es, parser, id_dot, &p)) {
-                if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
-                    immediateAccept(es, parser, id_newLine);
-                    e = AttributeExpression(e, Token_text(parser->token));
-                    getToken(parser);
-                } else {
-                    bool expectRightPar = accept(es, parser, id_leftPar);
-
-                    e = DotExpression(e, logicOr(es, parser));
-
-                    if (expectRightPar && !accept(es, parser, id_rightPar))
-                        syntax_error(es, p, "unmatched parentheses");
-                }
-            } else
-                break;
-        }
 
     if (p && !Expression_hasPosition(e))
         Expression_setPosition(e, p);
