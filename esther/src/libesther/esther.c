@@ -49,6 +49,10 @@ static Object *Esther_evalFunction(Esther *es, Object *UNUSED(self), Object *ast
     return Esther_eval(es, ast, es->root);
 }
 
+static Object *Esther_system(Esther *es, Object *UNUSED(self), Object *str) {
+    return ValueObject_new_int(es, system(String_c_str(str)));
+}
+
 //@TODO: Make modules describe themselves separetely (loop over directories)
 static void Esther_loadModules(Esther *es) {
     struct string str = executable_dir();
@@ -147,12 +151,13 @@ void Esther_init(Esther *es) {
 
     Object_setAttribute(es->esther, c_str_to_id("lexer"), es->lexer);
     Object_setAttribute(es->esther, c_str_to_id("parser"), es->parser);
-    Object_setAttribute(es->esther, c_str_to_id("eval"), Function_new(es, string_const("eval"), (Object * (*) ()) Esther_evalFunction, 1));
 
     es->root = Context_new(es);
 
     Context_setLocal(es->root, c_str_to_id("print"), Function_new(es, string_const("print"), (Object * (*) ()) Esther_print, -1));
     Context_setLocal(es->root, c_str_to_id("println"), Function_new(es, string_const("println"), (Object * (*) ()) Esther_println, -1));
+    Context_setLocal(es->root, c_str_to_id("eval"), Function_new(es, string_const("eval"), (Object * (*) ()) Esther_evalFunction, 1));
+    Context_setLocal(es->root, c_str_to_id("system"), Function_new(es, string_const("system"), (Object * (*) ()) Esther_system, 1));
 
     Esther_setRootObject(es, c_str_to_id("esther"), es->esther);
 
