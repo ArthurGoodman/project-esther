@@ -38,10 +38,10 @@ static ClassVTable vtable_for_Class = {
 };
 
 void Class_init(Esther *es, Object *self, struct string name, Object *superclass) {
-    Object_init(es, self, TClass, es->classClass);
+    Object_init(es, self, TClass, Esther_getRootObject(es, c_str_to_id("Class")));
 
     as_Class(self)->name = string_copy(name);
-    as_Class(self)->superclass = superclass ? superclass : es->objectClass;
+    as_Class(self)->superclass = superclass ? superclass : Esther_getRootObject(es, c_str_to_id("Object"));
     as_Class(self)->methods = NULL;
 
     *(void **) self = &vtable_for_Class;

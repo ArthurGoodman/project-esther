@@ -51,7 +51,7 @@ static ObjectVTable vtable_for_Tuple = {
 };
 
 void Tuple_init_null(Esther *es, Object *self, size_t size) {
-    Object_init(es, self, TTuple, es->tupleClass);
+    Object_init(es, self, TTuple, Esther_getRootObject(es, c_str_to_id("Tuple")));
 
     as_Tuple(self)->data = calloc(size, sizeof(Object *));
 

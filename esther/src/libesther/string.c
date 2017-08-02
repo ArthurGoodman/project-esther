@@ -38,7 +38,7 @@ static ObjectVTable vtable_for_String = {
 };
 
 void String_init_move(Esther *es, Object *self, struct string value) {
-    Object_init(es, self, TString, es->stringClass);
+    Object_init(es, self, TString, Esther_getRootObject(es, c_str_to_id("String")));
 
     as_String(self)->value = value;
 

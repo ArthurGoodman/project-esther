@@ -26,7 +26,7 @@ static ObjectVTable vtable_for_Function = {
 };
 
 void Function_init(Esther *es, Object *f, struct string name, Object *(*body)(), int argc) {
-    Object_init(es, f, TFunction, es->functionClass);
+    Object_init(es, f, TFunction, Esther_getRootObject(es, c_str_to_id("Function")));
 
     as_Function(f)->name = string_copy(name);
     as_Function(f)->body = body;

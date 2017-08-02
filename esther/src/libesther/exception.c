@@ -41,7 +41,7 @@ static ObjectVTable vtable_for_Exception = {
 };
 
 void Exception_init(Esther *es, Object *self, struct string msg) {
-    Object_init(es, self, TException, es->exceptionClass);
+    Object_init(es, self, TException, Esther_getRootObject(es, c_str_to_id("Exception")));
 
     as_Exception(self)->msg = string_copy(msg);
     as_Exception(self)->pos = NULL;

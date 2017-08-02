@@ -26,7 +26,7 @@ OBJECT_VTABLE(Parser)
 Object *Parser_new(Esther *es) {
     Parser *self = gc_alloc(sizeof(Parser));
 
-    Object_init(es, &self->base, TObject, es->objectClass);
+    Object_init(es, &self->base, TObject, NULL);
 
     self->tokens = NULL;
     self->token = NULL;

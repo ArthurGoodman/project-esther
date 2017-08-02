@@ -12,7 +12,7 @@
 
 Object *Lexer_new(Esther *es) {
     Object *self = gc_alloc(sizeof(Lexer));
-    Object_init(es, self, TObject, es->objectClass);
+    Object_init(es, self, TObject, NULL);
     return self;
 }
 

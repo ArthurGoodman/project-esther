@@ -25,7 +25,7 @@ static ObjectVTable vtable_for_Map = {
 };
 
 void Map_init(Esther *es, Object *self) {
-    Object_init(es, self, TMap, es->mapClass);
+    Object_init(es, self, TMap, Esther_getRootObject(es, c_str_to_id("Map")));
 
     as_Map(self)->data = std_map_new(compare_obj);
 

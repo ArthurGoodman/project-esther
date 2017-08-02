@@ -68,13 +68,13 @@ bool ValueObject_virtual_less(Object *self, Object *obj) {
 Object *ValueObject_variantTypeToObjectClass(Esther *es, VariantType type) {
     switch (type) {
     case CharVariant:
-        return es->charClass;
+        return Esther_getRootObject(es, c_str_to_id("Char"));
 
     case IntVariant:
-        return es->intClass;
+        return Esther_getRootObject(es, c_str_to_id("Int"));
 
     case RealVariant:
-        return es->floatClass;
+        return Esther_getRootObject(es, c_str_to_id("Float"));
 
     default:
         return NULL;

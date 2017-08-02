@@ -13,22 +13,6 @@ typedef struct Context Context;
 typedef struct Esther {
     Mapper *globalMapper;
 
-    Object *objectClass;
-    Object *classClass;
-    Object *stringClass;
-    Object *symbolClass;
-    Object *functionClass;
-    Object *tupleClass;
-    Object *arrayClass;
-    Object *mapClass;
-    Object *booleanClass;
-    Object *nullClass;
-    Object *numericClass;
-    Object *charClass;
-    Object *intClass;
-    Object *floatClass;
-    Object *exceptionClass;
-
     Object *trueObject;
     Object *falseObject;
     Object *nullObject;

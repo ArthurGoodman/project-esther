@@ -10,7 +10,7 @@
 
 Object *Object_new(Esther *es) {
     Object *self = gc_alloc(sizeof(Object));
-    Object_init(es, self, TObject, es->objectClass);
+    Object_init(es, self, TObject, NULL);
     return self;
 }
 
@@ -26,11 +26,11 @@ static ObjectVTable vtable_for_Object = {
     .isTrue = Object_virtual_isTrue
 };
 
-void Object_init(Esther *UNUSED(es), Object *self, ObjectType type, Object *objectClass) {
+void Object_init(Esther *es, Object *self, ObjectType type, Object *objectClass) {
     ManagedObject_init(&self->base);
 
     self->type = type;
-    self->objectClass = objectClass;
+    self->objectClass = objectClass ? objectClass : Esther_getRootObject(es, c_str_to_id("Object"));
     self->attributes = NULL;
 
     *(void **) self = &vtable_for_Object;

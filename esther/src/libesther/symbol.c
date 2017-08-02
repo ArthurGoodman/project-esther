@@ -57,7 +57,7 @@ static ObjectVTable vtable_for_Symbol = {
 };
 
 static void Symbol_init_id(Esther *es, Object *self, ID id) {
-    Object_init(es, self, TSymbol, es->symbolClass);
+    Object_init(es, self, TSymbol, Esther_getRootObject(es, c_str_to_id("Symbol")));
 
     as_Symbol(self)->id = id;
 

@@ -47,7 +47,7 @@ static ObjectVTable vtable_for_Array = {
 };
 
 void Array_init_std(Esther *es, Object *self, struct std_vector *data) {
-    Object_init(es, self, TArray, es->arrayClass);
+    Object_init(es, self, TArray, Esther_getRootObject(es, c_str_to_id("Array")));
 
     as_Array(self)->data = data;
 
