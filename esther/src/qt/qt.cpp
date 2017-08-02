@@ -58,7 +58,7 @@ struct MessageBox {
 
 static void MessageBox_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
-    delete as_MessageBox(self)->ptr;
+    // delete as_MessageBox(self)->ptr;
 }
 
 OBJECT_VTABLE(MessageBox)
@@ -67,6 +67,7 @@ static Object *MessageBoxClass_virtual_newInstance(Esther *es, Object *, Object 
     MessageBox *instance = reinterpret_cast<MessageBox *>(gc_alloc(sizeof(MessageBox)));
     Object_init(es, &instance->base, TObject, messageBoxClass);
     instance->ptr = new QMessageBox;
+    instance->ptr->setAttribute(Qt::WA_DeleteOnClose);
     *reinterpret_cast<void **>(instance) = &vtable_for_MessageBox;
     return reinterpret_cast<Object *>(instance);
 }
