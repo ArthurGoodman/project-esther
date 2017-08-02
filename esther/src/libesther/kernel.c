@@ -111,7 +111,7 @@ static Object *False_virtual_toString(Esther *es, Object *UNUSED(self)) {
     return String_new_c_str(es, "false");
 }
 
-static bool False_virtual_isTrue() {
+static bool False_virtual_isTrue(Object *UNUSED(self)) {
     return false;
 }
 
@@ -125,6 +125,10 @@ static Object *ObjectClass_class(Esther *UNUSED(es), Object *self) {
 
 static Object *ObjectClass_equals(Esther *es, Object *self, Object *obj) {
     return Esther_toBoolean(es, Object_equals(self, obj));
+}
+
+static Object *ObjectClass_clone(Esther *es, Object *self) {
+    return Object_clone(es, self);
 }
 
 static Object *ClassClass_superclass(Esther *UNUSED(es), Object *self) {
@@ -308,6 +312,28 @@ static Object *NumericClass_ne(Esther *es, Object *a, Object *b) {
     return Esther_toBoolean(es, Variant_ne(ValueObject_getValue(a), ValueObject_getValue(b)));
 }
 
+static Object *NumericClass_prefixDec(Esther *UNUSED(es), Object *self) {
+    ValueObject_setValue(self, Variant_sub(ValueObject_getValue(self), Variant_int(1)));
+    return self;
+}
+
+static Object *NumericClass_prefixInc(Esther *UNUSED(es), Object *self) {
+    ValueObject_setValue(self, Variant_add(ValueObject_getValue(self), Variant_int(1)));
+    return self;
+}
+
+static Object *NumericClass_suffixDec(Esther *es, Object *self) {
+    Object *clone = Object_clone(es, self);
+    ValueObject_setValue(self, Variant_sub(ValueObject_getValue(self), Variant_int(1)));
+    return clone;
+}
+
+static Object *NumericClass_suffixInc(Esther *es, Object *self) {
+    Object *clone = Object_clone(es, self);
+    ValueObject_setValue(self, Variant_add(ValueObject_getValue(self), Variant_int(1)));
+    return clone;
+}
+
 static Object *CharClass_isSpace(Esther *es, Object *self) {
     return Esther_toBoolean(es, isspace(Variant_toChar(ValueObject_getValue(self))));
 }
@@ -350,7 +376,8 @@ CLASS_VTABLE(Exception)
         .inspect = name##_virtual_toString,              \
         .equals = Object_virtual_equals,                 \
         .less = Object_virtual_less,                     \
-        .isTrue = is_true##_virtual_isTrue               \
+        .isTrue = is_true##_virtual_isTrue,              \
+        .clone = Object_virtual_clone_unimplemented      \
     };
 
 CONST_VTABLE(True, Object)
@@ -439,6 +466,7 @@ void Kernel_initialize(Esther *es) {
     Class_setMethod_func(objectClass, Function_new(es, string_const("toString"), (Object * (*) ()) Object_toString, 0));
     Class_setMethod_func(objectClass, Function_new(es, string_const("inspect"), (Object * (*) ()) Object_inspect, 0));
     Class_setMethod_func(objectClass, Function_new(es, string_const("equals"), (Object * (*) ()) ObjectClass_equals, 1));
+    Class_setMethod_func(objectClass, Function_new(es, string_const("clone"), (Object * (*) ()) ObjectClass_clone, 0));
     Class_setMethod(objectClass, c_str_to_id("=="), Class_getMethod(objectClass, c_str_to_id("equals")));
 
     Class_setMethod_func(classClass, Function_new(es, string_const("superclass"), (Object * (*) ()) ClassClass_superclass, 0));
@@ -496,6 +524,11 @@ void Kernel_initialize(Esther *es) {
     Class_setMethod_func(numericClass, Function_new(es, string_const(">="), (Object * (*) ()) NumericClass_gte, 1));
     Class_setMethod_func(numericClass, Function_new(es, string_const("=="), (Object * (*) ()) NumericClass_eq, 1));
     Class_setMethod_func(numericClass, Function_new(es, string_const("!="), (Object * (*) ()) NumericClass_ne, 1));
+
+    Class_setMethod_func(numericClass, Function_new(es, string_const("--_"), (Object * (*) ()) NumericClass_prefixDec, 0));
+    Class_setMethod_func(numericClass, Function_new(es, string_const("++_"), (Object * (*) ()) NumericClass_prefixInc, 0));
+    Class_setMethod_func(numericClass, Function_new(es, string_const("_--"), (Object * (*) ()) NumericClass_suffixDec, 0));
+    Class_setMethod_func(numericClass, Function_new(es, string_const("_++"), (Object * (*) ()) NumericClass_suffixInc, 0));
 
     Class_setMethod_func(charClass, Function_new(es, string_const("isSpace"), (Object * (*) ()) CharClass_isSpace, 0));
     Class_setMethod_func(charClass, Function_new(es, string_const("isDigit"), (Object * (*) ()) CharClass_isDigit, 0));

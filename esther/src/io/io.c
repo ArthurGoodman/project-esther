@@ -10,6 +10,7 @@ struct IO {
 #define IOClass_virtual_newInstance Class_virtual_unimplemented_newInstance
 
 #define IO_virtual_mapOnRefs Object_virtual_mapOnRefs
+#define IO_virtual_clone Object_virtual_clone_unimplemented
 
 static void IO_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);

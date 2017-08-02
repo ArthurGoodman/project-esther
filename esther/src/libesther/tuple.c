@@ -46,7 +46,8 @@ static ObjectVTable vtable_for_Tuple = {
     .inspect = Tuple_virtual_inspect,
     .equals = Object_virtual_equals,
     .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = Object_virtual_clone_unimplemented
 };
 
 void Tuple_init_null(Esther *es, Object *self, size_t size) {

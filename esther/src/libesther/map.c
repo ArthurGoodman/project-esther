@@ -19,7 +19,8 @@ static ObjectVTable vtable_for_Map = {
     .inspect = Map_virtual_inspect,
     .equals = Object_virtual_equals,
     .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = Object_virtual_clone_unimplemented
 };
 
 void Map_init(Esther *es, Object *self) {

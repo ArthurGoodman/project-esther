@@ -36,7 +36,8 @@ static ObjectVTable vtable_for_Exception = {
     .inspect = Object_virtual_toString,
     .equals = Object_virtual_equals,
     .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = Object_virtual_clone_unimplemented
 };
 
 void Exception_init(Esther *es, Object *self, struct string msg) {

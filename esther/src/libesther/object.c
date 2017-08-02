@@ -8,23 +8,18 @@
 #include "esther/string.h"
 #include "esther/tuple.h"
 
+Object *Object_virtual_clone_unimplemented(Esther *es, Object *self) {
+    Exception_throw_new(es, "cannot clone objects of %s class", Class_getName(Object_getClass(self)).data);
+    return NULL;
+}
+
 Object *Object_new(Esther *es) {
     Object *self = gc_alloc(sizeof(Object));
     Object_init(es, self, TObject, NULL);
     return self;
 }
 
-static ObjectVTable vtable_for_Object = {
-    .base = {
-        .base = {
-            .mapOnRefs = Object_virtual_mapOnRefs },
-        .finalize = Object_virtual_finalize },
-    .toString = Object_virtual_toString,
-    .inspect = Object_virtual_toString,
-    .equals = Object_virtual_equals,
-    .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue
-};
+OBJECT_VTABLE(Object)
 
 void Object_init(Esther *es, Object *self, ObjectType type, Object *objectClass) {
     ManagedObject_init(&self->base);
@@ -125,11 +120,35 @@ bool Object_virtual_less(Object *self, Object *obj) {
 }
 
 bool Object_isTrue(Object *self) {
-    return (*(ObjectVTable **) self)->isTrue();
+    return (*(ObjectVTable **) self)->isTrue(self);
 }
 
-bool Object_virtual_isTrue() {
+bool Object_virtual_isTrue(Object *UNUSED(self)) {
     return true;
+}
+
+void Object_copyAttributes(Object *self, Object *target) {
+    if (!self->attributes)
+        return;
+
+    std_map_iterator i;
+    std_map_begin(self->attributes, &i);
+
+    while (!std_map_end(self->attributes, &i)) {
+        Object_setAttribute(target, (ID) std_map_iterator_key(&i), std_map_iterator_value(&i));
+        std_map_iterator_next(&i);
+    }
+}
+
+Object *Object_clone(Esther *es, Object *self) {
+    return (*(ObjectVTable **) self)->clone(es, self);
+}
+
+Object *Object_virtual_clone(Esther *es, Object *self) {
+    Object *clone = Object_new(es);
+    clone->objectClass = self->objectClass;
+    Object_copyAttributes(self, clone);
+    return clone;
 }
 
 void Object_virtual_mapOnRefs(Mapper *self, MapFunction f) {

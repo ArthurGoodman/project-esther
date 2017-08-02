@@ -23,7 +23,8 @@ typedef struct ClassVTable {
           Class_virtual_toString,                   \
           Object_virtual_equals,                    \
           Object_virtual_less,                      \
-          Object_virtual_isTrue },                  \
+          Object_virtual_isTrue,                    \
+          Object_virtual_clone_unimplemented },     \
         name##Class_virtual_newInstance             \
     };
 

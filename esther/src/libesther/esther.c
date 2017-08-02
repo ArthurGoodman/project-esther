@@ -573,6 +573,8 @@ static Object *runCodeSilently(Esther *es, Object *code) {
 }
 
 static Object *runCode(Esther *es, Object *code) {
+    Object_setAttribute(es->esther, c_str_to_id("fileName"), String_new_c_str(es, es->file->fileName));
+
     Object *tokens = Lexer_lex(es, es->lexer, code);
     Object_setAttribute(es->esther, c_str_to_id("tokens"), tokens);
 

@@ -43,6 +43,8 @@ bool String_virtual_equals(Object *self, Object *obj);
 
 bool String_virtual_less(Object *self, Object *obj);
 
+Object *String_virtual_clone(Esther *es, Object *self);
+
 void String_virtual_finalize(ManagedObject *self);
 
 #ifdef __cplusplus

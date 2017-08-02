@@ -18,6 +18,7 @@ static void Parser_virtual_mapOnRefs(Mapper *self, MapFunction f) {
 }
 
 #define Parser_virtual_finalize Object_virtual_finalize
+#define Parser_virtual_clone Object_virtual_clone_unimplemented
 
 OBJECT_VTABLE(Parser)
 
@@ -131,7 +132,7 @@ static Object *addSub(Esther *es, Parser *parser);
 static Object *mulDiv(Esther *es, Parser *parser);
 static Object *power(Esther *es, Parser *parser);
 static Object *negate(Esther *es, Parser *parser);
-static Object *preffix(Esther *es, Parser *parser);
+static Object *prefix(Esther *es, Parser *parser);
 static Object *suffix(Esther *es, Parser *parser);
 static Object *term(Esther *es, Parser *parser);
 
@@ -310,9 +311,9 @@ static Object *negate(Esther *es, Parser *parser) {
     Object *p = Token_getPosition(parser->token);
 
     if (accept_pos(es, parser, id_not, &p))
-        e = NegateExpression(preffix(es, parser));
+        e = NegateExpression(prefix(es, parser));
     else
-        e = preffix(es, parser);
+        e = prefix(es, parser);
 
     if (p && !Expression_hasPosition(e))
         Expression_setPosition(e, p);
@@ -320,7 +321,7 @@ static Object *negate(Esther *es, Parser *parser) {
     return e;
 }
 
-static Object *preffix(Esther *es, Parser *parser) {
+static Object *prefix(Esther *es, Parser *parser) {
     Object *e = NULL;
     Object *p = Token_getPosition(parser->token);
 
@@ -328,6 +329,10 @@ static Object *preffix(Esther *es, Parser *parser) {
         e = PlusExpression(ValueExpression(ValueObject_new_int(es, 0)), suffix(es, parser));
     else if (accept_pos(es, parser, id_minus, &p))
         e = MinusExpression(ValueExpression(ValueObject_new_int(es, 0)), suffix(es, parser));
+    else if (accept_pos(es, parser, id_dec, &p))
+        e = CallExpression(AttributeExpression(suffix(es, parser), String_new_c_str(es, "--_")), Array_new(es, 0));
+    else if (accept_pos(es, parser, id_inc, &p))
+        e = CallExpression(AttributeExpression(suffix(es, parser), String_new_c_str(es, "++_")), Array_new(es, 0));
     else
         e = suffix(es, parser);
 
@@ -341,51 +346,56 @@ static Object *suffix(Esther *es, Parser *parser) {
     Object *e = term(es, parser);
     Object *p = Token_getPosition(parser->token);
 
-    while (true) {
-        if (immediateAccept(es, parser, id_leftPar)) {
-            Object *args = Array_new(es, 0);
+    if (accept_pos(es, parser, id_dec, &p))
+        e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_--")), Array_new(es, 0));
+    else if (accept_pos(es, parser, id_inc, &p))
+        e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_++")), Array_new(es, 0));
+    else
+        while (true) {
+            if (immediateAccept(es, parser, id_leftPar)) {
+                Object *args = Array_new(es, 0);
 
-            if (!check(es, parser, id_rightPar))
-                do
-                    Array_push(args, expr(es, parser));
-                while (accept(es, parser, id_comma));
+                if (!check(es, parser, id_rightPar))
+                    do
+                        Array_push(args, expr(es, parser));
+                    while (accept(es, parser, id_comma));
 
-            if (!accept(es, parser, id_rightPar))
-                syntax_error(es, p, "unmatched parentheses");
-
-            e = CallExpression(e, args);
-        } else if (immediateAccept(es, parser, id_pars)) {
-            e = CallExpression(e, Array_new(es, 0));
-        } else if (immediateAccept(es, parser, id_leftBracket)) {
-            Object *args = Array_new(es, 0);
-
-            if (!check(es, parser, id_rightBracket))
-                do
-                    Array_push(args, expr(es, parser));
-                while (accept(es, parser, id_comma));
-
-            if (!accept(es, parser, id_rightBracket))
-                syntax_error(es, p, "unmatched brackets");
-
-            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), args);
-        } else if (immediateAccept(es, parser, id_brackets)) {
-            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), Array_new(es, 0));
-        } else if (accept_pos(es, parser, id_dot, &p)) {
-            if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
-                immediateAccept(es, parser, id_newLine);
-                e = AttributeExpression(e, Token_text(parser->token));
-                getToken(parser);
-            } else {
-                bool expectRightPar = accept(es, parser, id_leftPar);
-
-                e = DotExpression(e, logicOr(es, parser));
-
-                if (expectRightPar && !accept(es, parser, id_rightPar))
+                if (!accept(es, parser, id_rightPar))
                     syntax_error(es, p, "unmatched parentheses");
-            }
-        } else
-            break;
-    }
+
+                e = CallExpression(e, args);
+            } else if (immediateAccept(es, parser, id_pars)) {
+                e = CallExpression(e, Array_new(es, 0));
+            } else if (immediateAccept(es, parser, id_leftBracket)) {
+                Object *args = Array_new(es, 0);
+
+                if (!check(es, parser, id_rightBracket))
+                    do
+                        Array_push(args, expr(es, parser));
+                    while (accept(es, parser, id_comma));
+
+                if (!accept(es, parser, id_rightBracket))
+                    syntax_error(es, p, "unmatched brackets");
+
+                e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), args);
+            } else if (immediateAccept(es, parser, id_brackets)) {
+                e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), Array_new(es, 0));
+            } else if (accept_pos(es, parser, id_dot, &p)) {
+                if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
+                    immediateAccept(es, parser, id_newLine);
+                    e = AttributeExpression(e, Token_text(parser->token));
+                    getToken(parser);
+                } else {
+                    bool expectRightPar = accept(es, parser, id_leftPar);
+
+                    e = DotExpression(e, logicOr(es, parser));
+
+                    if (expectRightPar && !accept(es, parser, id_rightPar))
+                        syntax_error(es, p, "unmatched parentheses");
+                }
+            } else
+                break;
+        }
 
     if (p && !Expression_hasPosition(e))
         Expression_setPosition(e, p);
@@ -425,7 +435,9 @@ static Object *term(Esther *es, Parser *parser) {
         Object *value = Token_text(parser->token);
         e = ValueExpression(String_size(value) == 1 ? ValueObject_new_char(es, String_c_str(value)[0]) : value);
         getToken(parser);
-    } else if (check_pos(es, parser, id_doubleQuote, &p)) {
+    }
+    //@TODO: Implement complex strings
+    else if (check_pos(es, parser, id_doubleQuote, &p)) {
         e = ValueExpression(Token_text(parser->token));
         getToken(parser);
     }
@@ -678,7 +690,6 @@ static Object *term(Esther *es, Parser *parser) {
 
 //@TODO: Implement for loop via ranges
 //@TODO: Implement do-while loop
-//@TODO: Implement inc/dec operators
 Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
     Parser *parser = (Parser *) self;
 

@@ -29,6 +29,7 @@ struct Application {
 #define as_Application(obj) ((Application *) (obj))
 
 #define Application_virtual_mapOnRefs Object_virtual_mapOnRefs
+#define Application_virtual_clone Object_virtual_clone_unimplemented
 
 static void Application_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);
@@ -55,6 +56,7 @@ struct MessageBox {
 #define as_MessageBox(obj) ((MessageBox *) (obj))
 
 #define MessageBox_virtual_mapOnRefs Object_virtual_mapOnRefs
+#define MessageBox_virtual_clone Object_virtual_clone_unimplemented
 
 static void MessageBox_virtual_finalize(ManagedObject *self) {
     Object_virtual_finalize(self);

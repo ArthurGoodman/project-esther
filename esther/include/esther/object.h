@@ -24,7 +24,8 @@ typedef struct ObjectVTable {
     Object *(*inspect)(Esther *es, Object *self);
     bool (*equals)(Object *self, Object *obj);
     bool (*less)(Object *self, Object *obj);
-    bool (*isTrue)();
+    bool (*isTrue)(Object *self);
+    Object *(*clone)(Esther *es, Object *self);
 } ObjectVTable;
 
 #define OBJECT_VTABLE(name)                   \
@@ -35,8 +36,11 @@ typedef struct ObjectVTable {
         Object_virtual_toString,              \
         Object_virtual_equals,                \
         Object_virtual_less,                  \
-        Object_virtual_isTrue                 \
+        Object_virtual_isTrue,                \
+        name##_virtual_clone                  \
     };
+
+Object *Object_virtual_clone_unimplemented(Esther *es, Object *self);
 
 typedef enum ObjectType {
     TArray,
@@ -93,7 +97,12 @@ bool Object_less(Object *self, Object *obj);
 bool Object_virtual_less(Object *self, Object *obj);
 
 bool Object_isTrue(Object *self);
-bool Object_virtual_isTrue();
+bool Object_virtual_isTrue(Object *self);
+
+void Object_copyAttributes(Object *self, Object *target);
+
+Object *Object_clone(Esther *es, Object *self);
+Object *Object_virtual_clone(Esther *es, Object *self);
 
 void Object_virtual_mapOnRefs(Mapper *self, MapFunction f);
 void Object_virtual_finalize(ManagedObject *self);

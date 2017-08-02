@@ -22,7 +22,8 @@ static ObjectVTable vtable_for_Function = {
     .inspect = Function_virtual_toString,
     .equals = Object_virtual_equals,
     .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = Object_virtual_clone_unimplemented
 };
 
 void Function_init(Esther *es, Object *f, struct string name, Object *(*body)(), int argc) {
@@ -149,7 +150,8 @@ static ObjectVTable vtable_for_InterpretedFunction = {
     .inspect = Function_virtual_toString,
     .equals = Object_virtual_equals,
     .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = Object_virtual_clone_unimplemented
 };
 
 void InterpretedFunction_init(Esther *es, Object *f, struct string name, Object *params, Context *closure, Object *body) {

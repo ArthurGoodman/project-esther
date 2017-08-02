@@ -33,7 +33,8 @@ static ObjectVTable vtable_for_String = {
     .inspect = String_virtual_inspect,
     .equals = String_virtual_equals,
     .less = String_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = String_virtual_clone
 };
 
 void String_init_move(Esther *es, Object *self, struct string value) {
@@ -110,6 +111,12 @@ bool String_virtual_equals(Object *self, Object *obj) {
 
 bool String_virtual_less(Object *self, Object *obj) {
     return Object_getType(obj) == TString ? string_compare(as_String(self)->value, as_String(obj)->value) < 0 : Object_virtual_less(self, obj);
+}
+
+Object *String_virtual_clone(Esther *es, Object *self) {
+    Object *clone = String_new(es, as_String(self)->value);
+    Object_copyAttributes(self, clone);
+    return clone;
 }
 
 void String_virtual_finalize(ManagedObject *self) {

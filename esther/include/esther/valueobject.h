@@ -32,6 +32,8 @@ bool ValueObject_virtual_equals(Object *self, Object *obj);
 
 bool ValueObject_virtual_less(Object *self, Object *obj);
 
+Object *ValueObject_virtual_clone(Esther *es, Object *self);
+
 Object *ValueObject_variantTypeToObjectClass(Esther *es, VariantType type);
 
 #ifdef __cplusplus

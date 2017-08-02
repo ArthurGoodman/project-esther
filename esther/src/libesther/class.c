@@ -21,19 +21,7 @@ Object *Class_new_anonymous(Esther *es) {
     return Class_new(es, string_const(""), NULL);
 }
 
-static ClassVTable vtable_for_Class = {
-    .base = {
-        .base = {
-            .base = {
-                .mapOnRefs = Class_virtual_mapOnRefs },
-            .finalize = Class_virtual_finalize },
-        .toString = Class_virtual_toString,
-        .inspect = Class_virtual_toString,
-        .equals = Object_virtual_equals,
-        .less = Object_virtual_less,
-        .isTrue = Object_virtual_isTrue },
-    .newInstance = Class_virtual_newInstance
-};
+CLASS_VTABLE()
 
 void Class_init(Esther *es, Object *self, struct string name, Object *superclass) {
     Object_init(es, self, TClass, Esther_getRootObject(es, c_str_to_id("Class")));
@@ -97,13 +85,17 @@ Object *Class_virtual_toString(Esther *es, Object *self) {
 
 Object *Class_newInstance(Esther *es, Object *self, Object *args) {
     Object *instance = (*(ClassVTable **) self)->newInstance(es, self, args);
+
     Object *initialize = Object_resolve(instance, c_str_to_id("initialize"));
+
     if (initialize)
         Object_callFunction(es, instance, initialize, args);
+
     return instance;
 }
 
 Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
+    //@Think: Maybe need to call Class_newInstance here
     Object *instance = (*(ClassVTable **) as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
     instance->objectClass = self;
     return instance;

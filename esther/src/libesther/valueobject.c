@@ -30,7 +30,8 @@ static ObjectVTable vtable_for_ValueObject = {
     .inspect = ValueObject_virtual_inspect,
     .equals = ValueObject_virtual_equals,
     .less = ValueObject_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = ValueObject_virtual_clone
 };
 
 void ValueObject_init(Esther *es, Object *self, Variant value) {
@@ -63,6 +64,12 @@ bool ValueObject_virtual_equals(Object *self, Object *obj) {
 
 bool ValueObject_virtual_less(Object *self, Object *obj) {
     return Object_getType(obj) == TValueObject ? Variant_lt(as_ValueObject(self)->value, as_ValueObject(obj)->value) : Object_virtual_less(self, obj);
+}
+
+Object *ValueObject_virtual_clone(Esther *es, Object *self) {
+    Object *clone = ValueObject_new_var(es, as_ValueObject(self)->value);
+    Object_copyAttributes(self, clone);
+    return clone;
 }
 
 Object *ValueObject_variantTypeToObjectClass(Esther *es, VariantType type) {

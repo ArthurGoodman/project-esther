@@ -338,17 +338,17 @@ struct string string_quote(struct string self, int offset, int column) {
 
     string_assign(&quote, string_substr(quote, MAX(0, column - max_quote_length / 2), max_quote_length));
 
-    struct string preffix = string_new_c_str(column > max_quote_length / 2 ? "... " : "");
+    struct string prefix = string_new_c_str(column > max_quote_length / 2 ? "... " : "");
     struct string suffix = string_new_c_str(size - column > max_quote_length / 2 ? " ..." : "");
 
     int pos = column > max_quote_length / 2 ? max_quote_length / 2 : column;
 
     struct string pointer = string_new_empty();
-    string_insert_char(&pointer, 0, ' ', pos + preffix.size - 1);
+    string_insert_char(&pointer, 0, ' ', pos + prefix.size - 1);
     string_append_char(&pointer, '^');
 
-    string_append(&preffix, quote);
-    string_assign(&quote, preffix);
+    string_append(&prefix, quote);
+    string_assign(&quote, prefix);
     string_append(&quote, suffix);
     string_append_char(&quote, '\n');
     string_append(&quote, pointer);

@@ -53,7 +53,8 @@ static ObjectVTable vtable_for_Symbol = {
     .inspect = Symbol_virtual_inspect,
     .equals = Symbol_virtual_equals,
     .less = Symbol_virtual_less,
-    .isTrue = Object_virtual_isTrue
+    .isTrue = Object_virtual_isTrue,
+    .clone = Object_virtual_clone_unimplemented
 };
 
 static void Symbol_init_id(Esther *es, Object *self, ID id) {
