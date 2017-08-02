@@ -357,7 +357,7 @@ CONST_VTABLE(True, Object)
 CONST_VTABLE(False, False)
 CONST_VTABLE(Null, False)
 
-void Core_initialize(Esther *es) {
+void Kernel_initialize(Esther *es) {
     Esther_setRootObject(es, c_str_to_id("Object"), NULL);
     Esther_setRootObject(es, c_str_to_id("Class"), NULL);
 

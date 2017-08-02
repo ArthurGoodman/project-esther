@@ -6,7 +6,7 @@ extern "C" {
 
 typedef struct Esther Esther;
 
-void Core_initialize(Esther *es);
+void Kernel_initialize(Esther *es);
 
 #ifdef __cplusplus
 }

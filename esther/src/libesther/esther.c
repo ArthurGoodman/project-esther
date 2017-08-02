@@ -135,7 +135,7 @@ void Esther_init(Esther *es) {
 
     es->rootObjects = std_map_new(compare_id);
 
-    Core_initialize(es);
+    Kernel_initialize(es);
 
     es->lexer = Lexer_new(es);
 
