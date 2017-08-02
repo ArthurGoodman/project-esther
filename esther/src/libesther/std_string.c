@@ -325,9 +325,7 @@ struct string string_escape_buffer(const char *buffer, size_t size) {
     return str;
 }
 
-//@Optimize: string manipulation
-//@Fix: quote cutting under small constraints
-//@Investigate: it's broken sometimes
+//@Investigate: quote cutting under small constraints
 struct string string_quote(struct string self, int offset, int column) {
     static const int max_quote_length = 150;
 
