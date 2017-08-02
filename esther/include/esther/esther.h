@@ -66,7 +66,7 @@ void Esther_setRootObject(Esther *es, ID name, Object *value);
 Object *Esther_eval(Esther *es, Object *ast, Context *context);
 
 void Esther_runScript(Esther *es, const char *fileName);
-Object *Esther_runFile(Esther *es, const char *fileName);
+Object *Esther_evalFile(Esther *es, const char *fileName);
 
 Object *Esther_importModule(Esther *es, Context *context, const char *name);
 void Esther_unloadModule(Esther *es, const char *name, void *library);

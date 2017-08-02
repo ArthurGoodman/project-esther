@@ -434,7 +434,7 @@ static Mapper *GlobalMapper_new(Esther *es) {
 static void Esther_loadModules(Esther *es) {
     struct string str = executable_dir();
     string_append_c_str(&str, "modules.es");
-    es->modules = Esther_runFile(es, str.data);
+    es->modules = Esther_evalFile(es, str.data);
     string_free(str);
 }
 
@@ -1026,66 +1026,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
     return value;
 }
 
-//@Refactor: boilerplate
-void Esther_runScript(Esther *es, const char *fileName) {
-    struct FileRecord rec;
-
-    rec.fileName = full_path(fileName);
-    rec.source = NULL;
-    rec.next = es->file;
-
-    es->file = &rec;
-
-    TRY {
-        struct string rawCode = read_file(fileName);
-
-        if (!rawCode.data) {
-            printf("error: unable to read file\n");
-            pop_jump_buffer();
-            break;
-        }
-
-        Object *code = String_new_move(es, string_expand_tabs(rawCode));
-        Object_setAttribute(es->esther, c_str_to_id("code"), code);
-
-        es->file->source = code;
-
-        string_free(rawCode);
-
-        Object *tokens = Lexer_lex(es, es->lexer, code);
-        Object_setAttribute(es->esther, c_str_to_id("tokens"), tokens);
-
-        // Esther_println(es, tokens, Tuple_new(es, 0));
-
-        Object *ast = Parser_parse(es, es->parser, tokens);
-        Object_setAttribute(es->esther, c_str_to_id("ast"), ast);
-
-        // Esther_println(es, ast, Tuple_new(es, 0));
-
-        printf("=> %s\n", String_c_str(Object_inspect(es, Esther_eval(es, ast, es->root))));
-    }
-    CATCH(e) {
-        Object *pos = Exception_getPos(e);
-
-        if (pos != NULL && es->file && es->file->source) {
-            int offset = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 0)));
-            int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
-            int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
-
-            struct string q = string_quote(String_value(es->file->source), offset, column);
-            printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e).data, q.data);
-            string_free(q);
-        } else
-            printf("error: %s\n", Exception_getMessage(e).data);
-    }
-    ENDTRY;
-
-    free((void *) es->file->fileName);
-
-    es->file = es->file->next;
-}
-
-Object *Esther_runFile(Esther *es, const char *fileName) {
+static Object *evalFile(Esther *es, const char *fileName, Object *(*codeRunner)(Esther *, Object *) ) {
     struct FileRecord rec;
 
     rec.fileName = full_path(fileName);
@@ -1111,7 +1052,7 @@ Object *Esther_runFile(Esther *es, const char *fileName) {
 
         string_free(rawCode);
 
-        value = Esther_eval(es, Parser_parse(es, es->parser, Lexer_lex(es, es->lexer, code)), es->root);
+        value = codeRunner(es, code);
     }
     CATCH(e) {
         Object *pos = Exception_getPos(e);
@@ -1136,8 +1077,38 @@ Object *Esther_runFile(Esther *es, const char *fileName) {
     return value;
 }
 
-//@Refactor
-//@TODO: Make modules to be singletons
+static Object *runCodeSilently(Esther *es, Object *code) {
+    return Esther_eval(es, Parser_parse(es, es->parser, Lexer_lex(es, es->lexer, code)), es->root);
+}
+
+static Object *runCode(Esther *es, Object *code) {
+    Object *tokens = Lexer_lex(es, es->lexer, code);
+    Object_setAttribute(es->esther, c_str_to_id("tokens"), tokens);
+
+    // Esther_println(es, tokens, Tuple_new(es, 0));
+
+    Object *ast = Parser_parse(es, es->parser, tokens);
+    Object_setAttribute(es->esther, c_str_to_id("ast"), ast);
+
+    // Esther_println(es, ast, Tuple_new(es, 0));
+
+    Object *value = Esther_eval(es, ast, es->root);
+
+    printf("=> %s\n", String_c_str(Object_inspect(es, value)));
+
+    return value;
+}
+
+void Esther_runScript(Esther *es, const char *fileName) {
+    evalFile(es, fileName, runCode);
+}
+
+Object *Esther_evalFile(Esther *es, const char *fileName) {
+    return evalFile(es, fileName, runCodeSilently);
+}
+
+//@Refactor module loading system (and these two functions in particular)
+//@TODO: Make modules into singletons
 Object *Esther_importModule(Esther *es, Context *context, const char *name) {
     Object *strName = String_new_c_str(es, name);
 
