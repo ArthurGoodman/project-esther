@@ -676,6 +676,9 @@ static Object *term(Esther *es, Parser *parser) {
     return e;
 }
 
+//@TODO: Implement for loop via ranges
+//@TODO: Implement do-while loop
+//@TODO: Implement inc/dec operators
 Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
     Parser *parser = (Parser *) self;
 

@@ -8,7 +8,6 @@
 #endif
 
 #include "ast.h"
-#include "core.h"
 #include "esther/array.h"
 #include "esther/class.h"
 #include "esther/context.h"
@@ -21,9 +20,42 @@
 #include "esther/string.h"
 #include "esther/symbol.h"
 #include "esther/tuple.h"
-#include "esther/utility.h"
 #include "esther/valueobject.h"
 #include "identifiers.h"
+#include "kernel.h"
+#include "utility.h"
+
+static Object *Esther_print(Esther *es, Object *self, Object *args) {
+    if (Tuple_size(args) == 0)
+        printf("%s", String_c_str(Object_toString(es, self)));
+    else
+        for (size_t i = 0; i < Tuple_size(args); i++)
+            printf("%s", String_c_str(Object_toString(es, Tuple_get(args, i))));
+
+    return es->nullObject;
+}
+
+static Object *Esther_println(Esther *es, Object *self, Object *args) {
+    if (Tuple_size(args) == 0)
+        printf("%s\n", String_c_str(Object_toString(es, self)));
+    else
+        for (size_t i = 0; i < Tuple_size(args); i++)
+            printf("%s\n", String_c_str(Object_toString(es, Tuple_get(args, i))));
+
+    return es->nullObject;
+}
+
+static Object *Esther_evalFunction(Esther *es, Object *UNUSED(self), Object *ast) {
+    return Esther_eval(es, ast, es->root);
+}
+
+//@TODO: Make modules describe themselves separetely (loop over directories)
+static void Esther_loadModules(Esther *es) {
+    struct string str = executable_dir();
+    string_append_c_str(&str, "modules.es");
+    es->modules = Esther_evalFile(es, str.data);
+    string_free(str);
+}
 
 typedef struct GlobalMapper {
     Mapper base;
@@ -75,37 +107,9 @@ static Mapper *GlobalMapper_new(Esther *es) {
     return (Mapper *) self;
 }
 
-static Object *Esther_print(Esther *es, Object *self, Object *args) {
-    if (Tuple_size(args) == 0)
-        printf("%s", String_c_str(Object_toString(es, self)));
-    else
-        for (size_t i = 0; i < Tuple_size(args); i++)
-            printf("%s", String_c_str(Object_toString(es, Tuple_get(args, i))));
-
-    return es->nullObject;
-}
-
-static Object *Esther_println(Esther *es, Object *self, Object *args) {
-    if (Tuple_size(args) == 0)
-        printf("%s\n", String_c_str(Object_toString(es, self)));
-    else
-        for (size_t i = 0; i < Tuple_size(args); i++)
-            printf("%s\n", String_c_str(Object_toString(es, Tuple_get(args, i))));
-
-    return es->nullObject;
-}
-
-static Object *Esther_evalFunction(Esther *es, Object *UNUSED(self), Object *ast) {
-    return Esther_eval(es, ast, es->root);
-}
-
-static void Esther_loadModules(Esther *es) {
-    struct string str = executable_dir();
-    string_append_c_str(&str, "modules.es");
-    es->modules = Esther_evalFile(es, str.data);
-    string_free(str);
-}
-
+//@TODO: Design Virtual Machine
+//@TODO: Implepent pattern matching for type checking system
+//@TODO: Design C interoperability system
 void Esther_init(Esther *es) {
     gc_registerMapper(es->globalMapper = GlobalMapper_new(es));
 
@@ -193,7 +197,10 @@ static void error_invalidAST(Esther *es) {
     Exception_throw_new(es, "invalid AST");
 }
 
-Object *Esther_eval(Esther *es, Object *ast, Context *context) {
+Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
+    // Removes -Wclobbered warning
+    Object *ast = _ast;
+
     if (Object_getType(ast) == TString) {
         Object *tokens = Lexer_lex(es, es->lexer, ast);
         ast = Parser_parse(es, es->parser, tokens);

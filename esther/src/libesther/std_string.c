@@ -1,7 +1,7 @@
 #include "esther/std_string.h"
 
 #include "esther/common.h"
-#include "esther/utility.h"
+#include "utility.h"
 
 #define ENOUGH_SPACE(str, n) ((str)->size + (n) <= (str)->capacity)
 #define FREE_SPACE(str) ((str)->data + (str)->size)
