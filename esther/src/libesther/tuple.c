@@ -87,6 +87,8 @@ Object *Tuple_virtual_inspect(Esther *es, Object *self) {
 
         if (i < as_Tuple(self)->size - 1)
             String_append_c_str(str, ", ");
+        else if (as_Tuple(self)->size == 1)
+            String_append_c_str(str, ",");
     }
 
     String_append_c_str(str, ")");

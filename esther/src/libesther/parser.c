@@ -533,18 +533,31 @@ static Object *term(Esther *es, Parser *parser) {
         e = ImportExpression(name);
     }
 
-    //@TODO: Change unary tuple syntax to Python-like
     else if (accept(es, parser, id_leftPar)) {
-        Object *args = Array_new(es, 0);
+        Object *args = NULL;
 
-        do
-            Array_push(args, expr(es, parser));
-        while (accept(es, parser, id_comma));
+        if (!check(es, parser, id_rightPar))
+            e = expr(es, parser);
+        else
+            e = TupleExpression(Array_new(es, 0));
+
+        if (accept(es, parser, id_comma)) {
+            args = Array_new(es, 1, e);
+
+            if (!check(es, parser, id_rightPar))
+                do {
+                    if (check(es, parser, id_rightPar))
+                        break;
+
+                    Array_push(args, expr(es, parser));
+                } while (accept(es, parser, id_comma));
+        }
 
         if (!accept(es, parser, id_rightPar))
             Exception_throw_new(es, "unmatched parentheses");
 
-        e = TupleExpression(args);
+        if (args)
+            e = TupleExpression(args);
     } else if (accept(es, parser, id_pars)) {
         e = TupleExpression(Array_new(es, 0));
     }
@@ -552,37 +565,43 @@ static Object *term(Esther *es, Parser *parser) {
     else if (accept(es, parser, id_leftBracket)) {
         Object *args = Array_new(es, 0);
 
-        bool map = false, firstPass = true;
+        if (!check(es, parser, id_rightBracket)) {
+            bool map = false, firstPass = true;
 
-        do {
-            Object *arg = expr(es, parser);
+            do {
+                if (check(es, parser, id_rightBracket))
+                    break;
 
-            if (!map && check(es, parser, id_doubleArrow)) {
-                if (!firstPass)
-                    Exception_throw_new(es, "unexpected '=>' in array literal");
+                Object *arg = expr(es, parser);
 
-                map = true;
-            }
+                if (!map && check(es, parser, id_doubleArrow)) {
+                    if (!firstPass)
+                        Exception_throw_new(es, "unexpected '=>' in array literal");
 
-            firstPass = false;
+                    map = true;
+                }
 
-            if (map) {
-                if (!accept(es, parser, id_doubleArrow))
-                    Exception_throw_new(es, "'=>' expected");
+                firstPass = false;
 
-                arg = Tuple_new(es, 2, arg, expr(es, parser));
-            }
+                if (map) {
+                    if (!accept(es, parser, id_doubleArrow))
+                        Exception_throw_new(es, "'=>' expected");
 
-            Array_push(args, arg);
-        } while (accept(es, parser, id_comma));
+                    arg = Tuple_new(es, 2, arg, expr(es, parser));
+                }
+
+                Array_push(args, arg);
+            } while (accept(es, parser, id_comma));
+
+            if (map)
+                e = MapExpression(args);
+            else
+                e = ArrayExpression(args);
+        } else
+            e = ArrayExpression(Array_new(es, 0));
 
         if (!accept(es, parser, id_rightBracket))
             Exception_throw_new(es, "unmatched brackets");
-
-        if (map)
-            e = MapExpression(args);
-        else
-            e = ArrayExpression(args);
     } else if (accept(es, parser, id_brackets)) {
         e = ArrayExpression(Array_new(es, 0));
     }

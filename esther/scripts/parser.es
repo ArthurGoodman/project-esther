@@ -10,7 +10,7 @@ class Parser {
         })
 
         function eval
-            self.oper.call(self.left.eval(), (self.right.eval()))
+            self.oper.call(self.left.eval(), (self.right.eval(),))
 
         function inspect(indent) {
             print(indent)
