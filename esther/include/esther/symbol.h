@@ -4,7 +4,6 @@
 extern "C" {
 #endif
 
-#include "esther/id.h"
 #include "esther/object.h"
 
 Object *id_to_sym(Esther *es, ID id);

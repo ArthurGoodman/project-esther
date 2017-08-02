@@ -3,9 +3,7 @@
 #include "esther/esther.h"
 #include "esther/exception.h"
 #include "esther/function.h"
-#include "esther/id.h"
 #include "esther/std_map.h"
-#include "esther/std_string.h"
 #include "esther/string.h"
 
 Object *Class_virtual_unimplemented_newInstance(Esther *es, Object *self, Object *UNUSED(args)) {

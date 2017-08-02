@@ -5,7 +5,6 @@ extern "C" {
 #endif
 
 #include <stdarg.h>
-#include <stdbool.h>
 #include <stddef.h>
 
 size_t ceil_to_power_of_2(size_t n);

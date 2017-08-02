@@ -1,7 +1,5 @@
 #include "esther/map.h"
 
-#include <string.h>
-
 #include "esther/esther.h"
 #include "esther/std_map.h"
 #include "esther/string.h"

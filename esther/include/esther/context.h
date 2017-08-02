@@ -8,7 +8,6 @@ extern "C" {
 
 #include "esther/id.h"
 #include "esther/memory.h"
-#include "esther/std_string.h"
 
 typedef struct Object Object;
 typedef struct Context Context;

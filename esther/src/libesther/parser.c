@@ -2,9 +2,7 @@
 
 #include "ast.h"
 #include "esther/array.h"
-#include "esther/esther.h"
 #include "esther/exception.h"
-#include "esther/id.h"
 #include "esther/lexer.h"
 #include "esther/string.h"
 #include "esther/symbol.h"

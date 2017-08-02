@@ -4,9 +4,7 @@
 extern "C" {
 #endif
 
-#include "esther/class.h"
-#include "esther/id.h"
-#include "esther/std_string.h"
+#include "esther/object.h"
 
 typedef struct Context Context;
 

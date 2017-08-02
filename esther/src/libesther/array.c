@@ -1,7 +1,5 @@
 #include "esther/array.h"
 
-#include <string.h>
-
 #include "esther/esther.h"
 #include "esther/std_vector.h"
 #include "esther/string.h"

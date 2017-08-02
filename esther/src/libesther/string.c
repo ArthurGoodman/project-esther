@@ -1,7 +1,6 @@
 #include "esther/string.h"
 
 #include "esther/esther.h"
-#include "esther/std_string.h"
 
 Object *String_new(Esther *es, struct string value) {
     Object *self = gc_alloc(sizeof(String));

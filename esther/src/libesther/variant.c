@@ -4,7 +4,6 @@
 
 #include "esther/common.h"
 #include "esther/std_string.h"
-#include "esther/utility.h"
 
 Variant Variant_null() {
     Variant var;

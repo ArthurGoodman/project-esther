@@ -1,7 +1,6 @@
 #include "esther/exception.h"
 
 #include "esther/esther.h"
-#include "esther/std_string.h"
 
 static struct jump_buffer *buffer = NULL;
 

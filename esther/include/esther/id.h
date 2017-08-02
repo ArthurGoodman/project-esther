@@ -4,7 +4,10 @@
 extern "C" {
 #endif
 
-#include "esther/common.h"
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #include "esther/std_string.h"
 
 #if defined(__x86_64)

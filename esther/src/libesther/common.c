@@ -1,6 +1,5 @@
 #include "esther/common.h"
 
-#include "esther/id.h"
 #include "esther/object.h"
 #include "esther/std_string.h"
 

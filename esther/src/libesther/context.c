@@ -2,6 +2,7 @@
 
 #include "esther/common.h"
 #include "esther/esther.h"
+#include "esther/object.h"
 
 Context *Context_new(Esther *es) {
     Context *self = gc_alloc(sizeof(Context));

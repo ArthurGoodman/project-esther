@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "config.h"
-#include "esther/common.h"
 
 namespace {
 struct Registers {
@@ -442,7 +441,7 @@ void *gc_alloc(size_t size) {
 void gc_free(void *p) {
     free(p);
 #else
-void gc_free(void *UNUSED(p)) {
+void gc_free(void *) {
 #endif
 }
 

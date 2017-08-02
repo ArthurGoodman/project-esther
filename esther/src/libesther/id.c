@@ -1,7 +1,7 @@
 #include "esther/id.h"
 
+#include "esther/common.h"
 #include "esther/std_map.h"
-#include "esther/std_string.h"
 
 static struct std_map *idString;
 static struct std_map *stringId;

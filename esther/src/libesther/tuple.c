@@ -1,7 +1,6 @@
 #include "esther/tuple.h"
 
 #include "esther/esther.h"
-#include "esther/std_string.h"
 #include "esther/string.h"
 
 Object *Tuple_new(Esther *es, size_t size, ...) {
