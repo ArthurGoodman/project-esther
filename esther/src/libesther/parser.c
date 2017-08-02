@@ -49,7 +49,7 @@ static void error_invalidToken(Esther *es, Parser *parser) {
 }
 
 static bool immediateCheck(Esther *es, Parser *parser, ID id) {
-    Object *symbol = Tuple_get(parser->token, 0);
+    Object *symbol = Token_id(parser->token);
 
     if (Object_getType(symbol) != TSymbol)
         error_invalidToken(es, parser);
@@ -344,7 +344,7 @@ static Object *suffix(Esther *es, Parser *parser) {
             e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), Array_new(es, 0));
         } else if (accept(es, parser, id_dot)) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
-                e = AttributeExpression(e, Tuple_get(parser->token, 1));
+                e = AttributeExpression(e, Token_text(parser->token));
                 getToken(parser);
             } else {
                 bool expectRightPar = accept(es, parser, id_leftPar);
@@ -369,7 +369,7 @@ static Object *term(Esther *es, Parser *parser) {
     Object *p = Token_getPosition(parser->token);
 
     if (check(es, parser, id_id)) {
-        e = IdExpression(Tuple_get(parser->token, 1));
+        e = IdExpression(Token_text(parser->token));
         getToken(parser);
     }
 
@@ -377,7 +377,7 @@ static Object *term(Esther *es, Parser *parser) {
         if (!check(es, parser, id_id))
             Exception_throw_new(es, "identifier expected");
 
-        Object *name = Tuple_get(parser->token, 1);
+        Object *name = Token_text(parser->token);
         getToken(parser);
 
         if (accept(es, parser, id_assign))
@@ -387,22 +387,22 @@ static Object *term(Esther *es, Parser *parser) {
     }
 
     else if (check(es, parser, id_int)) {
-        e = ValueExpression(ValueObject_new_int(es, atoi(String_c_str(Tuple_get(parser->token, 1)))));
+        e = ValueExpression(ValueObject_new_int(es, atoll(String_c_str(Token_text(parser->token)))));
         getToken(parser);
     } else if (check(es, parser, id_float)) {
-        e = ValueExpression(ValueObject_new_real(es, atof(String_c_str(Tuple_get(parser->token, 1)))));
+        e = ValueExpression(ValueObject_new_real(es, atof(String_c_str(Token_text(parser->token)))));
         getToken(parser);
     } else if (check(es, parser, id_singleQuote)) {
-        Object *value = Tuple_get(parser->token, 1);
+        Object *value = Token_text(parser->token);
         e = ValueExpression(String_size(value) == 1 ? ValueObject_new_char(es, String_c_str(value)[0]) : value);
         getToken(parser);
     } else if (check(es, parser, id_doubleQuote)) {
-        e = ValueExpression(Tuple_get(parser->token, 1));
+        e = ValueExpression(Token_text(parser->token));
         getToken(parser);
     }
 
     else if (accept(es, parser, id_colon)) {
-        e = SymbolExpression(Tuple_get(parser->token, 1));
+        e = SymbolExpression(Token_text(parser->token));
         getToken(parser);
     }
 
@@ -458,14 +458,14 @@ static Object *term(Esther *es, Parser *parser) {
         Object *name;
 
         if (check(es, parser, id_id)) {
-            name = Tuple_get(parser->token, 1);
+            name = Token_text(parser->token);
             getToken(parser);
         } else
             name = String_new_c_str(es, "");
 
         if (accept(es, parser, id_lt)) {
             Object *superclass = expr(es, parser);
-            e = ClassInhExpression(name, expr(es, parser), superclass);
+            e = ClassInhExpression(name, superclass, expr(es, parser));
         } else
             e = ClassExpression(name, expr(es, parser));
     }
@@ -474,7 +474,7 @@ static Object *term(Esther *es, Parser *parser) {
         Object *name;
 
         if (check(es, parser, id_id)) {
-            name = Tuple_get(parser->token, 1);
+            name = Token_text(parser->token);
             getToken(parser);
         } else
             name = String_new_c_str(es, "");
@@ -486,7 +486,7 @@ static Object *term(Esther *es, Parser *parser) {
                 if (!check(es, parser, id_id))
                     Exception_throw_new(es, "identifier expected");
 
-                Array_push(params, Tuple_get(parser->token, 1));
+                Array_push(params, Token_text(parser->token));
                 getToken(parser);
             } while (accept(es, parser, id_comma));
 
@@ -504,7 +504,7 @@ static Object *term(Esther *es, Parser *parser) {
             if (!check(es, parser, id_id))
                 Exception_throw_new(es, "identifier expected");
 
-            Object *name = Tuple_get(parser->token, 1);
+            Object *name = Token_text(parser->token);
             getToken(parser);
 
             Object *args = Array_new(es, 0);
@@ -519,7 +519,7 @@ static Object *term(Esther *es, Parser *parser) {
                     Exception_throw_new(es, "unmatched parentheses");
             }
 
-            e = NewExpression(check(es, parser, id_braces) || check(es, parser, id_leftBrace) ? term(es, parser) : Tuple_new(es, 0), name, args);
+            e = NewExpression(name, args, check(es, parser, id_braces) || check(es, parser, id_leftBrace) ? term(es, parser) : Tuple_new(es, 0));
         }
     }
 
@@ -527,13 +527,13 @@ static Object *term(Esther *es, Parser *parser) {
         if (!check(es, parser, id_id))
             Exception_throw_new(es, "identifier expected");
 
-        Object *name = Tuple_get(parser->token, 1);
+        Object *name = Token_text(parser->token);
         getToken(parser);
 
         e = ImportExpression(name);
     }
 
-    //@TODO: change unary tuple syntax to Python-like
+    //@TODO: Change unary tuple syntax to Python-like
     else if (accept(es, parser, id_leftPar)) {
         Object *args = Array_new(es, 0);
 
@@ -617,9 +617,9 @@ static Object *term(Esther *es, Parser *parser) {
     else if (check(es, parser, id_empty)) {
         Exception_throw_new(es, "unexpected end of program");
     } else if (check(es, parser, id_unknown)) {
-        Exception_throw_new(es, "unknown token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
+        Exception_throw_new(es, "unknown token %s", String_c_str(Object_inspect(es, Token_text(parser->token))));
     } else {
-        Exception_throw_new(es, "unexpected token %s", String_c_str(Object_inspect(es, Tuple_get(parser->token, 1))));
+        Exception_throw_new(es, "unexpected token %s", String_c_str(Object_inspect(es, Token_text(parser->token))));
     }
 
     if (p && !Expression_hasPosition(e))
@@ -628,7 +628,6 @@ static Object *term(Esther *es, Parser *parser) {
     return e;
 }
 
-//@Cleanup: Get rid of boilerplate code in parser
 Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
     Parser *parser = (Parser *) self;
 

@@ -227,7 +227,7 @@ void mark() {
         Mapper_mapOnRefs(mapper, markReference);
 }
 
-//@Fix: when no objects are freed, memoryUsed > oldSize
+//@Fix: When no objects are freed, memoryUsed > oldSize
 void sweep() {
     objectCount = 0;
     memoryUsed = 0;

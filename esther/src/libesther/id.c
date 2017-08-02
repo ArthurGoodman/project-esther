@@ -3,10 +3,10 @@
 #include "esther/std_map.h"
 #include "esther/std_string.h"
 
-static struct std_map *idString = NULL;
-static struct std_map *stringId = NULL;
+static struct std_map *idString;
+static struct std_map *stringId;
 
-static ID nextId = 0;
+static ID nextId;
 
 bool is_valid_id(ID id) {
     return id < nextId;

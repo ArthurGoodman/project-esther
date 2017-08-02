@@ -7,7 +7,7 @@ Object *ValueObject_new_char(Esther *es, char value) {
     return ValueObject_new_var(es, Variant_char(value));
 }
 
-Object *ValueObject_new_int(Esther *es, int value) {
+Object *ValueObject_new_int(Esther *es, long long value) {
     return ValueObject_new_var(es, Variant_int(value));
 }
 

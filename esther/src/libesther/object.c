@@ -67,7 +67,18 @@ Object *Object_resolve(Object *self, ID id) {
     return Object_hasAttribute(self, id) ? Object_getAttribute(self, id) : Class_lookup(self->objectClass, id);
 }
 
-Object *Object_call(Esther *es, Object *self, ID id, Object *args) {
+Object *Object_call(Esther *es, Object *self, ID id, size_t n, ...) {
+    va_list ap;
+    va_start(ap, n);
+
+    Object *value = Object_call_args(es, self, id, Tuple_new_va(es, n, ap));
+
+    va_end(ap);
+
+    return value;
+}
+
+Object *Object_call_args(Esther *es, Object *self, ID id, Object *args) {
     Object *f = Object_resolve(self, id);
 
     if (!f) {
@@ -75,23 +86,14 @@ Object *Object_call(Esther *es, Object *self, ID id, Object *args) {
         return NULL;
     }
 
-    return Object_call_function(es, self, f, args);
+    return Object_callFunction(es, self, f, args);
 }
 
-Object *Object_callIfFound(Esther *es, Object *self, ID id, Object *args) {
-    Object *f = Object_resolve(self, id);
-
-    if (!f)
-        return NULL;
-
-    return Object_call_function(es, self, f, args);
-}
-
-Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args) {
+Object *Object_callFunction(Esther *es, Object *self, Object *f, Object *args) {
     if (Object_getType(f) == TFunction)
         return Function_invoke(es, f, self, args);
 
-    return Object_call(es, f, c_str_to_id("()"), Tuple_new(es, 2, self, args));
+    return Object_call(es, f, c_str_to_id("()"), 2, self, args);
 }
 
 Object *Object_toString(Esther *es, Object *self) {

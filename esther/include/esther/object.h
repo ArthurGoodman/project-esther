@@ -17,19 +17,6 @@ typedef struct Class Class;
 typedef struct String String;
 typedef struct Tuple Tuple;
 
-typedef enum ObjectType {
-    TArray,
-    TClass,
-    TException,
-    TFunction,
-    TMap,
-    TObject,
-    TString,
-    TSymbol,
-    TTuple,
-    TValueObject
-} ObjectType;
-
 typedef struct ObjectVTable {
     ManagedObjectVTable base;
 
@@ -50,6 +37,19 @@ typedef struct ObjectVTable {
         Object_virtual_less,                  \
         Object_virtual_isTrue                 \
     };
+
+typedef enum ObjectType {
+    TArray,
+    TClass,
+    TException,
+    TFunction,
+    TMap,
+    TObject,
+    TString,
+    TSymbol,
+    TTuple,
+    TValueObject
+} ObjectType;
 
 typedef struct Object {
     ManagedObject base;
@@ -77,10 +77,9 @@ bool Object_is(Object *self, Object *_class);
 
 Object *Object_resolve(Object *self, ID id);
 
-//@Refactor: Make variadic version of call
-Object *Object_call(Esther *es, Object *self, ID id, Object *args);
-Object *Object_callIfFound(Esther *es, Object *self, ID id, Object *args);
-Object *Object_call_function(Esther *es, Object *self, Object *f, Object *args);
+Object *Object_call(Esther *es, Object *self, ID id, size_t n, ...);
+Object *Object_call_args(Esther *es, Object *self, ID id, Object *args);
+Object *Object_callFunction(Esther *es, Object *self, Object *f, Object *args);
 
 Object *Object_toString(Esther *es, Object *self);
 Object *Object_virtual_toString(Esther *es, Object *self);

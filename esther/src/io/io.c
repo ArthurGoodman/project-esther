@@ -130,8 +130,8 @@ static Object *IO_readChar(Esther *es, Object *self) {
 }
 
 static Object *IO_readInt(Esther *es, Object *self) {
-    int value;
-    if (fscanf(as_IO(self)->file, "%i", &value)) {
+    long long value;
+    if (fscanf(as_IO(self)->file, "%lli", &value)) {
     }
     return ValueObject_new_int(es, value);
 }

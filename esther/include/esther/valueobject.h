@@ -16,7 +16,7 @@ typedef struct ValueObject {
 #define as_ValueObject(obj) ((ValueObject *) obj)
 
 Object *ValueObject_new_char(Esther *es, char value);
-Object *ValueObject_new_int(Esther *es, int value);
+Object *ValueObject_new_int(Esther *es, long long value);
 Object *ValueObject_new_real(Esther *es, double value);
 Object *ValueObject_new_var(Esther *es, Variant value);
 

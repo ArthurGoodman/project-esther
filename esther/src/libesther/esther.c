@@ -105,7 +105,7 @@ static Object *IntClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Ob
 
 static Object *FloatClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
     if (Tuple_size(args) == 0)
-        return ValueObject_new_real(es, '\0');
+        return ValueObject_new_real(es, 0.0);
 
     if (Tuple_size(args) == 1) {
         Object *value = Tuple_get(args, 0);
@@ -681,6 +681,10 @@ void Esther_init(Esther *es) {
 
 //@TODO: Think about what actually needs to be done during finalization
 void Esther_finalize(Esther *es) {
+    gc_finalize();
+
+    free(es->globalMapper);
+
     std_map_iterator i;
     std_map_begin(es->moduleHandles, &i);
 
@@ -688,10 +692,6 @@ void Esther_finalize(Esther *es) {
         Esther_unloadModule(es, id_to_str((ID) std_map_iterator_key(&i)).data, std_map_iterator_value(&i));
         std_map_iterator_next(&i);
     }
-
-    free(es->globalMapper);
-
-    gc_finalize();
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {
@@ -772,60 +772,60 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
 
         else if (id == id_plus) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("+"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("+"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_plusAssign) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("+="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("+="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_minus) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("-"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("-"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_minusAssign) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("-="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("-="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_multiply) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("*"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("*"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_multiplyAssign) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("*="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("*="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_divide) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("/"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("/"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_divideAssign) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("/="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("/="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_mod) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("%"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("%"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_modAssign) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("%="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("%="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_power) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("**"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("**"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_powerAssign) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("**="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("**="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         }
 
         else if (id == id_lt) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("<"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("<"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_gt) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id(">"), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id(">"), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_le) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("<="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("<="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_ge) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id(">="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id(">="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_eq) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("=="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("=="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         } else if (id == id_ne) {
             Object *left = Esther_eval(es, BinaryExpression_left(ast), context);
-            value = Object_call(es, left, c_str_to_id("!="), Tuple_new(es, 1, Esther_eval(es, BinaryExpression_right(ast), context)));
+            value = Object_call(es, left, c_str_to_id("!="), 1, Esther_eval(es, BinaryExpression_right(ast), context));
         }
 
         else if (id == id_or) {
@@ -916,7 +916,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
                 for (size_t i = 0; i < Array_size(args); i++)
                     Tuple_set(evaledArgs, i, Esther_eval(es, Array_get(args, i), context));
 
-                Object *instance = Object_call(es, evaledSelf, c_str_to_id("new"), evaledArgs);
+                Object *instance = Object_call_args(es, evaledSelf, c_str_to_id("new"), evaledArgs);
 
                 Esther_eval(es, NewExpression_body(ast), Context_childContext(context, instance, Object_new(es)));
 
@@ -971,7 +971,7 @@ Object *Esther_eval(Esther *es, Object *ast, Context *context) {
             for (size_t i = 0; i < Array_size(args); i++)
                 Tuple_set(evaledArgs, i, Esther_eval(es, Array_get(args, i), context));
 
-            value = Object_call_function(es, evaledSelf, evaledF, evaledArgs);
+            value = Object_callFunction(es, evaledSelf, evaledF, evaledArgs);
         }
 
         else if (id == id_id) {
@@ -1137,7 +1137,7 @@ Object *Esther_runFile(Esther *es, const char *fileName) {
 }
 
 //@Refactor
-//@TODO: make modules to be singletons
+//@TODO: Make modules to be singletons
 Object *Esther_importModule(Esther *es, Context *context, const char *name) {
     Object *strName = String_new_c_str(es, name);
 
@@ -1232,10 +1232,9 @@ void Esther_unloadModule(Esther *es, const char *name, void *library) {
 
     finalize(es);
 
-//@Fix: for some reason this crashes on both platforms
 #if defined(__linux)
-// dlclose(library);
+    dlclose(library);
 #elif defined(__WIN32)
-// FreeLibrary(library);
+    FreeLibrary(library);
 #endif
 }

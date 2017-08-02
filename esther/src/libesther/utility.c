@@ -24,7 +24,6 @@ struct string read_file(const char *fileName) {
     if (!file)
         return string_null();
 
-    //@Refactor: get rid of fseek/ftell
     fseek(file, 0, SEEK_END);
     size_t size = ftell(file);
     fseek(file, 0, SEEK_SET);

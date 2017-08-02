@@ -20,14 +20,14 @@ typedef struct Variant {
 
     union {
         char character;
-        int integer;
+        long long integer;
         double real;
     };
 } Variant;
 
 Variant Variant_null();
 Variant Variant_char(char value);
-Variant Variant_int(int value);
+Variant Variant_int(long long value);
 Variant Variant_real(double value);
 
 VariantType Variant_getType(Variant var);
@@ -37,7 +37,7 @@ bool Variant_isNull(Variant var);
 Variant Variant_convertTo(Variant var, VariantType type);
 
 char Variant_toChar(Variant var);
-int Variant_toInt(Variant var);
+long long Variant_toInt(Variant var);
 double Variant_toReal(Variant var);
 
 Variant Variant_add(Variant a, Variant b);

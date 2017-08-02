@@ -19,7 +19,7 @@ Variant Variant_char(char value) {
     return var;
 }
 
-Variant Variant_int(int value) {
+Variant Variant_int(long long value) {
     Variant var;
     var.type = IntVariant;
     var.integer = value;
@@ -73,7 +73,7 @@ char Variant_toChar(Variant var) {
     }
 }
 
-int Variant_toInt(Variant var) {
+long long Variant_toInt(Variant var) {
     switch (var.type) {
     case CharVariant:
         return var.character;
@@ -334,7 +334,7 @@ struct string Variant_toString(Variant var) {
         return string_format("%c", var.character);
 
     case IntVariant:
-        return string_format("%i", var.integer);
+        return string_format("%lli", var.integer);
 
     case RealVariant:
         return string_format("%g", var.real);
@@ -353,7 +353,7 @@ struct string Variant_inspect(Variant var) {
     }
 
     case IntVariant:
-        return string_format("%i", var.integer);
+        return string_format("%lli", var.integer);
 
     case RealVariant:
         return string_format("%g", var.real);

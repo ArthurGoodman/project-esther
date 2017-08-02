@@ -6,7 +6,7 @@
 #include "esther/std_string.h"
 #include "esther/string.h"
 
-static struct std_map *idSymbol = NULL;
+static struct std_map *idSymbol;
 
 Object *id_to_sym(Esther *es, ID id) {
     if (!is_valid_id(id))

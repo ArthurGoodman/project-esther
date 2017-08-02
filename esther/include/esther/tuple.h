@@ -18,6 +18,7 @@ typedef struct Tuple {
 Object *Tuple_new(Esther *es, size_t size, ...);
 Object *Tuple_new_init(Esther *es, Object *const *data, size_t size);
 Object *Tuple_new_init_null(Esther *es, size_t size);
+Object *Tuple_new_va(Esther *es, size_t size, va_list ap);
 
 void Tuple_init(Esther *es, Object *self, Object *const *data, size_t size);
 void Tuple_init_null(Esther *es, Object *self, size_t size);

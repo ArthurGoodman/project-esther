@@ -4,12 +4,10 @@
 #define EXPR_1(sym, arg1) (Tuple_new(es, 2, (sym), (arg1)))
 #define EXPR_2(sym, arg1, arg2) (Tuple_new(es, 3, (sym), (arg1), (arg2)))
 #define EXPR_3(sym, arg1, arg2, arg3) (Tuple_new(es, 4, (sym), (arg1), (arg2), (arg3)))
-#define EXPR_4(sym, arg1, arg2, arg3, arg4) (Tuple_new(es, 5, (sym), (arg1), (arg2), (arg3), (arg4)))
 
 #define EXPR_ARG1(e) (Tuple_get((e), 1))
 #define EXPR_ARG2(e) (Tuple_get((e), 2))
 #define EXPR_ARG3(e) (Tuple_get((e), 3))
-#define EXPR_ARG4(e) (Tuple_get((e), 4))
 
 #define EmptyExpression (Tuple_new(es, 0))
 
@@ -50,7 +48,7 @@
 #define ModExpression(left, right) EXPR_2(sym_mod, left, right)
 #define PowerExpression(left, right) EXPR_2(sym_power, left, right)
 
-#define NegateExpression(self) EXPR_1(sym_not, self)
+#define NegateExpression(arg) EXPR_1(sym_not, arg)
 
 #define CallExpression(self, args) EXPR_2(sym_call, self, args)
 #define CallExpression_self EXPR_ARG1
@@ -96,7 +94,7 @@
 #define HereExpression EXPR_0(sym_here)
 
 #define ClassExpression(name, body) EXPR_2(sym_class, name, body)
-#define ClassInhExpression(name, body, superclass) EXPR_3(sym_class, name, body, superclass)
+#define ClassInhExpression(name, superclass, body) EXPR_3(sym_class, name, body, superclass)
 #define ClassExpression_name EXPR_ARG1
 #define ClassExpression_body EXPR_ARG2
 #define ClassExpression_superclass EXPR_ARG3
@@ -107,7 +105,7 @@
 #define FunctionExpression_body EXPR_ARG3
 
 #define NewLiteralExpression(body) EXPR_1(sym_new, body)
-#define NewExpression(body, name, args) EXPR_3(sym_new, body, name, args)
+#define NewExpression(name, args, body) EXPR_3(sym_new, body, name, args)
 #define NewExpression_body EXPR_ARG1
 #define NewExpression_name EXPR_ARG2
 #define NewExpression_args EXPR_ARG3

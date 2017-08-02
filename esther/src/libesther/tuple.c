@@ -8,8 +8,7 @@ Object *Tuple_new(Esther *es, size_t size, ...) {
     va_list ap;
     va_start(ap, size);
 
-    Object *self = gc_alloc(sizeof(Tuple));
-    Tuple_init_va(es, self, size, ap);
+    Object *self = Tuple_new_va(es, size, ap);
 
     va_end(ap);
 
@@ -25,6 +24,12 @@ Object *Tuple_new_init(Esther *es, Object *const *data, size_t size) {
 Object *Tuple_new_init_null(Esther *es, size_t size) {
     Object *self = gc_alloc(sizeof(Tuple));
     Tuple_init_null(es, self, size);
+    return self;
+}
+
+Object *Tuple_new_va(Esther *es, size_t size, va_list ap) {
+    Object *self = gc_alloc(sizeof(Tuple));
+    Tuple_init_va(es, self, size, ap);
     return self;
 }
 

@@ -99,7 +99,9 @@ Object *Class_virtual_toString(Esther *es, Object *self) {
 
 Object *Class_newInstance(Esther *es, Object *self, Object *args) {
     Object *instance = (*(ClassVTable **) self)->newInstance(es, self, args);
-    Object_callIfFound(es, instance, c_str_to_id("initialize"), args);
+    Object *initialize = Object_resolve(instance, c_str_to_id("initialize"));
+    if (initialize)
+        Object_callFunction(es, instance, initialize, args);
     return instance;
 }
 
