@@ -380,14 +380,8 @@ static Object *suffix(Esther *es, Parser *parser) {
                 immediateAccept(es, parser, id_newLine);
                 e = AttributeExpression(e, Token_text(parser->token));
                 getToken(parser);
-            } else {
-                bool expectRightPar = accept(es, parser, id_leftPar);
-
+            } else
                 e = DotExpression(e, logicOr(es, parser));
-
-                if (expectRightPar && !accept(es, parser, id_rightPar))
-                    syntax_error(es, p, "unmatched parentheses");
-            }
         } else
             break;
     }
@@ -451,13 +445,7 @@ static Object *term(Esther *es, Parser *parser) {
         Object *condition;
         Object *body;
 
-        bool expectRightPar = accept(es, parser, id_leftPar);
-
         condition = expr(es, parser);
-
-        if (expectRightPar && !accept(es, parser, id_rightPar))
-            syntax_error(es, p, "unmatched parentheses");
-
         body = expr(es, parser);
 
         if (accept(es, parser, id_else))
@@ -470,16 +458,24 @@ static Object *term(Esther *es, Parser *parser) {
         Object *condition;
         Object *body;
 
-        bool expectRightPar = accept(es, parser, id_leftPar);
-
         condition = expr(es, parser);
-
-        if (expectRightPar && !accept(es, parser, id_rightPar))
-            syntax_error(es, p, "unmatched parentheses");
-
         body = expr(es, parser);
 
         e = WhileExpression(condition, body);
+    }
+
+    else if (accept_pos(es, parser, id_do, &p)) {
+        Object *body;
+        Object *condition;
+
+        body = expr(es, parser);
+
+        if (!accept(es, parser, id_while))
+            syntax_error(es, p, "while expected");
+
+        condition = expr(es, parser);
+
+        e = DoExpression(condition, body);
     }
 
     else if (accept_pos(es, parser, id_true, &p)) {
@@ -689,7 +685,6 @@ static Object *term(Esther *es, Parser *parser) {
 }
 
 //@TODO: Implement for loop via ranges
-//@TODO: Implement do-while loop
 Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
     Parser *parser = (Parser *) self;
 

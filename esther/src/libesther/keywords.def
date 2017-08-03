@@ -1,6 +1,7 @@
 X(if, "if")
 X(else, "else")
 X(while, "while")
+X(do, "do")
 X(true, "true")
 X(false, "false")
 X(null, "null")

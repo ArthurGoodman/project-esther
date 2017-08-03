@@ -104,15 +104,11 @@ class Parser {
                     parser.pos++
                 }
                 
-                if (parser.symbol() == '.') {
-                    self.text += parser.symbol()
-                    parser.pos++
-
-                    while (parser.symbol().isDigit()) {
+                if (parser.symbol() == '.')
+                    do {
                         self.text += parser.symbol()
                         parser.pos++
-                    }
-                }
+                    } while (parser.symbol().isDigit())
             }
         else if (self.operators.contains(symbol())) {
             self.token = new Token(symbol())

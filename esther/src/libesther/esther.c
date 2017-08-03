@@ -342,6 +342,15 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
                 value = Esther_eval(es, body, context);
         }
 
+        else if (id == id_do) {
+            Object *condition = DoExpression_condition(ast);
+            Object *body = DoExpression_body(ast);
+
+            do
+                value = Esther_eval(es, body, context);
+            while (Object_isTrue(Esther_eval(es, condition, context)));
+        }
+
         else if (id == id_true) {
             value = es->trueObject;
         } else if (id == id_false) {

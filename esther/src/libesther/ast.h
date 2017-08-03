@@ -86,6 +86,10 @@
 #define WhileExpression_condition EXPR_ARG1
 #define WhileExpression_body EXPR_ARG2
 
+#define DoExpression(condition, body) EXPR_2(sym_do, condition, body)
+#define DoExpression_condition EXPR_ARG1
+#define DoExpression_body EXPR_ARG2
+
 #define TrueExpression EXPR_0(sym_true)
 #define FalseExpression EXPR_0(sym_false)
 #define NullExpression EXPR_0(sym_null)
