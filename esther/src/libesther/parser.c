@@ -150,9 +150,20 @@ static Object *expr(Esther *es, Parser *parser) {
     Object *p = Token_getPosition(parser->token);
 
     while (true) {
-        if (accept_pos(es, parser, id_assign, &p))
-            e = AssignExpression(e, logicOr(es, parser));
-        else if (accept_pos(es, parser, id_plusAssign, &p))
+        if (accept_pos(es, parser, id_assign, &p)) {
+            Object *value = logicOr(es, parser);
+
+            if (Tuple_size(e) > 0 && (Symbol_getId(Expression_id(e)) == id_attr || Symbol_getId(Expression_id(e)) == id_id) &&
+                Tuple_size(value) > 0 && Symbol_getId(Expression_id(value)) == id_function && String_size(FunctionExpression_name(value)) == 0) {
+
+                if (Symbol_getId(Expression_id(e)) == id_attr)
+                    Tuple_set(value, 1, AttributeExpression_name(e));
+                else
+                    Tuple_set(value, 1, IdExpression_name(e));
+            }
+
+            e = AssignExpression(e, value);
+        } else if (accept_pos(es, parser, id_plusAssign, &p))
             e = PlusAssignExpression(e, logicOr(es, parser));
         else if (accept_pos(es, parser, id_minusAssign, &p))
             e = MinusAssignExpression(e, logicOr(es, parser));
@@ -415,9 +426,14 @@ static Object *term(Esther *es, Parser *parser) {
         Object *name = Token_text(parser->token);
         getToken(parser);
 
-        if (accept(es, parser, id_assign))
-            e = VarAssignExpression(name, logicOr(es, parser));
-        else
+        if (accept(es, parser, id_assign)) {
+            Object *value = logicOr(es, parser);
+
+            if (Tuple_size(value) > 0 && Symbol_getId(Expression_id(value)) == id_function && String_size(FunctionExpression_name(value)) == 0)
+                Tuple_set(value, 1, name);
+
+            e = VarAssignExpression(name, value);
+        } else
             e = VarExpression(name);
     }
 
@@ -470,7 +486,7 @@ static Object *term(Esther *es, Parser *parser) {
         body = statement(es, parser);
 
         if (!accept(es, parser, id_while))
-            syntax_error(es, p, "while keyword expected");
+            syntax_error(es, p, "'while' keyword expected");
 
         condition = expr(es, parser);
 
@@ -487,7 +503,7 @@ static Object *term(Esther *es, Parser *parser) {
         getToken(parser);
 
         if (!accept(es, parser, id_in))
-            syntax_error(es, p, "in keyword expected");
+            syntax_error(es, p, "'in' keyword expected");
 
         iterable = expr(es, parser);
         body = statement(es, parser);
