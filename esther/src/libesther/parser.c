@@ -444,8 +444,7 @@ static Object *term(Esther *es, Parser *parser) {
     }
 
     else if (accept_pos(es, parser, id_if, &p)) {
-        Object *condition;
-        Object *body;
+        Object *condition, *body;
 
         condition = expr(es, parser);
         body = statement(es, parser);
@@ -457,8 +456,7 @@ static Object *term(Esther *es, Parser *parser) {
     }
 
     else if (accept_pos(es, parser, id_while, &p)) {
-        Object *condition;
-        Object *body;
+        Object *condition, *body;
 
         condition = expr(es, parser);
         body = statement(es, parser);
@@ -467,17 +465,34 @@ static Object *term(Esther *es, Parser *parser) {
     }
 
     else if (accept_pos(es, parser, id_do, &p)) {
-        Object *body;
-        Object *condition;
+        Object *condition, *body;
 
         body = statement(es, parser);
 
         if (!accept(es, parser, id_while))
-            syntax_error(es, p, "while expected");
+            syntax_error(es, p, "while keyword expected");
 
         condition = expr(es, parser);
 
         e = DoExpression(condition, body);
+    }
+
+    else if (accept_pos(es, parser, id_for, &p)) {
+        Object *var, *iterable, *body;
+
+        if (!check(es, parser, id_id))
+            syntax_error(es, p, "identifier expected");
+
+        var = Token_text(parser->token);
+        getToken(parser);
+
+        if (!accept(es, parser, id_in))
+            syntax_error(es, p, "in keyword expected");
+
+        iterable = expr(es, parser);
+        body = statement(es, parser);
+
+        e = ForExpression(var, iterable, body);
     }
 
     else if (accept_pos(es, parser, id_true, &p)) {
@@ -704,7 +719,6 @@ static Object *term(Esther *es, Parser *parser) {
     return e;
 }
 
-//@TODO: Implement for loop via ranges
 Object *Parser_parse(Esther *es, Object *self, Object *tokens) {
     Parser *parser = (Parser *) self;
 

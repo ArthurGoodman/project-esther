@@ -87,6 +87,11 @@
 #define LoopExpression_condition EXPR_ARG1
 #define LoopExpression_body EXPR_ARG2
 
+#define ForExpression(var, iterable, body) EXPR_3(sym_for, var, iterable, body)
+#define ForExpression_var EXPR_ARG1
+#define ForExpression_iterable EXPR_ARG2
+#define ForExpression_body EXPR_ARG3
+
 #define TrueExpression EXPR_0(sym_true)
 #define FalseExpression EXPR_0(sym_false)
 #define NullExpression EXPR_0(sym_null)

@@ -353,9 +353,8 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
                 if (exception) {
                     ExceptionType type = Exception_getType(exception);
 
-                    if (type == ExContinue)
-                        continue;
-                    else if (type == ExBreak) {
+                    if (type == ExContinue) {
+                    } else if (type == ExBreak) {
                         value = Exception_getValue(exception);
                         break;
                     } else
@@ -382,15 +381,60 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
                 if (exception) {
                     ExceptionType type = Exception_getType(exception);
 
-                    if (type == ExContinue)
-                        continue;
-                    else if (type == ExBreak) {
+                    if (type == ExContinue) {
+                    } else if (type == ExBreak) {
                         value = Exception_getValue(exception);
                         break;
                     } else
                         Exception_throw(exception);
                 }
             } while (Object_isTrue(Esther_eval(es, condition, context)));
+        }
+
+        else if (id == id_for) {
+            Object *iterable = Esther_eval(es, ForExpression_iterable(ast), context);
+
+            Object *iteratorFunction, *eachFunction;
+
+            if ((iteratorFunction = Object_resolve(iterable, c_str_to_id("iterator")))) {
+                Context *childContext = Context_childContext(context, Context_getSelf(context), Object_new(es));
+
+                ID var = str_to_id(String_value(ForExpression_var(ast)));
+                ID idNext = c_str_to_id("next");
+
+                Object *iterator = Object_callFunction(es, iterable, iteratorFunction, Tuple_new(es, 0));
+                Object *body = ForExpression_body(ast);
+
+                while (true) {
+                    Object *exception = NULL;
+
+                    TRY {
+                        Context_setLocal(childContext, var, Object_call(es, iterator, idNext, 0));
+                        value = Esther_eval(es, body, childContext);
+                    }
+                    CATCH(e) {
+                        exception = e;
+                    }
+                    ENDTRY;
+
+                    if (exception) {
+                        ExceptionType type = Exception_getType(exception);
+
+                        if (type == ExContinue) {
+                        } else if (type == ExBreak) {
+                            value = Exception_getValue(exception);
+                            break;
+                        } else if (type == ExStopIteration)
+                            break;
+                        else
+                            Exception_throw(exception);
+                    }
+                }
+            } else if ((eachFunction = Object_resolve(iterable, c_str_to_id("each")))) {
+                Object *f = InterpretedFunction_new(es, string_const(""), Array_new(es, 1, ForExpression_var(ast)), context, ForExpression_body(ast));
+                value = Object_callFunction(es, iterable, eachFunction, Tuple_new(es, 1, f));
+            } else
+                Exception_throw_new(es, "object is not iterable");
         }
 
         else if (id == id_true) {
