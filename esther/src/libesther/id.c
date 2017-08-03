@@ -35,6 +35,6 @@ ID str_to_id(struct string str) {
     return (ID) std_map_get(stringId, &str);
 }
 
-ID c_str_to_id(const char *str) {
+ID cstr_to_id(const char *str) {
     return str_to_id(string_const(str));
 }

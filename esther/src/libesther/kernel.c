@@ -13,7 +13,7 @@ static Object *ClassClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
 static Object *StringClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
     switch (Tuple_size(args)) {
     case 0:
-        return String_new_c_str(es, "");
+        return String_new_cstr(es, "");
 
     case 1:
         return String_new(es, String_value(Object_toString(es, Tuple_get(args, 0))));
@@ -25,7 +25,7 @@ static Object *StringClass_virtual_newInstance(Esther *es, Object *UNUSED(self),
 }
 
 static Object *SymbolClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    return c_str_to_sym(es, "");
+    return cstr_to_sym(es, "");
 }
 
 #define FunctionClass_virtual_newInstance Class_virtual_unimplemented_newInstance
@@ -57,7 +57,7 @@ static Object *CharClass_virtual_newInstance(Esther *es, Object *UNUSED(self), O
         if (Object_getType(value) == TValueObject)
             return ValueObject_new_char(es, Variant_toChar(as_ValueObject(value)->value));
         else if (Object_getType(value) == TString)
-            return ValueObject_new_char(es, String_c_str(value)[0]);
+            return ValueObject_new_char(es, String_cstr(value)[0]);
         else {
             Exception_throw_new(es, "invalid argument");
             return NULL;
@@ -81,7 +81,7 @@ static Object *IntClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Ob
         if (Object_getType(value) == TValueObject)
             return ValueObject_new_int(es, Variant_toInt(as_ValueObject(value)->value));
         else if (Object_getType(value) == TString)
-            return ValueObject_new_int(es, atoi(String_c_str(value)));
+            return ValueObject_new_int(es, atoi(String_cstr(value)));
         else {
             Exception_throw_new(es, "invalid argument");
             return NULL;
@@ -105,7 +105,7 @@ static Object *FloatClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
         if (Object_getType(value) == TValueObject)
             return ValueObject_new_real(es, Variant_toReal(as_ValueObject(value)->value));
         else if (Object_getType(value) == TString)
-            return ValueObject_new_real(es, atof(String_c_str(value)));
+            return ValueObject_new_real(es, atof(String_cstr(value)));
         else {
             Exception_throw_new(es, "invalid argument");
             return NULL;
@@ -162,13 +162,15 @@ static Object *RangeClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
 }
 
 #define RangeIteratorClass_virtual_newInstance Class_virtual_unimplemented_newInstance
+#define SequenceIteratorClass_virtual_newInstance Class_virtual_unimplemented_newInstance
+#define MapIteratorClass_virtual_newInstance Class_virtual_unimplemented_newInstance
 
 static Object *True_virtual_toString(Esther *es, Object *UNUSED(self)) {
-    return String_new_c_str(es, "true");
+    return String_new_cstr(es, "true");
 }
 
 static Object *False_virtual_toString(Esther *es, Object *UNUSED(self)) {
-    return String_new_c_str(es, "false");
+    return String_new_cstr(es, "false");
 }
 
 static bool False_virtual_isTrue(Object *UNUSED(self)) {
@@ -176,7 +178,7 @@ static bool False_virtual_isTrue(Object *UNUSED(self)) {
 }
 
 static Object *Null_virtual_toString(Esther *es, Object *UNUSED(self)) {
-    return String_new_c_str(es, "null");
+    return String_new_cstr(es, "null");
 }
 
 static Object *ObjectClass_class(Esther *UNUSED(es), Object *self) {
@@ -227,7 +229,7 @@ static Object *StringClass_capacity(Esther *es, Object *self) {
 }
 
 static Object *StringClass_at(Esther *es, Object *self, Object *pos) {
-    return ValueObject_new_char(es, String_c_str(self)[Variant_toInt(ValueObject_getValue(pos))]);
+    return ValueObject_new_char(es, String_cstr(self)[Variant_toInt(ValueObject_getValue(pos))]);
 }
 
 static Object *StringClass_plus(Esther *es, Object *self, Object *str) {
@@ -440,6 +442,8 @@ CLASS_VTABLE(Float)
 CLASS_VTABLE(Exception)
 CLASS_VTABLE(Range)
 CLASS_VTABLE(RangeIterator)
+CLASS_VTABLE(SequenceIterator)
+CLASS_VTABLE(MapIterator)
 
 #define CONST_VTABLE(name, is_true)                      \
     static ObjectVTable vtable_for_##name = {            \
@@ -460,8 +464,8 @@ CONST_VTABLE(False, False)
 CONST_VTABLE(Null, False)
 
 void Kernel_initialize(Esther *es) {
-    Esther_setRootObject(es, c_str_to_id("Object"), NULL);
-    Esther_setRootObject(es, c_str_to_id("Class"), NULL);
+    Esther_setRootObject(es, cstr_to_id("Object"), NULL);
+    Esther_setRootObject(es, cstr_to_id("Class"), NULL);
 
     Object *classClass = Class_new(es, string_const("Class"), NULL);
     classClass->objectClass = classClass;
@@ -533,6 +537,14 @@ void Kernel_initialize(Esther *es) {
     Esther_setRootObject(es, str_to_id(Class_getName(rangeIteratorClass)), rangeIteratorClass);
     *(void **) rangeIteratorClass = &vtable_for_RangeIteratorClass;
 
+    Object *sequenceIteratorClass = Class_new(es, string_const("SequenceIterator"), NULL);
+    Esther_setRootObject(es, str_to_id(Class_getName(sequenceIteratorClass)), sequenceIteratorClass);
+    *(void **) sequenceIteratorClass = &vtable_for_SequenceIteratorClass;
+
+    Object *mapIteratorClass = Class_new(es, string_const("MapIterator"), NULL);
+    Esther_setRootObject(es, str_to_id(Class_getName(mapIteratorClass)), mapIteratorClass);
+    *(void **) mapIteratorClass = &vtable_for_MapIteratorClass;
+
     es->trueObject = Object_new(es);
     es->trueObject->objectClass = booleanClass;
     *(void **) es->trueObject = &vtable_for_True;
@@ -550,7 +562,7 @@ void Kernel_initialize(Esther *es) {
     Class_setMethod_func(objectClass, Function_new(es, string_const("inspect"), (Object * (*) ()) Object_inspect, 0));
     Class_setMethod_func(objectClass, Function_new(es, string_const("equals"), (Object * (*) ()) ObjectClass_equals, 1));
     Class_setMethod_func(objectClass, Function_new(es, string_const("clone"), (Object * (*) ()) ObjectClass_clone, 0));
-    Class_setMethod(objectClass, c_str_to_id("=="), Class_getMethod(objectClass, c_str_to_id("equals")));
+    Class_setMethod(objectClass, cstr_to_id("=="), Class_getMethod(objectClass, cstr_to_id("equals")));
 
     Class_setMethod_func(classClass, Function_new(es, string_const("superclass"), (Object * (*) ()) ClassClass_superclass, 0));
     Class_setMethod_func(classClass, Function_new(es, string_const("new"), (Object * (*) ()) Class_newInstance, -1));
@@ -562,32 +574,40 @@ void Kernel_initialize(Esther *es) {
     Class_setMethod_func(stringClass, Function_new(es, string_const("size"), (Object * (*) ()) StringClass_size, 0));
     Class_setMethod_func(stringClass, Function_new(es, string_const("capacity"), (Object * (*) ()) StringClass_capacity, 0));
     Class_setMethod_func(stringClass, Function_new(es, string_const("at"), (Object * (*) ()) StringClass_at, 1));
-    Class_setMethod(stringClass, c_str_to_id("[]"), Class_getMethod(stringClass, c_str_to_id("at")));
+    Class_setMethod(stringClass, cstr_to_id("[]"), Class_getMethod(stringClass, cstr_to_id("at")));
     Class_setMethod_func(stringClass, Function_new(es, string_const("+"), (Object * (*) ()) StringClass_plus, 1));
     Class_setMethod_func(stringClass, Function_new(es, string_const("append"), (Object * (*) ()) StringClass_append, 1));
-    Class_setMethod(stringClass, c_str_to_id("+="), Class_getMethod(stringClass, c_str_to_id("append")));
+    Class_setMethod(stringClass, cstr_to_id("+="), Class_getMethod(stringClass, cstr_to_id("append")));
     Class_setMethod_func(stringClass, Function_new(es, string_const("contains"), (Object * (*) ()) StringClass_contains, 1));
+    Class_setMethod_func(stringClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Iterable_iterator, 0));
+    Class_setMethod_func(stringClass, Function_new(es, string_const("reversed"), (Object * (*) ()) Iterable_reversed, 0));
 
     Class_setMethod_func(functionClass, Function_new(es, string_const("call"), (Object * (*) ()) Function_invoke, 2));
-    Class_setMethod(functionClass, c_str_to_id("()"), Class_getMethod(functionClass, c_str_to_id("call")));
+    Class_setMethod(functionClass, cstr_to_id("()"), Class_getMethod(functionClass, cstr_to_id("call")));
 
     Class_setMethod_func(tupleClass, Function_new(es, string_const("size"), (Object * (*) ()) TupleClass_size, 0));
     Class_setMethod_func(tupleClass, Function_new(es, string_const("at"), (Object * (*) ()) TupleClass_at, 1));
-    Class_setMethod(tupleClass, c_str_to_id("[]"), Class_getMethod(tupleClass, c_str_to_id("at")));
+    Class_setMethod(tupleClass, cstr_to_id("[]"), Class_getMethod(tupleClass, cstr_to_id("at")));
     Class_setMethod_func(tupleClass, Function_new(es, string_const("set"), (Object * (*) ()) TupleClass_set, 2));
+    Class_setMethod_func(tupleClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Iterable_iterator, 0));
+    Class_setMethod_func(tupleClass, Function_new(es, string_const("reversed"), (Object * (*) ()) Iterable_reversed, 0));
 
     Class_setMethod_func(arrayClass, Function_new(es, string_const("size"), (Object * (*) ()) ArrayClass_size, 0));
     Class_setMethod_func(arrayClass, Function_new(es, string_const("at"), (Object * (*) ()) ArrayClass_at, 1));
-    Class_setMethod(arrayClass, c_str_to_id("[]"), Class_getMethod(arrayClass, c_str_to_id("at")));
+    Class_setMethod(arrayClass, cstr_to_id("[]"), Class_getMethod(arrayClass, cstr_to_id("at")));
     Class_setMethod_func(arrayClass, Function_new(es, string_const("set"), (Object * (*) ()) ArrayClass_set, 2));
     Class_setMethod_func(arrayClass, Function_new(es, string_const("push"), (Object * (*) ()) ArrayClass_push, 1));
     Class_setMethod_func(arrayClass, Function_new(es, string_const("pop"), (Object * (*) ()) ArrayClass_pop, 0));
+    Class_setMethod_func(arrayClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Iterable_iterator, 0));
+    Class_setMethod_func(arrayClass, Function_new(es, string_const("reversed"), (Object * (*) ()) Iterable_reversed, 0));
 
     Class_setMethod_func(mapClass, Function_new(es, string_const("size"), (Object * (*) ()) MapClass_size, 0));
     Class_setMethod_func(mapClass, Function_new(es, string_const("contains"), (Object * (*) ()) MapClass_contains, 1));
     Class_setMethod_func(mapClass, Function_new(es, string_const("get"), (Object * (*) ()) MapClass_get, 1));
-    Class_setMethod(mapClass, c_str_to_id("[]"), Class_getMethod(mapClass, c_str_to_id("get")));
+    Class_setMethod(mapClass, cstr_to_id("[]"), Class_getMethod(mapClass, cstr_to_id("get")));
     Class_setMethod_func(mapClass, Function_new(es, string_const("set"), (Object * (*) ()) MapClass_set, 2));
+    Class_setMethod_func(mapClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Map_iterator, 0));
+    Class_setMethod_func(mapClass, Function_new(es, string_const("reversed"), (Object * (*) ()) Map_reversed, 0));
 
     Class_setMethod_func(numericClass, Function_new(es, string_const("+"), (Object * (*) ()) NumericClass_add, 1));
     Class_setMethod_func(numericClass, Function_new(es, string_const("+="), (Object * (*) ()) NumericClass_addAssign, 1));
@@ -626,6 +646,14 @@ void Kernel_initialize(Esther *es) {
     Class_setMethod_func(rangeClass, Function_new(es, string_const("stop"), (Object * (*) ()) Range_getStop, 0));
     Class_setMethod_func(rangeClass, Function_new(es, string_const("step"), (Object * (*) ()) Range_getStep, 0));
     Class_setMethod_func(rangeClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Range_iterator, 0));
+    Class_setMethod_func(rangeClass, Function_new(es, string_const("reversed"), (Object * (*) ()) Range_reversed, 0));
 
+    Class_setMethod_func(rangeIteratorClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Esther_identity, 0));
     Class_setMethod_func(rangeIteratorClass, Function_new(es, string_const("next"), (Object * (*) ()) RangeIterator_next, 0));
+
+    Class_setMethod_func(sequenceIteratorClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Esther_identity, 0));
+    Class_setMethod_func(sequenceIteratorClass, Function_new(es, string_const("next"), (Object * (*) ()) SequenceIterator_next, 0));
+
+    Class_setMethod_func(mapIteratorClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Esther_identity, 0));
+    Class_setMethod_func(mapIteratorClass, Function_new(es, string_const("next"), (Object * (*) ()) MapIterator_next, 0));
 }

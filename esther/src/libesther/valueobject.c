@@ -75,13 +75,13 @@ Object *ValueObject_virtual_clone(Esther *es, Object *self) {
 Object *ValueObject_variantTypeToObjectClass(Esther *es, VariantType type) {
     switch (type) {
     case CharVariant:
-        return Esther_getRootObject(es, c_str_to_id("Char"));
+        return Esther_getRootObject(es, cstr_to_id("Char"));
 
     case IntVariant:
-        return Esther_getRootObject(es, c_str_to_id("Int"));
+        return Esther_getRootObject(es, cstr_to_id("Int"));
 
     case RealVariant:
-        return Esther_getRootObject(es, c_str_to_id("Float"));
+        return Esther_getRootObject(es, cstr_to_id("Float"));
 
     default:
         return NULL;

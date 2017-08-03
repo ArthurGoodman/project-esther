@@ -86,12 +86,12 @@ static Object *MessageBox_show(Esther *es, Object *self) {
 }
 
 static Object *MessageBox_setTitle(Esther *es, Object *self, Object *str) {
-    as_MessageBox(self)->ptr->setWindowTitle(String_c_str(str));
+    as_MessageBox(self)->ptr->setWindowTitle(String_cstr(str));
     return es->nullObject;
 }
 
 static Object *MessageBox_setText(Esther *es, Object *self, Object *str) {
-    as_MessageBox(self)->ptr->setText(String_c_str(str));
+    as_MessageBox(self)->ptr->setText(String_cstr(str));
     return es->nullObject;
 }
 

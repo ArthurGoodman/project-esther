@@ -25,7 +25,7 @@ void Object_init(Esther *es, Object *self, ObjectType type, Object *objectClass)
     ManagedObject_init(&self->base);
 
     self->type = type;
-    self->objectClass = objectClass ? objectClass : Esther_getRootObject(es, c_str_to_id("Object"));
+    self->objectClass = objectClass ? objectClass : Esther_getRootObject(es, cstr_to_id("Object"));
     self->attributes = NULL;
 
     *(void **) self = &vtable_for_Object;
@@ -88,7 +88,7 @@ Object *Object_callFunction(Esther *es, Object *self, Object *f, Object *args) {
     if (Object_getType(f) == TFunction)
         return Function_invoke(es, f, self, args);
 
-    return Object_call(es, f, c_str_to_id("()"), 2, self, args);
+    return Object_call(es, f, cstr_to_id("()"), 2, self, args);
 }
 
 Object *Object_toString(Esther *es, Object *self) {

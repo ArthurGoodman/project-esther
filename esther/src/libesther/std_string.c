@@ -30,7 +30,7 @@ struct string string_new_empty() {
     return string_new("", 0);
 }
 
-struct string string_new_c_str(const char *str) {
+struct string string_new_cstr(const char *str) {
     return string_new(str, strlen(str));
 }
 
@@ -90,7 +90,7 @@ void string_append_char(struct string *self, char c) {
     string_insert_buffer(self, self->size, &c, 1);
 }
 
-void string_append_c_str(struct string *self, const char *str) {
+void string_append_cstr(struct string *self, const char *str) {
     string_insert_buffer(self, self->size, str, strlen(str));
 }
 
@@ -111,7 +111,7 @@ void string_insert_char(struct string *self, size_t pos, char c, size_t n) {
     string_insert_buffer(self, pos, buf, n);
 }
 
-void string_insert_c_str(struct string *self, size_t pos, const char *str) {
+void string_insert_cstr(struct string *self, size_t pos, const char *str) {
     string_insert_buffer(self, pos, str, strlen(str));
 }
 
@@ -137,7 +137,7 @@ void string_replace_char(struct string *self, size_t pos, size_t len, char c, si
     string_replace_buffer(self, pos, len, buf, n);
 }
 
-void string_replace_c_str(struct string *self, size_t pos, size_t len, const char *str) {
+void string_replace_cstr(struct string *self, size_t pos, size_t len, const char *str) {
     string_replace_buffer(self, pos, len, str, strlen(str));
 }
 
@@ -160,7 +160,7 @@ size_t string_find_char(struct string self, char c, size_t pos) {
     return string_find_buffer(self, &c, 1, pos);
 }
 
-size_t string_find_c_str(struct string self, const char *str, size_t pos) {
+size_t string_find_cstr(struct string self, const char *str, size_t pos) {
     return string_find_buffer(self, str, strlen(str), pos);
 }
 
@@ -183,7 +183,7 @@ size_t string_rfind_char(struct string self, char c, size_t pos) {
     return string_rfind_buffer(self, &c, 1, pos);
 }
 
-size_t string_rfind_c_str(struct string self, const char *str, size_t pos) {
+size_t string_rfind_cstr(struct string self, const char *str, size_t pos) {
     return string_rfind_buffer(self, str, strlen(str), pos);
 }
 
@@ -344,8 +344,8 @@ struct string string_quote(struct string self, int offset, int column) {
 
     string_assign(&quote, string_substr(quote, MAX(0, column - max_quote_length / 2), max_quote_length));
 
-    struct string prefix = string_new_c_str(column > max_quote_length / 2 ? "... " : "");
-    struct string suffix = string_new_c_str(size - column > max_quote_length / 2 ? " ..." : "");
+    struct string prefix = string_new_cstr(column > max_quote_length / 2 ? "... " : "");
+    struct string suffix = string_new_cstr(size - column > max_quote_length / 2 ? " ..." : "");
 
     int pos = column > max_quote_length / 2 ? max_quote_length / 2 : column;
 

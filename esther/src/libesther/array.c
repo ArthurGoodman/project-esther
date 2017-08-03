@@ -1,6 +1,7 @@
 #include "esther/array.h"
 
 #include "esther/esther.h"
+#include "esther/iterator.h"
 #include "esther/std_vector.h"
 #include "esther/string.h"
 
@@ -46,7 +47,7 @@ static ObjectVTable vtable_for_Array = {
 };
 
 void Array_init_std(Esther *es, Object *self, struct std_vector *data) {
-    Object_init(es, self, TArray, Esther_getRootObject(es, c_str_to_id("Array")));
+    Object_init(es, self, TArray, Esther_getRootObject(es, cstr_to_id("Array")));
 
     as_Array(self)->data = data;
 
@@ -96,16 +97,16 @@ Object *Array_virtual_inspect(Esther *es, Object *self) {
     struct std_vector *data = as_Array(self)->data;
     size_t size = std_vector_size(data);
 
-    Object *str = String_new_c_str(es, "[");
+    Object *str = String_new_cstr(es, "[");
 
     for (size_t i = 0; i < size; i++) {
         String_append(str, Object_inspect(es, std_vector_at(data, i)));
 
         if (i < size - 1)
-            String_append_c_str(str, ", ");
+            String_append_cstr(str, ", ");
     }
 
-    String_append_c_str(str, "]");
+    String_append_cstr(str, "]");
 
     return str;
 }

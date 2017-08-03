@@ -6,8 +6,6 @@ extern "C" {
 
 #include "esther/object.h"
 
-struct std_map;
-
 typedef struct Map {
     Object base;
 

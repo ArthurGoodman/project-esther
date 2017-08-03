@@ -44,7 +44,7 @@ static void ungetToken(Parser *parser) {
 }
 
 static void error_invalidToken(Esther *es, Parser *parser) {
-    Exception_throw_new(es, "invalid token %s", String_c_str(Object_inspect(es, parser->token)));
+    Exception_throw_new(es, "invalid token %s", String_cstr(Object_inspect(es, parser->token)));
 }
 
 static void syntax_error(Esther *es, Object *pos, const char *fmt, ...) {
@@ -341,9 +341,9 @@ static Object *prefix(Esther *es, Parser *parser) {
     else if (accept_pos(es, parser, id_minus, &p))
         e = MinusExpression(ValueExpression(ValueObject_new_int(es, 0)), suffix(es, parser));
     else if (accept_pos(es, parser, id_dec, &p))
-        e = CallExpression(AttributeExpression(suffix(es, parser), String_new_c_str(es, "--_")), Array_new(es, 0));
+        e = CallExpression(AttributeExpression(suffix(es, parser), String_new_cstr(es, "--_")), Array_new(es, 0));
     else if (accept_pos(es, parser, id_inc, &p))
-        e = CallExpression(AttributeExpression(suffix(es, parser), String_new_c_str(es, "++_")), Array_new(es, 0));
+        e = CallExpression(AttributeExpression(suffix(es, parser), String_new_cstr(es, "++_")), Array_new(es, 0));
     else
         e = suffix(es, parser);
 
@@ -383,9 +383,9 @@ static Object *suffix(Esther *es, Parser *parser) {
             if (!accept(es, parser, id_rightBracket))
                 syntax_error(es, p, "unmatched brackets");
 
-            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), args);
+            e = CallExpression(AttributeExpression(e, String_new_cstr(es, "[]")), args);
         } else if (immediateAccept(es, parser, id_brackets)) {
-            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "[]")), Array_new(es, 0));
+            e = CallExpression(AttributeExpression(e, String_new_cstr(es, "[]")), Array_new(es, 0));
         } else if (accept_pos(es, parser, id_dot, &p)) {
             if (!check(es, parser, id_leftPar) && !check(es, parser, id_leftBrace) && !check(es, parser, id_empty)) {
                 immediateAccept(es, parser, id_newLine);
@@ -394,15 +394,15 @@ static Object *suffix(Esther *es, Parser *parser) {
             } else
                 e = DotExpression(e, logicOr(es, parser));
         } else if (accept_pos(es, parser, id_range, &p)) {
-            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "..")), Array_new(es, 1, logicOr(es, parser)));
+            e = CallExpression(AttributeExpression(e, String_new_cstr(es, "..")), Array_new(es, 1, logicOr(es, parser)));
         } else
             break;
     }
 
     if (immediateAccept(es, parser, id_dec))
-        e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_--")), Array_new(es, 0));
+        e = CallExpression(AttributeExpression(e, String_new_cstr(es, "_--")), Array_new(es, 0));
     else if (immediateAccept(es, parser, id_inc))
-        e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_++")), Array_new(es, 0));
+        e = CallExpression(AttributeExpression(e, String_new_cstr(es, "_++")), Array_new(es, 0));
 
     if (p && !Expression_hasPosition(e))
         Expression_setPosition(e, p);
@@ -438,14 +438,14 @@ static Object *term(Esther *es, Parser *parser) {
     }
 
     else if (check_pos(es, parser, id_int, &p)) {
-        e = ValueExpression(ValueObject_new_int(es, atoll(String_c_str(Token_text(parser->token)))));
+        e = ValueExpression(ValueObject_new_int(es, atoll(String_cstr(Token_text(parser->token)))));
         getToken(parser);
     } else if (check_pos(es, parser, id_float, &p)) {
-        e = ValueExpression(ValueObject_new_real(es, atof(String_c_str(Token_text(parser->token)))));
+        e = ValueExpression(ValueObject_new_real(es, atof(String_cstr(Token_text(parser->token)))));
         getToken(parser);
     } else if (check_pos(es, parser, id_singleQuote, &p)) {
         Object *value = Token_text(parser->token);
-        e = ValueExpression(String_size(value) == 1 ? ValueObject_new_char(es, String_c_str(value)[0]) : value);
+        e = ValueExpression(String_size(value) == 1 ? ValueObject_new_char(es, String_cstr(value)[0]) : value);
         getToken(parser);
     }
     //@TODO: Implement complex strings
@@ -545,7 +545,7 @@ static Object *term(Esther *es, Parser *parser) {
             name = Token_text(parser->token);
             getToken(parser);
         } else
-            name = String_new_c_str(es, "");
+            name = String_new_cstr(es, "");
 
         if (accept(es, parser, id_lt)) {
             Object *superclass = expr(es, parser);
@@ -561,7 +561,7 @@ static Object *term(Esther *es, Parser *parser) {
             name = Token_text(parser->token);
             getToken(parser);
         } else
-            name = String_new_c_str(es, "");
+            name = String_new_cstr(es, "");
 
         Object *params = Array_new(es, 0);
 
@@ -724,9 +724,9 @@ static Object *term(Esther *es, Parser *parser) {
     else if (check_pos(es, parser, id_empty, &p)) {
         syntax_error(es, p, "unexpected end of program");
     } else if (check_pos(es, parser, id_unknown, &p)) {
-        syntax_error(es, p, "unknown token %s", String_c_str(Object_inspect(es, Token_text(parser->token))));
+        syntax_error(es, p, "unknown token %s", String_cstr(Object_inspect(es, Token_text(parser->token))));
     } else {
-        syntax_error(es, p, "unexpected token %s", String_c_str(Object_inspect(es, Token_text(parser->token))));
+        syntax_error(es, p, "unexpected token %s", String_cstr(Object_inspect(es, Token_text(parser->token))));
     }
 
     if (p && !Expression_hasPosition(e))

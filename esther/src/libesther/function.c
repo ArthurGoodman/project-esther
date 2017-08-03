@@ -27,7 +27,7 @@ static ObjectVTable vtable_for_Function = {
 };
 
 void Function_init(Esther *es, Object *f, struct string name, Object *(*body)(), int argc) {
-    Object_init(es, f, TFunction, Esther_getRootObject(es, c_str_to_id("Function")));
+    Object_init(es, f, TFunction, Esther_getRootObject(es, cstr_to_id("Function")));
 
     as_Function(f)->name = string_copy(name);
     as_Function(f)->body = body;
@@ -110,7 +110,7 @@ Object *Function_virtual_toString(Esther *es, Object *f) {
     struct string name = as_Function(f)->name;
 
     if (name.size == 0)
-        return String_new_c_str(es, "<anonymous function>");
+        return String_new_cstr(es, "<anonymous function>");
 
     return String_new_move(es, string_format("<function %s>", name.data));
 }

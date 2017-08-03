@@ -39,6 +39,8 @@ typedef struct Esther {
 void Esther_init(Esther *es);
 void Esther_finalize(Esther *es);
 
+Object *Esther_identity(Esther *es, Object *self);
+
 Object *Esther_toBoolean(Esther *es, bool value);
 
 bool Esther_hasRootObject(Esther *es, ID name);

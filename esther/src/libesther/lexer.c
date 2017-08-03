@@ -83,7 +83,7 @@ static int find_str(const char *array[], const char *str) {
 
 static Object *scan(Esther *es, Lexer *lexer) {
     Object *id = sym_empty;
-    Object *text = String_new_c_str(es, "");
+    Object *text = String_new_cstr(es, "");
 
     skip_spaces(lexer);
 
@@ -105,7 +105,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
             read_sym(lexer);
 
         id = sym_newLine;
-        text = String_new_c_str(es, "\n");
+        text = String_new_cstr(es, "\n");
     } else if (sym(lexer) == '\'' || sym(lexer) == '"') {
         char type = read_sym(lexer);
 
@@ -205,7 +205,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
             String_append_char(text, read_sym(lexer));
         while (isalnum(sym(lexer)) || sym(lexer) == '_');
 
-        int i = find_str(keywords, String_c_str(text));
+        int i = find_str(keywords, String_cstr(text));
         id = i >= 0 ? keyword_symbols[i] : sym_id;
     } else {
         int i = 0;
@@ -214,13 +214,13 @@ static Object *scan(Esther *es, Lexer *lexer) {
             for (i = 0; strcmp(operators[i], "") != 0; i++) {
                 size_t size = String_size(text);
 
-                if (sym(lexer) && strncmp(operators[i], String_c_str(text), size) == 0 && operators[i][size] == sym(lexer)) {
+                if (sym(lexer) && strncmp(operators[i], String_cstr(text), size) == 0 && operators[i][size] == sym(lexer)) {
                     String_append_char(text, read_sym(lexer));
                     break;
                 }
             }
 
-        if (String_size(text) != 0 && (i = find_str(operators, String_c_str(text))) >= 0)
+        if (String_size(text) != 0 && (i = find_str(operators, String_cstr(text))) >= 0)
             id = operator_symbols[i];
         else {
             if (String_size(text) == 0)
@@ -241,7 +241,7 @@ static Object *scan(Esther *es, Lexer *lexer) {
 Object *Lexer_lex(Esther *es, Object *self, Object *code) {
     Lexer *lexer = (Lexer *) self;
 
-    lexer->code = String_c_str(code);
+    lexer->code = String_cstr(code);
     lexer->length = strlen(lexer->code);
     lexer->pos = 0;
     lexer->line = 0;

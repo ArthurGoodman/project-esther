@@ -14,9 +14,9 @@ Object *String_new_move(Esther *es, struct string value) {
     return self;
 }
 
-Object *String_new_c_str(Esther *es, const char *value) {
+Object *String_new_cstr(Esther *es, const char *value) {
     Object *self = gc_alloc(sizeof(String));
-    String_init_c_str(es, self, value);
+    String_init_cstr(es, self, value);
     return self;
 }
 
@@ -38,18 +38,18 @@ static ObjectVTable vtable_for_String = {
 };
 
 void String_init_move(Esther *es, Object *self, struct string value) {
-    Object_init(es, self, TString, Esther_getRootObject(es, c_str_to_id("String")));
+    Object_init(es, self, TString, Esther_getRootObject(es, cstr_to_id("String")));
 
     as_String(self)->value = value;
 
     *(void **) self = &vtable_for_String;
 }
 
-void String_init_c_str(Esther *es, Object *self, const char *value) {
-    String_init_move(es, self, string_new_c_str(value));
+void String_init_cstr(Esther *es, Object *self, const char *value) {
+    String_init_move(es, self, string_new_cstr(value));
 }
 
-const char *String_c_str(Object *self) {
+const char *String_cstr(Object *self) {
     return as_String(self)->value.data;
 }
 
@@ -62,8 +62,8 @@ Object *String_append(Object *self, Object *str) {
     return self;
 }
 
-Object *String_append_c_str(Object *self, const char *str) {
-    string_append_c_str(&as_String(self)->value, str);
+Object *String_append_cstr(Object *self, const char *str) {
+    string_append_cstr(&as_String(self)->value, str);
     return self;
 }
 
@@ -94,13 +94,13 @@ Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
 }
 
 Object *String_virtual_inspect(Esther *es, Object *self) {
-    Object *str = String_new_c_str(es, "\"");
+    Object *str = String_new_cstr(es, "\"");
 
     struct string escaped = string_escape(as_String(self)->value);
     String_append_std(str, escaped);
     string_free(escaped);
 
-    String_append_c_str(str, "\"");
+    String_append_cstr(str, "\"");
 
     return str;
 }

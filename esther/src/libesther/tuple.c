@@ -51,7 +51,7 @@ static ObjectVTable vtable_for_Tuple = {
 };
 
 void Tuple_init_null(Esther *es, Object *self, size_t size) {
-    Object_init(es, self, TTuple, Esther_getRootObject(es, c_str_to_id("Tuple")));
+    Object_init(es, self, TTuple, Esther_getRootObject(es, cstr_to_id("Tuple")));
 
     as_Tuple(self)->data = calloc(size, sizeof(Object *));
 
@@ -80,18 +80,18 @@ void Tuple_set(Object *self, size_t index, Object *value) {
 }
 
 Object *Tuple_virtual_inspect(Esther *es, Object *self) {
-    Object *str = String_new_c_str(es, "(");
+    Object *str = String_new_cstr(es, "(");
 
     for (size_t i = 0; i < as_Tuple(self)->size; i++) {
         String_append(str, Object_inspect(es, as_Tuple(self)->data[i]));
 
         if (i < as_Tuple(self)->size - 1)
-            String_append_c_str(str, ", ");
+            String_append_cstr(str, ", ");
         else if (as_Tuple(self)->size == 1)
-            String_append_c_str(str, ",");
+            String_append_cstr(str, ",");
     }
 
-    String_append_c_str(str, ")");
+    String_append_cstr(str, ")");
 
     return str;
 }

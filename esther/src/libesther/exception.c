@@ -26,7 +26,7 @@ Object *get_last_exception() {
 OBJECT_VTABLE(Exception)
 
 static void Exception_init(Esther *es, Object *self, ExceptionType type, struct string msg, Object *obj) {
-    Object_init(es, self, TException, Esther_getRootObject(es, c_str_to_id("Exception")));
+    Object_init(es, self, TException, Esther_getRootObject(es, cstr_to_id("Exception")));
 
     as_Exception(self)->type = type;
     as_Exception(self)->msg = string_copy(msg);

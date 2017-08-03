@@ -17,17 +17,17 @@ typedef struct String {
 
 Object *String_new(Esther *es, struct string value);
 Object *String_new_move(Esther *es, struct string value);
-Object *String_new_c_str(Esther *es, const char *value);
+Object *String_new_cstr(Esther *es, const char *value);
 
 void String_init(Esther *es, Object *self, struct string value);
 void String_init_move(Esther *es, Object *self, struct string value);
-void String_init_c_str(Esther *es, Object *self, const char *value);
+void String_init_cstr(Esther *es, Object *self, const char *value);
 
-const char *String_c_str(Object *self);
+const char *String_cstr(Object *self);
 struct string String_value(Object *self);
 
 Object *String_append(Object *self, Object *str);
-Object *String_append_c_str(Object *self, const char *str);
+Object *String_append_cstr(Object *self, const char *str);
 Object *String_append_char(Object *self, char c);
 Object *String_append_std(Object *self, struct string str);
 

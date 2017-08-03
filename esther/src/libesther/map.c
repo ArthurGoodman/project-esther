@@ -24,7 +24,7 @@ static ObjectVTable vtable_for_Map = {
 };
 
 void Map_init(Esther *es, Object *self) {
-    Object_init(es, self, TMap, Esther_getRootObject(es, c_str_to_id("Map")));
+    Object_init(es, self, TMap, Esther_getRootObject(es, cstr_to_id("Map")));
 
     as_Map(self)->data = std_map_new(compare_obj);
 
@@ -51,7 +51,7 @@ Object *Map_virtual_inspect(Esther *es, Object *self) {
     struct std_map *data = as_Map(self)->data;
     size_t size = std_map_size(data);
 
-    Object *str = String_new_c_str(es, "[");
+    Object *str = String_new_cstr(es, "[");
 
     std_map_iterator i;
     std_map_begin(data, &i);
@@ -60,16 +60,16 @@ Object *Map_virtual_inspect(Esther *es, Object *self) {
 
     while (!std_map_end(data, &i)) {
         String_append(str, Object_inspect(es, std_map_iterator_key(&i)));
-        String_append_c_str(str, " => ");
+        String_append_cstr(str, " => ");
         String_append(str, Object_inspect(es, std_map_iterator_value(&i)));
 
         if (index++ < size - 1)
-            String_append_c_str(str, ", ");
+            String_append_cstr(str, ", ");
 
         std_map_iterator_next(&i);
     }
 
-    String_append_c_str(str, "]");
+    String_append_cstr(str, "]");
 
     return str;
 }

@@ -10,8 +10,8 @@ extern "C" {
 #define Token_id(t) (Tuple_get((t), 0))
 #define Token_text(t) (Tuple_get((t), 1))
 
-#define Token_setPosition(t, position) (Object_setAttribute((t), c_str_to_id("pos"), (position)))
-#define Token_getPosition(t) (Object_getAttribute((t), c_str_to_id("pos")))
+#define Token_setPosition(t, position) (Object_setAttribute((t), cstr_to_id("pos"), (position)))
+#define Token_getPosition(t) (Object_getAttribute((t), cstr_to_id("pos")))
 
 typedef struct Lexer {
     Object base;

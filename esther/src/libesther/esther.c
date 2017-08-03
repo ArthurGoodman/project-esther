@@ -28,20 +28,20 @@
 
 static Object *Esther_print(Esther *es, Object *self, Object *args) {
     if (Tuple_size(args) == 0)
-        printf("%s", String_c_str(Object_toString(es, self)));
+        printf("%s", String_cstr(Object_toString(es, self)));
     else
         for (size_t i = 0; i < Tuple_size(args); i++)
-            printf("%s", String_c_str(Object_toString(es, Tuple_get(args, i))));
+            printf("%s", String_cstr(Object_toString(es, Tuple_get(args, i))));
 
     return es->nullObject;
 }
 
 static Object *Esther_println(Esther *es, Object *self, Object *args) {
     if (Tuple_size(args) == 0)
-        printf("%s\n", String_c_str(Object_toString(es, self)));
+        printf("%s\n", String_cstr(Object_toString(es, self)));
     else
         for (size_t i = 0; i < Tuple_size(args); i++)
-            printf("%s\n", String_c_str(Object_toString(es, Tuple_get(args, i))));
+            printf("%s\n", String_cstr(Object_toString(es, Tuple_get(args, i))));
 
     return es->nullObject;
 }
@@ -51,13 +51,13 @@ static Object *Esther_evalFunction(Esther *es, Object *UNUSED(self), Object *ast
 }
 
 static Object *Esther_system(Esther *es, Object *UNUSED(self), Object *str) {
-    return ValueObject_new_int(es, system(String_c_str(str)));
+    return ValueObject_new_int(es, system(String_cstr(str)));
 }
 
 //@TODO: Make modules describe themselves separetely (loop over directories)
 static void Esther_loadModules(Esther *es) {
     struct string str = executable_dir();
-    string_append_c_str(&str, "modules.es");
+    string_append_cstr(&str, "modules.es");
     es->modules = Esther_evalFile(es, str.data);
     string_free(str);
 }
@@ -140,27 +140,27 @@ void Esther_init(Esther *es) {
 
     es->lexer = Lexer_new(es);
 
-    Object_setAttribute(es->lexer, c_str_to_id("lex"), Function_new(es, string_const("lex"), (Object * (*) ()) Lexer_lex, 1));
+    Object_setAttribute(es->lexer, cstr_to_id("lex"), Function_new(es, string_const("lex"), (Object * (*) ()) Lexer_lex, 1));
 
     es->parser = Parser_new(es);
 
-    Object_setAttribute(es->parser, c_str_to_id("parse"), Function_new(es, string_const("parse"), (Object * (*) ()) Parser_parse, 1));
+    Object_setAttribute(es->parser, cstr_to_id("parse"), Function_new(es, string_const("parse"), (Object * (*) ()) Parser_parse, 1));
 
     es->mainObject = Object_new(es);
 
     es->esther = Object_new(es);
 
-    Object_setAttribute(es->esther, c_str_to_id("lexer"), es->lexer);
-    Object_setAttribute(es->esther, c_str_to_id("parser"), es->parser);
+    Object_setAttribute(es->esther, cstr_to_id("lexer"), es->lexer);
+    Object_setAttribute(es->esther, cstr_to_id("parser"), es->parser);
 
     es->root = Context_new(es);
 
-    Context_setLocal(es->root, c_str_to_id("print"), Function_new(es, string_const("print"), (Object * (*) ()) Esther_print, -1));
-    Context_setLocal(es->root, c_str_to_id("println"), Function_new(es, string_const("println"), (Object * (*) ()) Esther_println, -1));
-    Context_setLocal(es->root, c_str_to_id("eval"), Function_new(es, string_const("eval"), (Object * (*) ()) Esther_evalFunction, 1));
-    Context_setLocal(es->root, c_str_to_id("system"), Function_new(es, string_const("system"), (Object * (*) ()) Esther_system, 1));
+    Context_setLocal(es->root, cstr_to_id("print"), Function_new(es, string_const("print"), (Object * (*) ()) Esther_print, -1));
+    Context_setLocal(es->root, cstr_to_id("println"), Function_new(es, string_const("println"), (Object * (*) ()) Esther_println, -1));
+    Context_setLocal(es->root, cstr_to_id("eval"), Function_new(es, string_const("eval"), (Object * (*) ()) Esther_evalFunction, 1));
+    Context_setLocal(es->root, cstr_to_id("system"), Function_new(es, string_const("system"), (Object * (*) ()) Esther_system, 1));
 
-    Esther_setRootObject(es, c_str_to_id("esther"), es->esther);
+    Esther_setRootObject(es, cstr_to_id("esther"), es->esther);
 
     init_identifiers(es);
 
@@ -181,6 +181,10 @@ void Esther_finalize(Esther *es) {
         Esther_unloadModule(es, id_to_str((ID) std_map_iterator_key(&i)).data, std_map_iterator_value(&i));
         std_map_iterator_next(&i);
     }
+}
+
+Object *Esther_identity(Esther *UNUSED(es), Object *self) {
+    return self;
 }
 
 Object *Esther_toBoolean(Esther *es, bool value) {
@@ -396,11 +400,11 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
 
             Object *iteratorFunction, *eachFunction;
 
-            if ((iteratorFunction = Object_resolve(iterable, c_str_to_id("iterator")))) {
+            if ((iteratorFunction = Object_resolve(iterable, cstr_to_id("iterator")))) {
                 Context *childContext = Context_childContext(context, Context_getSelf(context), Object_new(es));
 
                 ID var = str_to_id(String_value(ForExpression_var(ast)));
-                ID idNext = c_str_to_id("next");
+                ID idNext = cstr_to_id("next");
 
                 Object *iterator = Object_callFunction(es, iterable, iteratorFunction, Tuple_new(es, 0));
                 Object *body = ForExpression_body(ast);
@@ -430,7 +434,7 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
                             Exception_throw(exception);
                     }
                 }
-            } else if ((eachFunction = Object_resolve(iterable, c_str_to_id("each")))) {
+            } else if ((eachFunction = Object_resolve(iterable, cstr_to_id("each")))) {
                 Object *f = InterpretedFunction_new(es, string_const(""), Array_new(es, 1, ForExpression_var(ast)), context, ForExpression_body(ast));
                 value = Object_callFunction(es, iterable, eachFunction, Tuple_new(es, 1, f));
             } else
@@ -520,7 +524,7 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
                 for (size_t i = 0; i < Array_size(args); i++)
                     Tuple_set(evaledArgs, i, Esther_eval(es, Array_get(args, i), context));
 
-                Object *instance = Object_call_args(es, evaledSelf, c_str_to_id("new"), evaledArgs);
+                Object *instance = Object_call_args(es, evaledSelf, cstr_to_id("new"), evaledArgs);
 
                 Esther_eval(es, NewExpression_body(ast), Context_childContext(context, instance, Object_new(es)));
 
@@ -712,21 +716,21 @@ static Object *runCodeSilently(Esther *es, Object *code) {
 }
 
 static Object *runCode(Esther *es, Object *code) {
-    Object_setAttribute(es->esther, c_str_to_id("fileName"), String_new_c_str(es, es->file->fileName));
+    Object_setAttribute(es->esther, cstr_to_id("fileName"), String_new_cstr(es, es->file->fileName));
 
     Object *tokens = Lexer_lex(es, es->lexer, code);
-    Object_setAttribute(es->esther, c_str_to_id("tokens"), tokens);
+    Object_setAttribute(es->esther, cstr_to_id("tokens"), tokens);
 
     // Esther_println(es, tokens, Tuple_new(es, 0));
 
     Object *ast = Parser_parse(es, es->parser, tokens);
-    Object_setAttribute(es->esther, c_str_to_id("ast"), ast);
+    Object_setAttribute(es->esther, cstr_to_id("ast"), ast);
 
     // Esther_println(es, ast, Tuple_new(es, 0));
 
     Object *value = Esther_eval(es, ast, es->root);
 
-    printf("=> %s\n", String_c_str(Object_inspect(es, value)));
+    printf("=> %s\n", String_cstr(Object_inspect(es, value)));
 
     return value;
 }
@@ -742,18 +746,18 @@ Object *Esther_evalFile(Esther *es, const char *fileName) {
 //@Refactor module loading system (and these two functions in particular)
 //@TODO: Make modules into singletons
 Object *Esther_importModule(Esther *es, Context *context, const char *name) {
-    Object *strName = String_new_c_str(es, name);
+    Object *strName = String_new_cstr(es, name);
 
     if (!Map_contains(es->modules, strName))
         Exception_throw_new(es, "cannot find module named '%s'", name);
 
     struct string path = executable_dir();
-    string_append(&path, String_value(Map_get(Map_get(es->modules, strName), c_str_to_sym(es, "path"))));
+    string_append(&path, String_value(Map_get(Map_get(es->modules, strName), cstr_to_sym(es, "path"))));
 
 #if defined(__linux)
-    string_append_c_str(&path, ".so");
+    string_append_cstr(&path, ".so");
 #elif defined(__WIN32)
-    string_append_c_str(&path, ".dll");
+    string_append_cstr(&path, ".dll");
 #endif
 
     const char *real_path = full_path(path.data);
@@ -764,7 +768,7 @@ Object *Esther_importModule(Esther *es, Context *context, const char *name) {
     HINSTANCE library = LoadLibraryA(real_path);
 #endif
 
-    std_map_set(es->moduleHandles, (void *) c_str_to_id(name), library);
+    std_map_set(es->moduleHandles, (void *) cstr_to_id(name), library);
 
     string_free(path);
     free((void *) real_path);
@@ -780,8 +784,8 @@ Object *Esther_importModule(Esther *es, Context *context, const char *name) {
     dlerror();
 #endif
 
-    struct string initializeFunctionName = string_new_c_str(name);
-    string_append_c_str(&initializeFunctionName, "_initialize");
+    struct string initializeFunctionName = string_new_cstr(name);
+    string_append_cstr(&initializeFunctionName, "_initialize");
 
 #if defined(__linux)
 #pragma GCC diagnostic push
@@ -810,8 +814,8 @@ Object *Esther_importModule(Esther *es, Context *context, const char *name) {
 
 //@Fix: Exceptions here are not caught
 void Esther_unloadModule(Esther *es, const char *name, void *library) {
-    struct string finalizeFunctionName = string_new_c_str(name);
-    string_append_c_str(&finalizeFunctionName, "_finalize");
+    struct string finalizeFunctionName = string_new_cstr(name);
+    string_append_cstr(&finalizeFunctionName, "_finalize");
 
 #if defined(__linux)
 #pragma GCC diagnostic push

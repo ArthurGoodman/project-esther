@@ -35,7 +35,7 @@ static Object *IO_new(Esther *es, FILE *file, Object *objectClass) {
 
 static Object *IO_write(Esther *es, Object *self, Object *arg) {
     Object *str = Object_toString(es, arg);
-    size_t len = fwrite(String_c_str(str), 1, String_size(str), as_IO(self)->file);
+    size_t len = fwrite(String_cstr(str), 1, String_size(str), as_IO(self)->file);
     return ValueObject_new_int(es, len);
 }
 
@@ -155,7 +155,7 @@ static Object *IO_close(Esther *es, Object *self) {
 }
 
 static Object *FileClass_open(Esther *es, Object *UNUSED(self), Object *fileName, Object *mode) {
-    return IO_new(es, fopen(String_c_str(fileName), String_c_str(mode)), fileClass);
+    return IO_new(es, fopen(String_cstr(fileName), String_cstr(mode)), fileClass);
 }
 
 static void GlobalMapper_mapOnRefs(Mapper *UNUSED(self), MapFunction f) {
@@ -179,9 +179,9 @@ void IO_initialize(Esther *es, Context *context) {
     ioClass = Class_new(es, string_const("IO"), NULL);
     *(void **) ioClass = &vtable_for_IOClass;
 
-    Object_setAttribute(ioClass, c_str_to_id("stdout"), IO_new(es, stdout, ioClass));
-    Object_setAttribute(ioClass, c_str_to_id("stdin"), IO_new(es, stdin, ioClass));
-    Object_setAttribute(ioClass, c_str_to_id("stderr"), IO_new(es, stderr, ioClass));
+    Object_setAttribute(ioClass, cstr_to_id("stdout"), IO_new(es, stdout, ioClass));
+    Object_setAttribute(ioClass, cstr_to_id("stdin"), IO_new(es, stdin, ioClass));
+    Object_setAttribute(ioClass, cstr_to_id("stderr"), IO_new(es, stderr, ioClass));
 
     Class_setMethod_func(ioClass, Function_new(es, string_const("write"), (Object * (*) ()) IO_write, 1));
     Class_setMethod_func(ioClass, Function_new(es, string_const("writeLine"), (Object * (*) ()) IO_writeLine, 1));
@@ -199,7 +199,7 @@ void IO_initialize(Esther *es, Context *context) {
     fileClass = Class_new(es, string_const("File"), ioClass);
     *(void **) fileClass = &vtable_for_IOClass;
 
-    Object_setAttribute(fileClass, c_str_to_id("open"), Function_new(es, string_const("open"), (Object * (*) ()) FileClass_open, 2));
+    Object_setAttribute(fileClass, cstr_to_id("open"), Function_new(es, string_const("open"), (Object * (*) ()) FileClass_open, 2));
 
     Context_setLocal(context, str_to_id(Class_getName(fileClass)), fileClass);
 }
