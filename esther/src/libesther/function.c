@@ -132,7 +132,27 @@ static Object *InterpretedFunction_body(Esther *es, Object *f, Object *self, Obj
     for (size_t i = 0; i < Tuple_size(args); i++)
         Context_setLocal(context, str_to_id(as_InterpretedFunction(f)->params[i]), Tuple_get(args, i));
 
-    return Esther_eval(es, as_InterpretedFunction(f)->body, context);
+    Object *value;
+    Object *exception = NULL;
+
+    TRY {
+        value = Esther_eval(es, as_InterpretedFunction(f)->body, context);
+    }
+    CATCH(e) {
+        exception = e;
+    }
+    ENDTRY;
+
+    if (exception) {
+        ExceptionType type = Exception_getType(exception);
+
+        if (type == ExReturn)
+            value = Exception_getValue(exception);
+        else
+            Exception_throw(exception);
+    }
+
+    return value;
 }
 
 Object *InterpretedFunction_new(Esther *es, struct string name, Object *params, Context *closure, Object *body) {

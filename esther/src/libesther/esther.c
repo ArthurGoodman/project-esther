@@ -335,20 +335,61 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
         }
 
         else if (id == id_while) {
-            Object *condition = WhileExpression_condition(ast);
-            Object *body = WhileExpression_body(ast);
+            Object *condition = LoopExpression_condition(ast);
+            Object *body = LoopExpression_body(ast);
 
-            while (Object_isTrue(Esther_eval(es, condition, context)))
-                value = Esther_eval(es, body, context);
+            while (Object_isTrue(Esther_eval(es, condition, context))) {
+                Object *exception = NULL;
+
+                TRY {
+                    value = Esther_eval(es, body, context);
+                }
+                CATCH(e) {
+                    exception = e;
+                }
+                ENDTRY;
+
+                if (exception) {
+                    ExceptionType type = Exception_getType(exception);
+
+                    if (type == ExContinue)
+                        continue;
+                    else if (type == ExBreak) {
+                        value = Exception_getValue(exception);
+                        break;
+                    } else
+                        Exception_throw(exception);
+                }
+            }
         }
 
         else if (id == id_do) {
-            Object *condition = DoExpression_condition(ast);
-            Object *body = DoExpression_body(ast);
+            Object *condition = LoopExpression_condition(ast);
+            Object *body = LoopExpression_body(ast);
 
-            do
-                value = Esther_eval(es, body, context);
-            while (Object_isTrue(Esther_eval(es, condition, context)));
+            do {
+                Object *exception = NULL;
+
+                TRY {
+                    value = Esther_eval(es, body, context);
+                }
+                CATCH(e) {
+                    exception = e;
+                }
+                ENDTRY;
+
+                if (exception) {
+                    ExceptionType type = Exception_getType(exception);
+
+                    if (type == ExContinue)
+                        continue;
+                    else if (type == ExBreak) {
+                        value = Exception_getValue(exception);
+                        break;
+                    } else
+                        Exception_throw(exception);
+                }
+            } while (Object_isTrue(Esther_eval(es, condition, context)));
         }
 
         else if (id == id_true) {
@@ -363,6 +404,24 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
             value = Context_getSelf(context);
         } else if (id == id_here) {
             value = Context_getHere(context);
+        }
+
+        else if (id == id_continue)
+            Exception_throw(Exception_new_continue(es));
+        else if (id == id_break) {
+            if (Tuple_size(ast) == 1)
+                Exception_throw(Exception_new_break(es, es->nullObject));
+            else if (Tuple_size(ast) == 2)
+                Exception_throw(Exception_new_break(es, Esther_eval(es, BreakExpression_value(ast), context)));
+            else
+                error_invalidAST(es);
+        } else if (id == id_return) {
+            if (Tuple_size(ast) == 1)
+                Exception_throw(Exception_new_return(es, es->nullObject));
+            else if (Tuple_size(ast) == 2)
+                Exception_throw(Exception_new_return(es, Esther_eval(es, ReturnExpression_value(ast), context)));
+            else
+                error_invalidAST(es);
         }
 
         else if (id == id_pars) {
@@ -555,18 +614,36 @@ static Object *evalFile(Esther *es, const char *fileName, Object *(*codeRunner)(
         value = codeRunner(es, code);
     }
     CATCH(e) {
-        Object *pos = Exception_getPos(e);
+        switch (Exception_getType(e)) {
+        case ExError: {
+            Object *pos = Exception_getPos(e);
 
-        if (pos != NULL && es->file && es->file->source) {
-            int offset = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 0)));
-            int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
-            int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
+            if (pos != NULL && es->file && es->file->source) {
+                int offset = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 0)));
+                int line = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 1)));
+                int column = Variant_toInt(ValueObject_getValue(Tuple_get(pos, 2)));
 
-            struct string q = string_quote(String_value(es->file->source), offset, column);
-            printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e).data, q.data);
-            string_free(q);
-        } else
-            printf("error: %s\n", Exception_getMessage(e).data);
+                struct string q = string_quote(String_value(es->file->source), offset, column);
+                printf("%s:%i:%i: error: %s\n%s\n", es->file->fileName, line, column, Exception_getMessage(e).data, q.data);
+                string_free(q);
+            } else
+                printf("error: %s\n", Exception_getMessage(e).data);
+
+            break;
+        }
+
+        case ExContinue:
+            printf("error: continue not within a loop\n");
+            break;
+
+        case ExBreak:
+            printf("error: break not within a loop\n");
+            break;
+
+        case ExReturn:
+            printf("error: return not within a function\n");
+            break;
+        }
     }
     ENDTRY;
 

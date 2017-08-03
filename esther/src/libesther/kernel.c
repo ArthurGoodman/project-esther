@@ -118,8 +118,18 @@ static Object *FloatClass_virtual_newInstance(Esther *es, Object *UNUSED(self), 
     }
 }
 
-static Object *ExceptionClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *UNUSED(args)) {
-    return Exception_new(es, string_const(""));
+static Object *ExceptionClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
+    switch (Tuple_size(args)) {
+    case 0:
+        return Exception_new_error(es, string_const(""));
+
+    case 1:
+        return Exception_new_error(es, String_value(Tuple_get(args, 0)));
+
+    default:
+        Exception_throw_new(es, "invalid number of arguments");
+        return NULL;
+    }
 }
 
 static Object *True_virtual_toString(Esther *es, Object *UNUSED(self)) {
@@ -369,6 +379,11 @@ static Object *CharClass_isLetterOrDigit(Esther *es, Object *self) {
     return Esther_toBoolean(es, isalnum(Variant_toChar(ValueObject_getValue(self))));
 }
 
+static Object *ExceptionClass_throw(Esther *UNUSED(es), Object *self) {
+    Exception_throw(self);
+    return NULL;
+}
+
 CLASS_VTABLE(Class)
 CLASS_VTABLE(Object)
 CLASS_VTABLE(String)
@@ -553,4 +568,6 @@ void Kernel_initialize(Esther *es) {
     Class_setMethod_func(charClass, Function_new(es, string_const("isDigit"), (Object * (*) ()) CharClass_isDigit, 0));
     Class_setMethod_func(charClass, Function_new(es, string_const("isLetter"), (Object * (*) ()) CharClass_isLetter, 0));
     Class_setMethod_func(charClass, Function_new(es, string_const("isLetterOrDigit"), (Object * (*) ()) CharClass_isLetterOrDigit, 0));
+
+    Class_setMethod_func(exceptionClass, Function_new(es, string_const("throw"), (Object * (*) ()) ExceptionClass_throw, 0));
 }

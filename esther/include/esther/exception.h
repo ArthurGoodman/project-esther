@@ -36,23 +36,45 @@ struct jump_buffer *pop_jump_buffer();
 
 Object *get_last_exception();
 
+typedef enum ExceptionType {
+    ExError,
+    ExContinue,
+    ExBreak,
+    ExReturn
+} ExceptionType;
+
 typedef struct Exception {
     Object base;
 
+    ExceptionType type;
     struct string msg;
-    Object *pos;
+    union {
+        Object *pos;
+        Object *value;
+    };
 } Exception;
 
 #define as_Exception(obj) ((Exception *) (obj))
 
-Object *Exception_new(Esther *es, struct string msg);
+Object *Exception_new_error(Esther *es, struct string msg);
+Object *Exception_new_continue(Esther *es);
+Object *Exception_new_break(Esther *es, Object *value);
+Object *Exception_new_return(Esther *es, Object *value);
 
-void Exception_init(Esther *es, Object *self, struct string msg);
+void Exception_init_error(Esther *es, Object *self, struct string msg);
+void Exception_init_continue(Esther *es, Object *self);
+void Exception_init_break(Esther *es, Object *self, Object *value);
+void Exception_init_return(Esther *es, Object *self, Object *value);
+
+ExceptionType Exception_getType(Object *self);
 
 struct string Exception_getMessage(Object *self);
 
 Object *Exception_getPos(Object *self);
 void Exception_setPos(Object *self, Object *pos);
+
+Object *Exception_getValue(Object *self);
+void Exception_setValue(Object *self, Object *value);
 
 void Exception_throw_new(Esther *es, const char *fmt, ...);
 void Exception_throw(Object *self);

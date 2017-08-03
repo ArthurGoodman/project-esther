@@ -83,12 +83,9 @@
 #define IfExpression_elseBody EXPR_ARG3
 
 #define WhileExpression(condition, body) EXPR_2(sym_while, condition, body)
-#define WhileExpression_condition EXPR_ARG1
-#define WhileExpression_body EXPR_ARG2
-
 #define DoExpression(condition, body) EXPR_2(sym_do, condition, body)
-#define DoExpression_condition EXPR_ARG1
-#define DoExpression_body EXPR_ARG2
+#define LoopExpression_condition EXPR_ARG1
+#define LoopExpression_body EXPR_ARG2
 
 #define TrueExpression EXPR_0(sym_true)
 #define FalseExpression EXPR_0(sym_false)
@@ -96,6 +93,16 @@
 
 #define SelfExpression EXPR_0(sym_self)
 #define HereExpression EXPR_0(sym_here)
+
+#define ContinueExpression EXPR_0(sym_continue)
+
+#define BreakExpression EXPR_0(sym_break)
+#define BreakValueExpression(value) EXPR_1(sym_break, value)
+#define BreakExpression_value EXPR_ARG1
+
+#define ReturnExpression EXPR_0(sym_return)
+#define ReturnValueExpression(value) EXPR_1(sym_return, value)
+#define ReturnExpression_value EXPR_ARG1
 
 #define ClassExpression(name, body) EXPR_2(sym_class, name, body)
 #define ClassInhExpression(name, superclass, body) EXPR_3(sym_class, name, body, superclass)

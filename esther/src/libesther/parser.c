@@ -53,7 +53,7 @@ static void syntax_error(Esther *es, Object *pos, const char *fmt, ...) {
     struct string msg = string_vformat(fmt, ap);
     va_end(ap);
 
-    Object *exception = Exception_new(es, msg);
+    Object *exception = Exception_new_error(es, msg);
     Exception_setPos(exception, pos);
 
     Exception_throw(exception);
@@ -446,10 +446,10 @@ static Object *term(Esther *es, Parser *parser) {
         Object *body;
 
         condition = expr(es, parser);
-        body = expr(es, parser);
+        body = statement(es, parser);
 
         if (accept(es, parser, id_else))
-            e = IfElseExpression(condition, body, expr(es, parser));
+            e = IfElseExpression(condition, body, statement(es, parser));
         else
             e = IfExpression(condition, body);
     }
@@ -459,7 +459,7 @@ static Object *term(Esther *es, Parser *parser) {
         Object *body;
 
         condition = expr(es, parser);
-        body = expr(es, parser);
+        body = statement(es, parser);
 
         e = WhileExpression(condition, body);
     }
@@ -468,7 +468,7 @@ static Object *term(Esther *es, Parser *parser) {
         Object *body;
         Object *condition;
 
-        body = expr(es, parser);
+        body = statement(es, parser);
 
         if (!accept(es, parser, id_while))
             syntax_error(es, p, "while expected");
@@ -489,6 +489,20 @@ static Object *term(Esther *es, Parser *parser) {
         e = SelfExpression;
     } else if (accept_pos(es, parser, id_here, &p)) {
         e = HereExpression;
+    }
+
+    else if (accept_pos(es, parser, id_continue, &p)) {
+        e = ContinueExpression;
+    } else if (accept_pos(es, parser, id_break, &p)) {
+        if (check(es, parser, id_empty) || check(es, parser, id_rightBrace) || immediateCheck(es, parser, id_newLine))
+            e = BreakExpression;
+        else
+            e = BreakValueExpression(expr(es, parser));
+    } else if (accept_pos(es, parser, id_return, &p)) {
+        if (check(es, parser, id_empty) || check(es, parser, id_rightBrace) || immediateCheck(es, parser, id_newLine))
+            e = ReturnExpression;
+        else
+            e = ReturnValueExpression(expr(es, parser));
     }
 
     else if (accept_pos(es, parser, id_class, &p)) {
@@ -667,6 +681,10 @@ static Object *term(Esther *es, Parser *parser) {
 
         e = Array_size(nodes) == 0 ? Tuple_new(es, 0) : Array_size(nodes) == 1 ? Array_get(nodes, 0) : BlockExpression(nodes);
     } else if (accept_pos(es, parser, id_braces, &p)) {
+        e = EmptyExpression;
+    }
+
+    else if (accept(es, parser, id_semi)) {
         e = EmptyExpression;
     }
 
