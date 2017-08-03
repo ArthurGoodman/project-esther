@@ -95,7 +95,6 @@ Object *Class_newInstance(Esther *es, Object *self, Object *args) {
 }
 
 Object *Class_virtual_newInstance(Esther *es, Object *self, Object *args) {
-    //@Think: Maybe need to call Class_newInstance here
     Object *instance = (*(ClassVTable **) as_Class(self)->superclass)->newInstance(es, as_Class(self)->superclass, args);
     instance->objectClass = self;
     return instance;

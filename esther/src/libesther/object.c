@@ -19,7 +19,7 @@ Object *Object_new(Esther *es) {
     return self;
 }
 
-OBJECT_VTABLE(Object)
+NONSTATIC_OBJECT_VTABLE(Object)
 
 void Object_init(Esther *es, Object *self, ObjectType type, Object *objectClass) {
     ManagedObject_init(&self->base);

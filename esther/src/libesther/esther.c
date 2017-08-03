@@ -16,6 +16,7 @@
 #include "esther/lexer.h"
 #include "esther/map.h"
 #include "esther/parser.h"
+#include "esther/range.h"
 #include "esther/std_map.h"
 #include "esther/string.h"
 #include "esther/symbol.h"
@@ -642,6 +643,14 @@ static Object *evalFile(Esther *es, const char *fileName, Object *(*codeRunner)(
 
         case ExReturn:
             printf("error: return not within a function\n");
+            break;
+
+        case ExStopIteration:
+            printf("Unhandled exception: StopIteration\n");
+            break;
+
+        default:
+            printf("Unhandled exception\n");
             break;
         }
     }

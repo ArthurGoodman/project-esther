@@ -382,13 +382,15 @@ static Object *suffix(Esther *es, Parser *parser) {
                 getToken(parser);
             } else
                 e = DotExpression(e, logicOr(es, parser));
+        } else if (accept_pos(es, parser, id_range, &p)) {
+            e = CallExpression(AttributeExpression(e, String_new_c_str(es, "..")), Array_new(es, 1, logicOr(es, parser)));
         } else
             break;
     }
 
-    if (accept_pos(es, parser, id_dec, &p))
+    if (immediateAccept(es, parser, id_dec))
         e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_--")), Array_new(es, 0));
-    else if (accept_pos(es, parser, id_inc, &p))
+    else if (immediateAccept(es, parser, id_inc))
         e = CallExpression(AttributeExpression(e, String_new_c_str(es, "_++")), Array_new(es, 0));
 
     if (p && !Expression_hasPosition(e))

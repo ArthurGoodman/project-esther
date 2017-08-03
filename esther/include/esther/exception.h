@@ -40,7 +40,8 @@ typedef enum ExceptionType {
     ExError,
     ExContinue,
     ExBreak,
-    ExReturn
+    ExReturn,
+    ExStopIteration
 } ExceptionType;
 
 typedef struct Exception {
@@ -60,11 +61,7 @@ Object *Exception_new_error(Esther *es, struct string msg);
 Object *Exception_new_continue(Esther *es);
 Object *Exception_new_break(Esther *es, Object *value);
 Object *Exception_new_return(Esther *es, Object *value);
-
-void Exception_init_error(Esther *es, Object *self, struct string msg);
-void Exception_init_continue(Esther *es, Object *self);
-void Exception_init_break(Esther *es, Object *self, Object *value);
-void Exception_init_return(Esther *es, Object *self, Object *value);
+Object *Exception_new_stopIteration(Esther *es);
 
 ExceptionType Exception_getType(Object *self);
 

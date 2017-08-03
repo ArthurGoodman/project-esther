@@ -5,6 +5,8 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 struct std_string;
 
@@ -20,14 +22,14 @@ typedef struct Variant {
 
     union {
         char character;
-        long long integer;
+        int64_t integer;
         double real;
     };
 } Variant;
 
 Variant Variant_null();
 Variant Variant_char(char value);
-Variant Variant_int(long long value);
+Variant Variant_int(int64_t value);
 Variant Variant_real(double value);
 
 VariantType Variant_getType(Variant var);
@@ -37,7 +39,7 @@ bool Variant_isNull(Variant var);
 Variant Variant_convertTo(Variant var, VariantType type);
 
 char Variant_toChar(Variant var);
-long long Variant_toInt(Variant var);
+int64_t Variant_toInt(Variant var);
 double Variant_toReal(Variant var);
 
 Variant Variant_add(Variant a, Variant b);

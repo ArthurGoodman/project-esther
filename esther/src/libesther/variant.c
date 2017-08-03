@@ -18,7 +18,7 @@ Variant Variant_char(char value) {
     return var;
 }
 
-Variant Variant_int(long long value) {
+Variant Variant_int(int64_t value) {
     Variant var;
     var.type = IntVariant;
     var.integer = value;
@@ -72,7 +72,7 @@ char Variant_toChar(Variant var) {
     }
 }
 
-long long Variant_toInt(Variant var) {
+int64_t Variant_toInt(Variant var) {
     switch (var.type) {
     case CharVariant:
         return var.character;

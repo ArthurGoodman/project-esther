@@ -132,6 +132,37 @@ static Object *ExceptionClass_virtual_newInstance(Esther *es, Object *UNUSED(sel
     }
 }
 
+static Object *RangeClass_virtual_newInstance(Esther *es, Object *UNUSED(self), Object *args) {
+    int64_t start = 0;
+    int64_t stop;
+    int64_t step = 1;
+
+    switch (Tuple_size(args)) {
+    case 1:
+        stop = Variant_toInt(ValueObject_getValue(Tuple_get(args, 0)));
+        break;
+
+    case 2:
+        start = Variant_toInt(ValueObject_getValue(Tuple_get(args, 0)));
+        stop = Variant_toInt(ValueObject_getValue(Tuple_get(args, 1)));
+        break;
+
+    case 3:
+        start = Variant_toInt(ValueObject_getValue(Tuple_get(args, 0)));
+        stop = Variant_toInt(ValueObject_getValue(Tuple_get(args, 1)));
+        step = Variant_toInt(ValueObject_getValue(Tuple_get(args, 2)));
+        break;
+
+    default:
+        Exception_throw_new(es, "invalid number of arguments");
+        return NULL;
+    }
+
+    return Range_new(es, start, stop, step);
+}
+
+#define RangeIteratorClass_virtual_newInstance Class_virtual_unimplemented_newInstance
+
 static Object *True_virtual_toString(Esther *es, Object *UNUSED(self)) {
     return String_new_c_str(es, "true");
 }
@@ -363,6 +394,14 @@ static Object *NumericClass_suffixInc(Esther *es, Object *self) {
     return clone;
 }
 
+static Object *IntClass_range(Esther *es, Object *self, Object *arg) {
+    int64_t start = Variant_toInt(ValueObject_getValue(self));
+    int64_t stop = Variant_toInt(ValueObject_getValue(arg));
+    int64_t step = start <= stop ? 1 : -1;
+
+    return Range_new(es, start, stop, step);
+}
+
 static Object *CharClass_isSpace(Esther *es, Object *self) {
     return Esther_toBoolean(es, isspace(Variant_toChar(ValueObject_getValue(self))));
 }
@@ -399,6 +438,8 @@ CLASS_VTABLE(Char)
 CLASS_VTABLE(Int)
 CLASS_VTABLE(Float)
 CLASS_VTABLE(Exception)
+CLASS_VTABLE(Range)
+CLASS_VTABLE(RangeIterator)
 
 #define CONST_VTABLE(name, is_true)                      \
     static ObjectVTable vtable_for_##name = {            \
@@ -484,6 +525,14 @@ void Kernel_initialize(Esther *es) {
     Esther_setRootObject(es, str_to_id(Class_getName(exceptionClass)), exceptionClass);
     *(void **) exceptionClass = &vtable_for_ExceptionClass;
 
+    Object *rangeClass = Class_new(es, string_const("Range"), NULL);
+    Esther_setRootObject(es, str_to_id(Class_getName(rangeClass)), rangeClass);
+    *(void **) rangeClass = &vtable_for_RangeClass;
+
+    Object *rangeIteratorClass = Class_new(es, string_const("RangeIterator"), NULL);
+    Esther_setRootObject(es, str_to_id(Class_getName(rangeIteratorClass)), rangeIteratorClass);
+    *(void **) rangeIteratorClass = &vtable_for_RangeIteratorClass;
+
     es->trueObject = Object_new(es);
     es->trueObject->objectClass = booleanClass;
     *(void **) es->trueObject = &vtable_for_True;
@@ -564,10 +613,19 @@ void Kernel_initialize(Esther *es) {
     Class_setMethod_func(numericClass, Function_new(es, string_const("_--"), (Object * (*) ()) NumericClass_suffixDec, 0));
     Class_setMethod_func(numericClass, Function_new(es, string_const("_++"), (Object * (*) ()) NumericClass_suffixInc, 0));
 
+    Class_setMethod_func(intClass, Function_new(es, string_const(".."), (Object * (*) ()) IntClass_range, 1));
+
     Class_setMethod_func(charClass, Function_new(es, string_const("isSpace"), (Object * (*) ()) CharClass_isSpace, 0));
     Class_setMethod_func(charClass, Function_new(es, string_const("isDigit"), (Object * (*) ()) CharClass_isDigit, 0));
     Class_setMethod_func(charClass, Function_new(es, string_const("isLetter"), (Object * (*) ()) CharClass_isLetter, 0));
     Class_setMethod_func(charClass, Function_new(es, string_const("isLetterOrDigit"), (Object * (*) ()) CharClass_isLetterOrDigit, 0));
 
     Class_setMethod_func(exceptionClass, Function_new(es, string_const("throw"), (Object * (*) ()) ExceptionClass_throw, 0));
+
+    Class_setMethod_func(rangeClass, Function_new(es, string_const("start"), (Object * (*) ()) Range_getStart, 0));
+    Class_setMethod_func(rangeClass, Function_new(es, string_const("stop"), (Object * (*) ()) Range_getStop, 0));
+    Class_setMethod_func(rangeClass, Function_new(es, string_const("step"), (Object * (*) ()) Range_getStep, 0));
+    Class_setMethod_func(rangeClass, Function_new(es, string_const("iterator"), (Object * (*) ()) Range_iterator, 0));
+
+    Class_setMethod_func(rangeIteratorClass, Function_new(es, string_const("next"), (Object * (*) ()) RangeIterator_next, 0));
 }

@@ -21,42 +21,9 @@ Object *get_last_exception() {
     return last_exception;
 }
 
-Object *Exception_new_error(Esther *es, struct string msg) {
-    Object *self = gc_alloc(sizeof(Exception));
-    Exception_init_error(es, self, msg);
-    return self;
-}
+#define Exception_virtual_clone Object_virtual_clone_unimplemented
 
-Object *Exception_new_continue(Esther *es) {
-    Object *self = gc_alloc(sizeof(Exception));
-    Exception_init_continue(es, self);
-    return self;
-}
-
-Object *Exception_new_break(Esther *es, Object *value) {
-    Object *self = gc_alloc(sizeof(Exception));
-    Exception_init_break(es, self, value);
-    return self;
-}
-
-Object *Exception_new_return(Esther *es, Object *value) {
-    Object *self = gc_alloc(sizeof(Exception));
-    Exception_init_return(es, self, value);
-    return self;
-}
-
-static ObjectVTable vtable_for_Exception = {
-    .base = {
-        .base = {
-            .mapOnRefs = Exception_virtual_mapOnRefs },
-        .finalize = Exception_virtual_finalize },
-    .toString = Object_virtual_toString,
-    .inspect = Object_virtual_toString,
-    .equals = Object_virtual_equals,
-    .less = Object_virtual_less,
-    .isTrue = Object_virtual_isTrue,
-    .clone = Object_virtual_clone_unimplemented
-};
+OBJECT_VTABLE(Exception)
 
 static void Exception_init(Esther *es, Object *self, ExceptionType type, struct string msg, Object *obj) {
     Object_init(es, self, TException, Esther_getRootObject(es, c_str_to_id("Exception")));
@@ -68,20 +35,34 @@ static void Exception_init(Esther *es, Object *self, ExceptionType type, struct 
     *(void **) self = &vtable_for_Exception;
 }
 
-void Exception_init_error(Esther *es, Object *self, struct string msg) {
+Object *Exception_new_error(Esther *es, struct string msg) {
+    Object *self = gc_alloc(sizeof(Exception));
     Exception_init(es, self, ExError, msg, NULL);
+    return self;
 }
 
-void Exception_init_continue(Esther *es, Object *self) {
-    Exception_init(es, self, ExContinue, string_new_empty(), NULL);
+Object *Exception_new_continue(Esther *es) {
+    Object *self = gc_alloc(sizeof(Exception));
+    Exception_init(es, self, ExContinue, string_const(""), NULL);
+    return self;
 }
 
-void Exception_init_break(Esther *es, Object *self, Object *value) {
-    Exception_init(es, self, ExBreak, string_new_empty(), value);
+Object *Exception_new_break(Esther *es, Object *value) {
+    Object *self = gc_alloc(sizeof(Exception));
+    Exception_init(es, self, ExBreak, string_const(""), value);
+    return self;
 }
 
-void Exception_init_return(Esther *es, Object *self, Object *value) {
-    Exception_init(es, self, ExReturn, string_new_empty(), value);
+Object *Exception_new_return(Esther *es, Object *value) {
+    Object *self = gc_alloc(sizeof(Exception));
+    Exception_init(es, self, ExReturn, string_const(""), value);
+    return self;
+}
+
+Object *Exception_new_stopIteration(Esther *es) {
+    Object *self = gc_alloc(sizeof(Exception));
+    Exception_init(es, self, ExStopIteration, string_const(""), NULL);
+    return self;
 }
 
 ExceptionType Exception_getType(Object *self) {

@@ -131,7 +131,7 @@ static Object *IO_readChar(Esther *es, Object *self) {
 }
 
 static Object *IO_readInt(Esther *es, Object *self) {
-    long long value;
+    int64_t value;
     if (fscanf(as_IO(self)->file, "%lli", &value)) {
     }
     return ValueObject_new_int(es, value);

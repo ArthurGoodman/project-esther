@@ -28,17 +28,21 @@ typedef struct ObjectVTable {
     Object *(*clone)(Esther *es, Object *self);
 } ObjectVTable;
 
-#define OBJECT_VTABLE(name)                   \
-    static ObjectVTable vtable_for_##name = { \
-        { { name##_virtual_mapOnRefs },       \
-          name##_virtual_finalize },          \
-        Object_virtual_toString,              \
-        Object_virtual_toString,              \
-        Object_virtual_equals,                \
-        Object_virtual_less,                  \
-        Object_virtual_isTrue,                \
-        name##_virtual_clone                  \
+#define NONSTATIC_OBJECT_VTABLE(name)   \
+    ObjectVTable vtable_for_##name = {  \
+        { { name##_virtual_mapOnRefs }, \
+          name##_virtual_finalize },    \
+        Object_virtual_toString,        \
+        Object_virtual_toString,        \
+        Object_virtual_equals,          \
+        Object_virtual_less,            \
+        Object_virtual_isTrue,          \
+        name##_virtual_clone            \
     };
+
+#define OBJECT_VTABLE(name) static NONSTATIC_OBJECT_VTABLE(name)
+
+extern ObjectVTable vtable_for_Object;
 
 Object *Object_virtual_clone_unimplemented(Esther *es, Object *self);
 

@@ -13,6 +13,7 @@
 #include "esther/memory.h"
 #include "esther/object.h"
 #include "esther/parser.h"
+#include "esther/range.h"
 #include "esther/std_map.h"
 #include "esther/std_string.h"
 #include "esther/std_vector.h"
