@@ -154,6 +154,28 @@ static Object *scan(Esther *es, Lexer *lexer) {
                     break;
                 case '\n':
                     break;
+                case 'x': {
+                    char value[3];
+                    char *endptr;
+
+                    read_sym(lexer);
+
+                    value[0] = sym(lexer);
+                    value[1] = next_sym(lexer);
+                    value[2] = '\0';
+
+                    String_append_char(text, (char) strtol(value, &endptr, 16));
+
+                    if ((!value[0] || !value[1] || endptr == value) && lexer->alert) {
+                        endptr[1] = '\0';
+                        Exception_throw_new(es, "invalid escape sequence '\\x%s'", value);
+                    }
+
+                    if (endptr == value + 2)
+                        read_sym(lexer);
+
+                    break;
+                }
 
                 default:
                     if (lexer->alert)
