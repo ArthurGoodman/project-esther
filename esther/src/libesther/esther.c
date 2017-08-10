@@ -207,14 +207,48 @@ static void error_invalidAST(Esther *es) {
     Exception_throw_new(es, "invalid AST");
 }
 
+//@TODO: Implement proper string interpolation
+static Object *Esther_interpolateString(Esther *es, struct string str, Context *context) {
+    struct string result = string_new_prealloc(str.size);
+
+    size_t i = 0, j = -1, prev_i = 0;
+    while ((i = string_find_char(str, '%', j + 1)) != (size_t) -1) {
+        if (str.data[i + 1] != '{') {
+            string_append_buffer(&result, str.data + prev_i, i + 1 - prev_i);
+            prev_i = i + 1;
+
+            j = i;
+
+            continue;
+        }
+
+        string_append_buffer(&result, str.data + prev_i, i - prev_i);
+        prev_i = i;
+
+        i += 2;
+
+        j = string_find_char(str, '}', i);
+
+        if (j == (size_t) -1)
+            Exception_throw_new(es, "invalid interpolated string");
+
+        struct string expr = string_substr(str, i, j - i);
+        Object *value = Esther_eval(es, String_new_move(es, expr), context);
+        string_append(&result, String_value(Object_toString(es, value)));
+    }
+
+    string_append_buffer(&result, str.data + j + 1, str.size - j - 1);
+
+    return String_new(es, result);
+}
+
 Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
     // Removes -Wclobbered warning
     Object *ast = _ast;
 
-    if (Object_getType(ast) == TString) {
-        Object *tokens = Lexer_lex(es, es->lexer, ast);
-        ast = Parser_parse(es, es->parser, tokens);
-    }
+    if (Object_getType(ast) == TString)
+        //@Fix: Positions in AST here become invalid
+        ast = Parser_parse(es, es->parser, Lexer_lex(es, es->lexer, ast));
 
     if (Object_getType(ast) != TTuple)
         error_invalidAST(es);
@@ -603,12 +637,15 @@ Object *Esther_eval(Esther *es, Object *_ast, Context *context) {
         }
 
         else if (id == id_sharp) {
-            value = ValueExpression_value(ast);
+            value = ValueObject_new_var(es, ValueObject_getValue(ValueExpression_value(ast)));
+        }
 
-            if (Object_getType(value) == TValueObject)
-                value = ValueObject_new_var(es, ValueObject_getValue(value));
-            else if (Object_getType(value) == TString)
-                value = String_new(es, String_value(value));
+        else if (id == id_singleQuote) {
+            value = String_new(es, String_value(StringExpression_value(ast)));
+        }
+
+        else if (id == id_doubleQuote) {
+            value = Esther_interpolateString(es, String_value(InterpolatedStringExpression_value(ast)), context);
         }
 
         else if (id == id_colon) {

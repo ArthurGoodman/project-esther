@@ -52,6 +52,14 @@ size_t string_rfind_char(struct string self, char c, size_t pos);
 size_t string_rfind_cstr(struct string self, const char *str, size_t pos);
 size_t string_rfind_buffer(struct string self, const char *buffer, size_t size, size_t pos);
 
+size_t string_find_one_of(struct string self, struct string str, size_t pos);
+size_t string_find_one_of_cstr(struct string self, const char *str, size_t pos);
+size_t string_find_one_of_buffer(struct string self, const char *buffer, size_t size, size_t pos);
+
+size_t string_rfind_one_of(struct string self, struct string str, size_t pos);
+size_t string_rfind_one_of_cstr(struct string self, const char *str, size_t pos);
+size_t string_rfind_one_of_buffer(struct string self, const char *buffer, size_t size, size_t pos);
+
 void string_erase(struct string *self, size_t pos, size_t len);
 
 struct string string_substr(struct string self, size_t pos, size_t len);

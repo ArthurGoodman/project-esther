@@ -94,13 +94,16 @@ Object *String_virtual_toString(Esther *UNUSED(es), Object *self) {
 }
 
 Object *String_virtual_inspect(Esther *es, Object *self) {
-    Object *str = String_new_cstr(es, "\"");
-
     struct string escaped = string_escape(as_String(self)->value);
+
+    char type = escaped.size == 1 ? '"' : '\'';
+
+    Object *str = String_new_move(es, string_new(&type, 1));
+
     String_append_std(str, escaped);
     string_free(escaped);
 
-    String_append_cstr(str, "\"");
+    String_append_char(str, type);
 
     return str;
 }

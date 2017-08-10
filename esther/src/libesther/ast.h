@@ -68,6 +68,12 @@
 #define ValueExpression(value) EXPR_1(sym_sharp, value)
 #define ValueExpression_value EXPR_ARG1
 
+#define StringExpression(value) EXPR_1(sym_singleQuote, value)
+#define StringExpression_value EXPR_ARG1
+
+#define InterpolatedStringExpression(value) EXPR_1(sym_doubleQuote, value)
+#define InterpolatedStringExpression_value EXPR_ARG1
+
 #define VarExpression(name) EXPR_1(sym_var, name)
 #define VarAssignExpression(name, value) EXPR_2(sym_var, name, value)
 #define VarExpression_name EXPR_ARG1

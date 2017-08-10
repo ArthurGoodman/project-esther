@@ -445,13 +445,17 @@ static Object *term(Esther *es, Parser *parser) {
         getToken(parser);
     } else if (check_pos(es, parser, id_singleQuote, &p)) {
         Object *value = Token_text(parser->token);
-        e = ValueExpression(String_size(value) == 1 ? ValueObject_new_char(es, String_cstr(value)[0]) : value);
         getToken(parser);
-    }
-    //@TODO: Implement complex strings
-    else if (check_pos(es, parser, id_doubleQuote, &p)) {
-        e = ValueExpression(Token_text(parser->token));
+
+        if (String_size(value) == 1)
+            e = ValueExpression(ValueObject_new_char(es, String_cstr(value)[0]));
+        else
+            e = StringExpression(value);
+    } else if (check_pos(es, parser, id_doubleQuote, &p)) {
+        Object *value = Token_text(parser->token);
         getToken(parser);
+
+        e = InterpolatedStringExpression(value);
     }
 
     else if (accept_pos(es, parser, id_colon, &p)) {

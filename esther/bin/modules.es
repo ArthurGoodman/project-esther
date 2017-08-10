@@ -1,8 +1,8 @@
 [
-    "IO" => [
-        :path => "../lib/libio"
+    'IO' => [
+        :path => '../lib/libio'
     ],
-    "Qt" => [
-        :path => "../lib/libqt"
+    'Qt' => [
+        :path => '../lib/libqt'
     ]
 ]

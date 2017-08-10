@@ -13,12 +13,20 @@ static void extend(struct string *self, size_t size) {
     self->capacity = newCapacity;
 }
 
-static bool match(const char *a, const char *b, size_t n) {
-    for (size_t i = 0; i < n; i++)
+static bool match(const char *a, const char *b, size_t size) {
+    for (size_t i = 0; i < size; i++)
         if (a[i] != b[i])
             return false;
 
     return true;
+}
+
+static bool buffer_contains_char(const char *buffer, size_t size, char c) {
+    for (size_t i = 0; i < size; i++)
+        if (buffer[i] == c)
+            return true;
+
+    return false;
 }
 
 struct string string_null() {
@@ -168,6 +176,9 @@ size_t string_find_buffer(struct string self, const char *buffer, size_t size, s
     if (size == 0)
         return 0;
 
+    if (self.size == 0)
+        return -1;
+
     for (size_t i = MIN(pos, self.size - 1); i <= self.size - size; i++)
         if (match(self.data + i, buffer, size))
             return i;
@@ -191,8 +202,50 @@ size_t string_rfind_buffer(struct string self, const char *buffer, size_t size, 
     if (size == 0)
         return 0;
 
+    if (self.size == 0)
+        return -1;
+
     for (int i = MIN(pos, self.size - 1) - size + 1; i >= 0; i--)
         if (match(self.data + i, buffer, size))
+            return i;
+
+    return -1;
+}
+
+//@Fix: Boilerplate?.. Questionmark...
+size_t string_find_one_of(struct string self, struct string str, size_t pos) {
+    return string_find_one_of_buffer(self, str.data, str.size, pos);
+}
+
+size_t string_find_one_of_cstr(struct string self, const char *str, size_t pos) {
+    return string_find_one_of_buffer(self, str, strlen(str), pos);
+}
+
+size_t string_find_one_of_buffer(struct string self, const char *buffer, size_t size, size_t pos) {
+    if (size == 0 || self.size == 0)
+        return -1;
+
+    for (size_t i = MIN(pos, self.size - 1); i <= self.size - size; i++)
+        if (buffer_contains_char(buffer, size, self.data[i]))
+            return i;
+
+    return -1;
+}
+
+size_t string_rfind_one_of(struct string self, struct string str, size_t pos) {
+    return string_rfind_one_of_buffer(self, str.data, str.size, pos);
+}
+
+size_t string_rfind_one_of_cstr(struct string self, const char *str, size_t pos) {
+    return string_rfind_one_of_buffer(self, str, strlen(str), pos);
+}
+
+size_t string_rfind_one_of_buffer(struct string self, const char *buffer, size_t size, size_t pos) {
+    if (size == 0 || self.size == 0)
+        return -1;
+
+    for (int i = MIN(pos, self.size - 1) - size + 1; i >= 0; i--)
+        if (buffer_contains_char(buffer, size, self.data[i]))
             return i;
 
     return -1;
