@@ -1,5 +1,7 @@
 #include <esther.h>
 
+#include <inttypes.h>
+
 struct IO {
     Object base;
     FILE *file;
@@ -132,7 +134,7 @@ static Object *IO_readChar(Esther *es, Object *self) {
 
 static Object *IO_readInt(Esther *es, Object *self) {
     int64_t value;
-    if (fscanf(as_IO(self)->file, "%lli", &value)) {
+    if (fscanf(as_IO(self)->file, "%" PRId64, &value)) {
     }
     return ValueObject_new_int(es, value);
 }
