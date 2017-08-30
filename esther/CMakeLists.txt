@@ -45,3 +45,6 @@ target_link_libraries(libio libesther)
 
 add_executable(esther ${esther_sources})
 target_link_libraries(esther libesther)
+
+#set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
