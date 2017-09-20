@@ -11,7 +11,7 @@ project(testher)
 file(GLOB_RECURSE sources "src/*.cpp")
 file(GLOB_RECURSE headers "include/*.h")
 
-include_directories(".")
+include_directories(src src/io src/system)
 
 set(EXECUTABLE_OUTPUT_PATH "bin")
 

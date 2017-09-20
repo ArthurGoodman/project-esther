@@ -12,10 +12,7 @@
 *.so*
 *.stash
 *.user
-CMakeCache.txt
-CMakeFiles/
-esther/bin/esther
-Makefile
-Makefile.Debug
-Makefile.Release
-testher/src/rapidjson/
+bin/*
+!bin/modules.es
+build/*
+testher/src/rapidjson/*

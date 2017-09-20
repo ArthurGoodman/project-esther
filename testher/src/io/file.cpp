@@ -1,6 +1,9 @@
 #include "file.h"
 
+#ifdef __WIN32
 #include <windows.h>
+#endif
+
 #include <fstream>
 #include <iostream>
 
@@ -12,8 +15,11 @@ File::File(const std::string &path) {
 }
 
 bool File::exists() const {
+#ifdef __WIN32
     DWORD fileAttributes = GetFileAttributesA(path.c_str());
     return fileAttributes != INVALID_FILE_ATTRIBUTES && !(fileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+#endif
+    return false;
 }
 
 std::string File::getPath() const {
@@ -21,9 +27,11 @@ std::string File::getPath() const {
 }
 
 void File::setPath(const std::string &path) {
+#ifdef __WIN32
     char buffer[MAX_PATH];
     GetFullPathNameA(path.c_str(), MAX_PATH, buffer, 0);
     this->path = buffer;
+#endif
 }
 
 std::string File::getDirectoryPath() const {

@@ -9,9 +9,6 @@ file(GLOB_RECURSE libio_sources "src/io/*.cpp" "src/io/*.c")
 
 include_directories("include")
 
-set(EXECUTABLE_OUTPUT_PATH "bin")
-set(LIBRARY_OUTPUT_PATH "lib")
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD 11)
 
