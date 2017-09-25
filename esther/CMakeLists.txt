@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(esther)
-
 file(GLOB_RECURSE esther_sources "src/esther/*.cpp")
 file(GLOB_RECURSE libesther_sources "src/libesther/*.cpp" "src/libesther/*.c")
 file(GLOB_RECURSE libesther_headers "include/*.h" "src/libesther/*.h")
